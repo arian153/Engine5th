@@ -1,0 +1,92 @@
+//**************************************************************//
+//  _______ .__   __.   _______  __  .__   __.  _______  _____  //
+// |   ____||  \ |  |  /  _____||  | |  \ |  | |   ____|| ____| //
+// |  |__   |   \|  | |  |  __  |  | |   \|  | |  |__   | |__   //
+// |   __|  |  . `  | |  | |_ | |  | |  . `  | |   __|  |___ \  //
+// |  |____ |  |\   | |  |__| | |  | |  |\   | |  |____  ___) | //
+// |_______||__| \__|  \______| |__| |__| \__| |_______||____/  //
+//                                                              //
+//**************************************************************//
+
+#pragma once
+#include "../Utility/MathDef.hpp"
+
+namespace Engine5
+{
+    class Matrix44;
+
+    class Vector4
+    {
+    public:
+        explicit Vector4(Real x = 0.0f, Real y = 0.0f, Real z = 0.0f, Real w = 0.0f);
+        explicit Vector4(Real arr[4]);
+        Vector4(const Vector4& rhs);
+        ~Vector4();
+
+        void Set(Real x = 0.0f, Real y = 0.0f, Real z = 0.0f, Real w = 0.0f);
+        void SetZero();
+        void SetInverse();
+        void SetNegate();
+        void SetNormalize();
+        void SetHalf();
+        void SetClean();
+        void SetProjection(const Vector4& a, const Vector4& b);
+
+        Real    Length() const;
+        Real    LengthSquared() const;
+        Real    DistanceTo(const Vector4& rhs) const;
+        Real    DistanceSquaredTo(const Vector4& rhs) const;
+        Vector4 ProjectionTo(const Vector4& rhs) const;
+        Vector4 ProjectionFrom(const Vector4& rhs) const;
+        Vector4 Unit() const;
+        Vector4 Half() const;
+
+        Real     DotProduct(const Vector4& rhs) const;
+        Vector4  CrossProduct(const Vector4& rhs) const;
+        Matrix44 OuterProduct(const Vector4& rhs) const;
+        Vector4  HadamardProduct(const Vector4& rhs) const;
+
+        bool IsValid() const;
+        bool IsZero() const;
+        bool IsEqual(const Vector4& rhs) const;
+        bool IsNotEqual(const Vector4& rhs) const;
+
+    public:
+        friend Real     DotProduct(const Vector4& vec1, const Vector4& vec2);
+        friend Vector4  CrossProduct(const Vector4& vec1, const Vector4& vec2);
+        friend Matrix44 OuterProduct(const Vector4& vec1, const Vector4& vec2);
+        friend Vector4  HadamardProduct(const Vector4& vec1, const Vector4& vec2);
+        friend Vector4  Projection(const Vector4& vec1, const Vector4& vec2);
+        friend Vector4  LinearInterpolation(const Vector4& start, const Vector4& end, Real t);
+
+    public:
+        bool                 operator ==(const Vector4& rhs) const;
+        bool                 operator !=(const Vector4& rhs) const;
+        Vector4              operator -() const;
+        Vector4&             operator =(const Vector4& rhs);
+        Vector4&             operator =(Real rhs);
+        Vector4&             operator +=(const Vector4& rhs);
+        Vector4&             operator +=(Real real);
+        Vector4&             operator -=(const Vector4& rhs);
+        Vector4&             operator -=(Real real);
+        Vector4&             operator *=(Real real);
+        Vector4&             operator /=(Real real);
+        Vector4              operator +(const Vector4& rhs) const;
+        Vector4              operator +(Real real) const;
+        Vector4              operator -(const Vector4& rhs) const;
+        Vector4              operator -(Real real) const;
+        Vector4              operator *(Real real) const;
+        Vector4              operator /(Real real) const;
+        friend std::ostream& operator <<(std::ostream& os, const Vector4& rhs);
+        friend Vector4       operator *(Real real, const Vector4& vector);
+        Vector4&             operator ++();
+        Vector4              operator ++(int);
+        Vector4&             operator --();
+        Vector4              operator --(int);
+        Real                 operator[](size_t i) const;
+        Real&                operator[](size_t i);
+
+    public:
+        Real x, y, z, w;
+    };
+}
