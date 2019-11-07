@@ -1,18 +1,11 @@
 #pragma once
 #include "../../Math/Utility/MathDef.hpp"
-#include "OSAPI.hpp"
 #include "../../Graphics/RenderSystem.hpp"
 
 
 namespace Engine5
 {
-    class JobSystem;
     class WindowsAPI;
-
-    enum class OSAPIMode
-    {
-        Windows
-    };
 
     class Application
     {
@@ -31,7 +24,7 @@ namespace Engine5
         Real CurrentSPF() const;
 
         static Application* GetApplication();
-        OSAPI*              GetOSAPI() const;
+        WindowsAPI*         GetOSAPI() const;
 
     private:
         void CalculateFrameStats();
@@ -51,14 +44,12 @@ namespace Engine5
         Real m_curr_mspf    = 0.0f;
 
         //application name
-        std::string      m_application_caption = "Engine 5";
-        OSAPIMode        m_os_api_mode;
-        RenderingAPIMode m_rendering_api_mode;
+        std::string m_application_caption = "Engine 5";
 
     private:
         static inline Application* m_s_application = nullptr;
         //sub systems
-        WindowsAPI*        m_os_api        = nullptr;
+        WindowsAPI*   m_os_api        = nullptr;
         RenderSystem* m_render_system = nullptr;
     };
 }

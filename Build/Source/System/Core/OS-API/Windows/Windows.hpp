@@ -1,24 +1,26 @@
 #pragma once
-#include "../OSAPI.hpp"
 #include <Windows.h>
+#include "../../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
-    class WindowsAPI final : public OSAPI
+    class Application;
+
+    class WindowsAPI final 
     {
     public:
         explicit WindowsAPI(Application* application);
         ~WindowsAPI();
 
-        void Initialize() override;
-        void Update(Real dt) override;
-        void Shutdown() override;
+        void Initialize() ;
+        void Update(Real dt) ;
+        void Shutdown() ;
 
-        void SetConfineCursor(bool flag) override;
-        void SetShowCursor(bool flag) override;
-        void SetFullscreen(bool flag) override;
-        void SetClientResolution(int width, int height) override;
-        void SetMonitorResolution() override;
+        void SetConfineCursor(bool flag) ;
+        void SetShowCursor(bool flag) ;
+        void SetFullscreen(bool flag) ;
+        void SetClientResolution(int width, int height) ;
+        void SetMonitorResolution() ;
        
         LRESULT   MessageProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
         void      MessagePump() const;
@@ -27,8 +29,24 @@ namespace Engine5
         HINSTANCE AppInstance() const;
         HWND      AppHWnd() const;
 
+        int  ClientWidth() const ;
+        int  ClientHeight() const ;
+        bool IsFullscreen() const ;
+        bool IsConfineCursor() const ;
+        bool IsShowCursor() const ;
+        bool IsInit() const ;
+        bool IsQuit() const ;
+        Real AspectRatio() const ;
+
+        Application* GetApplication() const ;
+
     private:
         friend class Application;
+
+    private:
+        const DWORD FULLSCREEN_STYLE = WS_POPUP | WS_VISIBLE;
+        const DWORD WINDOWED_STYLE = WS_POPUP | WS_CAPTION;
+        const DWORD WINDOWED_STYLE_COMMON = WS_OVERLAPPEDWINDOW;
 
     private:
         //window data
@@ -36,9 +54,36 @@ namespace Engine5
         HWND      m_h_wnd = nullptr;
         DWORD     m_style = WINDOWED_STYLE_COMMON;
 
-    private:
-        const DWORD FULLSCREEN_STYLE      = WS_POPUP | WS_VISIBLE;
-        const DWORD WINDOWED_STYLE        = WS_POPUP | WS_CAPTION;
-        const DWORD WINDOWED_STYLE_COMMON = WS_OVERLAPPEDWINDOW;
+        //window style option
+        bool m_b_fullscreen = false;
+        bool m_b_invisible = false;
+        bool m_b_borderless = false;
+        bool m_b_resizable = false;
+
+        //application state
+        bool m_b_loaded = false;
+        bool m_b_init = false;
+        bool m_b_quit = false;
+        bool m_b_app_paused = false;
+        bool m_b_minimized = false;
+        bool m_b_maximized = false;
+
+        //mouse option
+        bool m_b_show_mouse_cursor = true;
+        bool m_b_confine_cursor = false;
+
+        //application window size
+        int m_curr_client_width = 1280;
+        int m_curr_client_height = 720;
+        int m_prev_client_width = 1280;
+        int m_prev_client_height = 720;
+
+        //actual monitor resolution
+        int m_monitor_screen_width = 0;
+        int m_monitor_screen_height = 0;
+
+        Application* m_application = nullptr;
+
+    
     };
 }

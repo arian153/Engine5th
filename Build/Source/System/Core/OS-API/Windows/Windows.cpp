@@ -14,7 +14,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 namespace Engine5
 {
     WindowsAPI::WindowsAPI(Application* application)
-        : OSAPI(application)
+        : m_application(application)
     {
         m_h_instance = GetModuleHandle(nullptr);
         m_style      = WINDOWED_STYLE_COMMON;
@@ -410,5 +410,50 @@ namespace Engine5
     HWND WindowsAPI::AppHWnd() const
     {
         return m_h_wnd;
+    }
+
+    int WindowsAPI::ClientWidth() const
+    {
+        return m_curr_client_width;
+    }
+
+    int WindowsAPI::ClientHeight() const
+    {
+        return m_curr_client_height;
+    }
+
+    bool WindowsAPI::IsFullscreen() const
+    {
+        return m_b_fullscreen;
+    }
+
+    bool WindowsAPI::IsConfineCursor() const
+    {
+        return m_b_confine_cursor;
+    }
+
+    bool WindowsAPI::IsShowCursor() const
+    {
+        return m_b_show_mouse_cursor;
+    }
+
+    bool WindowsAPI::IsInit() const
+    {
+        return m_b_init;
+    }
+
+    bool WindowsAPI::IsQuit() const
+    {
+        return m_b_quit;
+    }
+
+    Real WindowsAPI::AspectRatio() const
+    {
+        return static_cast<Real>(m_curr_client_width) / m_curr_client_height;
+    }
+
+    Application* WindowsAPI::GetApplication() const
+    {
+        return m_application;
     }
 }

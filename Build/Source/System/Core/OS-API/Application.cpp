@@ -7,8 +7,6 @@ namespace Engine5
     Application::Application()
     {
         m_s_application      = this;
-        m_os_api_mode        = OSAPIMode::Windows;
-        m_rendering_api_mode = RenderingAPIMode::DirectX3D11;
     }
 
     Application::~Application()
@@ -26,17 +24,9 @@ namespace Engine5
 
     void Application::Initialize()
     {
-        //create OS API
-        switch (m_os_api_mode)
-        {
-        case Engine5::OSAPIMode::Windows:
-            m_os_api = new WindowsAPI(this);
-            m_os_api->Initialize();
-            break;
-        default:
-            break;
-        }
-        m_render_system = new RenderSystem(m_rendering_api_mode, m_os_api);
+        m_os_api = new WindowsAPI(this);
+        m_os_api->Initialize();
+        m_render_system = new RenderSystem(m_os_api);
         m_render_system->Initialize();
     }
 
@@ -86,7 +76,7 @@ namespace Engine5
         return m_s_application;
     }
 
-    OSAPI* Application::GetOSAPI() const
+    WindowsAPI* Application::GetOSAPI() const
     {
         return m_os_api;
     }

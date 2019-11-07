@@ -11,17 +11,12 @@
 
 namespace Engine5
 {
-    enum class RenderingAPIMode
-    {
-        DirectX3D11
-    };
-
     class OSAPI;
 
     class RenderSystem
     {
     public:
-        explicit RenderSystem(RenderingAPIMode flag, WindowsAPI* os_api);
+        explicit RenderSystem(WindowsAPI* os_api);
         ~RenderSystem();
 
         void Initialize();
@@ -44,19 +39,18 @@ namespace Engine5
         //
 
     private:
-        WindowsAPI*              m_os_api   = nullptr;
-        DirectX3D11*       m_renderer = nullptr;
+        WindowsAPI*         m_os_api   = nullptr;
+        DirectX3D11*        m_renderer = nullptr;
         std::vector<Scene*> m_scenes;
         ShaderManager*      m_shader_manager     = nullptr;
         PrimitiveRenderer*  m_primitive_renderer = nullptr;
 
-        size_t           m_render_width     = 1280;
-        size_t           m_render_height    = 720;
-        bool             m_b_vsync          = true;
-        Real             m_far_plane        = 1000.0f;
-        Real             m_near_plane       = 0.1f;
-        Real             m_field_of_view    = Math::PI_DIV_4;
-        Color            m_background_color = ColorDef::Pure::Gray;
-        RenderingAPIMode m_mode             = RenderingAPIMode::DirectX3D11;
+        size_t m_render_width     = 1280;
+        size_t m_render_height    = 720;
+        bool   m_b_vsync          = true;
+        Real   m_far_plane        = 1000.0f;
+        Real   m_near_plane       = 0.1f;
+        Real   m_field_of_view    = Math::PI_DIV_4;
+        Color  m_background_color = ColorDef::Pure::Gray;
     };
 }
