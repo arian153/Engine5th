@@ -249,7 +249,8 @@ namespace Engine5
 
             // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
             m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-            m_color_shader->Update(dt, m_device_context, static_cast<int>(m_dot_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
+
+            m_color_shader->Update(dt, m_device_context, static_cast<int>(m_line_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
         }
     }
 
@@ -325,7 +326,7 @@ namespace Engine5
 
             // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
             m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-            m_color_shader->Update(dt, m_device_context, static_cast<int>(m_dot_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
+            m_color_shader->Update(dt, m_device_context, static_cast<int>(m_face_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
         }
     }
 

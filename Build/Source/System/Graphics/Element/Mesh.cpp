@@ -1,4 +1,5 @@
 #include "Mesh.hpp"
+#include "../../Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -99,6 +100,8 @@ namespace Engine5
 
     void Mesh::Update(Real dt)
     {
+        E5_UNUSED_PARAM(dt);
+        RenderBuffers();
     }
 
     void Mesh::Shutdown()
