@@ -21,13 +21,8 @@ namespace Engine5
         m_shader_manager->Initialize();
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
-        m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
+        m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -60.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
-        Scene* scene = new Scene();
-        scene->SetDX11(m_renderer);
-        scene->SetShaderManager(m_shader_manager);
-        scene->Initialize();
-        m_scenes.push_back(scene);
     }
 
     void RenderSystem::Update(Real dt)
@@ -36,33 +31,21 @@ namespace Engine5
         {
             m_renderer->BeginScene(m_background_color);
             m_renderer->Update(dt);
-
-            m_primitive_renderer->UpdatePrimitiveRendererCamera();
-            m_primitive_renderer->UpdateProjectionMatrix();
-
             Circle circle;
             circle.radius = 10.0f;
-
             Triangle tri;
             tri.vertices[0] = Vector2(-1.0f, -1.0f);
             tri.vertices[1] = Vector2(0.0f, 1.0f);
             tri.vertices[2] = Vector2(1.0f, -1.0f);
-
-            m_primitive_renderer->DrawPrimitive(&circle, RenderingMode::Line, ColorDef::Pure::Red);
+            tri.position.z -= 0.1f;
             tri.DrawPrimitive(m_primitive_renderer, RenderingMode::Face, ColorDef::Pure::Red);
+            m_primitive_renderer->DrawPrimitive(&circle, RenderingMode::Face, ColorDef::Pure::Green);
             m_primitive_renderer->Update(dt);
-
-           
-            //m_primitive_renderer->DrawPrimitive(&tri, RenderingMode::Line, ColorDef::Pure::Red);
-            
-            
-            
-        
             //update scene
-            /*for (auto& scene : m_scenes)
+            for (auto& scene : m_scenes)
             {
                 scene->Update(dt);
-            }*/
+            }
             m_renderer->EndScene();
         }
     }

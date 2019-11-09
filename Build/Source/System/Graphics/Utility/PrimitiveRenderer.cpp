@@ -23,16 +23,22 @@ namespace Engine5
         m_position     = Vector3(0.0f, 0.0f, -60.0f);
         m_rotation     = Quaternion();
         UpdatePrimitiveRendererCamera();
+        UpdateProjectionMatrix();
         m_device_context = m_dx11_api->GetDeviceContext();
+        m_world_matrix = DirectX::XMMatrixIdentity();
     }
 
     void PrimitiveRenderer::Update(Real dt)
     {
         UpdatePrimitiveRendererCamera();
+        //
         BuildDotBuffer();
         UpdateDotBuffer(dt);
+        //line
         BuildLineBuffer();
         UpdateLineBuffer(dt);
+        
+        //face
         BuildTriangleBuffer();
         UpdateTriangleBuffer(dt);
         Clear();

@@ -130,7 +130,7 @@ namespace Engine5
         }
         else if (mode == RenderingMode::Line)
         {
-            renderer->ReserveIndices(static_cast<size_t>(2 * count), mode);
+            renderer->ReserveIndices(static_cast<size_t>(200), mode);
             for (int i = 0; i < count - 1; ++i)
             {
                 renderer->PushLineIndices(index + i, index + i + 1);
@@ -143,9 +143,9 @@ namespace Engine5
             renderer->PushVertex(position, mode, color);
             for (int i = 0; i < count - 1; ++i)
             {
-                renderer->PushFaceIndices(index + i, index + i + 1, center);
+                renderer->PushFaceIndices(center, index + i + 1, index + i);
             }
-            renderer->PushFaceIndices(index + count - 1, index, center);
+            renderer->PushFaceIndices(center, index, index + count - 1);
         }
     }
 }
