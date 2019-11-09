@@ -243,4 +243,8 @@ namespace Engine5
         }
         return m_radius;
     }
+
+    void ColliderDome::Clone(ColliderPrimitive* cloned)
+    {
+    }
 }

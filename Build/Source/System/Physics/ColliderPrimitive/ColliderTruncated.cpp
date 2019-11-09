@@ -375,4 +375,8 @@ namespace Engine5
         }
         return m_radius;
     }
+
+    void ColliderTruncated::Clone(ColliderPrimitive* cloned)
+    {
+    }
 }

@@ -31,12 +31,15 @@ namespace Engine5
         Real    Height() const;
         Vector3 Radius() const;
 
+    protected:
+        void Clone(ColliderPrimitive* cloned) override;
+
     private:
         bool TestRayEllipsoid(const Ray& ray, const Vector3& centroid, Real& min_t, Real& max_t) const;
 
     private:
-        Vector3 m_radius;
-        Vector3 m_transformed_radius;
+        Vector3 m_radius = Vector3(1.3f, 0.5f, 0.4f);
+        Vector3 m_transformed_radius = Vector3(0.3f, 0.5f, 1.4f);
         Real    m_height             = 1.0f;
         Real    m_transformed_height = 1.0f;
     };

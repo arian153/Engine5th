@@ -25,6 +25,9 @@ namespace Engine5
 
         Vector3 Radius() const;
 
+    protected:
+        void Clone(ColliderPrimitive* cloned) override;
+
     private:
         Vector3 m_radius;
         Vector3 m_transformed_radius;

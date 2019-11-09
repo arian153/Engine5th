@@ -1,6 +1,7 @@
 #include "RenderSystem.hpp"
 #include "../Core/OS-API/Windows/Windows.hpp"
 #include "Utility/Color.hpp"
+#include "../Physics/ColliderPrimitive/ColliderIncludes.hpp"
 
 namespace Engine5
 {
@@ -21,7 +22,7 @@ namespace Engine5
         m_shader_manager->Initialize();
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
-        m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -60.0f));
+        m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
     }
 
@@ -31,15 +32,12 @@ namespace Engine5
         {
             m_renderer->BeginScene(m_background_color);
             m_renderer->Update(dt);
-            Circle circle;
-            circle.radius = 10.0f;
-            Triangle tri;
-            tri.vertices[0] = Vector2(-1.0f, -1.0f);
-            tri.vertices[1] = Vector2(0.0f, 1.0f);
-            tri.vertices[2] = Vector2(1.0f, -1.0f);
-            tri.position.z -= 0.1f;
-            tri.DrawPrimitive(m_primitive_renderer, RenderingMode::Face, ColorDef::Pure::Red);
-            m_primitive_renderer->DrawPrimitive(&circle, RenderingMode::Face, ColorDef::Pure::Green);
+
+            ColliderDome primitive;
+            primitive.DrawPrimitive(m_primitive_renderer, RenderingMode::Line, ColorDef::Pure::Red);
+
+            //m_primitive_renderer->DrawPrimitive(&primitive, RenderingMode::Line, ColorDef::Pure::Red);
+
             m_primitive_renderer->Update(dt);
             //update scene
             for (auto& scene : m_scenes)

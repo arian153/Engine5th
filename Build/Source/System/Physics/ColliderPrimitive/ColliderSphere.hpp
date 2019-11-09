@@ -25,6 +25,9 @@ namespace Engine5
 
         Real Radius() const;
 
+    protected:
+        void Clone(ColliderPrimitive* cloned) override;
+
     private:
         Real m_radius             = 1.0f;
         Real m_transformed_radius = 1.0f;

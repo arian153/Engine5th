@@ -292,4 +292,8 @@ namespace Engine5
         }
         return m_vertices[i];
     }
+
+    void ColliderBox::Clone(ColliderPrimitive* cloned)
+    {
+    }
 }

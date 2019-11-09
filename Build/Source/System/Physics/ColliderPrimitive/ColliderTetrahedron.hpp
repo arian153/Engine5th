@@ -25,6 +25,9 @@ namespace Engine5
 
         Vector3 Vertex(size_t i) const;
 
+    protected:
+        void Clone(ColliderPrimitive* cloned) override;
+
     private:
         Vector3 m_vertices[4];
         Vector3 m_transformed_vertices[4];

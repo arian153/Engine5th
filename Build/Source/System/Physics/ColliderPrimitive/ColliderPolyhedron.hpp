@@ -23,6 +23,9 @@ namespace Engine5
         void UpdateBoundingVolume() override;
         void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
 
+    protected:
+        void Clone(ColliderPrimitive* cloned) override;
+
     private:
     };
 }

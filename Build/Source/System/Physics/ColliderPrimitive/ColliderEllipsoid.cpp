@@ -235,4 +235,8 @@ namespace Engine5
         }
         return m_radius;
     }
+
+    void ColliderEllipsoid::Clone(ColliderPrimitive* cloned)
+    {
+    }
 }

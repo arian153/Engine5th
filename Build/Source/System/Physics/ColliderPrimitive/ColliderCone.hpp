@@ -31,6 +31,9 @@ namespace Engine5
         Real    Height() const;
         Vector2 Radius() const;
 
+    protected:
+        void Clone(ColliderPrimitive* cloned) override;
+
     private:
         Vector2 m_radius;
         Vector2 m_transformed_radius;

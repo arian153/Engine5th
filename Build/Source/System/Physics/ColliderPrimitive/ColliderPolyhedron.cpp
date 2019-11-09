@@ -60,4 +60,8 @@ namespace Engine5
 
         }
     }
+
+    void ColliderPolyhedron::Clone(ColliderPrimitive* cloned)
+    {
+    }
 }

@@ -200,4 +200,8 @@ namespace Engine5
         }
         return m_radius;
     }
+
+    void ColliderSphere::Clone(ColliderPrimitive* cloned)
+    {
+    }
 }

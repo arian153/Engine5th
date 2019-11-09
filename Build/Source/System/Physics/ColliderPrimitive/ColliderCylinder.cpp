@@ -330,4 +330,8 @@ namespace Engine5
         }
         return m_radius;
     }
+
+    void ColliderCylinder::Clone(ColliderPrimitive* cloned)
+    {
+    }
 }

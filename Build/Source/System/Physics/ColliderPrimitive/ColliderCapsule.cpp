@@ -435,6 +435,10 @@ namespace Engine5
         return m_radius;
     }
 
+    void ColliderCapsule::Clone(ColliderPrimitive* cloned)
+    {
+    }
+
     bool ColliderCapsule::TestRayEllipsoid(const Ray& ray, const Vector3& centroid, Real& min_t, Real& max_t) const
     {
         Vector3 radius = Radius();

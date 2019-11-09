@@ -33,7 +33,7 @@ namespace Engine5
         bool TestRaySphere(const Ray& ray, const Vector3& centroid, Real& min_t, Real& max_t) const;
 
     public:
-        Real radius = 1.0f;
-        Real height = 1.0f;
+        Real radius = 0.25f;
+        Real height = 0.5f;
     };
 }

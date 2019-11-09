@@ -125,4 +125,8 @@ namespace Engine5
         }
         return m_vertices[i];
     }
+
+    void ColliderTetrahedron::Clone(ColliderPrimitive* cloned)
+    {
+    }
 }

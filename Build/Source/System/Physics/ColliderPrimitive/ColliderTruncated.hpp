@@ -7,7 +7,7 @@ namespace Engine5
      * \brief
      * Truncated Collider is aligned on the y-axis
      */
-    class ColliderTruncated : public ColliderPrimitive
+    class ColliderTruncated final : public ColliderPrimitive
     {
     public:
         //minkowski support - gjk, epa
@@ -31,11 +31,14 @@ namespace Engine5
         Real    Height() const;
         Vector2 Radius() const;
 
+    protected:
+        void Clone(ColliderPrimitive* cloned) override;
+
     private:
-        Vector2 m_radius;
+        Vector2 m_radius = Vector2(0.5f, 0.3f);
         Vector2 m_transformed_radius;
         Real    m_height             = 1.0f;
         Real    m_transformed_height = 1.0f;
-        Real    m_ratio              = 1.0f;
+        Real    m_ratio              = 0.5f;
     };
 }
