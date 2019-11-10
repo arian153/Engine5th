@@ -9,4 +9,16 @@ namespace Engine5
     World::~World()
     {
     }
+
+    void World::Initialize()
+    {
+    }
+
+    void World::Update(Real dt)
+    {
+    }
+
+    void World::Shutdown()
+    {
+    }
 }

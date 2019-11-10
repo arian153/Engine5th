@@ -1,7 +1,6 @@
 #include "RenderSystem.hpp"
 #include "../Core/OS-API/Windows/Windows.hpp"
 #include "Utility/Color.hpp"
-#include "../Physics/ColliderPrimitive/ColliderIncludes.hpp"
 
 namespace Engine5
 {
@@ -32,11 +31,6 @@ namespace Engine5
         {
             m_renderer->BeginScene(m_background_color);
             m_renderer->Update(dt);
-
-            ColliderDome primitive;
-            primitive.DrawPrimitive(m_primitive_renderer, RenderingMode::Line, ColorDef::Pure::Red);
-
-            //m_primitive_renderer->DrawPrimitive(&primitive, RenderingMode::Line, ColorDef::Pure::Red);
 
             m_primitive_renderer->Update(dt);
             //update scene

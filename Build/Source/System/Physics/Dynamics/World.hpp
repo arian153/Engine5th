@@ -1,4 +1,5 @@
 #pragma once
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -8,8 +9,11 @@ namespace Engine5
         World();
         ~World();
 
-
+        void Initialize();
+        void Update(Real dt);
+        void Shutdown();
 
     private:
+
     };
 }

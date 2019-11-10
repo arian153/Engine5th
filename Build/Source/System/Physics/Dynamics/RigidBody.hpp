@@ -13,6 +13,10 @@ namespace Engine5
         RigidBody();
         ~RigidBody();
 
+        void Initialize();
+        void Update(Real dt);
+        void Shutdown();
+
         void Integrate(Real dt);
 
         void UpdateGlobalCentroidFromPosition();

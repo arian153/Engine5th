@@ -1,4 +1,5 @@
 #pragma once
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -8,7 +9,7 @@ namespace Engine5
         SoftBody();
         ~SoftBody();
 
-    private:
+        private:
         friend class Resolution;
 
     private:

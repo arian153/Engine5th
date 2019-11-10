@@ -10,6 +10,24 @@ namespace Engine5
     {
     }
 
+    void RigidBody::Initialize()
+    {
+        if(m_collider_list == nullptr)
+        {
+            m_collider_list = new std::vector<ColliderPrimitive*>();
+        }
+    }
+
+    void RigidBody::Update(Real dt)
+    {
+    
+        Integrate(dt);
+    }
+
+    void RigidBody::Shutdown()
+    {
+    }
+
     void RigidBody::Integrate(Real dt)
     {
         // integrate linear velocity
