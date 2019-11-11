@@ -59,6 +59,7 @@ namespace Engine5
     private:
         friend class Resolution;
         friend class ColliderPrimitive;
+        friend class World;
 
     private:
         //linear data

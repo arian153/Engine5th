@@ -8,10 +8,12 @@ namespace Engine5
       , Capsule
       , Cone
       , Cylinder
+      , Dome
       , Ellipsoid
       , Polyhedron
       , Sphere
       , Tetrahedron
+      , Truncated
       , InvalidPrimitive
     };
 
@@ -24,16 +26,16 @@ namespace Engine5
 
     enum class BroadPhaseMode : int
     {
-        DynamicBVH,
-        StaticBVH,
-        NSquared,
-        GridPartition
+        DynamicBVH
+      , StaticBVH
+      , NSquared
+      , GridPartition
     };
 
     enum class CollisionDetectionMode : int
     {
-        Discrete,
-        ContinuousStatic,
-        ContinuousFull
+        Discrete
+      , ContinuousStatic
+      , ContinuousFull
     };
 }

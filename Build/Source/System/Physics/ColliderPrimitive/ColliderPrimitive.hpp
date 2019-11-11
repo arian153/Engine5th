@@ -57,6 +57,7 @@ namespace Engine5
         friend class RigidBody;
         friend class NarrowPhase;
         friend class BoundingAABB;
+        friend class World;
 
     protected:
         //collider local space data

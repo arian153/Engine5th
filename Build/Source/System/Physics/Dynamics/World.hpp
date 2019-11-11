@@ -1,5 +1,8 @@
 #pragma once
 #include "../../Math/Utility/MathDef.hpp"
+#include <vector>
+#include "RigidBody.hpp"
+#include "../Utility/PhysicsDef.hpp"
 
 namespace Engine5
 {
@@ -13,7 +16,11 @@ namespace Engine5
         void Update(Real dt);
         void Shutdown();
 
-    private:
+        RigidBody* AddRigidBody(RigidBody* body);
+        ColliderPrimitive* AddCollider(RigidBody* body, ColliderType type);
 
+    private:
+        std::vector<ColliderPrimitive*> m_coliders;
+        std::vector<RigidBody*> m_bodies;
     };
 }

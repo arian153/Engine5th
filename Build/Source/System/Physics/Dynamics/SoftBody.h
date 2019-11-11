@@ -11,6 +11,7 @@ namespace Engine5
 
         private:
         friend class Resolution;
+        friend class World;
 
     private:
     };
