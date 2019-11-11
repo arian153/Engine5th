@@ -3,6 +3,14 @@
 
 namespace Engine5
 {
+    ColliderTruncated::ColliderTruncated()
+    {
+    }
+
+    ColliderTruncated::~ColliderTruncated()
+    {
+    }
+
     Vector3 ColliderTruncated::Support(const Vector3& direction)
     {
         Vector3 local_dir = WorldToLocalVector(direction).Unit();

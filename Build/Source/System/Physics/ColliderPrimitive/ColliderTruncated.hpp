@@ -10,6 +10,12 @@ namespace Engine5
     class ColliderTruncated final : public ColliderPrimitive
     {
     public:
+        //default param
+        ColliderTruncated();
+        ~ColliderTruncated() override;
+        ColliderTruncated(const ColliderTruncated& rhs) = delete;
+        ColliderTruncated& operator=(const ColliderTruncated& rhs) = delete;
+
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
 

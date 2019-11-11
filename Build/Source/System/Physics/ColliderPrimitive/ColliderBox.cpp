@@ -5,6 +5,7 @@ namespace Engine5
 {
     ColliderBox::ColliderBox()
     {
+        m_type = ColliderType::Box;
     }
 
     ColliderBox::~ColliderBox()

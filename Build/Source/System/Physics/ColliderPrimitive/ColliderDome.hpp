@@ -7,9 +7,14 @@ namespace Engine5
      * \brief
      * Dome Collider is aligned on the y-axis
      */
-    class ColliderDome : public ColliderPrimitive
+    class ColliderDome final : public ColliderPrimitive
     {
     public:
+        ColliderDome();
+        ~ColliderDome() override;
+        ColliderDome(const ColliderDome& rhs) = delete;
+        ColliderDome& operator=(const ColliderDome& rhs) = delete;
+
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
 

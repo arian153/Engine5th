@@ -3,9 +3,14 @@
 
 namespace Engine5
 {
-    class ColliderSphere : public ColliderPrimitive
+    class ColliderSphere final : public ColliderPrimitive
     {
     public:
+        ColliderSphere();
+        ~ColliderSphere() override;
+        ColliderSphere(const ColliderSphere& rhs) = delete;
+        ColliderSphere& operator=(const ColliderSphere& rhs) = delete;
+
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
 

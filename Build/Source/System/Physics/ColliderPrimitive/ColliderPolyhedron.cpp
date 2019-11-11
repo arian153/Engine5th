@@ -3,6 +3,14 @@
 
 namespace Engine5
 {
+    ColliderPolyhedron::ColliderPolyhedron()
+    {
+    }
+
+    ColliderPolyhedron::~ColliderPolyhedron()
+    {
+    }
+
     Vector3 ColliderPolyhedron::Support(const Vector3& direction)
     {
         return direction;

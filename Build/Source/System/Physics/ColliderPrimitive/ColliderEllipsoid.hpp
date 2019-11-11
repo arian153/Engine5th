@@ -3,9 +3,15 @@
 
 namespace Engine5
 {
-    class ColliderEllipsoid : public ColliderPrimitive
+    class ColliderEllipsoid final : public ColliderPrimitive
     {
     public:
+
+        ColliderEllipsoid();
+        ~ColliderEllipsoid() override;
+        ColliderEllipsoid(const ColliderEllipsoid& rhs) = delete;
+        ColliderEllipsoid& operator=(const ColliderEllipsoid& rhs) = delete;
+
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
 

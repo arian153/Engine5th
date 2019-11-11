@@ -7,9 +7,14 @@ namespace Engine5
      * \brief
      * Cylinder Collider is aligned on the y-axis
      */
-    class ColliderCylinder : public ColliderPrimitive
+    class ColliderCylinder final : public ColliderPrimitive
     {
     public:
+        ColliderCylinder();
+        ~ColliderCylinder() override;
+        ColliderCylinder(const ColliderCylinder& rhs) = delete;
+        ColliderCylinder& operator=(const ColliderCylinder& rhs) = delete;
+
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
 

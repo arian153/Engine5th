@@ -3,6 +3,14 @@
 
 namespace Engine5
 {
+    ColliderTetrahedron::ColliderTetrahedron()
+    {
+    }
+
+    ColliderTetrahedron::~ColliderTetrahedron()
+    {
+    }
+
     Vector3 ColliderTetrahedron::Support(const Vector3& direction)
     {
         Vector3 local_dir = WorldToLocalVector(direction).Unit();

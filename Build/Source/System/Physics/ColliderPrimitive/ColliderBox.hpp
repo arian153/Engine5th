@@ -3,11 +3,14 @@
 
 namespace Engine5
 {
-    class ColliderBox : public ColliderPrimitive
+    class ColliderBox final : public ColliderPrimitive
     {
     public:
         ColliderBox();
-        ~ColliderBox();
+        ~ColliderBox() override;
+        ColliderBox(const ColliderBox& rhs) = delete;
+        ColliderBox& operator=(const ColliderBox& rhs) = delete;
+
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
 

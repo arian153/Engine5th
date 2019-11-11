@@ -7,9 +7,14 @@ namespace Engine5
      * \brief
      * Cone Collider is aligned on the y-axis
      */
-    class ColliderCone : public ColliderPrimitive
+    class ColliderCone final : public ColliderPrimitive
     {
     public:
+        ColliderCone();
+        ~ColliderCone() override;
+        ColliderCone(const ColliderCone& rhs) = delete;
+        ColliderCone& operator=(const ColliderCone& rhs) = delete;
+
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
 

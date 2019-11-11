@@ -3,6 +3,14 @@
 
 namespace Engine5
 {
+    ColliderDome::ColliderDome()
+    {
+    }
+
+    ColliderDome::~ColliderDome()
+    {
+    }
+
     Vector3 ColliderDome::Support(const Vector3& direction)
     {
         Vector3 local_dir = WorldToLocalVector(direction).Unit();

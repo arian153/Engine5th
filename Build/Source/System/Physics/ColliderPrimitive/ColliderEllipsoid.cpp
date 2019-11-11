@@ -3,6 +3,14 @@
 
 namespace Engine5
 {
+    ColliderEllipsoid::ColliderEllipsoid()
+    {
+    }
+
+    ColliderEllipsoid::~ColliderEllipsoid()
+    {
+    }
+
     Vector3 ColliderEllipsoid::Support(const Vector3& direction)
     {
         Vector3 local_dir = WorldToLocalVector(direction).Unit();

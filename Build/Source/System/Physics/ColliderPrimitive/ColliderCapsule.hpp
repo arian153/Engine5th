@@ -7,9 +7,14 @@ namespace Engine5
      * \brief 
      * Capsule Collider is aligned on the y-axis
      */
-    class ColliderCapsule : public ColliderPrimitive
+    class ColliderCapsule final : public ColliderPrimitive
     {
     public:
+        ColliderCapsule();
+        ~ColliderCapsule() override;
+        ColliderCapsule(const ColliderCapsule& rhs) = delete;
+        ColliderCapsule& operator=(const ColliderCapsule& rhs) = delete;
+
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
 

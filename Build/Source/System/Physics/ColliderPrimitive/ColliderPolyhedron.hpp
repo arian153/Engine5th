@@ -3,9 +3,14 @@
 
 namespace Engine5
 {
-    class ColliderPolyhedron : public ColliderPrimitive
+    class ColliderPolyhedron final : public ColliderPrimitive
     {
     public:
+        ColliderPolyhedron();
+        ~ColliderPolyhedron() override;
+        ColliderPolyhedron(const ColliderPolyhedron& rhs) = delete;
+        ColliderPolyhedron& operator=(const ColliderPolyhedron& rhs) = delete;
+
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
 
