@@ -26,6 +26,7 @@ namespace Engine5
         //Draw
         void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
 
+        void SetBox(Real width, Real height, Real depth);
     public:
         Vector3 vertices[8];
     };

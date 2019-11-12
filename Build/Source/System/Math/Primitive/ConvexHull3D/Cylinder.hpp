@@ -29,7 +29,7 @@ namespace Engine5
 
         Vector2 Radius() const;
     public:
-        Real radius = 1.0f;
+        Real radius = 0.5f;
         Real height = 1.0f;
     };
 }

@@ -16,6 +16,7 @@ namespace Engine5
 
     void Sphere::Initialize()
     {
+        SetUnit();
     }
 
     void Sphere::Shutdown()
@@ -24,6 +25,7 @@ namespace Engine5
 
     void Sphere::SetUnit()
     {
+        radius = 0.5f;
     }
 
     Vector3 Sphere::Support(const Vector3& direction)

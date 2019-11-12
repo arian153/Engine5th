@@ -16,6 +16,7 @@ namespace Engine5
 
     void Capsule::Initialize()
     {
+        SetUnit();
     }
 
     void Capsule::Shutdown()
@@ -24,6 +25,8 @@ namespace Engine5
 
     void Capsule::SetUnit()
     {
+        radius = 0.25f;
+        height = 0.5f;
     }
 
     Vector3 Capsule::Support(const Vector3& direction)

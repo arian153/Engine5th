@@ -16,6 +16,7 @@ namespace Engine5
 
     void Box::Initialize()
     {
+        SetUnit();
     }
 
     void Box::Shutdown()
@@ -24,6 +25,18 @@ namespace Engine5
 
     void Box::SetUnit()
     {
+        Real w = 0.5f;
+        Real h = 0.5f;
+        Real d = 0.5f;
+
+        vertices[0].Set(+w, +h, +d);
+        vertices[1].Set(+w, +h, -d);
+        vertices[2].Set(+w, -h, +d);
+        vertices[3].Set(+w, -h, -d);
+        vertices[4].Set(-w, +h, +d);
+        vertices[5].Set(-w, +h, -d);
+        vertices[6].Set(-w, -h, +d);
+        vertices[7].Set(-w, -h, -d);
     }
 
     Vector3 Box::Support(const Vector3& direction)
@@ -210,5 +223,22 @@ namespace Engine5
             renderer->PushFaceIndices(index + 3, index + 2, index + 6);
             renderer->PushFaceIndices(index + 3, index + 6, index + 7);
         }
+    }
+
+    void Box::SetBox(Real width, Real height, Real depth)
+    {
+        Real w = 0.5f * width;
+        Real h = 0.5f * height;
+        Real d = 0.5f * depth;
+
+        vertices[0].Set(+w, +h, +d);
+        vertices[1].Set(+w, +h, -d);
+        vertices[2].Set(+w, -h, +d);
+        vertices[3].Set(+w, -h, -d);
+        vertices[4].Set(-w, +h, +d);
+        vertices[5].Set(-w, +h, -d);
+        vertices[6].Set(-w, -h, +d);
+        vertices[7].Set(-w, -h, -d);
+
     }
 }

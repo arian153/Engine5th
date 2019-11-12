@@ -50,9 +50,30 @@ namespace Engine5
 
     void Vector3::SetInverse()
     {
-        this->x = 1.0f / this->x;
-        this->y = 1.0f / this->y;
-        this->z = 1.0f / this->z;
+        if (Utility::IsZero(x))
+        {
+            x = 0.0f;
+        }
+        else
+        {
+            this->x = 1.0f / this->x;
+        }
+        if (Utility::IsZero(y))
+        {
+            y = 0.0f;
+        }
+        else
+        {
+            this->y = 1.0f / this->y;
+        }
+        if (Utility::IsZero(z))
+        {
+            z = 0.0f;
+        }
+        else
+        {
+            this->z = 1.0f / this->z;
+        }
     }
 
     void Vector3::SetNegate()

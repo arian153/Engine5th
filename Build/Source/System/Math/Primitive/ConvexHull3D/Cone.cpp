@@ -16,6 +16,7 @@ namespace Engine5
 
     void Cone::Initialize()
     {
+        SetUnit();
     }
 
     void Cone::Shutdown()
@@ -24,6 +25,8 @@ namespace Engine5
 
     void Cone::SetUnit()
     {
+        radius = 0.5f;
+        height = 1.0f;
     }
 
     Vector3 Cone::Support(const Vector3& direction)

@@ -25,8 +25,16 @@ namespace Engine5
 
         //Draw
         void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
-       
+
+        void UpdateMinMaxPoint();
+
     public:
         std::vector<Vector3>* vertices = nullptr;
+
+    private:
+        //max x, max y, max z among vertices
+        Vector3 max_point;
+        //min x, min y, min z among vertices
+        Vector3 min_point;
     };
 }

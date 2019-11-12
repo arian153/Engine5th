@@ -16,6 +16,7 @@ namespace Engine5
 
     void Cylinder::Initialize()
     {
+        SetUnit();
     }
 
     void Cylinder::Shutdown()
@@ -24,6 +25,8 @@ namespace Engine5
 
     void Cylinder::SetUnit()
     {
+        radius = 0.5f;
+        height = 1.0f;
     }
 
     Vector3 Cylinder::Support(const Vector3& direction)

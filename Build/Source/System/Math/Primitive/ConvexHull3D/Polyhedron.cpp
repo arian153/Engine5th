@@ -10,18 +10,39 @@ namespace Engine5
 
     Polyhedron::~Polyhedron()
     {
+        if (vertices != nullptr)
+        {
+            Shutdown();
+        }
     }
 
     void Polyhedron::Initialize()
     {
+        vertices = new std::vector<Vector3>();
     }
 
     void Polyhedron::Shutdown()
     {
+        if (vertices != nullptr)
+        {
+            vertices->clear();
+            delete vertices;
+            vertices = nullptr;
+        }
     }
 
     void Polyhedron::SetUnit()
     {
+        Vector3 scale = max_point - min_point;
+        scale.SetInverse();
+
+        if(vertices != nullptr)
+        {
+            for(auto& vertex : *vertices)
+            {
+               vertex = vertex.HadamardProduct(scale);
+            }
+        }
     }
 
     Vector3 Polyhedron::Support(const Vector3& direction)
@@ -54,5 +75,44 @@ namespace Engine5
 
     void Polyhedron::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
     {
+    }
+
+    void Polyhedron::UpdateMinMaxPoint()
+    {
+        min_point = Vector3(Math::REAL_POSITIVE_MAX, Math::REAL_POSITIVE_MAX, Math::REAL_POSITIVE_MAX);
+        max_point = Vector3(Math::REAL_NEGATIVE_MAX, Math::REAL_NEGATIVE_MAX, Math::REAL_NEGATIVE_MAX);
+
+        for (auto& vertex : *vertices)
+        {
+            if (vertex.x < min_point.x)
+            {
+                min_point.x = vertex.x;
+            }
+
+            if (vertex.y < min_point.y)
+            {
+                min_point.y = vertex.y;
+            }
+
+            if (vertex.z < min_point.z)
+            {
+                min_point.z = vertex.z;
+            }
+
+            if (vertex.x > max_point.x)
+            {
+                max_point.x = vertex.x;
+            }
+
+            if (vertex.y > max_point.y)
+            {
+                max_point.y = vertex.y;
+            }
+
+            if (vertex.z > max_point.z)
+            {
+                max_point.z = vertex.z;
+            }
+        }
     }
 }

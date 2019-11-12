@@ -16,6 +16,7 @@ namespace Engine5
 
     void Ellipsoid::Initialize()
     {
+        SetUnit();
     }
 
     void Ellipsoid::Shutdown()
@@ -24,6 +25,7 @@ namespace Engine5
 
     void Ellipsoid::SetUnit()
     {
+        radius = 1.0f;
     }
 
     Vector3 Ellipsoid::Support(const Vector3& direction)
