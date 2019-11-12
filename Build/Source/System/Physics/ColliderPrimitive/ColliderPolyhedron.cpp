@@ -5,9 +5,19 @@ namespace Engine5
 {
     ColliderPolyhedron::ColliderPolyhedron()
     {
+        m_type = ColliderType::Polyhedron;
     }
 
     ColliderPolyhedron::~ColliderPolyhedron()
+    {
+    }
+
+    void ColliderPolyhedron::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderPolyhedron::Shutdown()
     {
     }
 
@@ -53,19 +63,12 @@ namespace Engine5
     {
         if (mode == RenderingMode::Dot)
         {
-
         }
         else if (mode == RenderingMode::Line)
         {
-
         }
         else if (mode == RenderingMode::Face)
         {
-
-        }
-        else
-        {
-
         }
     }
 

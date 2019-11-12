@@ -12,8 +12,11 @@ namespace Engine5
     public:
         ColliderCapsule();
         ~ColliderCapsule() override;
-        ColliderCapsule(const ColliderCapsule& rhs) = delete;
+        ColliderCapsule(const ColliderCapsule& rhs)            = delete;
         ColliderCapsule& operator=(const ColliderCapsule& rhs) = delete;
+
+        void Initialize() override;
+        void Shutdown() override;
 
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
@@ -43,8 +46,8 @@ namespace Engine5
         bool TestRayEllipsoid(const Ray& ray, const Vector3& centroid, Real& min_t, Real& max_t) const;
 
     private:
-        Vector3 m_radius = Vector3(1.3f, 0.5f, 0.4f);
-        Vector3 m_transformed_radius = Vector3(0.3f, 0.5f, 1.4f);
+        Vector3 m_radius;
+        Vector3 m_transformed_radius;
         Real    m_height             = 1.0f;
         Real    m_transformed_height = 1.0f;
     };

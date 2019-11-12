@@ -8,8 +8,11 @@ namespace Engine5
     public:
         ColliderTetrahedron();
         ~ColliderTetrahedron() override;
-        ColliderTetrahedron(const ColliderTetrahedron& rhs) = delete;
+        ColliderTetrahedron(const ColliderTetrahedron& rhs)            = delete;
         ColliderTetrahedron& operator=(const ColliderTetrahedron& rhs) = delete;
+
+        void Initialize() override;
+        void Shutdown() override;
 
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;

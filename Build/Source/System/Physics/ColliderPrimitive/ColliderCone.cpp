@@ -5,9 +5,19 @@ namespace Engine5
 {
     ColliderCone::ColliderCone()
     {
+        m_type = ColliderType::Cone;
     }
 
     ColliderCone::~ColliderCone()
+    {
+    }
+
+    void ColliderCone::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderCone::Shutdown()
     {
     }
 

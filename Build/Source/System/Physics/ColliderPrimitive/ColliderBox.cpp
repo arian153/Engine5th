@@ -12,6 +12,15 @@ namespace Engine5
     {
     }
 
+    void ColliderBox::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderBox::Shutdown()
+    {
+    }
+
     Vector3 ColliderBox::Support(const Vector3& direction)
     {
         Vector3 local_dir = WorldToLocalVector(direction).Unit();
@@ -222,7 +231,6 @@ namespace Engine5
         }
         Vector3    body_position    = GetBodyPosition();
         Quaternion body_orientation = GetBodyOrientation();
-
         for (auto& vertex : vertices)
         {
             //collider local space to object space(body local)
@@ -292,6 +300,21 @@ namespace Engine5
             return m_transformed_vertices[i];
         }
         return m_vertices[i];
+    }
+
+    void ColliderBox::SetBox(Real width, Real height, Real depth)
+    {
+        Real w = 0.5f * width;
+        Real h = 0.5f * height;
+        Real d = 0.5f * depth;
+        m_vertices[0].Set(+w, +h, +d);
+        m_vertices[1].Set(+w, +h, -d);
+        m_vertices[2].Set(+w, -h, +d);
+        m_vertices[3].Set(+w, -h, -d);
+        m_vertices[4].Set(-w, +h, +d);
+        m_vertices[5].Set(-w, +h, -d);
+        m_vertices[6].Set(-w, -h, +d);
+        m_vertices[7].Set(-w, -h, -d);
     }
 
     void ColliderBox::Clone(ColliderPrimitive* cloned)

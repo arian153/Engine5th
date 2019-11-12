@@ -8,8 +8,11 @@ namespace Engine5
     public:
         ColliderPolyhedron();
         ~ColliderPolyhedron() override;
-        ColliderPolyhedron(const ColliderPolyhedron& rhs) = delete;
+        ColliderPolyhedron(const ColliderPolyhedron& rhs)            = delete;
         ColliderPolyhedron& operator=(const ColliderPolyhedron& rhs) = delete;
+
+        void Initialize() override;
+        void Shutdown() override;
 
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;

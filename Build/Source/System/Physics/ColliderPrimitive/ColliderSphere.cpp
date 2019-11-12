@@ -5,9 +5,19 @@ namespace Engine5
 {
     ColliderSphere::ColliderSphere()
     {
+        m_type = ColliderType::Sphere;
     }
 
     ColliderSphere::~ColliderSphere()
+    {
+    }
+
+    void ColliderSphere::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderSphere::Shutdown()
     {
     }
 

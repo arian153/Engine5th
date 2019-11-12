@@ -5,9 +5,19 @@ namespace Engine5
 {
     ColliderDome::ColliderDome()
     {
+        m_type = ColliderType::Dome;
     }
 
     ColliderDome::~ColliderDome()
+    {
+    }
+
+    void ColliderDome::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderDome::Shutdown()
     {
     }
 

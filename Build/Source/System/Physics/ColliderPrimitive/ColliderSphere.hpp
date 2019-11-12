@@ -8,8 +8,11 @@ namespace Engine5
     public:
         ColliderSphere();
         ~ColliderSphere() override;
-        ColliderSphere(const ColliderSphere& rhs) = delete;
+        ColliderSphere(const ColliderSphere& rhs)            = delete;
         ColliderSphere& operator=(const ColliderSphere& rhs) = delete;
+
+        void Initialize() override;
+        void Shutdown() override;
 
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;

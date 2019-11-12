@@ -5,9 +5,19 @@ namespace Engine5
 {
     ColliderTetrahedron::ColliderTetrahedron()
     {
+        m_type = ColliderType::Tetrahedron;
     }
 
     ColliderTetrahedron::~ColliderTetrahedron()
+    {
+    }
+
+    void ColliderTetrahedron::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderTetrahedron::Shutdown()
     {
     }
 

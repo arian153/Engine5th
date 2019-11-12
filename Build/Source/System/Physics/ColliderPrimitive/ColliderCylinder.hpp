@@ -12,8 +12,11 @@ namespace Engine5
     public:
         ColliderCylinder();
         ~ColliderCylinder() override;
-        ColliderCylinder(const ColliderCylinder& rhs) = delete;
+        ColliderCylinder(const ColliderCylinder& rhs)            = delete;
         ColliderCylinder& operator=(const ColliderCylinder& rhs) = delete;
+
+        void Initialize() override;
+        void Shutdown() override;
 
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;

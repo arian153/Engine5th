@@ -5,9 +5,19 @@ namespace Engine5
 {
     ColliderTruncated::ColliderTruncated()
     {
+        m_type = ColliderType::Truncated;
     }
 
     ColliderTruncated::~ColliderTruncated()
+    {
+    }
+
+    void ColliderTruncated::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderTruncated::Shutdown()
     {
     }
 
@@ -279,6 +289,7 @@ namespace Engine5
     {
         m_radius = 0.5f;
         m_height = 1.0f;
+        m_ratio  = 0.5f;
 
         //TODO - get scale from transform 
         Vector3 scale(1.0f, 1.0f, 1.0f);

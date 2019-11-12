@@ -8,8 +8,11 @@ namespace Engine5
     public:
         ColliderBox();
         ~ColliderBox() override;
-        ColliderBox(const ColliderBox& rhs) = delete;
+        ColliderBox(const ColliderBox& rhs)            = delete;
         ColliderBox& operator=(const ColliderBox& rhs) = delete;
+
+        void Initialize() override;
+        void Shutdown() override;
 
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;
@@ -29,6 +32,7 @@ namespace Engine5
         void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
 
         Vector3 Vertex(size_t i) const;
+        void    SetBox(Real width, Real height, Real depth);
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;

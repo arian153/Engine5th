@@ -12,8 +12,11 @@ namespace Engine5
     public:
         ColliderDome();
         ~ColliderDome() override;
-        ColliderDome(const ColliderDome& rhs) = delete;
+        ColliderDome(const ColliderDome& rhs)            = delete;
         ColliderDome& operator=(const ColliderDome& rhs) = delete;
+
+        void Initialize() override;
+        void Shutdown() override;
 
         //minkowski support - gjk, epa
         Vector3 Support(const Vector3& direction) override;

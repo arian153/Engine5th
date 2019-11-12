@@ -5,9 +5,19 @@ namespace Engine5
 {
     ColliderCapsule::ColliderCapsule()
     {
+        m_type = ColliderType::Capsule;
     }
 
     ColliderCapsule::~ColliderCapsule()
+    {
+    }
+
+    void ColliderCapsule::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderCapsule::Shutdown()
     {
     }
 
@@ -291,15 +301,15 @@ namespace Engine5
         int stack_count = renderer->SPHERICAL_STACK_COUNT;
         int slice_count = renderer->SPHERICAL_SLICE_COUNT;
         renderer->ReserveVertices(renderer->SPHERICAL_VERTICES_COUNT, mode);
-        Vector3    axis_vector          = Vector3::AxisY();
-        Vector3    body_position        = GetBodyPosition();
-        Quaternion body_orientation     = GetBodyOrientation();
-        Real       half_height          = HalfHeight();
-        Vector3    radius               = Radius();
+        Vector3    axis_vector      = Vector3::AxisY();
+        Vector3    body_position    = GetBodyPosition();
+        Quaternion body_orientation = GetBodyOrientation();
+        Real       half_height      = HalfHeight();
+        Vector3    radius           = Radius();
 
         //top vertex
-        Vector3    top_vertex_local_pos = axis_vector;
-        top_vertex_local_pos            = top_vertex_local_pos.HadamardProduct(radius);
+        Vector3 top_vertex_local_pos = axis_vector;
+        top_vertex_local_pos         = top_vertex_local_pos.HadamardProduct(radius);
         top_vertex_local_pos += half_height * axis_vector;
 
         //modify rotation, translation

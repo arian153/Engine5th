@@ -5,9 +5,19 @@ namespace Engine5
 {
     ColliderCylinder::ColliderCylinder()
     {
+        m_type = ColliderType::Cylinder;
     }
 
     ColliderCylinder::~ColliderCylinder()
+    {
+    }
+
+    void ColliderCylinder::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderCylinder::Shutdown()
     {
     }
 

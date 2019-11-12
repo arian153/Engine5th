@@ -32,6 +32,9 @@ namespace Engine5
 
         Vector3 ConvertBodyWorldPoint(const Vector3& local_point) const;
     public:
+        virtual void Initialize() = 0;
+        virtual void Shutdown() = 0;
+
         //minkowski support - gjk, epa
         virtual Vector3 Support(const Vector3& direction) = 0;
 

@@ -5,9 +5,19 @@ namespace Engine5
 {
     ColliderEllipsoid::ColliderEllipsoid()
     {
+        m_type = ColliderType::Ellipsoid;
     }
 
     ColliderEllipsoid::~ColliderEllipsoid()
+    {
+    }
+
+    void ColliderEllipsoid::Initialize()
+    {
+        MakeUnitPrimitive();
+    }
+
+    void ColliderEllipsoid::Shutdown()
     {
     }
 
