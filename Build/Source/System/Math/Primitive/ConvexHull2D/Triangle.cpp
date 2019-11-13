@@ -24,6 +24,9 @@ namespace Engine5
 
     void Triangle::SetUnit()
     {
+        vertices[0] = Vector2(0.0f, 0.0f);
+        vertices[1] = Vector2(1.0f, 0.0f);
+        vertices[2] = Vector2(0.0f, 1.0f);
     }
 
     Vector3 Triangle::Support(const Vector3& direction)

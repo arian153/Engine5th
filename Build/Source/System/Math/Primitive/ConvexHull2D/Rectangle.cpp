@@ -24,6 +24,13 @@ namespace Engine5
 
     void Rectangle::SetUnit()
     {
+        Real w = 0.5f;
+        Real h = 0.5f;
+
+        vertices[0].Set(+w, +h);
+        vertices[1].Set(+w, -h);
+        vertices[2].Set(-w, +h);
+        vertices[3].Set(-w, -h);
     }
 
     Vector3 Rectangle::Support(const Vector3& direction)

@@ -24,6 +24,7 @@ namespace Engine5
 
     void Circle::SetUnit()
     {
+        radius = 0.5f;
     }
 
     Vector3 Circle::Support(const Vector3& direction)

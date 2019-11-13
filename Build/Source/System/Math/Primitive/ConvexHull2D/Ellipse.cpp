@@ -24,6 +24,7 @@ namespace Engine5
 
     void Ellipse::SetUnit()
     {
+        radius = 0.5f;
     }
 
     Vector3 Ellipse::Support(const Vector3& direction)
