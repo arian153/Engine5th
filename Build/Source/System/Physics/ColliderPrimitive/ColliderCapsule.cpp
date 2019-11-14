@@ -283,7 +283,6 @@ namespace Engine5
     void ColliderCapsule::SetUnit()
     {
         Real length = m_radius.y * 2.0f + m_height;
-
         if (length > 0.0f)
         {
             m_radius /= length;

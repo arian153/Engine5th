@@ -66,6 +66,7 @@ namespace Engine5
         //collider local space data
         Quaternion m_orientation;
         Vector3    m_position;
+        Real       m_scale_factor = 1.0f;
 
         //collider mass data
         Vector3  m_centroid; //center of mass

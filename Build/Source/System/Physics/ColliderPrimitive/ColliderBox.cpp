@@ -1,5 +1,6 @@
 #include "ColliderBox.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
+#include "../BroadPhase/BoundingAABB.hpp"
 
 namespace Engine5
 {
@@ -210,9 +211,18 @@ namespace Engine5
 
     void ColliderBox::UpdateBoundingVolume()
     {
-        //Vector3 min = Vertex(7);
-        //Vector3 max = Vertex(0);
-        //m_bounding_volume->Set();
+        if (m_rigid_body != nullptr)
+        {
+            auto pos = m_rigid_body->LocalToWorldPoint(m_position);
+            auto min = m_vertices[7] * m_scale_factor;
+            auto max = m_vertices[0] * m_scale_factor;
+
+            m_bounding_volume->Set(min + pos, max + pos);
+        }
+        else
+        {
+            m_bounding_volume->Set(m_vertices[7] + m_position, m_vertices[0] + m_position);
+        }
     }
 
     void ColliderBox::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
