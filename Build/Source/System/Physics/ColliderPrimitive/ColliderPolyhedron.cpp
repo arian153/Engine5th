@@ -14,7 +14,6 @@ namespace Engine5
 
     void ColliderPolyhedron::Initialize()
     {
-        MakeUnitPrimitive();
     }
 
     void ColliderPolyhedron::Shutdown()
@@ -38,7 +37,7 @@ namespace Engine5
         return local_point_on_collider;
     }
 
-    void ColliderPolyhedron::CalculateMassData(Real density)
+    void ColliderPolyhedron::SetMassData(Real density)
     {
     }
 
@@ -47,11 +46,11 @@ namespace Engine5
         return m_mass;
     }
 
-    void ColliderPolyhedron::ScalePrimitiveData(const Vector3& scale)
+    void ColliderPolyhedron::UpdateScale(const Vector3& scale)
     {
     }
 
-    void ColliderPolyhedron::MakeUnitPrimitive()
+    void ColliderPolyhedron::SetUnit()
     {
     }
 
@@ -59,7 +58,7 @@ namespace Engine5
     {
     }
 
-    void ColliderPolyhedron::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void ColliderPolyhedron::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         if (mode == RenderingMode::Dot)
         {

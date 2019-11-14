@@ -25,7 +25,7 @@ namespace Engine5
 
     void Ellipsoid::SetUnit()
     {
-        radius = 1.0f;
+        radius.SetNormalize();
     }
 
     Vector3 Ellipsoid::Support(const Vector3& direction)

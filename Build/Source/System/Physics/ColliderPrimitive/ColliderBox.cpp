@@ -14,7 +14,6 @@ namespace Engine5
 
     void ColliderBox::Initialize()
     {
-        MakeUnitPrimitive();
     }
 
     void ColliderBox::Shutdown()
@@ -143,7 +142,7 @@ namespace Engine5
         return normal;
     }
 
-    void ColliderBox::CalculateMassData(Real density)
+    void ColliderBox::SetMassData(Real density)
     {
         Real w, h, d;
         if (m_rigid_body != nullptr)
@@ -182,7 +181,7 @@ namespace Engine5
         return w * h * d;
     }
 
-    void ColliderBox::ScalePrimitiveData(const Vector3& scale)
+    void ColliderBox::UpdateScale(const Vector3& scale)
     {
         for (size_t i = 0; i < 8; ++i)
         {
@@ -190,7 +189,7 @@ namespace Engine5
         }
     }
 
-    void ColliderBox::MakeUnitPrimitive()
+    void ColliderBox::SetUnit()
     {
         Real w = 0.5f;
         Real h = 0.5f;
@@ -206,7 +205,7 @@ namespace Engine5
 
         //TODO - get scale from transform 
         Vector3 scale(1.0f, 1.0f, 1.0f);
-        ScalePrimitiveData(scale);
+        UpdateScale(scale);
     }
 
     void ColliderBox::UpdateBoundingVolume()
@@ -216,7 +215,7 @@ namespace Engine5
         //m_bounding_volume->Set();
     }
 
-    void ColliderBox::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void ColliderBox::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         renderer->ReserveVertices(8, mode);

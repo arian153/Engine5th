@@ -8,6 +8,7 @@ namespace Engine5
     Circle::Circle()
     {
         type = PrimitiveType::Circle;
+
     }
 
     Circle::~Circle()

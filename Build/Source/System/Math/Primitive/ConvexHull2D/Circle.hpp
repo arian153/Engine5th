@@ -26,6 +26,6 @@ namespace Engine5
         void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
 
     public:
-        Real radius = 1.0f;
+        Real radius = 0.5f;
     };
 }

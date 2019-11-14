@@ -14,7 +14,6 @@ namespace Engine5
 
     void ColliderDome::Initialize()
     {
-        MakeUnitPrimitive();
     }
 
     void ColliderDome::Shutdown()
@@ -104,7 +103,7 @@ namespace Engine5
         return local_point_on_collider;
     }
 
-    void ColliderDome::CalculateMassData(Real density)
+    void ColliderDome::SetMassData(Real density)
     {
         Real a, b, c;
         m_mass = density * GetVolume();
@@ -138,25 +137,25 @@ namespace Engine5
         return 2.0f / 3.0f * Math::PI * m_radius.x * m_radius.y * m_radius.z;
     }
 
-    void ColliderDome::ScalePrimitiveData(const Vector3& scale)
+    void ColliderDome::UpdateScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius.HadamardProduct(scale);
     }
 
-    void ColliderDome::MakeUnitPrimitive()
+    void ColliderDome::SetUnit()
     {
-        m_radius = 0.5f;
+        m_radius.SetNormalize();
 
         //TODO - get scale from transform 
         Vector3 scale(1.0f, 1.0f, 1.0f);
-        ScalePrimitiveData(scale);
+        UpdateScale(scale);
     }
 
     void ColliderDome::UpdateBoundingVolume()
     {
     }
 
-    void ColliderDome::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void ColliderDome::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index               = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count         = renderer->SPHERICAL_STACK_COUNT + 1; //for equal divide.

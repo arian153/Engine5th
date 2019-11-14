@@ -14,7 +14,6 @@ namespace Engine5
 
     void ColliderTetrahedron::Initialize()
     {
-        MakeUnitPrimitive();
     }
 
     void ColliderTetrahedron::Shutdown()
@@ -50,7 +49,7 @@ namespace Engine5
         return local_point_on_collider;
     }
 
-    void ColliderTetrahedron::CalculateMassData(Real density)
+    void ColliderTetrahedron::SetMassData(Real density)
     {
     }
 
@@ -59,7 +58,7 @@ namespace Engine5
         return m_mass;
     }
 
-    void ColliderTetrahedron::ScalePrimitiveData(const Vector3& scale)
+    void ColliderTetrahedron::UpdateScale(const Vector3& scale)
     {
         for (size_t i = 0; i < 4; ++i)
         {
@@ -67,7 +66,7 @@ namespace Engine5
         }
     }
 
-    void ColliderTetrahedron::MakeUnitPrimitive()
+    void ColliderTetrahedron::SetUnit()
     {
         m_vertices[0] = Vector3::Origin();
         m_vertices[1] = Vector3::AxisX();
@@ -76,14 +75,14 @@ namespace Engine5
 
         //TODO - get scale from transform 
         Vector3 scale(1.0f, 1.0f, 1.0f);
-        ScalePrimitiveData(scale);
+        UpdateScale(scale);
     }
 
     void ColliderTetrahedron::UpdateBoundingVolume()
     {
     }
 
-    void ColliderTetrahedron::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void ColliderTetrahedron::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         renderer->ReserveVertices(4, mode);

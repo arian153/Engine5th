@@ -26,14 +26,14 @@ namespace Engine5
         Vector3 GetNormal(const Vector3& local_point_on_collider) override;
 
         //physics
-        void CalculateMassData(Real density) override;
+        void SetMassData(Real density) override;
         Real GetVolume() override;
 
         //collider 
-        void ScalePrimitiveData(const Vector3& scale) override;
-        void MakeUnitPrimitive() override;
+        void UpdateScale(const Vector3& scale) override;
+        void SetUnit() override;
         void UpdateBoundingVolume() override;
-        void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
+        void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         Real    HalfHeight() const;
         Real    Height() const;

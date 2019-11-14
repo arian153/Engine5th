@@ -14,7 +14,6 @@ namespace Engine5
 
     void ColliderEllipsoid::Initialize()
     {
-        MakeUnitPrimitive();
     }
 
     void ColliderEllipsoid::Shutdown()
@@ -76,7 +75,7 @@ namespace Engine5
         return normal;
     }
 
-    void ColliderEllipsoid::CalculateMassData(Real density)
+    void ColliderEllipsoid::SetMassData(Real density)
     {
         Real a, b, c;
         m_mass = density * GetVolume();
@@ -109,24 +108,24 @@ namespace Engine5
         return 4.0f / 3.0f * Math::PI * m_radius.x * m_radius.y * m_radius.z;
     }
 
-    void ColliderEllipsoid::ScalePrimitiveData(const Vector3& scale)
+    void ColliderEllipsoid::UpdateScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius.HadamardProduct(scale);
     }
 
-    void ColliderEllipsoid::MakeUnitPrimitive()
+    void ColliderEllipsoid::SetUnit()
     {
-        m_radius = 0.5f;
+        m_radius.SetNormalize();
         //TODO - get scale from transform 
         Vector3 scale(1.0f, 1.0f, 1.0f);
-        ScalePrimitiveData(scale);
+        UpdateScale(scale);
     }
 
     void ColliderEllipsoid::UpdateBoundingVolume()
     {
     }
 
-    void ColliderEllipsoid::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void ColliderEllipsoid::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index       = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count = renderer->SPHERICAL_STACK_COUNT;

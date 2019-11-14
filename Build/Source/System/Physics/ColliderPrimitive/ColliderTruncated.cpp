@@ -14,7 +14,7 @@ namespace Engine5
 
     void ColliderTruncated::Initialize()
     {
-        MakeUnitPrimitive();
+
     }
 
     void ColliderTruncated::Shutdown()
@@ -241,7 +241,7 @@ namespace Engine5
         return normal;
     }
 
-    void ColliderTruncated::CalculateMassData(Real density)
+    void ColliderTruncated::SetMassData(Real density)
     {
         Real a, b, h;
         m_mass             = density * GetVolume();
@@ -278,29 +278,41 @@ namespace Engine5
         return Math::PI * m_radius.x * m_radius.y * m_height * ratio / 3.0f;
     }
 
-    void ColliderTruncated::ScalePrimitiveData(const Vector3& scale)
+    void ColliderTruncated::UpdateScale(const Vector3& scale)
     {
         m_transformed_height = m_height * scale.y;
         m_transformed_radius = m_radius.HadamardProduct(Vector2(scale.x, scale.z));
     }
 
 
-    void ColliderTruncated::MakeUnitPrimitive()
+    void ColliderTruncated::SetUnit()
     {
-        m_radius = 0.5f;
-        m_height = 1.0f;
-        m_ratio  = 0.5f;
+        Real division;
+        if (m_radius.Length() * 2.0f > m_height)
+        {
+            division = m_radius.Length() * 2.0f;
+        }
+        else
+        {
+            division = m_height;
+        }
+
+        if (division > 0.0f)
+        {
+            m_radius /= division;
+            m_height /= division;
+        }
 
         //TODO - get scale from transform 
         Vector3 scale(1.0f, 1.0f, 1.0f);
-        ScalePrimitiveData(scale);
+        UpdateScale(scale);
     }
 
     void ColliderTruncated::UpdateBoundingVolume()
     {
     }
 
-    void ColliderTruncated::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void ColliderTruncated::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index       = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count = renderer->CYLINDRICAL_STACK_COUNT;

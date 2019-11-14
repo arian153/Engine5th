@@ -43,15 +43,15 @@ namespace Engine5
         virtual Vector3 GetNormal(const Vector3& local_point_on_collider) = 0;
 
         //physics
-        virtual void CalculateMassData(Real density) = 0;
+        virtual void SetMassData(Real density) = 0;
         virtual Real GetVolume() = 0;
         
 
         //collider 
-        virtual void ScalePrimitiveData(const Vector3& scale) = 0;
-        virtual void MakeUnitPrimitive() = 0;
+        virtual void UpdateScale(const Vector3& scale) = 0;
+        virtual void SetUnit() = 0;
         virtual void UpdateBoundingVolume() = 0;
-        virtual void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) = 0;
+        virtual void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const = 0;
 
     protected:
         virtual void Clone(ColliderPrimitive* cloned) = 0;

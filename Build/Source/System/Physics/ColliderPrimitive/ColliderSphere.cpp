@@ -14,7 +14,6 @@ namespace Engine5
 
     void ColliderSphere::Initialize()
     {
-        MakeUnitPrimitive();
     }
 
     void ColliderSphere::Shutdown()
@@ -56,7 +55,7 @@ namespace Engine5
         return local_point_on_collider.Unit();
     }
 
-    void ColliderSphere::CalculateMassData(Real density)
+    void ColliderSphere::SetMassData(Real density)
     {
         m_mass  = density * GetVolume();
         Real it = m_mass * 0.4f * Radius() * Radius();
@@ -74,24 +73,24 @@ namespace Engine5
         return 4.0f / 3.0f * Math::PI * m_radius * m_radius * m_radius;
     }
 
-    void ColliderSphere::ScalePrimitiveData(const Vector3& scale)
+    void ColliderSphere::UpdateScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius * scale.Length();
     }
 
-    void ColliderSphere::MakeUnitPrimitive()
+    void ColliderSphere::SetUnit()
     {
         m_radius = 0.5f;
         //TODO - get scale from transform 
         Vector3 scale(1.0f, 1.0f, 1.0f);
-        ScalePrimitiveData(scale);
+        UpdateScale(scale);
     }
 
     void ColliderSphere::UpdateBoundingVolume()
     {
     }
 
-    void ColliderSphere::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void ColliderSphere::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index       = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count = renderer->SPHERICAL_STACK_COUNT;

@@ -14,7 +14,6 @@ namespace Engine5
 
     void ColliderCapsule::Initialize()
     {
-        MakeUnitPrimitive();
     }
 
     void ColliderCapsule::Shutdown()
@@ -238,7 +237,7 @@ namespace Engine5
         return normal;
     }
 
-    void ColliderCapsule::CalculateMassData(Real density)
+    void ColliderCapsule::SetMassData(Real density)
     {
         Real a, b, c, h;
         m_mass = density * GetVolume();
@@ -275,27 +274,32 @@ namespace Engine5
         return Math::PI * m_radius.x * m_radius.z * (m_radius.y * 4.0f / 3.0f + m_height);
     }
 
-    void ColliderCapsule::ScalePrimitiveData(const Vector3& scale)
+    void ColliderCapsule::UpdateScale(const Vector3& scale)
     {
         m_transformed_height = m_height * scale.y;
         m_transformed_radius = m_radius.HadamardProduct(scale);
     }
 
-    void ColliderCapsule::MakeUnitPrimitive()
+    void ColliderCapsule::SetUnit()
     {
-        m_radius = 0.25f;
-        m_height = 0.5f;
+        Real length = m_radius.y * 2.0f + m_height;
+
+        if (length > 0.0f)
+        {
+            m_radius /= length;
+            m_height /= length;
+        }
 
         //TODO - get scale from transform 
         Vector3 scale(1.0f, 1.0f, 1.0f);
-        ScalePrimitiveData(scale);
+        UpdateScale(scale);
     }
 
     void ColliderCapsule::UpdateBoundingVolume()
     {
     }
 
-    void ColliderCapsule::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void ColliderCapsule::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index       = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count = renderer->SPHERICAL_STACK_COUNT;

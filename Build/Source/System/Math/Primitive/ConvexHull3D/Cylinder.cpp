@@ -16,7 +16,6 @@ namespace Engine5
 
     void Cylinder::Initialize()
     {
-        SetUnit();
     }
 
     void Cylinder::Shutdown()
@@ -25,8 +24,21 @@ namespace Engine5
 
     void Cylinder::SetUnit()
     {
-        radius = 0.5f;
-        height = 1.0f;
+        Real division;
+        if (radius * 2.0f > height)
+        {
+            division = radius * 2.0f;
+        }
+        else
+        {
+            division = height;
+        }
+
+        if (division > 0.0f)
+        {
+            radius /= division;
+            height /= division;
+        }
     }
 
     Vector3 Cylinder::Support(const Vector3& direction)

@@ -25,8 +25,13 @@ namespace Engine5
 
     void Capsule::SetUnit()
     {
-        radius = 0.25f;
-        height = 0.5f;
+        Real length = radius * 2.0f + height;
+
+        if(length > 0.0f)
+        {
+            radius /= length;
+            height /= length;
+        }
     }
 
     Vector3 Capsule::Support(const Vector3& direction)
