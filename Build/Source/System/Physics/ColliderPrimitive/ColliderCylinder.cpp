@@ -1,5 +1,6 @@
 #include "ColliderCylinder.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
+#include "../BroadPhase/BoundingAABB.hpp"
 
 namespace Engine5
 {
@@ -265,6 +266,19 @@ namespace Engine5
 
     void ColliderCylinder::UpdateBoundingVolume()
     {
+        Real    bounding_factor = Vector3(m_radius.x, m_height, m_radius.y).Length();
+        Vector3 pos;
+        if (m_rigid_body != nullptr)
+        {
+            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            bounding_factor *= m_scale_factor;
+        }
+        else
+        {
+            pos = m_position;
+        }
+        Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
+        m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
     void ColliderCylinder::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const

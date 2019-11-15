@@ -211,18 +211,19 @@ namespace Engine5
 
     void ColliderBox::UpdateBoundingVolume()
     {
+        Real    bounding_factor = m_vertices[0].Length();
+        Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            auto pos = m_rigid_body->LocalToWorldPoint(m_position);
-            auto min = m_vertices[7] * m_scale_factor;
-            auto max = m_vertices[0] * m_scale_factor;
-
-            m_bounding_volume->Set(min + pos, max + pos);
+            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            bounding_factor *= m_scale_factor;
         }
         else
         {
-            m_bounding_volume->Set(m_vertices[7] + m_position, m_vertices[0] + m_position);
+            pos = m_position;
         }
+        Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
+        m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
     void ColliderBox::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
