@@ -112,6 +112,7 @@ namespace Engine5
     void ColliderEllipsoid::UpdateScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius.HadamardProduct(scale);
+        m_scale_factor = scale.Length();
     }
 
     void ColliderEllipsoid::SetUnit()

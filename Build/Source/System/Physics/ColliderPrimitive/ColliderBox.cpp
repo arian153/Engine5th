@@ -188,6 +188,7 @@ namespace Engine5
         {
             m_transformed_vertices[i] = m_vertices[i].HadamardProduct(scale);
         }
+        m_scale_factor = scale.Length();
     }
 
     void ColliderBox::SetUnit()
@@ -322,5 +323,6 @@ namespace Engine5
 
     void ColliderBox::Clone(ColliderPrimitive* cloned)
     {
+
     }
 }

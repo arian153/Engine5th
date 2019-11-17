@@ -77,6 +77,7 @@ namespace Engine5
     void ColliderSphere::UpdateScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius * scale.Length();
+        m_scale_factor = scale.Length();
     }
 
     void ColliderSphere::SetUnit()

@@ -279,6 +279,7 @@ namespace Engine5
     {
         m_transformed_height = m_height * scale.y;
         m_transformed_radius = m_radius.HadamardProduct(scale);
+        m_scale_factor = scale.Length();
     }
 
     void ColliderCapsule::SetUnit()

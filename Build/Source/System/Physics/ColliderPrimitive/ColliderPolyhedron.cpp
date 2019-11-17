@@ -48,6 +48,7 @@ namespace Engine5
 
     void ColliderPolyhedron::UpdateScale(const Vector3& scale)
     {
+        m_scale_factor = scale.Length();
     }
 
     void ColliderPolyhedron::SetUnit()

@@ -283,6 +283,7 @@ namespace Engine5
     {
         m_transformed_height = m_height * scale.y;
         m_transformed_radius = m_radius.HadamardProduct(Vector2(scale.x, scale.z));
+        m_scale_factor = scale.Length();
     }
 
 
