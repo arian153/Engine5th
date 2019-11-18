@@ -44,7 +44,7 @@ namespace Engine5
         Real m_curr_mspf    = 0.0f;
 
         //application name
-        std::string m_application_caption = "Engine 5";
+        String m_application_caption = "Engine 5";
 
     private:
         static inline Application* m_s_application = nullptr;

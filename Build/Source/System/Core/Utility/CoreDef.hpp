@@ -14,6 +14,9 @@ namespace Engine5
     using R32 = float;
     using R64 = double;
 
+    using String = std::string;
+    using WString = std::wstring;
+
     namespace Core
     {
         constexpr R32 R32_MIN = 1.175494351e-38F;

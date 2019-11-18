@@ -145,4 +145,12 @@ namespace Engine5
         result += GetBodyPosition();
         return result;
     }
+
+    void ColliderPrimitive::SyncFromTransform()
+    {
+    }
+
+    void ColliderPrimitive::SyncToTransform()
+    {
+    }
 }

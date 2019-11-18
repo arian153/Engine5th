@@ -33,8 +33,8 @@
 
 namespace Engine5
 {
-    std::wstring StringToWString(const std::string& str);
-    std::string  WStringToString(const std::wstring& wstr);
+    WString StringToWString(const String& str);
+    String  WStringToString(const std::wstring& wstr);
 
     template <typename First, typename... Rest>
     void UnusedParameter(const First& first, const Rest& ...rest);
@@ -44,7 +44,7 @@ namespace Engine5
 
     void UnusedParameter();
 
-    bool Assert(int expression, const std::string& output_message, const std::string& function_name, const std::string& file_name, unsigned line_number);
+    bool Assert(int expression, const String& output_message, const String& function_name, const String& file_name, unsigned line_number);
 }
 
 #include "CoreUtility.inl"

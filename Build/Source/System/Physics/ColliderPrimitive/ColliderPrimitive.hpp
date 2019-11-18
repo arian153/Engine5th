@@ -2,6 +2,8 @@
 #include "../../Math/Math.hpp"
 #include "..//Dynamics/RigidBody.hpp"
 #include "../BroadPhase/RayCast.hpp"
+#include "../Dynamics/ColliderSet.hpp"
+
 
 namespace Engine5
 {
@@ -31,6 +33,9 @@ namespace Engine5
         BoundingAABB* GetBoundingVolume() const;
 
         Vector3 ConvertBodyWorldPoint(const Vector3& local_point) const;
+        void    SyncFromTransform();
+        void    SyncToTransform();
+
     public:
         virtual void Initialize() = 0;
         virtual void Shutdown() = 0;
@@ -75,6 +80,7 @@ namespace Engine5
 
         //other data
         RigidBody*    m_rigid_body      = nullptr;
+        ColliderSet*  m_collider_set    = nullptr;
         BoundingAABB* m_bounding_volume = nullptr;
         ColliderType  m_type;
     };

@@ -241,7 +241,7 @@ namespace Engine5
         return m_depth_stencil_view;
     }
 
-    std::string DirectX3D11::GetVideoCardInfo(size_t& memory) const
+    String DirectX3D11::GetVideoCardInfo(size_t& memory) const
     {
         memory = m_video_card_memory;
         return m_video_card_description;

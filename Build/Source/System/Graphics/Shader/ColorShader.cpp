@@ -4,7 +4,7 @@
 
 namespace Engine5
 {
-    ColorShader::ColorShader(const std::string& vsr, const std::string& psr)
+    ColorShader::ColorShader(const String& vsr, const String& psr)
         : m_vsr(vsr), m_psr(psr)
     {
     }
@@ -35,7 +35,7 @@ namespace Engine5
         ShutdownShader();
     }
 
-    void ColorShader::InitializeShader(ID3D11Device* device, HWND hwnd, const std::string& vs_path, const std::string& ps_path)
+    void ColorShader::InitializeShader(ID3D11Device* device, HWND hwnd, const String& vs_path, const String& ps_path)
     {
         // Initialize the pointers this function will use to null.
         ID3D10Blob* error_message        = nullptr;
@@ -165,7 +165,7 @@ namespace Engine5
         }
     }
 
-    void ColorShader::OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const std::string& shader_name)
+    void ColorShader::OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const String& shader_name)
     {
         std::ofstream file_out;
 

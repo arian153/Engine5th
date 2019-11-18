@@ -24,7 +24,7 @@ namespace Engine5
     }
 
     template<typename T>
-    inline std::string TypeToString()
+    inline String TypeToString()
     {
         return typeid(T).name();
     }

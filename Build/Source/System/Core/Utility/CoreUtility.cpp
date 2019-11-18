@@ -6,9 +6,9 @@
 
 namespace Engine5
 {
-    std::wstring StringToWString(const std::string& str)
+    WString StringToWString(const String& str)
     {
-        std::wstring convertedString;
+        WString convertedString;
         int          requiredSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, 0, 0);
         if (requiredSize > 0)
         {
@@ -19,9 +19,9 @@ namespace Engine5
         return convertedString;
     }
 
-    std::string WStringToString(const std::wstring& wstr)
+    String WStringToString(const std::wstring& wstr)
     {
-        std::string convertedString;
+        String convertedString;
         int         requiredSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, 0, 0, 0, 0);
         if (requiredSize > 0)
         {
@@ -36,7 +36,7 @@ namespace Engine5
     {
     }
 
-    bool Assert(int expression, const std::string& output_message, const std::string& function_name, const std::string& file_name, unsigned line_number)
+    bool Assert(int expression, const String& output_message, const String& function_name, const String& file_name, unsigned line_number)
     {
         if (!expression)
         {
@@ -56,7 +56,7 @@ namespace Engine5
             ss << "\nNO: Exit immediately";
 
             /*display a message to the user*/
-            std::wstring message      = StringToWString(ss.str());
+            WString message      = StringToWString(ss.str());
             int          return_value = MessageBox(nullptr, message.c_str(), L"ASSERT!", MB_TASKMODAL | MB_SETFOREGROUND | MB_YESNO | MB_ICONERROR);
             if (return_value == IDYES)
             {

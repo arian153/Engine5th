@@ -3,6 +3,7 @@
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include "../../Math/Utility/MathDef.hpp"
+#include "../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
@@ -17,7 +18,7 @@ namespace Engine5
         };
 
     public:
-        ColorShader(const std::string& vsr, const std::string& psr);
+        ColorShader(const String& vsr, const String& psr);
         ~ColorShader();
 
         void Initialize(ID3D11Device* device, HWND hwnd);
@@ -25,9 +26,9 @@ namespace Engine5
         void Shutdown();
 
     private:
-        void InitializeShader(ID3D11Device* device, HWND hwnd, const std::string& vs_path, const std::string& ps_path);
+        void InitializeShader(ID3D11Device* device, HWND hwnd, const String& vs_path, const String& ps_path);
         void ShutdownShader();
-        void OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const std::string& shader_name);
+        void OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const String& shader_name);
 
         bool SetShaderParameters(ID3D11DeviceContext* device_context, const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj) const;
         void RenderShader(ID3D11DeviceContext* device_context, int index_count) const;
@@ -38,7 +39,7 @@ namespace Engine5
         ID3D11InputLayout*  m_layout        = nullptr;
         ID3D11Buffer*       m_matrix_buffer = nullptr;
 
-        std::string m_vsr;
-        std::string m_psr;
+        String m_vsr;
+        String m_psr;
     };
 }

@@ -7,27 +7,28 @@
 #include <directxmath.h>
 #include <string>
 #include "../../Math/Utility/MathDef.hpp"
+#include "../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
     class Color;
 
-    class DirectX3D11 final 
+    class DirectX3D11 final
     {
     public:
         explicit DirectX3D11(HWND hwnd);
         ~DirectX3D11();
-        void Initialize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view) ;
-        void Update(Real dt) ;
-        void Shutdown() ;
-        void OnResize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view) ;
-        void OnFullscreen(bool fullscreen_flag) ;
+        void Initialize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view);
+        void Update(Real dt);
+        void Shutdown();
+        void OnResize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view);
+        void OnFullscreen(bool fullscreen_flag);
 
-        void BeginScene(Color color) const ;
-        void EndScene() const ;
-        void SetVSync(bool flag) ;
-        void SetAlphaBlending(bool flag) const ;
-        void SetZBuffering(bool flag) const ;
+        void BeginScene(Color color) const;
+        void EndScene() const;
+        void SetVSync(bool flag);
+        void SetAlphaBlending(bool flag) const;
+        void SetZBuffering(bool flag) const;
 
 
         ID3D11Device*           GetDevice() const;
@@ -35,9 +36,9 @@ namespace Engine5
         ID3D11DepthStencilView* GetDepthStencilView() const;
         //RenderSystem* GetRenderSystem();
 
-        std::string GetVideoCardInfo(size_t& memory) const;
+        String            GetVideoCardInfo(size_t& memory) const;
         DirectX::XMMATRIX GetProjectionMatrix() const;
-        
+
         void SetBackBufferRenderTarget() const;
         void SetRasterStateWireFrame(bool flag) const;
 
@@ -95,17 +96,17 @@ namespace Engine5
         DirectX::XMMATRIX m_isometric_matrix;
         DirectX::XMMATRIX m_ndc_to_screen_matrix;
 
-        UINT        m_back_buffer_count = 1;
-        bool        m_enable_msaa       = false;
-        UINT        m_msaa_quality      = 0;
-        bool        m_vsync_enabled     = true;
-        UINT        m_numerator;
-        UINT        m_denominator;
-        size_t      m_video_card_memory;
-        std::string m_video_card_description;
-        size_t      m_client_width;
-        size_t      m_client_height;
-        Real        m_dw_dpi = 96.0f;
+        UINT   m_back_buffer_count = 1;
+        bool   m_enable_msaa       = false;
+        UINT   m_msaa_quality      = 0;
+        bool   m_vsync_enabled     = true;
+        UINT   m_numerator;
+        UINT   m_denominator;
+        size_t m_video_card_memory;
+        String m_video_card_description;
+        size_t m_client_width;
+        size_t m_client_height;
+        Real   m_dw_dpi = 96.0f;
 
     private:
     };
