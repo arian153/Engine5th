@@ -50,11 +50,6 @@ namespace Engine5
     void DirectX3D11::Update(Real dt)
     {
         E5_UNUSED_PARAM(dt);
-
-
-
-
-
     }
 
     void DirectX3D11::Shutdown()
