@@ -1,6 +1,7 @@
 #include "DirectX3D11.hpp"
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "../Utility/Color.hpp"
+#include "../Utility/MatrixGenerator.hpp"
 
 namespace Engine5
 {
@@ -706,7 +707,9 @@ namespace Engine5
     {
         Real screen_aspect  = (Real)client_width / (Real)client_height;
         m_projection_matrix = ProjectionMatrix(screen_aspect, field_of_view, far_plane, near_plane);
-        m_ortho_matrix      = OrthoGraphicMatrix(client_width, client_height, far_plane, near_plane);
+        MatrixGenerator mat_gen;
+        auto result = mat_gen.ProjectionMatrix(screen_aspect, field_of_view, far_plane, near_plane);
+        m_ortho_matrix = OrthoGraphicMatrix(client_width, client_height, far_plane, near_plane);
     }
 
     void DirectX3D11::SetUpMultiSamplingLevel()
