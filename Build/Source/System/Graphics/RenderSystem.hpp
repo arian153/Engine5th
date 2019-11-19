@@ -7,6 +7,7 @@
 #include "Utility/ShaderManager.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
 #include "../Core/OS-API/Windows/Windows.hpp"
+#include "Utility/MatrixGenerator.hpp"
 
 
 namespace Engine5
@@ -39,11 +40,13 @@ namespace Engine5
         //
 
     private:
-        WindowsAPI*         m_os_api   = nullptr;
-        DirectX3D11*        m_renderer = nullptr;
+        WindowsAPI*        m_os_api             = nullptr;
+        DirectX3D11*       m_renderer           = nullptr;
+        ShaderManager*     m_shader_manager     = nullptr;
+        PrimitiveRenderer* m_primitive_renderer = nullptr;
+        MatrixGenerator    m_matrix_generator;
+
         std::vector<Scene*> m_scenes;
-        ShaderManager*      m_shader_manager     = nullptr;
-        PrimitiveRenderer*  m_primitive_renderer = nullptr;
 
         size_t m_render_width     = 1280;
         size_t m_render_height    = 720;

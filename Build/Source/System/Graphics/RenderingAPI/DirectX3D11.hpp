@@ -11,12 +11,13 @@
 
 namespace Engine5
 {
+    class MatrixGenerator;
     class Color;
 
-    class DirectX3D11 final
+    class DirectX3D11
     {
     public:
-        explicit DirectX3D11(HWND hwnd);
+        explicit DirectX3D11(HWND hwnd, MatrixGenerator* matrix_gen);
         ~DirectX3D11();
         void Initialize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view);
         void Update(Real dt);
@@ -59,7 +60,6 @@ namespace Engine5
         void SetUpDWDevice();
         void SetUpDWRenderTarget();
 
-        DirectX::XMMATRIX ProjectionMatrix(Real screen_aspect, Real field_of_view, Real far_plane, Real near_plane) const;
         DirectX::XMMATRIX OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane) const;
 
     private:
@@ -81,6 +81,7 @@ namespace Engine5
         IDWriteFactory2*         m_write_factory                 = nullptr;
         ID2D1Bitmap1*            m_target_bitmap                 = nullptr;
         HWND                     m_hwnd                          = nullptr;
+        MatrixGenerator*         m_matrix_generator              = nullptr;
         D3D_FEATURE_LEVEL        m_d3d_feature_level;
         DXGI_FORMAT              m_dxgi_color_format = DXGI_FORMAT_B8G8R8A8_UNORM;
 

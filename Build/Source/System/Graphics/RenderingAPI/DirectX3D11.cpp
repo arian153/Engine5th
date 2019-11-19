@@ -2,11 +2,13 @@
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "../Utility/Color.hpp"
 #include "../Utility/MatrixGenerator.hpp"
+#include "../../Math/Math.hpp"
 
 namespace Engine5
 {
-    DirectX3D11::DirectX3D11(HWND hwnd)
+    DirectX3D11::DirectX3D11(HWND hwnd, MatrixGenerator* matrix_gen)
         : m_hwnd(hwnd),
+          m_matrix_generator(matrix_gen),
           m_d3d_feature_level(),
           m_projection_matrix(),
           m_world_matrix(),
@@ -706,10 +708,8 @@ namespace Engine5
     void DirectX3D11::SetUpMatrices(int client_width, int client_height, Real far_plane, Real near_plane, Real field_of_view)
     {
         Real screen_aspect  = (Real)client_width / (Real)client_height;
-        m_projection_matrix = ProjectionMatrix(screen_aspect, field_of_view, far_plane, near_plane);
-        MatrixGenerator mat_gen;
-        auto result = mat_gen.ProjectionMatrix(screen_aspect, field_of_view, far_plane, near_plane);
-        m_ortho_matrix = OrthoGraphicMatrix(client_width, client_height, far_plane, near_plane);
+        m_projection_matrix = Converter::ToXMMatrix(m_matrix_generator->ProjectionMatrix(screen_aspect, field_of_view, far_plane, near_plane));
+        m_ortho_matrix      = OrthoGraphicMatrix(client_width, client_height, far_plane, near_plane);
     }
 
     void DirectX3D11::SetUpMultiSamplingLevel()
@@ -810,10 +810,6 @@ namespace Engine5
         }
     }
 
-    DirectX::XMMATRIX DirectX3D11::ProjectionMatrix(Real screen_aspect, Real field_of_view, Real far_plane, Real near_plane) const
-    {
-        return DirectX::XMMatrixPerspectiveFovLH(field_of_view, screen_aspect, near_plane, far_plane);
-    }
 
     DirectX::XMMATRIX DirectX3D11::OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane) const
     {

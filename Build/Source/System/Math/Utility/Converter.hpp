@@ -22,14 +22,22 @@ namespace Engine5
         Quaternion ToQuaternion(const DirectX::XMVECTOR& xmvector);
         Quaternion ToQuaternion(const DirectX::XMFLOAT4& xmfloat4);
 
+        Matrix44 ToMatrix44(const DirectX::XMMATRIX& xmmatrix);
+        Matrix44 ToMatrix44(const DirectX::XMFLOAT4X4& xmfloat44);
+
 
         DirectX::XMVECTOR ToXMVector(const Vector3& vector);
         DirectX::XMVECTOR ToXMVector(const Vector4& vector);
         DirectX::XMVECTOR ToXMVector(const Quaternion& quaternion);
+        DirectX::XMMATRIX ToXMMatrix(const Matrix44& matrix);
 
         DirectX::XMFLOAT2 ToXMFloat2(const Vector2& vector);
         DirectX::XMFLOAT3 ToXMFloat3(const Vector3& vector);
         DirectX::XMFLOAT4 ToXMFloat4(const Vector4& vector);
         DirectX::XMFLOAT4 ToXMFloat4(const Quaternion& quaternion);
+        
+        DirectX::XMFLOAT4X4 ToXMFloat4X4(const Matrix44& matrix);
+       
+
     }
 }
