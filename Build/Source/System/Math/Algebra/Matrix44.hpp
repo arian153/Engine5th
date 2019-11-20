@@ -10,7 +10,7 @@
 
 #pragma once
 #include "../Utility/MathDef.hpp"
-#include "../Utility/Structure.hpp"
+#include "../Structure/EulerAngle.hpp"
 
 namespace Engine5
 {

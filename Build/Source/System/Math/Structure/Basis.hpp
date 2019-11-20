@@ -1,9 +1,10 @@
 #pragma once
-#include "../../Algebra/Vector3.hpp"
-#include "../../Algebra/Quaternion.hpp"
+#include "../Algebra/Vector3.hpp"
 
 namespace Engine5
 {
+    class Quaternion;
+
     class Basis
     {
     public:

@@ -2,7 +2,7 @@
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../../Math/Algebra/Quaternion.hpp"
 #include <directxmath.h>
-#include "../../Math/Primitive/Others/Basis.hpp"
+#include "../../Math/Structure/Basis.hpp"
 
 namespace Engine5
 {

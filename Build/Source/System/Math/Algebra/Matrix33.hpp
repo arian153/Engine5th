@@ -10,7 +10,8 @@
 
 #pragma once
 #include "../Utility/MathDef.hpp"
-#include "../Utility/Structure.hpp"
+#include "../Structure/EulerAngle.hpp"
+#include "../Structure/AxisRadian.hpp"
 
 
 namespace Engine5

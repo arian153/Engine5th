@@ -1,5 +1,5 @@
 #include "Basis.hpp"
-#include "../../Utility/Utility.hpp"
+#include "../Algebra/Quaternion.hpp"
 
 namespace Engine5
 {

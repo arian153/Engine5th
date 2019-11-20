@@ -1,7 +1,7 @@
 #include "Utility.hpp"
 #include "../Algebra/Vector3.hpp"
 #include "../Algebra/Quaternion.hpp"
-#include "Structure.hpp"
+#include "../Structure/Vector3Pair.hpp"
 
 namespace Engine5
 {

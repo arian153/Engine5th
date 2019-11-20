@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Algebra/Vector3.hpp"
 #include "../../Algebra/Quaternion.hpp"
-#include "../../Utility/Structure.hpp"
+#include "../../Structure/Vector3Pair.hpp"
 
 namespace Engine5
 {

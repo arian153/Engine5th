@@ -10,7 +10,6 @@
 
 #include "Matrix33.hpp"
 #include "Quaternion.hpp"
-#include "../Utility/Structure.hpp"
 #include "../Utility/Utility.hpp"
 #include "Vector2.hpp"
 #include <ostream>

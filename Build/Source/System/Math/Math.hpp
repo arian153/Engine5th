@@ -4,7 +4,6 @@
 #include "Utility/MathDef.hpp"
 #include "Utility/Converter.hpp"
 #include "Utility/Random.hpp"
-#include "Utility/Structure.hpp"
 #include "Utility/Utility.hpp"
 
 //Algebra
@@ -38,9 +37,14 @@
 #include "Primitive/ConvexHull3D/Tetrahedron.hpp"
 
 //Primitive Others
-#include "Primitive/Others/Basis.hpp"
 #include "Primitive/Others/Line.hpp"
 #include "Primitive/Others/Plane.hpp"
 #include "Primitive/Others/Ray.hpp"
 #include "Primitive/Others/Segment.hpp"
 
+//Structure
+#include "Structure/AxisRadian.hpp"
+#include "Structure/Basis.hpp"
+#include "Structure/EulerAngle.hpp"
+#include "Structure/Transform.h"
+#include "Structure/Vector3Pair.hpp"
