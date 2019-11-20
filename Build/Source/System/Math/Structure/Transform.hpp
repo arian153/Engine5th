@@ -10,15 +10,11 @@ namespace Engine5
     public:
         Transform();
         ~Transform();
-
         Matrix44 LocalToWorldMatrix() const;
-        Vector3 GetPosition() const;
-        Vector3 GetScale() const;
-        Quaternion GetOrientation() const;
 
-    private:
-        Vector3 m_position;
-        Vector3 m_scale;
-        Quaternion m_orientation;
+    public:
+        Vector3    position;
+        Vector3    scale;
+        Quaternion orientation;
     };
 }
