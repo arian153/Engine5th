@@ -15,6 +15,7 @@ namespace Engine5
 
     void ColliderEllipsoid::Initialize()
     {
+        SetEllipsoid(Vector3(0.5f, 0.5f, 0.5f));
     }
 
     void ColliderEllipsoid::Shutdown()
@@ -61,7 +62,7 @@ namespace Engine5
     Vector3 ColliderEllipsoid::GetNormal(const Vector3& local_point_on_collider)
     {
         Vector3 normal;
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             normal.x = 2.0f * local_point_on_collider.x / m_transformed_radius.x * m_transformed_radius.x;
             normal.y = 2.0f * local_point_on_collider.y / m_transformed_radius.y * m_transformed_radius.y;
@@ -79,8 +80,9 @@ namespace Engine5
     void ColliderEllipsoid::SetMassData(Real density)
     {
         Real a, b, c;
-        m_mass = density * GetVolume();
-        if (m_rigid_body != nullptr)
+        m_density = density;
+        m_mass    = density * GetVolume();
+        if (m_collider_set != nullptr)
         {
             a = m_transformed_radius.x;
             b = m_transformed_radius.z;
@@ -98,31 +100,29 @@ namespace Engine5
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
         m_centroid.SetZero();
+        UpdateMassData();
     }
 
     Real ColliderEllipsoid::GetVolume()
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return 4.0f / 3.0f * Math::PI * m_transformed_radius.x * m_transformed_radius.y * m_transformed_radius.z;
         }
         return 4.0f / 3.0f * Math::PI * m_radius.x * m_radius.y * m_radius.z;
     }
 
-    void ColliderEllipsoid::UpdateScale(const Vector3& scale)
+    void ColliderEllipsoid::SetScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius.HadamardProduct(scale);
         m_scale_factor       = scale.Length();
+        UpdateScaleData();
     }
 
     void ColliderEllipsoid::SetUnit()
     {
         m_radius.SetNormalize();
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderEllipsoid::UpdateBoundingVolume()
@@ -263,7 +263,7 @@ namespace Engine5
 
     Vector3 ColliderEllipsoid::Radius() const
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return m_transformed_radius;
         }
@@ -273,11 +273,7 @@ namespace Engine5
     void ColliderEllipsoid::SetEllipsoid(const Vector3& radius)
     {
         m_radius = radius;
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderEllipsoid::Clone(ColliderPrimitive* cloned)

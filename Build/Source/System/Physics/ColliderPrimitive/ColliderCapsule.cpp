@@ -15,6 +15,7 @@ namespace Engine5
 
     void ColliderCapsule::Initialize()
     {
+        SetCapsule(0.5f, Vector3(0.25f, 0.25f, 0.25f));
     }
 
     void ColliderCapsule::Shutdown()
@@ -241,8 +242,9 @@ namespace Engine5
     void ColliderCapsule::SetMassData(Real density)
     {
         Real a, b, c, h;
-        m_mass = density * GetVolume();
-        if (m_rigid_body != nullptr)
+        m_density = density;
+        m_mass    = density * GetVolume();
+        if (m_collider_set != nullptr)
         {
             a = m_transformed_radius.x;
             b = m_transformed_radius.z;
@@ -264,22 +266,24 @@ namespace Engine5
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
         m_centroid = Vector3(0.0f, 0.5f * h, 0.0f) - HalfHeight();
+        UpdateMassData();
     }
 
     Real ColliderCapsule::GetVolume()
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return Math::PI * m_transformed_radius.x * m_transformed_radius.z * (m_transformed_radius.y * 4.0f / 3.0f + m_transformed_height);
         }
         return Math::PI * m_radius.x * m_radius.z * (m_radius.y * 4.0f / 3.0f + m_height);
     }
 
-    void ColliderCapsule::UpdateScale(const Vector3& scale)
+    void ColliderCapsule::SetScale(const Vector3& scale)
     {
         m_transformed_height = m_height * scale.y;
         m_transformed_radius = m_radius.HadamardProduct(scale);
         m_scale_factor       = scale.Length();
+        UpdateScaleData();
     }
 
     void ColliderCapsule::SetUnit()
@@ -290,11 +294,7 @@ namespace Engine5
             m_radius /= length;
             m_height /= length;
         }
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderCapsule::UpdateBoundingVolume()
@@ -447,7 +447,7 @@ namespace Engine5
 
     Real ColliderCapsule::HalfHeight() const
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return m_transformed_height * 0.5f;
         }
@@ -456,7 +456,7 @@ namespace Engine5
 
     Real ColliderCapsule::Height() const
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return m_transformed_height;
         }
@@ -465,7 +465,7 @@ namespace Engine5
 
     Vector3 ColliderCapsule::Radius() const
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return m_transformed_radius;
         }
@@ -476,31 +476,19 @@ namespace Engine5
     {
         m_radius = radius;
         m_height = height;
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderCapsule::SetHeight(Real height)
     {
         m_height = height;
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderCapsule::SetRadius(const Vector3& radius)
     {
         m_radius = radius;
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderCapsule::Clone(ColliderPrimitive* cloned)

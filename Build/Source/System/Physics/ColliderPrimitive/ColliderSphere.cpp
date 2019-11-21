@@ -15,6 +15,7 @@ namespace Engine5
 
     void ColliderSphere::Initialize()
     {
+        SetSphere(0.5f);
     }
 
     void ColliderSphere::Shutdown()
@@ -58,36 +59,35 @@ namespace Engine5
 
     void ColliderSphere::SetMassData(Real density)
     {
-        m_mass  = density * GetVolume();
-        Real it = m_mass * 0.4f * Radius() * Radius();
+        m_mass    = density * GetVolume();
+        m_density = density;
+        Real it   = m_mass * 0.4f * Radius() * Radius();
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it, it, it);
         m_centroid.SetZero();
+        UpdateMassData();
     }
 
     Real ColliderSphere::GetVolume()
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return 4.0f / 3.0f * Math::PI * m_transformed_radius * m_transformed_radius * m_transformed_radius;
         }
         return 4.0f / 3.0f * Math::PI * m_radius * m_radius * m_radius;
     }
 
-    void ColliderSphere::UpdateScale(const Vector3& scale)
+    void ColliderSphere::SetScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius * scale.Length();
         m_scale_factor       = scale.Length();
+        UpdateScaleData();
     }
 
     void ColliderSphere::SetUnit()
     {
         m_radius = 0.5f;
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderSphere::UpdateBoundingVolume()
@@ -228,7 +228,7 @@ namespace Engine5
 
     Real ColliderSphere::Radius() const
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return m_transformed_radius;
         }
@@ -238,11 +238,7 @@ namespace Engine5
     void ColliderSphere::SetSphere(Real radius)
     {
         m_radius = radius;
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderSphere::Clone(ColliderPrimitive* cloned)

@@ -14,6 +14,7 @@ namespace Engine5
 
     void ColliderPolyhedron::Initialize()
     {
+        UpdatePrimitive();
     }
 
     void ColliderPolyhedron::Shutdown()
@@ -39,6 +40,8 @@ namespace Engine5
 
     void ColliderPolyhedron::SetMassData(Real density)
     {
+        m_density = density;
+        UpdateMassData();
     }
 
     Real ColliderPolyhedron::GetVolume()
@@ -46,18 +49,15 @@ namespace Engine5
         return m_mass;
     }
 
-    void ColliderPolyhedron::UpdateScale(const Vector3& scale)
+    void ColliderPolyhedron::SetScale(const Vector3& scale)
     {
         m_scale_factor = scale.Length();
+        UpdateScaleData();
     }
 
     void ColliderPolyhedron::SetUnit()
     {
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderPolyhedron::UpdateBoundingVolume()

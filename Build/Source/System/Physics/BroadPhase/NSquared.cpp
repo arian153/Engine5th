@@ -84,16 +84,10 @@ namespace Engine5
             auto jt_begin = it;
             for (auto jt = ++jt_begin; jt != aabb_end; ++jt)
             {
-                BoundingAABB*      aabb_a       = (*it);
-                BoundingAABB*      aabb_b       = (*jt);
-                ColliderPrimitive* collider_a   = aabb_a->GetCollider();
-                ColliderPrimitive* collider_b   = aabb_b->GetCollider();
-                RigidBody*         rigid_body_a = collider_a->GetRigidBody();
-                RigidBody*         rigid_body_b = collider_b->GetRigidBody();
-                if (rigid_body_a == rigid_body_b)
-                {
-                    continue;
-                }
+                BoundingAABB*      aabb_a     = (*it);
+                BoundingAABB*      aabb_b     = (*jt);
+                ColliderPrimitive* collider_a = aabb_a->GetCollider();
+                ColliderPrimitive* collider_b = aabb_b->GetCollider();
                 if (aabb_a->Intersect(aabb_b))
                 {
                     result.emplace_back(collider_a, collider_b);

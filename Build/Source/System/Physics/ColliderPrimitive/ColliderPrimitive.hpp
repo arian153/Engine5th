@@ -32,10 +32,14 @@ namespace Engine5
         Quaternion    GetBodyOrientation() const;
         RigidBody*    GetRigidBody() const;
         BoundingAABB* GetBoundingVolume() const;
+        Real          GetDensity() const;
 
         Vector3 ConvertBodyWorldPoint(const Vector3& local_point) const;
         void    SyncFromTransform();
         void    SyncToTransform();
+        void    UpdatePrimitive();
+        void    UpdateMassData();
+        void    UpdateScaleData();
 
     public:
         virtual void Initialize() = 0;
@@ -54,13 +58,14 @@ namespace Engine5
         
 
         //collider 
-        virtual void UpdateScale(const Vector3& scale) = 0;
+        virtual void SetScale(const Vector3& scale) = 0;
         virtual void SetUnit() = 0;
         virtual void UpdateBoundingVolume() = 0;
         virtual void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const = 0;
 
     protected:
         virtual void Clone(ColliderPrimitive* cloned) = 0;
+        
 
     private:
         friend class ColliderSet;
@@ -79,6 +84,7 @@ namespace Engine5
         Vector3  m_centroid; //center of mass
         Real     m_mass;
         Matrix33 m_local_inertia_tensor;
+        Real     m_density = 1.0f;
 
         //other data
         RigidBody*    m_rigid_body      = nullptr;

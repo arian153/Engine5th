@@ -33,10 +33,6 @@ namespace Engine5
     {
     }
 
-    void ColliderSet::SetRigidBody(RigidBody* rigid_body)
-    {
-        m_rigid_body = rigid_body;
-    }
 
     ColliderPrimitive* ColliderSet::AddCollider(ColliderType type)
     {
@@ -77,17 +73,52 @@ namespace Engine5
             return nullptr;
         }
         primitive->m_collider_set = this;
-        this->CalculateMassData();
+        UpdateMassData();
         if (m_rigid_body != nullptr)
         {
-            primitive->m_rigid_body = m_rigid_body;
-            m_rigid_body->UpdateMassData();
+            m_rigid_body->m_collider_set = this;
+            primitive->m_rigid_body      = m_rigid_body;
         }
         return primitive;
     }
 
+    ColliderPrimitive* ColliderSet::GetCollider(size_t index) const
+    {
+        if (m_colliders != nullptr)
+        {
+            auto size = m_colliders->size();
+            if (index < size)
+            {
+                return m_colliders->at(index);
+            }
+        }
+        return nullptr;
+    }
 
-    void ColliderSet::CalculateMassData()
+    void ColliderSet::SetRigidBody(RigidBody* rigid_body)
+    {
+        m_rigid_body = rigid_body;
+    }
+
+    void ColliderSet::SetTransform(Transform* transform)
+    {
+        m_transform = transform;
+    }
+
+    void ColliderSet::SetMassData(Real density)
+    {
+        if (m_colliders != nullptr)
+        {
+            // compute local centroid & mass
+            for (auto& collider_data : *m_colliders)
+            {
+                collider_data->SetMassData(density);
+            }
+            UpdateMassData();
+        }
+    }
+
+    void ColliderSet::UpdateMassData()
     {
         m_mass_data.mass = 0.0f;
         m_mass_data.local_centroid.SetZero();
@@ -152,7 +183,7 @@ namespace Engine5
                 primitive->UpdateScale(m_transform->scale);
             }
         }
-        CalculateMassData();
+        UpdateMassData();
     }
 
     Vector3 ColliderSet::GetTransformScale() const

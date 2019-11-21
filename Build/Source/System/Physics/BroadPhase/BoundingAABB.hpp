@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class ColliderSet;
     class ColliderPrimitive;
 
     class BoundingAABB
@@ -16,7 +17,7 @@ namespace Engine5
         bool         Intersect(BoundingAABB* aabb) const;
         bool         Contains(const Vector3& point) const;
         bool         TestRayIntersection(const Ray& ray, Real& t, Real max_distance = -1.0f) const;
-        bool         Contains( BoundingAABB* aabb) const;
+        bool         Contains(BoundingAABB* aabb) const;
         Real         Volume() const;
         Real         Growth(const BoundingAABB& aabb) const;
         Vector3      Center() const;
@@ -35,7 +36,8 @@ namespace Engine5
     private:
         Vector3            m_min;
         Vector3            m_max;
-        ColliderPrimitive* m_collider = nullptr;
-        void*              m_userdata = nullptr;
+        ColliderSet*       m_collider_set = nullptr;
+        ColliderPrimitive* m_collider     = nullptr;
+        void*              m_userdata     = nullptr;
     };
 }

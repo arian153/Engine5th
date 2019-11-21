@@ -15,6 +15,7 @@ namespace Engine5
 
     void ColliderBox::Initialize()
     {
+        SetBox(1.0f, 1.0f, 1.0f);
     }
 
     void ColliderBox::Shutdown()
@@ -146,7 +147,8 @@ namespace Engine5
     void ColliderBox::SetMassData(Real density)
     {
         Real w, h, d;
-        if (m_rigid_body != nullptr)
+        m_density = density;
+        if (m_collider_set != nullptr)
         {
             w = (m_transformed_vertices[0] - m_transformed_vertices[4]).x;
             h = (m_transformed_vertices[0] - m_transformed_vertices[2]).y;
@@ -165,11 +167,12 @@ namespace Engine5
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_a, it_b, it_c);
         m_centroid = Vector3(0.5f * w, 0.5f * h, 0.5f * d) + Vertex(7);
+        UpdateMassData();
     }
 
     Real ColliderBox::GetVolume()
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             Real w = (m_transformed_vertices[0] - m_transformed_vertices[4]).x;
             Real h = (m_transformed_vertices[0] - m_transformed_vertices[2]).y;
@@ -182,13 +185,14 @@ namespace Engine5
         return w * h * d;
     }
 
-    void ColliderBox::UpdateScale(const Vector3& scale)
+    void ColliderBox::SetScale(const Vector3& scale)
     {
         for (size_t i = 0; i < 8; ++i)
         {
             m_transformed_vertices[i] = m_vertices[i].HadamardProduct(scale);
         }
         m_scale_factor = scale.Length();
+        UpdateScaleData();
     }
 
     void ColliderBox::SetUnit()
@@ -207,11 +211,7 @@ namespace Engine5
         m_vertices[5].Set(-w, +h, -d);
         m_vertices[6].Set(-w, -h, +d);
         m_vertices[7].Set(-w, -h, -d);
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderBox::UpdateBoundingVolume()
@@ -236,7 +236,7 @@ namespace Engine5
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         renderer->ReserveVertices(8, mode);
         Vector3 vertices[8];
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             std::memcpy(vertices, m_transformed_vertices, sizeof(m_transformed_vertices));
         }
@@ -310,7 +310,7 @@ namespace Engine5
 
     Vector3 ColliderBox::Vertex(size_t i) const
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return m_transformed_vertices[i];
         }
@@ -330,12 +330,7 @@ namespace Engine5
         m_vertices[5].Set(-w, +h, -d);
         m_vertices[6].Set(-w, -h, +d);
         m_vertices[7].Set(-w, -h, -d);
-
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderBox::Clone(ColliderPrimitive* cloned)

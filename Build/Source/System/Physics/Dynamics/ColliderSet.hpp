@@ -19,15 +19,23 @@ namespace Engine5
         void Update(Real dt);
         void Shutdown();
 
-
-        void               SetRigidBody(RigidBody* rigid_body);
+        //primitives
         ColliderPrimitive* AddCollider(ColliderType type);
+        ColliderPrimitive* GetCollider(size_t index) const;
 
-        void     CalculateMassData();
-        MassData GetMassData() const;
+        //Set pointer to body, transform
+        void SetRigidBody(RigidBody* rigid_body);
+        void SetTransform(Transform* transform);
 
+        //setters
+        void SetMassData(Real density);
+        void UpdateMassData();
         void UpdateScale();
-        Vector3 GetTransformScale() const;
+
+        //getters
+        MassData GetMassData() const;
+        Vector3  GetTransformScale() const;
+
 
     private:
         friend class RigidBody;

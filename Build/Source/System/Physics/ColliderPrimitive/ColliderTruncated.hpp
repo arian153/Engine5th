@@ -31,7 +31,7 @@ namespace Engine5
         Real GetVolume() override;
 
         //collider 
-        void UpdateScale(const Vector3& scale) override;
+        void SetScale(const Vector3& scale) override;
         void SetUnit() override;
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
@@ -51,7 +51,7 @@ namespace Engine5
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
-        Vector2 m_radius = Vector2(0.5f, 0.3f);
+        Vector2 m_radius = Vector2(0.5f, 0.5f);
         Vector2 m_transformed_radius;
         Real    m_height             = 1.0f;
         Real    m_transformed_height = 1.0f;

@@ -15,6 +15,7 @@ namespace Engine5
 
     void ColliderDome::Initialize()
     {
+        SetDome(Vector3(0.5f, 0.5f, 0.5f));
     }
 
     void ColliderDome::Shutdown()
@@ -107,8 +108,9 @@ namespace Engine5
     void ColliderDome::SetMassData(Real density)
     {
         Real a, b, c;
-        m_mass = density * GetVolume();
-        if (m_rigid_body != nullptr)
+        m_density = density;
+        m_mass    = density * GetVolume();
+        if (m_collider_set != nullptr)
         {
             a = m_transformed_radius.x;
             b = m_transformed_radius.z;
@@ -127,31 +129,29 @@ namespace Engine5
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
         m_centroid.Set(0.0f, 0.375f * c, 0.0f);
+        UpdateMassData();
     }
 
     Real ColliderDome::GetVolume()
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return 2.0f / 3.0f * Math::PI * m_transformed_radius.x * m_transformed_radius.y * m_transformed_radius.z;
         }
         return 2.0f / 3.0f * Math::PI * m_radius.x * m_radius.y * m_radius.z;
     }
 
-    void ColliderDome::UpdateScale(const Vector3& scale)
+    void ColliderDome::SetScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius.HadamardProduct(scale);
         m_scale_factor       = scale.Length();
+        UpdateScaleData();
     }
 
     void ColliderDome::SetUnit()
     {
         m_radius.SetNormalize();
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderDome::UpdateBoundingVolume()
@@ -270,7 +270,7 @@ namespace Engine5
 
     Vector3 ColliderDome::Radius() const
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return m_transformed_radius;
         }
@@ -280,11 +280,7 @@ namespace Engine5
     void ColliderDome::SetDome(const Vector3& radius)
     {
         m_radius = radius;
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderDome::Clone(ColliderPrimitive* cloned)

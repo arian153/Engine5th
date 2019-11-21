@@ -137,6 +137,11 @@ namespace Engine5
         return m_bounding_volume;
     }
 
+    Real ColliderPrimitive::GetDensity() const
+    {
+        return m_density;
+    }
+
     Vector3 ColliderPrimitive::ConvertBodyWorldPoint(const Vector3& local_point) const
     {
         Vector3 result = m_orientation.Rotate(local_point);
@@ -152,5 +157,32 @@ namespace Engine5
 
     void ColliderPrimitive::SyncToTransform()
     {
+    }
+
+    void ColliderPrimitive::UpdatePrimitive()
+    {
+        if (m_collider_set != nullptr)
+        {
+            SetScale(m_collider_set->GetTransformScale());
+            SetMassData(m_density);
+            m_collider_set->UpdateMassData();
+        }
+    }
+
+    void ColliderPrimitive::UpdateMassData() const
+    {
+        if (m_collider_set != nullptr)
+        {
+            m_collider_set->UpdateMassData();
+        }
+    }
+
+    void ColliderPrimitive::UpdateScaleData()
+    {
+        if (m_collider_set != nullptr)
+        {
+            SetMassData(m_density);
+            m_collider_set->UpdateMassData();
+        }
     }
 }

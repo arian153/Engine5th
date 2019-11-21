@@ -157,7 +157,7 @@ namespace Engine5
 
     void Octree::Copy(BroadPhase* other)
     {
-        if(m_root != nullptr)
+        if (m_root != nullptr)
         {
             CopyNode(m_root, other);
         }
@@ -440,14 +440,8 @@ namespace Engine5
         size_t size = node->aabb_list.size();
         for (size_t i = index; i < size; i++)
         {
-            ColliderPrimitive* collider_a   = aabb->GetCollider();
-            ColliderPrimitive* collider_b   = node->aabb_list[i]->GetCollider();
-            RigidBody*         rigid_body_a = collider_a->GetRigidBody();
-            RigidBody*         rigid_body_b = collider_b->GetRigidBody();
-            if (rigid_body_a == rigid_body_b)
-            {
-                continue;
-            }
+            ColliderPrimitive* collider_a = aabb->GetCollider();
+            ColliderPrimitive* collider_b = node->aabb_list[i]->GetCollider();
             if (aabb->Intersect(node->aabb_list[i]))
             {
                 result.emplace_back(collider_a, collider_b);

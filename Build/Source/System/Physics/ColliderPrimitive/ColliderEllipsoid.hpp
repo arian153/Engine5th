@@ -27,7 +27,7 @@ namespace Engine5
         Real GetVolume() override;
 
         //collider 
-        void UpdateScale(const Vector3& scale) override;
+        void SetScale(const Vector3& scale) override;
         void SetUnit() override;
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;

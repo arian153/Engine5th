@@ -9,6 +9,7 @@ namespace Engine5
         if (m_collider != nullptr)
         {
             m_collider->m_bounding_volume = this;
+            m_collider_set                = m_collider->m_collider_set;
         }
     }
 
@@ -81,6 +82,12 @@ namespace Engine5
         // if separated in z direction
         if (m_min.z > aabb->m_max.z || aabb->m_min.z > m_max.z)
             return false;
+
+        // if same collider set, skip intersection
+        if (m_collider_set != nullptr && m_collider_set == aabb->m_collider_set)
+        {
+            return false;
+        }
 
         // no separation, must be intersecting
         return true;

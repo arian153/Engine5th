@@ -14,6 +14,7 @@ namespace Engine5
 
     void ColliderTetrahedron::Initialize()
     {
+        SetTetrahedron(Vector3::Origin(), Vector3::AxisX(), Vector3::AxisY(), Vector3::AxisZ());
     }
 
     void ColliderTetrahedron::Shutdown()
@@ -51,6 +52,8 @@ namespace Engine5
 
     void ColliderTetrahedron::SetMassData(Real density)
     {
+        m_density = density;
+        UpdateMassData();
     }
 
     Real ColliderTetrahedron::GetVolume()
@@ -58,13 +61,14 @@ namespace Engine5
         return m_mass;
     }
 
-    void ColliderTetrahedron::UpdateScale(const Vector3& scale)
+    void ColliderTetrahedron::SetScale(const Vector3& scale)
     {
         for (size_t i = 0; i < 4; ++i)
         {
             m_transformed_vertices[i] = m_vertices[i].HadamardProduct(scale);
         }
         m_scale_factor = scale.Length();
+        UpdateScaleData();
     }
 
     void ColliderTetrahedron::SetUnit()
@@ -73,11 +77,7 @@ namespace Engine5
         m_vertices[1] = Vector3::AxisX();
         m_vertices[2] = Vector3::AxisY();
         m_vertices[3] = Vector3::AxisZ();
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderTetrahedron::UpdateBoundingVolume()
@@ -89,7 +89,7 @@ namespace Engine5
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         renderer->ReserveVertices(4, mode);
         Vector3 vertices[4];
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             std::memcpy(vertices, m_transformed_vertices, sizeof(m_transformed_vertices));
         }
@@ -138,7 +138,7 @@ namespace Engine5
 
     Vector3 ColliderTetrahedron::Vertex(size_t i) const
     {
-        if (m_rigid_body != nullptr)
+        if (m_collider_set != nullptr)
         {
             return m_transformed_vertices[i];
         }
@@ -151,11 +151,7 @@ namespace Engine5
         m_vertices[1] = v1;
         m_vertices[2] = v2;
         m_vertices[3] = v3;
-        if (m_collider_set != nullptr)
-        {
-            UpdateScale(m_collider_set->GetTransformScale());
-            m_collider_set->CalculateMassData();
-        }
+        UpdatePrimitive();
     }
 
     void ColliderTetrahedron::Clone(ColliderPrimitive* cloned)
