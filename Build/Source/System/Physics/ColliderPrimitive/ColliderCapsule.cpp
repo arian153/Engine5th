@@ -266,7 +266,6 @@ namespace Engine5
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
         m_centroid = Vector3(0.0f, 0.5f * h, 0.0f) - HalfHeight();
-        UpdateMassData();
     }
 
     Real ColliderCapsule::GetVolume()
@@ -278,12 +277,11 @@ namespace Engine5
         return Math::PI * m_radius.x * m_radius.z * (m_radius.y * 4.0f / 3.0f + m_height);
     }
 
-    void ColliderCapsule::SetScale(const Vector3& scale)
+    void ColliderCapsule::SetScaleData(const Vector3& scale)
     {
         m_transformed_height = m_height * scale.y;
         m_transformed_radius = m_radius.HadamardProduct(scale);
         m_scale_factor       = scale.Length();
-        UpdateScaleData();
     }
 
     void ColliderCapsule::SetUnit()

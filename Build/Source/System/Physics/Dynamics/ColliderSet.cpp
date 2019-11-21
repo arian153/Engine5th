@@ -118,6 +118,18 @@ namespace Engine5
         }
     }
 
+    void ColliderSet::SetScale(const Vector3& scale)
+    {
+        if (m_colliders != nullptr)
+        {
+            for (auto& collider_data : *m_colliders)
+            {
+                collider_data->SetScale(scale);
+            }
+            UpdateScale();
+        }
+    }
+
     void ColliderSet::UpdateMassData()
     {
         m_mass_data.mass = 0.0f;
@@ -180,7 +192,7 @@ namespace Engine5
         {
             for (auto& primitive : *m_colliders)
             {
-                primitive->UpdateScale(m_transform->scale);
+                primitive->SetScaleData(m_transform->scale);
             }
         }
         UpdateMassData();

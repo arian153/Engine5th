@@ -29,6 +29,7 @@ namespace Engine5
 
         //setters
         void SetMassData(Real density);
+        void SetScale(const Vector3& scale);
         void UpdateMassData();
         void UpdateScale();
 

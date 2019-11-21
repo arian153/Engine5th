@@ -65,7 +65,6 @@ namespace Engine5
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it, it, it);
         m_centroid.SetZero();
-        UpdateMassData();
     }
 
     Real ColliderSphere::GetVolume()
@@ -77,11 +76,10 @@ namespace Engine5
         return 4.0f / 3.0f * Math::PI * m_radius * m_radius * m_radius;
     }
 
-    void ColliderSphere::SetScale(const Vector3& scale)
+    void ColliderSphere::SetScaleData(const Vector3& scale)
     {
         m_transformed_radius = m_radius * scale.Length();
         m_scale_factor       = scale.Length();
-        UpdateScaleData();
     }
 
     void ColliderSphere::SetUnit()

@@ -37,10 +37,8 @@ namespace Engine5
         Vector3 ConvertBodyWorldPoint(const Vector3& local_point) const;
         void    SyncFromTransform();
         void    SyncToTransform();
-        void    UpdatePrimitive();
-        void    UpdateMassData();
-        void    UpdateScaleData();
-
+        void    SetScale(const Vector3& scale);
+        void    SetMass(Real density);
     public:
         virtual void Initialize() = 0;
         virtual void Shutdown() = 0;
@@ -53,19 +51,23 @@ namespace Engine5
         virtual Vector3 GetNormal(const Vector3& local_point_on_collider) = 0;
 
         //physics
-        virtual void SetMassData(Real density) = 0;
         virtual Real GetVolume() = 0;
-        
 
         //collider 
-        virtual void SetScale(const Vector3& scale) = 0;
         virtual void SetUnit() = 0;
         virtual void UpdateBoundingVolume() = 0;
         virtual void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const = 0;
 
     protected:
+        void UpdatePrimitive();
+        void UpdateMassData() const;
+        void UpdateScaleData();
+
+    protected:
+        virtual void SetMassData(Real density) = 0;
+        virtual void SetScaleData(const Vector3& scale) = 0;
         virtual void Clone(ColliderPrimitive* cloned) = 0;
-        
+
 
     private:
         friend class ColliderSet;

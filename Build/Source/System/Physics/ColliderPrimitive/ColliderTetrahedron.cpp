@@ -53,7 +53,6 @@ namespace Engine5
     void ColliderTetrahedron::SetMassData(Real density)
     {
         m_density = density;
-        UpdateMassData();
     }
 
     Real ColliderTetrahedron::GetVolume()
@@ -61,14 +60,13 @@ namespace Engine5
         return m_mass;
     }
 
-    void ColliderTetrahedron::SetScale(const Vector3& scale)
+    void ColliderTetrahedron::SetScaleData(const Vector3& scale)
     {
         for (size_t i = 0; i < 4; ++i)
         {
             m_transformed_vertices[i] = m_vertices[i].HadamardProduct(scale);
         }
         m_scale_factor = scale.Length();
-        UpdateScaleData();
     }
 
     void ColliderTetrahedron::SetUnit()

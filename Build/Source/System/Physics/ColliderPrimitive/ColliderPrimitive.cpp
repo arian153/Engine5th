@@ -159,11 +159,24 @@ namespace Engine5
     {
     }
 
+    void ColliderPrimitive::SetScale(const Vector3& scale)
+    {
+        SetScaleData(scale);
+        UpdateScaleData();
+    }
+
+    void ColliderPrimitive::SetMass(Real density)
+    {
+        SetMassData(density);
+        UpdateMassData();
+    }
+
     void ColliderPrimitive::UpdatePrimitive()
     {
         if (m_collider_set != nullptr)
         {
             SetScale(m_collider_set->GetTransformScale());
+            UpdateBoundingVolume();
             SetMassData(m_density);
             m_collider_set->UpdateMassData();
         }
@@ -181,6 +194,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
+            UpdateBoundingVolume();
             SetMassData(m_density);
             m_collider_set->UpdateMassData();
         }

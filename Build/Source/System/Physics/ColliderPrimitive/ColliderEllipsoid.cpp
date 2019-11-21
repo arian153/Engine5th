@@ -100,7 +100,6 @@ namespace Engine5
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
         m_centroid.SetZero();
-        UpdateMassData();
     }
 
     Real ColliderEllipsoid::GetVolume()
@@ -112,11 +111,10 @@ namespace Engine5
         return 4.0f / 3.0f * Math::PI * m_radius.x * m_radius.y * m_radius.z;
     }
 
-    void ColliderEllipsoid::SetScale(const Vector3& scale)
+    void ColliderEllipsoid::SetScaleData(const Vector3& scale)
     {
         m_transformed_radius = m_radius.HadamardProduct(scale);
         m_scale_factor       = scale.Length();
-        UpdateScaleData();
     }
 
     void ColliderEllipsoid::SetUnit()

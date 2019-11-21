@@ -167,7 +167,6 @@ namespace Engine5
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_a, it_b, it_c);
         m_centroid = Vector3(0.5f * w, 0.5f * h, 0.5f * d) + Vertex(7);
-        UpdateMassData();
     }
 
     Real ColliderBox::GetVolume()
@@ -185,14 +184,13 @@ namespace Engine5
         return w * h * d;
     }
 
-    void ColliderBox::SetScale(const Vector3& scale)
+    void ColliderBox::SetScaleData(const Vector3& scale)
     {
         for (size_t i = 0; i < 8; ++i)
         {
             m_transformed_vertices[i] = m_vertices[i].HadamardProduct(scale);
         }
         m_scale_factor = scale.Length();
-        UpdateScaleData();
     }
 
     void ColliderBox::SetUnit()
