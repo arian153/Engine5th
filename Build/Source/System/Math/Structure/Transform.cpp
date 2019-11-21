@@ -12,10 +12,15 @@ namespace Engine5
 
     Matrix44 Transform::LocalToWorldMatrix() const
     {
-        Matrix44 result;
-
-        
-
+        Matrix44 scaling;
+        scaling.SetTransformationScaling(scale, 1.0f);
+        Matrix44 rotation;
+        rotation.SetTransformationRotation(orientation);
+        Matrix44 translation;
+        translation.SetTransformationTranslation(position);
+        Matrix44 result(scaling);
+        result *= rotation;
+        result *= translation;
         return result;
     }
 }

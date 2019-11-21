@@ -2,11 +2,12 @@
 #include "../../Math/Math.hpp"
 #include "..//Utility/PhysicsDef.hpp"
 #include "..//ColliderPrimitive/ColliderPrimitive.hpp"
-#include <vector>
 
 namespace Engine5
 {
     class ColliderPrimitive;
+    class ColliderSet;
+
     class RigidBody
     {
     public:
@@ -85,7 +86,7 @@ namespace Engine5
         Matrix33 m_global_inverse_inertia_tensor;
 
         //others
-        MotionMode                       m_motion_mode        = MotionMode::Dynamic;
-        std::vector<ColliderPrimitive*>* m_collider_list = nullptr;
+        MotionMode   m_motion_mode  = MotionMode::Dynamic;
+        ColliderSet* m_collider_set = nullptr;
     };
 }

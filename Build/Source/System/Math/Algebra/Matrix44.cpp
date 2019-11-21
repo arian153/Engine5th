@@ -375,6 +375,26 @@ namespace Engine5
         data[15] = scale.w;
     }
 
+    void Matrix44::SetTransformationScaling(const Vector3& scale, Real w)
+    {
+        data[0] = scale.x;
+        data[1] = 0.0f;
+        data[2] = 0.0f;
+        data[3] = 0.0f;
+        data[4] = 0.0f;
+        data[5] = scale.y;
+        data[6] = 0.0f;
+        data[7] = 0.0f;
+        data[8] = 0.0f;
+        data[9] = 0.0f;
+        data[10] = scale.z;
+        data[11] = 0.0f;
+        data[12] = 0.0f;
+        data[13] = 0.0f;
+        data[14] = 0.0f;
+        data[15] = w;
+    }
+
     void Matrix44::SetTransformationTranslation(const Vector3& translation)
     {
         data[0]  = 1.0f;

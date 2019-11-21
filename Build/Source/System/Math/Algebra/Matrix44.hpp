@@ -51,6 +51,7 @@ namespace Engine5
         void SetTransformationRotationZ(Real radian);
 
         void SetTransformationScaling(const Vector4& scale);
+        void SetTransformationScaling(const Vector3& scale, Real w = 1.0f);
         void SetTransformationTranslation(const Vector3& translation);
 
         bool IsZero() const;

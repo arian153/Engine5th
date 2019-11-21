@@ -81,7 +81,6 @@ namespace Engine5
         if(body != nullptr)
         {
             primitive->m_rigid_body = body;
-            body->m_collider_list->push_back(primitive);
             body->UpdateMassData();
         }
 
