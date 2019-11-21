@@ -193,14 +193,25 @@ namespace Engine5
 
     void ColliderBox::SetUnit()
     {
-        auto min_max = m_vertices[0] - m_vertices[7];
+        auto min_max      = m_vertices[0] - m_vertices[7];
         Real scale_factor = min_max.Length();
         min_max /= scale_factor;
-        SetBox(min_max.x, min_max.y, min_max.z);
-
-        //TODO - get scale from transform 
-        Vector3 scale(1.0f, 1.0f, 1.0f);
-        UpdateScale(scale);
+        Real w = 0.5f * min_max.x;
+        Real h = 0.5f * min_max.y;
+        Real d = 0.5f * min_max.z;
+        m_vertices[0].Set(+w, +h, +d);
+        m_vertices[1].Set(+w, +h, -d);
+        m_vertices[2].Set(+w, -h, +d);
+        m_vertices[3].Set(+w, -h, -d);
+        m_vertices[4].Set(-w, +h, +d);
+        m_vertices[5].Set(-w, +h, -d);
+        m_vertices[6].Set(-w, -h, +d);
+        m_vertices[7].Set(-w, -h, -d);
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderBox::UpdateBoundingVolume()
@@ -319,10 +330,15 @@ namespace Engine5
         m_vertices[5].Set(-w, +h, -d);
         m_vertices[6].Set(-w, -h, +d);
         m_vertices[7].Set(-w, -h, -d);
+
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderBox::Clone(ColliderPrimitive* cloned)
     {
-
     }
 }

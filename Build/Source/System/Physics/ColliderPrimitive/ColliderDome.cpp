@@ -141,16 +141,17 @@ namespace Engine5
     void ColliderDome::UpdateScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius.HadamardProduct(scale);
-        m_scale_factor = scale.Length();
+        m_scale_factor       = scale.Length();
     }
 
     void ColliderDome::SetUnit()
     {
         m_radius.SetNormalize();
-
-        //TODO - get scale from transform 
-        Vector3 scale(1.0f, 1.0f, 1.0f);
-        UpdateScale(scale);
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderDome::UpdateBoundingVolume()
@@ -274,6 +275,16 @@ namespace Engine5
             return m_transformed_radius;
         }
         return m_radius;
+    }
+
+    void ColliderDome::SetDome(const Vector3& radius)
+    {
+        m_radius = radius;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderDome::Clone(ColliderPrimitive* cloned)

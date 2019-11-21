@@ -27,7 +27,7 @@ namespace Engine5
     void RigidBody::Integrate(Real dt)
     {
         // integrate linear velocity
-        m_linear_velocity += m_inverse_mass * m_force_accumulator * dt;
+        m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * dt;
 
         // integrate angular velocity
         m_angular_velocity += m_global_inverse_inertia_tensor * m_torque_accumulator * dt;
@@ -57,17 +57,17 @@ namespace Engine5
 
     void RigidBody::UpdateGlobalCentroidFromPosition()
     {
-        m_global_centroid = m_orientation.Rotate(m_local_centroid) + m_position;
+        m_global_centroid = m_orientation.Rotate(m_mass_data.local_centroid) + m_position;
     }
 
     void RigidBody::UpdatePositionFromGlobalCentroid()
     {
-        m_position = m_orientation.Rotate(-m_local_centroid) + m_global_centroid;
+        m_position = m_orientation.Rotate(-m_mass_data.local_centroid) + m_global_centroid;
     }
 
     void RigidBody::UpdateGlobalInertiaTensor()
     {
-        m_global_inverse_inertia_tensor = m_orientation * m_local_inertia_tensor * m_inverse_orientation;
+        m_global_inverse_inertia_tensor = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
     }
 
     void RigidBody::UpdateOrientation()
@@ -79,56 +79,14 @@ namespace Engine5
 
     void RigidBody::UpdateMassData()
     {
-        // reset local centroid & mass
-        m_local_centroid.SetZero();
-        m_mass = 0.0f;
-        if (m_collider_set != nullptr && m_collider_set->m_colliders != nullptr)
+        if (m_collider_set != nullptr)
         {
-            // compute local centroid & mass
-            for (auto& collider_data : *m_collider_set->m_colliders)
-            {
-                // accumulate mass
-                m_mass += collider_data->m_mass;
-
-                // accumulate weighted contribution
-                m_local_centroid += collider_data->m_mass * collider_data->m_centroid;
-            }
-
-            // compute inverse mass
-            if (Utility::IsZero(m_mass) == false)
-            {
-                m_inverse_mass = 1.0f / m_mass;
-            }
-            else
-            {
-                //infinite mass.
-                m_inverse_mass = 0.0f;
-            }
-
-            // compute final local centroid
-            m_local_centroid *= m_inverse_mass;
-
-            // compute local inertia tensor
-            m_local_inertia_tensor.SetZero();
-            for (auto& collider_data : *m_collider_set->m_colliders)
-            {
-                Vector3  r       = m_local_centroid - collider_data->m_centroid;
-                Real     r_dot_r = r.DotProduct(r);
-                Matrix33 r_out_r = r.OuterProduct(r);
-
-                // accumulate local inertia tensor contribution, using Parallel Axis Theorem
-                m_local_inertia_tensor += collider_data->m_local_inertia_tensor + collider_data->m_mass * (r_dot_r * Matrix33::Identity() - r_out_r);
-            }
-
-            // compute inverse inertia tensor
-            m_local_inverse_inertia_tensor = m_local_inertia_tensor.Inverse();
-            if (m_motion_mode != MotionMode::Dynamic)
-            {
-                this->SetMassInfinite();
-                this->SetInertiaInfinite();
-
-                //set collider mass data infinite? or not?
-            }
+            m_mass_data = m_collider_set->GetMassData();
+        }
+        if (m_motion_mode != MotionMode::Dynamic)
+        {
+            this->SetMassInfinite();
+            this->SetInertiaInfinite();
         }
     }
 
@@ -175,52 +133,54 @@ namespace Engine5
 
     void RigidBody::SetMassInfinite()
     {
-        m_mass         = 0.0f;
-        m_inverse_mass = 0.0f;
+        m_mass_data.mass         = 0.0f;
+        m_mass_data.inverse_mass = 0.0f;
     }
 
     void RigidBody::SetMass(Real mass)
     {
-        m_mass         = mass;
-        m_inverse_mass = 1.0f / mass;
+        m_mass_data.mass         = mass;
+        m_mass_data.inverse_mass = 1.0f / mass;
     }
 
     Real RigidBody::Mass() const
     {
-        return m_mass;
+        return m_mass_data.mass;
     }
 
     Real RigidBody::InverseMass() const
     {
-        return m_inverse_mass;
+        return m_mass_data.inverse_mass;
     }
 
     Matrix33 RigidBody::MassMatrix() const
     {
+        Real     mass = m_mass_data.mass;
         Matrix33 mass_matrix;
-        mass_matrix.SetDiagonal(m_mass, m_mass, m_mass);
+        mass_matrix.SetDiagonal(mass, mass, mass);
         return mass_matrix;
     }
 
     Matrix33 RigidBody::InverseMassMatrix() const
     {
+        Real     inv_mass = m_mass_data.inverse_mass;
         Matrix33 inverse_mass_matrix;
-        inverse_mass_matrix.SetDiagonal(m_inverse_mass, m_inverse_mass, m_inverse_mass);
+        inverse_mass_matrix.SetDiagonal(inv_mass, inv_mass, inv_mass);
         return inverse_mass_matrix;
     }
 
     void RigidBody::SetInertiaInfinite()
     {
         m_global_inverse_inertia_tensor.SetZero();
-        m_local_inertia_tensor.SetZero();
-        m_local_inverse_inertia_tensor.SetZero();
+        m_mass_data.local_inertia_tensor.SetZero();
+        m_mass_data.local_inverse_inertia_tensor.SetZero();
     }
 
     void RigidBody::SetInertia(const Matrix33& inertia_tensor)
     {
-        m_global_inverse_inertia_tensor = inertia_tensor.Inverse();
-        m_local_inertia_tensor          = m_inverse_orientation.ToMatrix() * m_global_inverse_inertia_tensor * m_orientation.ToMatrix();
-        m_local_inverse_inertia_tensor  = m_local_inertia_tensor.Inverse();
+        m_global_inverse_inertia_tensor          = inertia_tensor.Inverse();
+        m_mass_data.local_inertia_tensor         = m_inverse_orientation.ToMatrix() * m_global_inverse_inertia_tensor * m_orientation.ToMatrix();
+        m_mass_data.local_inverse_inertia_tensor = m_mass_data.local_inertia_tensor.Inverse();
     }
 
     Matrix33 RigidBody::Inertia() const

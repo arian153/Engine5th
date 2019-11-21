@@ -279,7 +279,7 @@ namespace Engine5
     {
         m_transformed_height = m_height * scale.y;
         m_transformed_radius = m_radius.HadamardProduct(scale);
-        m_scale_factor = scale.Length();
+        m_scale_factor       = scale.Length();
     }
 
     void ColliderCapsule::SetUnit()
@@ -290,10 +290,11 @@ namespace Engine5
             m_radius /= length;
             m_height /= length;
         }
-
-        //TODO - get scale from transform 
-        Vector3 scale(1.0f, 1.0f, 1.0f);
-        UpdateScale(scale);
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderCapsule::UpdateBoundingVolume()
@@ -469,6 +470,37 @@ namespace Engine5
             return m_transformed_radius;
         }
         return m_radius;
+    }
+
+    void ColliderCapsule::SetCapsule(Real height, const Vector3& radius)
+    {
+        m_radius = radius;
+        m_height = height;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
+    }
+
+    void ColliderCapsule::SetHeight(Real height)
+    {
+        m_height = height;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
+    }
+
+    void ColliderCapsule::SetRadius(const Vector3& radius)
+    {
+        m_radius = radius;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderCapsule::Clone(ColliderPrimitive* cloned)

@@ -15,7 +15,6 @@ namespace Engine5
 
     void ColliderTruncated::Initialize()
     {
-
     }
 
     void ColliderTruncated::Shutdown()
@@ -283,7 +282,7 @@ namespace Engine5
     {
         m_transformed_height = m_height * scale.y;
         m_transformed_radius = m_radius.HadamardProduct(Vector2(scale.x, scale.z));
-        m_scale_factor = scale.Length();
+        m_scale_factor       = scale.Length();
     }
 
 
@@ -298,16 +297,16 @@ namespace Engine5
         {
             division = m_height;
         }
-
         if (division > 0.0f)
         {
             m_radius /= division;
             m_height /= division;
         }
-
-        //TODO - get scale from transform 
-        Vector3 scale(1.0f, 1.0f, 1.0f);
-        UpdateScale(scale);
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderTruncated::UpdateBoundingVolume()
@@ -420,6 +419,53 @@ namespace Engine5
             return m_transformed_radius;
         }
         return m_radius;
+    }
+
+    Real ColliderTruncated::Ratio() const
+    {
+        return m_ratio;
+    }
+
+    void ColliderTruncated::SetTruncated(Real height, const Vector2& radius, Real ratio)
+    {
+        m_height = height;
+        m_radius = radius;
+        m_ratio  = ratio;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
+    }
+
+    void ColliderTruncated::SetHeight(Real height)
+    {
+        m_height = height;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
+    }
+
+    void ColliderTruncated::SetRadius(const Vector2& radius)
+    {
+        m_radius = radius;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
+    }
+
+    void ColliderTruncated::SetRatio(Real ratio)
+    {
+        m_ratio = ratio;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderTruncated::Clone(ColliderPrimitive* cloned)

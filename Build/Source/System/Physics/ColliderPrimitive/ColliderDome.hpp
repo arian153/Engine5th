@@ -36,6 +36,7 @@ namespace Engine5
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         Vector3 Radius() const;
+        void SetDome(const Vector3& radius);
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;

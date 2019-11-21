@@ -73,10 +73,11 @@ namespace Engine5
         m_vertices[1] = Vector3::AxisX();
         m_vertices[2] = Vector3::AxisY();
         m_vertices[3] = Vector3::AxisZ();
-
-        //TODO - get scale from transform 
-        Vector3 scale(1.0f, 1.0f, 1.0f);
-        UpdateScale(scale);
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderTetrahedron::UpdateBoundingVolume()
@@ -142,6 +143,19 @@ namespace Engine5
             return m_transformed_vertices[i];
         }
         return m_vertices[i];
+    }
+
+    void ColliderTetrahedron::SetTetrahedron(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector3& v3)
+    {
+        m_vertices[0] = v0;
+        m_vertices[1] = v1;
+        m_vertices[2] = v2;
+        m_vertices[3] = v3;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderTetrahedron::Clone(ColliderPrimitive* cloned)

@@ -2,6 +2,7 @@
 #include "../../Math/Math.hpp"
 #include "..//Utility/PhysicsDef.hpp"
 #include "..//ColliderPrimitive/ColliderPrimitive.hpp"
+#include "MassData.hpp"
 
 namespace Engine5
 {
@@ -77,12 +78,8 @@ namespace Engine5
         Vector3    m_constraints_rotational = Vector3(1.0f, 1.0f, 1.0f);
 
         //mass data
+        MassData m_mass_data;
         Vector3  m_global_centroid; //center of mass
-        Vector3  m_local_centroid;
-        Real     m_mass         = 1.0f;
-        Real     m_inverse_mass = 1.0f;
-        Matrix33 m_local_inertia_tensor;
-        Matrix33 m_local_inverse_inertia_tensor;
         Matrix33 m_global_inverse_inertia_tensor;
 
         //others

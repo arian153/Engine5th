@@ -77,15 +77,17 @@ namespace Engine5
     void ColliderSphere::UpdateScale(const Vector3& scale)
     {
         m_transformed_radius = m_radius * scale.Length();
-        m_scale_factor = scale.Length();
+        m_scale_factor       = scale.Length();
     }
 
     void ColliderSphere::SetUnit()
     {
         m_radius = 0.5f;
-        //TODO - get scale from transform 
-        Vector3 scale(1.0f, 1.0f, 1.0f);
-        UpdateScale(scale);
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderSphere::UpdateBoundingVolume()
@@ -231,6 +233,16 @@ namespace Engine5
             return m_transformed_radius;
         }
         return m_radius;
+    }
+
+    void ColliderSphere::SetSphere(Real radius)
+    {
+        m_radius = radius;
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderSphere::Clone(ColliderPrimitive* cloned)

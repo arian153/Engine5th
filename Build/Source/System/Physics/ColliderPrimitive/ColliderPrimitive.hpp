@@ -12,6 +12,7 @@ namespace Engine5
     class PrimitiveRenderer;
     class BoundingAABB;
     class RigidBody;
+    class Transform;
 
     class ColliderPrimitive
     {

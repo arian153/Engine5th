@@ -5,6 +5,10 @@
 
 namespace Engine5
 {
+    class RigidBody;
+    enum class ColliderType;
+    class ColliderPrimitive;
+
     class ColliderSet
     {
     public:
@@ -15,16 +19,26 @@ namespace Engine5
         void Update(Real dt);
         void Shutdown();
 
-        MassData CalculateMassData() ;
-        
+
+        void               SetRigidBody(RigidBody* rigid_body);
+        ColliderPrimitive* AddCollider(ColliderType type);
+
+        void     CalculateMassData();
+        MassData GetMassData() const;
+
+        void UpdateScale();
+        Vector3 GetTransformScale() const;
 
     private:
         friend class RigidBody;
 
     private:
-        MassData m_mass_data;
+        MassData      m_mass_data;
         BoundingAABB* m_bounding_volume = nullptr;
+        RigidBody*    m_rigid_body      = nullptr;
+        Transform*    m_transform       = nullptr;
+
+        //primitives
         std::vector<ColliderPrimitive*>* m_colliders = nullptr;
     };
-
 }

@@ -53,6 +53,11 @@ namespace Engine5
 
     void ColliderPolyhedron::SetUnit()
     {
+        if (m_collider_set != nullptr)
+        {
+            UpdateScale(m_collider_set->GetTransformScale());
+            m_collider_set->CalculateMassData();
+        }
     }
 
     void ColliderPolyhedron::UpdateBoundingVolume()

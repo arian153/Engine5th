@@ -17,7 +17,6 @@ namespace Engine5
         void Shutdown();
 
         RigidBody* AddRigidBody(RigidBody* body);
-        ColliderPrimitive* AddCollider(RigidBody* body, ColliderType type);
 
     private:
         std::vector<ColliderPrimitive*> m_coliders;

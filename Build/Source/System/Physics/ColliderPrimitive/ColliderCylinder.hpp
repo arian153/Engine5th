@@ -39,6 +39,10 @@ namespace Engine5
         Real    Height() const;
         Vector2 Radius() const;
 
+        void SetCylinder(Real height, const Vector2& radius);
+        void SetHeight(Real height);
+        void SetRadius(const Vector2& radius);
+
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 

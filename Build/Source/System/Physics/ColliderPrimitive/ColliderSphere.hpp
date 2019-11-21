@@ -32,6 +32,7 @@ namespace Engine5
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         Real Radius() const;
+        void SetSphere(Real radius);
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;

@@ -39,6 +39,13 @@ namespace Engine5
         Real    HalfHeight() const;
         Real    Height() const;
         Vector2 Radius() const;
+        Real    Ratio() const;
+
+        void SetTruncated(Real height, const Vector2& radius, Real ratio);
+        void SetHeight(Real height);
+        void SetRadius(const Vector2& radius);
+        void SetRatio(Real ratio);
+
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
