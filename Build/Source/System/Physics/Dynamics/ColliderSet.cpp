@@ -23,6 +23,7 @@ namespace Engine5
 
     void ColliderSet::Initialize()
     {
+        m_colliders = new std::vector<ColliderPrimitive*>;
     }
 
     void ColliderSet::Update(Real dt)
@@ -31,6 +32,18 @@ namespace Engine5
 
     void ColliderSet::Shutdown()
     {
+        if (m_colliders != nullptr)
+        {
+            for (auto& collider_data : *m_colliders)
+            {
+                collider_data->Shutdown();
+                delete collider_data;
+                collider_data = nullptr;
+            }
+            m_colliders->clear();
+            delete m_colliders;
+            m_colliders = nullptr;
+        }
     }
 
 
@@ -73,12 +86,12 @@ namespace Engine5
             return nullptr;
         }
         primitive->m_collider_set = this;
-        UpdateMassData();
         if (m_rigid_body != nullptr)
         {
             m_rigid_body->m_collider_set = this;
             primitive->m_rigid_body      = m_rigid_body;
         }
+        primitive->Initialize();
         return primitive;
     }
 
@@ -105,7 +118,7 @@ namespace Engine5
         m_transform = transform;
     }
 
-    void ColliderSet::SetMassData(Real density)
+    void ColliderSet::SetMass(Real density)
     {
         if (m_colliders != nullptr)
         {
@@ -124,10 +137,33 @@ namespace Engine5
         {
             for (auto& collider_data : *m_colliders)
             {
-                collider_data->SetScale(scale);
+                collider_data->SetScaleData(scale);
+                if (collider_data->m_bounding_volume != nullptr)
+                {
+                    collider_data->UpdateBoundingVolume();
+                }
+                collider_data->SetMassData(collider_data->m_density);
             }
-            UpdateScale();
+            UpdateMassData();
         }
+        if (m_transform != nullptr)
+        {
+            m_transform->scale = scale;
+        }
+    }
+
+    MassData ColliderSet::GetMassData() const
+    {
+        return m_mass_data;
+    }
+
+    Vector3 ColliderSet::GetTransformScale() const
+    {
+        if (m_transform != nullptr)
+        {
+            return m_transform->scale;
+        }
+        return Vector3(1.0f, 1.0f, 1.0f);
     }
 
     void ColliderSet::UpdateMassData()
@@ -181,29 +217,8 @@ namespace Engine5
         }
     }
 
-    MassData ColliderSet::GetMassData() const
+    void ColliderSet::SyncFromTransform()
     {
-        return m_mass_data;
-    }
-
-    void ColliderSet::UpdateScale()
-    {
-        if (m_transform != nullptr)
-        {
-            for (auto& primitive : *m_colliders)
-            {
-                primitive->SetScaleData(m_transform->scale);
-            }
-        }
-        UpdateMassData();
-    }
-
-    Vector3 ColliderSet::GetTransformScale() const
-    {
-        if (m_transform != nullptr)
-        {
-            return m_transform->scale;
-        }
-        return Vector3(1.0f, 1.0f, 1.0f);
+        SetScale(GetTransformScale());
     }
 }

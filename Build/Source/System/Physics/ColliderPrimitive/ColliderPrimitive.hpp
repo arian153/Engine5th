@@ -35,8 +35,6 @@ namespace Engine5
         Real          GetDensity() const;
 
         Vector3 ConvertBodyWorldPoint(const Vector3& local_point) const;
-        void    SyncFromTransform();
-        void    SyncToTransform();
         void    SetScale(const Vector3& scale);
         void    SetMass(Real density);
     public:

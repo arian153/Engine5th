@@ -151,14 +151,6 @@ namespace Engine5
         return result;
     }
 
-    void ColliderPrimitive::SyncFromTransform()
-    {
-    }
-
-    void ColliderPrimitive::SyncToTransform()
-    {
-    }
-
     void ColliderPrimitive::SetScale(const Vector3& scale)
     {
         SetScaleData(scale);
@@ -176,7 +168,10 @@ namespace Engine5
         if (m_collider_set != nullptr)
         {
             SetScale(m_collider_set->GetTransformScale());
-            UpdateBoundingVolume();
+            if (m_bounding_volume != nullptr)
+            {
+                UpdateBoundingVolume();
+            }
             SetMassData(m_density);
             m_collider_set->UpdateMassData();
         }
@@ -194,7 +189,10 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            UpdateBoundingVolume();
+            if (m_bounding_volume != nullptr)
+            {
+                UpdateBoundingVolume();
+            }
             SetMassData(m_density);
             m_collider_set->UpdateMassData();
         }

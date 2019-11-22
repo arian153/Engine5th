@@ -28,24 +28,29 @@ namespace Engine5
         void SetTransform(Transform* transform);
 
         //setters
-        void SetMassData(Real density);
+        void SetMass(Real density);
         void SetScale(const Vector3& scale);
-        void UpdateMassData();
-        void UpdateScale();
 
         //getters
         MassData GetMassData() const;
         Vector3  GetTransformScale() const;
 
+        //modify data
+        void UpdateMassData();
+        void SyncFromTransform();
+
+    private:
+
 
     private:
         friend class RigidBody;
+        friend class ColliderComponent;
 
     private:
-        MassData      m_mass_data;
-        BoundingAABB* m_bounding_volume = nullptr;
         RigidBody*    m_rigid_body      = nullptr;
         Transform*    m_transform       = nullptr;
+        MassData      m_mass_data;
+        Vector3       m_scale;
 
         //primitives
         std::vector<ColliderPrimitive*>* m_colliders = nullptr;
