@@ -8,11 +8,12 @@ namespace Engine5
     class RigidBody;
     enum class ColliderType;
     class ColliderPrimitive;
+    class World;
 
     class ColliderSet
     {
     public:
-        ColliderSet();
+        ColliderSet(World* world);
         ~ColliderSet();
 
         void Initialize();
@@ -43,14 +44,16 @@ namespace Engine5
 
 
     private:
+        friend class World;
         friend class RigidBody;
         friend class ColliderComponent;
 
     private:
-        RigidBody*    m_rigid_body      = nullptr;
-        Transform*    m_transform       = nullptr;
-        MassData      m_mass_data;
-        Vector3       m_scale;
+        RigidBody* m_rigid_body = nullptr;
+        Transform* m_transform  = nullptr;
+        World*     m_world      = nullptr;
+        MassData   m_mass_data;
+        Vector3    m_scale;
 
         //primitives
         std::vector<ColliderPrimitive*>* m_colliders = nullptr;

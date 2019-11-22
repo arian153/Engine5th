@@ -3,7 +3,8 @@
 
 namespace Engine5
 {
-    RigidBody::RigidBody()
+    RigidBody::RigidBody(World* world)
+        : m_world(world)
     {
     }
 

@@ -10,10 +10,12 @@
 #include "../ColliderPrimitive/ColliderSphere.hpp"
 #include "../ColliderPrimitive/ColliderTetrahedron.hpp"
 #include "../ColliderPrimitive/ColliderTruncated.hpp"
+#include "World.hpp"
 
 namespace Engine5
 {
-    ColliderSet::ColliderSet()
+    ColliderSet::ColliderSet(World* world)
+        : m_world(world)
     {
     }
 
@@ -90,6 +92,10 @@ namespace Engine5
         {
             m_rigid_body->m_collider_set = this;
             primitive->m_rigid_body      = m_rigid_body;
+        }
+        if (m_world != nullptr)
+        {
+            m_world->AddPrimitive(primitive);
         }
         primitive->Initialize();
         return primitive;

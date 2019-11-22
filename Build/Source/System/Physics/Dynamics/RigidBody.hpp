@@ -12,7 +12,7 @@ namespace Engine5
     class RigidBody
     {
     public:
-        RigidBody();
+        RigidBody(World* world);
         ~RigidBody();
 
         void Initialize();
@@ -86,5 +86,6 @@ namespace Engine5
         //others
         MotionMode   m_motion_mode  = MotionMode::Dynamic;
         ColliderSet* m_collider_set = nullptr;
+        World*       m_world        = nullptr;
     };
 }
