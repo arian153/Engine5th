@@ -8,11 +8,12 @@ namespace Engine5
 {
     class ColliderPrimitive;
     class ColliderSet;
+    class World;
 
     class RigidBody
     {
     public:
-        RigidBody(World* world);
+        explicit RigidBody(World* world);
         ~RigidBody();
 
         void Initialize();

@@ -21,18 +21,19 @@ namespace Engine5
 
         ColliderPrimitive* CreateCollider(ColliderSet* collider_set, ColliderType type) const;
 
-        RigidBody* AddRigidBody(RigidBody* body);
+        RigidBody*   AddRigidBody(RigidBody* body);
         ColliderSet* AddColliderSet(ColliderSet* set);
-        void AddPrimitive(ColliderPrimitive* collider_primitive) const;
+        void         AddPrimitive(ColliderPrimitive* collider_primitive) const;
 
     private:
-        
+
 
     private:
-        BroadPhaseMode m_mode = BroadPhaseMode::DynamicBVH;
-        BroadPhase* m_broad_phase = nullptr;
+        BroadPhaseMode m_mode        = BroadPhaseMode::DynamicBVH;
+        BroadPhase*    m_broad_phase = nullptr;
 
         std::vector<ColliderSet*> m_collider_sets;
         std::vector<RigidBody*>   m_rigid_bodies;
+        std::list<ColliderPair>   m_pairs;
     };
 }
