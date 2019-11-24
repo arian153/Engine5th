@@ -2,6 +2,7 @@
 #include "../BroadPhase/DynamicBVH.hpp"
 #include "../BroadPhase/NSquared.hpp"
 #include "../BroadPhase/GridPartition.hpp"
+#include "../NarrowPhase/NarrowPhase.hpp"
 
 
 namespace Engine5
@@ -46,7 +47,7 @@ namespace Engine5
         m_broad_phase->Update(dt);
         m_broad_phase->ComputePairs(m_pairs);
 
-        //filtering phase
+        //narrow phase
         //resolution phase
         //integration phase
         for (auto& body : m_rigid_bodies)

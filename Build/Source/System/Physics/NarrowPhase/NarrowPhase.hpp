@@ -14,6 +14,8 @@ namespace Engine5
         NarrowPhase();
         ~NarrowPhase();
 
+        void GenerateContact(bool b_draw);
+
         SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction);
         bool         GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex);
         bool         EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, Contact result);

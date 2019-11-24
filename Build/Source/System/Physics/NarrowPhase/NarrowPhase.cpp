@@ -12,6 +12,11 @@ namespace Engine5
     {
     }
 
+    void NarrowPhase::GenerateContact(bool b_draw)
+    {
+
+    }
+
     SupportPoint NarrowPhase::GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction)
     {
         RigidBody* body_a      = a->m_rigid_body;
