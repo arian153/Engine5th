@@ -53,7 +53,6 @@ namespace Engine5
                     //generate invalid contact do not copy data.
                     //send a event invalid.
                     //data_table->SendInvalidCollision(manifold.second.collider_a, manifold.second.collider_b);
-                    continue;
                 }
                 else
                 {
