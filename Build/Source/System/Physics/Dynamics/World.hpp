@@ -4,6 +4,8 @@
 #include "RigidBody.hpp"
 #include "../Utility/PhysicsDef.hpp"
 #include "../BroadPhase/BroadPhase.hpp"
+#include "../Resolution/Manifold.hpp"
+#include <unordered_map>
 
 namespace Engine5
 {
@@ -37,5 +39,6 @@ namespace Engine5
         std::vector<ColliderSet*> m_collider_sets;
         std::vector<RigidBody*>   m_rigid_bodies;
         std::list<ColliderPair>   m_pairs;
+        std::unordered_map<size_t, Manifold> m_manifold_table;
     };
 }

@@ -28,6 +28,7 @@ namespace Engine5
 
     private:
         friend class Resolution;
+        friend class NarrowPhase;
 
     private:
         Real    normal_impulse_sum           = 0.0f;
