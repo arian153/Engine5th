@@ -3,6 +3,7 @@
 #include "../BroadPhase/NSquared.hpp"
 #include "../BroadPhase/GridPartition.hpp"
 #include "../NarrowPhase/NarrowPhase.hpp"
+#include "../NarrowPhase/CollisionDataTable.hpp"
 
 
 namespace Engine5
@@ -39,6 +40,10 @@ namespace Engine5
             }
             m_broad_phase->Initialize();
         }
+        m_collision_data_table = new CollisionDataTable();
+        m_narrow_phase         = new NarrowPhase();
+        m_collision_data_table->Initialize();
+        m_narrow_phase->Initialize();
     }
 
     void World::Update(Real dt)
@@ -48,6 +53,8 @@ namespace Engine5
         m_broad_phase->ComputePairs(m_pairs);
 
         //narrow phase
+        m_narrow_phase->GenerateContact(m_manifold_table, m_collision_data_table, false, false, false);
+
         //resolution phase
         //integration phase
         for (auto& body : m_rigid_bodies)
@@ -58,6 +65,19 @@ namespace Engine5
 
     void World::Shutdown()
     {
+        if (m_narrow_phase != nullptr)
+        {
+            m_narrow_phase->Shutdown();
+            delete m_narrow_phase;
+            m_narrow_phase = nullptr;
+        }
+
+        if (m_collision_data_table != nullptr)
+        {
+            m_collision_data_table->Shutdown();
+            delete m_collision_data_table;
+            m_collision_data_table = nullptr;
+        }
         m_pairs.clear();
         for (auto& body : m_rigid_bodies)
         {

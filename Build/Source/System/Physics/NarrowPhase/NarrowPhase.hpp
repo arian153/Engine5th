@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class CollisionDataTable;
     class ColliderPrimitive;
     class Polytope;
 
@@ -15,9 +16,13 @@ namespace Engine5
     public:
         NarrowPhase();
         ~NarrowPhase();
+
+        void Initialize();
+        void Shutdown();
+
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
 
-        void GenerateContact(std::unordered_map<size_t, Manifold>& manifold_table, bool b_draw_gjk_flag, bool b_draw_epa_flag, bool b_draw_contact_flag);
+        void GenerateContact(std::unordered_map<size_t, Manifold>& manifold_table, CollisionDataTable* data_table, bool b_draw_gjk_flag, bool b_draw_epa_flag, bool b_draw_contact_flag);
 
         SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction);
         bool         GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex);

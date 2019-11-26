@@ -18,6 +18,10 @@ namespace Engine5
     {
     }
 
+    void CollisionDataTable::Initialize()
+    {
+    }
+
     void CollisionDataTable::Shutdown()
     {
         m_collision_data_key_map.clear();
@@ -243,7 +247,7 @@ namespace Engine5
         return reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
     }
 
-    std::unordered_multimap<ColliderPrimitive*, ColliderPrimitive*>::_Pairii CollisionDataTable::FindRelatedColliderPairList(ColliderPrimitive* key)
+    auto CollisionDataTable::FindRelatedColliderPairList(ColliderPrimitive* key) -> std::unordered_multimap<ColliderPrimitive*, ColliderPrimitive*>::_Pairii
     {
         return m_collision_data_key_map.equal_range(key);
     }

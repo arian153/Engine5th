@@ -36,6 +36,7 @@ namespace Engine5
         CollisionDataTable();
         ~CollisionDataTable();
 
+        void Initialize();
         void Shutdown();
 
         void SendHasCollision(ColliderPrimitive* a, ColliderPrimitive* b, bool was_collision, const Vector3& collision_point_a, const Vector3& collision_point_b);
@@ -45,7 +46,7 @@ namespace Engine5
         void   ValidateKeyMap(ColliderPrimitive* a, ColliderPrimitive* b);
         size_t GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b);
 
-        std::unordered_multimap<ColliderPrimitive*, ColliderPrimitive*>::_Pairii FindRelatedColliderPairList(ColliderPrimitive* key);
+        auto FindRelatedColliderPairList(ColliderPrimitive* key) -> std::unordered_multimap<ColliderPrimitive*, ColliderPrimitive*>::_Pairii;
 
         std::list<CollisionData> FindCollisionDataList(ColliderPrimitive* key);
         CollisionState           FindCollisionState(ColliderPrimitive* a, ColliderPrimitive* b);

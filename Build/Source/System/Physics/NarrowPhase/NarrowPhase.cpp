@@ -2,6 +2,7 @@
 #include "../Dynamics/RigidBody.hpp"
 #include "Polytope.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
+#include "CollisionDataTable.hpp"
 
 namespace Engine5
 {
@@ -13,17 +14,25 @@ namespace Engine5
     {
     }
 
+    void NarrowPhase::Initialize()
+    {
+    }
+
+    void NarrowPhase::Shutdown()
+    {
+    }
+
     void NarrowPhase::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
     {
         m_primitive_renderer = primitive_renderer;
     }
 
-    void NarrowPhase::GenerateContact(std::unordered_map<size_t, Manifold>& manifold_table, bool b_draw_gjk_flag, bool b_draw_epa_flag, bool b_draw_contact_flag)
+    void NarrowPhase::GenerateContact(std::unordered_map<size_t, Manifold>& manifold_table, CollisionDataTable* data_table, bool b_draw_gjk_flag, bool b_draw_epa_flag, bool b_draw_contact_flag)
     {
         for (auto& manifold : manifold_table)
         {
             Simplex simplex;
-            //data_table->ValidateKeyMap(manifold.second.collider_a, manifold.second.collider_b);
+            data_table->ValidateKeyMap(manifold.second.collider_a, manifold.second.collider_b);
             if (GJKCollisionDetection(manifold.second.collider_a, manifold.second.collider_b, simplex) == true)
             {
                 //collider pair have a collision do epa and create collision.
