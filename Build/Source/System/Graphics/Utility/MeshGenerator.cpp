@@ -209,7 +209,7 @@ namespace Engine5
         return mesh_data;
     }
 
-    MeshData* MeshGenerator::CreateSphereWithSubdivision(Real radius, I32 subdivisions) const
+    MeshData* MeshGenerator::CreateGeodesicSphere(Real radius, I32 subdivisions) const
     {
         MeshData* mesh_data = new MeshData();
 
