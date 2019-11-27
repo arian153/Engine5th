@@ -9,16 +9,7 @@
 #include "BroadPhase/StaticBVH.hpp"
 
 //Collider Primitive
-#include "ColliderPrimitive/ColliderBox.hpp"
-#include "ColliderPrimitive/ColliderCapsule.hpp"
-#include "ColliderPrimitive/ColliderCone.hpp"
-#include "ColliderPrimitive/ColliderCylinder.hpp"
-#include "ColliderPrimitive/ColliderDome.hpp"
-#include "ColliderPrimitive/ColliderEllipsoid.hpp"
-#include "ColliderPrimitive/ColliderPolyhedron.hpp"
-#include "ColliderPrimitive/ColliderSphere.hpp"
-#include "ColliderPrimitive/ColliderTetrahedron.hpp"
-#include "ColliderPrimitive/ColliderTruncated.hpp"
+#include "ColliderPrimitive/ColliderIncludes.hpp"
 
 //Constraints
 #include "Constraints/ContactConstraints.hpp"

@@ -1,20 +1,19 @@
 #pragma once
-#include "ColliderPrimitive.hpp"
+#include "../ColliderPrimitive.hpp"
 
 namespace Engine5
 {
     /**
-     * \brief
-     * Truncated Collider is aligned on the y-axis
+     * \brief 
+     * Capsule Collider is aligned on the y-axis
      */
-    class ColliderTruncated final : public ColliderPrimitive
+    class ColliderCapsule final : public ColliderPrimitive
     {
     public:
-        //default param
-        ColliderTruncated();
-        ~ColliderTruncated() override;
-        ColliderTruncated(const ColliderTruncated& rhs)            = delete;
-        ColliderTruncated& operator=(const ColliderTruncated& rhs) = delete;
+        ColliderCapsule();
+        ~ColliderCapsule() override;
+        ColliderCapsule(const ColliderCapsule& rhs)            = delete;
+        ColliderCapsule& operator=(const ColliderCapsule& rhs) = delete;
 
         void Initialize() override;
         void Shutdown() override;
@@ -38,23 +37,22 @@ namespace Engine5
 
         Real    HalfHeight() const;
         Real    Height() const;
-        Vector2 Radius() const;
-        Real    Ratio() const;
-
-        void SetTruncated(Real height, const Vector2& radius, Real ratio);
+        Vector3 Radius() const;
+        void SetCapsule(Real height, const Vector3& radius);
         void SetHeight(Real height);
-        void SetRadius(const Vector2& radius);
-        void SetRatio(Real ratio);
+        void SetRadius(const Vector3& radius);
 
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
-        Vector2 m_radius = Vector2(0.5f, 0.5f);
-        Vector2 m_transformed_radius;
+        bool TestRayEllipsoid(const Ray& ray, const Vector3& centroid, Real& min_t, Real& max_t) const;
+
+    private:
+        Vector3 m_radius;
+        Vector3 m_transformed_radius;
         Real    m_height             = 1.0f;
         Real    m_transformed_height = 1.0f;
-        Real    m_ratio              = 0.5f;
     };
 }

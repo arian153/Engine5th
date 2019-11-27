@@ -1,15 +1,15 @@
 #pragma once
-#include "ColliderPrimitive.hpp"
+#include "../ColliderPrimitive.hpp"
 
 namespace Engine5
 {
-    class ColliderBox final : public ColliderPrimitive
+    class ColliderTetrahedron final : public ColliderPrimitive
     {
     public:
-        ColliderBox();
-        ~ColliderBox() override;
-        ColliderBox(const ColliderBox& rhs)            = delete;
-        ColliderBox& operator=(const ColliderBox& rhs) = delete;
+        ColliderTetrahedron();
+        ~ColliderTetrahedron() override;
+        ColliderTetrahedron(const ColliderTetrahedron& rhs)            = delete;
+        ColliderTetrahedron& operator=(const ColliderTetrahedron& rhs) = delete;
 
         void Initialize() override;
         void Shutdown() override;
@@ -32,13 +32,13 @@ namespace Engine5
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         Vector3 Vertex(size_t i) const;
-        void    SetBox(Real width, Real height, Real depth);
+        void SetTetrahedron(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector3& v3);
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
-        Vector3 m_vertices[8];
-        Vector3 m_transformed_vertices[8];
+        Vector3 m_vertices[4];
+        Vector3 m_transformed_vertices[4];
     };
 }

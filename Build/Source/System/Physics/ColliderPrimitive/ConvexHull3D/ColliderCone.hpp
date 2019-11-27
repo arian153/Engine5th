@@ -1,15 +1,19 @@
 #pragma once
-#include "ColliderPrimitive.hpp"
+#include "../ColliderPrimitive.hpp"
 
 namespace Engine5
 {
-    class ColliderSphere final : public ColliderPrimitive
+    /**
+     * \brief
+     * Cone Collider is aligned on the y-axis
+     */
+    class ColliderCone final : public ColliderPrimitive
     {
     public:
-        ColliderSphere();
-        ~ColliderSphere() override;
-        ColliderSphere(const ColliderSphere& rhs)            = delete;
-        ColliderSphere& operator=(const ColliderSphere& rhs) = delete;
+        ColliderCone();
+        ~ColliderCone() override;
+        ColliderCone(const ColliderCone& rhs)            = delete;
+        ColliderCone& operator=(const ColliderCone& rhs) = delete;
 
         void Initialize() override;
         void Shutdown() override;
@@ -31,14 +35,21 @@ namespace Engine5
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
-        Real Radius() const;
-        void SetSphere(Real radius);
+        Real    HalfHeight() const;
+        Real    Height() const;
+        Vector2 Radius() const;
+
+        void SetCone(Real height, const Vector2& radius);
+        void SetHeight(Real height);
+        void SetRadius(const Vector2& radius);
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
-        Real m_radius             = 1.0f;
-        Real m_transformed_radius = 1.0f;
+        Vector2 m_radius;
+        Vector2 m_transformed_radius;
+        Real    m_height             = 1.0f;
+        Real    m_transformed_height = 1.0f;
     };
 }

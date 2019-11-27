@@ -1,15 +1,16 @@
 #pragma once
-#include "ColliderPrimitive.hpp"
+#include "../ColliderPrimitive.hpp"
 
 namespace Engine5
 {
-    class ColliderPolyhedron final : public ColliderPrimitive
+    class ColliderEllipsoid final : public ColliderPrimitive
     {
     public:
-        ColliderPolyhedron();
-        ~ColliderPolyhedron() override;
-        ColliderPolyhedron(const ColliderPolyhedron& rhs)            = delete;
-        ColliderPolyhedron& operator=(const ColliderPolyhedron& rhs) = delete;
+
+        ColliderEllipsoid();
+        ~ColliderEllipsoid() override;
+        ColliderEllipsoid(const ColliderEllipsoid& rhs)            = delete;
+        ColliderEllipsoid& operator=(const ColliderEllipsoid& rhs) = delete;
 
         void Initialize() override;
         void Shutdown() override;
@@ -31,9 +32,14 @@ namespace Engine5
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
+        Vector3 Radius() const;
+        void SetEllipsoid(const Vector3& radius);
+
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
+        Vector3 m_radius;
+        Vector3 m_transformed_radius;
     };
 }

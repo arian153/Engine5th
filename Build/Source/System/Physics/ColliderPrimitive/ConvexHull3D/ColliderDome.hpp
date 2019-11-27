@@ -1,16 +1,19 @@
 #pragma once
-#include "ColliderPrimitive.hpp"
+#include "../ColliderPrimitive.hpp"
 
 namespace Engine5
 {
-    class ColliderEllipsoid final : public ColliderPrimitive
+    /**
+     * \brief
+     * Dome Collider is aligned on the y-axis
+     */
+    class ColliderDome final : public ColliderPrimitive
     {
     public:
-
-        ColliderEllipsoid();
-        ~ColliderEllipsoid() override;
-        ColliderEllipsoid(const ColliderEllipsoid& rhs)            = delete;
-        ColliderEllipsoid& operator=(const ColliderEllipsoid& rhs) = delete;
+        ColliderDome();
+        ~ColliderDome() override;
+        ColliderDome(const ColliderDome& rhs)            = delete;
+        ColliderDome& operator=(const ColliderDome& rhs) = delete;
 
         void Initialize() override;
         void Shutdown() override;
@@ -33,13 +36,13 @@ namespace Engine5
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         Vector3 Radius() const;
-        void SetEllipsoid(const Vector3& radius);
+        void SetDome(const Vector3& radius);
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
-        Vector3 m_radius;
+        Vector3 m_radius = Vector3(0.3f, 0.4f, 0.5f);
         Vector3 m_transformed_radius;
     };
 }

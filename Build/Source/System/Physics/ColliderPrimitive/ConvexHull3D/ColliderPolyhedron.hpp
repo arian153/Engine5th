@@ -1,19 +1,15 @@
 #pragma once
-#include "ColliderPrimitive.hpp"
+#include "../ColliderPrimitive.hpp"
 
 namespace Engine5
 {
-    /**
-     * \brief
-     * Dome Collider is aligned on the y-axis
-     */
-    class ColliderDome final : public ColliderPrimitive
+    class ColliderPolyhedron final : public ColliderPrimitive
     {
     public:
-        ColliderDome();
-        ~ColliderDome() override;
-        ColliderDome(const ColliderDome& rhs)            = delete;
-        ColliderDome& operator=(const ColliderDome& rhs) = delete;
+        ColliderPolyhedron();
+        ~ColliderPolyhedron() override;
+        ColliderPolyhedron(const ColliderPolyhedron& rhs)            = delete;
+        ColliderPolyhedron& operator=(const ColliderPolyhedron& rhs) = delete;
 
         void Initialize() override;
         void Shutdown() override;
@@ -35,14 +31,9 @@ namespace Engine5
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
-        Vector3 Radius() const;
-        void SetDome(const Vector3& radius);
-
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
-        Vector3 m_radius = Vector3(0.3f, 0.4f, 0.5f);
-        Vector3 m_transformed_radius;
     };
 }

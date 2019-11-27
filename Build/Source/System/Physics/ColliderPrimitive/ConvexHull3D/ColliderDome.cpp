@@ -1,6 +1,6 @@
 #include "ColliderDome.hpp"
-#include "../../Graphics/Utility/PrimitiveRenderer.hpp"
-#include "../BroadPhase/BoundingAABB.hpp"
+#include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
+#include "../../BroadPhase/BoundingAABB.hpp"
 
 namespace Engine5
 {

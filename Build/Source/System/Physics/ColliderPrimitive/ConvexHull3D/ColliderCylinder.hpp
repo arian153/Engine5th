@@ -1,19 +1,19 @@
 #pragma once
-#include "ColliderPrimitive.hpp"
+#include "../ColliderPrimitive.hpp"
 
 namespace Engine5
 {
     /**
      * \brief
-     * Cone Collider is aligned on the y-axis
+     * Cylinder Collider is aligned on the y-axis
      */
-    class ColliderCone final : public ColliderPrimitive
+    class ColliderCylinder final : public ColliderPrimitive
     {
     public:
-        ColliderCone();
-        ~ColliderCone() override;
-        ColliderCone(const ColliderCone& rhs)            = delete;
-        ColliderCone& operator=(const ColliderCone& rhs) = delete;
+        ColliderCylinder();
+        ~ColliderCylinder() override;
+        ColliderCylinder(const ColliderCylinder& rhs)            = delete;
+        ColliderCylinder& operator=(const ColliderCylinder& rhs) = delete;
 
         void Initialize() override;
         void Shutdown() override;
@@ -39,7 +39,7 @@ namespace Engine5
         Real    Height() const;
         Vector2 Radius() const;
 
-        void SetCone(Real height, const Vector2& radius);
+        void SetCylinder(Real height, const Vector2& radius);
         void SetHeight(Real height);
         void SetRadius(const Vector2& radius);
 
