@@ -61,6 +61,8 @@ namespace Engine5
 
     void ColliderPolyhedron::UpdateBoundingVolume()
     {
+        //todo temporary code
+        m_bounding_volume->Set(Vector3::Origin(), Vector3::Origin());
     }
 
     void ColliderPolyhedron::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const

@@ -8,7 +8,7 @@ namespace Engine5
     public:
         ColliderCircle();
         ~ColliderCircle() override;
-        ColliderCircle(const ColliderCircle& rhs) = delete;
+        ColliderCircle(const ColliderCircle& rhs)            = delete;
         ColliderCircle& operator=(const ColliderCircle& rhs) = delete;
 
         void Initialize() override;
@@ -35,5 +35,7 @@ namespace Engine5
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
+        Real m_radius             = 1.0f;
+        Real m_transformed_radius = 1.0f;
     };
 }

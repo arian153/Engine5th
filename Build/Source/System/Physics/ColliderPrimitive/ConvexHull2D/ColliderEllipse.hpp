@@ -35,5 +35,7 @@ namespace Engine5
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
+        Vector2 m_radius;
+        Vector2 m_transformed_radius;
     };
 }
