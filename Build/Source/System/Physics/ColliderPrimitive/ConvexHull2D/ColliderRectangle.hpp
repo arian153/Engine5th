@@ -31,9 +31,14 @@ namespace Engine5
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
+        Vector2 Vertex(size_t i) const;
+        void    SetRectangle(Real width, Real height);
+
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
+        Vector2 m_vertices[4];
+        Vector2 m_transformed_vertices[4];
     };
 }
