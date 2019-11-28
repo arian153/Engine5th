@@ -41,13 +41,13 @@ namespace Engine5
         m_density = density;
         if (m_collider_set != nullptr)
         {
-            w = (m_transformed_vertices[0] - m_transformed_vertices[4]).x;
-            h = (m_transformed_vertices[0] - m_transformed_vertices[2]).y;
+            w = (m_scaled_vertices[0] - m_scaled_vertices[2]).x;
+            h = (m_scaled_vertices[0] - m_scaled_vertices[3]).y;
         }
         else
         {
-            w = (m_vertices[0] - m_vertices[4]).x;
-            h = (m_vertices[0] - m_vertices[2]).y;
+            w = (m_vertices[0] - m_vertices[2]).x;
+            h = (m_vertices[0] - m_vertices[3]).y;
         }
         m_mass    = density * w * h;
         Real it_a = m_mass / 12.0f * (h * h);
@@ -89,6 +89,13 @@ namespace Engine5
 
     void ColliderRectangle::SetRectangle(Real width, Real height)
     {
+        Real w = 0.5f * width;
+        Real h = 0.5f * height;
+
+        m_vertices[0].Set(+w, +h);
+        m_vertices[1].Set(+w, -h);
+        m_vertices[2].Set(-w, +h);
+        m_vertices[3].Set(-w, -h);
     }
 
     void ColliderRectangle::Clone(ColliderPrimitive* cloned)

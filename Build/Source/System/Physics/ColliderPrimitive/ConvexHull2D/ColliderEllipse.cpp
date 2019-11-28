@@ -42,8 +42,8 @@ namespace Engine5
         m_mass = density * GetVolume();
         if (m_collider_set != nullptr)
         {
-            a = m_transformed_radius.x;
-            b = m_transformed_radius.y;
+            a = m_scaled_radius.x;
+            b = m_scaled_radius.y;
         }
         else
         {
@@ -63,7 +63,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return Math::PI * m_transformed_radius.x * m_transformed_radius.y;
+            return Math::PI * m_scaled_radius.x * m_scaled_radius.y;
         }
         return Math::PI * m_radius.x * m_radius.y;
     }

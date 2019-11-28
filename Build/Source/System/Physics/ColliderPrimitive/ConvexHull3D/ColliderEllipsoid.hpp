@@ -40,6 +40,6 @@ namespace Engine5
 
     private:
         Vector3 m_radius;
-        Vector3 m_transformed_radius;
+        Vector3 m_scaled_radius;
     };
 }

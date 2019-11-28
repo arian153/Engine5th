@@ -64,9 +64,9 @@ namespace Engine5
         Vector3 normal;
         if (m_collider_set != nullptr)
         {
-            normal.x = 2.0f * local_point_on_collider.x / m_transformed_radius.x * m_transformed_radius.x;
-            normal.y = 2.0f * local_point_on_collider.y / m_transformed_radius.y * m_transformed_radius.y;
-            normal.z = 2.0f * local_point_on_collider.z / m_transformed_radius.z * m_transformed_radius.z;
+            normal.x = 2.0f * local_point_on_collider.x / m_scaled_radius.x * m_scaled_radius.x;
+            normal.y = 2.0f * local_point_on_collider.y / m_scaled_radius.y * m_scaled_radius.y;
+            normal.z = 2.0f * local_point_on_collider.z / m_scaled_radius.z * m_scaled_radius.z;
         }
         else
         {
@@ -84,9 +84,9 @@ namespace Engine5
         m_mass    = density * GetVolume();
         if (m_collider_set != nullptr)
         {
-            a = m_transformed_radius.x;
-            b = m_transformed_radius.z;
-            c = m_transformed_radius.y;
+            a = m_scaled_radius.x;
+            b = m_scaled_radius.z;
+            c = m_scaled_radius.y;
         }
         else
         {
@@ -106,14 +106,14 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return 4.0f / 3.0f * Math::PI * m_transformed_radius.x * m_transformed_radius.y * m_transformed_radius.z;
+            return 4.0f / 3.0f * Math::PI * m_scaled_radius.x * m_scaled_radius.y * m_scaled_radius.z;
         }
         return 4.0f / 3.0f * Math::PI * m_radius.x * m_radius.y * m_radius.z;
     }
 
     void ColliderEllipsoid::SetScaleData(const Vector3& scale)
     {
-        m_transformed_radius = m_radius.HadamardProduct(scale);
+        m_scaled_radius = m_radius.HadamardProduct(scale);
         m_scale_factor       = scale.Length();
     }
 
@@ -263,7 +263,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return m_transformed_radius;
+            return m_scaled_radius;
         }
         return m_radius;
     }

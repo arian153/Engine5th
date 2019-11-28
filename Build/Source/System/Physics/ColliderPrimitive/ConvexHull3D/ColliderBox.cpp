@@ -150,9 +150,9 @@ namespace Engine5
         m_density = density;
         if (m_collider_set != nullptr)
         {
-            w = (m_transformed_vertices[0] - m_transformed_vertices[4]).x;
-            h = (m_transformed_vertices[0] - m_transformed_vertices[2]).y;
-            d = (m_transformed_vertices[0] - m_transformed_vertices[1]).z;
+            w = (m_scaled_vertices[0] - m_scaled_vertices[4]).x;
+            h = (m_scaled_vertices[0] - m_scaled_vertices[2]).y;
+            d = (m_scaled_vertices[0] - m_scaled_vertices[1]).z;
         }
         else
         {
@@ -173,9 +173,9 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            Real w = (m_transformed_vertices[0] - m_transformed_vertices[4]).x;
-            Real h = (m_transformed_vertices[0] - m_transformed_vertices[2]).y;
-            Real d = (m_transformed_vertices[0] - m_transformed_vertices[1]).z;
+            Real w = (m_scaled_vertices[0] - m_scaled_vertices[4]).x;
+            Real h = (m_scaled_vertices[0] - m_scaled_vertices[2]).y;
+            Real d = (m_scaled_vertices[0] - m_scaled_vertices[1]).z;
             return w * h * d;
         }
         Real w = (m_vertices[0] - m_vertices[4]).x;
@@ -188,7 +188,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 8; ++i)
         {
-            m_transformed_vertices[i] = m_vertices[i].HadamardProduct(scale);
+            m_scaled_vertices[i] = m_vertices[i].HadamardProduct(scale);
         }
         m_scale_factor = scale.Length();
     }
@@ -236,7 +236,7 @@ namespace Engine5
         Vector3 vertices[8];
         if (m_collider_set != nullptr)
         {
-            std::memcpy(vertices, m_transformed_vertices, sizeof(m_transformed_vertices));
+            std::memcpy(vertices, m_scaled_vertices, sizeof(m_scaled_vertices));
         }
         else
         {
@@ -310,7 +310,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return m_transformed_vertices[i];
+            return m_scaled_vertices[i];
         }
         return m_vertices[i];
     }

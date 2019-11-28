@@ -39,6 +39,6 @@ namespace Engine5
 
     private:
         Vector3 m_vertices[4];
-        Vector3 m_transformed_vertices[4];
+        Vector3 m_scaled_vertices[4];
     };
 }

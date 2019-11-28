@@ -37,10 +37,28 @@ namespace Engine5
 
     void ColliderTriangle::SetMassData(Real density)
     {
+        //find mass
+        //find centroid
+        //find inertia tensor
     }
 
     Real ColliderTriangle::GetVolume()
     {
+        Vector3 edge01, edge02;
+        if (m_collider_set != nullptr)
+        {
+            auto v2edge01 = m_scaled_vertices[1] - m_scaled_vertices[0];
+            auto v2edge02 = m_scaled_vertices[2] - m_scaled_vertices[0];
+            edge01        = Vector3(v2edge01.x, v2edge01.y, 0.0f);
+            edge02        = Vector3(v2edge02.x, v2edge02.y, 0.0f);
+        }
+        else
+        {
+            auto v2edge01 = m_vertices[1] - m_vertices[0];
+            auto v2edge02 = m_vertices[2] - m_vertices[0];
+            edge01        = Vector3(v2edge01.x, v2edge01.y, 0.0f);
+            edge02        = Vector3(v2edge02.x, v2edge02.y, 0.0f);
+        }
         return 0.0f;
     }
 

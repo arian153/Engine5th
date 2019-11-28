@@ -35,5 +35,7 @@ namespace Engine5
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
+        Vector2 m_vertices[3];
+        Vector2 m_scaled_vertices[3];
     };
 }

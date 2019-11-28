@@ -210,9 +210,9 @@ namespace Engine5
         m_mass    = density * GetVolume();
         if (m_collider_set != nullptr)
         {
-            a = m_transformed_radius.x;
-            b = m_transformed_radius.y;
-            h = m_transformed_height;
+            a = m_scaled_radius.x;
+            b = m_scaled_radius.y;
+            h = m_scaled_height;
         }
         else
         {
@@ -232,15 +232,15 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return Math::PI * m_transformed_radius.x * m_transformed_radius.y * m_transformed_height;
+            return Math::PI * m_scaled_radius.x * m_scaled_radius.y * m_scaled_height;
         }
         return Math::PI * m_radius.x * m_radius.y * m_height;
     }
 
     void ColliderCylinder::SetScaleData(const Vector3& scale)
     {
-        m_transformed_height = m_height * scale.y;
-        m_transformed_radius = m_radius.HadamardProduct(Vector2(scale.x, scale.z));
+        m_scaled_height = m_height * scale.y;
+        m_scaled_radius = m_radius.HadamardProduct(Vector2(scale.x, scale.z));
         m_scale_factor       = scale.Length();
     }
 
@@ -351,7 +351,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return m_transformed_height * 0.5f;
+            return m_scaled_height * 0.5f;
         }
         return m_height * 0.5f;
     }
@@ -360,7 +360,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return m_transformed_height;
+            return m_scaled_height;
         }
         return m_height;
     }
@@ -369,7 +369,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return m_transformed_radius;
+            return m_scaled_radius;
         }
         return m_radius;
     }

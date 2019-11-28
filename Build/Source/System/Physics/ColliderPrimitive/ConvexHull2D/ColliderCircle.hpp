@@ -36,6 +36,6 @@ namespace Engine5
 
     private:
         Real m_radius             = 1.0f;
-        Real m_transformed_radius = 1.0f;
+        Real m_scaled_radius = 1.0f;
     };
 }

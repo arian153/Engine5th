@@ -71,14 +71,14 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return 4.0f / 3.0f * Math::PI * m_transformed_radius * m_transformed_radius * m_transformed_radius;
+            return 4.0f / 3.0f * Math::PI * m_scaled_radius * m_scaled_radius * m_scaled_radius;
         }
         return 4.0f / 3.0f * Math::PI * m_radius * m_radius * m_radius;
     }
 
     void ColliderSphere::SetScaleData(const Vector3& scale)
     {
-        m_transformed_radius = m_radius * scale.Length();
+        m_scaled_radius = m_radius * scale.Length();
         m_scale_factor       = scale.Length();
     }
 
@@ -228,7 +228,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return m_transformed_radius;
+            return m_scaled_radius;
         }
         return m_radius;
     }

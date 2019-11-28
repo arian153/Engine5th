@@ -51,8 +51,8 @@ namespace Engine5
 
     private:
         Vector3 m_radius;
-        Vector3 m_transformed_radius;
+        Vector3 m_scaled_radius;
         Real    m_height             = 1.0f;
-        Real    m_transformed_height = 1.0f;
+        Real    m_scaled_height = 1.0f;
     };
 }

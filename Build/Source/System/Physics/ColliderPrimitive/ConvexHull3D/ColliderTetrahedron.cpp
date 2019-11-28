@@ -65,7 +65,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 4; ++i)
         {
-            m_transformed_vertices[i] = m_vertices[i].HadamardProduct(scale);
+            m_scaled_vertices[i] = m_vertices[i].HadamardProduct(scale);
         }
         m_scale_factor = scale.Length();
     }
@@ -92,7 +92,7 @@ namespace Engine5
         Vector3 vertices[4];
         if (m_collider_set != nullptr)
         {
-            std::memcpy(vertices, m_transformed_vertices, sizeof(m_transformed_vertices));
+            std::memcpy(vertices, m_scaled_vertices, sizeof(m_scaled_vertices));
         }
         else
         {
@@ -141,7 +141,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            return m_transformed_vertices[i];
+            return m_scaled_vertices[i];
         }
         return m_vertices[i];
     }
