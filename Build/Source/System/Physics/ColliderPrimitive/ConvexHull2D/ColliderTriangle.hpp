@@ -31,6 +31,7 @@ namespace Engine5
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
+        Vector2 Vertex(size_t i);
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 

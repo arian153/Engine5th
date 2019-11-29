@@ -37,9 +37,41 @@ namespace Engine5
 
     void ColliderTriangle::SetMassData(Real density)
     {
-        //find mass
-        //find centroid
-        //find inertia tensor
+        Real area  = 0.0f;
+        Real it_xx = 0.0f;
+        Real it_yy = 0.0f;
+        Real it_zz = 0.0f;
+        Real inv3  = 1.0f / 3.0f;
+        for (size_t i1 = 0; i1 < 3; ++i1)
+        {
+            // Triangle vertices, third vertex implied as (0, 0)
+            Vector3 p1, p2;
+            size_t  i2 = i1 + 1 < 3 ? i1 + 1 : 0;
+            if (m_collider_set != nullptr)
+            {
+                p1 = Vector3(m_scaled_vertices[i1].x, m_scaled_vertices[i1].y);
+                p2 = Vector3(m_scaled_vertices[i2].x, m_scaled_vertices[i2].y);
+            }
+            else
+            {
+                p1 = Vector3(m_vertices[i1].x, m_vertices[i1].y);
+                p2 = Vector3(m_vertices[i2].x, m_vertices[i2].y);
+            }
+            Real triangle_area = 0.5f * p1.CrossProduct(p2).Length();
+            area += triangle_area;
+
+            // Use area to weight the centroid average, not just vertex position
+            m_centroid += (p1 + p2) * triangle_area * inv3;
+            Real it_x = p1.x * p1.x + p2.x * p1.x + p2.x * p2.x;
+            Real it_y = p1.y * p1.y + p2.y * p1.y + p2.y * p2.y;
+            it_xx += 0.25f * inv3 * p1.CrossProduct(p2).Length() * it_y;
+            it_yy += 0.25f * inv3 * p1.CrossProduct(p2).Length() * it_x;
+            it_zz += 0.25f * inv3 * p1.CrossProduct(p2).Length() * (it_x + it_y);
+        }
+        m_centroid *= 1.0f / area;
+        m_mass = density * area;
+        m_local_inertia_tensor.SetZero();
+        m_local_inertia_tensor.SetDiagonal(it_xx * density, it_yy * density, it_zz * density);
     }
 
     Real ColliderTriangle::GetVolume()
@@ -59,7 +91,7 @@ namespace Engine5
             edge01        = Vector3(v2edge01.x, v2edge01.y, 0.0f);
             edge02        = Vector3(v2edge02.x, v2edge02.y, 0.0f);
         }
-        return 0.0f;
+        return edge01.CrossProduct(edge02).Length() * 0.5f;
     }
 
     void ColliderTriangle::SetScaleData(const Vector3& scale)
@@ -78,6 +110,15 @@ namespace Engine5
 
     void ColliderTriangle::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
+    }
+
+    Vector2 ColliderTriangle::Vertex(size_t i)
+    {
+        if (m_collider_set != nullptr)
+        {
+            return m_scaled_vertices[i];
+        }
+        return m_vertices[i];
     }
 
     void ColliderTriangle::Clone(ColliderPrimitive* cloned)
