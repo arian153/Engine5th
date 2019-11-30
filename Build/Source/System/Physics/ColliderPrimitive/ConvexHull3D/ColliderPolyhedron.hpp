@@ -1,5 +1,7 @@
 #pragma once
 #include "../ColliderPrimitive.hpp"
+#include "../ColliderEdge.hpp"
+#include "../ColliderFace.hpp"
 
 namespace Engine5
 {
@@ -35,5 +37,13 @@ namespace Engine5
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
+        std::vector<Vector3>*      m_vertices;
+        std::vector<Vector3>*      m_scaled_vertices;
+        std::vector<ColliderEdge>* m_edges;
+        std::vector<ColliderFace>* m_feces;
+
+        Real    m_volume;
+        Vector3 m_min_vertex;
+        Vector3 m_max_vertex;
     };
 }

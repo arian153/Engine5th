@@ -1,5 +1,6 @@
 #pragma once
 #include "../ColliderPrimitive.hpp"
+#include "../ColliderEdge.hpp"
 
 namespace Engine5
 {
@@ -8,7 +9,7 @@ namespace Engine5
     public:
         ColliderPolygon();
         ~ColliderPolygon() override;
-        ColliderPolygon(const ColliderPolygon& rhs) = delete;
+        ColliderPolygon(const ColliderPolygon& rhs)            = delete;
         ColliderPolygon& operator=(const ColliderPolygon& rhs) = delete;
 
         void Initialize() override;
@@ -35,5 +36,12 @@ namespace Engine5
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
+        std::vector<Vector2>*      m_vertices;
+        std::vector<Vector2>*      m_scaled_vertices;
+        std::vector<ColliderEdge>* m_edges;
+
+        Real m_volume;
+        Vector2 m_min_vertex;
+        Vector2 m_max_vertex;
     };
 }
