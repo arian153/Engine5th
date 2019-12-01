@@ -71,6 +71,7 @@ namespace Engine5
 
     void ColliderCircle::SetUnit()
     {
+        m_radius = 0.5f;
     }
 
     void ColliderCircle::UpdateBoundingVolume()

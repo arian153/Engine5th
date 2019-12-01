@@ -36,11 +36,10 @@ namespace Engine5
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
-        std::vector<Vector2>*      m_vertices;
-        std::vector<Vector2>*      m_scaled_vertices;
-        std::vector<ColliderEdge>* m_edges;
+        std::vector<Vector2>*      m_vertices        = nullptr;
+        std::vector<Vector2>*      m_scaled_vertices = nullptr;
+        std::vector<ColliderEdge>* m_edges           = nullptr;
 
-        Real m_volume;
         Vector2 m_min_vertex;
         Vector2 m_max_vertex;
     };
