@@ -33,17 +33,31 @@ namespace Engine5
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
+        Vector3 Vertex(size_t i) const;
+
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
     private:
-        std::vector<Vector3>*      m_vertices;
-        std::vector<Vector3>*      m_scaled_vertices;
-        std::vector<ColliderEdge>* m_edges;
-        std::vector<ColliderFace>* m_feces;
+        class SubMassData
+        {
+        public:
+            Real     mass   = 0.0f;
+            Real     volume = 0.0f;
+            Vector3  centroid;
+            Matrix33 inertia;
+        };
 
-        Real    m_volume;
-        Vector3 m_min_vertex;
-        Vector3 m_max_vertex;
+    private:
+        Matrix33    TranslateInertia(const Matrix33& input, const Vector3& centroid, Real mass, const Vector3& offset) const;
+        SubMassData CalculateTetrahedronMassData(const Vector3& ref, const Vector3& v1, const Vector3& v2, const Vector3& v3, Real density) const;
+    private:
+        std::vector<Vector3>*      m_vertices        = nullptr;
+        std::vector<Vector3>*      m_scaled_vertices = nullptr;
+        std::vector<ColliderEdge>* m_edges           = nullptr;
+        std::vector<ColliderFace>* m_faces           = nullptr;
+
+        Vector3 m_min_bound;
+        Vector3 m_max_bound;
     };
 }

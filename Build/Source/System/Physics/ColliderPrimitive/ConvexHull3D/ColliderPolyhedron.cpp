@@ -41,12 +41,40 @@ namespace Engine5
 
     void ColliderPolyhedron::SetMassData(Real density)
     {
-        m_density = density;
+        m_density  = density;
+        m_centroid = 0.0f;
+        m_local_inertia_tensor.SetZero();
+        m_mass            = 0.0f;
+        Vector3 ref_point = Vector3::Origin();
+        for (auto& face : *m_faces)
+        {
+            auto sub_data = CalculateTetrahedronMassData(ref_point, Vertex(face.a), Vertex(face.b), Vertex(face.c), density);
+            m_centroid += sub_data.mass * sub_data.centroid;
+            m_mass += sub_data.mass;
+            m_local_inertia_tensor += sub_data.inertia;
+        }
+        if (Utility::IsZero(m_mass) == false)
+        {
+            m_centroid /= m_mass;
+        }
+        else
+        {
+            m_centroid = 0.0f;
+        }
+        m_local_inertia_tensor = TranslateInertia(m_local_inertia_tensor, m_centroid, m_mass, ref_point - m_centroid);
     }
 
     Real ColliderPolyhedron::GetVolume()
     {
-        return m_mass;
+        Real    volume    = 0.0f;
+        Vector3 ref_point = Vector3::Origin();
+        for (auto& face : *m_faces)
+        {
+            Matrix33 tetrahedron_matrix;
+            tetrahedron_matrix.SetColumns(Vertex(face.a) - ref_point, Vertex(face.b) - ref_point, Vertex(face.c) - ref_point);
+            volume += tetrahedron_matrix.Determinant() / 6.0f;
+        }
+        return volume;
     }
 
     void ColliderPolyhedron::SetScaleData(const Vector3& scale)
@@ -78,7 +106,48 @@ namespace Engine5
         }
     }
 
+    Vector3 ColliderPolyhedron::Vertex(size_t i) const
+    {
+        if (m_collider_set != nullptr)
+        {
+            return m_scaled_vertices->at(i);
+        }
+        return m_vertices->at(i);
+    }
+
     void ColliderPolyhedron::Clone(ColliderPrimitive* cloned)
     {
+    }
+
+    Matrix33 ColliderPolyhedron::TranslateInertia(const Matrix33& input, const Vector3& centroid, Real mass, const Vector3& offset) const
+    {
+        return input + mass * (offset.OuterProduct(centroid) + centroid.OuterProduct(offset) + offset.OuterProduct(offset));
+    }
+
+    ColliderPolyhedron::SubMassData ColliderPolyhedron::CalculateTetrahedronMassData(const Vector3& ref, const Vector3& v1, const Vector3& v2, const Vector3& v3, Real density) const
+    {
+        SubMassData result;
+        //canonical moment of inertia data.
+        Real     axis = 1.0f / 60.0f;
+        Real     prod = 1.0f / 120.0f;
+        Matrix33 canonical_matrix(axis, prod, prod, prod, axis, prod, prod, prod, axis);
+        Matrix33 transformation_matrix;
+        transformation_matrix.SetColumns(v1 - ref, v2 - ref, v3 - ref);
+
+        //calculate sub inertia
+        result.inertia = transformation_matrix.Determinant() * transformation_matrix * canonical_matrix * transformation_matrix.Transpose();
+
+        //volume is 1 / 6 of triple product, that is 1/6 det of transformation matrix.
+        result.volume = transformation_matrix.Determinant() / 6.0f;
+        result.mass   = density * result.volume;
+
+        //the center of mass of the points used to construct covariance matrix.
+        //The center-of-mass is just the mean of the four vertex coordinates. 
+        result.centroid = (ref + v1 + v2 + v3) * 0.25f;
+        if (ref.IsZero() == false)
+        {
+            result.inertia = TranslateInertia(result.inertia, result.centroid, result.mass, ref);
+        }
+        return result;
     }
 }
