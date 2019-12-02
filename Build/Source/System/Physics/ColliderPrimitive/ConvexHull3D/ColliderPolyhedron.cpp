@@ -138,10 +138,8 @@ namespace Engine5
         result.inertia = transformation_matrix.Determinant() * transformation_matrix * canonical_matrix * transformation_matrix.Transpose();
 
         //volume is 1 / 6 of triple product, that is 1/6 det of transformation matrix.
-        result.volume = transformation_matrix.Determinant() / 6.0f;
-        result.mass   = density * result.volume;
+        result.mass = density * transformation_matrix.Determinant() / 6.0f;
 
-        //the center of mass of the points used to construct covariance matrix.
         //The center-of-mass is just the mean of the four vertex coordinates. 
         result.centroid = (ref + v1 + v2 + v3) * 0.25f;
         if (ref.IsZero() == false)

@@ -43,7 +43,6 @@ namespace Engine5
         {
         public:
             Real     mass   = 0.0f;
-            Real     volume = 0.0f;
             Vector3  centroid;
             Matrix33 inertia;
         };
