@@ -32,6 +32,9 @@ namespace Engine5
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
+        Vector2 Vertex(size_t i) const;
+
+
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
@@ -40,7 +43,7 @@ namespace Engine5
         std::vector<Vector2>*      m_scaled_vertices = nullptr;
         std::vector<ColliderEdge>* m_edges           = nullptr;
 
-        Vector2 m_min_vertex;
-        Vector2 m_max_vertex;
+        Vector2 m_min_bound;
+        Vector2 m_max_bound;
     };
 }

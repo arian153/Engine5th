@@ -102,20 +102,66 @@ namespace Engine5
 
     void ColliderPolygon::SetScaleData(const Vector3& scale)
     {
+        size_t  size = m_vertices->size();
+        Vector2 scale_v2(scale.x, scale.y);
+        for (size_t i = 0; i < size; ++i)
+        {
+            m_scaled_vertices->at(i) = scale_v2.HadamardProduct(m_vertices->at(i));
+        }
+        m_scale_factor = scale.Length();
     }
 
     void ColliderPolygon::SetUnit()
     {
+        auto min_max     = m_max_bound - m_min_bound;
+        Real unit_factor = 1.0f / min_max.Length();
+        for (auto& vertex : *m_vertices)
+        {
+            vertex *= unit_factor;
+        }
+        UpdatePrimitive();
     }
 
     void ColliderPolygon::UpdateBoundingVolume()
     {
-        //todo temporary code
-        m_bounding_volume->Set(Vector3::Origin(), Vector3::Origin());
+        Real bounding_factor = (m_max_bound - m_min_bound).Length() * 0.5f;
+
+        Vector3 pos;
+        if (m_rigid_body != nullptr)
+        {
+            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            bounding_factor *= m_scale_factor;
+        }
+        else
+        {
+            pos = m_position;
+        }
+
+        Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
+        m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
     void ColliderPolygon::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
+        I32 index = static_cast<I32>(renderer->VerticesSize(mode));
+        size_t size = m_vertices->size();
+        renderer->ReserveVertices(size, mode);
+
+
+
+    }
+
+    Vector2 ColliderPolygon::Vertex(size_t i) const
+    {
+        if (i >= m_vertices->size())
+        {
+            i = m_vertices->size() - 1;
+        }
+        if (m_collider_set != nullptr)
+        {
+            return m_scaled_vertices->at(i);
+        }
+        return m_vertices->at(i);
     }
 
     void ColliderPolygon::Clone(ColliderPrimitive* cloned)
