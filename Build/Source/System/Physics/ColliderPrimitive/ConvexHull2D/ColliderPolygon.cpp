@@ -43,7 +43,7 @@ namespace Engine5
         Real   it_zz = 0.0f;
         Real   inv3  = 1.0f / 3.0f;
         size_t size  = m_vertices->size();
-        for (size_t i1 = 0; i1 < 3; ++i1)
+        for (size_t i1 = 0; i1 < size; ++i1)
         {
             // Triangle vertices, third vertex implied as (0, 0)
             Vector3 p1, p2;
@@ -124,8 +124,7 @@ namespace Engine5
 
     void ColliderPolygon::UpdateBoundingVolume()
     {
-        Real bounding_factor = (m_max_bound - m_min_bound).Length() * 0.5f;
-
+        Real    bounding_factor = (m_max_bound - m_min_bound).Length() * 0.5f;
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
@@ -136,19 +135,70 @@ namespace Engine5
         {
             pos = m_position;
         }
-
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
     void ColliderPolygon::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
-        I32 index = static_cast<I32>(renderer->VerticesSize(mode));
-        size_t size = m_vertices->size();
+        I32    index = static_cast<I32>(renderer->VerticesSize(mode));
+        std::vector<Vector2>* vertices;
+        if (m_collider_set != nullptr)
+        {
+            vertices = m_scaled_vertices;
+        }
+        else
+        {
+            vertices = m_vertices;
+        }
+
+        size_t size  = vertices->size();
         renderer->ReserveVertices(size, mode);
+        Vector3               body_position    = GetBodyPosition();
+        Quaternion            body_orientation = GetBodyOrientation();
+       
+        for (auto& vertex : *vertices)
+        {
+            //collider local space to object space(body local)
+            Vector3 vertex_v3(vertex);
+            vertex_v3 = m_orientation.Rotate(vertex_v3);
+            vertex_v3 += m_position;
 
+            //body local space to world space
+            vertex_v3 = body_orientation.Rotate(vertex_v3);
+            vertex_v3 += body_position;
+            //push to renderer
+            renderer->PushVertex(vertex_v3, mode, color);
+        }
 
-
+        //add indices
+        if (mode == RenderingMode::Dot)
+        {
+            for (I32 i = 0; i < size; ++i)
+            {
+                renderer->PushIndex(index + i, mode);
+            }
+        }
+        else if (mode == RenderingMode::Line)
+        {
+            for (auto& edge : *m_edges)
+            {
+                renderer->PushLineIndices(index + edge.a, index + edge.b);
+            }
+        }
+        else if (mode == RenderingMode::Face)
+        {
+            Vector3 vertex_v3(Vector3::Origin());
+            vertex_v3 = m_orientation.Rotate(vertex_v3);
+            vertex_v3 += m_position;
+            vertex_v3 = body_orientation.Rotate(vertex_v3);
+            vertex_v3 += body_position;
+            renderer->PushVertex(vertex_v3, mode, color);
+            for (auto& edge : *m_edges)
+            {
+                renderer->PushFaceIndices(index + edge.a, index + edge.b, size);
+            }
+        }
     }
 
     Vector2 ColliderPolygon::Vertex(size_t i) const

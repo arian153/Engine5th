@@ -53,12 +53,43 @@ namespace Engine5
 
     void ColliderTetrahedron::SetMassData(Real density)
     {
-        m_density = density;
+        m_density  = density;
+        m_centroid = 0.0f;
+        m_local_inertia_tensor.SetZero();
+        m_mass        = 0.0f;
+        Vector3  ref  = Vertex(0);
+        Vector3  v1   = Vertex(1);
+        Vector3  v2   = Vertex(2);
+        Vector3  v3   = Vertex(3);
+        Real     axis = 1.0f / 60.0f;
+        Real     prod = 1.0f / 120.0f;
+        Matrix33 canonical_matrix(axis, prod, prod, prod, axis, prod, prod, prod, axis);
+        Matrix33 transformation_matrix;
+        transformation_matrix.SetColumns(v1 - ref, v2 - ref, v3 - ref);
+
+        //calculate sub inertia
+        m_local_inertia_tensor = transformation_matrix.Determinant() * transformation_matrix * canonical_matrix * transformation_matrix.Transpose();
+
+        //volume is 1 / 6 of triple product, that is 1/6 det of transformation matrix.
+        m_mass = density * transformation_matrix.Determinant() / 6.0f;
+
+        //The center-of-mass is just the mean of the four vertex coordinates. 
+        m_centroid = (ref + v1 + v2 + v3) * 0.25f;
+        if (ref.IsZero() == false)
+        {
+            m_local_inertia_tensor += m_mass * (ref.OuterProduct(m_centroid) + m_centroid.OuterProduct(ref) + ref.OuterProduct(ref));
+        }
     }
 
     Real ColliderTetrahedron::GetVolume()
     {
-        return m_mass;
+        Vector3  ref = Vertex(0);
+        Vector3  v1  = Vertex(1);
+        Vector3  v2  = Vertex(2);
+        Vector3  v3  = Vertex(3);
+        Matrix33 transformation_matrix;
+        transformation_matrix.SetColumns(v1 - ref, v2 - ref, v3 - ref);
+        return transformation_matrix.Determinant() / 6.0f;
     }
 
     void ColliderTetrahedron::SetScaleData(const Vector3& scale)

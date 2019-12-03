@@ -12,6 +12,8 @@
 #include "..//Utility/Utility.hpp"
 #include <ostream>
 #include "Matrix22.hpp"
+#include "Vector3.hpp"
+#include "Vector4.hpp"
 
 namespace Engine5
 {
@@ -22,6 +24,16 @@ namespace Engine5
 
     Vector2::Vector2(Real arr[2])
         : x(arr[0]), y(arr[1])
+    {
+    }
+
+    Vector2::Vector2(const Vector3& rhs)
+        : x(rhs.x), y(rhs.y)
+    {
+    }
+
+    Vector2::Vector2(const Vector4& rhs)
+        : x(rhs.x), y(rhs.y)
     {
     }
 
@@ -211,6 +223,20 @@ namespace Engine5
             x = rhs.x;
             y = rhs.y;
         }
+        return *this;
+    }
+
+    Vector2& Vector2::operator=(const Vector3& rhs)
+    {
+        x = rhs.x;
+        y = rhs.y;
+        return *this;
+    }
+
+    Vector2& Vector2::operator=(const Vector4& rhs)
+    {
+        x = rhs.x;
+        y = rhs.y;
         return *this;
     }
 

@@ -13,6 +13,8 @@
 
 namespace Engine5
 {
+    class Vector4;
+    class Vector3;
     class Matrix22;
 
     class Vector2
@@ -20,6 +22,8 @@ namespace Engine5
     public:
         explicit Vector2(Real x = 0.0f, Real y = 0.0f);
         explicit Vector2(Real arr[2]);
+        explicit Vector2(const Vector3& rhs);
+        explicit Vector2(const Vector4& rhs);
         Vector2(const Vector2& rhs);
         ~Vector2();
 
@@ -67,6 +71,8 @@ namespace Engine5
         bool                 operator !=(const Vector2& rhs) const;
         Vector2              operator -() const;
         Vector2&             operator =(const Vector2& rhs);
+        Vector2&             operator =(const Vector3& rhs);
+        Vector2&             operator =(const Vector4& rhs);
         Vector2&             operator =(Real rhs);
         Vector2&             operator +=(const Vector2& rhs);
         Vector2&             operator +=(Real real);

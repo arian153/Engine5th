@@ -95,14 +95,56 @@ namespace Engine5
 
     void ColliderPolyhedron::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
+        I32                   index = static_cast<I32>(renderer->VerticesSize(mode));
+        std::vector<Vector3>* vertices;
+        if (m_collider_set != nullptr)
+        {
+            vertices = m_scaled_vertices;
+        }
+        else
+        {
+            vertices = m_vertices;
+        }
+        size_t size = vertices->size();
+        renderer->ReserveVertices(size, mode);
+        Vector3    body_position    = GetBodyPosition();
+        Quaternion body_orientation = GetBodyOrientation();
+        for (auto& vertex : *vertices)
+        {
+            //collider local space to object space(body local)
+            vertex = m_orientation.Rotate(vertex);
+            vertex += m_position;
+
+            //body local space to world space
+            vertex = body_orientation.Rotate(vertex);
+            vertex += body_position;
+            //push to renderer
+            renderer->PushVertex(vertex, mode, color);
+        }
+
+        //add indices
         if (mode == RenderingMode::Dot)
         {
+            for (I32 i = 0; i < size; ++i)
+            {
+                renderer->PushIndex(index + i, mode);
+            }
         }
         else if (mode == RenderingMode::Line)
         {
+            for (auto& face : *m_faces)
+            {
+                renderer->PushLineIndices(index + face.a, index + face.b);
+                renderer->PushLineIndices(index + face.b, index + face.c);
+                renderer->PushLineIndices(index + face.c, index + face.a);
+            }
         }
         else if (mode == RenderingMode::Face)
         {
+            for (auto& face : *m_faces)
+            {
+                renderer->PushFaceIndices(index + face.a, index + face.b, index + face.c);
+            }
         }
     }
 
