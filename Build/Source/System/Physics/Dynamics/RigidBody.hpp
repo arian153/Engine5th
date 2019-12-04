@@ -52,8 +52,8 @@ namespace Engine5
         Matrix33 Inertia() const;
         Matrix33 InverseInertia() const;
 
-        void       SetMotionType(MotionMode motion_mode);
-        MotionMode GetMotionType() const;
+        void       SetMotionMode(MotionMode motion_mode);
+        MotionMode GetMotionMode() const;
 
         Vector3 LocalToWorldPoint(const Vector3& local_point) const;
         Vector3 WorldToLocalPoint(const Vector3& world_point) const;

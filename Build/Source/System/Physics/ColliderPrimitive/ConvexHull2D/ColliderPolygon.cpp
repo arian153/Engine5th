@@ -183,7 +183,7 @@ namespace Engine5
         {
             for (auto& edge : *m_edges)
             {
-                renderer->PushLineIndices(index + edge.a, index + edge.b);
+                renderer->PushLineIndices(index + (I32)edge.a, index + (I32)edge.b);
             }
         }
         else if (mode == RenderingMode::Face)
@@ -196,7 +196,7 @@ namespace Engine5
             renderer->PushVertex(vertex_v3, mode, color);
             for (auto& edge : *m_edges)
             {
-                renderer->PushFaceIndices(index + edge.a, index + edge.b, size);
+                renderer->PushFaceIndices(index + (I32)edge.a, index + (I32)edge.b, (I32)size);
             }
         }
     }

@@ -36,7 +36,7 @@ namespace Engine5
         wc.hInstance     = m_h_instance;
         wc.hIcon         = LoadIcon(nullptr, IDI_WINLOGO);
         wc.hCursor       = LoadCursor(nullptr, IDC_ARROW);
-        wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+        wc.hbrBackground = nullptr;//(HBRUSH)GetStockObject(BLACK_BRUSH);
         wc.lpszMenuName  = nullptr;
         wc.lpszClassName = L"E5hWnd";
         if (!RegisterClass(&wc))

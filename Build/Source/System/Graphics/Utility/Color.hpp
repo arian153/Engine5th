@@ -11,10 +11,10 @@ namespace Engine5
         explicit Color(Real r = 1.0f, Real g = 1.0f, Real b = 1.0f, Real a = 1.0f);
         ~Color();
 
-        Real ToReal(U8 color);
-        Real ToReal(int color);
-        U8   ToByte(Real color);
-        int  ToInt(Real color);
+        Real              ToReal(U8 color);
+        Real              ToReal(int color);
+        U8                ToByte(Real color);
+        int               ToInt(Real color);
         DirectX::XMFLOAT4 ToXMFloat4() const;
 
     public:
@@ -25,15 +25,15 @@ namespace Engine5
     {
         namespace Pure
         {
-            const static Color White   = Color(1.000000f, 1.000000f, 1.000000f, 1.000000f); //255, 255, 255
-            const static Color Gray    = Color(0.666666f, 0.666666f, 0.666666f, 1.000000f); //170, 170, 170
-            const static Color Black   = Color(0.000000f, 0.000000f, 0.000000f, 1.000000f); //  0,   0,   0
-            const static Color Red     = Color(1.000000f, 0.000000f, 0.000000f, 1.000000f); //255,   0,   0
-            const static Color Green   = Color(0.000000f, 1.000000f, 0.000000f, 1.000000f); //  0, 255,   0
-            const static Color Blue    = Color(0.000000f, 0.000000f, 1.000000f, 1.000000f); //  0,   0, 255
-            const static Color Cyan    = Color(0.000000f, 1.000000f, 1.000000f, 1.000000f); //  0, 255, 255
-            const static Color Magenta = Color(1.000000f, 0.000000f, 1.000000f, 1.000000f); //255,   0, 255
-            const static Color Yellow  = Color(1.000000f, 1.000000f, 0.000000f, 1.000000f); //255, 255,   0
+            const static Color White        = Color(1.000000f, 1.000000f, 1.000000f, 1.000000f); //255, 255, 255
+            const static Color Gray         = Color(0.666666f, 0.666666f, 0.666666f, 1.000000f); //170, 170, 170
+            const static Color Black        = Color(0.000000f, 0.000000f, 0.000000f, 1.000000f); //  0,   0,   0
+            const static Color Red          = Color(1.000000f, 0.000000f, 0.000000f, 1.000000f); //255,   0,   0
+            const static Color Green        = Color(0.000000f, 1.000000f, 0.000000f, 1.000000f); //  0, 255,   0
+            const static Color Blue         = Color(0.000000f, 0.000000f, 1.000000f, 1.000000f); //  0,   0, 255
+            const static Color Cyan         = Color(0.000000f, 1.000000f, 1.000000f, 1.000000f); //  0, 255, 255
+            const static Color Magenta      = Color(1.000000f, 0.000000f, 1.000000f, 1.000000f); //255,   0, 255
+            const static Color Yellow       = Color(1.000000f, 1.000000f, 0.000000f, 1.000000f); //255, 255,   0
         }
 
         namespace UI
@@ -47,6 +47,4 @@ namespace Engine5
             const static Color BackgroundDarkGray  = Color(0.117647f, 0.117647f, 0.117647f, 1.000000f); // 30,  30,  30
         }
     }
-
-    
 }

@@ -178,7 +178,7 @@ namespace Engine5
         this->SetUpDWRenderTarget();
     }
 
-    void DirectX3D11::OnFullscreen(bool fullscreen_flag)
+    void DirectX3D11::OnFullscreen(bool fullscreen_flag) const
     {
         m_swap_chain->SetFullscreenState(fullscreen_flag, nullptr);
     }

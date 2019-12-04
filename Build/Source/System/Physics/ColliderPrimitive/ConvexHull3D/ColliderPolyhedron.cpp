@@ -134,16 +134,16 @@ namespace Engine5
         {
             for (auto& face : *m_faces)
             {
-                renderer->PushLineIndices(index + face.a, index + face.b);
-                renderer->PushLineIndices(index + face.b, index + face.c);
-                renderer->PushLineIndices(index + face.c, index + face.a);
+                renderer->PushLineIndices(index + (I32)face.a, index + (I32)face.b);
+                renderer->PushLineIndices(index + (I32)face.b, index + (I32)face.c);
+                renderer->PushLineIndices(index + (I32)face.c, index + (I32)face.a);
             }
         }
         else if (mode == RenderingMode::Face)
         {
             for (auto& face : *m_faces)
             {
-                renderer->PushFaceIndices(index + face.a, index + face.b, index + face.c);
+                renderer->PushFaceIndices(index + (I32)face.a, index + (I32)face.b, index + (I32)face.c);
             }
         }
     }

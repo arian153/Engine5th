@@ -195,12 +195,12 @@ namespace Engine5
         return m_global_inverse_inertia_tensor;
     }
 
-    void RigidBody::SetMotionType(MotionMode motion_mode)
+    void RigidBody::SetMotionMode(MotionMode motion_mode)
     {
         m_motion_mode = motion_mode;
     }
 
-    MotionMode RigidBody::GetMotionType() const
+    MotionMode RigidBody::GetMotionMode() const
     {
         return m_motion_mode;
     }

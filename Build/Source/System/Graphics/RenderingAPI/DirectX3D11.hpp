@@ -23,7 +23,7 @@ namespace Engine5
         void Update(Real dt);
         void Shutdown();
         void OnResize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view);
-        void OnFullscreen(bool fullscreen_flag);
+        void OnFullscreen(bool fullscreen_flag) const;
 
         void BeginScene(Color color) const;
         void EndScene() const;
