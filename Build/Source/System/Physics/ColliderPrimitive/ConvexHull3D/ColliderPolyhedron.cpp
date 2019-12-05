@@ -15,16 +15,78 @@ namespace Engine5
 
     void ColliderPolyhedron::Initialize()
     {
+        if (m_vertices == nullptr)
+        {
+            m_vertices = new std::vector<Vector3>();
+        }
+        if (m_scaled_vertices == nullptr)
+        {
+            m_scaled_vertices = new std::vector<Vector3>();
+        }
+        if (m_edges == nullptr)
+        {
+            m_edges = new std::vector<ColliderEdge>();
+        }
+        if (m_faces == nullptr)
+        {
+            m_faces = new std::vector<ColliderFace>();
+        }
         UpdatePrimitive();
     }
 
     void ColliderPolyhedron::Shutdown()
     {
+        if (m_vertices != nullptr)
+        {
+            m_vertices->clear();
+            delete m_vertices;
+            m_vertices = nullptr;
+        }
+        if (m_scaled_vertices != nullptr)
+        {
+            m_scaled_vertices->clear();
+            delete m_scaled_vertices;
+            m_scaled_vertices = nullptr;
+        }
+        if (m_edges != nullptr)
+        {
+            m_edges->clear();
+            delete m_edges;
+            m_edges = nullptr;
+        }
+        if (m_faces != nullptr)
+        {
+            m_faces->clear();
+            delete m_faces;
+            m_faces = nullptr;
+        }
     }
 
     Vector3 ColliderPolyhedron::Support(const Vector3& direction)
     {
-        return direction;
+        Vector3               local_dir = WorldToLocalVector(direction).Unit();
+        Real                  p         = Math::REAL_NEGATIVE_MAX;
+        Vector3               result;
+        std::vector<Vector3>* vertices;
+        if (m_collider_set != nullptr)
+        {
+            vertices = m_scaled_vertices;
+        }
+        else
+        {
+            vertices = m_vertices;
+        }
+        size_t size = vertices->size();
+        for (size_t i = 0; i < size; ++i)
+        {
+            Real projection = vertices->at(i).DotProduct(local_dir);
+            if (projection > p)
+            {
+                result = Vertex(i);
+                p      = projection;
+            }
+        }
+        return LocalToWorldPoint(result);
     }
 
     bool ColliderPolyhedron::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -155,6 +217,15 @@ namespace Engine5
             return m_scaled_vertices->at(i);
         }
         return m_vertices->at(i);
+    }
+
+    size_t ColliderPolyhedron::Size() const
+    {
+        if (m_collider_set != nullptr)
+        {
+            return m_scaled_vertices->size();
+        }
+        return m_vertices->size();
     }
 
     void ColliderPolyhedron::Clone(ColliderPrimitive* cloned)

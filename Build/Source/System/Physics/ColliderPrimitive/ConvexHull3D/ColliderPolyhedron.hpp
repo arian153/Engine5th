@@ -34,6 +34,7 @@ namespace Engine5
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         Vector3 Vertex(size_t i) const;
+        size_t Size() const;
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
@@ -59,4 +60,5 @@ namespace Engine5
         Vector3 m_min_bound;
         Vector3 m_max_bound;
     };
+
 }
