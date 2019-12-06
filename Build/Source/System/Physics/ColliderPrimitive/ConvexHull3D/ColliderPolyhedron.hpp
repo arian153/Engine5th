@@ -34,7 +34,7 @@ namespace Engine5
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         Vector3 Vertex(size_t i) const;
-        size_t Size() const;
+        size_t  Size() const;
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
@@ -43,12 +43,14 @@ namespace Engine5
         class SubMassData
         {
         public:
-            Real     mass   = 0.0f;
+            Real     mass = 0.0f;
             Vector3  centroid;
             Matrix33 inertia;
         };
 
     private:
+        bool        IntersectRayFace(const Ray& ray, const ColliderFace& face, Real& t) const;
+        bool        IsFaceContainPoint(const ColliderFace& face, const Vector3& point, Vector3& normal) const;
         Matrix33    TranslateInertia(const Matrix33& input, const Vector3& centroid, Real mass, const Vector3& offset) const;
         SubMassData CalculateTetrahedronMassData(const Vector3& ref, const Vector3& v1, const Vector3& v2, const Vector3& v3, Real density) const;
     private:
@@ -60,5 +62,4 @@ namespace Engine5
         Vector3 m_min_bound;
         Vector3 m_max_bound;
     };
-
 }

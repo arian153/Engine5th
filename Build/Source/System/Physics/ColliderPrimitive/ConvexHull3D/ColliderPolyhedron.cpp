@@ -91,14 +91,61 @@ namespace Engine5
 
     bool ColliderPolyhedron::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
-        minimum_t = local_ray.direction.DotProduct(local_ray.position);
-        maximum_t = -1.0f;
+        bool b_first   = true;
+        int  hit_count = 0;
+        minimum_t      = -1.0f;
+        maximum_t      = -1.0f;
+        for (auto& face : *m_faces)
+        {
+            Real t = -1.0f;
+            if (IntersectRayFace(local_ray, face, t) == true)
+            {
+                if (b_first == true)
+                {
+                    minimum_t = t;
+                    maximum_t = t;
+                    b_first   = false;
+                }
+                else
+                {
+                    if (t > maximum_t)
+                    {
+                        maximum_t = t;
+                    }
+                    if (t < minimum_t)
+                    {
+                        minimum_t = t;
+                    }
+                }
+                hit_count++;
+            }
+        }
+        if (hit_count > 0)
+        {
+            if (minimum_t < 0.0f && maximum_t < 0.0f)
+            {
+                return false;
+            }
+            if (minimum_t <= 0.0f)
+            {
+                minimum_t = 0.0f;
+            }
+            return true;
+        }
         return false;
     }
 
     Vector3 ColliderPolyhedron::GetNormal(const Vector3& local_point_on_collider)
     {
-        return local_point_on_collider;
+        Vector3 normal;
+        for (auto& face : *m_faces)
+        {
+            if (this->IsFaceContainPoint(face, local_point_on_collider, normal) == true)
+            {
+                return normal;
+            }
+        }
+        return normal;
     }
 
     void ColliderPolyhedron::SetMassData(Real density)
@@ -230,6 +277,87 @@ namespace Engine5
 
     void ColliderPolyhedron::Clone(ColliderPrimitive* cloned)
     {
+    }
+
+    bool ColliderPolyhedron::IntersectRayFace(const Ray& ray, const ColliderFace& face, Real& t) const
+    {
+        std::vector<Vector3>* vertices;
+        if (m_collider_set != nullptr)
+        {
+            vertices = m_scaled_vertices;
+        }
+        else
+        {
+            vertices = m_vertices;
+        }
+        Vector3 edge1 = (*vertices)[face.b] - (*vertices)[face.a];
+        Vector3 edge2 = (*vertices)[face.c] - (*vertices)[face.a];
+        Vector3 h     = ray.direction.CrossProduct(edge2);
+        Real    a     = edge1.DotProduct(h);
+        t             = -1.0f;
+        if (Utility::IsZero(a))
+        {
+            return false;
+        }
+        Real    f = 1.0f / a;
+        Vector3 s = ray.position - (*vertices)[face.a];
+        Real    u = f * (s.DotProduct(h));
+        if (u < 0.0f || u > 1.0f)
+        {
+            return false;
+        }
+        Vector3 q = s.CrossProduct(edge1);
+        Real    v = f * ray.direction.DotProduct(q);
+        if (v < 0.0f || u + v > 1.0f)
+        {
+            return false;
+        }
+
+        // At this stage we can compute t to find out where the intersection point is on the line.
+        t = f * edge2.DotProduct(q);
+        if (t > Math::EPSILON) // ray intersection
+        {
+            return true;
+        }
+        // intersect back side of ray.
+        return false;
+    }
+
+    bool ColliderPolyhedron::IsFaceContainPoint(const ColliderFace& face, const Vector3& point, Vector3& normal) const
+    {
+        std::vector<Vector3>* vertices;
+        if (m_collider_set != nullptr)
+        {
+            vertices = m_scaled_vertices;
+        }
+        else
+        {
+            vertices = m_vertices;
+        }
+        Vector3 v0     = vertices->at(face.a);
+        Vector3 v1     = vertices->at(face.b);
+        Vector3 v2     = vertices->at(face.c);
+        Vector3 edge01 = v1 - v0;
+        Vector3 edge12 = v2 - v1;
+        normal         = edge01.CrossProduct(edge12);
+        Vector3 w_test = edge01.CrossProduct(point - v0);
+        if (w_test.DotProduct(normal) < 0.0f)
+        {
+            return false;
+        }
+        w_test = edge12.CrossProduct(point - v1);
+        if (w_test.DotProduct(normal) < 0.0f)
+        {
+            return false;
+        }
+        Vector3 edge3 = v0 - v2;
+        w_test        = edge3.CrossProduct(point - v2);
+        if (w_test.DotProduct(normal) < 0.0f)
+        {
+            return false;
+        }
+        normal.SetNormalize();
+        return true;
     }
 
     Matrix33 ColliderPolyhedron::TranslateInertia(const Matrix33& input, const Vector3& centroid, Real mass, const Vector3& offset) const
