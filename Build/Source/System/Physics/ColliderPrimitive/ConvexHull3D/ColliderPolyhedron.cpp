@@ -198,7 +198,16 @@ namespace Engine5
 
     void ColliderPolyhedron::UpdateBoundingVolume()
     {
-        //todo temporary code
+        if (m_rigid_body != nullptr)
+        {
+            //pos = m_rigid_body->LocalToWorldPoint(m_position);
+            //bounding_factor *= m_scale_factor;
+        }
+        else
+        {
+            
+        }
+
         m_bounding_volume->Set(Vector3::Origin(), Vector3::Origin());
     }
 
