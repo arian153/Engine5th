@@ -53,6 +53,7 @@ namespace Engine5
         bool        IsFaceContainPoint(const ColliderFace& face, const Vector3& point, Vector3& normal) const;
         Matrix33    TranslateInertia(const Matrix33& input, const Vector3& centroid, Real mass, const Vector3& offset) const;
         SubMassData CalculateTetrahedronMassData(const Vector3& ref, const Vector3& v1, const Vector3& v2, const Vector3& v3, Real density) const;
+        void CalculateMinMaxBound();
     private:
         std::vector<Vector3>*      m_vertices        = nullptr;
         std::vector<Vector3>*      m_scaled_vertices = nullptr;

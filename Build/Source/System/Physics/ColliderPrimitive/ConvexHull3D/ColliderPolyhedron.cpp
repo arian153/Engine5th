@@ -188,27 +188,55 @@ namespace Engine5
 
     void ColliderPolyhedron::SetScaleData(const Vector3& scale)
     {
+        m_scaled_vertices->clear();
+        size_t size = m_vertices->size();
+        m_scaled_vertices->reserve(size);
+        for (size_t i = 0; i < size; ++i)
+        {
+            m_scaled_vertices->push_back(m_vertices->at(i).HadamardProduct(scale));
+            for (size_t j = 0; j < 3; ++j)
+            {
+                if (m_max_bound[j] < m_vertices->at(i)[j])
+                {
+                    m_max_bound[j] = m_vertices->at(i)[j];
+                }
+                if (m_min_bound[j] > m_vertices->at(i)[j])
+                {
+                    m_min_bound[j] = m_vertices->at(i)[j];
+                }
+            }
+        }
         m_scale_factor = scale.Length();
     }
 
     void ColliderPolyhedron::SetUnit()
     {
+        CalculateMinMaxBound();
+        auto   min_max      = m_max_bound - m_min_bound;
+        Real   scale_factor = min_max.Length();
+        size_t size         = m_vertices->size();
+        for (size_t i = 0; i < size; ++i)
+        {
+            m_vertices->at(i) /= scale_factor;
+        }
         UpdatePrimitive();
     }
 
     void ColliderPolyhedron::UpdateBoundingVolume()
     {
+        Real    bounding_factor = (m_max_bound - m_min_bound).Length();
+        Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            //pos = m_rigid_body->LocalToWorldPoint(m_position);
-            //bounding_factor *= m_scale_factor;
+            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            bounding_factor *= m_scale_factor;
         }
         else
         {
-            
+            pos = m_position;
         }
-
-        m_bounding_volume->Set(Vector3::Origin(), Vector3::Origin());
+        Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
+        m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
     void ColliderPolyhedron::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
@@ -397,5 +425,26 @@ namespace Engine5
             result.inertia = TranslateInertia(result.inertia, result.centroid, result.mass, ref);
         }
         return result;
+    }
+
+    void ColliderPolyhedron::CalculateMinMaxBound()
+    {
+        m_max_bound = Math::REAL_NEGATIVE_MAX;
+        m_min_bound = Math::REAL_POSITIVE_MAX;
+        size_t size = m_vertices->size();
+        for (size_t i = 0; i < size; ++i)
+        {
+            for (size_t j = 0; j < 3; ++j)
+            {
+                if (m_max_bound[j] < m_vertices->at(i)[j])
+                {
+                    m_max_bound[j] = m_vertices->at(i)[j];
+                }
+                if (m_min_bound[j] > m_vertices->at(i)[j])
+                {
+                    m_min_bound[j] = m_vertices->at(i)[j];
+                }
+            }
+        }
     }
 }
