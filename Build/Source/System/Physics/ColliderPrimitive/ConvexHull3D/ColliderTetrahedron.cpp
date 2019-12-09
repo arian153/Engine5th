@@ -103,17 +103,49 @@ namespace Engine5
 
     void ColliderTetrahedron::SetUnit()
     {
-        m_vertices[0] = Vector3::Origin();
-        m_vertices[1] = Vector3::AxisX();
-        m_vertices[2] = Vector3::AxisY();
-        m_vertices[3] = Vector3::AxisZ();
+        Vector3 max_bound, min_bound;
+        max_bound = Math::REAL_NEGATIVE_MAX;
+        min_bound = Math::REAL_POSITIVE_MAX;
+        for (size_t i = 0; i < 4; ++i)
+        {
+            for (size_t j = 0; j < 3; ++j)
+            {
+                if (max_bound[j] < m_vertices[i][j])
+                {
+                    max_bound[j] = m_vertices[i][j];
+                }
+                if (min_bound[j] > m_vertices[i][j])
+                {
+                    min_bound[j] = m_vertices[i][j];
+                }
+            }
+        }
+        auto scale_factor = (max_bound - min_bound).Inverse();
+        for (size_t i = 0; i < 4; ++i)
+        {
+            m_vertices[i] = m_vertices[i].HadamardProduct(scale_factor);
+        }
         UpdatePrimitive();
     }
 
     void ColliderTetrahedron::UpdateBoundingVolume()
     {
-        //todo temporary code
-        m_bounding_volume->Set(Vector3::Origin(), Vector3::Origin());
+        Vector3 max_bound, min_bound;
+        max_bound               = Math::REAL_NEGATIVE_MAX;
+        min_bound               = Math::REAL_POSITIVE_MAX;
+        Real    bounding_factor = (max_bound - min_bound).Length();
+        Vector3 pos;
+        if (m_rigid_body != nullptr)
+        {
+            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            bounding_factor *= m_scale_factor;
+        }
+        else
+        {
+            pos = m_position;
+        }
+        Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
+        m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
     void ColliderTetrahedron::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const

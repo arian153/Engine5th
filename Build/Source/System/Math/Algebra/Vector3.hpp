@@ -46,6 +46,8 @@ namespace Engine5
         Vector3 ProjectionFrom(const Vector3& rhs) const;
         Vector3 Unit() const;
         Vector3 Half() const;
+        Vector3 Inverse() const;
+        Vector3 Negate() const;
 
         Real     DotProduct(const Vector3& rhs) const;
         Vector3  CrossProduct(const Vector3& rhs) const;

@@ -62,30 +62,9 @@ namespace Engine5
 
     void Vector3::SetInverse()
     {
-        if (Utility::IsZero(x))
-        {
-            x = 0.0f;
-        }
-        else
-        {
-            this->x = 1.0f / this->x;
-        }
-        if (Utility::IsZero(y))
-        {
-            y = 0.0f;
-        }
-        else
-        {
-            this->y = 1.0f / this->y;
-        }
-        if (Utility::IsZero(z))
-        {
-            z = 0.0f;
-        }
-        else
-        {
-            this->z = 1.0f / this->z;
-        }
+        this->x = Utility::IsZero(x) ? 0.0f : 1.0f / this->x;
+        this->y = Utility::IsZero(y) ? 0.0f : 1.0f / this->y;
+        this->z = Utility::IsZero(z) ? 0.0f : 1.0f / this->z;
     }
 
     void Vector3::SetNegate()
@@ -183,6 +162,19 @@ namespace Engine5
         Vector3 result = *this;
         result.SetHalf();
         return result;
+    }
+
+    Vector3 Vector3::Inverse() const
+    {
+        return Vector3(
+                       Utility::IsZero(x) ? 0.0f : 1.0f / this->x,
+                       Utility::IsZero(y) ? 0.0f : 1.0f / this->y,
+                       Utility::IsZero(z) ? 0.0f : 1.0f / this->z);
+    }
+
+    Vector3 Vector3::Negate() const
+    {
+        return Vector3(-this->x, -this->y, -this->z);
     }
 
     Real Vector3::DotProduct(const Vector3& rhs) const

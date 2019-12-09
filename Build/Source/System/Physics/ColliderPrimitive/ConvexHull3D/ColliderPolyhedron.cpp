@@ -212,12 +212,11 @@ namespace Engine5
     void ColliderPolyhedron::SetUnit()
     {
         CalculateMinMaxBound();
-        auto   min_max      = m_max_bound - m_min_bound;
-        Real   scale_factor = min_max.Length();
+        auto   scale_factor = (m_max_bound - m_min_bound).Inverse();
         size_t size         = m_vertices->size();
         for (size_t i = 0; i < size; ++i)
         {
-            m_vertices->at(i) /= scale_factor;
+            m_vertices->at(i) = m_vertices->at(i).HadamardProduct(scale_factor);
         }
         UpdatePrimitive();
     }

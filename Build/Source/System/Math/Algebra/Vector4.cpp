@@ -64,10 +64,10 @@ namespace Engine5
 
     void Vector4::SetInverse()
     {
-        x = 1.0f / x;
-        y = 1.0f / y;
-        z = 1.0f / z;
-        w = 1.0f / w;
+        this->x = Utility::IsZero(x) ? 0.0f : 1.0f / this->x;
+        this->y = Utility::IsZero(y) ? 0.0f : 1.0f / this->y;
+        this->z = Utility::IsZero(z) ? 0.0f : 1.0f / this->z;
+        this->w = Utility::IsZero(w) ? 0.0f : 1.0f / this->w;
     }
 
     void Vector4::SetNegate()
