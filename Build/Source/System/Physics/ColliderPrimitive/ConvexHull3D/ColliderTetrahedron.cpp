@@ -1,6 +1,7 @@
 #include "ColliderTetrahedron.hpp"
 #include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../BroadPhase/BoundingAABB.hpp"
+#include "../ColliderFace.hpp"
 
 namespace Engine5
 {
@@ -41,8 +42,50 @@ namespace Engine5
 
     bool ColliderTetrahedron::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
-        minimum_t = local_ray.direction.DotProduct(local_ray.position);
-        maximum_t = -1.0f;
+        bool b_hit = false;
+        minimum_t  = -1.0f;
+        maximum_t  = -1.0f;
+        ColliderFace faces[4];
+        faces[0] = ColliderFace(0, 1, 2);
+        faces[1] = ColliderFace(0, 1, 3);
+        faces[2] = ColliderFace(0, 2, 3);
+        faces[3] = ColliderFace(1, 2, 3);
+        for (auto& face : faces)
+        {
+            Real t = -1.0f;
+            if (IntersectRayFace(local_ray, face, t) == true)
+            {
+                if (b_hit == false)
+                {
+                    minimum_t = t;
+                    maximum_t = t;
+                    b_hit     = true;
+                }
+                else
+                {
+                    if (t > maximum_t)
+                    {
+                        maximum_t = t;
+                    }
+                    if (t < minimum_t)
+                    {
+                        minimum_t = t;
+                    }
+                }
+            }
+        }
+        if (b_hit == true)
+        {
+            if (minimum_t < 0.0f && maximum_t < 0.0f)
+            {
+                return false;
+            }
+            if (minimum_t <= 0.0f)
+            {
+                minimum_t = 0.0f;
+            }
+            return true;
+        }
         return false;
     }
 
@@ -220,5 +263,40 @@ namespace Engine5
 
     void ColliderTetrahedron::Clone(ColliderPrimitive* cloned)
     {
+    }
+
+    bool ColliderTetrahedron::IntersectRayFace(const Ray& ray, const ColliderFace& face, Real& t) const
+    {
+        Vector3 edge1 = Vertex(face.b) - Vertex(face.a);
+        Vector3 edge2 = Vertex(face.c) - Vertex(face.a);
+        Vector3 h     = ray.direction.CrossProduct(edge2);
+        Real    a     = edge1.DotProduct(h);
+        t             = -1.0f;
+        if (Utility::IsZero(a))
+        {
+            return false;
+        }
+        Real    f = 1.0f / a;
+        Vector3 s = ray.position - Vertex(face.a);
+        Real    u = f * (s.DotProduct(h));
+        if (u < 0.0f || u > 1.0f)
+        {
+            return false;
+        }
+        Vector3 q = s.CrossProduct(edge1);
+        Real    v = f * ray.direction.DotProduct(q);
+        if (v < 0.0f || u + v > 1.0f)
+        {
+            return false;
+        }
+
+        // At this stage we can compute t to find out where the intersection point is on the line.
+        t = f * edge2.DotProduct(q);
+        if (t > Math::EPSILON) // ray intersection
+        {
+            return true;
+        }
+        // intersect back side of ray.
+        return false;
     }
 }

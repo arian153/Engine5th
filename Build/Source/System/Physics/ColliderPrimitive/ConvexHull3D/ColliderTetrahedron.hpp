@@ -3,6 +3,8 @@
 
 namespace Engine5
 {
+    class ColliderFace;
+
     class ColliderTetrahedron final : public ColliderPrimitive
     {
     public:
@@ -32,10 +34,13 @@ namespace Engine5
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         Vector3 Vertex(size_t i) const;
-        void SetTetrahedron(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector3& v3);
+        void    SetTetrahedron(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector3& v3);
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
+
+    private:
+        bool IntersectRayFace(const Ray& ray, const ColliderFace& face, Real& t) const;
 
     private:
         Vector3 m_vertices[4];
