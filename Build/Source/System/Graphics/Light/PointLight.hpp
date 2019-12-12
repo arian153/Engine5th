@@ -10,6 +10,7 @@ namespace Engine5
         PointLight();
         ~PointLight();
 
+        void Set();
     private:
         Color   m_ambient;
         Color   m_diffuse;

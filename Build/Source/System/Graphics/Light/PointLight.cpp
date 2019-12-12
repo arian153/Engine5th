@@ -9,4 +9,8 @@ namespace Engine5
     PointLight::~PointLight()
     {
     }
+
+    void PointLight::Set()
+    {
+    }
 }
