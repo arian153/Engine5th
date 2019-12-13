@@ -31,6 +31,7 @@ namespace Engine5
         void UpdateBoundingVolume() override;
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
+        Real Radius() const;
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 

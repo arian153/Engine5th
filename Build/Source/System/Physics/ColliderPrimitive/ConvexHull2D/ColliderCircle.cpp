@@ -22,7 +22,12 @@ namespace Engine5
 
     Vector3 ColliderCircle::Support(const Vector3& direction)
     {
-        return direction;
+        Vector3 local_dir = WorldToLocalVector(direction).Unit();
+        Vector3 subspace_direction = local_dir;
+        subspace_direction.z = 0.0f;
+        subspace_direction.SetNormalize();
+        Vector3 result = Radius() * subspace_direction;
+        return LocalToWorldPoint(result);
     }
 
     bool ColliderCircle::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -82,6 +87,15 @@ namespace Engine5
 
     void ColliderCircle::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
+    }
+
+    Real ColliderCircle::Radius() const
+    {
+        if (m_collider_set != nullptr)
+        {
+            return m_scaled_radius;
+        }
+        return m_radius;
     }
 
     void ColliderCircle::Clone(ColliderPrimitive* cloned)

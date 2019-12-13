@@ -12,5 +12,6 @@ namespace Engine5
 
     void PointLight::Set()
     {
+
     }
 }

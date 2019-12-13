@@ -29,9 +29,7 @@ namespace Engine5
 
     Vector3 Ellipse::Support(const Vector3& direction)
     {
-        Vector2 sub_space_direction;
-        sub_space_direction.x = direction.x;
-        sub_space_direction.y = direction.y;
+        Vector2 sub_space_direction(direction);
         sub_space_direction.SetNormalize();
         Vector2 result = radius.HadamardProduct(radius);
         result         = result.HadamardProduct(sub_space_direction);

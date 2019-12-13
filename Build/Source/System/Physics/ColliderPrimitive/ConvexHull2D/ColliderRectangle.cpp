@@ -22,7 +22,19 @@ namespace Engine5
 
     Vector3 ColliderRectangle::Support(const Vector3& direction)
     {
-        return direction;
+        Vector3 local_dir = WorldToLocalVector(direction).Unit();
+        Real    p = Math::REAL_NEGATIVE_MAX;
+        Vector3 result;
+        for (size_t i = 0; i < 4; ++i)
+        {
+            Real projection = Vector3(Vertex(i)).DotProduct(local_dir);
+            if (projection > p)
+            {
+                result = Vertex(i);
+                p = projection;
+            }
+        }
+        return LocalToWorldPoint(result);
     }
 
     bool ColliderRectangle::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const

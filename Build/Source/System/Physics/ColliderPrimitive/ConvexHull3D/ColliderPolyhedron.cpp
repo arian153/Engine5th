@@ -82,7 +82,7 @@ namespace Engine5
             Real projection = vertices->at(i).DotProduct(local_dir);
             if (projection > p)
             {
-                result = Vertex(i);
+                result = vertices->at(i);
                 p      = projection;
             }
         }

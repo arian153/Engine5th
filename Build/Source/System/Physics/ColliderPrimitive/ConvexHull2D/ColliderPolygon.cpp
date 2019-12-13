@@ -22,7 +22,32 @@ namespace Engine5
 
     Vector3 ColliderPolygon::Support(const Vector3& direction)
     {
-        return direction;
+
+        Vector3 local_dir = WorldToLocalVector(direction).Unit();
+        Real    p = Math::REAL_NEGATIVE_MAX;
+        Vector3 result;
+
+        std::vector<Vector2>* vertices;
+        if (m_collider_set != nullptr)
+        {
+            vertices = m_scaled_vertices;
+        }
+        else
+        {
+            vertices = m_vertices;
+        }
+        size_t size = vertices->size();
+
+        for (size_t i = 0; i < size; ++i)
+        {
+            Real projection = Vector3(vertices->at(i)).DotProduct(local_dir);
+            if (projection > p)
+            {
+                result = vertices->at(i);
+                p = projection;
+            }
+        }
+        return LocalToWorldPoint(result);
     }
 
     bool ColliderPolygon::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const

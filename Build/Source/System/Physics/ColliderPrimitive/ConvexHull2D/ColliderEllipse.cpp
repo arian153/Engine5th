@@ -22,7 +22,14 @@ namespace Engine5
 
     Vector3 ColliderEllipse::Support(const Vector3& direction)
     {
-        return direction;
+        Vector3 local_dir = WorldToLocalVector(direction).Unit();
+        Vector2 radius    = Radius();
+        Vector2 sub_space_direction(local_dir);
+        sub_space_direction.SetNormalize();
+        Vector2 result = radius.HadamardProduct(radius);
+        result         = result.HadamardProduct(sub_space_direction);
+        result /= radius.HadamardProduct(sub_space_direction).Length();
+        return Vector3(result.x, result.y, 0.0f);
     }
 
     bool ColliderEllipse::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -39,7 +46,7 @@ namespace Engine5
     {
         Real a, b;
         m_density = density;
-        m_mass = density * GetVolume();
+        m_mass    = density * GetVolume();
         if (m_collider_set != nullptr)
         {
             a = m_scaled_radius.x;
@@ -53,7 +60,6 @@ namespace Engine5
         Real it_xx = 0.25f * m_mass * b * b;
         Real it_yy = 0.25f * m_mass * a * a;
         Real it_zz = 0.25f * m_mass * (a * a + b * b);
-
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
         m_centroid = Vector3::Origin();
@@ -84,6 +90,15 @@ namespace Engine5
 
     void ColliderEllipse::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
+    }
+
+    Vector2 ColliderEllipse::Radius() const
+    {
+        if (m_collider_set != nullptr)
+        {
+            return m_scaled_radius;
+        }
+        return m_radius;
     }
 
     void ColliderEllipse::Clone(ColliderPrimitive* cloned)
