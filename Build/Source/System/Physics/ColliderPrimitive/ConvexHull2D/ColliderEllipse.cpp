@@ -14,6 +14,7 @@ namespace Engine5
 
     void ColliderEllipse::Initialize()
     {
+        SetEllipse(Vector2(0.5f, 0.5f));
     }
 
     void ColliderEllipse::Shutdown()
@@ -34,12 +35,89 @@ namespace Engine5
 
     bool ColliderEllipse::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
-        return false;
+        Vector2 radius        = Radius();
+        Real    denominator_x = 1.0f / (radius.x * radius.x);
+        Real    denominator_y = 1.0f / (radius.y * radius.y);
+        minimum_t             = -1.0f;
+        maximum_t             = -1.0f;
+        //Quadratic elements
+        Real a = local_ray.direction.x * local_ray.direction.x * denominator_x +
+                local_ray.direction.y * local_ray.direction.y * denominator_y;
+        Real b = 2.0f * local_ray.direction.x * local_ray.position.x * denominator_x +
+                2.0f * local_ray.direction.y * local_ray.position.y * denominator_y;
+        Real c = local_ray.position.x * local_ray.position.x * denominator_x +
+                local_ray.position.y * local_ray.position.y * denominator_y - 1.0f;
+        Real ellipse_min_t, ellipse_max_t;
+        //plane elements
+        Vector3 normal(0.0f, 0.0f, 1.0f);
+        Vector3 pc          = -local_ray.position;
+        Real    denominator = normal.DotProduct(local_ray.direction);
+        if (Utility::IsZero(denominator) == true)
+        {
+            //ray is parallel to plane.
+            if (Utility::IsZero(pc.DotProduct(normal)) == true)
+            {
+                //ray is on the plane.
+                if (Utility::SolveQuadratic(a, b, c, ellipse_max_t, ellipse_min_t))
+                {
+                    //solve intersection
+                    if (Utility::IsEqual(ellipse_min_t, ellipse_max_t))
+                    {
+                        minimum_t = maximum_t = ellipse_min_t;
+                    }
+                    else
+                    {
+                        minimum_t = ellipse_min_t;
+                        maximum_t = ellipse_max_t;
+                    }
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            //ray-plane intersect one point.
+            Real    plane_t            = pc.DotProduct(normal) / denominator;
+            Vector3 plane_intersection = local_ray.position + local_ray.direction * plane_t;
+            //define ellipse.
+            Real ellipse_result = plane_intersection.x * plane_intersection.x * denominator_x + plane_intersection.y * plane_intersection.y * denominator_y;
+            if (ellipse_result <= 1.0f)
+            {
+                minimum_t = maximum_t = plane_t;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (minimum_t < 0.0f && maximum_t < 0.0f)
+        {
+            return false;
+        }
+        if (minimum_t <= 0.0f)
+        {
+            minimum_t = 0.0f;
+        }
+        return true;
     }
 
     Vector3 ColliderEllipse::GetNormal(const Vector3& local_point_on_collider)
     {
-        return local_point_on_collider;
+        Vector2 radius         = Radius();
+        Real    ellipse_result = local_point_on_collider.x * local_point_on_collider.x / (radius.x * radius.x)
+                + local_point_on_collider.y * local_point_on_collider.y / (radius.y * radius.y);
+        if (Utility::IsEqual(ellipse_result, 1.0f))
+        {
+            Vector3 normal;
+            normal.x = 2.0f * local_point_on_collider.x / radius.x * radius.x;
+            normal.y = 2.0f * local_point_on_collider.y / radius.y * radius.y;
+            normal.SetNormalize();
+            return normal;
+        }
+        return Vector3::AxisZ();
     }
 
     void ColliderEllipse::SetMassData(Real density)
@@ -88,8 +166,19 @@ namespace Engine5
 
     void ColliderEllipse::UpdateBoundingVolume()
     {
-        //todo temporary code
-        m_bounding_volume->Set(Vector3::Origin(), Vector3::Origin());
+        Real    bounding_factor = m_radius.Length();
+        Vector3 pos;
+        if (m_rigid_body != nullptr)
+        {
+            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            bounding_factor *= m_scale_factor;
+        }
+        else
+        {
+            pos = m_position;
+        }
+        Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
+        m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
     void ColliderEllipse::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
@@ -150,6 +239,12 @@ namespace Engine5
             return m_scaled_radius;
         }
         return m_radius;
+    }
+
+    void ColliderEllipse::SetEllipse(const Vector2& radius)
+    {
+        m_radius = radius;
+        UpdatePrimitive();
     }
 
     void ColliderEllipse::Clone(ColliderPrimitive* cloned)

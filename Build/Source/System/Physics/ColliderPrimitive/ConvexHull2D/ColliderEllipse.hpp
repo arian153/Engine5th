@@ -32,6 +32,7 @@ namespace Engine5
         void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         Vector2 Radius() const;
+        void SetEllipse(const Vector2& radius);
     protected:
         void Clone(ColliderPrimitive* cloned) override;
 
