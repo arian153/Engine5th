@@ -41,7 +41,7 @@ namespace Engine5
 
     private:
         bool IntersectRayFace(const Ray& ray, const ColliderFace& face, Real& t) const;
-        bool        IsFaceContainPoint(const ColliderFace& face, const Vector3& point, Vector3& normal) const;
+        bool IsFaceContainPoint(const ColliderFace& face, const Vector3& point, Vector3& normal) const;
 
     private:
         Vector3 m_vertices[4];

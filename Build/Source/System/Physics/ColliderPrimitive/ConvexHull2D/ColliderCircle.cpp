@@ -14,6 +14,7 @@ namespace Engine5
 
     void ColliderCircle::Initialize()
     {
+        SetCircle(0.5f);
     }
 
     void ColliderCircle::Shutdown()
@@ -22,9 +23,9 @@ namespace Engine5
 
     Vector3 ColliderCircle::Support(const Vector3& direction)
     {
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
+        Vector3 local_dir          = WorldToLocalVector(direction).Unit();
         Vector3 subspace_direction = local_dir;
-        subspace_direction.z = 0.0f;
+        subspace_direction.z       = 0.0f;
         subspace_direction.SetNormalize();
         Vector3 result = Radius() * subspace_direction;
         return LocalToWorldPoint(result);
@@ -32,12 +33,78 @@ namespace Engine5
 
     bool ColliderCircle::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
-        return false;
+        Real radius = Radius();
+        minimum_t   = -1.0f;
+        maximum_t   = -1.0f;
+        //Quadratic elements
+        Real    a = local_ray.direction.x * local_ray.direction.x + local_ray.direction.y * local_ray.direction.y;
+        Real    b = 2.0f * (local_ray.direction.x * local_ray.position.x + local_ray.direction.y * local_ray.position.y);
+        Real    c = (local_ray.position.x * local_ray.position.x + local_ray.position.y * local_ray.position.y) - (radius * radius);
+        Real    circle_min_t, circle_max_t;
+        Vector3 normal(0.0f, 0.0f, 1.0f);
+        Vector3 pc          = -local_ray.position;
+        Real    denominator = normal.DotProduct(local_ray.direction);
+        if (Utility::IsZero(denominator) == true)
+        {
+            //ray is parallel to plane.
+            if (Utility::IsZero(pc.DotProduct(normal)) == true)
+            {
+                //ray is on the plane.
+                if (Utility::SolveQuadratic(a, b, c, circle_max_t, circle_min_t))
+                {
+                    //solve intersection
+                    if (Utility::IsEqual(circle_min_t, circle_max_t))
+                    {
+                        minimum_t = maximum_t = circle_min_t;
+                    }
+                    else
+                    {
+                        minimum_t = circle_min_t;
+                        maximum_t = circle_max_t;
+                    }
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            //ray-plane intersect one point.
+            Real    plane_t            = pc.DotProduct(normal) / denominator;
+            Vector3 plane_intersection = local_ray.position + local_ray.direction * plane_t;
+
+            //define circle.
+            if ((plane_intersection - m_position).LengthSquared() < radius * radius)
+            {
+                minimum_t = maximum_t = plane_t;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (minimum_t < 0.0f && maximum_t < 0.0f)
+        {
+            return false;
+        }
+        if (minimum_t <= 0.0f)
+        {
+            minimum_t = 0.0f;
+        }
+        return true;
     }
 
     Vector3 ColliderCircle::GetNormal(const Vector3& local_point_on_collider)
     {
-        return local_point_on_collider;
+        Real radius = Radius();
+        Real point_radius = local_point_on_collider.x * local_point_on_collider.x + local_point_on_collider.y * local_point_on_collider.y;
+        if (Utility::IsEqual(point_radius, radius * radius))
+        {
+            return local_point_on_collider.Unit();;
+        }
+        return Vector3::AxisZ();
     }
 
     void ColliderCircle::SetMassData(Real density)
@@ -73,7 +140,7 @@ namespace Engine5
     void ColliderCircle::SetScaleData(const Vector3& scale)
     {
         m_scaled_radius = m_radius * scale.Length();
-        m_scale_factor = scale.Length();
+        m_scale_factor  = scale.Length();
     }
 
     void ColliderCircle::SetUnit()
@@ -104,10 +171,10 @@ namespace Engine5
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = renderer->CIRCULAR_VERTICES_COUNT;
         renderer->ReserveVertices(count, mode);
-        Vector3    body_position = GetBodyPosition();
+        Vector3    body_position    = GetBodyPosition();
         Quaternion body_orientation = GetBodyOrientation();
-        Real    radius = Radius();
-        Real       radian_step = Math::TWO_PI / static_cast<Real>(count);
+        Real       radius           = Radius();
+        Real       radian_step      = Math::TWO_PI / static_cast<Real>(count);
         for (int i = 0; i < count; ++i)
         {
             Real    angle = static_cast<Real>(i) * radian_step;
@@ -137,9 +204,9 @@ namespace Engine5
         else if (mode == RenderingMode::Face)
         {
             //add a center pos
-            I32     center = static_cast<I32>(renderer->VerticesSize(mode));
+            I32     center   = static_cast<I32>(renderer->VerticesSize(mode));
             Vector3 position = m_position;
-            position = body_orientation.Rotate(position);
+            position         = body_orientation.Rotate(position);
             position += body_position;
             renderer->PushVertex(position, mode, color);
             for (int i = 0; i < count - 1; ++i)
@@ -157,6 +224,12 @@ namespace Engine5
             return m_scaled_radius;
         }
         return m_radius;
+    }
+
+    void ColliderCircle::SetCircle(Real radius)
+    {
+        m_radius = radius;
+        UpdatePrimitive();
     }
 
     void ColliderCircle::Clone(ColliderPrimitive* cloned)

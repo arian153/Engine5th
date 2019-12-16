@@ -108,6 +108,7 @@ namespace Engine5
         m_vertices[1].Set(+w, -h);
         m_vertices[2].Set(-w, +h);
         m_vertices[3].Set(-w, -h);
+        UpdatePrimitive();
     }
 
     void ColliderRectangle::Clone(ColliderPrimitive* cloned)

@@ -134,6 +134,14 @@ namespace Engine5
         return m_vertices[i];
     }
 
+    void ColliderTriangle::SetTriangle(const Vector2& v0, const Vector2& v1, const Vector2& v2)
+    {
+        m_vertices[0] = v0;
+        m_vertices[1] = v1;
+        m_vertices[2] = v2;
+        UpdatePrimitive();
+    }
+
     void ColliderTriangle::Clone(ColliderPrimitive* cloned)
     {
     }
