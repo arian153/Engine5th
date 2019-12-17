@@ -2,6 +2,7 @@
 #include "../Algebra/Vector3.hpp"
 #include "../Algebra/Quaternion.hpp"
 #include "../Structure/Vector3Pair.hpp"
+#include "VectorDef.hpp"
 
 namespace Engine5
 {
@@ -24,8 +25,8 @@ namespace Engine5
 
         Vector3Pair GetTangentUsingQuaternion(const Vector3& normal)
         {
-            Quaternion axis_to_normal(Vector3::AxisY(), normal);
-            return Vector3Pair(axis_to_normal.Rotate(Vector3::AxisX()), axis_to_normal.Rotate(Vector3::AxisZ()));
+            Quaternion axis_to_normal(Math::Vector3::Y_AXIS, normal);
+            return Vector3Pair(axis_to_normal.Rotate(Math::Vector3::X_AXIS), axis_to_normal.Rotate(Math::Vector3::Z_AXIS));
         }
 
         bool SolveQuadratic(Real a, Real b, Real c, Real& result1, Real& result2)

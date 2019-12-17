@@ -183,10 +183,10 @@ namespace Engine5
 
     void NarrowPhase::ComputeBasisQuaternion(const Vector3& normal, Vector3& tangent_a, Vector3& tangent_b)
     {
-        Quaternion rotation(normal, Vector3::AxisY());
-        tangent_a = rotation.Rotate(Vector3::AxisX());
+        Quaternion rotation(normal, Math::Vector3::Y_AXIS);
+        tangent_a = rotation.Rotate(Math::Vector3::X_AXIS);
         tangent_a.SetNormalize();
-        tangent_b = rotation.Rotate(Vector3::AxisZ());
+        tangent_b = rotation.Rotate(Math::Vector3::Z_AXIS);
         tangent_b.SetNormalize();
     }
 

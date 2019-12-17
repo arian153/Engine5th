@@ -175,7 +175,7 @@ namespace Engine5
                 }
             }
         }
-        return Vector3::AxisZ();
+        return Math::Vector3::Z_AXIS;
     }
 
     void ColliderPolygon::SetMassData(Real density)
@@ -334,7 +334,7 @@ namespace Engine5
         }
         else if (mode == RenderingMode::Face)
         {
-            Vector3 vertex_v3(Vector3::Origin());
+            Vector3 vertex_v3 = Math::Vector3::ORIGIN;
             vertex_v3 = m_orientation.Rotate(vertex_v3);
             vertex_v3 += m_position;
             vertex_v3 = body_orientation.Rotate(vertex_v3);

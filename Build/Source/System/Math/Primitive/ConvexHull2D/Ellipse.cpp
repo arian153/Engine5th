@@ -116,7 +116,7 @@ namespace Engine5
             normal.SetNormalize();
             return normal;
         }
-        return Vector3::AxisZ();
+        return Math::Vector3::Z_AXIS;
     }
 
     void Ellipse::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)

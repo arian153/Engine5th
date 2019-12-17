@@ -207,7 +207,7 @@ namespace Engine5
                 }
             }
         }
-        return Vector3::AxisZ();
+        return Math::Vector3::Z_AXIS;
     }
 
     void ColliderTriangle::SetMassData(Real density)

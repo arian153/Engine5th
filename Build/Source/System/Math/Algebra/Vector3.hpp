@@ -101,12 +101,6 @@ namespace Engine5
         Real                 operator *(const Vector3& rhs) const;
 
     public:
-        static Vector3 AxisX();
-        static Vector3 AxisY();
-        static Vector3 AxisZ();
-        static Vector3 Origin();
-
-    public:
         Real x, y, z;
     };
 }

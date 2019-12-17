@@ -14,6 +14,7 @@
 #include "Vector2.hpp"
 #include <ostream>
 #include "../../Core/Utility/CoreUtility.hpp"
+#include "../Utility/VectorDef.hpp"
 
 
 namespace Engine5
@@ -413,7 +414,7 @@ namespace Engine5
         // angle is zero, axis can be anything
         if (Utility::IsZero(radian))
         {
-            axis = Vector3::AxisY();
+            axis = Math::Vector3::Y_AXIS;
         }
             // standard case
         else if (radian < Math::PI - Math::EPSILON)

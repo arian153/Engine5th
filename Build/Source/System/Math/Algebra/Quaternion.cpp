@@ -13,6 +13,7 @@
 #include "Vector3.hpp"
 #include "..//Utility/Utility.hpp"
 #include <ostream>
+#include "../Utility/VectorDef.hpp"
 
 
 namespace Engine5
@@ -347,7 +348,7 @@ namespace Engine5
     {
         Real    radian = 2.0f * acosf(r);
         Real    length = sqrtf(1.0f - (r * r));
-        Vector3 axis   = Vector3::AxisY();
+        Vector3 axis   = Math::Vector3::Y_AXIS;
         if (Utility::IsZero(length) == false)
         {
             length = 1.0f / length;
@@ -442,7 +443,7 @@ namespace Engine5
     {
         Real    curr_rad  = 2.0f * acosf(r);
         Real    length    = sqrtf(1.0f - (r * r));
-        Vector3 axis      = Vector3::AxisY();
+        Vector3 axis      = Math::Vector3::Y_AXIS;
         Real    half_rad  = (curr_rad + radian) * 0.5f;
         Real    sin_theta = sinf(half_rad);
         Real    cos_theta = cosf(half_rad);
@@ -804,7 +805,7 @@ namespace Engine5
         {
             Real    radian = 2.0f * acosf(rhs.r);
             Real    length = sqrtf(1.0f - (rhs.r * rhs.r));
-            Vector3 axis   = Vector3::AxisY();
+            Vector3 axis   = Math::Vector3::Y_AXIS;
             if (Utility::IsZero(length) == false)
             {
                 length = 1.0f / length;

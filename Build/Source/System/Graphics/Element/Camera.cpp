@@ -90,9 +90,9 @@ namespace Engine5
 
     void Camera::UpdateCamera()
     {
-        DirectX::XMVECTOR up_vector       = Converter::ToXMVector(Vector3::AxisY());
+        DirectX::XMVECTOR up_vector       = Converter::ToXMVector(Math::Vector3::Y_AXIS);
         DirectX::XMVECTOR pos_vector      = Converter::ToXMVector(m_position);
-        DirectX::XMVECTOR look_vector     = Converter::ToXMVector(Vector3::AxisZ());
+        DirectX::XMVECTOR look_vector     = Converter::ToXMVector(Math::Vector3::Z_AXIS);
         DirectX::XMMATRIX rotation_matrix = DirectX::XMMatrixRotationQuaternion(Converter::ToXMVector(m_orientation));
 
         // Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.

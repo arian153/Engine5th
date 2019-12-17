@@ -8,7 +8,7 @@ namespace Engine5
     class Line
     {
     public:
-        explicit Line(const Vector3& position = Vector3(), const Vector3& direction = Vector3::AxisY());
+        explicit Line(const Vector3& position = Vector3(), const Vector3& direction = Math::Vector3::Y_AXIS);
         Line(const Line& rhs);
         ~Line();
         Vector3     ParamToPoint(Real t) const;

@@ -25,10 +25,10 @@ namespace Engine5
 
     void Tetrahedron::SetUnit()
     {
-        vertices[0] = Vector3::Origin();
-        vertices[1] = Vector3::AxisX();
-        vertices[2] = Vector3::AxisY();
-        vertices[3] = Vector3::AxisZ();
+        vertices[0] = Math::Vector3::ORIGIN;
+        vertices[1] = Math::Vector3::X_AXIS;
+        vertices[2] = Math::Vector3::Y_AXIS;
+        vertices[3] = Math::Vector3::Z_AXIS;
     }
 
     Vector3 Tetrahedron::Support(const Vector3& direction)

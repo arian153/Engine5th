@@ -9,7 +9,7 @@ namespace Engine5
     class Ray
     {
     public:
-        explicit Ray(const Vector3& position = Vector3(), const Vector3& direction = Vector3::AxisY());
+        explicit Ray(const Vector3& position = Vector3(), const Vector3& direction = Math::Vector3::Y_AXIS);
         Ray(const Ray& rhs);
         ~Ray();
         Vector3 ParamToPoint(Real t) const;

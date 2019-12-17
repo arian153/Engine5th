@@ -420,26 +420,6 @@ namespace Engine5
         return (x * rhs.x + y * rhs.y + z * rhs.z);
     }
 
-    Vector3 Vector3::AxisX()
-    {
-        return Vector3(1.f, 0.f, 0.f);
-    }
-
-    Vector3 Vector3::AxisY()
-    {
-        return Vector3(0.f, 1.f, 0.f);
-    }
-
-    Vector3 Vector3::AxisZ()
-    {
-        return Vector3(0.f, 0.f, 1.f);
-    }
-
-    Vector3 Vector3::Origin()
-    {
-        return Vector3(0.f, 0.f, 0.f);
-    }
-
     Real DotProduct(const Vector3& vec1, const Vector3& vec2)
     {
         return vec1.DotProduct(vec2);

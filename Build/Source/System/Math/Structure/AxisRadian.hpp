@@ -1,13 +1,14 @@
 #pragma once
 #include "../Utility/MathDef.hpp"
 #include "../Algebra/Vector3.hpp"
+#include "../Utility/VectorDef.hpp"
 
 namespace Engine5
 {
     class AxisRadian
     {
     public:
-        explicit AxisRadian(const Vector3& axis = Vector3::AxisY(), Real radian = 0.0f);
+        explicit AxisRadian(const Vector3& axis = Math::Vector3::Y_AXIS, Real radian = 0.0f);
         AxisRadian(const AxisRadian& rhs);
         ~AxisRadian();
 

@@ -3,6 +3,10 @@
 
 namespace Engine5
 {
+    Basis::Basis()
+    {
+    }
+
     Basis::Basis(const Vector3& a, const Vector3& b, const Vector3& c)
         : i(a), j(b), k(c)
     {

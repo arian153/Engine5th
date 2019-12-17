@@ -158,7 +158,7 @@ namespace Engine5
         {
             return Vector3(0.0f, 1.0f);
         }
-        return Vector3::AxisZ();
+        return Math::Vector3::Z_AXIS;
     }
 
     void Rectangle::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)

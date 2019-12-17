@@ -117,7 +117,7 @@ namespace Engine5
             normal.SetNormalize();
             return normal;
         }
-        return Vector3::AxisZ();
+        return Math::Vector3::Z_AXIS;
     }
 
     void ColliderEllipse::SetMassData(Real density)
@@ -140,7 +140,7 @@ namespace Engine5
         Real it_zz = 0.25f * m_mass * (a * a + b * b);
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
-        m_centroid = Vector3::Origin();
+        m_centroid = Math::Vector3::ORIGIN;
     }
 
     Real ColliderEllipse::GetVolume()

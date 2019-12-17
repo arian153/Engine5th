@@ -177,7 +177,7 @@ namespace Engine5
         I32 half_stack_count    = stack_count / 2;
         I32 dome_vertices_count = (stack_count / 2) * (slice_count + 1) + 1;
         renderer->ReserveVertices((size_t)dome_vertices_count, mode);
-        Vector3    axis_vector      = Vector3::AxisY();
+        Vector3    axis_vector      = Math::Vector3::Y_AXIS;
         Vector3    body_position    = GetBodyPosition();
         Quaternion body_orientation = GetBodyOrientation();
         Vector3    radius           = Radius();

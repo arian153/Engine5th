@@ -16,7 +16,7 @@ namespace Engine5
 
     void ColliderTetrahedron::Initialize()
     {
-        SetTetrahedron(Vector3::Origin(), Vector3::AxisX(), Vector3::AxisY(), Vector3::AxisZ());
+        SetTetrahedron(Math::Vector3::ORIGIN, Math::Vector3::X_AXIS, Math::Vector3::Y_AXIS, Math::Vector3::Z_AXIS);
     }
 
     void ColliderTetrahedron::Shutdown()

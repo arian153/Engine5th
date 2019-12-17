@@ -1,5 +1,6 @@
 #pragma once
 #include "../Algebra/Vector3.hpp"
+#include "../Utility/VectorDef.hpp"
 
 namespace Engine5
 {
@@ -8,7 +9,8 @@ namespace Engine5
     class Basis
     {
     public:
-        explicit Basis(const Vector3& a = Vector3::AxisX(), const Vector3& b = Vector3::AxisY(), const Vector3& c = Vector3::AxisZ());
+        Basis();
+        explicit Basis(const Vector3& a, const Vector3& b, const Vector3& c);
         Basis(const Basis& rhs);
         Basis& operator=(const Basis& rhs);
         ~Basis();
@@ -20,8 +22,8 @@ namespace Engine5
         void Normalize();
 
     public:
-        Vector3 i = Vector3::AxisX();
-        Vector3 j = Vector3::AxisY();
-        Vector3 k = Vector3::AxisZ();
+        Vector3 i = Math::Vector3::X_AXIS;
+        Vector3 j = Math::Vector3::Y_AXIS;
+        Vector3 k = Math::Vector3::Z_AXIS;
     };
 }

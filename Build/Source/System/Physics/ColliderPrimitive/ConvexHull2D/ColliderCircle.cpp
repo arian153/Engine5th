@@ -104,7 +104,7 @@ namespace Engine5
         {
             return local_point_on_collider.Unit();;
         }
-        return Vector3::AxisZ();
+        return Math::Vector3::Z_AXIS;
     }
 
     void ColliderCircle::SetMassData(Real density)
@@ -125,7 +125,7 @@ namespace Engine5
         Real it_zz = 0.5f * m_mass * r * r;
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
-        m_centroid = Vector3::Origin();
+        m_centroid = Math::Vector3::ORIGIN;
     }
 
     Real ColliderCircle::GetVolume()

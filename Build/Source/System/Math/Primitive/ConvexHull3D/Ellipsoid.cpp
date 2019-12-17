@@ -79,7 +79,7 @@ namespace Engine5
         int stack_count = renderer->SPHERICAL_STACK_COUNT;
         int slice_count = renderer->SPHERICAL_SLICE_COUNT;
         renderer->ReserveVertices(renderer->SPHERICAL_VERTICES_COUNT, mode);
-        Vector3 axis_vector = Vector3::AxisY();
+        Vector3 axis_vector = Math::Vector3::Y_AXIS;
 
         //top vertex
         Vector3 top_vertex_local_pos = axis_vector;

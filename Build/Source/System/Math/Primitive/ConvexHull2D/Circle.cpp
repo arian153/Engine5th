@@ -106,7 +106,7 @@ namespace Engine5
         {
             return local_point_on_primitive.Unit();;
         }
-        return Vector3::AxisZ();
+        return Math::Vector3::Z_AXIS;
     }
 
     void Circle::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)

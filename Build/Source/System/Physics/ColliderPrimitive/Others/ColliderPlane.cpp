@@ -58,7 +58,7 @@ namespace Engine5
     void ColliderPlane::UpdateBoundingVolume()
     {
         //todo temporary code
-        m_bounding_volume->Set(Vector3::Origin(), Vector3::Origin());
+        m_bounding_volume->Set(Math::Vector3::ORIGIN, Math::Vector3::ORIGIN);
     }
 
     void ColliderPlane::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const

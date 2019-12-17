@@ -154,7 +154,7 @@ namespace Engine5
         m_centroid = 0.0f;
         m_local_inertia_tensor.SetZero();
         m_mass            = 0.0f;
-        Vector3 ref_point = Vector3::Origin();
+        Vector3 ref_point = Math::Vector3::ORIGIN;
         for (auto& face : *m_faces)
         {
             auto sub_data = CalculateTetrahedronMassData(ref_point, Vertex(face.a), Vertex(face.b), Vertex(face.c), density);
@@ -176,7 +176,7 @@ namespace Engine5
     Real ColliderPolyhedron::GetVolume()
     {
         Real    volume    = 0.0f;
-        Vector3 ref_point = Vector3::Origin();
+        Vector3 ref_point = Math::Vector3::ORIGIN;
         for (auto& face : *m_faces)
         {
             Matrix33 tetrahedron_matrix;

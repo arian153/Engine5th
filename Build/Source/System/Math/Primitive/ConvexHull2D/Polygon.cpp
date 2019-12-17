@@ -156,7 +156,7 @@ namespace Engine5
                 }
             }
         }
-        return Vector3::AxisZ();
+        return Math::Vector3::Z_AXIS;
     }
 
     void Polygon::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)

@@ -17,7 +17,7 @@ namespace Engine5
         void Shutdown();
         void SetPosition(const Vector3& position);
         void SetOrientation(const Quaternion& orientation);
-        void LookAt(const Vector3& position, const Vector3& target, const Vector3& up = Vector3::AxisY());
+        void LookAt(const Vector3& position, const Vector3& target, const Vector3& up = Math::Vector3::Y_AXIS);
 
         Vector3           GetPosition() const;
         Quaternion        GetOrientation() const;
