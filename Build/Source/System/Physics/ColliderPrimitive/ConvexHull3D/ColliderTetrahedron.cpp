@@ -166,13 +166,14 @@ namespace Engine5
         {
             for (size_t j = 0; j < 3; ++j)
             {
-                if (max_bound[j] < m_vertices[i][j])
+                Real value = Vertex(i)[j];
+                if (max_bound[j] < value)
                 {
-                    max_bound[j] = m_vertices[i][j];
+                    max_bound[j] = value;
                 }
-                if (min_bound[j] > m_vertices[i][j])
+                if (min_bound[j] > value)
                 {
-                    min_bound[j] = m_vertices[i][j];
+                    min_bound[j] = value;
                 }
             }
         }
@@ -187,8 +188,23 @@ namespace Engine5
     void ColliderTetrahedron::UpdateBoundingVolume()
     {
         Vector3 max_bound, min_bound;
-        max_bound               = Math::REAL_NEGATIVE_MAX;
-        min_bound               = Math::REAL_POSITIVE_MAX;
+        max_bound = Math::REAL_NEGATIVE_MAX;
+        min_bound = Math::REAL_POSITIVE_MAX;
+        for (size_t i = 0; i < 4; ++i)
+        {
+            for (size_t j = 0; j < 3; ++j)
+            {
+                Real value = Vertex(i)[j];
+                if (max_bound[j] < value)
+                {
+                    max_bound[j] = value;
+                }
+                if (min_bound[j] > value)
+                {
+                    min_bound[j] = value;
+                }
+            }
+        }
         Real    bounding_factor = (max_bound - min_bound).Length();
         Vector3 pos;
         if (m_rigid_body != nullptr)

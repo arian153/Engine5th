@@ -154,6 +154,13 @@ namespace Engine5
         return result;
     }
 
+    Vector2 Vector2::Inverse() const
+    {
+        return Vector2(
+                       Utility::IsZero(x) ? 0.0f : 1.0f / this->x,
+                       Utility::IsZero(y) ? 0.0f : 1.0f / this->y);
+    }
+
     Real Vector2::DotProduct(const Vector2& rhs) const
     {
         return (x * rhs.x + y * rhs.y);

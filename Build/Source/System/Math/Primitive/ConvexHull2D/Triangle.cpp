@@ -207,11 +207,10 @@ namespace Engine5
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = 3;
         renderer->ReserveVertices(count, mode);
-        Vector3 world_vertices[3];
         for (size_t i = 0; i < 3; ++i)
         {
             //local space to world space
-            Vector3 vertex(vertices[i].x, vertices[i].y);
+            Vector3 vertex(vertices[i]);
             vertex = orientation.Rotate(vertex);
             vertex += position;
 

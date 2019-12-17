@@ -435,13 +435,14 @@ namespace Engine5
         {
             for (size_t j = 0; j < 3; ++j)
             {
-                if (m_max_bound[j] < m_vertices->at(i)[j])
+                Real value = m_vertices->at(i)[j];
+                if (m_max_bound[j] < value)
                 {
-                    m_max_bound[j] = m_vertices->at(i)[j];
+                    m_max_bound[j] = value;
                 }
-                if (m_min_bound[j] > m_vertices->at(i)[j])
+                if (m_min_bound[j] > value)
                 {
-                    m_min_bound[j] = m_vertices->at(i)[j];
+                    m_min_bound[j] = value;
                 }
             }
         }
