@@ -8,6 +8,14 @@ namespace Engine5
 {
     namespace Math
     {
+        namespace Vector
+        {
+            constexpr size_t X = 0;
+            constexpr size_t Y = 1;
+            constexpr size_t Z = 2;
+            constexpr size_t W = 3;
+        }
+
         namespace Vector2
         {
             const Engine5::Vector2 ORIGIN(0.0f, 0.0f);

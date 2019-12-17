@@ -55,6 +55,12 @@ namespace Engine5
         bool IsEqual(const Vector4& rhs) const;
         bool IsNotEqual(const Vector4& rhs) const;
 
+        Real GrepVec1(size_t flag0) const;
+        Vector2 GrepVec2(size_t flag0, size_t flag1) const;
+        Vector3 GrepVec3(size_t flag0, size_t flag1, size_t flag2) const;
+        Vector4 GrepVec4(size_t flag0, size_t flag1, size_t flag2, size_t flag3) const;
+        size_t SafeFlag(size_t given) const;
+
     public:
         friend Real     DotProduct(const Vector4& vec1, const Vector4& vec2);
         friend Vector4  CrossProduct(const Vector4& vec1, const Vector4& vec2);

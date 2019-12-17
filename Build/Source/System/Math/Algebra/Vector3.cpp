@@ -233,6 +233,31 @@ namespace Engine5
             || Utility::IsNotEqual(z, rhs.z));
     }
 
+    Real Vector3::GrepVec1(size_t flag0) const
+    {
+        return (*this)[SafeFlag(flag0)];
+    }
+
+    Vector2 Vector3::GrepVec2(size_t flag0, size_t flag1) const
+    {
+        return Vector2((*this)[flag0], (*this)[flag1]);
+    }
+
+    Vector3 Vector3::GrepVec3(size_t flag0, size_t flag1, size_t flag2) const
+    {
+        return Vector3((*this)[flag0], (*this)[flag1], (*this)[flag2]);
+    }
+
+    Vector4 Vector3::GrepVec4(size_t flag0, size_t flag1, size_t flag2, size_t flag3) const
+    {
+        return Vector4((*this)[flag0], (*this)[flag1], (*this)[flag2], (*this)[flag3]);
+    }
+
+    size_t Vector3::SafeFlag(size_t given) const
+    {
+        return given > Math::Vector::Z ? Math::Vector::Z : given;
+    }
+
     bool Vector3::operator==(const Vector3& rhs) const
     {
         return (Utility::IsEqual(x, rhs.x)

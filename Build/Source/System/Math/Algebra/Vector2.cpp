@@ -14,6 +14,7 @@
 #include "Matrix22.hpp"
 #include "Vector3.hpp"
 #include "Vector4.hpp"
+#include "../Utility/VectorDef.hpp"
 
 namespace Engine5
 {
@@ -206,6 +207,31 @@ namespace Engine5
     bool Vector2::IsNotEqual(const Vector2& rhs) const
     {
         return Utility::IsNotEqual(x, rhs.x) || Utility::IsNotEqual(y, rhs.y);
+    }
+
+    Real Vector2::GrepVec1(size_t flag0) const
+    {
+        return (*this)[SafeFlag(flag0)];
+    }
+
+    Vector2 Vector2::GrepVec2(size_t flag0, size_t flag1) const
+    {
+        return Vector2((*this)[SafeFlag(flag0)], (*this)[SafeFlag(flag1)]);
+    }
+
+    Vector3 Vector2::GrepVec3(size_t flag0, size_t flag1, size_t flag2) const
+    {
+        return Vector3((*this)[SafeFlag(flag0)], (*this)[SafeFlag(flag1)], (*this)[SafeFlag(flag2)]);
+    }
+
+    Vector4 Vector2::GrepVec4(size_t flag0, size_t flag1, size_t flag2, size_t flag3) const
+    {
+        return Vector4((*this)[SafeFlag(flag0)], (*this)[SafeFlag(flag1)], (*this)[SafeFlag(flag2)], (*this)[SafeFlag(flag3)]);
+    }
+
+    size_t Vector2::SafeFlag(size_t given) const
+    {
+        return given > Math::Vector::Y ? Math::Vector::Y : given;
     }
 
     bool Vector2::operator==(const Vector2& rhs) const
