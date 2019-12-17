@@ -22,11 +22,9 @@ namespace Engine5
 
     Vector3 ColliderPolygon::Support(const Vector3& direction)
     {
-
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
-        Real    p = Math::REAL_NEGATIVE_MAX;
-        Vector3 result;
-
+        Vector3               local_dir = WorldToLocalVector(direction).Unit();
+        Real                  p         = Math::REAL_NEGATIVE_MAX;
+        Vector3               result;
         std::vector<Vector2>* vertices;
         if (m_collider_set != nullptr)
         {
@@ -37,14 +35,13 @@ namespace Engine5
             vertices = m_vertices;
         }
         size_t size = vertices->size();
-
         for (size_t i = 0; i < size; ++i)
         {
             Real projection = Vector3(vertices->at(i)).DotProduct(local_dir);
             if (projection > p)
             {
                 result = vertices->at(i);
-                p = projection;
+                p      = projection;
             }
         }
         return LocalToWorldPoint(result);
@@ -52,37 +49,160 @@ namespace Engine5
 
     bool ColliderPolygon::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
-        return false;
+        minimum_t = -1.0f;
+        maximum_t = -1.0f;
+        //Quadratic elements
+        Real polygon_min_t = Math::REAL_POSITIVE_MAX;
+        Real polygon_max_t = Math::REAL_NEGATIVE_MAX;
+
+        //plane elements
+        Vector3 normal(0.0f, 0.0f, 1.0f);
+        Vector3 pc          = -local_ray.position;
+        Real    denominator = normal.DotProduct(local_ray.direction);
+        if (Utility::IsZero(denominator) == true)
+        {
+            //ray is parallel to plane.
+            if (Utility::IsZero(pc.DotProduct(normal)) == true)
+            {
+                std::vector<Vector2>* vertices;
+                if (m_collider_set != nullptr)
+                {
+                    vertices = m_scaled_vertices;
+                }
+                else
+                {
+                    vertices = m_vertices;
+                }
+
+                //ray is on the plane.
+                Vector2 dir(local_ray.direction.x, local_ray.direction.y);
+                Vector2 pos(local_ray.position.x, local_ray.position.y);
+                Real    inv_dir = 1.0f / dir.DotProduct(dir);
+                size_t  size    = vertices->size();
+                for (size_t i = 0; i < size; ++i)
+                {
+                    size_t  j    = i + 1 < size ? i + 1 : 0;
+                    Vector2 p0   = vertices->at(i);
+                    Vector2 p1   = vertices->at(j);
+                    Vector2 edge = p1 - p0;
+                    if (Utility::IsZero(dir.CrossProduct(edge)) == true)
+                    {
+                        if (Utility::IsZero((p0 - pos).CrossProduct(dir)) == true)
+                        {
+                            polygon_min_t = (p0 - pos).DotProduct(dir) * inv_dir;
+                            polygon_max_t = (p1 - pos).DotProduct(dir) * inv_dir;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        Real t = (p0 - pos).CrossProduct(edge) / (dir.CrossProduct(edge));
+                        if (polygon_min_t > t)
+                        {
+                            polygon_min_t = t;
+                        }
+                        if (polygon_max_t < t)
+                        {
+                            polygon_max_t = t;
+                        }
+                    }
+                }
+                //find min max t.
+                minimum_t = polygon_min_t;
+                maximum_t = polygon_max_t;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            //ray-plane intersect one point.
+            Real    plane_t            = pc.DotProduct(normal) / denominator;
+            Vector3 plane_intersection = local_ray.position + local_ray.direction * plane_t;
+            //define ellipse.
+            bool is_rectangle_contain_point = false;
+            if (is_rectangle_contain_point)
+            {
+                minimum_t = maximum_t = plane_t;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (minimum_t < 0.0f && maximum_t < 0.0f)
+        {
+            return false;
+        }
+        if (minimum_t <= 0.0f)
+        {
+            minimum_t = 0.0f;
+        }
+        return true;
     }
 
     Vector3 ColliderPolygon::GetNormal(const Vector3& local_point_on_collider)
     {
-        return local_point_on_collider;
+        std::vector<Vector2>* vertices;
+        if (m_collider_set != nullptr)
+        {
+            vertices = m_scaled_vertices;
+        }
+        else
+        {
+            vertices = m_vertices;
+        }
+        size_t  size = vertices->size();
+        Vector2 v(local_point_on_collider);
+        for (size_t i = 0; i < size; ++i)
+        {
+            size_t  j    = i + 1 < size ? i + 1 : 0;
+            Vector2 p0   = vertices->at(i);
+            Vector2 p1   = vertices->at(j);
+            Vector2 edge = p1 - p0;
+            if (p0.IsEqual(p1) == false)
+            {
+                Real tx = (v.x - p0.x) / edge.x;
+                Real ty = (v.y - p0.y) / edge.y;
+                Real t  = Utility::IsEqual(tx, ty) ? tx : (!Utility::IsZero(tx) ? tx : ty);
+
+                //is point on edge ?
+                if (t <= 1.0f && t >= 0.0f)
+                {
+                    return Vector3(-v.y, v.x);
+                }
+            }
+        }
+        return Vector3::AxisZ();
     }
 
     void ColliderPolygon::SetMassData(Real density)
     {
-        Real   area  = 0.0f;
-        Real   it_xx = 0.0f;
-        Real   it_yy = 0.0f;
-        Real   it_zz = 0.0f;
-        Real   inv3  = 1.0f / 3.0f;
-        size_t size  = m_vertices->size();
-        for (size_t i1 = 0; i1 < size; ++i1)
+        Real area  = 0.0f;
+        Real it_xx = 0.0f;
+        Real it_yy = 0.0f;
+        Real it_zz = 0.0f;
+        Real inv3  = 1.0f / 3.0f;
+        //vertices
+        std::vector<Vector2>* vertices;
+        if (m_collider_set != nullptr)
+        {
+            vertices = m_scaled_vertices;
+        }
+        else
+        {
+            vertices = m_vertices;
+        }
+        size_t size = vertices->size();
+        for (size_t i = 0; i < size; ++i)
         {
             // Triangle vertices, third vertex implied as (0, 0)
             Vector3 p1, p2;
-            size_t  i2 = i1 + 1 < size ? i1 + 1 : 0;
-            if (m_collider_set != nullptr)
-            {
-                p1 = Vector3(m_scaled_vertices->at(i1).x, m_scaled_vertices->at(i1).y);
-                p2 = Vector3(m_scaled_vertices->at(i2).x, m_scaled_vertices->at(i2).y);
-            }
-            else
-            {
-                p1 = Vector3(m_vertices->at(i1).x, m_vertices->at(i1).y);
-                p2 = Vector3(m_vertices->at(i2).x, m_vertices->at(i2).y);
-            }
+            size_t  j          = i + 1 < size ? i + 1 : 0;
+            p1                 = Vector3(vertices->at(i).x, vertices->at(i).y);
+            p2                 = Vector3(vertices->at(j).x, vertices->at(j).y);
             Real triangle_area = 0.5f * p1.CrossProduct(p2).Length();
             area += triangle_area;
 
@@ -102,23 +222,26 @@ namespace Engine5
 
     Real ColliderPolygon::GetVolume()
     {
-        Real   area = 0.0f;
-        size_t size = m_vertices->size();
-        for (size_t i1 = 0; i1 < 3; ++i1)
+        Real area = 0.0f;
+        //vertices
+        std::vector<Vector2>* vertices;
+        if (m_collider_set != nullptr)
+        {
+            vertices = m_scaled_vertices;
+        }
+        else
+        {
+            vertices = m_vertices;
+        }
+        size_t size = vertices->size();
+        for (size_t i = 0; i < size; ++i)
         {
             // Triangle vertices, third vertex implied as (0, 0)
             Vector3 p1, p2;
-            size_t  i2 = i1 + 1 < size ? i1 + 1 : 0;
-            if (m_collider_set != nullptr)
-            {
-                p1 = Vector3(m_scaled_vertices->at(i1).x, m_scaled_vertices->at(i1).y);
-                p2 = Vector3(m_scaled_vertices->at(i2).x, m_scaled_vertices->at(i2).y);
-            }
-            else
-            {
-                p1 = Vector3(m_vertices->at(i1).x, m_vertices->at(i1).y);
-                p2 = Vector3(m_vertices->at(i2).x, m_vertices->at(i2).y);
-            }
+            size_t  j = i + 1 < size ? i + 1 : 0;
+            p1        = Vector3(vertices->at(i).x, vertices->at(i).y);
+            p2        = Vector3(vertices->at(j).x, vertices->at(j).y);
+            //area
             Real triangle_area = 0.5f * p1.CrossProduct(p2).Length();
             area += triangle_area;
         }
@@ -166,7 +289,7 @@ namespace Engine5
 
     void ColliderPolygon::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
-        I32    index = static_cast<I32>(renderer->VerticesSize(mode));
+        I32                   index = static_cast<I32>(renderer->VerticesSize(mode));
         std::vector<Vector2>* vertices;
         if (m_collider_set != nullptr)
         {
@@ -176,12 +299,10 @@ namespace Engine5
         {
             vertices = m_vertices;
         }
-
-        size_t size  = vertices->size();
+        size_t size = vertices->size();
         renderer->ReserveVertices(size, mode);
-        Vector3               body_position    = GetBodyPosition();
-        Quaternion            body_orientation = GetBodyOrientation();
-       
+        Vector3    body_position    = GetBodyPosition();
+        Quaternion body_orientation = GetBodyOrientation();
         for (auto& vertex : *vertices)
         {
             //collider local space to object space(body local)
