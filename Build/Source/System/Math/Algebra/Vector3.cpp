@@ -240,17 +240,17 @@ namespace Engine5
 
     Vector2 Vector3::GrepVec2(size_t flag0, size_t flag1) const
     {
-        return Vector2((*this)[flag0], (*this)[flag1]);
+        return Vector2((*this)[SafeFlag(flag0)], (*this)[SafeFlag(flag1)]);
     }
 
     Vector3 Vector3::GrepVec3(size_t flag0, size_t flag1, size_t flag2) const
     {
-        return Vector3((*this)[flag0], (*this)[flag1], (*this)[flag2]);
+        return Vector3((*this)[SafeFlag(flag0)], (*this)[SafeFlag(flag1)], (*this)[SafeFlag(flag2)]);
     }
 
     Vector4 Vector3::GrepVec4(size_t flag0, size_t flag1, size_t flag2, size_t flag3) const
     {
-        return Vector4((*this)[flag0], (*this)[flag1], (*this)[flag2], (*this)[flag3]);
+        return Vector4((*this)[SafeFlag(flag0)], (*this)[SafeFlag(flag1)], (*this)[SafeFlag(flag2)], (*this)[SafeFlag(flag3)]);
     }
 
     size_t Vector3::SafeFlag(size_t given) const
