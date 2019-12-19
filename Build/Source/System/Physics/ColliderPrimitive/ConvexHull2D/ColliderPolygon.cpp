@@ -377,6 +377,7 @@ namespace Engine5
 
     void ColliderPolygon::CreateSimplex()
     {
+
     }
 
     void ColliderPolygon::AddToOutsideSet()

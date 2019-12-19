@@ -458,8 +458,70 @@ namespace Engine5
         }
     }
 
-    void ColliderPolyhedron::CreateSimplex()
+    size_t ColliderPolyhedron::CreateSimplex(const std::vector<Vector3>& vertices)
     {
+        //1. For each principle direction(X - axis, Y - axis, Z - axis)
+        Vector3 min_vertex, max_vertex;
+        bool    b_succeed = false;
+        for (size_t i = 0; i < 3; ++i)
+        {
+            //  1. Find the minimum and maximum point in that dimension
+            Real min = Math::REAL_POSITIVE_MAX;
+            Real max = Math::REAL_NEGATIVE_MAX;
+            for (auto& vertex : vertices)
+            {
+                if (vertex[i] < min)
+                {
+                    min        = vertex[i];
+                    min_vertex = vertex;
+                }
+                if (vertex[i] > max)
+                {
+                    max        = vertex[i];
+                    max_vertex = vertex;
+                }
+            }
+            //  2. If min != max then break out of loop with success
+            if (min != max)
+            {
+                b_succeed = true;
+                break;
+            }
+            //  3. Continue the loop
+        }
+        //2. If the loop finished without success return and report that we have a degenerate point cloud, either 1D or 2D.
+        if (b_succeed == false)
+        {
+            return 0;
+        }
+
+        //3. Find the point which is furthest distant from the line defined by the first two points.If this maximum distance is zero, then our point cloud is 1D, so report the degeneracy.
+        Segment segment(min_vertex, max_vertex);
+        Real    max_distance = 0.0f;
+        Real    t            = 0.0f;
+        Vector3 max_triangle;
+        for (auto& vertex : vertices)
+        {
+            Real distance = segment.DistanceSquared(vertex, t);
+            if (distance > max_distance)
+            {
+                max_distance = distance;
+                max_triangle = vertex;
+            }
+        }
+        if (Utility::IsZero(max_distance))
+        {
+            return 1;
+        }
+        
+        //4. Find the point which has the largest absolute distance from the plane defined by the first three points.If this maximum distance is zero, then our point cloud is 2D, so report the the degeneracy.
+        Triangle triangle;
+        triangle.vertices[0] = min_vertex;
+        triangle.vertices[1] = max_vertex;
+        triangle.vertices[2] = max_triangle;
+        //5. Create the tetrahedron polyhedron.Remember that if the distance from the plane of the fourth point was negative, then the order of the first three vertices must be reversed.
+        //6. Return the fact that we created a non - degenerate tetrahedron of dimension 3.
+        return 3;
     }
 
     void ColliderPolyhedron::AddToOutsideSet()
