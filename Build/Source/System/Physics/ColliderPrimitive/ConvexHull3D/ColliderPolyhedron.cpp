@@ -311,6 +311,16 @@ namespace Engine5
         return m_vertices->size();
     }
 
+    bool ColliderPolyhedron::SetPolyhedron(const std::vector<Vector3>& vertices)
+    {
+        size_t size = vertices.size();
+        if (size < 4)
+        {
+            return false;
+        }
+        return true;
+    }
+
     void ColliderPolyhedron::Clone(ColliderPrimitive* cloned)
     {
     }
@@ -446,5 +456,17 @@ namespace Engine5
                 }
             }
         }
+    }
+
+    void ColliderPolyhedron::CreateSimplex()
+    {
+    }
+
+    void ColliderPolyhedron::AddToOutsideSet()
+    {
+    }
+
+    void ColliderPolyhedron::CalculateHorizon()
+    {
     }
 }

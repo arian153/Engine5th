@@ -335,7 +335,7 @@ namespace Engine5
         else if (mode == RenderingMode::Face)
         {
             Vector3 vertex_v3 = Math::Vector3::ORIGIN;
-            vertex_v3 = m_orientation.Rotate(vertex_v3);
+            vertex_v3         = m_orientation.Rotate(vertex_v3);
             vertex_v3 += m_position;
             vertex_v3 = body_orientation.Rotate(vertex_v3);
             vertex_v3 += body_position;
@@ -360,7 +360,30 @@ namespace Engine5
         return m_vertices->at(i);
     }
 
+    bool ColliderPolygon::SetPolygon(const std::vector<Vector2>& vertices)
+    {
+        size_t size = vertices.size();
+        if (size < 3)
+        {
+            return false;
+        }
+        return true;
+    }
+
+
     void ColliderPolygon::Clone(ColliderPrimitive* cloned)
+    {
+    }
+
+    void ColliderPolygon::CreateSimplex()
+    {
+    }
+
+    void ColliderPolygon::AddToOutsideSet()
+    {
+    }
+
+    void ColliderPolygon::CalculateHorizon()
     {
     }
 }

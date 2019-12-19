@@ -35,6 +35,7 @@ namespace Engine5
 
         Vector3 Vertex(size_t i) const;
         size_t  Size() const;
+        bool SetPolyhedron(const std::vector<Vector3>& vertices);
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
@@ -54,6 +55,11 @@ namespace Engine5
         Matrix33    TranslateInertia(const Matrix33& input, const Vector3& centroid, Real mass, const Vector3& offset) const;
         SubMassData CalculateTetrahedronMassData(const Vector3& ref, const Vector3& v1, const Vector3& v2, const Vector3& v3, Real density) const;
         void CalculateMinMaxBound();
+
+        void CreateSimplex();
+        void AddToOutsideSet();
+        void CalculateHorizon();
+
     private:
         std::vector<Vector3>*      m_vertices        = nullptr;
         std::vector<Vector3>*      m_scaled_vertices = nullptr;

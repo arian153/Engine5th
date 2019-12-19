@@ -34,9 +34,15 @@ namespace Engine5
 
         Vector2 Vertex(size_t i) const;
 
+        bool SetPolygon(const std::vector<Vector2>& vertices);
 
     protected:
         void Clone(ColliderPrimitive* cloned) override;
+
+    private:
+        void CreateSimplex();
+        void AddToOutsideSet();
+        void CalculateHorizon();
 
     private:
         std::vector<Vector2>*      m_vertices        = nullptr;
