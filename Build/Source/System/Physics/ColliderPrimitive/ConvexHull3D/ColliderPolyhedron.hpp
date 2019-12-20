@@ -56,9 +56,11 @@ namespace Engine5
         SubMassData CalculateTetrahedronMassData(const Vector3& ref, const Vector3& v1, const Vector3& v2, const Vector3& v3, Real density) const;
         void CalculateMinMaxBound();
 
-        size_t CreateSimplex(const std::vector<Vector3>& vertices);
+        size_t CreateSimplex(const std::vector<Vector3>& vertices) const;
         void AddToOutsideSet();
         void CalculateHorizon();
+
+        Vector3 ClosestPointTrianglePoint(const Vector3& p, const Vector3& a, const Vector3& b, const Vector3& c) const;
 
     private:
         std::vector<Vector3>*      m_vertices        = nullptr;

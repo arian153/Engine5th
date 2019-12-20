@@ -458,7 +458,7 @@ namespace Engine5
         }
     }
 
-    size_t ColliderPolyhedron::CreateSimplex(const std::vector<Vector3>& vertices)
+    size_t ColliderPolyhedron::CreateSimplex(const std::vector<Vector3>& vertices) const
     {
         //1. For each principle direction(X - axis, Y - axis, Z - axis)
         Vector3 min_vertex, max_vertex;
@@ -515,12 +515,31 @@ namespace Engine5
         }
         
         //4. Find the point which has the largest absolute distance from the plane defined by the first three points.If this maximum distance is zero, then our point cloud is 2D, so report the the degeneracy.
-        Triangle triangle;
-        triangle.vertices[0] = min_vertex;
-        triangle.vertices[1] = max_vertex;
-        triangle.vertices[2] = max_triangle;
+        max_distance = 0.0f;
+        Vector3 max_tetrahedron;
+        for(auto& vertex : vertices)
+        {
+            Vector3 closest = ClosestPointTrianglePoint(vertex, min_vertex, max_vertex, max_triangle);
+            Real distance = (vertex - closest).LengthSquared();
+            if (distance > max_distance)
+            {
+                max_distance = distance;
+                max_tetrahedron = vertex;
+            }
+        }
+
+        if (Utility::IsZero(max_distance))
+        {
+            return 2;
+        }
+        
         //5. Create the tetrahedron polyhedron.Remember that if the distance from the plane of the fourth point was negative, then the order of the first three vertices must be reversed.
         //6. Return the fact that we created a non - degenerate tetrahedron of dimension 3.
+        m_vertices->push_back(min_vertex);
+        m_vertices->push_back(max_vertex);
+        m_vertices->push_back(max_triangle);
+        m_vertices->push_back(max_tetrahedron);
+
         return 3;
     }
 
@@ -530,5 +549,73 @@ namespace Engine5
 
     void ColliderPolyhedron::CalculateHorizon()
     {
+    }
+
+    Vector3 ColliderPolyhedron::ClosestPointTrianglePoint(const Vector3& p, const Vector3& a, const Vector3& b, const Vector3& c) const
+    {
+        // Check if P in vertex region outside A
+        Vector3 ab = b - a;
+        Vector3 ac = c - a;
+        Vector3 ap = p - a;
+        Real    d1 = DotProduct(ab, ap);
+        Real    d2 = DotProduct(ac, ap);
+        if (d1 <= 0.0f && d2 <= 0.0f)
+        {
+            // barycentric coordinates (1,0,0)
+            return a;
+        }
+           
+        // Check if P in vertex region outside B
+        Vector3 bp = p - b;
+        Real    d3 = DotProduct(ab, bp);
+        Real    d4 = DotProduct(ac, bp);
+        if (d3 >= 0.0f && d4 <= d3)
+        {
+            // barycentric coordinates (0,1,0)
+            return b;
+        }
+          
+        // Check if P in edge region of AB, if so return projection of P onto AB
+        Real vc = d1 * d4 - d3 * d2;
+        if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
+        {
+            Real v = d1 / (d1 - d3);
+            // barycentric coordinates (1-v,v,0)
+            return a + v * ab;
+        }
+
+        // Check if P in vertex region outside C
+        Vector3 cp = p - c;
+        Real    d5 = DotProduct(ab, cp);
+        Real    d6 = DotProduct(ac, cp);
+        if (d6 >= 0.0f && d5 <= d6)
+        {
+            // barycentric coordinates (0,0,1)
+            return c;
+        }
+           
+        // Check if P in edge region of AC, if so return projection of P onto AC
+        Real vb = d5 * d2 - d1 * d6;
+        if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
+        {
+            Real w = d2 / (d2 - d6);
+            // barycentric coordinates (1-w,0,w)
+            return a + w * ac;
+        }
+
+        // Check if P in edge region of BC, if so return projection of P onto BC
+        Real va = d3 * d6 - d5 * d4;
+        if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
+        {
+            Real w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+            // barycentric coordinates (0,1-w,w)
+            return b + w * (c - b);
+        }
+
+        // P inside face region. Compute Q through its barycentric coordinates (u,v,w)
+        Real denom = 1.0f / (va + vb + vc);
+        Real v     = vb * denom;
+        Real w     = vc * denom;
+        return a + ab * v + ac * w; // = u*a + v*b + w*c, u = va * denom = 1.0f - v - w
     }
 }
