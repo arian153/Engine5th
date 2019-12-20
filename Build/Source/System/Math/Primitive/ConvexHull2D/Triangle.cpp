@@ -1,35 +1,35 @@
-#include "Triangle2D.hpp"
+#include "Triangle.hpp"
 #include "../../Utility/Utility.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
 #include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
-    Triangle2D::Triangle2D()
+    Triangle::Triangle()
     {
-        type = PrimitiveType::Triangle2D;
+        type = PrimitiveType::Triangle;
     }
 
-    Triangle2D::~Triangle2D()
-    {
-    }
-
-    void Triangle2D::Initialize()
+    Triangle::~Triangle()
     {
     }
 
-    void Triangle2D::Shutdown()
+    void Triangle::Initialize()
     {
     }
 
-    void Triangle2D::SetUnit()
+    void Triangle::Shutdown()
+    {
+    }
+
+    void Triangle::SetUnit()
     {
         vertices[0] = Vector2(0.0f, 0.0f);
         vertices[1] = Vector2(1.0f, 0.0f);
         vertices[2] = Vector2(0.0f, 1.0f);
     }
 
-    Vector3 Triangle2D::Support(const Vector3& direction)
+    Vector3 Triangle::Support(const Vector3& direction)
     {
         Vector2 sub_space_direction;
         sub_space_direction.x = direction.x;
@@ -49,7 +49,7 @@ namespace Engine5
         return Vector3(result.x, result.y, 0.0f);
     }
 
-    bool Triangle2D::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
+    bool Triangle::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
         minimum_t = -1.0f;
         maximum_t = -1.0f;
@@ -197,12 +197,12 @@ namespace Engine5
         return true;
     }
 
-    Vector3 Triangle2D::GetNormal(const Vector3& local_point_on_primitive)
+    Vector3 Triangle::GetNormal(const Vector3& local_point_on_primitive)
     {
         return local_point_on_primitive;
     }
 
-    void Triangle2D::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Triangle::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = 3;
@@ -236,5 +236,118 @@ namespace Engine5
         {
             renderer->PushFaceIndices(index + 0, index + 1, index + 2);
         }
+    }
+
+    void Triangle::SetTriangle(const Vector2& v0, const Vector2& v1, const Vector2& v2)
+    {
+        vertices[0] = v0;
+        vertices[1] = v1;
+        vertices[2] = v2;
+    }
+
+    void Triangle::SetTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    {
+        Vector3    ab     = v1 - v0;
+        Vector3    ac     = v2 - v0;
+        Vector3    normal = ab.CrossProduct(ac).Unit();
+        Quaternion rotation(normal, Math::Vector3::Z_AXIS);
+        vertices[0] = rotation.Rotate(v0);
+        vertices[1] = rotation.Rotate(v1);
+        vertices[2] = rotation.Rotate(v2);
+        orientation = rotation.Inverse();
+    }
+
+    Vector3 Triangle::Vertex(size_t i) const
+    {
+        return orientation.Rotate(Vector3(vertices[i]));
+    }
+
+    Vector3 Triangle::Center() const
+    {
+        Vector2 result = (vertices[0] + vertices[1] + vertices[2]) / 3.0f;
+        return orientation.Rotate(Vector3(result));
+    }
+
+    Vector3 Triangle::ClosestPoint(const Vector3& point) const
+    {
+        Vector3 a = Vertex(0);
+        Vector3 b = Vertex(1);
+        Vector3 c = Vertex(2);
+
+        // Check if P in vertex region outside A
+        Vector3 ab = b - a;
+        Vector3 ac = c - a;
+        Vector3 ap = point - a;
+        Real    d1 = DotProduct(ab, ap);
+        Real    d2 = DotProduct(ac, ap);
+        if (d1 <= 0.0f && d2 <= 0.0f)
+        {
+            // barycentric coordinates (1,0,0)
+            return a;
+        }
+
+        // Check if P in vertex region outside B
+        Vector3 bp = point - b;
+        Real    d3 = DotProduct(ab, bp);
+        Real    d4 = DotProduct(ac, bp);
+        if (d3 >= 0.0f && d4 <= d3)
+        {
+            // barycentric coordinates (0,1,0)
+            return b;
+        }
+
+        // Check if P in edge region of AB, if so return projection of P onto AB
+        Real vc = d1 * d4 - d3 * d2;
+        if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
+        {
+            Real v = d1 / (d1 - d3);
+            // barycentric coordinates (1-v,v,0)
+            return a + v * ab;
+        }
+
+        // Check if P in vertex region outside C
+        Vector3 cp = point - c;
+        Real    d5 = DotProduct(ab, cp);
+        Real    d6 = DotProduct(ac, cp);
+        if (d6 >= 0.0f && d5 <= d6)
+        {
+            // barycentric coordinates (0,0,1)
+            return c;
+        }
+
+        // Check if P in edge region of AC, if so return projection of P onto AC
+        Real vb = d5 * d2 - d1 * d6;
+        if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
+        {
+            Real w = d2 / (d2 - d6);
+            // barycentric coordinates (1-w,0,w)
+            return a + w * ac;
+        }
+
+        // Check if P in edge region of BC, if so return projection of P onto BC
+        Real va = d3 * d6 - d5 * d4;
+        if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
+        {
+            Real w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+            // barycentric coordinates (0,1-w,w)
+            return b + w * (c - b);
+        }
+
+        // P inside face region. Compute Q through its barycentric coordinates (u,v,w)
+        Real denom = 1.0f / (va + vb + vc);
+        Real v     = vb * denom;
+        Real w     = vc * denom;
+        // = u*a + v*b + w*c, u = va * denom = 1.0f - v - w
+        return a + ab * v + ac * w;
+    }
+
+    Real Triangle::Distance(const Vector3& point) const
+    {
+        return sqrtf(DistanceSquared(point));
+    }
+
+    Real Triangle::DistanceSquared(const Vector3& point) const
+    {
+        return (point - ClosestPoint(point)).LengthSquared();
     }
 }

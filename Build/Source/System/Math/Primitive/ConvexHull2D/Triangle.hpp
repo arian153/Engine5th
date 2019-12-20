@@ -4,11 +4,11 @@
 
 namespace Engine5
 {
-    class Rectangle2D final : public Primitive
+    class Triangle final : public Primitive
     {
     public:
-        Rectangle2D();
-        ~Rectangle2D();
+        Triangle();
+        ~Triangle();
 
         void Initialize() override;
         void Shutdown() override;
@@ -26,7 +26,17 @@ namespace Engine5
         //Draw
         void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
 
+        void SetTriangle(const Vector2& v0, const Vector2& v1, const Vector2& v2);
+        void SetTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2);
+
+        Vector3 Vertex(size_t i) const;
+        Vector3 Center() const;
+        Vector3 ClosestPoint(const Vector3& point) const;
+
+        Real Distance(const Vector3& point) const;
+        Real DistanceSquared(const Vector3& point) const;
+
     public:
-        Vector2 vertices[4];
+        Vector2 vertices[3];
     };
 }

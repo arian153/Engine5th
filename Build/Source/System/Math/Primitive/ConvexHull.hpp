@@ -2,9 +2,9 @@
 
 #include "ConvexHull2D/Circle.hpp"
 #include "ConvexHull2D/Ellipse.hpp"
-#include "ConvexHull2D/Polygon2D.hpp"
-#include "ConvexHull2D/Rectangle2D.hpp"
-#include "ConvexHull2D/Triangle2D.hpp"
+#include "ConvexHull2D/Polygon.hpp"
+#include "ConvexHull2D/Rectangle.hpp"
+#include "ConvexHull2D/Triangle.hpp"
 
 #include "ConvexHull3D/Box.hpp"
 #include "ConvexHull3D/Capsule.hpp"

@@ -1,28 +1,28 @@
-#include "Rectangle2D.hpp"
+#include "Rectangle.hpp"
 #include "../../Utility/Utility.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
 #include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
-    Rectangle2D::Rectangle2D()
+    Rectangle::Rectangle()
     {
-        type = PrimitiveType::Rectangle2D;
+        type = PrimitiveType::Rectangle;
     }
 
-    Rectangle2D::~Rectangle2D()
-    {
-    }
-
-    void Rectangle2D::Initialize()
+    Rectangle::~Rectangle()
     {
     }
 
-    void Rectangle2D::Shutdown()
+    void Rectangle::Initialize()
     {
     }
 
-    void Rectangle2D::SetUnit()
+    void Rectangle::Shutdown()
+    {
+    }
+
+    void Rectangle::SetUnit()
     {
         Real w = 0.5f;
         Real h = 0.5f;
@@ -33,7 +33,7 @@ namespace Engine5
         vertices[3].Set(-w, -h);
     }
 
-    Vector3 Rectangle2D::Support(const Vector3& direction)
+    Vector3 Rectangle::Support(const Vector3& direction)
     {
         Vector2 sub_space_direction;
         sub_space_direction.x = direction.x;
@@ -53,7 +53,7 @@ namespace Engine5
         return Vector3(result.x, result.y, 0.0f);
     }
 
-    bool Rectangle2D::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
+    bool Rectangle::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
         //add a ray-collider intersection test code.
         minimum_t = -1.0f;
@@ -138,7 +138,7 @@ namespace Engine5
         return true;
     }
 
-    Vector3 Rectangle2D::GetNormal(const Vector3& local_point_on_primitive)
+    Vector3 Rectangle::GetNormal(const Vector3& local_point_on_primitive)
     {
         Vector2 rect_min = vertices[3];
         Vector2 rect_max = vertices[0];
@@ -161,7 +161,7 @@ namespace Engine5
         return Math::Vector3::Z_AXIS;
     }
 
-    void Rectangle2D::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Rectangle::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = 4;

@@ -5,11 +5,11 @@
 
 namespace Engine5
 {
-    class Polygon2D final : public Primitive
+    class Polygon final : public Primitive
     {
     public:
-        Polygon2D();
-        ~Polygon2D();
+        Polygon();
+        ~Polygon();
 
         void Initialize() override;
         void Shutdown() override;

@@ -23,9 +23,9 @@
 //Primitive 2D
 #include "Primitive/ConvexHull2D/Circle.hpp"
 #include "Primitive/ConvexHull2D/Ellipse.hpp"
-#include "Primitive/ConvexHull2D/Polygon2D.hpp"
-#include "Primitive/ConvexHull2D/Rectangle2D.hpp"
-#include "Primitive/ConvexHull2D/Triangle2D.hpp"
+#include "Primitive/ConvexHull2D/Polygon.hpp"
+#include "Primitive/ConvexHull2D/Rectangle.hpp"
+#include "Primitive/ConvexHull2D/Triangle.hpp"
 
 //Primitive 3D
 #include "Primitive/ConvexHull3D/Box.hpp"
