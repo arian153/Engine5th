@@ -11,8 +11,6 @@
 //Collider Primitive
 #include "ColliderPrimitive/ColliderIncludes.hpp"
 
-//Constraints
-#include "Constraints/ContactConstraints.hpp"
 
 //Dynamics
 #include "Dynamics/RigidBody.hpp"
@@ -25,6 +23,7 @@
 #include "Resolution/Resolution.hpp"
 #include "Resolution/Contact.hpp"
 #include "Resolution/Manifold.hpp"
+#include "Resolution/Constraints/ContactConstraints.hpp"
 
 //Utility
 #include "Utility/IntersectionUtility.hpp"

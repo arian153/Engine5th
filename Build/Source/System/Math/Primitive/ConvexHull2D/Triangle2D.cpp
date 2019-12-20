@@ -1,35 +1,35 @@
-#include "Triangle.hpp"
+#include "Triangle2D.hpp"
 #include "../../Utility/Utility.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
 #include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
-    Triangle::Triangle()
+    Triangle2D::Triangle2D()
     {
-        type = PrimitiveType::Triangle;
+        type = PrimitiveType::Triangle2D;
     }
 
-    Triangle::~Triangle()
-    {
-    }
-
-    void Triangle::Initialize()
+    Triangle2D::~Triangle2D()
     {
     }
 
-    void Triangle::Shutdown()
+    void Triangle2D::Initialize()
     {
     }
 
-    void Triangle::SetUnit()
+    void Triangle2D::Shutdown()
+    {
+    }
+
+    void Triangle2D::SetUnit()
     {
         vertices[0] = Vector2(0.0f, 0.0f);
         vertices[1] = Vector2(1.0f, 0.0f);
         vertices[2] = Vector2(0.0f, 1.0f);
     }
 
-    Vector3 Triangle::Support(const Vector3& direction)
+    Vector3 Triangle2D::Support(const Vector3& direction)
     {
         Vector2 sub_space_direction;
         sub_space_direction.x = direction.x;
@@ -49,7 +49,7 @@ namespace Engine5
         return Vector3(result.x, result.y, 0.0f);
     }
 
-    bool Triangle::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
+    bool Triangle2D::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
         minimum_t = -1.0f;
         maximum_t = -1.0f;
@@ -197,12 +197,12 @@ namespace Engine5
         return true;
     }
 
-    Vector3 Triangle::GetNormal(const Vector3& local_point_on_primitive)
+    Vector3 Triangle2D::GetNormal(const Vector3& local_point_on_primitive)
     {
         return local_point_on_primitive;
     }
 
-    void Triangle::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Triangle2D::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = 3;

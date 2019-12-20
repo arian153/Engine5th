@@ -13,9 +13,9 @@ namespace Engine5
     {
         Circle
       , Ellipse
-      , Polygon
-      , Rectangle
-      , Triangle
+      , Polygon2D
+      , Rectangle2D
+      , Triangle2D
       , Box
       , Capsule
       , Cone

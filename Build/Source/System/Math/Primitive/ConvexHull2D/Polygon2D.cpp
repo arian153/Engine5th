@@ -1,32 +1,32 @@
-#include "Polygon.hpp"
+#include "Polygon2D.hpp"
 #include "../../Utility/Utility.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
 #include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
-    Polygon::Polygon()
+    Polygon2D::Polygon2D()
     {
-        type = PrimitiveType::Polygon;
+        type = PrimitiveType::Polygon2D;
     }
 
-    Polygon::~Polygon()
-    {
-    }
-
-    void Polygon::Initialize()
+    Polygon2D::~Polygon2D()
     {
     }
 
-    void Polygon::Shutdown()
+    void Polygon2D::Initialize()
     {
     }
 
-    void Polygon::SetUnit()
+    void Polygon2D::Shutdown()
     {
     }
 
-    Vector3 Polygon::Support(const Vector3& direction)
+    void Polygon2D::SetUnit()
+    {
+    }
+
+    Vector3 Polygon2D::Support(const Vector3& direction)
     {
         Vector2 sub_space_direction;
         sub_space_direction.x = direction.x;
@@ -46,7 +46,7 @@ namespace Engine5
         return Vector3(result.x, result.y, 0.0f);
     }
 
-    bool Polygon::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
+    bool Polygon2D::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
         minimum_t = -1.0f;
         maximum_t = -1.0f;
@@ -133,7 +133,7 @@ namespace Engine5
     }
 
 
-    Vector3 Polygon::GetNormal(const Vector3& local_point_on_primitive)
+    Vector3 Polygon2D::GetNormal(const Vector3& local_point_on_primitive)
     {
         size_t  size = vertices->size();
         Vector2 v(local_point_on_primitive);
@@ -159,7 +159,7 @@ namespace Engine5
         return Math::Vector3::Z_AXIS;
     }
 
-    void Polygon::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Polygon2D::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
     {
     }
 }

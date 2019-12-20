@@ -4,11 +4,11 @@
 
 namespace Engine5
 {
-    class Triangle final : public Primitive
+    class Rectangle2D final : public Primitive
     {
     public:
-        Triangle();
-        ~Triangle();
+        Rectangle2D();
+        ~Rectangle2D();
 
         void Initialize() override;
         void Shutdown() override;
@@ -25,8 +25,8 @@ namespace Engine5
 
         //Draw
         void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
-        
+
     public:
-        Vector2 vertices[3];
+        Vector2 vertices[4];
     };
 }
