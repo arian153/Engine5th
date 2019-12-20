@@ -23,6 +23,12 @@ namespace Engine5
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
         m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
+        Triangle triangle;
+        triangle.SetTriangle(Vector3(1.0f, 2.0f, 3.0f), Vector3(3.0f, -4.0f, 5.0f), Vector3(1.0f, 1.0f, 1.0f));
+        auto v0 = triangle.Vertex(0);
+        auto v1 = triangle.Vertex(1);
+        auto v2 = triangle.Vertex(2);
+
     }
 
     void RenderSystem::Update(Real dt)
@@ -31,8 +37,10 @@ namespace Engine5
         {
             m_renderer->BeginScene(m_background_color);
             m_renderer->Update(dt);
-
             m_primitive_renderer->Update(dt);
+
+            
+
             //update scene
             for (auto& scene : m_scenes)
             {
