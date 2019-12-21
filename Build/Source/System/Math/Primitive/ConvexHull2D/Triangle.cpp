@@ -251,20 +251,20 @@ namespace Engine5
         Vector3    ac     = v2 - v0;
         Vector3    normal = ab.CrossProduct(ac).Unit();
         Quaternion rotation(normal, Math::Vector3::Z_AXIS);
-        auto       result = rotation.ToAxisRadian();
-        auto       degree = Utility::RadiansToDegrees(result.radian);
-        auto       p0     = rotation.Rotate(v0);
-        auto       p1     = rotation.Rotate(v1);
-        auto       p2     = rotation.Rotate(v2);
-        vertices[0]       = p0;
-        vertices[1]       = p1;
-        vertices[2]       = p2;
-        orientation       = rotation.Inverse();
+        auto       p0 = rotation.Rotate(v0);
+        if (Utility::IsZero(p0.z) == false)
+        {
+            z_factor = p0.z;
+        }
+        vertices[0] = p0;
+        vertices[1] = rotation.Rotate(v1);
+        vertices[2] = rotation.Rotate(v2);
+        orientation = rotation.Inverse();
     }
 
     Vector3 Triangle::Vertex(size_t i) const
     {
-        return orientation.Rotate(Vector3(vertices[i]));
+        return orientation.Rotate(Vector3(vertices[i].x, vertices[i].y, z_factor));
     }
 
     Vector3 Triangle::Center() const

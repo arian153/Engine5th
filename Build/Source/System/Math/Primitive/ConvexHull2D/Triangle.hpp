@@ -38,5 +38,6 @@ namespace Engine5
 
     public:
         Vector2 vertices[3];
+        Real z_factor = 0.0f;
     };
 }
