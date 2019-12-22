@@ -23,7 +23,6 @@ namespace Engine5
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
         m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
-        
     }
 
     void RenderSystem::Update(Real dt)
@@ -33,8 +32,6 @@ namespace Engine5
             m_renderer->BeginScene(m_background_color);
             m_renderer->Update(dt);
             m_primitive_renderer->Update(dt);
-
-            
 
             //update scene
             for (auto& scene : m_scenes)

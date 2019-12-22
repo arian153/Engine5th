@@ -210,7 +210,7 @@ namespace Engine5
         for (size_t i = 0; i < 3; ++i)
         {
             //local space to world space
-            Vector3 vertex(vertices[i]);
+            Vector3 vertex(vertices[i].x, vertices[i].y, z_factor);
             vertex = orientation.Rotate(vertex);
             vertex += position;
 
@@ -270,7 +270,7 @@ namespace Engine5
     Vector3 Triangle::Center() const
     {
         Vector2 result = (vertices[0] + vertices[1] + vertices[2]) / 3.0f;
-        return orientation.Rotate(Vector3(result));
+        return orientation.Rotate(Vector3(result.x, result.y, z_factor));
     }
 
     Vector3 Triangle::ClosestPoint(const Vector3& point) const
