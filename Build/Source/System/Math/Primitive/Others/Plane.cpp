@@ -4,10 +4,125 @@
 namespace Engine5
 {
     Plane::Plane()
+        : a(1.0f), b(0.0f), c(0.0f), d(0.0f)
     {
     }
 
     Plane::~Plane()
     {
+    }
+
+    Plane::Plane(Real a, Real b, Real c, Real d)
+    {
+        Set(a, b, c, d);
+    }
+
+    Plane::Plane(const Vector3& p0, const Vector3& p1, const Vector3& p2)
+    {
+        Set(p0, p1, p2);
+    }
+
+    Plane::Plane(const Plane& rhs)
+    {
+        this->a = rhs.a;
+        this->b = rhs.b;
+        this->c = rhs.c;
+        this->d = rhs.d;
+    }
+
+    Plane& Plane::operator=(const Plane& rhs)
+    {
+        if (this != &rhs)
+        {
+            this->a = rhs.a;
+            this->b = rhs.b;
+            this->c = rhs.c;
+            this->d = rhs.d;
+        }
+        return *this;
+    }
+
+    void Plane::Set(Real _a, Real _b, Real _c, Real _d)
+    {
+        Real length_squared = _a * _a + _b * _b + _c * _c;
+        if (Utility::IsZero(length_squared) == true)
+        {
+            this->a = 0.0f;
+            this->b = 0.0f;
+            this->c = 0.0f;
+            this->d = 0.0f;
+        }
+        else
+        {
+            Real inv_sqrt = Utility::InvSqrt(length_squared);
+            this->a       = _a * inv_sqrt;
+            this->b       = _b * inv_sqrt;
+            this->c       = _c * inv_sqrt;
+            this->d       = _d * inv_sqrt;
+        }
+    }
+
+    void Plane::Set(const Vector3& normal, Real offset)
+    {
+        if (Utility::IsZero(normal.LengthSquared()) == true)
+        {
+            this->a = 0.0f;
+            this->b = 0.0f;
+            this->c = 0.0f;
+            this->d = 0.0f;
+        }
+        else
+        {
+            Vector3 unit = normal.Unit();
+            this->a      = unit.x;
+            this->b      = unit.y;
+            this->c      = unit.z;
+            this->d      = offset / unit.Length();
+        }
+    }
+
+    void Plane::Set(const Vector3& p0, const Vector3& p1, const Vector3& p2)
+    {
+        Vector3 u = p1 - p0;
+        Vector3 v = p2 - p0;
+        Vector3 w = u.CrossProduct(v);
+        if (Utility::IsZero(w.LengthSquared()) == true)
+        {
+            this->a = 0.0f;
+            this->b = 0.0f;
+            this->c = 0.0f;
+            this->d = 0.0f;
+        }
+        else
+        {
+            Vector3 unit = w.Unit();
+            this->a      = unit.x;
+            this->b      = unit.y;
+            this->c      = unit.z;
+            this->d      = -unit.DotProduct(p0);
+        }
+    }
+
+    Real Plane::Distance(const Vector3& point) const
+    {
+        Vector3 normal(a, b, c);
+        return fabsf(normal.DotProduct(point) + d);
+    }
+
+    Real Plane::PlaneTest(const Vector3& point) const
+    {
+        Vector3 normal(a, b, c);
+        return normal.DotProduct(point) + d;
+    }
+
+    Vector3 Plane::ClosestPoint(const Vector3& point) const
+    {
+        Vector3 normal(a, b, c);
+        return point - PlaneTest(point) * normal;
+    }
+
+    Vector3 Plane::Normal() const
+    {
+        return Vector3(a, b, c).Unit();
     }
 }

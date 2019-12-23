@@ -60,8 +60,6 @@ namespace Engine5
         void AddToOutsideSet();
         void CalculateHorizon();
 
-        Vector3 ClosestPointTrianglePoint(const Vector3& p, const Vector3& a, const Vector3& b, const Vector3& c) const;
-
     private:
         std::vector<Vector3>*      m_vertices        = nullptr;
         std::vector<Vector3>*      m_scaled_vertices = nullptr;
