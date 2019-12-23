@@ -37,7 +37,8 @@ namespace Engine5
         Real DistanceSquared(const Vector3& point) const;
 
     public:
-
+        static Vector3 ClosestPoint(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2);
+        static Real DistanceSquared(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2);
 
     public:
         Vector2 vertices[3];

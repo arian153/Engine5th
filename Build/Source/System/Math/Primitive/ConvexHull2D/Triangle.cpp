@@ -355,4 +355,80 @@ namespace Engine5
     {
         return (point - ClosestPoint(point)).LengthSquared();
     }
+
+    Vector3 Triangle::ClosestPoint(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    {
+        Vector3 a(v0), b(v1), c(v2);
+        
+        // Check if P in vertex region outside A
+        Vector3 ab = b - a;
+        Vector3 ac = c - a;
+        Vector3 ap = point - a;
+        Real    d1 = DotProduct(ab, ap);
+        Real    d2 = DotProduct(ac, ap);
+        if (d1 <= 0.0f && d2 <= 0.0f)
+        {
+            // barycentric coordinates (1,0,0)
+            return a;
+        }
+
+        // Check if P in vertex region outside B
+        Vector3 bp = point - b;
+        Real    d3 = DotProduct(ab, bp);
+        Real    d4 = DotProduct(ac, bp);
+        if (d3 >= 0.0f && d4 <= d3)
+        {
+            // barycentric coordinates (0,1,0)
+            return b;
+        }
+
+        // Check if P in edge region of AB, if so return projection of P onto AB
+        Real vc = d1 * d4 - d3 * d2;
+        if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
+        {
+            Real v = d1 / (d1 - d3);
+            // barycentric coordinates (1-v,v,0)
+            return a + v * ab;
+        }
+
+        // Check if P in vertex region outside C
+        Vector3 cp = point - c;
+        Real    d5 = DotProduct(ab, cp);
+        Real    d6 = DotProduct(ac, cp);
+        if (d6 >= 0.0f && d5 <= d6)
+        {
+            // barycentric coordinates (0,0,1)
+            return c;
+        }
+
+        // Check if P in edge region of AC, if so return projection of P onto AC
+        Real vb = d5 * d2 - d1 * d6;
+        if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
+        {
+            Real w = d2 / (d2 - d6);
+            // barycentric coordinates (1-w,0,w)
+            return a + w * ac;
+        }
+
+        // Check if P in edge region of BC, if so return projection of P onto BC
+        Real va = d3 * d6 - d5 * d4;
+        if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
+        {
+            Real w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+            // barycentric coordinates (0,1-w,w)
+            return b + w * (c - b);
+        }
+
+        // P inside face region. Compute Q through its barycentric coordinates (u,v,w)
+        Real denom = 1.0f / (va + vb + vc);
+        Real v     = vb * denom;
+        Real w     = vc * denom;
+        // = u*a + v*b + w*c, u = va * denom = 1.0f - v - w
+        return a + ab * v + ac * w;
+    }
+
+    Real Triangle::DistanceSquared(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    {
+        return (point - ClosestPoint(point, v0, v1, v2)).LengthSquared();
+    }
 }

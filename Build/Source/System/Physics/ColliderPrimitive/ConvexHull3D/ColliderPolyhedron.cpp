@@ -313,11 +313,66 @@ namespace Engine5
 
     bool ColliderPolyhedron::SetPolyhedron(const std::vector<Vector3>& vertices)
     {
+        //0. Early quit when not enough vertices.
         size_t size = vertices.size();
         if (size < 4)
         {
             return false;
         }
+
+        //1. Allocate a Polyhedron which will be our return value.
+        if (m_vertices == nullptr)
+        {
+            m_vertices = new std::vector<Vector3>();
+        }
+
+        //2. Find a maximal simplex of the current dimension.In our case, 
+        //find 4 points which define maximal tetrahedron, and create the tetrahedron which will be our seed partial answer.
+        //CREATE_SIMPLEX(Polyhedron, listVertices).
+        //If this returns a dimension lower than 3, report the degeneracy and quit.
+        size_t dimension = CreateSimplex(vertices);
+        if (dimension < 3)
+        {
+            return false;
+        }
+
+        //3. Divide the points of the cloud into the outside sets of the four faces of the tetrahedron.
+        //This is done by calling ADD_TO_OUTSIDE_SET(face, listVertices) on each of the 4 faces in turn.
+        //Points that could be put in multiple sets will be randomly placed in one of them, and it does not matter which one.
+        //Any points which are inside or on all of the planes do not contribute to the convex hull.
+        //These points are removed from the rest of the calculation.
+
+
+        
+        //4. While(There exists currFace = a face on the current convex hull which has a non - empty outside set of vertices)
+            //1. Find the point in currFace's outside set which is farthest away from the plane of the currFace. 
+            //This is the eyePoint.
+            
+            //2. Compute the horizon of the current polyhedron as seen from this eyePoint.
+            //CALCULATE_HORIZON(eyePoint, NULL, currFace, listHorizonEdges, listUnclaimedVertices).
+            //This will mark all of the visible faces as not on the convex hull and place all of their outside set points on the listUnclaimedVertices.
+            //It is creates the listHorizonEdges which is a counterclockwise ordered list of edges around the horizon contour of the polyhedron as viewed from the eyePoint.
+            
+            //3. Construct a cone from the eye point to all of the edges of the horizon.
+            //Before a triangle of this cone is created and added to the polyhedron a test to see if it coplanar to the face on the other side of the horizon edge is applied.
+            //If the faces are coplanar then they are merged together and that horizon edge is marked as not on the convex hull.Then a similar check must also be applied to edges which cross the horizon to see if they are collinear.
+            //If so then the vertex on the horizon which is on this line must be marked as not on the horizon.
+            
+            //4. Divide the points of the listUnclaimedVertices into the outside sets of the new cone faces and the faces which were merged with what would be new cone faces.
+            //This is done by calling ADD_TO_OUTSIDE_SET(face, listUnclaimedVertices) on each of these faces in turn.
+            //Points that could be put in multiple sets will be randomly placed in one of them, and it does not matter which one.
+            //Any points which are inside or on all of the planes do not contribute to the convex hull.
+            //These points are marked as not on the convex hull.
+
+            //5. Remove all faces, edges, and vertices which have been marked as not on the convex hull.
+            //These faces, edges, and vertices have all been enclosed by the new cone emanating from the eyePoint.
+
+            //6. Continue the loop
+        
+        //5. When all the faces with outside points have been processed we are done.
+        //The polyhedron should a clean convex hull where all coplanar faces have been merged.
+        //All collinear edges have been merged.
+        //And all coincident vertices have had their DualFace pointers merged.
         return true;
     }
 
@@ -515,13 +570,11 @@ namespace Engine5
         }
         
         //4. Find the point which has the largest absolute distance from the plane defined by the first three points.If this maximum distance is zero, then our point cloud is 2D, so report the the degeneracy.
-        Triangle triangle;
-        triangle.SetTriangle(min_vertex, max_vertex, max_triangle);
         max_distance = 0.0f;
         Vector3 max_tetrahedron;
         for (auto& vertex : vertices)
         {
-            Real distance = triangle.DistanceSquared(vertex);
+            Real distance = Triangle::DistanceSquared(vertex, min_vertex, max_vertex, max_triangle);
             if (distance > max_distance)
             {
                 max_distance    = distance;
@@ -553,16 +606,35 @@ namespace Engine5
         }
         
         //6. Return the fact that we created a non - degenerate tetrahedron of dimension 3.
+        m_faces->emplace_back(0, 1, 2);
+        m_faces->emplace_back(1, 2, 3);
+        m_faces->emplace_back(2, 3, 0);
+        m_faces->emplace_back(3, 0, 1);
         return 3;
     }
 
     void ColliderPolyhedron::AddToOutsideSet()
     {
-
+        //For each vertex in the listVertices
+        //distance = Distance from the plane of the face to the vertex
+        //If the vertex is in the plane of the face(i.e.distance == 0)
+        //Then check to see if the vertex is coincident with any vertices of the face, and if so merge it into that face vertex.
+        //Else If distance > 0
+        //Then claim the vertex by removing it from this list and adding it the face's set of outside vertices
+        //Continue the loop
     }
 
     void ColliderPolyhedron::CalculateHorizon()
     {
-
+        //If the currFace is not on the convex hull
+        //Mark the crossedEdge as not on the convex hull and return.
+        //If the currFace is visible from the eyePoint
+        //Mark the currFace as not on the convex hull.
+        //Remove all vertices from the currFace's outside set, and add them to the listUnclaimedVertices. c. 
+        //If the crossedEdge != NULL (only for the first face) then mark the crossedEdge as not on the convex hull d. 
+        //Cross each of the edges of currFace which are still on the convex hull 
+        //in counterclockwise order starting from the edge after the crossedEdge 
+        //(in the case of the first face, pick any edge to start with). 
+        //For each currEdge recurse with the call.
     }
 }
