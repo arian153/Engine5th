@@ -342,6 +342,10 @@ namespace Engine5
         //Any points which are inside or on all of the planes do not contribute to the convex hull.
         //These points are removed from the rest of the calculation.
 
+        for(auto face : *m_faces)
+        {
+            AddToOutsideSet(face, vertices);
+        }
 
         
         //4. While(There exists currFace = a face on the current convex hull which has a non - empty outside set of vertices)
@@ -613,17 +617,40 @@ namespace Engine5
         return 3;
     }
 
-    void ColliderPolyhedron::AddToOutsideSet()
+    void ColliderPolyhedron::AddToOutsideSet(ColliderFace face, const std::vector<Vector3>& vertices)
     {
-        //For each vertex in the listVertices
-        //distance = Distance from the plane of the face to the vertex
-        //If the vertex is in the plane of the face(i.e.distance == 0)
-        //Then check to see if the vertex is coincident with any vertices of the face, and if so merge it into that face vertex.
-        //Else If distance > 0
-        //Then claim the vertex by removing it from this list and adding it the face's set of outside vertices
-        //Continue the loop
+        Vector3 face_a(m_vertices->at(face.a));
+        Vector3 face_b(m_vertices->at(face.b));
+        Vector3 face_c(m_vertices->at(face.c));
+
+        
+        Plane plane(face_a, face_b, face_c);
+
+        //1. For each vertex in the listVertices
+        for(auto& vertex : vertices)
+        {
+            //1. distance = Distance from the plane of the face to the vertex
+            Real distance = plane.Distance(vertex);
+                //2. If the vertex is in the plane of the face(i.e.distance == 0)
+            if(Utility::IsZero(distance))
+            {
+                //3. Then check to see if the vertex is coincident with any vertices of the face, and if so merge it into that face vertex.
+                if(Triangle::IsContainPoint(vertex, face_a, face_b, face_c))
+                {
+                    //merge
+                }
+            }
+            //4. Else If distance > 0
+            else if(distance > 0.0f)
+            {
+                //5. Then claim the vertex by removing it from this list and adding it the face's set of outside vertices
+
+            }
+            //6. Continue the loop
+        }
     }
 
+   
     void ColliderPolyhedron::CalculateHorizon()
     {
         //If the currFace is not on the convex hull

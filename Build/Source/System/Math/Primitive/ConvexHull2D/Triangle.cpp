@@ -431,4 +431,41 @@ namespace Engine5
     {
         return (point - ClosestPoint(point, v0, v1, v2)).LengthSquared();
     }
+
+    Real Triangle::Distance(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    {
+        return sqrtf(DistanceSquared(point, v0, v1, v2));
+    }
+
+    bool Triangle::IsContainPoint(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    {
+        Vector3 edge01 = v1 - v0;
+        Vector3 edge12 = v2 - v1;
+        Vector3 normal = edge01.CrossProduct(edge12);
+        Vector3 w_test = edge01.CrossProduct(point - v0);
+        if (w_test.DotProduct(normal) < 0.0f)
+        {
+            return false;
+        }
+        w_test = edge12.CrossProduct(point - v1);
+        if (w_test.DotProduct(normal) < 0.0f)
+        {
+            return false;
+        }
+        Vector3 edge3 = v0 - v2;
+        w_test        = edge3.CrossProduct(point - v2);
+        if (w_test.DotProduct(normal) < 0.0f)
+        {
+            return false;
+        }
+        normal.SetNormalize();
+        return true;
+    }
+
+    Vector3 Triangle::Normal(const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    {
+        Vector3 edge01 = v1 - v0;
+        Vector3 edge02 = v2 - v0;
+        return edge01.CrossProduct(edge02);
+    }
 }

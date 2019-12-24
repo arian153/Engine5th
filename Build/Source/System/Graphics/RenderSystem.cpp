@@ -23,6 +23,7 @@ namespace Engine5
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
         m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
+        //auto result = Triangle::DistanceSquared(Vector3(2, 0.5f, 0), Vector3(0, 1, 0), Vector3(-1, 0, 0), Vector3(1, 0, 0));
     }
 
     void RenderSystem::Update(Real dt)

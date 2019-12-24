@@ -57,7 +57,7 @@ namespace Engine5
         void CalculateMinMaxBound();
 
         size_t CreateSimplex(const std::vector<Vector3>& vertices) const;
-        void AddToOutsideSet();
+        void AddToOutsideSet(ColliderFace face, const std::vector<Vector3>& vertices);
         void CalculateHorizon();
 
     private:

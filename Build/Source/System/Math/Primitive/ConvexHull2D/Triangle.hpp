@@ -39,6 +39,9 @@ namespace Engine5
     public:
         static Vector3 ClosestPoint(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2);
         static Real DistanceSquared(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2);
+        static Real Distance(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2);
+        static bool IsContainPoint(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2);
+        static Vector3 Normal(const Vector3& v0, const Vector3& v1, const Vector3& v2);
 
     public:
         Vector2 vertices[3];
