@@ -1,6 +1,7 @@
 #include "ColliderPolyhedron.hpp"
 #include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../BroadPhase/BoundingAABB.hpp"
+#include <list>
 
 namespace Engine5
 {
@@ -311,10 +312,10 @@ namespace Engine5
         return m_vertices->size();
     }
 
-    bool ColliderPolyhedron::SetPolyhedron(const std::vector<Vector3>& vertices)
+    bool ColliderPolyhedron::SetPolyhedron(const std::vector<Vector3>& input_vertices)
     {
         //0. Early quit when not enough vertices.
-        size_t size = vertices.size();
+        size_t size = input_vertices.size();
         if (size < 4)
         {
             return false;
@@ -324,7 +325,16 @@ namespace Engine5
         if (m_vertices == nullptr)
         {
             m_vertices = new std::vector<Vector3>();
+            m_vertices->reserve(size);
         }
+        else
+        {
+            m_vertices->clear();
+            m_vertices->reserve(size);
+        }
+
+        std::vector<Vector3> vertices = input_vertices;
+
 
         //2. Find a maximal simplex of the current dimension.In our case, 
         //find 4 points which define maximal tetrahedron, and create the tetrahedron which will be our seed partial answer.
@@ -342,9 +352,13 @@ namespace Engine5
         //Any points which are inside or on all of the planes do not contribute to the convex hull.
         //These points are removed from the rest of the calculation.
 
+        std::list<OutsideSetFace> outside_set_list;
+
         for(auto face : *m_faces)
         {
-            AddToOutsideSet(face, vertices);
+            OutsideSetFace outside_set(face);
+            AddToOutsideSet(vertices, outside_set);
+            outside_set_list.push_back(outside_set);
         }
 
         
@@ -617,36 +631,47 @@ namespace Engine5
         return 3;
     }
 
-    void ColliderPolyhedron::AddToOutsideSet(ColliderFace face, const std::vector<Vector3>& vertices)
+    void ColliderPolyhedron::AddToOutsideSet(std::vector<Vector3>& vertices, OutsideSetFace& result) const
     {
-        Vector3 face_a(m_vertices->at(face.a));
-        Vector3 face_b(m_vertices->at(face.b));
-        Vector3 face_c(m_vertices->at(face.c));
+        Vector3 face_a(m_vertices->at(result.a));
+        Vector3 face_b(m_vertices->at(result.b));
+        Vector3 face_c(m_vertices->at(result.c));
 
         
         Plane plane(face_a, face_b, face_c);
+        auto begin = vertices.begin();
+        auto end = vertices.end();
+
+        std::list<std::vector<Vector3>::iterator> erase_list;
 
         //1. For each vertex in the listVertices
-        for(auto& vertex : vertices)
+        for(auto it = begin; it != end; ++it)
         {
             //1. distance = Distance from the plane of the face to the vertex
-            Real distance = plane.Distance(vertex);
+            Real distance = plane.Distance(*it);
                 //2. If the vertex is in the plane of the face(i.e.distance == 0)
             if(Utility::IsZero(distance))
             {
                 //3. Then check to see if the vertex is coincident with any vertices of the face, and if so merge it into that face vertex.
-                if(Triangle::IsContainPoint(vertex, face_a, face_b, face_c))
+                if(Triangle::IsContainPoint(*it, face_a, face_b, face_c))
                 {
                     //merge
+                    erase_list.push_back(it);
                 }
             }
             //4. Else If distance > 0
             else if(distance > 0.0f)
             {
                 //5. Then claim the vertex by removing it from this list and adding it the face's set of outside vertices
-
+                result.outside_vertices.push_back(*it);
+                erase_list.push_back(it);
             }
             //6. Continue the loop
+        }
+
+        for(auto& it : erase_list)
+        {
+            vertices.erase(it);
         }
     }
 

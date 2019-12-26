@@ -2,6 +2,7 @@
 #include "../ColliderPrimitive.hpp"
 #include "../ColliderEdge.hpp"
 #include "../ColliderFace.hpp"
+#include "../OutsideSetFace.hpp"
 
 namespace Engine5
 {
@@ -57,7 +58,7 @@ namespace Engine5
         void CalculateMinMaxBound();
 
         size_t CreateSimplex(const std::vector<Vector3>& vertices) const;
-        void AddToOutsideSet(ColliderFace face, const std::vector<Vector3>& vertices);
+        void AddToOutsideSet(std::vector<Vector3>& vertices, OutsideSetFace& result) const;
         void CalculateHorizon();
 
     private:

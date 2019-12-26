@@ -14,6 +14,5 @@ namespace Engine5
         size_t a = Core::U64_MAX;
         size_t b = Core::U64_MAX;
         size_t c = Core::U64_MAX;
-
     };
 }
