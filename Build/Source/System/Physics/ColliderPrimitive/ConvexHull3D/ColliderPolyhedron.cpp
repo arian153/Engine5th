@@ -332,7 +332,6 @@ namespace Engine5
             m_vertices->clear();
             m_vertices->reserve(size);
         }
-
         std::vector<Vector3> vertices = input_vertices;
 
 
@@ -351,31 +350,30 @@ namespace Engine5
         //Points that could be put in multiple sets will be randomly placed in one of them, and it does not matter which one.
         //Any points which are inside or on all of the planes do not contribute to the convex hull.
         //These points are removed from the rest of the calculation.
-
         std::list<OutsideSetFace> outside_set_list;
-
-        for(auto face : *m_faces)
+        for (auto face : *m_faces)
         {
             OutsideSetFace outside_set(face);
             AddToOutsideSet(vertices, outside_set);
             outside_set_list.push_back(outside_set);
         }
 
-        
         //4. While(There exists currFace = a face on the current convex hull which has a non - empty outside set of vertices)
+        while (!outside_set_list.empty())
+        {
             //1. Find the point in currFace's outside set which is farthest away from the plane of the currFace. 
             //This is the eyePoint.
-            
+
             //2. Compute the horizon of the current polyhedron as seen from this eyePoint.
             //CALCULATE_HORIZON(eyePoint, NULL, currFace, listHorizonEdges, listUnclaimedVertices).
             //This will mark all of the visible faces as not on the convex hull and place all of their outside set points on the listUnclaimedVertices.
             //It is creates the listHorizonEdges which is a counterclockwise ordered list of edges around the horizon contour of the polyhedron as viewed from the eyePoint.
-            
+
             //3. Construct a cone from the eye point to all of the edges of the horizon.
             //Before a triangle of this cone is created and added to the polyhedron a test to see if it coplanar to the face on the other side of the horizon edge is applied.
             //If the faces are coplanar then they are merged together and that horizon edge is marked as not on the convex hull.Then a similar check must also be applied to edges which cross the horizon to see if they are collinear.
             //If so then the vertex on the horizon which is on this line must be marked as not on the horizon.
-            
+
             //4. Divide the points of the listUnclaimedVertices into the outside sets of the new cone faces and the faces which were merged with what would be new cone faces.
             //This is done by calling ADD_TO_OUTSIDE_SET(face, listUnclaimedVertices) on each of these faces in turn.
             //Points that could be put in multiple sets will be randomly placed in one of them, and it does not matter which one.
@@ -384,8 +382,10 @@ namespace Engine5
 
             //5. Remove all faces, edges, and vertices which have been marked as not on the convex hull.
             //These faces, edges, and vertices have all been enclosed by the new cone emanating from the eyePoint.
-
             //6. Continue the loop
+        }
+        
+            
         
         //5. When all the faces with outside points have been processed we are done.
         //The polyhedron should a clean convex hull where all coplanar faces have been merged.
@@ -633,34 +633,31 @@ namespace Engine5
 
     void ColliderPolyhedron::AddToOutsideSet(std::vector<Vector3>& vertices, OutsideSetFace& result) const
     {
-        Vector3 face_a(m_vertices->at(result.a));
-        Vector3 face_b(m_vertices->at(result.b));
-        Vector3 face_c(m_vertices->at(result.c));
-
-        
-        Plane plane(face_a, face_b, face_c);
-        auto begin = vertices.begin();
-        auto end = vertices.end();
-
+        Vector3                                   face_a(m_vertices->at(result.a));
+        Vector3                                   face_b(m_vertices->at(result.b));
+        Vector3                                   face_c(m_vertices->at(result.c));
+        Plane                                     plane(face_a, face_b, face_c);
+        auto                                      begin = vertices.begin();
+        auto                                      end   = vertices.end();
         std::list<std::vector<Vector3>::iterator> erase_list;
 
         //1. For each vertex in the listVertices
-        for(auto it = begin; it != end; ++it)
+        for (auto it = begin; it != end; ++it)
         {
             //1. distance = Distance from the plane of the face to the vertex
             Real distance = plane.Distance(*it);
-                //2. If the vertex is in the plane of the face(i.e.distance == 0)
-            if(Utility::IsZero(distance))
+            //2. If the vertex is in the plane of the face(i.e.distance == 0)
+            if (Utility::IsZero(distance))
             {
                 //3. Then check to see if the vertex is coincident with any vertices of the face, and if so merge it into that face vertex.
-                if(Triangle::IsContainPoint(*it, face_a, face_b, face_c))
+                if (Triangle::IsContainPoint(*it, face_a, face_b, face_c))
                 {
                     //merge
                     erase_list.push_back(it);
                 }
             }
-            //4. Else If distance > 0
-            else if(distance > 0.0f)
+                //4. Else If distance > 0
+            else if (distance > 0.0f)
             {
                 //5. Then claim the vertex by removing it from this list and adding it the face's set of outside vertices
                 result.outside_vertices.push_back(*it);
@@ -668,14 +665,13 @@ namespace Engine5
             }
             //6. Continue the loop
         }
-
-        for(auto& it : erase_list)
+        for (auto& it : erase_list)
         {
             vertices.erase(it);
         }
     }
 
-   
+
     void ColliderPolyhedron::CalculateHorizon()
     {
         //If the currFace is not on the convex hull
