@@ -30,14 +30,13 @@ namespace Engine5
         return false;
     }
 
-    Vector3 ColliderPlane::GetNormal(const Vector3& local_point_on_collider)
+    Vector3 ColliderPlane::GetNormal(const Vector3& local_point_on_collider) const
     {
-        return local_point_on_collider;
+        return m_normal;
     }
 
     void ColliderPlane::SetMassData(Real density)
     {
-
     }
 
     Real ColliderPlane::GetVolume()
@@ -45,27 +44,13 @@ namespace Engine5
         return 0.0f;
     }
 
-    void ColliderPlane::SetScaleData(const Vector3& scale)
-    {
-        m_scale_factor = scale.Length();
-    }
 
-    void ColliderPlane::SetUnit()
+    void ColliderPlane::UpdateBoundingVolume() const
     {
-        UpdatePrimitive();
-    }
-
-    void ColliderPlane::UpdateBoundingVolume()
-    {
-        //todo temporary code
         m_bounding_volume->Set(Math::Vector3::ORIGIN, Math::Vector3::ORIGIN);
     }
 
     void ColliderPlane::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
-    {
-    }
-
-    void ColliderPlane::Clone(ColliderPrimitive* cloned)
     {
     }
 }

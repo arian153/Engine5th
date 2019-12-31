@@ -3,37 +3,34 @@
 
 namespace Engine5
 {
-    class ColliderPlane final : public ColliderPrimitive
+    class ColliderPlane
     {
     public:
         ColliderPlane();
-        ~ColliderPlane() override;
-        ColliderPlane(const ColliderPlane& rhs) = delete;
+        ~ColliderPlane();
+        ColliderPlane(const ColliderPlane& rhs)            = delete;
         ColliderPlane& operator=(const ColliderPlane& rhs) = delete;
 
-        void Initialize() override;
-        void Shutdown() override;
+        void Initialize();
+        void Shutdown();
 
         //minkowski support - gjk, epa
-        Vector3 Support(const Vector3& direction) override;
+        Vector3 Support(const Vector3& direction);
 
         //ray - collider intersection
-        bool    TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const override;
-        Vector3 GetNormal(const Vector3& local_point_on_collider) override;
+        bool    TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const;
+        Vector3 GetNormal(const Vector3& local_point_on_collider) const;
 
         //physics
-        void SetMassData(Real density) override;
-        Real GetVolume() override;
+        void SetMassData(Real density);
+        Real GetVolume();
 
         //collider 
-        void SetScaleData(const Vector3& scale) override;
-        void SetUnit() override;
-        void UpdateBoundingVolume() override;
-        void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
-
-    protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void UpdateBoundingVolume() const;
+        void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const;
 
     private:
+        Vector3 m_normal;
+        BoundingAABB* m_bounding_volume = nullptr;
     };
 }
