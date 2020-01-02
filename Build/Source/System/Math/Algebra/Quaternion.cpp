@@ -309,6 +309,11 @@ namespace Engine5
         return false;
     }
 
+    bool Quaternion::IsLostAxis() const
+    {
+        return Utility::IsZero(1.0f - r);
+    }
+
     Vector3 Quaternion::ToVector() const
     {
         return Vector3(i, j, k);

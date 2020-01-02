@@ -33,8 +33,7 @@ namespace Engine5
 
     private:
         void UpdateChildrenPositionRecursive(const Vector3& position);
-        void UpdateChildrenOrientationRecursive(const Vector3& orientation);
-        void UpdateChildrenScaleRecursive(const Vector3& scale, const Vector3& position);
+        void UpdateChildrenOrientationRecursive(const Quaternion& orientation);
 
     private:
         Transform  m_transform;

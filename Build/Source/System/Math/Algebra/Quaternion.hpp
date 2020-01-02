@@ -55,6 +55,7 @@ namespace Engine5
         bool IsIdentity() const;
         bool IsEqual(const Quaternion& rhs) const;
         bool IsNotEqual(const Quaternion& rhs) const;
+        bool IsLostAxis() const;
 
         Vector3    ToVector() const;
         Matrix33   ToMatrix() const;
@@ -72,7 +73,7 @@ namespace Engine5
         void       AddRotation(const Quaternion& quaternion);
         void       AddRadian(Real radian);
         void       ChangeAxis(const Vector3& axis);
-
+        
     public:
         friend Quaternion Conjugate(const Quaternion& quaternion);
         friend Quaternion Inverse(const Quaternion& quaternion);
