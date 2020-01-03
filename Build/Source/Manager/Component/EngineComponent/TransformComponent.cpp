@@ -151,6 +151,31 @@ namespace Engine5
         }
     }
 
+    Vector3 TransformComponent::GetPosition() const
+    {
+        return m_transform.position;
+    }
+
+    Vector3 TransformComponent::GetScale() const
+    {
+        return m_transform.scale;
+    }
+
+    Quaternion TransformComponent::GetOrientation() const
+    {
+        return m_transform.orientation;
+    }
+
+    Matrix33 TransformComponent::GetRotationMatrix() const
+    {
+        return m_transform.orientation.ToMatrix();
+    }
+
+    Matrix44 TransformComponent::GetTransformMatrix() const
+    {
+        return m_transform.LocalToWorldMatrix();
+    }
+
     void TransformComponent::UpdateChildrenPositionRecursive(const Vector3& position)
     {
 

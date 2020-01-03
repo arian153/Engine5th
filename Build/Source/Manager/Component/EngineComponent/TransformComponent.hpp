@@ -31,6 +31,13 @@ namespace Engine5
         void AddRotationA(Real radian);
         void AddScale(const Vector3& delta_scale, Anchor3D anchor = Anchor3D::CCC);
 
+        //Getter
+        Vector3 GetPosition() const;
+        Vector3 GetScale() const;
+        Quaternion GetOrientation() const;
+        Matrix33 GetRotationMatrix() const;
+        Matrix44 GetTransformMatrix() const;
+
     private:
         void UpdateChildrenPositionRecursive(const Vector3& position);
         void UpdateChildrenOrientationRecursive(const Quaternion& orientation);
