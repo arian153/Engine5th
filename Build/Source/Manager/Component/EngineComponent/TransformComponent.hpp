@@ -10,6 +10,10 @@ namespace Engine5
         TransformComponent();
         ~TransformComponent();
 
+        void Initialize() override;
+        void Update(Real dt) override;
+        void Shutdown() override;
+
         //Setter
         void SetPosition(const Vector3& position);
         void SetPosition(Real x, Real y, Real z);

@@ -9,6 +9,10 @@ namespace Engine5
         ColliderComponent();
         ~ColliderComponent();
 
+        void Initialize() override;
+        void Update(Real dt) override;
+        void Shutdown() override;
+
     private:
 
     };

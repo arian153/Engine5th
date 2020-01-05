@@ -1,4 +1,5 @@
 #include "TransformComponent.hpp"
+#include "../../../System/Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -7,6 +8,19 @@ namespace Engine5
     }
 
     TransformComponent::~TransformComponent()
+    {
+    }
+
+    void TransformComponent::Initialize()
+    {
+    }
+
+    void TransformComponent::Update(Real dt)
+    {
+        E5_UNUSED_PARAM(dt);
+    }
+
+    void TransformComponent::Shutdown()
     {
     }
 

@@ -9,6 +9,9 @@ namespace Engine5
         CameraComponent();
         ~CameraComponent();
 
+        void Initialize() override;
+        void Update(Real dt) override;
+        void Shutdown() override;
     private:
 
     };
