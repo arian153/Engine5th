@@ -111,14 +111,7 @@ namespace Engine5
 
     Matrix33 ColliderPrimitive::WorldInertia() const
     {
-        auto     rotated = m_orientation * m_local_inertia_tensor * (m_orientation.Inverse());
-        Vector3  r       = m_position;
-        Real     r_dot_r = r.DotProduct(r);
-        Matrix33 r_out_r = r.OuterProduct(r);
-
-        //using Parallel Axis Theorem
-        auto translated = m_mass * (r_dot_r * Matrix33::Identity() - r_out_r);
-        return rotated + translated;
+        return MassData::TranslateInertia(MassData::RotateInertia(m_local_inertia_tensor, m_orientation), m_mass, m_position);
     }
 
     Vector3 ColliderPrimitive::WorldCentroid() const
@@ -179,6 +172,7 @@ namespace Engine5
         SetMassData(density);
         UpdateMassData();
     }
+
 
     void ColliderPrimitive::UpdatePrimitive()
     {

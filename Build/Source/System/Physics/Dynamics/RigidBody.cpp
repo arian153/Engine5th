@@ -209,7 +209,7 @@ namespace Engine5
     {
         m_mass_data.local_inertia_tensor         = inertia;
         m_mass_data.local_inverse_inertia_tensor = inertia.Inverse();
-        m_global_inverse_inertia_tensor          = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
+        m_global_inverse_inertia_tensor          = m_orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
     }
 
     void RigidBody::SetMotionMode(MotionMode motion_mode)

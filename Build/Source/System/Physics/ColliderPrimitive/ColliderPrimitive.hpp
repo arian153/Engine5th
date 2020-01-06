@@ -40,7 +40,8 @@ namespace Engine5
         Vector3 ConvertBodyWorldPoint(const Vector3& local_point) const;
         void    SetScale(const Vector3& scale);
         void    SetMass(Real density);
-    public:
+
+    public: //virtual methods
         virtual void Initialize() = 0;
         virtual void Shutdown() = 0;
 

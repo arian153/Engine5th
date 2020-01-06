@@ -208,7 +208,7 @@ namespace Engine5
             m_mass_data.local_inertia_tensor.SetZero();
             for (auto& collider_data : *m_colliders)
             {
-                Vector3  r       = m_mass_data.local_centroid - collider_data->m_centroid;
+                Vector3  r       = m_mass_data.local_centroid - collider_data->WorldCentroid();
                 Real     r_dot_r = r.DotProduct(r);
                 Matrix33 r_out_r = r.OuterProduct(r);
 
