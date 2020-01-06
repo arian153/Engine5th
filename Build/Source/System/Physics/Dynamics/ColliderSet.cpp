@@ -187,7 +187,7 @@ namespace Engine5
                 m_mass_data.mass += collider_data->m_mass;
 
                 // accumulate weighted contribution
-                m_mass_data.local_centroid += collider_data->m_mass * collider_data->m_centroid;
+                m_mass_data.local_centroid += collider_data->m_mass * collider_data->WorldCentroid();
             }
 
             // compute inverse mass
@@ -213,7 +213,7 @@ namespace Engine5
                 Matrix33 r_out_r = r.OuterProduct(r);
 
                 // accumulate local inertia tensor contribution, using Parallel Axis Theorem
-                m_mass_data.local_inertia_tensor += collider_data->m_local_inertia_tensor + collider_data->m_mass * (r_dot_r * Matrix33::Identity() - r_out_r);
+                m_mass_data.local_inertia_tensor += collider_data->WorldInertia() + collider_data->m_mass * (r_dot_r * Matrix33::Identity() - r_out_r);
             }
 
             // compute inverse inertia tensor

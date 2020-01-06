@@ -109,6 +109,23 @@ namespace Engine5
         return m_orientation.Inverse().Rotate(world_vector);
     }
 
+    Matrix33 ColliderPrimitive::WorldInertia() const
+    {
+        auto     rotated = m_orientation * m_local_inertia_tensor * (m_orientation.Inverse());
+        Vector3  r       = m_position;
+        Real     r_dot_r = r.DotProduct(r);
+        Matrix33 r_out_r = r.OuterProduct(r);
+
+        //using Parallel Axis Theorem
+        auto translated = m_mass * (r_dot_r * Matrix33::Identity() - r_out_r);
+        return rotated + translated;
+    }
+
+    Vector3 ColliderPrimitive::WorldCentroid() const
+    {
+        return m_orientation.Rotate(m_centroid) + m_position;
+    }
+
     Vector3 ColliderPrimitive::GetBodyPosition() const
     {
         if (m_rigid_body != nullptr)

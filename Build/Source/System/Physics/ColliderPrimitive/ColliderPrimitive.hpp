@@ -28,6 +28,9 @@ namespace Engine5
         Vector3 LocalToWorldVector(const Vector3& local_vector) const;
         Vector3 WorldToLocalVector(const Vector3& world_vector) const;
 
+        Matrix33 WorldInertia() const;
+        Vector3 WorldCentroid() const;
+
         Vector3       GetBodyPosition() const;
         Quaternion    GetBodyOrientation() const;
         RigidBody*    GetRigidBody() const;

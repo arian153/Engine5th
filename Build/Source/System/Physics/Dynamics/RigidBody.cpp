@@ -69,7 +69,7 @@ namespace Engine5
 
     void RigidBody::UpdateGlobalInertiaTensor()
     {
-        m_global_inverse_inertia_tensor = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
+        m_global_inverse_inertia_tensor = m_orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
     }
 
     void RigidBody::UpdateOrientation()
@@ -181,8 +181,8 @@ namespace Engine5
     void RigidBody::SetInertia(const Matrix33& inertia_tensor)
     {
         m_global_inverse_inertia_tensor          = inertia_tensor.Inverse();
-        m_mass_data.local_inertia_tensor         = m_inverse_orientation.ToMatrix() * m_global_inverse_inertia_tensor * m_orientation.ToMatrix();
-        m_mass_data.local_inverse_inertia_tensor = m_mass_data.local_inertia_tensor.Inverse();
+        m_mass_data.local_inverse_inertia_tensor = m_inverse_orientation * m_global_inverse_inertia_tensor * m_orientation;
+        m_mass_data.local_inertia_tensor         = m_mass_data.local_inverse_inertia_tensor.Inverse();
     }
 
     Matrix33 RigidBody::Inertia() const
@@ -207,9 +207,9 @@ namespace Engine5
 
     void RigidBody::SetLocalInertia(const Matrix33& inertia)
     {
-        m_mass_data.local_inertia_tensor = inertia;
+        m_mass_data.local_inertia_tensor         = inertia;
         m_mass_data.local_inverse_inertia_tensor = inertia.Inverse();
-        m_global_inverse_inertia_tensor = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
+        m_global_inverse_inertia_tensor          = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
     }
 
     void RigidBody::SetMotionMode(MotionMode motion_mode)
