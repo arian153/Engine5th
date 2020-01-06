@@ -24,7 +24,10 @@ namespace Engine5
 
     void ColliderSet::Initialize()
     {
-        m_colliders = new std::vector<ColliderPrimitive*>;
+        if (m_colliders == nullptr)
+        {
+            m_colliders = new std::vector<ColliderPrimitive*>;
+        }
     }
 
     void ColliderSet::Update(Real dt)

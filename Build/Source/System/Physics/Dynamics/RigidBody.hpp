@@ -52,6 +52,10 @@ namespace Engine5
         Matrix33 Inertia() const;
         Matrix33 InverseInertia() const;
 
+        Matrix33 LocalInertia() const;
+        Matrix33 InverseLocalInertia() const;
+        void SetLocalInertia(const Matrix33& inertia);
+
         void       SetMotionMode(MotionMode motion_mode);
         MotionMode GetMotionMode() const;
 

@@ -195,6 +195,23 @@ namespace Engine5
         return m_global_inverse_inertia_tensor;
     }
 
+    Matrix33 RigidBody::LocalInertia() const
+    {
+        return m_mass_data.local_inertia_tensor;
+    }
+
+    Matrix33 RigidBody::InverseLocalInertia() const
+    {
+        return m_mass_data.local_inverse_inertia_tensor;
+    }
+
+    void RigidBody::SetLocalInertia(const Matrix33& inertia)
+    {
+        m_mass_data.local_inertia_tensor = inertia;
+        m_mass_data.local_inverse_inertia_tensor = inertia.Inverse();
+        m_global_inverse_inertia_tensor = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
+    }
+
     void RigidBody::SetMotionMode(MotionMode motion_mode)
     {
         m_motion_mode = motion_mode;

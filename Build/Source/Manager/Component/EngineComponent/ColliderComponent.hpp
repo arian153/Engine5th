@@ -1,5 +1,6 @@
 #pragma once
-#include "..//Component.hpp"
+#include "../Component.hpp"
+#include "../../../System/Physics/Physics.hpp"
 
 namespace Engine5
 {
@@ -14,7 +15,6 @@ namespace Engine5
         void Shutdown() override;
 
     private:
-
+        ColliderSet* m_collider_set = nullptr;
     };
-
 }
