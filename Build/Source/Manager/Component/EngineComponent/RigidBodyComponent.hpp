@@ -38,6 +38,8 @@ namespace Engine5
 
 
     private:
-        RigidBody* m_rigid_body = nullptr;
+        RigidBody*   m_rigid_body   = nullptr;
+        Transform*   m_transform    = nullptr;
+        ColliderSet* m_collider_set = nullptr;
     };
 }

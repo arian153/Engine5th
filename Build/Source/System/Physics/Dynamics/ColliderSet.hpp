@@ -13,7 +13,7 @@ namespace Engine5
     class ColliderSet
     {
     public:
-        ColliderSet(World* world);
+        explicit ColliderSet(World* world);
         ~ColliderSet();
 
         void Initialize();

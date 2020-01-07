@@ -12,17 +12,24 @@ namespace Engine5
 
     void RigidBodyComponent::Initialize()
     {
-        m_rigid_body->Initialize();
+        
     }
 
     void RigidBodyComponent::Update(Real dt)
     {
-        m_rigid_body->Update(dt);
+        if (m_transform != nullptr)
+        {
+            m_rigid_body->SyncFromTransform(m_transform);
+        }
+        m_rigid_body->Integrate(dt);
+        if (m_transform != nullptr)
+        {
+            m_rigid_body->SyncToTransform(m_transform);
+        }
     }
 
     void RigidBodyComponent::Shutdown()
     {
-        m_rigid_body->Shutdown();
     }
 
     void RigidBodyComponent::ApplyForce(const Vector3& force, const Vector3& at) const

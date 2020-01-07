@@ -1,5 +1,4 @@
 #include "RigidBody.hpp"
-#include "ColliderSet.hpp"
 #include "World.hpp"
 
 namespace Engine5
@@ -10,19 +9,6 @@ namespace Engine5
     }
 
     RigidBody::~RigidBody()
-    {
-    }
-
-    void RigidBody::Initialize()
-    {
-    }
-
-    void RigidBody::Update(Real dt)
-    {
-        Integrate(dt);
-    }
-
-    void RigidBody::Shutdown()
     {
     }
 
@@ -79,16 +65,14 @@ namespace Engine5
         m_inverse_orientation.SetNormalize();
     }
 
-    void RigidBody::UpdateMassData()
+    void RigidBody::SetMassData(const MassData& mass_data)
     {
-        if (m_collider_set != nullptr)
-        {
-            m_mass_data = m_collider_set->GetMassData();
-        }
+        m_mass_data = mass_data;
+
         if (m_motion_mode != MotionMode::Dynamic)
         {
-            this->SetMassInfinite();
-            this->SetInertiaInfinite();
+            SetMassInfinite();
+            SetInertiaInfinite();
         }
     }
 
@@ -240,5 +224,19 @@ namespace Engine5
     Vector3 RigidBody::WorldToLocalVector(const Vector3& world_vector) const
     {
         return m_inverse_orientation.Rotate(world_vector);
+    }
+
+    void RigidBody::SyncToTransform(Transform* transform) const
+    {
+        transform->orientation = m_orientation;
+        transform->position = m_position;
+    }
+
+    void RigidBody::SyncFromTransform(Transform* transform)
+    {
+        m_position = transform->position;
+        m_orientation = transform->orientation;
+        UpdateGlobalCentroidFromPosition();
+        UpdateGlobalInertiaTensor();
     }
 }

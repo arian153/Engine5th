@@ -92,8 +92,7 @@ namespace Engine5
         primitive->m_collider_set = this;
         if (m_rigid_body != nullptr)
         {
-            m_rigid_body->m_collider_set = this;
-            primitive->m_rigid_body      = m_rigid_body;
+            primitive->m_rigid_body = m_rigid_body;
         }
         if (m_world != nullptr)
         {
@@ -221,7 +220,7 @@ namespace Engine5
         }
         if (m_rigid_body != nullptr)
         {
-            m_rigid_body->UpdateMassData();
+            m_rigid_body->SetMassData(m_mass_data);
         }
     }
 

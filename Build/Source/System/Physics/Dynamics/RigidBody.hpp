@@ -1,13 +1,10 @@
 #pragma once
 #include "../../Math/Math.hpp"
 #include "..//Utility/PhysicsDef.hpp"
-#include "..//ColliderPrimitive/ColliderPrimitive.hpp"
 #include "MassData.hpp"
 
 namespace Engine5
 {
-    class ColliderPrimitive;
-    class ColliderSet;
     class World;
 
     class RigidBody
@@ -16,10 +13,6 @@ namespace Engine5
         explicit RigidBody(World* world);
         ~RigidBody();
 
-        void Initialize();
-        void Update(Real dt);
-        void Shutdown();
-
         void Integrate(Real dt);
 
         void UpdateGlobalCentroidFromPosition();
@@ -27,7 +20,7 @@ namespace Engine5
         void UpdateGlobalInertiaTensor();
 
         void UpdateOrientation();
-        void UpdateMassData();
+        void SetMassData(const MassData& mass_data);
 
         void ApplyForce(const Vector3& force, const Vector3& at);
         void ApplyForceCentroid(const Vector3& force);
@@ -54,7 +47,7 @@ namespace Engine5
 
         Matrix33 LocalInertia() const;
         Matrix33 InverseLocalInertia() const;
-        void SetLocalInertia(const Matrix33& inertia);
+        void     SetLocalInertia(const Matrix33& inertia);
 
         void       SetMotionMode(MotionMode motion_mode);
         MotionMode GetMotionMode() const;
@@ -63,6 +56,10 @@ namespace Engine5
         Vector3 WorldToLocalPoint(const Vector3& world_point) const;
         Vector3 LocalToWorldVector(const Vector3& local_vector) const;
         Vector3 WorldToLocalVector(const Vector3& world_vector) const;
+
+        void SyncToTransform(Transform* transform) const;
+        void SyncFromTransform(Transform* transform);
+
     private:
         friend class Resolution;
         friend class ColliderPrimitive;
@@ -89,8 +86,7 @@ namespace Engine5
         Matrix33 m_global_inverse_inertia_tensor;
 
         //others
-        MotionMode   m_motion_mode  = MotionMode::Dynamic;
-        ColliderSet* m_collider_set = nullptr;
-        World*       m_world        = nullptr;
+        MotionMode m_motion_mode = MotionMode::Dynamic;
+        World*     m_world       = nullptr;
     };
 }
