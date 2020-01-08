@@ -17,12 +17,12 @@ namespace Engine5
         ~ColliderSet();
 
         void Initialize();
-        void Update(Real dt);
         void Shutdown();
 
         //primitives
         ColliderPrimitive* AddCollider(ColliderType type);
         ColliderPrimitive* GetCollider(size_t index) const;
+        void EraseCollider(ColliderPrimitive* collider) const;
 
         //Set pointer to body, transform
         void SetRigidBody(RigidBody* rigid_body);

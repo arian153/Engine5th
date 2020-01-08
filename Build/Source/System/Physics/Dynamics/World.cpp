@@ -4,6 +4,8 @@
 #include "../BroadPhase/GridPartition.hpp"
 #include "../NarrowPhase/NarrowPhase.hpp"
 #include "../NarrowPhase/CollisionDataTable.hpp"
+#include "ColliderSet.hpp"
+#include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
 
 namespace Engine5
@@ -57,10 +59,6 @@ namespace Engine5
 
         //resolution phase
         //integration phase
-        for (auto& body : m_rigid_bodies)
-        {
-            body->Update(dt);
-        }
     }
 
     void World::Shutdown()
@@ -71,7 +69,6 @@ namespace Engine5
             delete m_narrow_phase;
             m_narrow_phase = nullptr;
         }
-
         if (m_collision_data_table != nullptr)
         {
             m_collision_data_table->Shutdown();
@@ -81,7 +78,6 @@ namespace Engine5
         m_pairs.clear();
         for (auto& body : m_rigid_bodies)
         {
-            body->Shutdown();
             delete body;
             body = nullptr;
         }

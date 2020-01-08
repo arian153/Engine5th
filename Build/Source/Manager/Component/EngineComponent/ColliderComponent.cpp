@@ -17,11 +17,25 @@ namespace Engine5
 
     void ColliderComponent::Update(Real dt)
     {
-        m_collider_set->Update(dt);
     }
 
     void ColliderComponent::Shutdown()
     {
         m_collider_set->Shutdown();
+    }
+
+    ColliderPrimitive* ColliderComponent::AddCollider(ColliderType type) const
+    {
+        return m_collider_set->AddCollider(type);
+    }
+
+    ColliderPrimitive* ColliderComponent::GetCollider(size_t index) const
+    {
+        return m_collider_set->GetCollider(index);
+    }
+
+    void ColliderComponent::EraseCollider(ColliderPrimitive* collider) const
+    {
+        m_collider_set->EraseCollider(collider);
     }
 }

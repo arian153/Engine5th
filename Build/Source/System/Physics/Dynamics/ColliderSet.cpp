@@ -30,10 +30,6 @@ namespace Engine5
         }
     }
 
-    void ColliderSet::Update(Real dt)
-    {
-    }
-
     void ColliderSet::Shutdown()
     {
         if (m_colliders != nullptr)
@@ -113,6 +109,22 @@ namespace Engine5
             }
         }
         return nullptr;
+    }
+
+    void ColliderSet::EraseCollider(ColliderPrimitive* collider) const
+    {
+        auto end = m_colliders->end();
+        for (auto it = m_colliders->begin(); it != end;)
+        {
+            if (*it == collider)
+            {
+                m_colliders->erase(it++);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
 
     void ColliderSet::SetRigidBody(RigidBody* rigid_body)
