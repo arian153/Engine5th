@@ -178,7 +178,7 @@ namespace Engine5
     {
         if (m_collider_set != nullptr)
         {
-            SetScale(m_collider_set->GetTransformScale());
+            SetScale(m_collider_set->GetScale());
             if (m_bounding_volume != nullptr)
             {
                 UpdateBoundingVolume();

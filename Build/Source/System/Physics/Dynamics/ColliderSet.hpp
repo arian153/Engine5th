@@ -26,7 +26,6 @@ namespace Engine5
 
         //Set pointer to body, transform
         void SetRigidBody(RigidBody* rigid_body);
-        void SetTransform(Transform* transform);
 
         //setters
         void SetMass(Real density);
@@ -34,11 +33,12 @@ namespace Engine5
 
         //getters
         MassData GetMassData() const;
-        Vector3  GetTransformScale() const;
+        Vector3 GetScale() const;
 
         //modify data
         void UpdateMassData();
-        void SyncFromTransform();
+        void SyncToTransform(Transform* transform) const;
+        void SyncFromTransform(Transform* transform);
 
     private:
 
@@ -50,7 +50,6 @@ namespace Engine5
 
     private:
         RigidBody* m_rigid_body = nullptr;
-        Transform* m_transform  = nullptr;
         World*     m_world      = nullptr;
         MassData   m_mass_data;
         Vector3    m_scale;

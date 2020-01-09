@@ -1,6 +1,7 @@
 #include "GridPartition.hpp"
 #include "..//Dynamics/RigidBody.hpp"
 #include <algorithm>
+#include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
 namespace Engine5
 {

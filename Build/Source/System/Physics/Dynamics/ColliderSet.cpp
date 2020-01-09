@@ -132,11 +132,6 @@ namespace Engine5
         m_rigid_body = rigid_body;
     }
 
-    void ColliderSet::SetTransform(Transform* transform)
-    {
-        m_transform = transform;
-    }
-
     void ColliderSet::SetMass(Real density)
     {
         if (m_colliders != nullptr)
@@ -165,10 +160,6 @@ namespace Engine5
             }
             UpdateMassData();
         }
-        if (m_transform != nullptr)
-        {
-            m_transform->scale = scale;
-        }
     }
 
     MassData ColliderSet::GetMassData() const
@@ -176,13 +167,9 @@ namespace Engine5
         return m_mass_data;
     }
 
-    Vector3 ColliderSet::GetTransformScale() const
+    Vector3 ColliderSet::GetScale() const
     {
-        if (m_transform != nullptr)
-        {
-            return m_transform->scale;
-        }
-        return Vector3(1.0f, 1.0f, 1.0f);
+        return m_scale;
     }
 
     void ColliderSet::UpdateMassData()
@@ -236,8 +223,13 @@ namespace Engine5
         }
     }
 
-    void ColliderSet::SyncFromTransform()
+    void ColliderSet::SyncToTransform(Transform* transform) const
     {
-        SetScale(GetTransformScale());
+        transform->scale = m_scale;
+    }
+
+    void ColliderSet::SyncFromTransform(Transform* transform)
+    {
+        SetScale(transform->scale);
     }
 }

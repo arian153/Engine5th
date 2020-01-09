@@ -3,6 +3,7 @@
 #include "Polytope.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "CollisionDataTable.hpp"
+#include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
 namespace Engine5
 {
