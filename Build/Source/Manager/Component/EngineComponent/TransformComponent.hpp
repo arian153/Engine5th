@@ -42,6 +42,11 @@ namespace Engine5
         Matrix33 GetRotationMatrix() const;
         Matrix44 GetTransformMatrix() const;
 
+        Vector3 LocalToWorldPoint(const Vector3& local_point) const;
+        Vector3 WorldToLocalPoint(const Vector3& world_point) const;
+        Vector3 LocalToWorldVector(const Vector3& local_vector) const;
+        Vector3 WorldToLocalVector(const Vector3& world_vector) const;
+
     private:
         void UpdateChildrenPositionRecursive(const Vector3& position);
         void UpdateChildrenOrientationRecursive(const Quaternion& orientation);

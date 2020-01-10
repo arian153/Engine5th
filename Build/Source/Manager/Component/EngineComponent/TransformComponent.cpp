@@ -159,7 +159,7 @@ namespace Engine5
         else
         {
             auto curr_size = m_transform.scale.Half();
-            auto new_size = (m_transform.scale + delta_scale).Half();
+            auto new_size  = (m_transform.scale + delta_scale).Half();
             m_transform.position += (new_size - curr_size).HadamardProduct(Anchor::AnchorVector3(anchor));
             m_transform.scale += delta_scale;
         }
@@ -190,9 +190,28 @@ namespace Engine5
         return m_transform.LocalToWorldMatrix();
     }
 
+    Vector3 TransformComponent::LocalToWorldPoint(const Vector3& local_point) const
+    {
+        return m_transform.LocalToWorldPoint(local_point);
+    }
+
+    Vector3 TransformComponent::WorldToLocalPoint(const Vector3& world_point) const
+    {
+        return m_transform.WorldToLocalPoint(world_point);
+    }
+
+    Vector3 TransformComponent::LocalToWorldVector(const Vector3& local_vector) const
+    {
+        return m_transform.LocalToWorldVector(local_vector);
+    }
+
+    Vector3 TransformComponent::WorldToLocalVector(const Vector3& world_vector) const
+    {
+        return m_transform.WorldToLocalVector(world_vector);
+    }
+
     void TransformComponent::UpdateChildrenPositionRecursive(const Vector3& position)
     {
-
     }
 
     void TransformComponent::UpdateChildrenOrientationRecursive(const Quaternion& orientation)
