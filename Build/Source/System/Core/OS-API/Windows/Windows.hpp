@@ -6,7 +6,7 @@ namespace Engine5
 {
     class Application;
 
-    class WindowsAPI final
+    class WindowsAPI 
     {
     public:
         explicit WindowsAPI(Application* application);
