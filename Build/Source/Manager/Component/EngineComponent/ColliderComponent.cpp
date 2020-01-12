@@ -12,7 +12,12 @@ namespace Engine5
 
     void ColliderComponent::Initialize()
     {
-        m_collider_set->Initialize();
+        //m_rigid_body = GetRigidBody();
+        if (m_rigid_body != nullptr)
+        {
+            m_collider_set->Initialize(m_rigid_body);
+            m_b_init = true;
+        }
     }
 
     void ColliderComponent::Update(Real dt)
@@ -39,12 +44,12 @@ namespace Engine5
         m_collider_set->EraseCollider(collider);
     }
 
-    void ColliderComponent::SetMass(Real density)
+    void ColliderComponent::SetMass(Real density) const
     {
         m_collider_set->SetMass(density);
     }
 
-    void ColliderComponent::SetScale(const Vector3& scale)
+    void ColliderComponent::SetScale(const Vector3& scale) const
     {
         m_collider_set->SetScale(scale);
         if (m_transform != nullptr)
@@ -53,12 +58,12 @@ namespace Engine5
         }
     }
 
-    MassData ColliderComponent::GetMass()
+    MassData ColliderComponent::GetMass() const
     {
         return m_collider_set->GetMassData();
     }
 
-    Vector3 ColliderComponent::GetScale()
+    Vector3 ColliderComponent::GetScale() const
     {
         return m_collider_set->GetScale();
     }

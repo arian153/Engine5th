@@ -22,11 +22,15 @@ namespace Engine5
     {
     }
 
-    void ColliderSet::Initialize()
+    void ColliderSet::Initialize(RigidBody* rigid_body)
     {
         if (m_colliders == nullptr)
         {
             m_colliders = new std::vector<ColliderPrimitive*>;
+        }
+        if (m_rigid_body == nullptr)
+        {
+            m_rigid_body = rigid_body;
         }
     }
 
@@ -85,15 +89,10 @@ namespace Engine5
         default:
             return nullptr;
         }
+        //each primitives must know both collider set and rigid body.
         primitive->m_collider_set = this;
-        if (m_rigid_body != nullptr)
-        {
-            primitive->m_rigid_body = m_rigid_body;
-        }
-        if (m_world != nullptr)
-        {
-            m_world->AddPrimitive(primitive);
-        }
+        primitive->m_rigid_body   = m_rigid_body;
+        m_world->AddPrimitive(primitive);
         primitive->Initialize();
         return primitive;
     }
@@ -125,11 +124,6 @@ namespace Engine5
                 ++it;
             }
         }
-    }
-
-    void ColliderSet::SetRigidBody(RigidBody* rigid_body)
-    {
-        m_rigid_body = rigid_body;
     }
 
     void ColliderSet::SetMass(Real density)

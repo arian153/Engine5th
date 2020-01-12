@@ -14,7 +14,7 @@ namespace Engine5
     void ColliderPrimitive::CastRay(RayCastResult& result, Real max_distance)
     {
         result.hit_data.collider = this;
-        RigidBody* body          = GetRigidBody();
+        RigidBody* body = m_rigid_body;
         Ray        body_ray(body->WorldToLocalPoint(result.ray.position), body->WorldToLocalVector(result.ray.direction));
         Ray        local_ray(this->WorldToLocalPoint(body_ray.position), this->WorldToLocalVector(body_ray.direction));
         Real       minimum_t = -1.0f;
@@ -37,7 +37,7 @@ namespace Engine5
 
     void ColliderPrimitive::IntersectRay(RayIntersectionResult& result, Real max_distance)
     {
-        RigidBody* body      = GetRigidBody();
+        RigidBody* body = m_rigid_body;
         Ray        world_ray = result.ray;
         Ray        body_ray(body->WorldToLocalPoint(result.ray.position), body->WorldToLocalVector(result.ray.direction));
         Ray        local_ray(this->WorldToLocalPoint(body_ray.position), this->WorldToLocalVector(body_ray.direction));

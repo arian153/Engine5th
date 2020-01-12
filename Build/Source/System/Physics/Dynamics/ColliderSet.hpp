@@ -16,16 +16,13 @@ namespace Engine5
         explicit ColliderSet(World* world);
         ~ColliderSet();
 
-        void Initialize();
+        void Initialize(RigidBody* rigid_body);
         void Shutdown();
 
         //primitives
         ColliderPrimitive* AddCollider(ColliderType type);
         ColliderPrimitive* GetCollider(size_t index) const;
         void EraseCollider(ColliderPrimitive* collider) const;
-
-        //Set pointer to body, transform
-        void SetRigidBody(RigidBody* rigid_body);
 
         //setters
         void SetMass(Real density);

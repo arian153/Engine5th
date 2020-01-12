@@ -18,15 +18,17 @@ namespace Engine5
         ColliderPrimitive* GetCollider(size_t index) const;
         void EraseCollider(ColliderPrimitive* collider) const;
 
-        void SetMass(Real density);
-        void SetScale(const Vector3& scale);
+        void SetMass(Real density) const;
+        void SetScale(const Vector3& scale) const;
 
-        MassData GetMass();
-        Vector3 GetScale();
+        MassData GetMass() const;
+        Vector3 GetScale() const;
 
     private:
         ColliderSet* m_collider_set = nullptr;
         RigidBody* m_rigid_body = nullptr;
         Transform* m_transform = nullptr;
+
+        bool m_b_init = false;
     };
 }
