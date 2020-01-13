@@ -10,6 +10,12 @@ namespace Engine5
         type = PrimitiveType::Triangle;
     }
 
+    Triangle::Triangle(const Vector3& p0, const Vector3& p1, const Vector3& p2)
+    {
+        type = PrimitiveType::Triangle;
+        SetTriangle(p0, p1, p2);
+    }
+
     Triangle::~Triangle()
     {
     }
@@ -210,7 +216,7 @@ namespace Engine5
         for (size_t i = 0; i < 3; ++i)
         {
             //local space to world space
-            Vector3 vertex(vertices[i].x, vertices[i].y, z_factor);
+            Vector3 vertex(vertices[i]);
             vertex = orientation.Rotate(vertex);
             vertex += position;
 
@@ -238,25 +244,27 @@ namespace Engine5
         }
     }
 
-    void Triangle::SetTriangle(const Vector2& v0, const Vector2& v1, const Vector2& v2)
+    void Triangle::SetTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2)
     {
-        vertices[0] = v0;
-        vertices[1] = v1;
-        vertices[2] = v2;
+        position    = (p0 + p1 + p2) / 3.0f;
+        auto c      = position.GrepVec2(Math::Vector::X, Math::Vector::Y);
+        vertices[0] = p0 - c;
+        vertices[1] = p1 - c;
+        vertices[2] = p2 - c;
+        //orientation.Set(Math::Vector3::Z_AXIS, 0.0f);
     }
 
-    void Triangle::SetTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    void Triangle::SetTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2)
     {
-        Vector3    ab     = v1 - v0;
-        Vector3    ac     = v2 - v0;
+        Vector3    ab     = p1 - p0;
+        Vector3    ac     = p2 - p0;
         Vector3    normal = ab.CrossProduct(ac).Unit();
         Quaternion rotation(normal, Math::Vector3::Z_AXIS);
-        auto       p0 = rotation.Rotate(v0);
-        if (Utility::IsZero(p0.z) == false)
-        {
-            z_factor = p0.z;
-        }
-        vertices[0] = p0;
+        position    = (p0 + p1 + p2) / 3.0f;
+        auto v0     = p0 - position;
+        auto v1     = p1 - position;
+        auto v2     = p2 - position;
+        vertices[0] = rotation.Rotate(v0);
         vertices[1] = rotation.Rotate(v1);
         vertices[2] = rotation.Rotate(v2);
         orientation = rotation.Inverse();
@@ -264,13 +272,7 @@ namespace Engine5
 
     Vector3 Triangle::Vertex(size_t i) const
     {
-        return orientation.Rotate(Vector3(vertices[i].x, vertices[i].y, z_factor));
-    }
-
-    Vector3 Triangle::Center() const
-    {
-        Vector2 result = (vertices[0] + vertices[1] + vertices[2]) / 3.0f;
-        return orientation.Rotate(Vector3(result.x, result.y, z_factor));
+        return orientation.Rotate(Vector3(vertices[i])) + position;
     }
 
     Vector3 Triangle::ClosestPoint(const Vector3& point) const
@@ -356,9 +358,9 @@ namespace Engine5
         return (point - ClosestPoint(point)).LengthSquared();
     }
 
-    Vector3 Triangle::ClosestPoint(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    Vector3 Triangle::ClosestPoint(const Vector3& point, const Vector3& p0, const Vector3& p1, const Vector3& p2)
     {
-        Vector3 a(v0), b(v1), c(v2);
+        Vector3 a(p0), b(p1), c(p2);
         
         // Check if P in vertex region outside A
         Vector3 ab = b - a;
@@ -427,33 +429,33 @@ namespace Engine5
         return a + ab * v + ac * w;
     }
 
-    Real Triangle::DistanceSquared(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    Real Triangle::DistanceSquared(const Vector3& point, const Vector3& p0, const Vector3& p1, const Vector3& p2)
     {
-        return (point - ClosestPoint(point, v0, v1, v2)).LengthSquared();
+        return (point - ClosestPoint(point, p0, p1, p2)).LengthSquared();
     }
 
-    Real Triangle::Distance(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    Real Triangle::Distance(const Vector3& point, const Vector3& p0, const Vector3& p1, const Vector3& p2)
     {
-        return sqrtf(DistanceSquared(point, v0, v1, v2));
+        return sqrtf(DistanceSquared(point, p0, p1, p2));
     }
 
-    bool Triangle::IsContainPoint(const Vector3& point, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    bool Triangle::IsContainPoint(const Vector3& point, const Vector3& p0, const Vector3& p1, const Vector3& p2)
     {
-        Vector3 edge01 = v1 - v0;
-        Vector3 edge12 = v2 - v1;
+        Vector3 edge01 = p1 - p0;
+        Vector3 edge12 = p2 - p1;
         Vector3 normal = edge01.CrossProduct(edge12);
-        Vector3 w_test = edge01.CrossProduct(point - v0);
+        Vector3 w_test = edge01.CrossProduct(point - p0);
         if (w_test.DotProduct(normal) < 0.0f)
         {
             return false;
         }
-        w_test = edge12.CrossProduct(point - v1);
+        w_test = edge12.CrossProduct(point - p1);
         if (w_test.DotProduct(normal) < 0.0f)
         {
             return false;
         }
-        Vector3 edge3 = v0 - v2;
-        w_test        = edge3.CrossProduct(point - v2);
+        Vector3 edge3 = p0 - p2;
+        w_test        = edge3.CrossProduct(point - p2);
         if (w_test.DotProduct(normal) < 0.0f)
         {
             return false;
@@ -462,10 +464,10 @@ namespace Engine5
         return true;
     }
 
-    Vector3 Triangle::Normal(const Vector3& v0, const Vector3& v1, const Vector3& v2)
+    Vector3 Triangle::Normal(const Vector3& p0, const Vector3& p1, const Vector3& p2)
     {
-        Vector3 edge01 = v1 - v0;
-        Vector3 edge02 = v2 - v0;
+        Vector3 edge01 = p1 - p0;
+        Vector3 edge02 = p2 - p0;
         return edge01.CrossProduct(edge02);
     }
 }

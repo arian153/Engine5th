@@ -24,6 +24,12 @@ namespace Engine5
         m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
         //auto result = Triangle::DistanceSquared(Vector3(2, 0.5f, 0), Vector3(0, 1, 0), Vector3(-1, 0, 0), Vector3(1, 0, 0));
+
+        //Triangle triangle;
+        //triangle.SetTriangle(Vector3(1, 2, 3), Vector3(3, -4, 5), Vector3(1, 1, 1));
+        //auto p0 = triangle.Vertex(0);
+        //auto p1 = triangle.Vertex(1);
+        //auto p2 = triangle.Vertex(2);
     }
 
     void RenderSystem::Update(Real dt)

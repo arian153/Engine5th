@@ -107,4 +107,9 @@ namespace Engine5
     {
         return type;
     }
+
+    void Primitive::AddPosition(const Vector3& delta_pos)
+    {
+        position += delta_pos;
+    }
 }

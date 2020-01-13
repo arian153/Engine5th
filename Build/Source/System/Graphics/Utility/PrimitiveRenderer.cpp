@@ -22,6 +22,19 @@ namespace Engine5
         primitive.DrawPrimitive(this, mode, color);
     }
 
+    void PrimitiveRenderer::DrawPoint(const Vector3& point, RenderingMode mode, Color color)
+    {
+
+    }
+
+    void PrimitiveRenderer::DrawSegment(const Vector3& start, const Vector3& end, RenderingMode mode, Color color)
+    {
+    }
+
+    void PrimitiveRenderer::DrawRay(const Vector3& position, const Vector3& direction, RenderingMode mode, Color color)
+    {
+    }
+
     void PrimitiveRenderer::Initialize(ColorShader* color_shader)
     {
         m_color_shader = color_shader;

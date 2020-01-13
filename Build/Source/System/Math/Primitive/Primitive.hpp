@@ -43,6 +43,8 @@ namespace Engine5
         virtual Vector3       WorldToLocalVector(const Vector3& world_vector) const final;
         virtual PrimitiveType Type() const final;
 
+        void AddPosition(const Vector3& delta_pos);
+
     public:
         virtual void Initialize() = 0;
         virtual void Shutdown() = 0;
@@ -59,6 +61,7 @@ namespace Engine5
 
         //Draw
         virtual void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const = 0;
+
 
     public:
         Vector3    position;
