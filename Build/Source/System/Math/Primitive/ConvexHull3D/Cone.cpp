@@ -231,7 +231,7 @@ namespace Engine5
         return normal;
     }
 
-    void Cone::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Cone::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index       = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count = renderer->CYLINDRICAL_STACK_COUNT;

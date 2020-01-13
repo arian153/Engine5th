@@ -25,15 +25,15 @@ namespace Engine5
     {
         namespace Pure
         {
-            const static Color White        = Color(1.000000f, 1.000000f, 1.000000f, 1.000000f); //255, 255, 255
-            const static Color Gray         = Color(0.666666f, 0.666666f, 0.666666f, 1.000000f); //170, 170, 170
-            const static Color Black        = Color(0.000000f, 0.000000f, 0.000000f, 1.000000f); //  0,   0,   0
-            const static Color Red          = Color(1.000000f, 0.000000f, 0.000000f, 1.000000f); //255,   0,   0
-            const static Color Green        = Color(0.000000f, 1.000000f, 0.000000f, 1.000000f); //  0, 255,   0
-            const static Color Blue         = Color(0.000000f, 0.000000f, 1.000000f, 1.000000f); //  0,   0, 255
-            const static Color Cyan         = Color(0.000000f, 1.000000f, 1.000000f, 1.000000f); //  0, 255, 255
-            const static Color Magenta      = Color(1.000000f, 0.000000f, 1.000000f, 1.000000f); //255,   0, 255
-            const static Color Yellow       = Color(1.000000f, 1.000000f, 0.000000f, 1.000000f); //255, 255,   0
+            const static Color White   = Color(1.000000f, 1.000000f, 1.000000f, 1.000000f); //255, 255, 255
+            const static Color Gray    = Color(0.666666f, 0.666666f, 0.666666f, 1.000000f); //170, 170, 170
+            const static Color Black   = Color(0.000000f, 0.000000f, 0.000000f, 1.000000f); //  0,   0,   0
+            const static Color Red     = Color(1.000000f, 0.000000f, 0.000000f, 1.000000f); //255,   0,   0
+            const static Color Green   = Color(0.000000f, 1.000000f, 0.000000f, 1.000000f); //  0, 255,   0
+            const static Color Blue    = Color(0.000000f, 0.000000f, 1.000000f, 1.000000f); //  0,   0, 255
+            const static Color Cyan    = Color(0.000000f, 1.000000f, 1.000000f, 1.000000f); //  0, 255, 255
+            const static Color Magenta = Color(1.000000f, 0.000000f, 1.000000f, 1.000000f); //255,   0, 255
+            const static Color Yellow  = Color(1.000000f, 1.000000f, 0.000000f, 1.000000f); //255, 255,   0
         }
 
         namespace UI
@@ -47,4 +47,11 @@ namespace Engine5
             const static Color BackgroundDarkGray  = Color(0.117647f, 0.117647f, 0.117647f, 1.000000f); // 30,  30,  30
         }
     }
+
+    class ColorFlag
+    {
+    public:
+        bool  b_flag = false;
+        Color color  = ColorDef::Pure::White;
+    };
 }

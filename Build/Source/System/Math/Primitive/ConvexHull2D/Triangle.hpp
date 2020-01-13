@@ -24,7 +24,7 @@ namespace Engine5
         Vector3 GetNormal(const Vector3& local_point_on_primitive) override;
 
         //Draw
-        void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
+        void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
         void SetTriangle(const Vector2& v0, const Vector2& v1, const Vector2& v2);
         void SetTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2);

@@ -28,7 +28,7 @@ namespace Engine5
         m_primitive_renderer = primitive_renderer;
     }
 
-    void NarrowPhase::GenerateContact(std::unordered_map<size_t, Manifold>& manifold_table, CollisionDataTable* data_table, bool b_draw_gjk_flag, bool b_draw_epa_flag, bool b_draw_contact_flag)
+    void NarrowPhase::GenerateContact(std::unordered_map<size_t, Manifold>& manifold_table, CollisionDataTable* data_table, const ColorFlag& gjk_flag, const ColorFlag& epa_flag, const ColorFlag& contact_flag)
     {
         for (auto& manifold : manifold_table)
         {
@@ -43,15 +43,19 @@ namespace Engine5
                 }
                 Polytope polytope = Polytope(simplex);
                 //draw gjk result simplex
-                if (b_draw_gjk_flag)
+                if (gjk_flag.b_flag)
                 {
                     //m_primitive_renderer->DrawTetrahedronWireFrame(simplex.simplex_vertex_a.global, simplex.simplex_vertex_b.global, simplex.simplex_vertex_c.global, simplex.simplex_vertex_d.global, Color(0.0f, 1.0f, 0.0f, 1.0f));
                 }
                 Contact new_contact_data;
                 if (EPAContactGeneration(manifold.second.collider_a, manifold.second.collider_b, polytope, new_contact_data) == true)
                 {
-                    if (b_draw_epa_flag)
+                    if (epa_flag.b_flag)
                     {
+                        for (auto& face : polytope.faces)
+                        {
+                            //m_primitive_renderer->DrawPrimitive(Triangle(), RenderingMode::Line, contact_flag.color);
+                        }
                         /*for (auto& face : polytope.faces)
                         {
                             m_primitive_renderer->DrawTriangleWireFrame(polytope.vertices[face.a].global, polytope.vertices[face.b].global, polytope.vertices[face.c].global, Color(1.0f, 1.0f, 0.0f, 1.0f));
@@ -62,34 +66,35 @@ namespace Engine5
                 {
                     //generate invalid contact do not copy data.
                     //send a event invalid.
-                    //data_table->SendInvalidCollision(manifold.second.collider_a, manifold.second.collider_b);
+                    data_table->SendInvalidCollision(manifold.second.collider_a, manifold.second.collider_b);
                 }
                 else
                 {
                     //send a event about start and persist.
-                    //data_table->SendHasCollision(manifold.second.collider_a, manifold.second.collider_b, manifold.second.is_collide, new_contact_data.global_position_a, new_contact_data.global_position_b);
+                    data_table->SendHasCollision(manifold.second.collider_a, manifold.second.collider_b, manifold.second.is_collide, new_contact_data.global_position_a, new_contact_data.global_position_b);
                     manifold.second.UpdateInvalidContact();
                     new_contact_data.is_collide = true;
                     manifold.second.UpdateCurrentManifold(new_contact_data);
                     manifold.second.CutDownManifold();
                     manifold.second.is_collide = true;
                     //draw contact result.
-                    //E4_OUTPUT(new_contact_data.normal, "\n");
-                    Vector3 pos_a = new_contact_data.global_position_a;
-                    Vector3 pos_b = new_contact_data.global_position_b;
-                    if (b_draw_contact_flag)
+                    if (contact_flag.b_flag)
                     {
-                        /*m_primitive_renderer->DrawSphereWireFrame(pos_a, 0.1f, Quaternion(), Color(1.0f, 0.5f, 0.0f, 1.0f));
-                        m_primitive_renderer->DrawSphereWireFrame(pos_b, 0.1f, Quaternion(), Color(1.0f, 0.5f, 0.0f, 1.0f));
-                        m_primitive_renderer->DrawLine(pos_a, pos_a + new_contact_data.normal, Color(1.0f, 0.5f, 0.0f, 1.0f));
-                        m_primitive_renderer->DrawLine(pos_b, pos_b + new_contact_data.normal, Color(1.0f, 0.5f, 0.0f, 1.0f));*/
+                        Vector3 pos_a = new_contact_data.global_position_a;
+                        Vector3 pos_b = new_contact_data.global_position_b;
+                        Quaternion no_rotation;
+
+                        m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), RenderingMode::Line, contact_flag.color);
+                        m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), RenderingMode::Line, contact_flag.color);
+                        //m_primitive_renderer->DrawLine(pos_a, pos_a + new_contact_data.normal, contact_flag.color);
+                        //m_primitive_renderer->DrawLine(pos_b, pos_b + new_contact_data.normal, contact_flag.color);
                     }
                 }
             }
             else
             {
                 //send a event about none and end.
-                //data_table->SendNotCollision(manifold.second.collider_a, manifold.second.collider_b, manifold.second.is_collide);
+                data_table->SendNotCollision(manifold.second.collider_a, manifold.second.collider_b, manifold.second.is_collide);
                 manifold.second.is_collide = false;
                 manifold.second.UpdateCollisionState();
             }

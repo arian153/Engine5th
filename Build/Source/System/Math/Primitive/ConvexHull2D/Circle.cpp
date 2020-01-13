@@ -109,7 +109,7 @@ namespace Engine5
         return Math::Vector3::Z_AXIS;
     }
 
-    void Circle::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Circle::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = renderer->CIRCULAR_VERTICES_COUNT;

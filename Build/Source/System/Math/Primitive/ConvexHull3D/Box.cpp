@@ -160,7 +160,7 @@ namespace Engine5
         return normal;
     }
 
-    void Box::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Box::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         renderer->ReserveVertices(8, mode);

@@ -6,6 +6,7 @@
 #include "../BroadPhase/BroadPhase.hpp"
 #include "../Resolution/Manifold.hpp"
 #include <unordered_map>
+#include "../../Graphics/Utility/Color.hpp"
 
 namespace Engine5
 {
@@ -43,5 +44,12 @@ namespace Engine5
         std::list<ColliderPair>              m_pairs;
         std::unordered_map<size_t, Manifold> m_manifold_table;
         CollisionDataTable*                  m_collision_data_table = nullptr;
+
+        ColorFlag m_draw_gjk;
+        ColorFlag m_draw_epa;
+        ColorFlag m_draw_contact;
+        ColorFlag m_draw_collider;
+        ColorFlag m_draw_bounding_volume;
+
     };
 }

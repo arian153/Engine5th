@@ -7,6 +7,11 @@ namespace Engine5
     {
     }
 
+    Primitive::Primitive(const Vector3& position, const Quaternion& orientation)
+        : position(position), orientation(orientation)
+    {
+    }
+
     Primitive::~Primitive()
     {
     }

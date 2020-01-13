@@ -24,7 +24,7 @@ namespace Engine5
         Vector3 GetNormal(const Vector3& local_point_on_primitive) override;
 
         //Draw
-        void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) override;
+        void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
 
     public:
         Vector2 radius = Vector2(1.0f, 1.0f);

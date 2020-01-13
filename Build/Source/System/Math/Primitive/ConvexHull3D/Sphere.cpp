@@ -10,6 +10,12 @@ namespace Engine5
         type = PrimitiveType::Sphere;
     }
 
+    Sphere::Sphere(const Vector3& position, const Quaternion& orientation, Real radius)
+        : Primitive(position, orientation), radius(radius)
+    {
+        type = PrimitiveType::Sphere;
+    }
+
     Sphere::~Sphere()
     {
     }
@@ -60,7 +66,7 @@ namespace Engine5
         return local_point_on_primitive.Unit();
     }
 
-    void Sphere::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Sphere::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index       = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count = renderer->SPHERICAL_STACK_COUNT;

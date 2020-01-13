@@ -55,7 +55,7 @@ namespace Engine5
         m_broad_phase->ComputePairs(m_pairs);
 
         //narrow phase
-        m_narrow_phase->GenerateContact(m_manifold_table, m_collision_data_table, false, false, false);
+        m_narrow_phase->GenerateContact(m_manifold_table, m_collision_data_table, m_draw_gjk, m_draw_epa, m_draw_contact);
 
         //resolution phase
         //integration phase

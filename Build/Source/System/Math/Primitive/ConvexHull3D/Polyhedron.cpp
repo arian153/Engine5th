@@ -73,7 +73,7 @@ namespace Engine5
         return local_point_on_primitive;
     }
 
-    void Polyhedron::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Polyhedron::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
     }
 

@@ -24,6 +24,7 @@ namespace Engine5
         explicit PrimitiveRenderer(DirectX3D11* dx11_api);
         ~PrimitiveRenderer();
         void DrawPrimitive(Primitive* primitive, RenderingMode mode, Color color = Color());
+        void DrawPrimitive(const Primitive& primitive, RenderingMode mode, Color color = Color());
 
         void Initialize(ColorShader* color_shader);
         void Update(Real dt);

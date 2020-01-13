@@ -59,7 +59,7 @@ namespace Engine5
         return local_point_on_primitive;
     }
 
-    void Tetrahedron::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Tetrahedron::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         renderer->ReserveVertices(4, mode);

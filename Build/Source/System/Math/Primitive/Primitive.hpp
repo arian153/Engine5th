@@ -31,6 +31,7 @@ namespace Engine5
     {
     public:
         Primitive();
+        explicit Primitive(const Vector3& position, const Quaternion& orientation);
         virtual ~Primitive();
 
         virtual void CastRay(PrimitiveRayCastResult& result, Real max_distance = -1.0f) final;
@@ -57,13 +58,13 @@ namespace Engine5
         virtual Vector3 GetNormal(const Vector3& local_point_on_primitive) = 0;
 
         //Draw
-        virtual void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) = 0;
+        virtual void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const = 0;
 
     public:
         Vector3    position;
         Quaternion orientation;
 
     protected:
-        PrimitiveType type;
+        PrimitiveType type = PrimitiveType::Invalid;
     };
 }

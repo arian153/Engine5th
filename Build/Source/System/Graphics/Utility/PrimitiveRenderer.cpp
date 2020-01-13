@@ -17,6 +17,11 @@ namespace Engine5
         primitive->DrawPrimitive(this, mode, color);
     }
 
+    void PrimitiveRenderer::DrawPrimitive(const Primitive& primitive, RenderingMode mode, Color color)
+    {
+        primitive.DrawPrimitive(this, mode, color);
+    }
+
     void PrimitiveRenderer::Initialize(ColorShader* color_shader)
     {
         m_color_shader = color_shader;

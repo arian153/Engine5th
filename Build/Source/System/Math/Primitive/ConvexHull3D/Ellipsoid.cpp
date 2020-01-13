@@ -73,7 +73,7 @@ namespace Engine5
         return normal;
     }
 
-    void Ellipsoid::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color)
+    void Ellipsoid::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
     {
         I32 index       = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count = renderer->SPHERICAL_STACK_COUNT;
