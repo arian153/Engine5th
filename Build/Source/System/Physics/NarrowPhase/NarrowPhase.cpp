@@ -45,7 +45,12 @@ namespace Engine5
                 //draw gjk result simplex
                 if (gjk_flag.b_flag)
                 {
-                    //m_primitive_renderer->DrawTetrahedronWireFrame(simplex.simplex_vertex_a.global, simplex.simplex_vertex_b.global, simplex.simplex_vertex_c.global, simplex.simplex_vertex_d.global, Color(0.0f, 1.0f, 0.0f, 1.0f));
+                    m_primitive_renderer->DrawTetrahedron(
+                                                          simplex.simplex_vertex_a.global,
+                                                          simplex.simplex_vertex_b.global,
+                                                          simplex.simplex_vertex_c.global,
+                                                          simplex.simplex_vertex_d.global,
+                                                          RenderingMode::Line, gjk_flag.color);
                 }
                 Contact new_contact_data;
                 if (EPAContactGeneration(manifold.second.collider_a, manifold.second.collider_b, polytope, new_contact_data) == true)
@@ -54,12 +59,12 @@ namespace Engine5
                     {
                         for (auto& face : polytope.faces)
                         {
-                            //m_primitive_renderer->DrawPrimitive(Triangle(), RenderingMode::Line, contact_flag.color);
+                            m_primitive_renderer->DrawTriangle(
+                                                               polytope.vertices[face.a].global,
+                                                               polytope.vertices[face.b].global,
+                                                               polytope.vertices[face.c].global,
+                                                               RenderingMode::Line, epa_flag.color);
                         }
-                        /*for (auto& face : polytope.faces)
-                        {
-                            m_primitive_renderer->DrawTriangleWireFrame(polytope.vertices[face.a].global, polytope.vertices[face.b].global, polytope.vertices[face.c].global, Color(1.0f, 1.0f, 0.0f, 1.0f));
-                        }*/
                     }
                 }
                 if (new_contact_data.is_valid == false)
@@ -80,14 +85,13 @@ namespace Engine5
                     //draw contact result.
                     if (contact_flag.b_flag)
                     {
-                        Vector3 pos_a = new_contact_data.global_position_a;
-                        Vector3 pos_b = new_contact_data.global_position_b;
+                        Vector3    pos_a = new_contact_data.global_position_a;
+                        Vector3    pos_b = new_contact_data.global_position_b;
                         Quaternion no_rotation;
-
-                        m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), RenderingMode::Line, contact_flag.color);
-                        m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), RenderingMode::Line, contact_flag.color);
-                        //m_primitive_renderer->DrawLine(pos_a, pos_a + new_contact_data.normal, contact_flag.color);
-                        //m_primitive_renderer->DrawLine(pos_b, pos_b + new_contact_data.normal, contact_flag.color);
+                        m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), RenderingMode::Face, contact_flag.color);
+                        m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), RenderingMode::Face, contact_flag.color);
+                        m_primitive_renderer->DrawSegment(pos_a, pos_a + new_contact_data.normal, contact_flag.color);
+                        m_primitive_renderer->DrawSegment(pos_b, pos_b + new_contact_data.normal, contact_flag.color);
                     }
                 }
             }

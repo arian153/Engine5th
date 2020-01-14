@@ -85,16 +85,18 @@ namespace Engine5
         }
         else if (mode == RenderingMode::Line)
         {
-            renderer->PushLineIndices(index + 0, index + 1);
+            renderer->PushLineIndices(index, index + 1);
+            renderer->PushLineIndices(index, index + 2);
+            renderer->PushLineIndices(index, index + 3);
             renderer->PushLineIndices(index + 1, index + 2);
             renderer->PushLineIndices(index + 2, index + 3);
-            renderer->PushLineIndices(index + 3, index + 0);
+            renderer->PushLineIndices(index + 3, index + 1);
         }
         else if (mode == RenderingMode::Face)
         {
-            renderer->PushFaceIndices(index + 0, index + 1, index + 2);
-            renderer->PushFaceIndices(index + 0, index + 1, index + 3);
-            renderer->PushFaceIndices(index + 0, index + 2, index + 3);
+            renderer->PushFaceIndices(index, index + 1, index + 2);
+            renderer->PushFaceIndices(index, index + 2, index + 3);
+            renderer->PushFaceIndices(index, index + 3, index + 1);
             renderer->PushFaceIndices(index + 1, index + 2, index + 3);
         }
     }

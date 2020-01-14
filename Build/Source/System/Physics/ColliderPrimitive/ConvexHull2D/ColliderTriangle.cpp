@@ -371,11 +371,11 @@ namespace Engine5
         }
         else if (mode == RenderingMode::Line)
         {
-            for (int i = 0; i < count - 1; ++i)
+            for (int i = 0; i < count; ++i)
             {
-                renderer->PushLineIndices(index + i, index + i + 1);
+                size_t  j = i + 1 < count ? i + 1 : 0;
+                renderer->PushLineIndices(index + i, index + j);
             }
-            renderer->PushLineIndices(index + count - 1, index);
         }
         else if (mode == RenderingMode::Face)
         {

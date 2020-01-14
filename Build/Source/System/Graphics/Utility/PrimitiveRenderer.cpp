@@ -22,17 +22,86 @@ namespace Engine5
         primitive.DrawPrimitive(this, mode, color);
     }
 
-    void PrimitiveRenderer::DrawPoint(const Vector3& point, RenderingMode mode, Color color)
+    void PrimitiveRenderer::DrawPoint(const Vector3& point, Color color)
     {
-
+        I32 index = m_dot_vertices.size();
+        I32 count = index + 1;
+        m_dot_vertices.reserve(static_cast<size_t>(count));
+        m_dot_vertices.emplace_back(point, color);
+        m_dot_indices.push_back(index);
     }
 
-    void PrimitiveRenderer::DrawSegment(const Vector3& start, const Vector3& end, RenderingMode mode, Color color)
+    void PrimitiveRenderer::DrawSegment(const Vector3& start, const Vector3& end, Color color)
     {
+        I32 index = m_line_vertices.size();
+        I32 count = index + 2;
+        m_line_vertices.reserve(static_cast<size_t>(count));
+        m_line_vertices.emplace_back(start, color);
+        m_line_vertices.emplace_back(end, color);
+        PushLineIndices(index, index + 1);
     }
 
-    void PrimitiveRenderer::DrawRay(const Vector3& position, const Vector3& direction, RenderingMode mode, Color color)
+    void PrimitiveRenderer::DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, RenderingMode mode, Color color)
     {
+        I32 index = static_cast<I32>(VerticesSize(mode));
+        I32 count = 3;
+        ReserveVertices(count, mode);
+        PushVertex(p0, mode, color);
+        PushVertex(p1, mode, color);
+        PushVertex(p2, mode, color);
+        if (mode == RenderingMode::Dot)
+        {
+            for (I32 i = 0; i < count; ++i)
+            {
+                PushIndex(index + i, mode);
+            }
+        }
+        else if (mode == RenderingMode::Line)
+        {
+            for (int i = 0; i < count; ++i)
+            {
+                size_t j = i + 1 < count ? i + 1 : 0;
+                PushLineIndices(index + i, index + j);
+            }
+        }
+        else if (mode == RenderingMode::Face)
+        {
+            PushFaceIndices(index + 0, index + 1, index + 2);
+        }
+    }
+
+    void PrimitiveRenderer::DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, RenderingMode mode, Color color)
+    {
+        I32 index = static_cast<I32>(VerticesSize(mode));
+        I32 count = 4;
+        ReserveVertices(count, mode);
+        PushVertex(p0, mode, color);
+        PushVertex(p1, mode, color);
+        PushVertex(p2, mode, color);
+        PushVertex(p3, mode, color);
+        if (mode == RenderingMode::Dot)
+        {
+            for (I32 i = 0; i < count; ++i)
+            {
+                PushIndex(index + i, mode);
+            }
+        }
+        else if (mode == RenderingMode::Line)
+        {
+            PushLineIndices(index, index + 1);
+            PushLineIndices(index, index + 2);
+            PushLineIndices(index, index + 3);
+            PushLineIndices(index + 1, index + 2);
+            PushLineIndices(index + 2, index + 3);
+            PushLineIndices(index + 3, index + 1);
+        }
+        else if (mode == RenderingMode::Face)
+        {
+            PushFaceIndices(index, index + 1, index + 2);
+            PushFaceIndices(index, index + 2, index + 3);
+            PushFaceIndices(index, index + 3, index + 1);
+            PushFaceIndices(index + 1, index + 2, index + 3);
+        }
     }
 
     void PrimitiveRenderer::Initialize(ColorShader* color_shader)
@@ -43,7 +112,7 @@ namespace Engine5
         UpdatePrimitiveRendererCamera();
         UpdateProjectionMatrix();
         m_device_context = m_dx11_api->GetDeviceContext();
-        m_world_matrix = DirectX::XMMatrixIdentity();
+        m_world_matrix   = DirectX::XMMatrixIdentity();
     }
 
     void PrimitiveRenderer::Update(Real dt)
@@ -273,7 +342,6 @@ namespace Engine5
 
             // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
             m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
             m_color_shader->Update(dt, m_device_context, static_cast<int>(m_line_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
         }
     }

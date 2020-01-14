@@ -27,9 +27,10 @@ namespace Engine5
         void DrawPrimitive(const Primitive& primitive, RenderingMode mode, Color color = Color());
 
         //Draw Direct Primitives
-        void DrawPoint(const Vector3& point, RenderingMode mode, Color color = Color());
-        void DrawSegment(const Vector3& start, const Vector3& end, RenderingMode mode, Color color = Color());
-        void DrawRay(const Vector3& position, const Vector3& direction, RenderingMode mode, Color color = Color());
+        void DrawPoint(const Vector3& point, Color color = Color());
+        void DrawSegment(const Vector3& start, const Vector3& end, Color color = Color());
+        void DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, RenderingMode mode, Color color = Color());
+        void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, RenderingMode mode, Color color = Color());
 
         void Initialize(ColorShader* color_shader);
         void Update(Real dt);
