@@ -46,7 +46,7 @@ namespace Engine5
         void   ValidateKeyMap(ColliderPrimitive* a, ColliderPrimitive* b);
         size_t GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b);
 
-        auto FindRelatedColliderPairList(ColliderPrimitive* key) -> std::unordered_multimap<ColliderPrimitive*, ColliderPrimitive*>::_Pairii;
+        auto FindRelatedColliderPairList(ColliderPrimitive* key);
 
         std::list<CollisionData> FindCollisionDataList(ColliderPrimitive* key);
         CollisionState           FindCollisionState(ColliderPrimitive* a, ColliderPrimitive* b);

@@ -240,7 +240,7 @@ namespace Engine5
         }
         else if (mode == RenderingMode::Face)
         {
-            renderer->PushFaceIndices(index + 0, index + 1, index + 2);
+            renderer->PushFaceIndices(index + 0, index + 2, index + 1);
         }
     }
 

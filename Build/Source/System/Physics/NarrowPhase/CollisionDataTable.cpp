@@ -247,7 +247,7 @@ namespace Engine5
         return reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
     }
 
-    auto CollisionDataTable::FindRelatedColliderPairList(ColliderPrimitive* key) -> std::unordered_multimap<ColliderPrimitive*, ColliderPrimitive*>::_Pairii
+    auto CollisionDataTable::FindRelatedColliderPairList(ColliderPrimitive* key) 
     {
         return m_collision_data_key_map.equal_range(key);
     }

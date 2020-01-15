@@ -27,6 +27,7 @@ namespace Engine5
 
         //Triangle triangle;
         //triangle.SetTriangle(Vector3(1, 2, 3), Vector3(3, -4, 5), Vector3(1, 1, 1));
+        
         //auto p0 = triangle.Vertex(0);
         //auto p1 = triangle.Vertex(1);
         //auto p2 = triangle.Vertex(2);
@@ -39,6 +40,14 @@ namespace Engine5
             m_renderer->BeginScene(m_background_color);
             m_renderer->Update(dt);
             m_primitive_renderer->Update(dt);
+
+            Triangle triangle;
+            //triangle.SetTriangle(Vector3(1, 0, 0), Vector3(0, 1, 0), Vector3(-1, 0, 0));
+            triangle.SetTriangle(Vector3(1, 2, 3), Vector3(3, -4, 5), Vector3(1, 1, 1));
+            triangle.DrawPrimitive(m_primitive_renderer, RenderingMode::Face, ColorDef::Pure::Red);
+
+            triangle.SetTriangle(Vector3(), Vector3(1.0f), Vector3(0.0f, -1.0f));
+            triangle.DrawPrimitive(m_primitive_renderer, RenderingMode::Line, ColorDef::Pure::Yellow);
 
             //update scene
             for (auto& scene : m_scenes)
