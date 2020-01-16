@@ -47,7 +47,7 @@ namespace Engine5
             if (projection > p)
             {
                 result = vertices[i];
-                p      = projection;
+                p = projection;
             }
         }
         return Vector3(result.x, result.y, 0.0f);
@@ -60,12 +60,12 @@ namespace Engine5
         maximum_t = -1.0f;
         //plane elements
         Vector3 normal(0.0f, 0.0f, 1.0f);
-        Vector3 pc          = -local_ray.position;
+        Vector3 pc = -local_ray.position;
         Real    denominator = normal.DotProduct(local_ray.direction);
         Real    t_y_min, t_y_max;
         Vector2 rect_min = vertices[3];
         Vector2 rect_max = vertices[0];
-        Vector3 inv_dir  = local_ray.direction;
+        Vector3 inv_dir = local_ray.direction;
         inv_dir.SetInverse();
         if (Utility::IsZero(denominator) == true)
         {
@@ -114,7 +114,7 @@ namespace Engine5
         else
         {
             //ray-plane intersect one point.
-            Real    plane_t            = pc.DotProduct(normal) / denominator;
+            Real    plane_t = pc.DotProduct(normal) / denominator;
             Vector3 plane_intersection = local_ray.position + local_ray.direction * plane_t;
             //define rectangle.
             if (rect_min.x <= plane_intersection.x && rect_max.x >= plane_intersection.x &&
@@ -188,7 +188,7 @@ namespace Engine5
         {
             for (int i = 0; i < count; ++i)
             {
-                size_t  j = i + 1 < count ? i + 1 : 0;
+                I32 j = i + 1 < count ? i + 1 : 0;
                 renderer->PushLineIndices(index + i, index + j);
             }
         }

@@ -14,7 +14,7 @@ namespace Engine5
 
         void SolveConstraints() const;
         void SolveContact(Contact* contact, Real dt) const;
-        void SolveManifold() const;
+        void SolveManifold(Manifold* manifold) const;
         void WarmStart(Manifold* manifold) const;
 
     private:

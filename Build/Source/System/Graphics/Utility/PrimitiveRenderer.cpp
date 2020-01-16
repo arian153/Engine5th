@@ -24,7 +24,7 @@ namespace Engine5
 
     void PrimitiveRenderer::DrawPoint(const Vector3& point, Color color)
     {
-        I32 index = m_dot_vertices.size();
+        I32 index = (I32)m_dot_vertices.size();
         I32 count = index + 1;
         m_dot_vertices.reserve(static_cast<size_t>(count));
         m_dot_vertices.emplace_back(point, color);
@@ -33,7 +33,7 @@ namespace Engine5
 
     void PrimitiveRenderer::DrawSegment(const Vector3& start, const Vector3& end, Color color)
     {
-        I32 index = m_line_vertices.size();
+        I32 index = (I32)m_line_vertices.size();
         I32 count = index + 2;
         m_line_vertices.reserve(static_cast<size_t>(count));
         m_line_vertices.emplace_back(start, color);
@@ -60,7 +60,7 @@ namespace Engine5
         {
             for (int i = 0; i < count; ++i)
             {
-                size_t j = i + 1 < count ? i + 1 : 0;
+                I32 j = i + 1 < count ? i + 1 : 0;
                 PushLineIndices(index + i, index + j);
             }
         }

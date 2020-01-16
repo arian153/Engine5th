@@ -234,7 +234,7 @@ namespace Engine5
         {
             for (int i = 0; i < count; ++i)
             {
-                size_t  j = i + 1 < count ? i + 1 : 0;
+                I32  j = i + 1 < count ? i + 1 : 0;
                 renderer->PushLineIndices(index + i, index + j);
             }
         }
