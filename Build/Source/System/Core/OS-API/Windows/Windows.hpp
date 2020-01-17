@@ -28,6 +28,7 @@ namespace Engine5
         DWORD     GetWindowModeRelatedResolution() const;
         HINSTANCE AppInstance() const;
         HWND      AppHWnd() const;
+        Real MonitorScaleFactor() const;
 
         int  ClientWidth() const;
         int  ClientHeight() const;

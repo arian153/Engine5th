@@ -1,6 +1,7 @@
 #include "Windows.hpp"
 #include "../Application.hpp"
 #include "../../Utility/CoreUtility.hpp"
+#include <ShellScalingApi.h>
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
@@ -388,9 +389,14 @@ namespace Engine5
         int win_width  = size.right - size.left;
         int win_height = size.bottom - size.top;
 
+        Real monitor_scale = MonitorScaleFactor();
+
+        Real movement_width = (Real)win_width / (2.0f * monitor_scale);
+        Real movement_height = (Real)win_height / (2.0f * monitor_scale);
+
         /* Get start position for center */
-        x_start = (dm.dmPelsWidth / 2) - (win_width / 2);
-        y_start = (dm.dmPelsHeight / 2) - (win_height / 2);
+        x_start = (int)movement_width; //(dm.dmPelsWidth / 2) -(int)movement_width;
+        y_start = (int)movement_height; //(dm.dmPelsHeight / 2) -(int)movement_height;
     }
 
     DWORD WindowsAPI::GetWindowModeRelatedResolution() const
@@ -410,6 +416,75 @@ namespace Engine5
     HWND WindowsAPI::AppHWnd() const
     {
         return m_h_wnd;
+    }
+
+    Real WindowsAPI::MonitorScaleFactor() const
+    {
+        POINT pt_zero = { 0, 0 };
+        HMONITOR primary_monitor = MonitorFromPoint(pt_zero, MONITOR_DEFAULTTOPRIMARY);
+
+        DEVICE_SCALE_FACTOR result;
+        GetScaleFactorForMonitor(primary_monitor, &result);
+
+        Real scale_result = -1.0f;
+        switch (result)
+        {
+        case DEVICE_SCALE_FACTOR_INVALID:
+            break;
+        case SCALE_100_PERCENT:
+            scale_result = 1.0f;
+            break;
+        case SCALE_120_PERCENT:
+            scale_result = 1.2f;
+            break;
+        case SCALE_125_PERCENT:
+            scale_result = 1.25f;
+            break;
+        case SCALE_140_PERCENT:
+            scale_result = 1.4f;
+            break;
+        case SCALE_150_PERCENT:
+            scale_result = 1.5f;
+            break;
+        case SCALE_160_PERCENT:
+            scale_result = 1.6f;
+            break;
+        case SCALE_175_PERCENT:
+            scale_result = 1.75f;
+            break;
+        case SCALE_180_PERCENT:
+            scale_result = 1.8f;
+            break;
+        case SCALE_200_PERCENT:
+            scale_result = 2.0f;
+            break;
+        case SCALE_225_PERCENT:
+            scale_result = 2.25f;
+            break;
+        case SCALE_250_PERCENT:
+            scale_result = 2.5f;
+            break;
+        case SCALE_300_PERCENT:
+            scale_result = 3.0f;
+            break;
+        case SCALE_350_PERCENT:
+            scale_result = 3.5f;
+            break;
+        case SCALE_400_PERCENT:
+            scale_result = 4.0f;
+            break;
+        case SCALE_450_PERCENT:
+            scale_result = 4.5f;
+            break;
+        case SCALE_500_PERCENT:
+            scale_result = 5.0f;
+            break;
+        default:
+            scale_result = 1.0f;
+            break;
+        }
+
+        return scale_result;
     }
 
     int WindowsAPI::ClientWidth() const
