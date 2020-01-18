@@ -10,6 +10,12 @@ namespace Engine5
         type = PrimitiveType::Triangle;
     }
 
+    Triangle::Triangle(const Vector2& p0, const Vector2& p1, const Vector2& p2)
+    {
+        type = PrimitiveType::Triangle;
+        SetTriangle(p0, p1, p2);
+    }
+
     Triangle::Triangle(const Vector3& p0, const Vector3& p1, const Vector3& p2)
     {
         type = PrimitiveType::Triangle;
@@ -251,7 +257,6 @@ namespace Engine5
         vertices[0] = p0 - c;
         vertices[1] = p1 - c;
         vertices[2] = p2 - c;
-        //orientation.Set(Math::Vector3::Z_AXIS, 0.0f);
     }
 
     void Triangle::SetTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2)

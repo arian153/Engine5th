@@ -32,6 +32,7 @@ namespace Engine5
         void DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, RenderingMode mode, Color color = Color());
         void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, RenderingMode mode, Color color = Color());
 
+
         void Initialize(ColorShader* color_shader);
         void Update(Real dt);
         void Shutdown();

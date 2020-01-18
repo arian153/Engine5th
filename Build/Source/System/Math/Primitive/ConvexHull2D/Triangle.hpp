@@ -8,6 +8,7 @@ namespace Engine5
     {
     public:
         Triangle();
+        explicit Triangle(const Vector2& p0, const Vector2& p1, const Vector2& p2);
         explicit Triangle(const Vector3& p0, const Vector3& p1, const Vector3& p2);
         ~Triangle();
 
