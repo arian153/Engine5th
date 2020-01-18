@@ -17,7 +17,6 @@ namespace Engine5
         void UpdateCurrentManifold(const Contact& new_contact);
         void UpdateCollisionState();
         void CutDownManifold();
-
         size_t ContactsCount() const;
 
     private:
@@ -31,9 +30,6 @@ namespace Engine5
         friend class NarrowPhase;
 
     private:
-        Real    normal_impulse_sum           = 0.0f;
-        Real    tangent_a_impulse_sum        = 0.0f;
-        Real    tangent_b_impulse_sum        = 0.0f;
         Real    persistent_threshold_squared = 4.0f;
         Vector3 cache_a_positional;
         Vector3 cache_a_rotational;
@@ -41,9 +37,11 @@ namespace Engine5
         Vector3 cache_b_rotational;
         bool    is_collide = false;
 
+        Vector3 normal;
+
         //data
-        ColliderPrimitive*   collider_a = nullptr;
-        ColliderPrimitive*   collider_b = nullptr;
+        ColliderPrimitive* collider_a = nullptr;
+        ColliderPrimitive* collider_b = nullptr;
         std::vector<Contact> contacts;
     };
 }
