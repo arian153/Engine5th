@@ -391,12 +391,12 @@ namespace Engine5
 
         Real monitor_scale = MonitorScaleFactor();
 
-        Real movement_width = (Real)win_width / (2.0f * monitor_scale);
-        Real movement_height = (Real)win_height / (2.0f * monitor_scale);
+        Real movement_width = (Real)win_width * monitor_scale / 2.0f;
+        Real movement_height = (Real)win_height * monitor_scale / 2.0f;
 
         /* Get start position for center */
-        x_start = (int)movement_width; //(dm.dmPelsWidth / 2) -(int)movement_width;
-        y_start = (int)movement_height; //(dm.dmPelsHeight / 2) -(int)movement_height;
+        x_start = (dm.dmPelsWidth / 2) - static_cast<int>(movement_width);
+        y_start = (dm.dmPelsHeight / 2) - static_cast<int>(movement_height);
     }
 
     DWORD WindowsAPI::GetWindowModeRelatedResolution() const
@@ -423,8 +423,7 @@ namespace Engine5
         POINT pt_zero = { 0, 0 };
         HMONITOR primary_monitor = MonitorFromPoint(pt_zero, MONITOR_DEFAULTTOPRIMARY);
 
-        DEVICE_SCALE_FACTOR result;
-        GetScaleFactorForMonitor(primary_monitor, &result);
+        DEVICE_SCALE_FACTOR result = GetScaleFactorForDevice(DEVICE_PRIMARY);
 
         Real scale_result = -1.0f;
         switch (result)
