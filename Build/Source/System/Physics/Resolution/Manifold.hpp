@@ -24,6 +24,7 @@ namespace Engine5
         Real DistanceFromLineSegment(const Contact& contact, Contact* p0, Contact* p1);
         Real DistanceFromTriangle(const Contact& contact, Contact* p0, Contact* p1, Contact* p2);
         bool OnTriangle(Contact* point, Contact* p0, Contact* p1, Contact* p2);
+        void CalculateNormal();
 
     private:
         friend class Resolution;

@@ -38,22 +38,27 @@ namespace Engine5
             auto    body_a = collider_a->GetRigidBody();
             auto    body_b = collider_b->GetRigidBody();
 
+            //convert existing contact point from local space to world space.
+            //if both bodies are far enough away, remove contact from manifold data.
+
             Vector3 local_to_global_a = body_a->LocalToWorldPoint(contact.local_position_a);
             Vector3 local_to_global_b = body_b->LocalToWorldPoint(contact.local_position_b);
 
-            Vector3 r_ab = local_to_global_b - local_to_global_a;
+            //current frame's distance between a to b.
+            Vector3 r_ab = local_to_global_b - local_to_global_a; 
 
-            Vector3 r_a = contact.global_position_a - local_to_global_a;
+            //how much distance changed between prev to current
+            Vector3 r_a = contact.global_position_a - local_to_global_a; 
             Vector3 r_b = contact.global_position_b - local_to_global_b;
             
-            bool    still_penetrating = contact.normal.DotProduct(r_ab) <= 0.0f;
-
-            bool    r_a_close_enough = r_a.LengthSquared() < persistent_threshold_squared;
-            bool    r_b_close_enough = r_b.LengthSquared() < persistent_threshold_squared;
+            //check still penetrate between both bodies.
+            bool    b_still_penetrating = contact.normal.DotProduct(r_ab) <= 0.0f;
+            bool    b_r_a_close_enough = r_a.LengthSquared() < persistent_threshold_squared;
+            bool    b_r_b_close_enough = r_b.LengthSquared() < persistent_threshold_squared;
 
             // keep contact point if the collision pair is still colliding at this point, 
             // and the local positions are not too far from the global positions original acquired from collision detection
-            if (r_a_close_enough && r_b_close_enough && still_penetrating)
+            if (b_r_a_close_enough && b_r_b_close_enough && b_still_penetrating)
             {
                 // contact persistent, keep
                 contact.is_persistent = true;
@@ -263,4 +268,10 @@ namespace Engine5
         }
         return true;
     }
+
+    void Manifold::CalculateNormal()
+    {
+
+    }
+
 }

@@ -14,6 +14,7 @@ namespace Engine5
 
     void Resolution::SolveConstraints() const
     {
+
     }
 
     void Resolution::SolveContact(Contact* contact, Real dt) const
@@ -52,10 +53,8 @@ namespace Engine5
             Vector3 relative_velocity_b = body_b->m_linear_velocity + body_b->m_angular_velocity.CrossProduct(rb);
             Vector3 relative_velocity = relative_velocity_b - relative_velocity_a;
             Real    projection = relative_velocity.DotProduct(contact->normal);
-            if (projection > 0.0f)
-            {
-            }
-            else
+
+            if (projection <= 0.0f)
             {
                 //Real restitution      = (collider_primitive_a->coef.restitution + collider_primitive_b->coef.restitution) * 0.5f;
                 //Real restitution_term = restitution * projection;

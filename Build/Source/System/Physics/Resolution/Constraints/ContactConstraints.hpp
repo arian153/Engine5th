@@ -11,7 +11,7 @@ namespace Engine5
 
     public:
         Vector3  local_point_a;
-        Vector3 local_point_b;
+        Vector3  local_point_b;
         Vector3  local_normal;
         Real     inv_mass_a;
         Real     inv_mass_b;
