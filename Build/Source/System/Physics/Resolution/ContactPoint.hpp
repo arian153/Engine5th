@@ -5,14 +5,14 @@ namespace Engine5
 {
     class ColliderPrimitive;
 
-    class Contact
+    class ContactPoint
     {
     public:
-        Contact();
-        ~Contact();
+        ContactPoint();
+        ~ContactPoint();
         void     Clear();
-        Contact& operator=(const Contact& rhs);
-        bool     operator==(const Contact& rhs) const;
+        ContactPoint& operator=(const ContactPoint& rhs);
+        bool     operator==(const ContactPoint& rhs) const;
 
     public:
         //Two contact points in world space, each representing the deepest penetrating point of one collider.

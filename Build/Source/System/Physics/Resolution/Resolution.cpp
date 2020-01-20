@@ -17,7 +17,7 @@ namespace Engine5
 
     }
 
-    void Resolution::SolveContact(Contact* contact, Real dt) const
+    void Resolution::SolveContact(ContactPoint* contact, Real dt) const
     {
         auto body_a = contact->collider_a->GetRigidBody();
         auto body_b = contact->collider_b->GetRigidBody();
@@ -100,7 +100,7 @@ namespace Engine5
         }
     }
 
-    void Resolution::SolveManifold(Manifold* manifold) const
+    void Resolution::SolveManifold(ContactManifold* manifold) const
     {
         for (auto& contact : manifold->contacts)
         {
@@ -109,7 +109,7 @@ namespace Engine5
 
     }
 
-    void Resolution::WarmStart(Manifold* manifold) const
+    void Resolution::WarmStart(ContactManifold* manifold) const
     {
         auto body_a = manifold->collider_a->GetRigidBody();
         auto body_b = manifold->collider_b->GetRigidBody();

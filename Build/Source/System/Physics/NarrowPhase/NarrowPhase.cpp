@@ -28,7 +28,7 @@ namespace Engine5
         m_primitive_renderer = primitive_renderer;
     }
 
-    void NarrowPhase::GenerateContact(std::unordered_map<size_t, Manifold>& manifold_table, CollisionDataTable* data_table, const ColorFlag& gjk_flag, const ColorFlag& epa_flag, const ColorFlag& contact_flag)
+    void NarrowPhase::GenerateContact(std::unordered_map<size_t, ContactManifold>& manifold_table, CollisionDataTable* data_table, const ColorFlag& gjk_flag, const ColorFlag& epa_flag, const ColorFlag& contact_flag)
     {
         for (auto& manifold : manifold_table)
         {
@@ -52,7 +52,7 @@ namespace Engine5
                                                           simplex.simplex_vertex_d.global,
                                                           RenderingMode::Line, gjk_flag.color);
                 }
-                Contact new_contact_data;
+                ContactPoint new_contact_data;
                 if (EPAContactGeneration(manifold.second.collider_a, manifold.second.collider_b, polytope, new_contact_data) == true)
                 {
                     if (epa_flag.b_flag)
@@ -143,7 +143,7 @@ namespace Engine5
         return false;
     }
 
-    bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, Contact& result)
+    bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result)
     {
         int exit_iteration = 0;
         while (exit_iteration < 100)

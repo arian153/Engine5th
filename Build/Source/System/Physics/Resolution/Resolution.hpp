@@ -3,8 +3,8 @@
 
 namespace Engine5
 {
-    class Contact;
-    class Manifold;
+    class ContactPoint;
+    class ContactManifold;
 
     class Resolution
     {
@@ -13,9 +13,9 @@ namespace Engine5
         ~Resolution();
 
         void SolveConstraints() const;
-        void SolveContact(Contact* contact, Real dt) const;
-        void SolveManifold(Manifold* manifold) const;
-        void WarmStart(Manifold* manifold) const;
+        void SolveContact(ContactPoint* contact, Real dt) const;
+        void SolveManifold(ContactManifold* manifold) const;
+        void WarmStart(ContactManifold* manifold) const;
 
     private:
         Real baumgarte_scalar = 0.0035f;

@@ -4,26 +4,26 @@
 
 namespace Engine5
 {
-    class Contact;
+    class ContactPoint;
 
-    class Manifold
+    class ContactManifold
     {
     public:
-        Manifold();
-        ~Manifold();
-        void Set(const Manifold& manifold);
+        ContactManifold();
+        ~ContactManifold();
+        void Set(const ContactManifold& manifold);
         void SetPersistentThreshold(Real threshold);
         void UpdateInvalidContact();
-        void UpdateCurrentManifold(const Contact& new_contact);
+        void UpdateCurrentManifold(const ContactPoint& new_contact);
         void UpdateCollisionState();
         void CutDownManifold();
         size_t ContactsCount() const;
 
     private:
-        Real DistanceFromPoint(const Contact& contact, Contact* p0);
-        Real DistanceFromLineSegment(const Contact& contact, Contact* p0, Contact* p1);
-        Real DistanceFromTriangle(const Contact& contact, Contact* p0, Contact* p1, Contact* p2);
-        bool OnTriangle(Contact* point, Contact* p0, Contact* p1, Contact* p2);
+        Real DistanceFromPoint(const ContactPoint& contact, ContactPoint* p0);
+        Real DistanceFromLineSegment(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1);
+        Real DistanceFromTriangle(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2);
+        bool OnTriangle(ContactPoint* point, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2);
         void CalculateNormal();
 
     private:
@@ -43,6 +43,6 @@ namespace Engine5
         //data
         ColliderPrimitive* collider_a = nullptr;
         ColliderPrimitive* collider_b = nullptr;
-        std::vector<Contact> contacts;
+        std::vector<ContactPoint> contacts;
     };
 }

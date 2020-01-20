@@ -4,15 +4,15 @@
 
 namespace Engine5
 {
-    Manifold::Manifold()
+    ContactManifold::ContactManifold()
     {
     }
 
-    Manifold::~Manifold()
+    ContactManifold::~ContactManifold()
     {
     }
 
-    void Manifold::Set(const Manifold& manifold)
+    void ContactManifold::Set(const ContactManifold& manifold)
     {
         this->collider_a = manifold.collider_a;
         this->collider_b = manifold.collider_b;
@@ -24,15 +24,15 @@ namespace Engine5
         }
     }
 
-    void Manifold::SetPersistentThreshold(Real threshold)
+    void ContactManifold::SetPersistentThreshold(Real threshold)
     {
         persistent_threshold_squared = threshold * threshold;
     }
 
-    void Manifold::UpdateInvalidContact()
+    void ContactManifold::UpdateInvalidContact()
     {
         //erase contact list.
-        std::list<Contact*> remove_list;
+        std::list<ContactPoint*> remove_list;
         for (auto& contact : contacts)
         {
             auto    body_a = collider_a->GetRigidBody();
@@ -45,12 +45,12 @@ namespace Engine5
             Vector3 local_to_global_b = body_b->LocalToWorldPoint(contact.local_position_b);
 
             //current frame's distance between a to b.
-            Vector3 r_ab = local_to_global_b - local_to_global_a; 
+            Vector3 r_ab = local_to_global_b - local_to_global_a;
 
             //how much distance changed between prev to current
-            Vector3 r_a = contact.global_position_a - local_to_global_a; 
+            Vector3 r_a = contact.global_position_a - local_to_global_a;
             Vector3 r_b = contact.global_position_b - local_to_global_b;
-            
+
             //check still penetrate between both bodies.
             bool    b_still_penetrating = contact.normal.DotProduct(r_ab) <= 0.0f;
             bool    b_r_a_close_enough = r_a.LengthSquared() < persistent_threshold_squared;
@@ -84,7 +84,7 @@ namespace Engine5
         remove_list.clear();
     }
 
-    void Manifold::UpdateCurrentManifold(const Contact& new_contact)
+    void ContactManifold::UpdateCurrentManifold(const ContactPoint& new_contact)
     {
         bool add_contact = false;
         for (auto& contact : contacts)
@@ -107,7 +107,7 @@ namespace Engine5
         }
     }
 
-    void Manifold::UpdateCollisionState()
+    void ContactManifold::UpdateCollisionState()
     {
         for (auto& contact : contacts)
         {
@@ -115,7 +115,7 @@ namespace Engine5
         }
     }
 
-    void Manifold::CutDownManifold()
+    void ContactManifold::CutDownManifold()
     {
         if (contacts.size() < 4)
         {
@@ -123,7 +123,7 @@ namespace Engine5
         }
 
         // find the deepest penetrating one
-        Contact* deepest = nullptr;
+        ContactPoint* deepest = nullptr;
         Real     penetration = Math::REAL_NEGATIVE_MAX;
         for (auto& contact : contacts)
         {
@@ -135,7 +135,7 @@ namespace Engine5
         }
 
         // find second contact
-        Contact* furthest1 = nullptr;
+        ContactPoint* furthest1 = nullptr;
         Real     distance_squared1 = Math::REAL_NEGATIVE_MAX;
         for (auto& contact : contacts)
         {
@@ -148,7 +148,7 @@ namespace Engine5
         }
 
         // find third contact
-        Contact* furthest2 = nullptr;
+        ContactPoint* furthest2 = nullptr;
         float    distance_squared2 = Math::REAL_NEGATIVE_MAX;
         for (auto& contact : contacts)
         {
@@ -161,7 +161,7 @@ namespace Engine5
         }
 
         // find fourth contact
-        Contact* furthest3 = nullptr;
+        ContactPoint* furthest3 = nullptr;
         float    distance_squared3 = Math::REAL_NEGATIVE_MAX;
         for (auto& contact : contacts)
         {
@@ -192,12 +192,12 @@ namespace Engine5
         }
     }
 
-    size_t Manifold::ContactsCount() const
+    size_t ContactManifold::ContactsCount() const
     {
         return contacts.size();
     }
 
-    Real Manifold::DistanceFromPoint(const Contact& contact, Contact* p0)
+    Real ContactManifold::DistanceFromPoint(const ContactPoint& contact, ContactPoint* p0)
     {
         if (p0 == nullptr)
         {
@@ -206,7 +206,7 @@ namespace Engine5
         return (contact.global_position_a - p0->global_position_a).LengthSquared();
     }
 
-    Real Manifold::DistanceFromLineSegment(const Contact& contact, Contact* p0, Contact* p1)
+    Real ContactManifold::DistanceFromLineSegment(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1)
     {
         if (p0 == nullptr || p1 == nullptr)
         {
@@ -219,7 +219,7 @@ namespace Engine5
         return d.DotProduct(d);
     }
 
-    Real Manifold::DistanceFromTriangle(const Contact& contact, Contact* p0, Contact* p1, Contact* p2)
+    Real ContactManifold::DistanceFromTriangle(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2)
     {
         if (p0 == nullptr || p1 == nullptr || p2 == nullptr)
         {
@@ -241,7 +241,7 @@ namespace Engine5
         return (closest - contact.global_position_a).LengthSquared();
     }
 
-    bool Manifold::OnTriangle(Contact* point, Contact* p0, Contact* p1, Contact* p2)
+    bool ContactManifold::OnTriangle(ContactPoint* point, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2)
     {
         if (point == nullptr || p0 == nullptr || p1 == nullptr || p2 == nullptr)
         {
@@ -269,7 +269,7 @@ namespace Engine5
         return true;
     }
 
-    void Manifold::CalculateNormal()
+    void ContactManifold::CalculateNormal()
     {
 
     }

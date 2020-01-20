@@ -2,15 +2,15 @@
 
 namespace Engine5
 {
-    Contact::Contact()
+    ContactPoint::ContactPoint()
     {
     }
 
-    Contact::~Contact()
+    ContactPoint::~ContactPoint()
     {
     }
 
-    void Contact::Clear()
+    void ContactPoint::Clear()
     {
         global_position_a.SetZero();
         global_position_b.SetZero();
@@ -28,7 +28,7 @@ namespace Engine5
         is_persistent         = false;
     }
 
-    Contact& Contact::operator=(const Contact& rhs)
+    ContactPoint& ContactPoint::operator=(const ContactPoint& rhs)
     {
         if (this != &rhs)
         {
@@ -47,7 +47,7 @@ namespace Engine5
         return *this;
     }
 
-    bool Contact::operator==(const Contact& rhs) const
+    bool ContactPoint::operator==(const ContactPoint& rhs) const
     {
         return (normal == rhs.normal && depth == rhs.depth && global_position_a == rhs.global_position_a);
     }

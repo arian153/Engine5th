@@ -26,7 +26,7 @@ namespace Engine5
 
         ColliderPrimitive* CreateCollider(ColliderSet* collider_set, ColliderType type) const;
 
-        RigidBody*   AddRigidBody(RigidBody* body);
+        RigidBody* AddRigidBody(RigidBody* body);
         ColliderSet* AddColliderSet(ColliderSet* set);
         void         AddPrimitive(ColliderPrimitive* collider_primitive) const;
 
@@ -34,16 +34,16 @@ namespace Engine5
 
 
     private:
-        BroadPhaseMode m_mode             = BroadPhaseMode::DynamicBVH;
-        BroadPhase*    m_broad_phase      = nullptr;
-        NarrowPhase*   m_narrow_phase     = nullptr;
-        Resolution*    m_resolution_phase = nullptr;
+        BroadPhaseMode m_mode = BroadPhaseMode::DynamicBVH;
+        BroadPhase* m_broad_phase = nullptr;
+        NarrowPhase* m_narrow_phase = nullptr;
+        Resolution* m_resolution_phase = nullptr;
 
         std::vector<ColliderSet*>            m_collider_sets;
         std::vector<RigidBody*>              m_rigid_bodies;
         std::list<ColliderPair>              m_pairs;
-        std::unordered_map<size_t, Manifold> m_manifold_table;
-        CollisionDataTable*                  m_collision_data_table = nullptr;
+        std::unordered_map<size_t, ContactManifold> m_manifold_table;
+        CollisionDataTable* m_collision_data_table = nullptr;
 
         ColorFlag m_draw_gjk;
         ColorFlag m_draw_epa;

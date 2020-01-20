@@ -23,11 +23,11 @@ namespace Engine5
 
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
 
-        void GenerateContact(std::unordered_map<size_t, Manifold>& manifold_table, CollisionDataTable* data_table, const ColorFlag& gjk, const ColorFlag& epa, const ColorFlag& contact);
+        void GenerateContact(std::unordered_map<size_t, ContactManifold>& manifold_table, CollisionDataTable* data_table, const ColorFlag& gjk, const ColorFlag& epa, const ColorFlag& contact);
 
         SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction);
         bool         GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex);
-        bool         EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, Contact& result);
+        bool         EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result);
 
     private:
         void ComputeBasisQuaternion(const Vector3& normal, Vector3& tangent_a, Vector3& tangent_b);
