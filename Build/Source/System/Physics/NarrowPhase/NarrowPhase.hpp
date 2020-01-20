@@ -1,9 +1,9 @@
 #pragma once
 #include "SupportPoint.hpp"
 #include "Simplex.hpp"
-#include "../Resolution/Contact.hpp"
+#include "../Resolution/ContactPoint.hpp"
 #include <unordered_map>
-#include "../Resolution/Manifold.hpp"
+#include "../Resolution/ContactManifold.hpp"
 
 namespace Engine5
 {

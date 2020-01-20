@@ -1,4 +1,4 @@
-#include "Manifold.hpp"
+#include "ContactManifold.hpp"
 #include <list>
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 

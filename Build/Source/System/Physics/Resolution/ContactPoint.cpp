@@ -1,4 +1,4 @@
-#include "Contact.hpp"
+#include "ContactPoint.hpp"
 
 namespace Engine5
 {

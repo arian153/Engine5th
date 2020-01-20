@@ -1,5 +1,5 @@
 #include "Resolution.hpp"
-#include "Manifold.hpp"
+#include "ContactManifold.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
 namespace Engine5

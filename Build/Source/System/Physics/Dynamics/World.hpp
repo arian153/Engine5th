@@ -4,7 +4,7 @@
 #include "RigidBody.hpp"
 #include "../Utility/PhysicsDef.hpp"
 #include "../BroadPhase/BroadPhase.hpp"
-#include "../Resolution/Manifold.hpp"
+#include "../Resolution/ContactManifold.hpp"
 #include <unordered_map>
 #include "../../Graphics/Utility/Color.hpp"
 

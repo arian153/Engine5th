@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Math/Math.hpp"
-#include "Contact.hpp"
+#include "ContactPoint.hpp"
 
 namespace Engine5
 {
