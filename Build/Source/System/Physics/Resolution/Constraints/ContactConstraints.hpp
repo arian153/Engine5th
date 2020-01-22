@@ -4,12 +4,13 @@
 
 namespace Engine5
 {
+    class ContactManifold;
     class RigidBody;
 
     class ContactConstraints final : public Constraints
     {
     public:
-        ContactConstraints();
+        ContactConstraints(ContactManifold* input);
         ~ContactConstraints();
 
         void SolveConstraints(Real dt) override;
@@ -20,8 +21,10 @@ namespace Engine5
         void WarmStart();
 
     private:
-        RigidBody* body_a = nullptr;
-        RigidBody* body_b = nullptr;
+        RigidBody* m_body_a = nullptr;
+        RigidBody* m_body_b = nullptr;
+
+        ContactManifold* m_manifold = nullptr;
 
         //velocities
         Vector3 m_v_a;
@@ -31,7 +34,7 @@ namespace Engine5
 
         //friction and restitution factor.
         //if 1.0f no effects.
-        Real restitution = 1.0f;
-        Real friction = 1.0f;
+        Real m_restitution = 1.0f;
+        Real m_friction = 1.0f;
     };
 }

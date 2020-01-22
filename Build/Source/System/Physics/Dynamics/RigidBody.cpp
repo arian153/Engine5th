@@ -87,6 +87,11 @@ namespace Engine5
         m_force_accumulator += force;
     }
 
+    Vector3 RigidBody::GetPosition() const
+    {
+        return m_position;
+    }
+
     void RigidBody::SetLinearVelocity(const Vector3& linear)
     {
         m_linear_velocity = linear;

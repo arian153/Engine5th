@@ -5,6 +5,7 @@
 namespace Engine5
 {
     class ContactPoint;
+    class RigidBody;
 
     class ContactManifold
     {
@@ -29,6 +30,7 @@ namespace Engine5
     private:
         friend class Resolution;
         friend class NarrowPhase;
+        friend class ContactConstraints;
 
     private:
         Real    persistent_threshold_squared = 4.0f;
@@ -36,8 +38,9 @@ namespace Engine5
         Vector3 manifold_normal;
 
         //data
-        ColliderPrimitive* collider_a = nullptr;
-        ColliderPrimitive* collider_b = nullptr;
+        RigidBody* m_body_a = nullptr;
+        RigidBody* m_body_b = nullptr;
+
         std::vector<ContactPoint> contacts;
     };
 }

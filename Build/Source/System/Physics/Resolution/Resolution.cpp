@@ -105,40 +105,7 @@ namespace Engine5
 
     void Resolution::WarmStart(ContactManifold* manifold) const
     {
-        auto body_a = manifold->collider_a->GetRigidBody();
-        auto body_b = manifold->collider_b->GetRigidBody();
-
-        //body a data.
-        auto va = body_a->GetLinearVelocity();
-        auto wa = body_a->GetAngularVelocity();
-        auto ma = body_a->InverseMass();
-        auto ia = body_a->InverseInertia();
-
-        //body b data.
-        auto vb = body_b->GetLinearVelocity();
-        auto wb = body_b->GetAngularVelocity();
-        auto mb = body_b->InverseMass();
-        auto ib = body_b->InverseInertia();
-
-        Basis normal_basis;
-        normal_basis.CalculateBasisApprox(manifold->manifold_normal);
-        Vector3 normal = normal_basis.i;
-        Vector3 tangent_a = normal_basis.j;
-        Vector3 tangent_b = normal_basis.k;
-
-        for (auto& contact : manifold->contacts)
-        {
-            Vector3 p = contact.normal_impulse_sum * normal
-                + contact.tangent_a_impulse_sum * tangent_a
-                + contact.tangent_b_impulse_sum * tangent_b;
-            //-= or +=
-            va += ma * p;
-            wa += ia * CrossProduct(contact.local_position_a, p);
-            //+= or -=
-            vb -= mb * p;
-            wb -= ib * CrossProduct(contact.local_position_b, p);
-        }
-
+        
         //apply new velocities.
         
     }

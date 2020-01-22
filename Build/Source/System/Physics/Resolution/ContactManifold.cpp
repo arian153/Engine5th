@@ -1,6 +1,7 @@
 #include "ContactManifold.hpp"
 #include <list>
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
+#include "../Dynamics/RigidBody.hpp"
 
 namespace Engine5
 {
@@ -14,8 +15,8 @@ namespace Engine5
 
     void ContactManifold::Set(const ContactManifold& manifold)
     {
-        this->collider_a = manifold.collider_a;
-        this->collider_b = manifold.collider_b;
+        this->m_body_a = manifold.m_body_a;
+        this->m_body_b = manifold.m_body_b;
         this->persistent_threshold_squared = manifold.persistent_threshold_squared;
         this->is_collide = manifold.is_collide;
         for (auto& contact : manifold.contacts)
@@ -35,14 +36,11 @@ namespace Engine5
         std::list<ContactPoint*> remove_list;
         for (auto& contact : contacts)
         {
-            auto    body_a = collider_a->GetRigidBody();
-            auto    body_b = collider_b->GetRigidBody();
-
             //convert existing contact point from local space to world space.
             //if both bodies are far enough away, remove contact from manifold data.
 
-            Vector3 local_to_global_a = body_a->LocalToWorldPoint(contact.local_position_a);
-            Vector3 local_to_global_b = body_b->LocalToWorldPoint(contact.local_position_b);
+            Vector3 local_to_global_a = m_body_a->LocalToWorldPoint(contact.local_position_a);
+            Vector3 local_to_global_b = m_body_b->LocalToWorldPoint(contact.local_position_b);
 
             //current frame's distance between a to b.
             Vector3 r_ab = local_to_global_b - local_to_global_a;
@@ -279,8 +277,9 @@ namespace Engine5
         }
         else if (contact_size == 2)
         {
+
             Vector3 line_dir = (contacts.at(1).global_position_a - contacts.at(0).global_position_a).Unit();
-            Vector3 pos_t = line_dir.CrossProduct((collider_b->GetBodyPosition() - collider_a->GetBodyPosition()).Unit()).Unit();
+            Vector3 pos_t = line_dir.CrossProduct((m_body_b->GetPosition() - m_body_b->GetPosition()).Unit()).Unit();
             Vector3 c0n_t = line_dir.CrossProduct(contacts.at(0).normal).Unit();
             Vector3 c1n_t = line_dir.CrossProduct(contacts.at(1).normal).Unit();
             Vector3 tangent = (pos_t + c0n_t + c1n_t).Unit();
