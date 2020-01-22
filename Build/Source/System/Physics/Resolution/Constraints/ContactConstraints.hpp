@@ -1,34 +1,37 @@
 #pragma once
 #include "../../../Math/Math.hpp"
+#include "Constraints.hpp"
 
 namespace Engine5
 {
-    class ContactPositionConstraints
+    class RigidBody;
+
+    class ContactConstraints final : public Constraints
     {
     public:
-        ContactPositionConstraints();
-        ~ContactPositionConstraints();
+        ContactConstraints();
+        ~ContactConstraints();
 
-    public:
-        Vector3  local_point_a;
-        Vector3  local_point_b;
-        Vector3  local_normal;
-        Real     inv_mass_a;
-        Real     inv_mass_b;
-        Vector3  local_centroid_a;
-        Vector3  local_centroid_b;
-        Matrix33 inv_inertia_a;
-        Matrix33 inv_inertia_b;
-    };
+        void SolveConstraints(Real dt) override;
+        void ApplyConstraints() override;
 
-    class ContactVelocityConstraints
-    {
-    public:
-        ContactVelocityConstraints();
-        ~ContactVelocityConstraints();
+        void SolveContactManifold();
+        void SolveContactPoint();
+        void WarmStart();
 
-    public:
-        Real restitution;
-        Real friction;
+    private:
+        RigidBody* body_a = nullptr;
+        RigidBody* body_b = nullptr;
+
+        //velocities
+        Vector3 m_v_a;
+        Vector3 m_w_a;
+        Vector3 m_v_b;
+        Vector3 m_w_b;
+
+        //friction and restitution factor.
+        //if 1.0f no effects.
+        Real restitution = 1.0f;
+        Real friction = 1.0f;
     };
 }

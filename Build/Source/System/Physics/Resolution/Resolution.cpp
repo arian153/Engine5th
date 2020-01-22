@@ -140,9 +140,6 @@ namespace Engine5
         }
 
         //apply new velocities.
-        body_a->SetLinearVelocity(va);
-        body_a->SetAngularVelocity(wa);
-        body_b->SetLinearVelocity(vb);
-        body_b->SetAngularVelocity(wb);
+        
     }
 }
