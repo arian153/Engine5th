@@ -32,13 +32,8 @@ namespace Engine5
 
     private:
         Real    persistent_threshold_squared = 4.0f;
-        Vector3 cache_a_positional;
-        Vector3 cache_a_rotational;
-        Vector3 cache_b_positional;
-        Vector3 cache_b_rotational;
         bool    is_collide = false;
-
-        Vector3 normal;
+        Vector3 manifold_normal;
 
         //data
         ColliderPrimitive* collider_a = nullptr;

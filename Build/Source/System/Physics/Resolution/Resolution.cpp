@@ -69,19 +69,13 @@ namespace Engine5
                     + contact_jacobian_aa * body_a->InverseInertia() * body_a->m_torque_accumulator
                     + contact_jacobian_lb * body_b->InverseMassMatrix() * body_b->m_force_accumulator
                     + contact_jacobian_ab * body_b->InverseInertia() * body_b->m_torque_accumulator;
-                //Real body_a_term = contact_jacobian_la * manifold.cache_a_positional + contact_jacobian_aa * manifold.cache_a_rotational;
-                // Real body_b_term = contact_jacobian_lb * manifold.cache_b_positional + contact_jacobian_ab * manifold.cache_b_rotational;
-                Real lambda = -(bias_term + velocity_term + force_term/* - body_a_term - body_b_term*/);
+                                Real lambda = -(bias_term + velocity_term + force_term/* - body_a_term - body_b_term*/);
                 lambda /= effective_mass;
                 Real normal_impulse_sum_copy = contact->normal_impulse_sum;
                 contact->normal_impulse_sum += lambda;
                 contact->normal_impulse_sum = Utility::Clamp(contact->normal_impulse_sum, 0.0f, Math::REAL_POSITIVE_MAX);
                 lambda = contact->normal_impulse_sum - normal_impulse_sum_copy;
-                //manifold.cache_a_positional += lambda * body_a->InverseMassMatrix() * contact_jacobian_la;
-                //manifold.cache_a_rotational += lambda * body_a->InverseInertia() * contact_jacobian_aa;
-                //manifold.cache_b_positional += lambda * body_b->InverseMassMatrix() * contact_jacobian_lb;
-                //manifold.cache_b_rotational += lambda * body_b->InverseInertia() * contact_jacobian_ab;
-                if (lambda > Math::EPSILON)
+                               if (lambda > Math::EPSILON)
                 {
                     Vector3 force_a = contact_jacobian_la * lambda * dt;
                     Vector3 torque_a = contact_jacobian_aa * lambda * dt;
@@ -127,7 +121,7 @@ namespace Engine5
         auto ib = body_b->InverseInertia();
 
         Basis normal_basis;
-        normal_basis.CalculateBasisApprox(manifold->normal);
+        normal_basis.CalculateBasisApprox(manifold->manifold_normal);
         Vector3 normal = normal_basis.i;
         Vector3 tangent_a = normal_basis.j;
         Vector3 tangent_b = normal_basis.k;

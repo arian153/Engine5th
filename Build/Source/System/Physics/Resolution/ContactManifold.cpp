@@ -271,7 +271,25 @@ namespace Engine5
 
     void ContactManifold::CalculateNormal()
     {
+        size_t contact_size = contacts.size();
 
+        if (contact_size == 1)
+        {
+            manifold_normal = contacts.at(0).normal;
+        }
+        else if (contact_size == 2)
+        {
+            Vector3 line_dir = (contacts.at(1).global_position_a - contacts.at(0).global_position_a).Unit();
+            Vector3 pos_t = line_dir.CrossProduct((collider_b->GetBodyPosition() - collider_a->GetBodyPosition()).Unit()).Unit();
+            Vector3 c0n_t = line_dir.CrossProduct(contacts.at(0).normal).Unit();
+            Vector3 c1n_t = line_dir.CrossProduct(contacts.at(1).normal).Unit();
+            Vector3 tangent = (pos_t + c0n_t + c1n_t).Unit();
+            manifold_normal = line_dir.CrossProduct(tangent).Unit();
+        }
+        else if (contact_size == 3 || contact_size == 4)
+        {
+            manifold_normal = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(2).global_position_a);
+        }
     }
 
 }
