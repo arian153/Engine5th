@@ -1,15 +1,10 @@
 #include "CollisionDataTable.hpp"
+#include "../Resolution/ContactManifold.hpp"
+#include "../Dynamics/ColliderSet.hpp"
+#include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
 namespace Engine5
 {
-    CollisionData::CollisionData()
-    {
-    }
-
-    CollisionData::~CollisionData()
-    {
-    }
-
     CollisionDataTable::CollisionDataTable()
     {
     }
@@ -18,32 +13,30 @@ namespace Engine5
     {
     }
 
-    void CollisionDataTable::Initialize()
+    void CollisionDataTable::Initialize(std::unordered_multimap<size_t, ContactManifold>* data_table)
     {
+        m_manifold_table = data_table;
     }
 
     void CollisionDataTable::Shutdown()
     {
-        m_collision_data_key_map.clear();
-        m_collision_data_map.clear();
+        m_key_table.clear();
     }
 
-    void CollisionDataTable::SendHasCollision(ColliderPrimitive* a, ColliderPrimitive* b, bool was_collision, const Vector3& collision_point_a, const Vector3& collision_point_b)
+    void CollisionDataTable::SendHasCollision(RigidBody* a, RigidBody* b, bool was_collision)
     {
-        size_t key       = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
-        auto   key_range = m_collision_data_map.equal_range(key);
+        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        auto   key_range = m_state_table.equal_range(key);
         if (key_range.first != key_range.second)
         {
             bool is_duplicated = false;
             for (auto it = key_range.first; it != key_range.second; ++it)
             {
-                if (((*it).second.collider_a == a && (*it).second.collider_b == b) ||
-                    ((*it).second.collider_b == a && (*it).second.collider_a == b))
+                if (((*it).second.body_a == a && (*it).second.body_b == b) ||
+                    ((*it).second.body_b == a && (*it).second.body_a == b))
                 {
                     // in this case, keep previous contact data for collision event.
-                    is_duplicated                  = true;
-                    (*it).second.collision_point_a = collision_point_a;
-                    (*it).second.collision_point_b = collision_point_b;
+                    is_duplicated = true;
                     if (was_collision == true)
                     {
                         (*it).second.state = CollisionState::Persist;
@@ -55,15 +48,15 @@ namespace Engine5
                     break;
                 }
             }
+
             if (is_duplicated == false)
             {
                 //found same key of pair. 
                 //but this data is new data, so add a new collision data.
-                CollisionData collision_data;
-                collision_data.collider_a        = a;
-                collision_data.collider_b        = b;
-                collision_data.collision_point_a = collision_point_a;
-                collision_data.collision_point_b = collision_point_b;
+                CollisionStateData collision_data;
+                collision_data.body_a = a;
+                collision_data.body_b = b;
+
                 if (was_collision == true)
                 {
                     collision_data.state = CollisionState::Persist;
@@ -72,17 +65,16 @@ namespace Engine5
                 {
                     collision_data.state = CollisionState::Start;
                 }
-                m_collision_data_map.emplace(key, collision_data);
+                m_state_table.emplace(key, collision_data);
             }
         }
         else
         {
             //found new pair. add a new collision data.
-            CollisionData collision_data;
-            collision_data.collider_a        = a;
-            collision_data.collider_b        = b;
-            collision_data.collision_point_a = collision_point_a;
-            collision_data.collision_point_b = collision_point_b;
+            CollisionStateData collision_data;
+            collision_data.body_a = a;
+            collision_data.body_b = b;
+
             if (was_collision == true)
             {
                 collision_data.state = CollisionState::Persist;
@@ -91,21 +83,22 @@ namespace Engine5
             {
                 collision_data.state = CollisionState::Start;
             }
-            m_collision_data_map.emplace(key, collision_data);
+
+            m_state_table.emplace(key, collision_data);
         }
     }
 
-    void CollisionDataTable::SendNotCollision(ColliderPrimitive* a, ColliderPrimitive* b, bool was_collision)
+    void CollisionDataTable::SendNotCollision(RigidBody* a, RigidBody* b, bool was_collision)
     {
-        size_t key       = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
-        auto   key_range = m_collision_data_map.equal_range(key);
+        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        auto   key_range = m_state_table.equal_range(key);
         if (key_range.first != key_range.second)
         {
             bool is_duplicated = false;
             for (auto it = key_range.first; it != key_range.second; ++it)
             {
-                if (((*it).second.collider_a == a && (*it).second.collider_b == b) ||
-                    ((*it).second.collider_b == a && (*it).second.collider_a == b))
+                if (((*it).second.body_a == a && (*it).second.body_b == b) ||
+                    ((*it).second.body_b == a && (*it).second.body_a == b))
                 {
                     // in this case, keep previous contact data for collision event.
                     is_duplicated = true;
@@ -124,9 +117,10 @@ namespace Engine5
             {
                 //found same key of pair. 
                 //but this data is new data, so add a new collision data.
-                CollisionData collision_data;
-                collision_data.collider_a = a;
-                collision_data.collider_b = b;
+                CollisionStateData collision_data;
+                collision_data.body_a = a;
+                collision_data.body_b = b;
+
                 if (was_collision == true)
                 {
                     collision_data.state = CollisionState::End;
@@ -135,15 +129,16 @@ namespace Engine5
                 {
                     collision_data.state = CollisionState::None;
                 }
-                m_collision_data_map.emplace(key, collision_data);
+                m_state_table.emplace(key, collision_data);
             }
         }
         else
         {
             //found new pair. add a new collision data.
-            CollisionData collision_data;
-            collision_data.collider_a = a;
-            collision_data.collider_b = b;
+            CollisionStateData collision_data;
+            collision_data.body_a = a;
+            collision_data.body_b = b;
+
             if (was_collision == true)
             {
                 collision_data.state = CollisionState::End;
@@ -152,24 +147,24 @@ namespace Engine5
             {
                 collision_data.state = CollisionState::None;
             }
-            m_collision_data_map.emplace(key, collision_data);
+            m_state_table.emplace(key, collision_data);
         }
     }
 
-    void CollisionDataTable::SendInvalidCollision(ColliderPrimitive* a, ColliderPrimitive* b)
+    void CollisionDataTable::SendInvalidCollision(RigidBody* a, RigidBody* b)
     {
-        size_t key       = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
-        auto   key_range = m_collision_data_map.equal_range(key);
+        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        auto   key_range = m_state_table.equal_range(key);
         if (key_range.first != key_range.second)
         {
             bool is_duplicated = false;
             for (auto it = key_range.first; it != key_range.second; ++it)
             {
-                if (((*it).second.collider_a == a && (*it).second.collider_b == b) ||
-                    ((*it).second.collider_b == a && (*it).second.collider_a == b))
+                if (((*it).second.body_a == a && (*it).second.body_b == b) ||
+                    ((*it).second.body_b == a && (*it).second.body_a == b))
                 {
                     // in this case, keep previous contact data for collision event.
-                    is_duplicated      = true;
+                    is_duplicated = true;
                     (*it).second.state = CollisionState::Invalid;
                     break;
                 }
@@ -178,27 +173,29 @@ namespace Engine5
             {
                 //found same key of pair. 
                 //but this data is new data, so add a new collision data.
-                CollisionData collision_data;
-                collision_data.collider_a = a;
-                collision_data.collider_b = b;
-                collision_data.state      = CollisionState::Invalid;
-                m_collision_data_map.emplace(key, collision_data);
+                CollisionStateData collision_data;
+                collision_data.body_a = a;
+                collision_data.body_b = b;
+
+                collision_data.state = CollisionState::Invalid;
+                m_state_table.emplace(key, collision_data);
             }
         }
         else
         {
             //found new pair. add a new collision data.
-            CollisionData collision_data;
-            collision_data.collider_a = a;
-            collision_data.collider_b = b;
-            collision_data.state      = CollisionState::Invalid;
-            m_collision_data_map.emplace(key, collision_data);
+            CollisionStateData collision_data;
+            collision_data.body_a = a;
+            collision_data.body_b = b;
+
+            collision_data.state = CollisionState::Invalid;
+            m_state_table.emplace(key, collision_data);
         }
     }
 
-    void CollisionDataTable::ValidateKeyMap(ColliderPrimitive* a, ColliderPrimitive* b)
+    void CollisionDataTable::ValidateKey(RigidBody* a, RigidBody* b)
     {
-        auto key_range_a = m_collision_data_key_map.equal_range(a);
+        auto key_range_a = m_key_table.equal_range(a);
         if (key_range_a.first != key_range_a.second)
         {
             bool is_duplicated = false;
@@ -212,14 +209,16 @@ namespace Engine5
             }
             if (is_duplicated == false)
             {
-                m_collision_data_key_map.emplace(a, b);
+                m_key_table.emplace(a, b);
             }
         }
         else
         {
-            m_collision_data_key_map.emplace(a, b);
+            m_key_table.emplace(a, b);
         }
-        auto key_range_b = m_collision_data_key_map.equal_range(b);
+
+
+        auto key_range_b = m_key_table.equal_range(b);
         if (key_range_b.first != key_range_b.second)
         {
             bool is_duplicated = false;
@@ -233,68 +232,91 @@ namespace Engine5
             }
             if (is_duplicated == false)
             {
-                m_collision_data_key_map.emplace(b, a);
+                m_key_table.emplace(b, a);
             }
         }
         else
         {
-            m_collision_data_key_map.emplace(b, a);
+            m_key_table.emplace(b, a);
         }
     }
 
-    size_t CollisionDataTable::GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b)
+    size_t CollisionDataTable::GenerateKey(RigidBody* a, RigidBody* b)
     {
         return reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
     }
 
-    auto CollisionDataTable::FindRelatedColliderPairList(ColliderPrimitive* key) 
+    size_t CollisionDataTable::GenerateKey(ColliderSet* a, ColliderSet* b)
     {
-        return m_collision_data_key_map.equal_range(key);
+        return reinterpret_cast<size_t>(a->m_rigid_body) + reinterpret_cast<size_t>(b->m_rigid_body);
     }
 
-    std::list<CollisionData> CollisionDataTable::FindCollisionDataList(ColliderPrimitive* key)
+    size_t CollisionDataTable::GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b)
     {
-        std::list<CollisionData> result;
-        auto                     key_range = m_collision_data_key_map.equal_range(key);
-        for (auto it = key_range.first; it != key_range.second; ++it)
+        return reinterpret_cast<size_t>(a->m_rigid_body) + reinterpret_cast<size_t>(b->m_rigid_body);
+    }
+
+    size_t CollisionDataTable::GenerateKey(ContactManifold* manifold)
+    {
+        return reinterpret_cast<size_t>(manifold->m_body_a) + reinterpret_cast<size_t>(manifold->m_body_b);
+    }
+
+    auto CollisionDataTable::FindAssociatedPairs(RigidBody* key)
+    {
+        return m_key_table.equal_range(key);
+    }
+
+    auto CollisionDataTable::FindCollisionDatas(RigidBody* a, RigidBody* b, size_t at)
+    {
+        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+
+        Vector3Pair result;
+
+        auto   data_range = m_manifold_table->equal_range(key);
+        if (data_range.first != data_range.second)
         {
-            auto generated_key = reinterpret_cast<size_t>(key) + reinterpret_cast<size_t>(it->second);
-            auto data_range    = m_collision_data_map.equal_range(generated_key);
-            if (data_range.first != data_range.second)
+            for (auto it = data_range.first; it != data_range.second; ++it)
             {
-                for (auto data_it = data_range.first; data_it != data_range.second; ++data_it)
+                if (it->second.m_body_a == a && it->second.m_body_b == b)
                 {
-                    if ((data_it->second.collider_a == key && data_it->second.collider_b == it->second) ||
-                        (data_it->second.collider_b == key && data_it->second.collider_a == it->second))
-                    {
-                        result.push_back(data_it->second);
-                        break;
-                    }
+                    size_t count = it->second.ContactsCount();
+                    size_t index = at < count ? at : 0;
+                    result.a = it->second.contacts.at(index).local_position_a;
+                    result.b = it->second.contacts.at(index).local_position_b;
+                    return result;
+                }
+                else if (it->second.m_body_b == a && it->second.m_body_a == b)
+                {
+                    size_t count = it->second.ContactsCount();
+                    size_t index = at < count ? at : 0;
+                    result.b = it->second.contacts.at(index).local_position_a;
+                    result.a = it->second.contacts.at(index).local_position_b;
+                    return result;
                 }
             }
-            else
-            {
-                //no data error.
-            }
         }
+
+        //result.a = Math::Vector3::INVALID;
+        //result.b = Math::Vector3::INVALID;
         return result;
     }
 
-    CollisionState CollisionDataTable::FindCollisionState(ColliderPrimitive* a, ColliderPrimitive* b)
+    auto CollisionDataTable::FindColisionState(RigidBody* a, RigidBody* b)
     {
-        size_t key        = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
-        auto   data_range = m_collision_data_map.equal_range(key);
+        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        auto   data_range = m_state_table.equal_range(key);
         if (data_range.first != data_range.second)
         {
-            for (auto data_it = data_range.first; data_it != data_range.second; ++data_it)
+            for (auto it = data_range.first; it != data_range.second; ++it)
             {
-                if ((data_it->second.collider_a == a && data_it->second.collider_b == b) ||
-                    (data_it->second.collider_b == a && data_it->second.collider_a == b))
+                if ((it->second.body_a == a && it->second.body_b == b) ||
+                    (it->second.body_b == a && it->second.body_a == b))
                 {
-                    return data_it->second.state;
+                    return it->second.state;
                 }
             }
         }
-        return CollisionState::Invalid;
+        return CollisionState::None;
     }
-}
+
+  }

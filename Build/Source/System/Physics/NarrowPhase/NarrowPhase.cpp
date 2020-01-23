@@ -2,8 +2,8 @@
 #include "../Dynamics/RigidBody.hpp"
 #include "Polytope.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
-#include "CollisionDataTable.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
+#include "CollisionDataTable.hpp"
 
 namespace Engine5
 {
@@ -33,7 +33,7 @@ namespace Engine5
         for (auto& manifold : manifold_table)
         {
             Simplex simplex;
-            data_table->ValidateKeyMap(manifold.second.collider_a, manifold.second.collider_b);
+            data_table->ValidateKey(manifold.second.m_body_a, manifold.second.m_body_b);
             if (GJKCollisionDetection(manifold.second.collider_a, manifold.second.collider_b, simplex) == true)
             {
                 //collider pair have a collision do epa and create collision.
@@ -71,12 +71,12 @@ namespace Engine5
                 {
                     //generate invalid contact do not copy data.
                     //send a event invalid.
-                    data_table->SendInvalidCollision(manifold.second.collider_a, manifold.second.collider_b);
+                    data_table->SendInvalidCollision(manifold.second.m_body_a, manifold.second.m_body_b);
                 }
                 else
                 {
                     //send a event about start and persist.
-                    data_table->SendHasCollision(manifold.second.collider_a, manifold.second.collider_b, manifold.second.is_collide, new_contact_data.global_position_a, new_contact_data.global_position_b);
+                    data_table->SendHasCollision(manifold.second.m_body_a, manifold.second.m_body_b, manifold.second.is_collide);
                     manifold.second.UpdateInvalidContact();
                     new_contact_data.is_collide = true;
                     manifold.second.UpdateCurrentManifold(new_contact_data);
@@ -98,7 +98,7 @@ namespace Engine5
             else
             {
                 //send a event about none and end.
-                data_table->SendNotCollision(manifold.second.collider_a, manifold.second.collider_b, manifold.second.is_collide);
+                data_table->SendNotCollision(manifold.second.m_body_a, manifold.second.m_body_b, manifold.second.is_collide);
                 manifold.second.is_collide = false;
                 manifold.second.UpdateCollisionState();
             }

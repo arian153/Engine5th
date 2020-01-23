@@ -37,6 +37,8 @@ namespace Engine5
             const Engine5::Vector3 POSITIVE_MIN(Math::REAL_POSITIVE_MIN, Math::REAL_POSITIVE_MIN, Math::REAL_POSITIVE_MIN);
             const Engine5::Vector3 NEGATIVE_MAX(Math::REAL_NEGATIVE_MAX, Math::REAL_NEGATIVE_MAX, Math::REAL_NEGATIVE_MAX);
             const Engine5::Vector3 NEGATIVE_MIN(Math::REAL_NEGATIVE_MIN, Math::REAL_NEGATIVE_MIN, Math::REAL_NEGATIVE_MIN);
+            //const Engine5::Vector3 INVALID(Math::FNAN, Math::FNAN, Math::FNAN);
+            //const Engine5::Vector3 INFINITE(Math::INF, Math::INF, Math::INF);
         }
 
         namespace Vector4

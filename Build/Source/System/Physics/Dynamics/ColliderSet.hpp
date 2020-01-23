@@ -44,6 +44,7 @@ namespace Engine5
         friend class World;
         friend class RigidBody;
         friend class ColliderComponent;
+        friend class CollisionDataTable;
 
     private:
         RigidBody* m_rigid_body = nullptr;
