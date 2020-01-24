@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    //32bit 
     using Real = float;
 
     namespace Math
