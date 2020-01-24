@@ -11,7 +11,7 @@ My 5th In-House Game Engine Project
 * jconcpp                
 Under MIT license, or public domain
 
-* DirectX Texture Loader        
+* DirectXTex texture processing library        
 Under MIT Lisence
 
 ## Features
