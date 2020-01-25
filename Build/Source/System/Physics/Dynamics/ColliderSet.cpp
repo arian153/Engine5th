@@ -126,6 +126,11 @@ namespace Engine5
         }
     }
 
+    RigidBody* ColliderSet::GetRigidBody()
+    {
+        return m_rigid_body;
+    }
+
     void ColliderSet::SetMass(Real density)
     {
         if (m_colliders != nullptr)

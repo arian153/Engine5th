@@ -82,19 +82,18 @@ namespace Engine5
                     else
                     {
                         //send a event about start and persist.
-                        data_table->ValidateKey(set_a, set_b);
                         ContactManifold* found = data_table->FindManifold(set_a, set_b);
 
                         if (found == nullptr)
                         {
-
+                            found = data_table->CreateManifold(set_a, set_b);
                         }
 
                         data_table->SendHasCollision(set_a, set_b, found->is_collide);
-                        new_contact_data.is_collide = true;
                         found->UpdateCurrentManifold(new_contact_data);
                         found->CutDownManifold();
                         found->is_collide = true;
+                        found->UpdateCollisionState();
 
                         //draw contact result.
                         if (contact_flag.b_flag)
@@ -114,10 +113,13 @@ namespace Engine5
                     //also this means their is no collision both collider.
                     //send a event about none and end.
                     ContactManifold* found = data_table->FindManifold(set_a, set_b);
-                    data_table->SendNotCollision(set_a, set_b, found->is_collide);
-                    found->is_collide = false;
-                    found->UpdateCollisionState();
 
+                    if (found != nullptr)
+                    {
+                        data_table->SendNotCollision(set_a, set_b, found->is_collide);
+                        found->is_collide = false;
+                        found->UpdateCollisionState();
+                    }
                 }
 
             }

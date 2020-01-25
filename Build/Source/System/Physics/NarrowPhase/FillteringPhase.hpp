@@ -35,7 +35,6 @@ namespace Engine5
         void SendNotCollision(ColliderSet* a, ColliderSet* b, bool was_collision);
         void SendInvalidCollision(ColliderSet* a, ColliderSet* b);
 
-        void   ValidateKey(ColliderSet* a, ColliderSet* b);
         size_t GenerateKey(ColliderSet* a, ColliderSet* b);
         size_t GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b);
         size_t GenerateKey(ContactManifold* manifold);
@@ -47,6 +46,8 @@ namespace Engine5
         ContactManifold* CreateManifold(ColliderSet* a, ColliderSet* b);
         bool HasManifold(ColliderSet* a, ColliderSet* b);
         void FilteringManifolds();
+        size_t RegisterKey(ColliderSet* a, ColliderSet* b);
+        void DeregisterKey(ColliderSet* a, ColliderSet* b);
 
     public:
         std::unordered_multimap<size_t, ContactManifold>* m_manifold_table = nullptr;

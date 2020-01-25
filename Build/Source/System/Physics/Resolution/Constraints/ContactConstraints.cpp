@@ -9,8 +9,8 @@ namespace Engine5
     ContactConstraints::ContactConstraints(ContactManifold* input)
         : m_manifold(input)
     {
-        m_body_a = m_manifold->m_body_a;
-        m_body_b = m_manifold->m_body_b;
+        m_body_a = m_manifold->m_set_a->GetRigidBody();
+        m_body_b = m_manifold->m_set_b->GetRigidBody();
     }
 
     ContactConstraints::~ContactConstraints()

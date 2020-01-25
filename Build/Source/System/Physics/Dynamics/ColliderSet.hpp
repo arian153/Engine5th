@@ -24,6 +24,8 @@ namespace Engine5
         ColliderPrimitive* GetCollider(size_t index) const;
         void EraseCollider(ColliderPrimitive* collider) const;
 
+        RigidBody* GetRigidBody();
+
         //setters
         void SetMass(Real density);
         void SetScale(const Vector3& scale);

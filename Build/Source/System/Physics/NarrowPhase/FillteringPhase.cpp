@@ -193,55 +193,6 @@ namespace Engine5
         }
     }
 
-    void FillteringPhase::ValidateKey(ColliderSet* a, ColliderSet* b)
-    {
-        auto key_range_a = m_key_table.equal_range(a);
-        if (key_range_a.first != key_range_a.second)
-        {
-            bool is_duplicated = false;
-            for (auto it = key_range_a.first; it != key_range_a.second; ++it)
-            {
-                if ((*it).second == b)
-                {
-                    is_duplicated = true;
-                    break;
-                }
-            }
-            if (is_duplicated == false)
-            {
-                m_key_table.emplace(a, b);
-            }
-        }
-        else
-        {
-            m_key_table.emplace(a, b);
-        }
-
-
-        auto key_range_b = m_key_table.equal_range(b);
-        if (key_range_b.first != key_range_b.second)
-        {
-            bool is_duplicated = false;
-            for (auto it = key_range_b.first; it != key_range_b.second; ++it)
-            {
-                if ((*it).second == a)
-                {
-                    is_duplicated = true;
-                    break;
-                }
-            }
-            if (is_duplicated == false)
-            {
-                m_key_table.emplace(b, a);
-            }
-        }
-        else
-        {
-            m_key_table.emplace(b, a);
-        }
-    }
-
-
     size_t FillteringPhase::GenerateKey(ColliderSet* a, ColliderSet* b)
     {
         return reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
@@ -336,7 +287,7 @@ namespace Engine5
 
     ContactManifold* FillteringPhase::CreateManifold(ColliderSet* a, ColliderSet* b)
     {
-        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        size_t key = RegisterKey(a, b);
         auto result = m_manifold_table->emplace(key, ContactManifold(a, b));
         return &result->second;
     }
@@ -367,6 +318,7 @@ namespace Engine5
             //if sets don't intersect each other, remove previous frame's manifolds.
             if (it->second.m_set_a->m_bounding_volume.Intersect(it->second.m_set_b->m_bounding_volume) == false)
             {
+                DeregisterKey(it->second.m_set_a, it->second.m_set_b);
                 m_manifold_table->erase(it++);
             }
             else
@@ -376,6 +328,93 @@ namespace Engine5
                 ++it;
             }
         }
+    }
+
+    size_t FillteringPhase::RegisterKey(ColliderSet* a, ColliderSet* b)
+    {
+        auto key_range_a = m_key_table.equal_range(a);
+        if (key_range_a.first != key_range_a.second)
+        {
+            bool is_duplicated = false;
+            for (auto it = key_range_a.first; it != key_range_a.second; ++it)
+            {
+                if ((*it).second == b)
+                {
+                    is_duplicated = true;
+                    break;
+                }
+            }
+            if (is_duplicated == false)
+            {
+                m_key_table.emplace(a, b);
+            }
+        }
+        else
+        {
+            m_key_table.emplace(a, b);
+        }
+
+        auto key_range_b = m_key_table.equal_range(b);
+        if (key_range_b.first != key_range_b.second)
+        {
+            bool is_duplicated = false;
+            for (auto it = key_range_b.first; it != key_range_b.second; ++it)
+            {
+                if ((*it).second == a)
+                {
+                    is_duplicated = true;
+                    break;
+                }
+            }
+            if (is_duplicated == false)
+            {
+                m_key_table.emplace(b, a);
+            }
+        }
+        else
+        {
+            m_key_table.emplace(b, a);
+        }
+
+        return reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+    }
+
+    void FillteringPhase::DeregisterKey(ColliderSet* a, ColliderSet* b)
+    {
+        auto key_range_a = m_key_table.equal_range(a);
+        if (key_range_a.first != key_range_a.second)
+        {
+            for (auto it = key_range_a.first; it != key_range_a.second; )
+            {
+                if ((*it).second == b)
+                {
+                    m_key_table.erase(it++);
+                    break;
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+        }
+
+        auto key_range_b = m_key_table.equal_range(b);
+        if (key_range_b.first != key_range_b.second)
+        {
+            for (auto it = key_range_b.first; it != key_range_b.second;)
+            {
+                if ((*it).second == a)
+                {
+                    m_key_table.erase(it++);
+                    break;
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+        }
+
     }
 
 }

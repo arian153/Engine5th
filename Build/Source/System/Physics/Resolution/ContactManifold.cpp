@@ -137,7 +137,7 @@ namespace Engine5
                 add_contact = true;
             }
         }
-        if (add_contact == true || contacts.size() == 0)
+        if (add_contact == true || contacts.empty())
         {
             contacts.push_back(new_contact);
         }
