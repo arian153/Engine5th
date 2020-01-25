@@ -2,6 +2,7 @@
 #include "RayCast.hpp"
 #include <list>
 #include <vector>
+#include "ColliderPair.hpp"
 
 namespace Engine5
 {
@@ -9,23 +10,6 @@ namespace Engine5
     class BoundingAABB;
     class PrimitiveRenderer;
     class Color;
-
-    class ColliderPair
-    {
-    public:
-        ColliderPair(ColliderPrimitive* a, ColliderPrimitive* b)
-            : first(a), second(b)
-        {
-        }
-
-        ~ColliderPair()
-        {
-        }
-
-    public:
-        ColliderPrimitive* first  = nullptr;
-        ColliderPrimitive* second = nullptr;
-    };
 
     class BroadPhase
     {

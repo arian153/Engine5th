@@ -4,13 +4,15 @@
 #include "../Resolution/ContactPoint.hpp"
 #include <unordered_map>
 #include "../Resolution/ContactManifold.hpp"
+#include "../BroadPhase/ColliderPair.hpp"
 
 namespace Engine5
 {
     class ColorFlag;
-    class CollisionDataTable;
+    class FillteringPhase;
     class ColliderPrimitive;
     class Polytope;
+
 
     class NarrowPhase
     {
@@ -23,7 +25,12 @@ namespace Engine5
 
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
 
-        void GenerateContact(std::unordered_map<size_t, ContactManifold>& manifold_table, CollisionDataTable* data_table, const ColorFlag& gjk, const ColorFlag& epa, const ColorFlag& contact);
+        void GenerateContact(
+            std::list<ColliderPair>& potential_list,
+            std::unordered_multimap<size_t, ContactManifold>& manifold_table, 
+            FillteringPhase* data_table, 
+            
+            const ColorFlag& gjk, const ColorFlag& epa, const ColorFlag& contact);
 
         SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction);
         bool         GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex);

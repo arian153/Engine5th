@@ -6,12 +6,17 @@ namespace Engine5
 {
     class ContactPoint;
     class RigidBody;
+    class ColliderSet;
 
     class ContactManifold
     {
     public:
         ContactManifold();
+        explicit ContactManifold(ColliderSet* a, ColliderSet* b);
         ~ContactManifold();
+        ContactManifold(const ContactManifold& rhs);
+        ContactManifold& operator=(const ContactManifold& rhs);
+
         void Set(const ContactManifold& manifold);
         void SetPersistentThreshold(Real threshold);
         void UpdateInvalidContact();
@@ -27,11 +32,12 @@ namespace Engine5
         bool OnTriangle(ContactPoint* point, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2);
         void CalculateNormal();
 
+
     private:
         friend class Resolution;
         friend class NarrowPhase;
         friend class ContactConstraints;
-        friend class CollisionDataTable;
+        friend class FillteringPhase;
 
     private:
         Real    persistent_threshold_squared = 4.0f;
@@ -39,8 +45,8 @@ namespace Engine5
         Vector3 manifold_normal;
 
         //data
-        RigidBody* m_body_a = nullptr;
-        RigidBody* m_body_b = nullptr;
+        ColliderSet* m_set_a = nullptr;
+        ColliderSet* m_set_b = nullptr;
 
         std::vector<ContactPoint> contacts;
     };

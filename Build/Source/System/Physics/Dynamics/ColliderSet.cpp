@@ -153,6 +153,7 @@ namespace Engine5
                 collider_data->SetMassData(collider_data->m_density);
             }
             UpdateMassData();
+            UpdateColliderSetBoundingVolume();
         }
     }
 
@@ -226,4 +227,18 @@ namespace Engine5
     {
         SetScale(transform->scale);
     }
+
+    void ColliderSet::UpdateColliderSetBoundingVolume()
+    {
+        if (m_colliders != nullptr)
+        {
+            m_bounding_volume.Set(Math::Vector3::ORIGIN, Math::Vector3::ORIGIN);
+
+            for (auto& collider_data : *m_colliders)
+            {
+                m_bounding_volume = collider_data->m_bounding_volume->Union(m_bounding_volume);
+            }
+        }
+    }
+
 }

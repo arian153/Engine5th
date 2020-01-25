@@ -36,6 +36,7 @@ namespace Engine5
         void UpdateMassData();
         void SyncToTransform(Transform* transform) const;
         void SyncFromTransform(Transform* transform);
+        void UpdateColliderSetBoundingVolume();
 
     private:
 
@@ -44,13 +45,15 @@ namespace Engine5
         friend class World;
         friend class RigidBody;
         friend class ColliderComponent;
-        friend class CollisionDataTable;
+        friend class FillteringPhase;
+        friend class ContactManifold;
 
     private:
         RigidBody* m_rigid_body = nullptr;
         World*     m_world      = nullptr;
         MassData   m_mass_data;
         Vector3    m_scale;
+        BoundingAABB m_bounding_volume;
 
         //primitives
         std::vector<ColliderPrimitive*>* m_colliders = nullptr;

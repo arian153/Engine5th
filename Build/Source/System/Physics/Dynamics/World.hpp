@@ -10,7 +10,7 @@
 
 namespace Engine5
 {
-    class CollisionDataTable;
+    class FillteringPhase;
 
     class World
     {
@@ -42,8 +42,8 @@ namespace Engine5
         std::vector<ColliderSet*>            m_collider_sets;
         std::vector<RigidBody*>              m_rigid_bodies;
         std::list<ColliderPair>              m_pairs;
-        std::unordered_map<size_t, ContactManifold> m_manifold_table;
-        CollisionDataTable* m_collision_data_table = nullptr;
+        std::unordered_multimap<size_t, ContactManifold> m_manifold_table;
+        FillteringPhase* m_collision_data_table = nullptr;
 
         ColorFlag m_draw_gjk;
         ColorFlag m_draw_epa;

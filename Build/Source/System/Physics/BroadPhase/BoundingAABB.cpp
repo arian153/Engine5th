@@ -93,6 +93,24 @@ namespace Engine5
         return true;
     }
 
+    bool BoundingAABB::Intersect(const BoundingAABB& aabb) const
+    {
+        // if separated in x direction
+        if (m_min.x > aabb.m_max.x || aabb.m_min.x > m_max.x)
+            return false;
+
+        // if separated in y direction
+        if (m_min.y > aabb.m_max.y || aabb.m_min.y > m_max.y)
+            return false;
+
+        // if separated in z direction
+        if (m_min.z > aabb.m_max.z || aabb.m_min.z > m_max.z)
+            return false;
+
+        // no separation, must be intersecting
+        return true;
+    }
+
     bool BoundingAABB::Contains(const Vector3& point) const
     {
         if (m_min.x > point.x || point.x > m_max.x)

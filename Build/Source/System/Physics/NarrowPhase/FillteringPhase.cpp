@@ -1,29 +1,29 @@
-#include "CollisionDataTable.hpp"
+#include "FillteringPhase.hpp"
 #include "../Resolution/ContactManifold.hpp"
 #include "../Dynamics/ColliderSet.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
 namespace Engine5
 {
-    CollisionDataTable::CollisionDataTable()
+    FillteringPhase::FillteringPhase()
     {
     }
 
-    CollisionDataTable::~CollisionDataTable()
+    FillteringPhase::~FillteringPhase()
     {
     }
 
-    void CollisionDataTable::Initialize(std::unordered_multimap<size_t, ContactManifold>* data_table)
+    void FillteringPhase::Initialize(std::unordered_multimap<size_t, ContactManifold>* data_table)
     {
         m_manifold_table = data_table;
     }
 
-    void CollisionDataTable::Shutdown()
+    void FillteringPhase::Shutdown()
     {
         m_key_table.clear();
     }
 
-    void CollisionDataTable::SendHasCollision(RigidBody* a, RigidBody* b, bool was_collision)
+    void FillteringPhase::SendHasCollision(ColliderSet* a, ColliderSet* b, bool was_collision)
     {
         size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         auto   key_range = m_state_table.equal_range(key);
@@ -32,8 +32,8 @@ namespace Engine5
             bool is_duplicated = false;
             for (auto it = key_range.first; it != key_range.second; ++it)
             {
-                if (((*it).second.body_a == a && (*it).second.body_b == b) ||
-                    ((*it).second.body_b == a && (*it).second.body_a == b))
+                if (((*it).second.set_a == a && (*it).second.set_b == b) ||
+                    ((*it).second.set_b == a && (*it).second.set_a == b))
                 {
                     // in this case, keep previous contact data for collision event.
                     is_duplicated = true;
@@ -54,8 +54,8 @@ namespace Engine5
                 //found same key of pair. 
                 //but this data is new data, so add a new collision data.
                 CollisionStateData collision_data;
-                collision_data.body_a = a;
-                collision_data.body_b = b;
+                collision_data.set_a = a;
+                collision_data.set_b = b;
 
                 if (was_collision == true)
                 {
@@ -72,8 +72,8 @@ namespace Engine5
         {
             //found new pair. add a new collision data.
             CollisionStateData collision_data;
-            collision_data.body_a = a;
-            collision_data.body_b = b;
+            collision_data.set_a = a;
+            collision_data.set_b = b;
 
             if (was_collision == true)
             {
@@ -88,7 +88,7 @@ namespace Engine5
         }
     }
 
-    void CollisionDataTable::SendNotCollision(RigidBody* a, RigidBody* b, bool was_collision)
+    void FillteringPhase::SendNotCollision(ColliderSet* a, ColliderSet* b, bool was_collision)
     {
         size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         auto   key_range = m_state_table.equal_range(key);
@@ -97,8 +97,8 @@ namespace Engine5
             bool is_duplicated = false;
             for (auto it = key_range.first; it != key_range.second; ++it)
             {
-                if (((*it).second.body_a == a && (*it).second.body_b == b) ||
-                    ((*it).second.body_b == a && (*it).second.body_a == b))
+                if (((*it).second.set_a == a && (*it).second.set_b == b) ||
+                    ((*it).second.set_b == a && (*it).second.set_a == b))
                 {
                     // in this case, keep previous contact data for collision event.
                     is_duplicated = true;
@@ -118,8 +118,8 @@ namespace Engine5
                 //found same key of pair. 
                 //but this data is new data, so add a new collision data.
                 CollisionStateData collision_data;
-                collision_data.body_a = a;
-                collision_data.body_b = b;
+                collision_data.set_a = a;
+                collision_data.set_b = b;
 
                 if (was_collision == true)
                 {
@@ -136,8 +136,8 @@ namespace Engine5
         {
             //found new pair. add a new collision data.
             CollisionStateData collision_data;
-            collision_data.body_a = a;
-            collision_data.body_b = b;
+            collision_data.set_a = a;
+            collision_data.set_b = b;
 
             if (was_collision == true)
             {
@@ -151,7 +151,7 @@ namespace Engine5
         }
     }
 
-    void CollisionDataTable::SendInvalidCollision(RigidBody* a, RigidBody* b)
+    void FillteringPhase::SendInvalidCollision(ColliderSet* a, ColliderSet* b)
     {
         size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         auto   key_range = m_state_table.equal_range(key);
@@ -160,8 +160,8 @@ namespace Engine5
             bool is_duplicated = false;
             for (auto it = key_range.first; it != key_range.second; ++it)
             {
-                if (((*it).second.body_a == a && (*it).second.body_b == b) ||
-                    ((*it).second.body_b == a && (*it).second.body_a == b))
+                if (((*it).second.set_a == a && (*it).second.set_b == b) ||
+                    ((*it).second.set_b == a && (*it).second.set_a == b))
                 {
                     // in this case, keep previous contact data for collision event.
                     is_duplicated = true;
@@ -174,8 +174,8 @@ namespace Engine5
                 //found same key of pair. 
                 //but this data is new data, so add a new collision data.
                 CollisionStateData collision_data;
-                collision_data.body_a = a;
-                collision_data.body_b = b;
+                collision_data.set_a = a;
+                collision_data.set_b = b;
 
                 collision_data.state = CollisionState::Invalid;
                 m_state_table.emplace(key, collision_data);
@@ -185,15 +185,15 @@ namespace Engine5
         {
             //found new pair. add a new collision data.
             CollisionStateData collision_data;
-            collision_data.body_a = a;
-            collision_data.body_b = b;
+            collision_data.set_a = a;
+            collision_data.set_b = b;
 
             collision_data.state = CollisionState::Invalid;
             m_state_table.emplace(key, collision_data);
         }
     }
 
-    void CollisionDataTable::ValidateKey(RigidBody* a, RigidBody* b)
+    void FillteringPhase::ValidateKey(ColliderSet* a, ColliderSet* b)
     {
         auto key_range_a = m_key_table.equal_range(a);
         if (key_range_a.first != key_range_a.second)
@@ -241,32 +241,28 @@ namespace Engine5
         }
     }
 
-    size_t CollisionDataTable::GenerateKey(RigidBody* a, RigidBody* b)
+
+    size_t FillteringPhase::GenerateKey(ColliderSet* a, ColliderSet* b)
     {
         return reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
     }
 
-    size_t CollisionDataTable::GenerateKey(ColliderSet* a, ColliderSet* b)
+    size_t FillteringPhase::GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b)
     {
-        return reinterpret_cast<size_t>(a->m_rigid_body) + reinterpret_cast<size_t>(b->m_rigid_body);
+        return reinterpret_cast<size_t>(a->m_collider_set) + reinterpret_cast<size_t>(b->m_collider_set);
     }
 
-    size_t CollisionDataTable::GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b)
+    size_t FillteringPhase::GenerateKey(ContactManifold* manifold)
     {
-        return reinterpret_cast<size_t>(a->m_rigid_body) + reinterpret_cast<size_t>(b->m_rigid_body);
+        return reinterpret_cast<size_t>(manifold->m_set_a) + reinterpret_cast<size_t>(manifold->m_set_b);
     }
 
-    size_t CollisionDataTable::GenerateKey(ContactManifold* manifold)
-    {
-        return reinterpret_cast<size_t>(manifold->m_body_a) + reinterpret_cast<size_t>(manifold->m_body_b);
-    }
-
-    auto CollisionDataTable::FindAssociatedPairs(RigidBody* key)
+    auto FillteringPhase::FindAssociatedPairs(ColliderSet* key)
     {
         return m_key_table.equal_range(key);
     }
 
-    auto CollisionDataTable::FindCollisionDatas(RigidBody* a, RigidBody* b, size_t at)
+    auto FillteringPhase::FindCollisionDatas(ColliderSet* a, ColliderSet* b, size_t at)
     {
         size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
 
@@ -277,7 +273,7 @@ namespace Engine5
         {
             for (auto it = data_range.first; it != data_range.second; ++it)
             {
-                if (it->second.m_body_a == a && it->second.m_body_b == b)
+                if (it->second.m_set_a == a && it->second.m_set_b == b)
                 {
                     size_t count = it->second.ContactsCount();
                     size_t index = at < count ? at : 0;
@@ -285,7 +281,7 @@ namespace Engine5
                     result.b = it->second.contacts.at(index).local_position_b;
                     return result;
                 }
-                else if (it->second.m_body_b == a && it->second.m_body_a == b)
+                else if (it->second.m_set_b == a && it->second.m_set_a == b)
                 {
                     size_t count = it->second.ContactsCount();
                     size_t index = at < count ? at : 0;
@@ -301,7 +297,7 @@ namespace Engine5
         return result;
     }
 
-    auto CollisionDataTable::FindColisionState(RigidBody* a, RigidBody* b)
+    auto FillteringPhase::FindColisionState(ColliderSet* a, ColliderSet* b)
     {
         size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         auto   data_range = m_state_table.equal_range(key);
@@ -309,8 +305,8 @@ namespace Engine5
         {
             for (auto it = data_range.first; it != data_range.second; ++it)
             {
-                if ((it->second.body_a == a && it->second.body_b == b) ||
-                    (it->second.body_b == a && it->second.body_a == b))
+                if ((it->second.set_a == a && it->second.set_b == b) ||
+                    (it->second.set_b == a && it->second.set_a == b))
                 {
                     return it->second.state;
                 }
@@ -319,4 +315,67 @@ namespace Engine5
         return CollisionState::None;
     }
 
-  }
+    ContactManifold* FillteringPhase::FindManifold(ColliderSet* a, ColliderSet* b)
+    {
+        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        auto   data_range = m_manifold_table->equal_range(key);
+        if (data_range.first != data_range.second)
+        {
+            for (auto it = data_range.first; it != data_range.second; ++it)
+            {
+                if (it->second.m_set_a == a && it->second.m_set_b == b ||
+                    it->second.m_set_b == a && it->second.m_set_a == b)
+                {
+                    return &it->second;
+                }
+            }
+        }
+
+        return nullptr;
+    }
+
+    ContactManifold* FillteringPhase::CreateManifold(ColliderSet* a, ColliderSet* b)
+    {
+        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        auto result = m_manifold_table->emplace(key, ContactManifold(a, b));
+        return &result->second;
+    }
+
+    bool FillteringPhase::HasManifold(ColliderSet* a, ColliderSet* b)
+    {
+        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        auto   data_range = m_manifold_table->equal_range(key);
+        if (data_range.first != data_range.second)
+        {
+            for (auto it = data_range.first; it != data_range.second; ++it)
+            {
+                if (it->second.m_set_a == a && it->second.m_set_b == b ||
+                    it->second.m_set_b == a && it->second.m_set_a == b)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    void FillteringPhase::FilteringManifolds()
+    {
+        for (auto it = m_manifold_table->begin(); it != m_manifold_table->end();)
+        {
+            //if sets don't intersect each other, remove previous frame's manifolds.
+            if (it->second.m_set_a->m_bounding_volume.Intersect(it->second.m_set_b->m_bounding_volume) == false)
+            {
+                m_manifold_table->erase(it++);
+            }
+            else
+            {
+                //else their is a potential contacts in manifold. and then update invalid contact in manifolds
+                it->second.UpdateInvalidContact();
+                ++it;
+            }
+        }
+    }
+
+}

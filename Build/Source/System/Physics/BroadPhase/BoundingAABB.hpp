@@ -15,6 +15,7 @@ namespace Engine5
 
         void         Set(const Vector3& min, const Vector3& max);
         bool         Intersect(BoundingAABB* aabb) const;
+        bool         Intersect(const BoundingAABB& aabb) const;
         bool         Contains(const Vector3& point) const;
         bool         TestRayIntersection(const Ray& ray, Real& t, Real max_distance = -1.0f) const;
         bool         Contains(BoundingAABB* aabb) const;

@@ -2,6 +2,7 @@
 #include <list>
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "../Dynamics/RigidBody.hpp"
+#include "../Dynamics/ColliderSet.hpp"
 
 namespace Engine5
 {
@@ -9,19 +10,55 @@ namespace Engine5
     {
     }
 
+    ContactManifold::ContactManifold(ColliderSet* a, ColliderSet* b)
+        :m_set_a(a), m_set_b(b)
+    {
+    }
+
     ContactManifold::~ContactManifold()
     {
     }
 
+    ContactManifold::ContactManifold(const ContactManifold& rhs)
+    {
+        m_set_a = rhs.m_set_a;
+        m_set_b = rhs.m_set_b;
+        persistent_threshold_squared = rhs.persistent_threshold_squared;
+        is_collide = rhs.is_collide;
+
+        for (auto& contact : rhs.contacts)
+        {
+            contacts.push_back(contact);
+        }
+    }
+
+    ContactManifold& ContactManifold::operator=(const ContactManifold& rhs)
+    {
+        if (this != &rhs)
+        {
+            m_set_a = rhs.m_set_a;
+            m_set_b = rhs.m_set_b;
+            persistent_threshold_squared = rhs.persistent_threshold_squared;
+            is_collide = rhs.is_collide;
+
+            for (auto& contact : rhs.contacts)
+            {
+                contacts.push_back(contact);
+            }
+        }
+        return *this;
+
+    }
+
     void ContactManifold::Set(const ContactManifold& manifold)
     {
-        this->m_body_a = manifold.m_body_a;
-        this->m_body_b = manifold.m_body_b;
-        this->persistent_threshold_squared = manifold.persistent_threshold_squared;
-        this->is_collide = manifold.is_collide;
+        m_set_a = manifold.m_set_a;
+        m_set_b = manifold.m_set_b;
+        persistent_threshold_squared = manifold.persistent_threshold_squared;
+        is_collide = manifold.is_collide;
         for (auto& contact : manifold.contacts)
         {
-            this->contacts.push_back(contact);
+            contacts.push_back(contact);
         }
     }
 
@@ -38,9 +75,10 @@ namespace Engine5
         {
             //convert existing contact point from local space to world space.
             //if both bodies are far enough away, remove contact from manifold data.
+            ;
 
-            Vector3 local_to_global_a = m_body_a->LocalToWorldPoint(contact.local_position_a);
-            Vector3 local_to_global_b = m_body_b->LocalToWorldPoint(contact.local_position_b);
+            Vector3 local_to_global_a = m_set_a->m_rigid_body->LocalToWorldPoint(contact.local_position_a);
+            Vector3 local_to_global_b = m_set_b->m_rigid_body->LocalToWorldPoint(contact.local_position_b);
 
             //current frame's distance between a to b.
             Vector3 r_ab = local_to_global_b - local_to_global_a;
@@ -279,7 +317,7 @@ namespace Engine5
         {
 
             Vector3 line_dir = (contacts.at(1).global_position_a - contacts.at(0).global_position_a).Unit();
-            Vector3 pos_t = line_dir.CrossProduct((m_body_b->GetPosition() - m_body_b->GetPosition()).Unit()).Unit();
+            Vector3 pos_t = line_dir.CrossProduct((m_set_b->m_rigid_body->GetPosition() - m_set_a->m_rigid_body->GetPosition()).Unit()).Unit();
             Vector3 c0n_t = line_dir.CrossProduct(contacts.at(0).normal).Unit();
             Vector3 c1n_t = line_dir.CrossProduct(contacts.at(1).normal).Unit();
             Vector3 tangent = (pos_t + c0n_t + c1n_t).Unit();
