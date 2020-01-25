@@ -1,6 +1,22 @@
-# Engine5
-my game engine project 5
+# Engine 5th
+My 5th In-House Game Engine Project
 
-API - Win32, DirectX 11, Direct2D, DirectWrite
+## API
+* Win32
+* DirectX 11
+* Direct2D
+* DirectWrite
 
-Library - jconcpp, DirectTex
+## Library 
+* jconcpp                
+Under MIT license, or public domain
+
+* DirectXTex texture processing library        
+Under MIT Lisence
+
+## Features
+
+### Rendering Engine
+
+### Physics Engine
+
