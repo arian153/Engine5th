@@ -61,6 +61,7 @@ namespace Engine5
                 ContactPoint new_contact_data;
                 if (EPAContactGeneration(pair.first, pair.second, polytope, new_contact_data) == true)
                 {
+                    //draw EPA result
                     if (epa_flag.b_flag)
                     {
                         for (auto& face : polytope.faces)
@@ -73,55 +74,52 @@ namespace Engine5
                         }
                     }
 
-                    if (new_contact_data.is_valid == false)
+                    //send a event about start and persist.
+                    ContactManifold* found = data_table->FindManifold(set_a, set_b);
+
+                    if (found == nullptr)
                     {
-                        //generate invalid contact do not copy data.
-                        //send a event invalid.
-                        data_table->SendInvalidCollision(set_a, set_b);
+                        found = data_table->CreateManifold(set_a, set_b);
                     }
-                    else
+
+                    data_table->SendHasCollision(set_a, set_b, found->is_collide);
+                    found->UpdateCurrentManifold(new_contact_data);
+                    found->CutDownManifold();
+                    found->is_collide = true;
+                    found->UpdateCollisionState();
+
+                    //draw contact result.
+                    if (contact_flag.b_flag)
                     {
-                        //send a event about start and persist.
-                        ContactManifold* found = data_table->FindManifold(set_a, set_b);
-
-                        if (found == nullptr)
-                        {
-                            found = data_table->CreateManifold(set_a, set_b);
-                        }
-
-                        data_table->SendHasCollision(set_a, set_b, found->is_collide);
-                        found->UpdateCurrentManifold(new_contact_data);
-                        found->CutDownManifold();
-                        found->is_collide = true;
-                        found->UpdateCollisionState();
-
-                        //draw contact result.
-                        if (contact_flag.b_flag)
-                        {
-                            Vector3    pos_a = new_contact_data.global_position_a;
-                            Vector3    pos_b = new_contact_data.global_position_b;
-                            Quaternion no_rotation;
-                            m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), RenderingMode::Face, contact_flag.color);
-                            m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), RenderingMode::Face, contact_flag.color);
-                            m_primitive_renderer->DrawSegment(pos_a, pos_a + new_contact_data.normal, contact_flag.color);
-                            m_primitive_renderer->DrawSegment(pos_b, pos_b + new_contact_data.normal, contact_flag.color);
-                        }
+                        Vector3    pos_a = new_contact_data.global_position_a;
+                        Vector3    pos_b = new_contact_data.global_position_b;
+                        Quaternion no_rotation;
+                        m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), RenderingMode::Face, contact_flag.color);
+                        m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), RenderingMode::Face, contact_flag.color);
+                        m_primitive_renderer->DrawSegment(pos_a, pos_a + new_contact_data.normal, contact_flag.color);
+                        m_primitive_renderer->DrawSegment(pos_b, pos_b + new_contact_data.normal, contact_flag.color);
                     }
+
                 }
                 else
                 {
-                    //also this means their is no collision both collider.
-                    //send a event about none and end.
-                    ContactManifold* found = data_table->FindManifold(set_a, set_b);
-
-                    if (found != nullptr)
-                    {
-                        data_table->SendNotCollision(set_a, set_b, found->is_collide);
-                        found->is_collide = false;
-                        found->UpdateCollisionState();
-                    }
+                    //generate invalid contact do not copy data.
+                    //send a event invalid.
+                    data_table->SendInvalidCollision(set_a, set_b);
                 }
 
+            }
+            else
+            {
+                //if gjk result false, they are not colliding each other.
+                //send a event about none and end.
+                ContactManifold* found = data_table->FindManifold(set_a, set_b);
+                if (found != nullptr)
+                {
+                    data_table->SendNotCollision(set_a, set_b, found->is_collide);
+                    found->is_collide = false;
+                    found->UpdateCollisionState();
+                }
             }
         }
     }
@@ -198,9 +196,8 @@ namespace Engine5
                     + (v * polytope.vertices[ closest_face.b ].local2) + (w * polytope.vertices[ closest_face.c ].local2);
                 result.global_position_a = a->m_rigid_body->LocalToWorldPoint(result.local_position_a);
                 result.global_position_b = b->m_rigid_body->LocalToWorldPoint(result.local_position_b);
-                result.normal = closest_face.normal;
+                result.normal = closest_face.normal.Unit();
                 result.depth = closest_face.distance;
-                result.normal.SetNormalize();
                 ComputeBasisQuaternion(result.normal, result.tangent_a, result.tangent_b);
                 return true;
             }
