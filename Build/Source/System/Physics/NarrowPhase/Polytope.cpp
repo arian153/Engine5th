@@ -3,7 +3,6 @@
 #include "../../Core/Utility/CoreDef.hpp"
 #include "../../Core/Utility/CoreUtility.hpp"
 
-
 namespace Engine5
 {
     PolytopeEdge::PolytopeEdge()
@@ -36,7 +35,6 @@ namespace Engine5
     {
         normal = (simplex[b].global - simplex[a].global).CrossProduct(simplex[c].global - simplex[a].global);
         normal.SetNormalize();
-
         // compute distance
         distance = normal.DotProduct(simplex[a].global);
     }
@@ -46,7 +44,6 @@ namespace Engine5
     {
         normal = (polytope.vertices[b].global - polytope.vertices[a].global).CrossProduct(polytope.vertices[c].global - polytope.vertices[a].global);
         normal.SetNormalize();
-
         // compute distance
         distance = normal.DotProduct(polytope.vertices[a].global);
     }
@@ -186,7 +183,6 @@ namespace Engine5
     {
         std::vector<PolytopeFace>::iterator closest_face_iterator = faces.end();
         Real                                closest_face_distance = Math::REAL_POSITIVE_MAX;
-
         //not initialized polytope return error polytope.
         if (faces.empty() == true)
         {
@@ -246,7 +242,6 @@ namespace Engine5
                 ++it;
             }
         }
-
         //add a new face cover up hole on polytope.
         for (auto it = edges.begin(); it != edges.end(); ++it)
         {

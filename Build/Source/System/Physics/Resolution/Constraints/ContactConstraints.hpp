@@ -10,7 +10,7 @@ namespace Engine5
     class ContactConstraints final : public Constraints
     {
     public:
-        ContactConstraints(ContactManifold* input);
+        explicit ContactConstraints(ContactManifold* input);
         ~ContactConstraints();
 
         void SolveConstraints(Real dt) override;
@@ -27,14 +27,14 @@ namespace Engine5
         ContactManifold* m_manifold = nullptr;
 
         //velocities
-        Vector3 m_v_a;
-        Vector3 m_w_a;
-        Vector3 m_v_b;
-        Vector3 m_w_b;
+        Vector3 m_dv_a;
+        Vector3 m_dw_a;
+        Vector3 m_dv_b;
+        Vector3 m_dw_b;
 
         //friction and restitution factor.
         //if 1.0f no effects.
         Real m_restitution = 1.0f;
-        Real m_friction = 1.0f;
+        Real m_friction    = 1.0f;
     };
 }

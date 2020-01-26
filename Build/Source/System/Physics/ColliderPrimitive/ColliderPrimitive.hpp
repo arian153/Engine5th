@@ -77,7 +77,7 @@ namespace Engine5
         friend class NarrowPhase;
         friend class BoundingAABB;
         friend class World;
-        friend class FillteringPhase;
+        friend class FilteringPhase;
 
     protected:
         //collider local space data

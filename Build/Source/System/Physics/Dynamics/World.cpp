@@ -3,7 +3,7 @@
 #include "../BroadPhase/NSquared.hpp"
 #include "../BroadPhase/GridPartition.hpp"
 #include "../NarrowPhase/NarrowPhase.hpp"
-#include "../NarrowPhase/FillteringPhase.hpp"
+#include "../NarrowPhase/FilteringPhase.hpp"
 #include "ColliderSet.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
@@ -42,7 +42,7 @@ namespace Engine5
             }
             m_broad_phase->Initialize();
         }
-        m_collision_data_table = new FillteringPhase();
+        m_collision_data_table = new FilteringPhase();
         m_narrow_phase         = new NarrowPhase();
         m_collision_data_table->Initialize(&m_manifold_table);
         m_narrow_phase->Initialize();

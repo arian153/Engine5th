@@ -70,7 +70,6 @@ namespace Engine5
         Vector3 ab  = simplex_vertex_b.global - simplex_vertex_a.global;
         Vector3 ac  = simplex_vertex_c.global - simplex_vertex_a.global;
         Vector3 abc = ab.CrossProduct(ac);
-
         //point is can't be behind/in the direction of B,C or BC
         Vector3 ab_abc = ab.CrossProduct(abc);
         // is the origin away from ab edge? in the same plane
@@ -80,29 +79,23 @@ namespace Engine5
             //change points
             simplex_vertex_c = simplex_vertex_b;
             simplex_vertex_b = simplex_vertex_a;
-
             //dir is not ab_abc because it's not point towards the origin
             dir = ab.CrossProductTwice(ao);
-
             //direction change; can't build tetrahedron
             return false;
         }
         Vector3 abc_ac = abc.CrossProduct(ac);
-
         // is the origin away from ac edge? or it is in abc?
         //if a0 is in that direction than
         if (abc_ac.DotProduct(ao) > 0.0f)
         {
             //keep c the same
             simplex_vertex_b = simplex_vertex_a;
-
             //dir is not abc_ac because it's not point towards the origin
             dir = ac.CrossProductTwice(ao);
-
             //direction change; can't build tetrahedron
             return false;
         }
-
         //now can build tetrahedron; check if it's above or below
         if (abc.DotProduct(ao) > 0.0f)
         {
@@ -110,7 +103,6 @@ namespace Engine5
             simplex_vertex_d = simplex_vertex_c;
             simplex_vertex_c = simplex_vertex_b;
             simplex_vertex_b = simplex_vertex_a;
-
             //new direction
             dir = abc;
         }
@@ -291,7 +283,6 @@ namespace Engine5
             dir              = n;
             return false;
         }
-
         //Below triangle
         simplex_vertex_d = simplex_vertex_b;
         simplex_vertex_b = simplex_vertex_a;
@@ -310,7 +301,7 @@ namespace Engine5
         count       = 3; //hoisting this just cause
         //Plane-test origin with 3 faces
         if (ABC.DotProduct(AO) > 0.0f)
-        { 
+        {
             //In front of ABC
             simplex_vertex_d = simplex_vertex_c;
             simplex_vertex_c = simplex_vertex_b;
@@ -319,14 +310,14 @@ namespace Engine5
             return false;
         }
         if (ACD.DotProduct(AO) > 0.0f)
-        { 
+        {
             //In front of ACD
             simplex_vertex_b = simplex_vertex_a;
             dir              = ACD;
             return false;
         }
         if (ADB.DotProduct(AO) > 0.0f)
-        { 
+        {
             //In front of ADB
             simplex_vertex_c = simplex_vertex_d;
             simplex_vertex_d = simplex_vertex_b;
@@ -334,7 +325,6 @@ namespace Engine5
             dir              = ADB;
             return false;
         }
-
         //else inside tetrahedron; enclosed!
         return true;
     }

@@ -102,6 +102,16 @@ namespace Engine5
         m_angular_velocity = angular;
     }
 
+    void RigidBody::AddLinearVelocity(const Vector3& linear_delta)
+    {
+        m_linear_velocity += linear_delta;
+    }
+
+    void RigidBody::AddAngularVelocity(const Vector3& angular_delta)
+    {
+        m_angular_velocity += angular_delta;
+    }
+
     Vector3 RigidBody::GetLinearVelocity() const
     {
         return m_linear_velocity;

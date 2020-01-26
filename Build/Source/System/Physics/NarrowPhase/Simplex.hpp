@@ -9,7 +9,7 @@ namespace Engine5
         Simplex();
         ~Simplex();
         SupportPoint& operator[](size_t index);
-        SupportPoint operator[](size_t index) const;
+        SupportPoint  operator[](size_t index) const;
 
         bool DoSimplexPoint(Vector3& dir);
         bool DoSimplexLine(Vector3& dir);
@@ -18,12 +18,12 @@ namespace Engine5
 
         bool IsContainOrigin(Vector3& dir);
 
-        void Push(const SupportPoint&p);
+        void Push(const SupportPoint& p);
 
-        void Set(const SupportPoint&a, const SupportPoint&b, const SupportPoint&c, const SupportPoint&d);
-        void Set(const SupportPoint&a, const SupportPoint&b, const SupportPoint&c);
-        void Set(const SupportPoint&a, const SupportPoint&b);
-        void Set(const SupportPoint&a);
+        void Set(const SupportPoint& a, const SupportPoint& b, const SupportPoint& c, const SupportPoint& d);
+        void Set(const SupportPoint& a, const SupportPoint& b, const SupportPoint& c);
+        void Set(const SupportPoint& a, const SupportPoint& b);
+        void Set(const SupportPoint& a);
 
         bool UpdateSimplexTriangle(Vector3& dir);
         bool UpdateSimplexTetrahedron(Vector3& dir);

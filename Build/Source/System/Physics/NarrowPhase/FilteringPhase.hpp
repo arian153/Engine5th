@@ -22,11 +22,11 @@ namespace Engine5
         CollisionState state = CollisionState::None;
     };
 
-    class FillteringPhase
+    class FilteringPhase
     {
     public:
-        FillteringPhase();
-        ~FillteringPhase();
+        FilteringPhase();
+        ~FilteringPhase();
 
         void Initialize(std::unordered_multimap<size_t, ContactManifold>* data_table);
         void Shutdown();

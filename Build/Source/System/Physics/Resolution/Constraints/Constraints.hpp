@@ -13,6 +13,5 @@ namespace Engine5
         virtual void ApplyConstraints() = 0;
 
     private:
-
     };
 }

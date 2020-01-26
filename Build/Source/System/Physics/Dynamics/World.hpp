@@ -10,7 +10,7 @@
 
 namespace Engine5
 {
-    class FillteringPhase;
+    class FilteringPhase;
 
     class World
     {
@@ -43,7 +43,7 @@ namespace Engine5
         std::vector<RigidBody*>              m_rigid_bodies;
         std::list<ColliderPair>              m_pairs;
         std::unordered_multimap<size_t, ContactManifold> m_manifold_table;
-        FillteringPhase* m_collision_data_table = nullptr;
+        FilteringPhase* m_collision_data_table = nullptr;
 
         ColorFlag m_draw_gjk;
         ColorFlag m_draw_epa;

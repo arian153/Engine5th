@@ -29,6 +29,9 @@ namespace Engine5
 
         void    SetLinearVelocity(const Vector3& linear);
         void    SetAngularVelocity(const Vector3& angular);
+        void    AddLinearVelocity(const Vector3& linear_delta);
+        void    AddAngularVelocity(const Vector3& angular_delta);
+
         Vector3 GetLinearVelocity() const;
         Vector3 GetAngularVelocity() const;
 

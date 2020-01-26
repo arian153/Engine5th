@@ -1,6 +1,6 @@
 #include "Constraints.hpp"
 
-namespace Engine5 
+namespace Engine5
 {
     Constraints::Constraints()
     {
@@ -9,6 +9,4 @@ namespace Engine5
     Constraints::~Constraints()
     {
     }
-
-
 }

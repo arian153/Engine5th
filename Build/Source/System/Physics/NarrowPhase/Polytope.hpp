@@ -2,7 +2,6 @@
 #include "SupportPoint.hpp"
 #include <vector>
 
-
 namespace Engine5
 {
     class Simplex;
@@ -56,12 +55,12 @@ namespace Engine5
         ~Polytope();
 
         PolytopeFace PickClosestFaceOfPolytopeToOrigin();
-        Real PointFaceTest(const Vector3& point, const Vector3& normal, const Vector3& v0);
-        void Push(SupportPoint& vertex);
-        void PushFromSimplex(const SupportPoint& vertex);
-        void Expand(const SupportPoint& vertex);
-        bool IsFaceSeen(const PolytopeFace& face, const SupportPoint& vertex);
-        void AddEdge(size_t a, size_t b);
+        Real         PointFaceTest(const Vector3& point, const Vector3& normal, const Vector3& v0);
+        void         Push(SupportPoint& vertex);
+        void         PushFromSimplex(const SupportPoint& vertex);
+        void         Expand(const SupportPoint& vertex);
+        bool         IsFaceSeen(const PolytopeFace& face, const SupportPoint& vertex);
+        void         AddEdge(size_t a, size_t b);
 
     private:
         friend class NarrowPhase;

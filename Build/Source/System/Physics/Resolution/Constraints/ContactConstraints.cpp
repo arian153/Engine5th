@@ -19,18 +19,16 @@ namespace Engine5
 
     void ContactConstraints::SolveConstraints(Real dt)
     {
-
     }
 
     void ContactConstraints::ApplyConstraints()
     {
         //apply body a
-        m_body_a->SetLinearVelocity(m_v_a);
-        m_body_a->SetAngularVelocity(m_w_a);
-
+        m_body_a->AddLinearVelocity(m_dv_a);
+        m_body_a->AddAngularVelocity(m_dw_a);
         //apply body b
-        m_body_b->SetLinearVelocity(m_v_b);
-        m_body_b->SetAngularVelocity(m_w_b);
+        m_body_b->AddLinearVelocity(m_dv_b);
+        m_body_b->AddAngularVelocity(m_dw_b);
     }
 
     void ContactConstraints::SolveContactManifold()
@@ -44,36 +42,31 @@ namespace Engine5
     void ContactConstraints::WarmStart()
     {
         //body a data.
-        auto va = m_body_a->GetLinearVelocity();
-        auto wa = m_body_a->GetAngularVelocity();
-        auto ma = m_body_a->InverseMass();
-        auto ia = m_body_a->InverseInertia();
-
+        Vector3  va = m_body_a->GetLinearVelocity();
+        Vector3  wa = m_body_a->GetAngularVelocity();
+        Real     ma = m_body_a->InverseMass();
+        Matrix33 ia = m_body_a->InverseInertia();
         //body b data.
-        auto vb = m_body_b->GetLinearVelocity();
-        auto wb = m_body_b->GetAngularVelocity();
-        auto mb = m_body_b->InverseMass();
-        auto ib = m_body_b->InverseInertia();
-
-        Basis normal_basis;
+        Vector3  vb = m_body_b->GetLinearVelocity();
+        Vector3  wb = m_body_b->GetAngularVelocity();
+        Real     mb = m_body_b->InverseMass();
+        Matrix33 ib = m_body_b->InverseInertia();
+        Basis    normal_basis;
         normal_basis.CalculateBasisApprox(m_manifold->manifold_normal);
-        Vector3 normal = normal_basis.i;
+        Vector3 normal    = normal_basis.i;
         Vector3 tangent_a = normal_basis.j;
         Vector3 tangent_b = normal_basis.k;
-
         for (auto& contact : m_manifold->contacts)
         {
             Vector3 p = contact.normal_impulse_sum * normal
-                + contact.tangent_a_impulse_sum * tangent_a
-                + contact.tangent_b_impulse_sum * tangent_b;
+                    + contact.tangent_a_impulse_sum * tangent_a
+                    + contact.tangent_b_impulse_sum * tangent_b;
             //-= or +=
-            va += ma * p;
-            wa += ia * CrossProduct(contact.local_position_a, p);
+            m_dv_a += ma * p;
+            m_dw_a += ia * CrossProduct(contact.local_position_a, p);
             //+= or -=
-            vb -= mb * p;
-            wb -= ib * CrossProduct(contact.local_position_b, p);
+            m_dv_b -= mb * p;
+            m_dw_b -= ib * CrossProduct(contact.local_position_b, p);
         }
-
     }
-
 }
