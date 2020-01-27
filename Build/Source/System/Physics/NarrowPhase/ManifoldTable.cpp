@@ -1,31 +1,30 @@
-#include "FilteringPhase.hpp"
+#include "ManifoldTable.hpp"
 #include "../Resolution/ContactManifold.hpp"
 #include "../Dynamics/ColliderSet.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
 namespace Engine5
 {
-    FilteringPhase::FilteringPhase()
+    ManifoldTable::ManifoldTable()
     {
     }
 
-    FilteringPhase::~FilteringPhase()
+    ManifoldTable::~ManifoldTable()
     {
     }
 
-    void FilteringPhase::Initialize(std::unordered_multimap<size_t, ContactManifold>* data_table)
+    void ManifoldTable::Initialize()
     {
-        m_manifold_table = data_table;
     }
 
-    void FilteringPhase::Shutdown()
+    void ManifoldTable::Shutdown()
     {
         m_key_table.clear();
     }
 
-    void FilteringPhase::SendHasCollision(ColliderSet* a, ColliderSet* b, bool was_collision)
+    void ManifoldTable::SendHasCollision(ColliderSet* a, ColliderSet* b, bool was_collision)
     {
-        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        size_t key       = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         auto   key_range = m_state_table.equal_range(key);
         if (key_range.first != key_range.second)
         {
@@ -48,7 +47,6 @@ namespace Engine5
                     break;
                 }
             }
-
             if (is_duplicated == false)
             {
                 //found same key of pair. 
@@ -56,7 +54,6 @@ namespace Engine5
                 CollisionStateData collision_data;
                 collision_data.set_a = a;
                 collision_data.set_b = b;
-
                 if (was_collision == true)
                 {
                     collision_data.state = CollisionState::Persist;
@@ -74,7 +71,6 @@ namespace Engine5
             CollisionStateData collision_data;
             collision_data.set_a = a;
             collision_data.set_b = b;
-
             if (was_collision == true)
             {
                 collision_data.state = CollisionState::Persist;
@@ -83,14 +79,13 @@ namespace Engine5
             {
                 collision_data.state = CollisionState::Start;
             }
-
             m_state_table.emplace(key, collision_data);
         }
     }
 
-    void FilteringPhase::SendNotCollision(ColliderSet* a, ColliderSet* b, bool was_collision)
+    void ManifoldTable::SendNotCollision(ColliderSet* a, ColliderSet* b, bool was_collision)
     {
-        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        size_t key       = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         auto   key_range = m_state_table.equal_range(key);
         if (key_range.first != key_range.second)
         {
@@ -120,7 +115,6 @@ namespace Engine5
                 CollisionStateData collision_data;
                 collision_data.set_a = a;
                 collision_data.set_b = b;
-
                 if (was_collision == true)
                 {
                     collision_data.state = CollisionState::End;
@@ -138,7 +132,6 @@ namespace Engine5
             CollisionStateData collision_data;
             collision_data.set_a = a;
             collision_data.set_b = b;
-
             if (was_collision == true)
             {
                 collision_data.state = CollisionState::End;
@@ -151,9 +144,9 @@ namespace Engine5
         }
     }
 
-    void FilteringPhase::SendInvalidCollision(ColliderSet* a, ColliderSet* b)
+    void ManifoldTable::SendInvalidCollision(ColliderSet* a, ColliderSet* b)
     {
-        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        size_t key       = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         auto   key_range = m_state_table.equal_range(key);
         if (key_range.first != key_range.second)
         {
@@ -164,7 +157,7 @@ namespace Engine5
                     ((*it).second.set_b == a && (*it).second.set_a == b))
                 {
                     // in this case, keep previous contact data for collision event.
-                    is_duplicated = true;
+                    is_duplicated      = true;
                     (*it).second.state = CollisionState::Invalid;
                     break;
                 }
@@ -176,7 +169,6 @@ namespace Engine5
                 CollisionStateData collision_data;
                 collision_data.set_a = a;
                 collision_data.set_b = b;
-
                 collision_data.state = CollisionState::Invalid;
                 m_state_table.emplace(key, collision_data);
             }
@@ -187,39 +179,36 @@ namespace Engine5
             CollisionStateData collision_data;
             collision_data.set_a = a;
             collision_data.set_b = b;
-
             collision_data.state = CollisionState::Invalid;
             m_state_table.emplace(key, collision_data);
         }
     }
 
-    size_t FilteringPhase::GenerateKey(ColliderSet* a, ColliderSet* b)
+    size_t ManifoldTable::GenerateKey(ColliderSet* a, ColliderSet* b)
     {
         return reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
     }
 
-    size_t FilteringPhase::GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b)
+    size_t ManifoldTable::GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b)
     {
         return reinterpret_cast<size_t>(a->m_collider_set) + reinterpret_cast<size_t>(b->m_collider_set);
     }
 
-    size_t FilteringPhase::GenerateKey(ContactManifold* manifold)
+    size_t ManifoldTable::GenerateKey(ContactManifold* manifold)
     {
         return reinterpret_cast<size_t>(manifold->m_set_a) + reinterpret_cast<size_t>(manifold->m_set_b);
     }
 
-    auto FilteringPhase::FindAssociatedPairs(ColliderSet* key)
+    auto ManifoldTable::FindAssociatedPairs(ColliderSet* key)
     {
         return m_key_table.equal_range(key);
     }
 
-    auto FilteringPhase::FindCollisionDatas(ColliderSet* a, ColliderSet* b, size_t at)
+    auto ManifoldTable::FindCollisionData(ColliderSet* a, ColliderSet* b, size_t at) const
     {
-        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
-
+        size_t      key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         Vector3Pair result;
-
-        auto   data_range = m_manifold_table->equal_range(key);
+        auto        data_range = m_manifold_table.equal_range(key);
         if (data_range.first != data_range.second)
         {
             for (auto it = data_range.first; it != data_range.second; ++it)
@@ -228,29 +217,28 @@ namespace Engine5
                 {
                     size_t count = it->second.ContactsCount();
                     size_t index = at < count ? at : 0;
-                    result.a = it->second.contacts.at(index).local_position_a;
-                    result.b = it->second.contacts.at(index).local_position_b;
+                    result.a     = it->second.contacts.at(index).local_position_a;
+                    result.b     = it->second.contacts.at(index).local_position_b;
                     return result;
                 }
                 else if (it->second.m_set_b == a && it->second.m_set_a == b)
                 {
                     size_t count = it->second.ContactsCount();
                     size_t index = at < count ? at : 0;
-                    result.b = it->second.contacts.at(index).local_position_a;
-                    result.a = it->second.contacts.at(index).local_position_b;
+                    result.b     = it->second.contacts.at(index).local_position_a;
+                    result.a     = it->second.contacts.at(index).local_position_b;
                     return result;
                 }
             }
         }
-
         //result.a = Math::Vector3::INVALID;
         //result.b = Math::Vector3::INVALID;
         return result;
     }
 
-    auto FilteringPhase::FindColisionState(ColliderSet* a, ColliderSet* b)
+    auto ManifoldTable::FindCollisionState(ColliderSet* a, ColliderSet* b)
     {
-        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        size_t key        = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         auto   data_range = m_state_table.equal_range(key);
         if (data_range.first != data_range.second)
         {
@@ -266,10 +254,10 @@ namespace Engine5
         return CollisionState::None;
     }
 
-    ContactManifold* FilteringPhase::FindManifold(ColliderSet* a, ColliderSet* b)
+    ContactManifold* ManifoldTable::FindManifold(ColliderSet* a, ColliderSet* b)
     {
-        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
-        auto   data_range = m_manifold_table->equal_range(key);
+        size_t key        = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        auto   data_range = m_manifold_table.equal_range(key);
         if (data_range.first != data_range.second)
         {
             for (auto it = data_range.first; it != data_range.second; ++it)
@@ -277,25 +265,24 @@ namespace Engine5
                 if (it->second.m_set_a == a && it->second.m_set_b == b ||
                     it->second.m_set_b == a && it->second.m_set_a == b)
                 {
-                    return &it->second;
+                    return &(it->second);
                 }
             }
         }
-
         return nullptr;
     }
 
-    ContactManifold* FilteringPhase::CreateManifold(ColliderSet* a, ColliderSet* b)
+    ContactManifold* ManifoldTable::CreateManifold(ColliderSet* a, ColliderSet* b)
     {
-        size_t key = RegisterKey(a, b);
-        auto result = m_manifold_table->emplace(key, ContactManifold(a, b));
+        size_t key    = RegisterKey(a, b);
+        auto   result = m_manifold_table.emplace(key, ContactManifold(a, b));
         return &result->second;
     }
 
-    bool FilteringPhase::HasManifold(ColliderSet* a, ColliderSet* b)
+    bool ManifoldTable::HasManifold(ColliderSet* a, ColliderSet* b) const
     {
-        size_t key = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
-        auto   data_range = m_manifold_table->equal_range(key);
+        size_t key        = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
+        auto   data_range = m_manifold_table.equal_range(key);
         if (data_range.first != data_range.second)
         {
             for (auto it = data_range.first; it != data_range.second; ++it)
@@ -307,19 +294,18 @@ namespace Engine5
                 }
             }
         }
-
         return false;
     }
 
-    void FilteringPhase::FilteringManifolds()
+    void ManifoldTable::FilteringManifolds()
     {
-        for (auto it = m_manifold_table->begin(); it != m_manifold_table->end();)
+        for (auto it = m_manifold_table.begin(); it != m_manifold_table.end();)
         {
             //if sets don't intersect each other, remove previous frame's manifolds.
             if (it->second.m_set_a->m_bounding_volume.Intersect(it->second.m_set_b->m_bounding_volume) == false)
             {
-                DeregisterKey(it->second.m_set_a, it->second.m_set_b);
-                m_manifold_table->erase(it++);
+                DeRegisterKey(it->second.m_set_a, it->second.m_set_b);
+                m_manifold_table.erase(it++);
             }
             else
             {
@@ -330,7 +316,7 @@ namespace Engine5
         }
     }
 
-    size_t FilteringPhase::RegisterKey(ColliderSet* a, ColliderSet* b)
+    size_t ManifoldTable::RegisterKey(ColliderSet* a, ColliderSet* b)
     {
         auto key_range_a = m_key_table.equal_range(a);
         if (key_range_a.first != key_range_a.second)
@@ -353,7 +339,6 @@ namespace Engine5
         {
             m_key_table.emplace(a, b);
         }
-
         auto key_range_b = m_key_table.equal_range(b);
         if (key_range_b.first != key_range_b.second)
         {
@@ -375,16 +360,15 @@ namespace Engine5
         {
             m_key_table.emplace(b, a);
         }
-
         return reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
     }
 
-    void FilteringPhase::DeregisterKey(ColliderSet* a, ColliderSet* b)
+    void ManifoldTable::DeRegisterKey(ColliderSet* a, ColliderSet* b)
     {
         auto key_range_a = m_key_table.equal_range(a);
         if (key_range_a.first != key_range_a.second)
         {
-            for (auto it = key_range_a.first; it != key_range_a.second; )
+            for (auto it = key_range_a.first; it != key_range_a.second;)
             {
                 if ((*it).second == b)
                 {
@@ -397,7 +381,6 @@ namespace Engine5
                 }
             }
         }
-
         auto key_range_b = m_key_table.equal_range(b);
         if (key_range_b.first != key_range_b.second)
         {
@@ -414,7 +397,5 @@ namespace Engine5
                 }
             }
         }
-
     }
-
 }

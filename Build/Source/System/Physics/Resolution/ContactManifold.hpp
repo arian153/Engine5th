@@ -37,7 +37,7 @@ namespace Engine5
         friend class Resolution;
         friend class NarrowPhase;
         friend class ContactConstraints;
-        friend class FilteringPhase;
+        friend class ManifoldTable;
 
     private:
         Real    persistent_threshold_squared = 4.0f;

@@ -3,7 +3,7 @@
 #include "Polytope.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
-#include "FilteringPhase.hpp"
+#include "ManifoldTable.hpp"
 
 namespace Engine5
 {
@@ -28,7 +28,7 @@ namespace Engine5
         m_primitive_renderer = primitive_renderer;
     }
 
-    void NarrowPhase::GenerateContact(std::list<ColliderPair>& potential_list, std::unordered_multimap<size_t, ContactManifold>& manifold_table, FilteringPhase* data_table, const ColorFlag& gjk_flag, const ColorFlag& epa_flag, const ColorFlag& contact_flag)
+    void NarrowPhase::GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table, const ColorFlag& gjk_flag, const ColorFlag& epa_flag, const ColorFlag& contact_flag)
     {
         data_table->FilteringManifolds();
         for (auto& pair : potential_list)

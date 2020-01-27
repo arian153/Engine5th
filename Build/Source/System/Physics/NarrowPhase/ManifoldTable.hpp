@@ -1,13 +1,16 @@
+// ReSharper disable CppFunctionIsNotImplemented
 #pragma once
-#include "../../Math/Algebra/Vector3.hpp"
-#include <list>
 #include <unordered_map>
 
 namespace Engine5
 {
     enum class CollisionState : int
     {
-        None = 0, Start, Persist, End, Invalid
+        None = 0
+      , Start
+      , Persist
+      , End
+      , Invalid
     };
 
     class ColliderPrimitive;
@@ -17,18 +20,18 @@ namespace Engine5
     class CollisionStateData
     {
     public:
-        ColliderSet* set_a = nullptr;
-        ColliderSet* set_b = nullptr;
+        ColliderSet*   set_a = nullptr;
+        ColliderSet*   set_b = nullptr;
         CollisionState state = CollisionState::None;
     };
 
-    class FilteringPhase
+    class ManifoldTable
     {
     public:
-        FilteringPhase();
-        ~FilteringPhase();
+        ManifoldTable();
+        ~ManifoldTable();
 
-        void Initialize(std::unordered_multimap<size_t, ContactManifold>* data_table);
+        void Initialize();
         void Shutdown();
 
         void SendHasCollision(ColliderSet* a, ColliderSet* b, bool was_collision);
@@ -38,19 +41,19 @@ namespace Engine5
         size_t GenerateKey(ColliderSet* a, ColliderSet* b);
         size_t GenerateKey(ColliderPrimitive* a, ColliderPrimitive* b);
         size_t GenerateKey(ContactManifold* manifold);
-        auto FindAssociatedPairs(ColliderSet* a);
-        auto FindCollisionDatas(ColliderSet* a, ColliderSet* b, size_t at = 0);
-        auto FindColisionState(ColliderSet* a, ColliderSet* b);
+        auto   FindAssociatedPairs(ColliderSet* a);
+        auto   FindCollisionData(ColliderSet* a, ColliderSet* b, size_t at = 0) const;
+        auto   FindCollisionState(ColliderSet* a, ColliderSet* b);
 
         ContactManifold* FindManifold(ColliderSet* a, ColliderSet* b);
         ContactManifold* CreateManifold(ColliderSet* a, ColliderSet* b);
-        bool HasManifold(ColliderSet* a, ColliderSet* b);
-        void FilteringManifolds();
-        size_t RegisterKey(ColliderSet* a, ColliderSet* b);
-        void DeregisterKey(ColliderSet* a, ColliderSet* b);
+        bool             HasManifold(ColliderSet* a, ColliderSet* b) const;
+        void             FilteringManifolds();
+        size_t           RegisterKey(ColliderSet* a, ColliderSet* b);
+        void             DeRegisterKey(ColliderSet* a, ColliderSet* b);
 
     public:
-        std::unordered_multimap<size_t, ContactManifold>* m_manifold_table = nullptr;
+        std::unordered_multimap<size_t, ContactManifold>    m_manifold_table;
         std::unordered_multimap<size_t, CollisionStateData> m_state_table;
         std::unordered_multimap<ColliderSet*, ColliderSet*> m_key_table;
     };

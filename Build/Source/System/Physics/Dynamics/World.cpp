@@ -3,7 +3,7 @@
 #include "../BroadPhase/NSquared.hpp"
 #include "../BroadPhase/GridPartition.hpp"
 #include "../NarrowPhase/NarrowPhase.hpp"
-#include "../NarrowPhase/FilteringPhase.hpp"
+#include "../NarrowPhase/ManifoldTable.hpp"
 #include "ColliderSet.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
@@ -42,9 +42,8 @@ namespace Engine5
             }
             m_broad_phase->Initialize();
         }
-        m_collision_data_table = new FilteringPhase();
+        m_manifold_table = new ManifoldTable();
         m_narrow_phase         = new NarrowPhase();
-        m_collision_data_table->Initialize(&m_manifold_table);
         m_narrow_phase->Initialize();
     }
 
@@ -55,7 +54,7 @@ namespace Engine5
         m_broad_phase->ComputePairs(m_pairs);
 
         //narrow phase
-        m_narrow_phase->GenerateContact(m_pairs, m_manifold_table, m_collision_data_table, m_draw_gjk, m_draw_epa, m_draw_contact);
+        m_narrow_phase->GenerateContact(m_pairs, m_manifold_table, m_draw_gjk, m_draw_epa, m_draw_contact);
 
         //resolution phase
         
@@ -70,11 +69,11 @@ namespace Engine5
             delete m_narrow_phase;
             m_narrow_phase = nullptr;
         }
-        if (m_collision_data_table != nullptr)
+        if (m_manifold_table != nullptr)
         {
-            m_collision_data_table->Shutdown();
-            delete m_collision_data_table;
-            m_collision_data_table = nullptr;
+            m_manifold_table->Shutdown();
+            delete m_manifold_table;
+            m_manifold_table = nullptr;
         }
         m_pairs.clear();
         for (auto& body : m_rigid_bodies)

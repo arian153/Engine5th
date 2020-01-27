@@ -47,7 +47,7 @@ namespace Engine5
         friend class World;
         friend class RigidBody;
         friend class ColliderComponent;
-        friend class FilteringPhase;
+        friend class ManifoldTable;
         friend class ContactManifold;
 
     private:
