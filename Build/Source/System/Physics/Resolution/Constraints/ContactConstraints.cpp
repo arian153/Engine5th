@@ -35,8 +35,94 @@ namespace Engine5
     {
     }
 
-    void ContactConstraints::SolveContactPoint()
+    void ContactConstraints::SolveContactPoint(ContactPoint& contact_point)
     {
+        RigidBody* body_a = contact_point.collider_a->GetRigidBody();
+        RigidBody* body_b = contact_point.collider_b->GetRigidBody();
+        //mass term
+        MassTerm mass;
+        mass.m_a = body_a->InverseMassMatrix();
+        mass.i_a = body_a->InverseInertia();
+        mass.m_b = body_b->InverseMassMatrix();
+        mass.i_b = body_b->InverseInertia();
+        //velocity term
+        VelocityTerm velocity;
+        velocity.v_a = body_a->GetLinearVelocity();
+        velocity.w_a = body_a->GetAngularVelocity();
+        velocity.v_b = body_b->GetLinearVelocity();
+        velocity.w_b = body_b->GetAngularVelocity();
+        //other data
+        ContactTerm contact;
+        contact.c_a = Vector3();  //ToDo - need to calculation
+        contact.c_b = Vector3();  //ToDo - need to calculation
+        contact.r_a = Vector3();  //ToDo - need to calculation
+        contact.r_b = Vector3();  //ToDo - need to calculation
+        TangentTerm tangent_a;
+        tangent_a.friction        = 0.0f; //ToDo - need to calculation
+        tangent_a.normal_impulse  = contact_point.normal_impulse_sum;
+        tangent_a.tangent         = contact_point.tangent_a;
+        tangent_a.tangent_impulse = contact_point.tangent_a_impulse_sum;
+        tangent_a.tangent_mass    = 0.0f; //ToDo - need to calculation
+        tangent_a.tangent_speed   = 0.0f; //ToDo - need to set
+        TangentTerm tangent_b;
+        tangent_b.friction        = 0.0f; //ToDo - need to calculation
+        tangent_b.normal_impulse  = contact_point.normal_impulse_sum;
+        tangent_b.tangent         = contact_point.tangent_b;
+        tangent_b.tangent_impulse = contact_point.tangent_b_impulse_sum;
+        tangent_b.tangent_mass    = 0.0f; //ToDo - need to calculation
+        tangent_b.tangent_speed   = 0.0f; //ToDo - need to set
+        NormalTerm normal;
+        normal.normal         = contact_point.normal;
+        normal.normal_impulse = contact_point.normal_impulse_sum;
+        normal.normal_mass    = 0.0f;  //ToDo - need to calculation
+        normal.restitution    = 0.0f;  //ToDo - need to calculation
+        //
+        // Solve tangent constraints first because non-penetration is more important than friction.
+        SolveTangentConstraints(contact, mass, velocity, tangent_a);
+        SolveTangentConstraints(contact, mass, velocity, tangent_b);
+        // Solve normal constraints
+        SolveNormalConstraints(contact, mass, velocity, normal);
+        contact_point.normal_impulse_sum    = normal.normal_impulse;
+        contact_point.tangent_a_impulse_sum = tangent_a.tangent_impulse;
+        contact_point.tangent_b_impulse_sum = tangent_b.tangent_impulse;
+    }
+
+    void ContactConstraints::SolveNormalConstraints(const ContactTerm& contact, const MassTerm& mass, VelocityTerm& velocity, NormalTerm& normal) const
+    {
+        // Relative velocity at contact
+        Vector3 dv = velocity.v_b + CrossProduct(velocity.w_b, contact.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact.r_a);
+        // Compute normal impulse
+        Real vn     = DotProduct(dv, normal.normal);
+        Real lambda = -normal.normal_mass * (vn - normal.restitution);
+        // b2Clamp the accumulated impulse
+        Real new_impulse      = Utility::Max(normal.normal_impulse + lambda, 0.0f);
+        lambda                = new_impulse - normal.normal_impulse;
+        normal.normal_impulse = new_impulse;
+        // Apply contact impulse
+        Vector3 p = lambda * normal.normal;
+        velocity.v_a -= mass.m_a * p;
+        velocity.w_a -= mass.i_a * CrossProduct(contact.r_a, p);
+        velocity.v_b += mass.m_b * p;
+        velocity.w_b += mass.i_b * CrossProduct(contact.r_b, p);
+    }
+
+    void ContactConstraints::SolveTangentConstraints(const ContactTerm& contact, const MassTerm& mass, VelocityTerm& velocity, TangentTerm& tangent) const
+    {
+        Vector3 dv = velocity.v_b + CrossProduct(velocity.w_b, contact.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact.r_a);
+        // Compute tangent force
+        Real vt     = DotProduct(dv, tangent.tangent) - tangent.tangent_speed;
+        Real lambda = tangent.tangent_mass * (-vt);
+        // b2Clamp the accumulated force
+        Real max_friction       = tangent.friction * tangent.normal_impulse; //max friction
+        Real new_impulse        = Utility::Clamp(tangent.tangent_impulse + lambda, -max_friction, max_friction);
+        lambda                  = new_impulse - tangent.tangent_impulse;
+        tangent.tangent_impulse = new_impulse;
+        // Apply contact impulse
+        Vector3 p = lambda * tangent.tangent;
+        velocity.v_a -= mass.m_a * p;
+        velocity.w_a -= mass.i_a * CrossProduct(contact.r_a, p);
+        velocity.v_b += mass.m_b * p;
+        velocity.w_b += mass.i_b * CrossProduct(contact.r_b, p);
     }
 
     void ContactConstraints::WarmStart()

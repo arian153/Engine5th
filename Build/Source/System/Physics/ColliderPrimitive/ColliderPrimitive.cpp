@@ -14,7 +14,7 @@ namespace Engine5
     void ColliderPrimitive::CastRay(RayCastResult& result, Real max_distance)
     {
         result.hit_data.collider = this;
-        RigidBody* body = m_rigid_body;
+        RigidBody* body          = m_rigid_body;
         Ray        body_ray(body->WorldToLocalPoint(result.ray.position), body->WorldToLocalVector(result.ray.direction));
         Ray        local_ray(this->WorldToLocalPoint(body_ray.position), this->WorldToLocalVector(body_ray.direction));
         Real       minimum_t = -1.0f;
@@ -23,7 +23,6 @@ namespace Engine5
         {
             result.hit_data.t   = minimum_t;
             result.hit_data.hit = true;
-
             //ray cast done
             Vector3 local_intersection   = local_ray.position + local_ray.direction * result.hit_data.t;
             result.hit_data.intersection = result.ray.position + result.ray.direction * result.hit_data.t;
@@ -37,7 +36,7 @@ namespace Engine5
 
     void ColliderPrimitive::IntersectRay(RayIntersectionResult& result, Real max_distance)
     {
-        RigidBody* body = m_rigid_body;
+        RigidBody* body      = m_rigid_body;
         Ray        world_ray = result.ray;
         Ray        body_ray(body->WorldToLocalPoint(result.ray.position), body->WorldToLocalVector(result.ray.direction));
         Ray        local_ray(this->WorldToLocalPoint(body_ray.position), this->WorldToLocalVector(body_ray.direction));
@@ -51,7 +50,6 @@ namespace Engine5
             hit_data_a.collider = this;
             hit_data_b.t        = maximum_t;
             hit_data_b.collider = this;
-
             //ray cast done
             Vector3 local_intersection_a = local_ray.position + local_ray.direction * hit_data_a.t;
             hit_data_a.intersection      = result.ray.position + result.ray.direction * hit_data_a.t;
@@ -147,6 +145,11 @@ namespace Engine5
         return m_bounding_volume;
     }
 
+    ColliderSet* ColliderPrimitive::GetColliderSet() const
+    {
+        return m_collider_set;
+    }
+
     Real ColliderPrimitive::GetDensity() const
     {
         return m_density;
@@ -172,7 +175,6 @@ namespace Engine5
         SetMassData(density);
         UpdateMassData();
     }
-
 
     void ColliderPrimitive::UpdatePrimitive()
     {

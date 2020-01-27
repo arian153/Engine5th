@@ -4,7 +4,6 @@
 #include "../BroadPhase/RayCast.hpp"
 #include "../Dynamics/ColliderSet.hpp"
 
-
 namespace Engine5
 {
     class Color;
@@ -29,12 +28,13 @@ namespace Engine5
         Vector3 WorldToLocalVector(const Vector3& world_vector) const;
 
         Matrix33 WorldInertia() const;
-        Vector3 WorldCentroid() const;
+        Vector3  WorldCentroid() const;
 
         Vector3       GetBodyPosition() const;
         Quaternion    GetBodyOrientation() const;
         RigidBody*    GetRigidBody() const;
         BoundingAABB* GetBoundingVolume() const;
+        ColliderSet*  GetColliderSet() const;
         Real          GetDensity() const;
 
         Vector3 ConvertBodyWorldPoint(const Vector3& local_point) const;
@@ -69,7 +69,6 @@ namespace Engine5
         virtual void SetMassData(Real density) = 0;
         virtual void SetScaleData(const Vector3& scale) = 0;
         virtual void Clone(ColliderPrimitive* cloned) = 0;
-
 
     private:
         friend class ColliderSet;
