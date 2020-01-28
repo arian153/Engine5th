@@ -24,11 +24,27 @@ namespace Engine5
     void ContactConstraints::ApplyConstraints()
     {
         //apply body a
-        m_body_a->AddLinearVelocity(m_dv_a);
-        m_body_a->AddAngularVelocity(m_dw_a);
+        m_body_a->SetLinearVelocity(m_velocity.v_a);
+        m_body_a->SetAngularVelocity(m_velocity.w_a);
         //apply body b
-        m_body_b->AddLinearVelocity(m_dv_b);
-        m_body_b->AddAngularVelocity(m_dw_b);
+        m_body_b->SetLinearVelocity(m_velocity.v_b);
+        m_body_b->SetAngularVelocity(m_velocity.w_b);
+    }
+
+    void ContactConstraints::InitializeContactConstraints(ContactPoint& contact_point)
+    {
+        RigidBody* body_a = contact_point.collider_a->GetRigidBody();
+        RigidBody* body_b = contact_point.collider_b->GetRigidBody();
+        //mass term
+        m_mass.m_a = body_a->InverseMassMatrix();
+        m_mass.i_a = body_a->InverseInertia();
+        m_mass.m_b = body_b->InverseMassMatrix();
+        m_mass.i_b = body_b->InverseInertia();
+        //velocity term
+        m_velocity.v_a = body_a->GetLinearVelocity();
+        m_velocity.w_a = body_a->GetAngularVelocity();
+        m_velocity.v_b = body_b->GetLinearVelocity();
+        m_velocity.w_b = body_b->GetAngularVelocity();
     }
 
     void ContactConstraints::SolveContactManifold()
@@ -39,52 +55,63 @@ namespace Engine5
     {
         RigidBody* body_a = contact_point.collider_a->GetRigidBody();
         RigidBody* body_b = contact_point.collider_b->GetRigidBody();
-        //mass term
-        MassTerm mass;
-        mass.m_a = body_a->InverseMassMatrix();
-        mass.i_a = body_a->InverseInertia();
-        mass.m_b = body_b->InverseMassMatrix();
-        mass.i_b = body_b->InverseInertia();
-        //velocity term
-        VelocityTerm velocity;
-        velocity.v_a = body_a->GetLinearVelocity();
-        velocity.w_a = body_a->GetAngularVelocity();
-        velocity.v_b = body_b->GetLinearVelocity();
-        velocity.w_b = body_b->GetAngularVelocity();
-        //other data
+        //contact term
         ContactTerm contact;
-        contact.c_a = Vector3();  //ToDo - need to calculation
-        contact.c_b = Vector3();  //ToDo - need to calculation
-        contact.r_a = Vector3();  //ToDo - need to calculation
-        contact.r_b = Vector3();  //ToDo - need to calculation
+        contact.c_a      = body_a->GetCentroid(); //global centroid.
+        contact.c_b      = body_b->GetCentroid(); //global centroid.
+        contact.r_a      = contact_point.global_position_a - contact.c_a;
+        contact.r_b      = contact_point.global_position_b - contact.c_b;
+        Vector3 n        = contact_point.normal;
+        Vector3 ta       = contact_point.tangent_a;
+        Vector3 tb       = contact_point.tangent_b;
+        Vector3 ra_ta    = CrossProduct(contact.r_a, ta);
+        Vector3 rb_ta    = CrossProduct(contact.r_b, ta);
+        Vector3 ra_tb    = CrossProduct(contact.r_a, tb);
+        Vector3 rb_tb    = CrossProduct(contact.r_b, tb);
+        Vector3 ra_n     = CrossProduct(contact.r_a, n);
+        Vector3 rb_n     = CrossProduct(contact.r_b, n);
+        bool    motion_a = body_a->GetMotionMode() == MotionMode::Dynamic;
+        bool    motion_b = body_b->GetMotionMode() == MotionMode::Dynamic;
+        //tangent term a
         TangentTerm tangent_a;
-        tangent_a.friction        = 0.0f; //ToDo - need to calculation
-        tangent_a.normal_impulse  = contact_point.normal_impulse_sum;
-        tangent_a.tangent         = contact_point.tangent_a;
+        tangent_a.tangent         = ta;
         tangent_a.tangent_impulse = contact_point.tangent_a_impulse_sum;
-        tangent_a.tangent_mass    = 0.0f; //ToDo - need to calculation
-        tangent_a.tangent_speed   = 0.0f; //ToDo - need to set
+        tangent_a.normal_impulse  = contact_point.normal_impulse_sum;
+        tangent_a.friction        = m_friction;
+        tangent_a.tangent_mass
+                = (motion_a ? ta * m_mass.m_a * ta + ra_ta * m_mass.i_a * ra_ta : 0.0f)
+                + (motion_b ? ta * m_mass.m_b * ta + rb_ta * m_mass.i_b * rb_ta : 0.0f);
+        tangent_a.tangent_mass  = tangent_a.tangent_mass > 0.0f ? tangent_a.tangent_mass : 0.0f;
+        tangent_a.tangent_speed = m_tangent_speed;
+        //tangent term b
         TangentTerm tangent_b;
-        tangent_b.friction        = 0.0f; //ToDo - need to calculation
-        tangent_b.normal_impulse  = contact_point.normal_impulse_sum;
-        tangent_b.tangent         = contact_point.tangent_b;
+        tangent_b.tangent         = tb;
         tangent_b.tangent_impulse = contact_point.tangent_b_impulse_sum;
-        tangent_b.tangent_mass    = 0.0f; //ToDo - need to calculation
-        tangent_b.tangent_speed   = 0.0f; //ToDo - need to set
+        tangent_b.normal_impulse  = contact_point.normal_impulse_sum;
+        tangent_b.friction        = m_friction;
+        tangent_b.tangent_mass
+                = (motion_a ? tb * m_mass.m_a * tb + ra_tb * m_mass.i_a * ra_tb : 0.0f)
+                + (motion_b ? tb * m_mass.m_b * tb + rb_tb * m_mass.i_b * rb_tb : 0.0f);
+        tangent_b.tangent_mass  = tangent_b.tangent_mass > 0.0f ? tangent_b.tangent_mass : 0.0f;
+        tangent_b.tangent_speed = m_tangent_speed;
+        //normal term
         NormalTerm normal;
-        normal.normal         = contact_point.normal;
+        normal.normal         = n;
         normal.normal_impulse = contact_point.normal_impulse_sum;
-        normal.normal_mass    = 0.0f;  //ToDo - need to calculation
-        normal.restitution    = 0.0f;  //ToDo - need to calculation
-        //
+        normal.restitution    = m_restitution;
+        normal.normal_mass
+                = (motion_a ? n * m_mass.m_a * n + ra_n * m_mass.i_a * ra_n : 0.0f)
+                + (motion_b ? n * m_mass.m_b * n + rb_n * m_mass.i_b * rb_n : 0.0f);
+        normal.normal_mass = normal.normal_mass > 0.0f ? normal.normal_mass : 0.0f;
         // Solve tangent constraints first because non-penetration is more important than friction.
-        SolveTangentConstraints(contact, mass, velocity, tangent_a);
-        SolveTangentConstraints(contact, mass, velocity, tangent_b);
+        SolveTangentConstraints(contact, m_mass, m_velocity, tangent_a);
+        SolveTangentConstraints(contact, m_mass, m_velocity, tangent_b);
         // Solve normal constraints
-        SolveNormalConstraints(contact, mass, velocity, normal);
+        SolveNormalConstraints(contact, m_mass, m_velocity, normal);
         contact_point.normal_impulse_sum    = normal.normal_impulse;
         contact_point.tangent_a_impulse_sum = tangent_a.tangent_impulse;
         contact_point.tangent_b_impulse_sum = tangent_b.tangent_impulse;
+        ApplyConstraints();
     }
 
     void ContactConstraints::SolveNormalConstraints(const ContactTerm& contact, const MassTerm& mass, VelocityTerm& velocity, NormalTerm& normal) const
@@ -148,11 +175,11 @@ namespace Engine5
                     + contact.tangent_a_impulse_sum * tangent_a
                     + contact.tangent_b_impulse_sum * tangent_b;
             //-= or +=
-            m_dv_a += ma * p;
-            m_dw_a += ia * CrossProduct(contact.local_position_a, p);
+            m_velocity.v_a += ma * p;
+            m_velocity.w_a += ia * CrossProduct(contact.local_position_a, p);
             //+= or -=
-            m_dv_b -= mb * p;
-            m_dw_b -= ib * CrossProduct(contact.local_position_b, p);
+            m_velocity.v_b -= mb * p;
+            m_velocity.w_b -= ib * CrossProduct(contact.local_position_b, p);
         }
     }
 }

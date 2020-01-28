@@ -64,6 +64,8 @@ namespace Engine5
         void SolveConstraints(Real dt) override;
         void ApplyConstraints() override;
 
+        void InitializeContactConstraints(ContactPoint& contact_point);
+
         void SolveContactManifold();
         void SolveContactPoint(ContactPoint& contact_point);
 
@@ -78,14 +80,15 @@ namespace Engine5
         ContactManifold* m_manifold = nullptr;
 
         //velocities
-        Vector3 m_dv_a;
-        Vector3 m_dw_a;
-        Vector3 m_dv_b;
-        Vector3 m_dw_b;
+        VelocityTerm m_velocity;
 
+        //constants
+        MassTerm m_mass;
+      
         //friction and restitution factor.
         //if 1.0f no effects.
         Real m_restitution = 1.0f;
         Real m_friction    = 1.0f;
+        Real m_tangent_speed = 0.0f;
     };
 }

@@ -92,6 +92,11 @@ namespace Engine5
         return m_position;
     }
 
+    Vector3 RigidBody::GetCentroid() const
+    {
+        return m_global_centroid;
+    }
+
     void RigidBody::SetLinearVelocity(const Vector3& linear)
     {
         m_linear_velocity = linear;

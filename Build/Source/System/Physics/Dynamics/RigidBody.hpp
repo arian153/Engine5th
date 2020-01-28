@@ -26,6 +26,7 @@ namespace Engine5
         void ApplyForceCentroid(const Vector3& force);
 
         Vector3 GetPosition() const;
+        Vector3 GetCentroid() const;
 
         void    SetLinearVelocity(const Vector3& linear);
         void    SetAngularVelocity(const Vector3& angular);
