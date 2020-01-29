@@ -3,6 +3,7 @@
 #include "../ContactManifold.hpp"
 #include "../ContactPoint.hpp"
 #include "../../ColliderPrimitive/ColliderPrimitive.hpp"
+#include "../../../Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -17,24 +18,10 @@ namespace Engine5
     {
     }
 
-    void ContactConstraints::SolveConstraints(Real dt)
+    void ContactConstraints::InitializeConstraints()
     {
-    }
-
-    void ContactConstraints::ApplyConstraints()
-    {
-        //apply body a
-        m_body_a->SetLinearVelocity(m_velocity.v_a);
-        m_body_a->SetAngularVelocity(m_velocity.w_a);
-        //apply body b
-        m_body_b->SetLinearVelocity(m_velocity.v_b);
-        m_body_b->SetAngularVelocity(m_velocity.w_b);
-    }
-
-    void ContactConstraints::InitializeContactConstraints(ContactPoint& contact_point)
-    {
-        RigidBody* body_a = contact_point.collider_a->GetRigidBody();
-        RigidBody* body_b = contact_point.collider_b->GetRigidBody();
+        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
+        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
         //mass term
         m_mass.m_a = body_a->InverseMassMatrix();
         m_mass.i_a = body_a->InverseInertia();
@@ -47,8 +34,39 @@ namespace Engine5
         m_velocity.w_b = body_b->GetAngularVelocity();
     }
 
+    void ContactConstraints::SolveConstraints(Real dt)
+    {
+        E5_UNUSED_PARAM(dt);
+        InitializeConstraints();
+
+        //set iteration.
+        WarmStart();
+
+        SolveContactManifold();
+
+        ApplyConstraints();
+
+
+    }
+
+    void ContactConstraints::ApplyConstraints()
+    {
+        //apply body a
+        m_body_a->SetLinearVelocity(m_velocity.v_a);
+        m_body_a->SetAngularVelocity(m_velocity.w_a);
+        //apply body b
+        m_body_b->SetLinearVelocity(m_velocity.v_b);
+        m_body_b->SetAngularVelocity(m_velocity.w_b);
+    }
+
+    
+
     void ContactConstraints::SolveContactManifold()
     {
+        for(auto& contact : m_manifold->contacts)
+        {
+            SolveContactPoint(contact);
+        }
     }
 
     void ContactConstraints::SolveContactPoint(ContactPoint& contact_point)

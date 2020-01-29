@@ -9,6 +9,7 @@ namespace Engine5
         Constraints();
         virtual ~Constraints();
 
+        virtual void InitializeConstraints() = 0;
         virtual void SolveConstraints(Real dt) = 0;
         virtual void ApplyConstraints() = 0;
 

@@ -126,7 +126,7 @@ namespace Engine5
         }
     }
 
-    RigidBody* ColliderSet::GetRigidBody()
+    RigidBody* ColliderSet::GetRigidBody() const
     {
         return m_rigid_body;
     }

@@ -39,20 +39,20 @@ namespace Engine5
     {
     public:
         Vector3 normal;
-        Real restitution;
-        Real normal_mass;
-        Real normal_impulse;
+        Real    restitution    = 0.0f;
+        Real    normal_mass    = 0.0f;
+        Real    normal_impulse = 0.0f;
     };
 
     class TangentTerm
     {
     public:
         Vector3 tangent;
-        Real friction;
-        Real tangent_speed;
-        Real tangent_mass;
-        Real tangent_impulse;
-        Real normal_impulse;
+        Real    friction        = 0.0f;
+        Real    tangent_speed   = 0.0f;
+        Real    tangent_mass    = 0.0f;
+        Real    tangent_impulse = 0.0f;
+        Real    normal_impulse  = 0.0f;
     };
 
     class ContactConstraints final : public Constraints
@@ -61,10 +61,9 @@ namespace Engine5
         explicit ContactConstraints(ContactManifold* input);
         ~ContactConstraints();
 
+        void InitializeConstraints() override;
         void SolveConstraints(Real dt) override;
         void ApplyConstraints() override;
-
-        void InitializeContactConstraints(ContactPoint& contact_point);
 
         void SolveContactManifold();
         void SolveContactPoint(ContactPoint& contact_point);
@@ -84,11 +83,11 @@ namespace Engine5
 
         //constants
         MassTerm m_mass;
-      
+
         //friction and restitution factor.
         //if 1.0f no effects.
-        Real m_restitution = 1.0f;
-        Real m_friction    = 1.0f;
+        Real m_restitution   = 1.0f;
+        Real m_friction      = 1.0f;
         Real m_tangent_speed = 0.0f;
     };
 }
