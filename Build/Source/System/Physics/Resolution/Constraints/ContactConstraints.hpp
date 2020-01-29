@@ -52,13 +52,12 @@ namespace Engine5
         Real    tangent_speed   = 0.0f;
         Real    tangent_mass    = 0.0f;
         Real    tangent_impulse = 0.0f;
-        Real    normal_impulse  = 0.0f;
     };
 
     class ContactConstraints final : public Constraints
     {
     public:
-        explicit ContactConstraints(ContactManifold* input);
+        explicit ContactConstraints(ContactManifold* input, Real friction, Real restitution, Real tangent_speed = 0.0f);
         ~ContactConstraints();
 
         void InitializeConstraints() override;
@@ -66,10 +65,11 @@ namespace Engine5
         void ApplyConstraints() override;
 
         void SolveContactManifold();
+        void InitializeContactPoint(ContactPoint& contact_point) const;
         void SolveContactPoint(ContactPoint& contact_point);
 
-        void SolveNormalConstraints(const ContactTerm& contact, const MassTerm& mass, VelocityTerm& velocity, NormalTerm& normal) const;
-        void SolveTangentConstraints(const ContactTerm& contact, const MassTerm& mass, VelocityTerm& velocity, TangentTerm& tangent) const;
+        void SolveNormalConstraints(const MassTerm& mass, Real velocity_bias, VelocityTerm& velocity, ContactPoint& contact_point) const;
+        void SolveTangentConstraints(const MassTerm& mass, Real friction, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void WarmStart();
 
     private:

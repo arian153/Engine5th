@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class Constraints;
     class ContactPoint;
     class ContactManifold;
 
@@ -12,13 +13,10 @@ namespace Engine5
         Resolution();
         ~Resolution();
 
-        void SolveConstraints() const;
-        void SolveContact(ContactPoint* contact, Real dt) const;
-        void SolveManifold(ContactManifold* manifold) const;
-        void WarmStart(ContactManifold* manifold) const;
+        void SolveConstraints(Constraints* constraints, Real dt) const;
 
     private:
-        bool m_b_warmstart = true;
+        bool m_b_warm_starting = true;
         Real baumgarte_scalar = 0.0035f;
         Real penetration_slop = 0.0005f;
         Real restitution_slop = 0.5f;
