@@ -1,5 +1,4 @@
 #include "Resolution.hpp"
-#include "ContactManifold.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "Constraints/Constraints.hpp"
 

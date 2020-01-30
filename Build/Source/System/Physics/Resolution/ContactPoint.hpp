@@ -49,6 +49,8 @@ namespace Engine5
         Real tangent_a_mass = 0.0f;
         Real tangent_b_mass = 0.0f;
 
+        Real velocity_bias = 0.0f;
+
         ColliderPrimitive* collider_a = nullptr;
         ColliderPrimitive* collider_b = nullptr;
 

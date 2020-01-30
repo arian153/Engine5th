@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Math/Math.hpp"
 #include "ContactPoint.hpp"
+#include "../Utility/PhysicsDef.hpp"
 
 namespace Engine5
 {
@@ -40,7 +41,7 @@ namespace Engine5
         friend class ManifoldTable;
 
     private:
-        Real    persistent_threshold_squared = 4.0f;
+        Real    persistent_threshold_squared = Collision::PERSISTENT_THRESHOLD_SQUARED;
         bool    is_collide = false;
         Vector3 manifold_normal;
 

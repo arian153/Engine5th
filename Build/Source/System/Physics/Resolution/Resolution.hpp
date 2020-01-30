@@ -17,9 +17,5 @@ namespace Engine5
 
     private:
         bool m_b_warm_starting = true;
-        Real baumgarte_scalar = 0.0035f;
-        Real penetration_slop = 0.0005f;
-        Real restitution_slop = 0.5f;
-
     };
 }

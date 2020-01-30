@@ -94,7 +94,15 @@ namespace Engine5
         contact_point.normal_mass
                 = (motion_a ? n * m_mass.m_a * n + ra_n * m_mass.i_a * ra_n : 0.0f)
                 + (motion_b ? n * m_mass.m_b * n + rb_n * m_mass.i_b * rb_n : 0.0f);
-        contact_point.normal_mass = contact_point.normal_mass > 0.0f ? contact_point.normal_mass : 0.0f;
+        contact_point.normal_mass   = contact_point.normal_mass > 0.0f ? contact_point.normal_mass : 0.0f;
+        contact_point.velocity_bias = 0.0f;
+        Real rel                    = DotProduct(
+                                                 n, m_velocity.v_b + CrossProduct(m_velocity.w_b, contact_point.r_b)
+                                                 - m_velocity.v_a - CrossProduct(m_velocity.w_a, contact_point.r_a));
+        if (rel < -Dynamics::ELASTIC_THRESHOLD)
+        {
+            contact_point.velocity_bias = -m_restitution * rel;
+        }
     }
 
     void ContactConstraints::SolveContactPoint(ContactPoint& contact_point)
@@ -102,16 +110,16 @@ namespace Engine5
         // Solve tangent constraints first because non-penetration is more important than friction.
         SolveTangentConstraints(m_mass, m_friction, m_tangent_speed, m_velocity, contact_point);
         // Solve normal constraints
-        SolveNormalConstraints(m_mass, m_restitution, m_velocity, contact_point);
+        SolveNormalConstraints(m_mass, m_velocity, contact_point);
     }
 
-    void ContactConstraints::SolveNormalConstraints(const MassTerm& mass, Real velocity_bias, VelocityTerm& velocity, ContactPoint& contact_point) const
+    void ContactConstraints::SolveNormalConstraints(const MassTerm& mass, VelocityTerm& velocity, ContactPoint& contact_point) const
     {
         // Relative velocity at contact
         Vector3 dv = velocity.v_b + CrossProduct(velocity.w_b, contact_point.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact_point.r_a);
         // Compute normal impulse
         Real vn     = DotProduct(dv, contact_point.normal);
-        Real lambda = -contact_point.normal_mass * (vn - velocity_bias);
+        Real lambda = -contact_point.normal_mass * (vn - contact_point.velocity_bias);
         // b2Clamp the accumulated impulse
         Real new_impulse                 = Utility::Max(contact_point.normal_impulse_sum + lambda, 0.0f);
         lambda                           = new_impulse - contact_point.normal_impulse_sum;
@@ -169,5 +177,10 @@ namespace Engine5
             m_velocity.v_b += m_mass.m_b * p;
             m_velocity.w_b += m_mass.i_b * CrossProduct(contact.r_b, p);
         }
+    }
+
+    void ContactConstraints::SolvePositionConstraints()
+    {
+
     }
 }

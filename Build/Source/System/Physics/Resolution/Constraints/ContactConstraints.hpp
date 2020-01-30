@@ -68,9 +68,11 @@ namespace Engine5
         void InitializeContactPoint(ContactPoint& contact_point) const;
         void SolveContactPoint(ContactPoint& contact_point);
 
-        void SolveNormalConstraints(const MassTerm& mass, Real velocity_bias, VelocityTerm& velocity, ContactPoint& contact_point) const;
+        void SolveNormalConstraints(const MassTerm& mass, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void SolveTangentConstraints(const MassTerm& mass, Real friction, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void WarmStart();
+
+        void SolvePositionConstraints();
 
     private:
         RigidBody* m_body_a = nullptr;
@@ -86,6 +88,7 @@ namespace Engine5
 
         //friction and restitution factor.
         //if 1.0f no effects.
+
         Real m_restitution   = 1.0f;
         Real m_friction      = 1.0f;
         Real m_tangent_speed = 0.0f;
