@@ -17,12 +17,21 @@ namespace Engine5
         Vector3 w_b;
     };
 
+    class PositionTerm
+    {
+    public:
+        Vector3 p_a; //global centroid
+        Vector3 p_b; //global centroid
+        Quaternion o_a; //global orientation
+        Quaternion o_b; //global orientation
+    };
+
     class MassTerm
     {
     public:
-        Matrix33 m_a;
+        Real     m_a = 0.0f;
+        Real     m_b = 0.0f;
         Matrix33 i_a;
-        Matrix33 m_b;
         Matrix33 i_b;
     };
 
@@ -72,7 +81,7 @@ namespace Engine5
         void SolveTangentConstraints(const MassTerm& mass, Real friction, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void WarmStart();
 
-        void SolvePositionConstraints();
+        void SolvePositionConstraints(const ContactManifold& contact_manifold);
 
     private:
         RigidBody* m_body_a = nullptr;
@@ -80,8 +89,8 @@ namespace Engine5
 
         ContactManifold* m_manifold = nullptr;
 
-        //velocities
         VelocityTerm m_velocity;
+        PositionTerm m_position;
 
         //constants
         MassTerm m_mass;

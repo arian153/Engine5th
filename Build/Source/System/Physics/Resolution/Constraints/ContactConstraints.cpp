@@ -23,15 +23,19 @@ namespace Engine5
         RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
         RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
         //mass term
-        m_mass.m_a = body_a->InverseMassMatrix();
-        m_mass.i_a = body_a->InverseInertia();
-        m_mass.m_b = body_b->InverseMassMatrix();
-        m_mass.i_b = body_b->InverseInertia();
+        m_mass.m_a = body_a->Mass();
+        m_mass.i_a = body_a->Inertia();
+        m_mass.m_b = body_b->Mass();
+        m_mass.i_b = body_b->Inertia();
         //velocity term
         m_velocity.v_a = body_a->GetLinearVelocity();
         m_velocity.w_a = body_a->GetAngularVelocity();
         m_velocity.v_b = body_b->GetLinearVelocity();
         m_velocity.w_b = body_b->GetAngularVelocity();
+        m_position.p_a = body_a->GetCentroid();
+        m_position.p_b = body_b->GetCentroid();
+        m_position.o_a = body_a->GetOrientation();
+        m_position.o_b = body_b->GetOrientation();
         for (auto& contact : m_manifold->contacts)
         {
             InitializeContactPoint(contact);
@@ -83,18 +87,18 @@ namespace Engine5
         Vector3 rb_n      = CrossProduct(contact_point.r_b, n);
         bool    motion_a  = body_a->GetMotionMode() == MotionMode::Dynamic;
         bool    motion_b  = body_b->GetMotionMode() == MotionMode::Dynamic;
-        contact_point.tangent_a_mass
-                = (motion_a ? ta * m_mass.m_a * ta + ra_ta * m_mass.i_a * ra_ta : 0.0f)
-                + (motion_b ? ta * m_mass.m_b * ta + rb_ta * m_mass.i_b * rb_ta : 0.0f);
-        contact_point.tangent_a_mass = contact_point.tangent_a_mass > 0.0f ? contact_point.tangent_a_mass : 0.0f;
-        contact_point.tangent_b_mass
-                = (motion_a ? tb * m_mass.m_a * tb + ra_tb * m_mass.i_a * ra_tb : 0.0f)
-                + (motion_b ? tb * m_mass.m_b * tb + rb_tb * m_mass.i_b * rb_tb : 0.0f);
-        contact_point.tangent_b_mass = contact_point.tangent_b_mass > 0.0f ? contact_point.tangent_b_mass : 0.0f;
-        contact_point.normal_mass
-                = (motion_a ? n * m_mass.m_a * n + ra_n * m_mass.i_a * ra_n : 0.0f)
-                + (motion_b ? n * m_mass.m_b * n + rb_n * m_mass.i_b * rb_n : 0.0f);
-        contact_point.normal_mass   = contact_point.normal_mass > 0.0f ? contact_point.normal_mass : 0.0f;
+        Real    tangent_a_mass
+                = (motion_a ? m_mass.m_a + ra_ta * m_mass.i_a * ra_ta : 0.0f)
+                + (motion_b ? m_mass.m_b + rb_ta * m_mass.i_b * rb_ta : 0.0f);
+        contact_point.tangent_a_mass = tangent_a_mass > 0.0f ? 1.0f / tangent_a_mass : 0.0f;
+        Real tangent_b_mass
+                = (motion_a ? m_mass.m_a + ra_tb * m_mass.i_a * ra_tb : 0.0f)
+                + (motion_b ? m_mass.m_b + rb_tb * m_mass.i_b * rb_tb : 0.0f);
+        contact_point.tangent_b_mass = tangent_b_mass > 0.0f ? 1.0f / tangent_b_mass : 0.0f;
+        Real normal_mass
+                = (motion_a ? m_mass.m_a + ra_n * m_mass.i_a * ra_n : 0.0f)
+                + (motion_b ? m_mass.m_b + rb_n * m_mass.i_b * rb_n : 0.0f);
+        contact_point.normal_mass   = normal_mass > 0.0f ? 1.0f / normal_mass : 0.0f;
         contact_point.velocity_bias = 0.0f;
         Real rel                    = DotProduct(
                                                  n, m_velocity.v_b + CrossProduct(m_velocity.w_b, contact_point.r_b)
@@ -179,8 +183,30 @@ namespace Engine5
         }
     }
 
-    void ContactConstraints::SolvePositionConstraints()
+    void ContactConstraints::SolvePositionConstraints(const ContactManifold& contact_manifold)
     {
-
+        RigidBody* body_a         = m_manifold->m_set_a->GetRigidBody();
+        RigidBody* body_b         = m_manifold->m_set_b->GetRigidBody();
+        // Solve normal constraints
+        for (auto& contact : m_manifold->contacts)
+        {
+            Real separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Collision::SEPARATION_SLOP;
+            Real    c       = Utility::Clamp(Dynamics::BAUMGRATE * (separation + Collision::LINEAR_SLOP), -Collision::MAX_LINEAR_CORRECTION, 0.0f);
+            Vector3 c_a     = body_a->GetCentroid(); //global centroid.
+            Vector3 c_b     = body_b->GetCentroid(); //global centroid.
+            Vector3 r_a     = contact.global_position_a - c_a;
+            Vector3 r_b     = contact.global_position_b - c_b;
+            Vector3 ra_n    = CrossProduct(contact.r_a, contact.normal);
+            Vector3 rb_n    = CrossProduct(contact.r_b, contact.normal);
+            Real    k       = m_mass.m_a + ra_n * m_mass.i_a * ra_n + m_mass.m_b + rb_n * m_mass.i_b * rb_n;
+            Real    impulse = k > 0.0f ? -c / k : 0.0f;
+            Vector3 p       = impulse * contact.normal;
+            Vector3 o_a     = m_mass.i_a * CrossProduct(contact.r_a, p);
+            Vector3 o_b     = m_mass.i_b * CrossProduct(contact.r_b, p);
+            m_position.p_a -= m_mass.m_a * p;
+            m_position.p_b += m_mass.m_b * p;
+            m_position.o_a.AddRotation(o_a.Unit(), o_a.Length());
+            m_position.o_b.AddRotation(o_b.Unit(), o_b.Length());
+        }
     }
 }

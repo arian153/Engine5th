@@ -54,8 +54,8 @@ namespace Engine5
         const Real PERSISTENT_THRESHOLD_SQUARED = PERSISTENT_THRESHOLD * PERSISTENT_THRESHOLD;
         const Real LINEAR_SLOP = 0.005f;
         const Real ANGULAR_SLOP = Math::RADIAN * 2.0f;
-
-
+        const Real MAX_LINEAR_CORRECTION = 0.2f;
+        const Real SEPARATION_SLOP = 0.02f;
 
     }
 }

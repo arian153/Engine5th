@@ -97,6 +97,16 @@ namespace Engine5
         return m_global_centroid;
     }
 
+    Vector3 RigidBody::GetLocalCentroid() const
+    {
+        return m_mass_data.local_centroid;
+    }
+
+    Quaternion RigidBody::GetOrientation() const
+    {
+        return m_orientation;
+    }
+
     void RigidBody::SetLinearVelocity(const Vector3& linear)
     {
         m_linear_velocity = linear;

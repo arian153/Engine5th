@@ -27,6 +27,8 @@ namespace Engine5
 
         Vector3 GetPosition() const;
         Vector3 GetCentroid() const;
+        Vector3 GetLocalCentroid() const;
+        Quaternion GetOrientation() const;
 
         void    SetLinearVelocity(const Vector3& linear);
         void    SetAngularVelocity(const Vector3& angular);
