@@ -25,15 +25,19 @@ namespace Engine5
         void ApplyForce(const Vector3& force, const Vector3& at);
         void ApplyForceCentroid(const Vector3& force);
 
-        Vector3 GetPosition() const;
-        Vector3 GetCentroid() const;
-        Vector3 GetLocalCentroid() const;
+        void SetPosition(const Vector3& position);
+        void SetCentroid(const Vector3& centroid);
+        void SetOrientation(const Quaternion& orientation);
+
+        Vector3    GetPosition() const;
+        Vector3    GetCentroid() const;
+        Vector3    GetLocalCentroid() const;
         Quaternion GetOrientation() const;
 
-        void    SetLinearVelocity(const Vector3& linear);
-        void    SetAngularVelocity(const Vector3& angular);
-        void    AddLinearVelocity(const Vector3& linear_delta);
-        void    AddAngularVelocity(const Vector3& angular_delta);
+        void SetLinearVelocity(const Vector3& linear);
+        void SetAngularVelocity(const Vector3& angular);
+        void AddLinearVelocity(const Vector3& linear_delta);
+        void AddAngularVelocity(const Vector3& angular_delta);
 
         Vector3 GetLinearVelocity() const;
         Vector3 GetAngularVelocity() const;

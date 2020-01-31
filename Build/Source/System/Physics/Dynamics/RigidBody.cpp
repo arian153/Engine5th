@@ -87,6 +87,24 @@ namespace Engine5
         m_force_accumulator += force;
     }
 
+    void RigidBody::SetPosition(const Vector3& position)
+    {
+        m_position = position;
+        UpdateGlobalCentroidFromPosition();
+    }
+
+    void RigidBody::SetCentroid(const Vector3& centroid)
+    {
+        m_global_centroid = centroid;
+        UpdatePositionFromGlobalCentroid();
+    }
+
+    void RigidBody::SetOrientation(const Quaternion& orientation)
+    {
+        m_orientation = orientation;
+        UpdateOrientation();
+    }
+
     Vector3 RigidBody::GetPosition() const
     {
         return m_position;

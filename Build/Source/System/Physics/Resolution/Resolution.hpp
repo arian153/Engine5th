@@ -13,9 +13,13 @@ namespace Engine5
         Resolution();
         ~Resolution();
 
+        void Solve();
+
         void SolveConstraints(Constraints* constraints, Real dt) const;
 
     private:
         bool m_b_warm_starting = true;
+        
+
     };
 }
