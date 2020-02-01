@@ -69,9 +69,9 @@ namespace Engine5
         explicit ContactConstraints(ContactManifold* input, Real friction, Real restitution, Real tangent_speed = 0.0f);
         ~ContactConstraints();
 
-        void InitializeConstraints() override;
-        void SolveConstraints(Real dt) override;
-        void ApplyConstraints() override;
+        void Initialize() override;
+        void Solve(Real dt) override;
+        void Apply() override;
 
         void InitializeContactPoint(ContactPoint& contact_point) const;
         void SolveContactPoint(ContactPoint& contact_point);

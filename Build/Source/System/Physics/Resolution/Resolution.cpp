@@ -2,6 +2,9 @@
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "Constraints/Constraints.hpp"
 #include "Constraints/ContactConstraints.hpp"
+#include <vector>
+// ReSharper disable once CppUnusedIncludeDirective
+#include "ContactManifold.hpp"
 
 namespace Engine5
 {
@@ -20,7 +23,7 @@ namespace Engine5
         for (auto& manifold : manifold_table->m_manifold_table)
         {
             ContactConstraints contact(&manifold.second, 1.0f, 1.0f);
-            contact.InitializeConstraints();
+            contact.Initialize();
 
             if(m_b_warm_starting == true)
             {
@@ -28,10 +31,10 @@ namespace Engine5
             }
 
             //iterate n
-            contact.SolveConstraints(dt);
+            contact.Solve(dt);
 
 
-            contact.ApplyConstraints();
+            contact.Apply();
         }
 
         //integration phase
@@ -49,9 +52,9 @@ namespace Engine5
 
     void Resolution::SolveConstraints(Constraints* constraints, Real dt) const
     {
-        constraints->InitializeConstraints();
-        constraints->SolveConstraints(dt);
-        constraints->ApplyConstraints();
+        constraints->Initialize();
+        constraints->Solve(dt);
+        constraints->Apply();
     }
 
 }

@@ -16,7 +16,7 @@ namespace Engine5
     {
     }
 
-    void ContactConstraints::InitializeConstraints()
+    void ContactConstraints::Initialize()
     {
         RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
         RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
@@ -36,7 +36,7 @@ namespace Engine5
         }
     }
 
-    void ContactConstraints::SolveConstraints(Real dt)
+    void ContactConstraints::Solve(Real dt)
     {
         E5_UNUSED_PARAM(dt);
         for (auto& contact : m_manifold->contacts)
@@ -45,7 +45,7 @@ namespace Engine5
         }
     }
 
-    void ContactConstraints::ApplyConstraints()
+    void ContactConstraints::Apply()
     {
         RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
         RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
