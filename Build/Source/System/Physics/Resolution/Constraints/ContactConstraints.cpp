@@ -39,9 +39,10 @@ namespace Engine5
     void ContactConstraints::SolveConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
-        WarmStart();
-        //iterate.
-        SolveContactManifold();
+        for (auto& contact : m_manifold->contacts)
+        {
+            SolveContactPoint(contact);
+        }
     }
 
     void ContactConstraints::ApplyConstraints()
@@ -54,14 +55,6 @@ namespace Engine5
         //apply body b
         body_b->SetLinearVelocity(m_velocity.v_b);
         body_b->SetAngularVelocity(m_velocity.w_b);
-    }
-
-    void ContactConstraints::SolveContactManifold()
-    {
-        for (auto& contact : m_manifold->contacts)
-        {
-            SolveContactPoint(contact);
-        }
     }
 
     void ContactConstraints::InitializeContactPoint(ContactPoint& contact_point) const

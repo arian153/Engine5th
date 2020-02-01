@@ -73,7 +73,6 @@ namespace Engine5
         void SolveConstraints(Real dt) override;
         void ApplyConstraints() override;
 
-        void SolveContactManifold();
         void InitializeContactPoint(ContactPoint& contact_point) const;
         void SolveContactPoint(ContactPoint& contact_point);
 

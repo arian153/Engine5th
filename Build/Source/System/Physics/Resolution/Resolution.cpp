@@ -1,6 +1,7 @@
 #include "Resolution.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "Constraints/Constraints.hpp"
+#include "Constraints/ContactConstraints.hpp"
 
 namespace Engine5
 {
@@ -12,21 +13,35 @@ namespace Engine5
     {
     }
 
-    void Resolution::Solve()
+    void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt) const
     {
         //resolution phase
-        for (auto& manifold : m_manifold_table->m_manifold_table)
+        //solve contact manifold
+        for (auto& manifold : manifold_table->m_manifold_table)
         {
             ContactConstraints contact(&manifold.second, 1.0f, 1.0f);
-            m_resolution_phase->SolveConstraints(&contact, dt);
+            contact.InitializeConstraints();
+
+            if(m_b_warm_starting == true)
+            {
+                contact.WarmStart();
+            }
+
+            //iterate n
+            contact.SolveConstraints(dt);
+
+
+            contact.ApplyConstraints();
         }
+
         //integration phase
-        for (auto& body : m_rigid_bodies)
+        for (auto& body : *rigid_bodies)
         {
             body->Integrate(dt);
         }
+
         //solve position constraints.
-        for (auto& manifold : m_manifold_table->m_manifold_table)
+        for (auto& manifold : manifold_table->m_manifold_table)
         {
             ContactConstraints::SolvePositionConstraints(manifold.second);
         }

@@ -1,5 +1,7 @@
 #pragma once
 #include "../../Math/Math.hpp"
+#include "../NarrowPhase/ManifoldTable.hpp"
+#include "../Dynamics/RigidBody.hpp"
 
 namespace Engine5
 {
@@ -13,7 +15,7 @@ namespace Engine5
         Resolution();
         ~Resolution();
 
-        void Solve();
+        void Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt) const;
 
         void SolveConstraints(Constraints* constraints, Real dt) const;
 
