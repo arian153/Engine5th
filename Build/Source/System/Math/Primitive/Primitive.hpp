@@ -6,10 +6,10 @@
 namespace Engine5
 {
     class PrimitiveRenderer;
-    enum class RenderingMode;
+    enum class eRenderingMode;
     class Color;
 
-    enum class PrimitiveType
+    enum class ePrimitiveType
     {
         Circle
       , Ellipse
@@ -41,7 +41,7 @@ namespace Engine5
         virtual Vector3       WorldToLocalPoint(const Vector3& world_point) const final;
         virtual Vector3       LocalToWorldVector(const Vector3& local_vector) const final;
         virtual Vector3       WorldToLocalVector(const Vector3& world_vector) const final;
-        virtual PrimitiveType Type() const final;
+        virtual ePrimitiveType Type() const final;
 
         void AddPosition(const Vector3& delta_pos);
 
@@ -60,7 +60,7 @@ namespace Engine5
         virtual Vector3 GetNormal(const Vector3& local_point_on_primitive) = 0;
 
         //Draw
-        virtual void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const = 0;
+        virtual void DrawPrimitive(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const = 0;
 
 
     public:
@@ -68,6 +68,6 @@ namespace Engine5
         Quaternion orientation;
 
     protected:
-        PrimitiveType type = PrimitiveType::Invalid;
+        ePrimitiveType type = ePrimitiveType::Invalid;
     };
 }

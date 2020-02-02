@@ -7,7 +7,7 @@ namespace Engine5
 {
     ColliderTetrahedron::ColliderTetrahedron()
     {
-        m_type = ColliderType::Tetrahedron;
+        m_type = eColliderType::Tetrahedron;
     }
 
     ColliderTetrahedron::~ColliderTetrahedron()
@@ -220,7 +220,7 @@ namespace Engine5
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
-    void ColliderTetrahedron::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void ColliderTetrahedron::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         renderer->ReserveVertices(4, mode);
@@ -249,14 +249,14 @@ namespace Engine5
         }
 
         //add indices
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < 4; ++i)
             {
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             renderer->PushLineIndices(index, index + 1);
             renderer->PushLineIndices(index, index + 2);
@@ -265,7 +265,7 @@ namespace Engine5
             renderer->PushLineIndices(index + 2, index + 3);
             renderer->PushLineIndices(index + 3, index + 1);
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             renderer->PushFaceIndices(index, index + 1, index + 2);
             renderer->PushFaceIndices(index, index + 2, index + 3);

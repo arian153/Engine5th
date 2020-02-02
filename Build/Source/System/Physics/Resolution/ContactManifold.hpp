@@ -41,7 +41,7 @@ namespace Engine5
         friend class ManifoldTable;
 
     private:
-        Real    persistent_threshold_squared = Collision::PERSISTENT_THRESHOLD_SQUARED;
+        Real    persistent_threshold_squared = Physics::Collision::PERSISTENT_THRESHOLD_SQUARED;
         bool    is_collide = false;
         Vector3 manifold_normal;
 

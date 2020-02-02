@@ -14,7 +14,7 @@ namespace Engine5
         void Update(Real dt) override;
         void Shutdown() override;
 
-        ColliderPrimitive* AddCollider(ColliderType type) const;
+        ColliderPrimitive* AddCollider(eColliderType type) const;
         ColliderPrimitive* GetCollider(size_t index) const;
         void EraseCollider(ColliderPrimitive* collider) const;
 

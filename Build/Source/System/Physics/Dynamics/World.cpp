@@ -25,16 +25,16 @@ namespace Engine5
         {
             switch (m_mode)
             {
-            case Engine5::BroadPhaseMode::DynamicBVH:
+            case Engine5::eBroadPhaseMode::DynamicBVH:
                 m_broad_phase = new DynamicBVH();
                 break;
-            case Engine5::BroadPhaseMode::StaticBVH:
+            case Engine5::eBroadPhaseMode::StaticBVH:
                 //m_broad_phase = new StaticBVH();
                 break;
-            case Engine5::BroadPhaseMode::NSquared:
+            case Engine5::eBroadPhaseMode::NSquared:
                 m_broad_phase = new NSquared();
                 break;
-            case Engine5::BroadPhaseMode::GridPartition:
+            case Engine5::eBroadPhaseMode::GridPartition:
                 m_broad_phase = new GridPartition();
                 break;
             default:
@@ -95,20 +95,20 @@ namespace Engine5
         }
     }
 
-    void World::SetBroadPhaseMode(BroadPhaseMode mode)
+    void World::SetBroadPhaseMode(eBroadPhaseMode mode)
     {
         if (mode != m_mode && m_broad_phase != nullptr)
         {
             BroadPhase* broad_phase;
             switch (mode)
             {
-            case Engine5::BroadPhaseMode::DynamicBVH:
+            case Engine5::eBroadPhaseMode::DynamicBVH:
                 broad_phase = new DynamicBVH();
                 break;
-            case Engine5::BroadPhaseMode::NSquared:
+            case Engine5::eBroadPhaseMode::NSquared:
                 broad_phase = new NSquared();
                 break;
-            case Engine5::BroadPhaseMode::GridPartition:
+            case Engine5::eBroadPhaseMode::GridPartition:
                 broad_phase = new GridPartition();
                 break;
             default:
@@ -123,7 +123,7 @@ namespace Engine5
         }
     }
 
-    ColliderPrimitive* World::CreateCollider(ColliderSet* collider_set, ColliderType type) const
+    ColliderPrimitive* World::CreateCollider(ColliderSet* collider_set, eColliderType type) const
     {
         if (collider_set != nullptr)
         {

@@ -103,7 +103,7 @@ namespace Engine5
         return orientation.Inverse().Rotate(world_vector);
     }
 
-    PrimitiveType Primitive::Type() const
+    ePrimitiveType Primitive::Type() const
     {
         return type;
     }

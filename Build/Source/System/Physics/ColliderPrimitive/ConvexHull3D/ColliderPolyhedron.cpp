@@ -7,7 +7,7 @@ namespace Engine5
 {
     ColliderPolyhedron::ColliderPolyhedron()
     {
-        m_type = ColliderType::Polyhedron;
+        m_type = eColliderType::Polyhedron;
     }
 
     ColliderPolyhedron::~ColliderPolyhedron()
@@ -239,7 +239,7 @@ namespace Engine5
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
-    void ColliderPolyhedron::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void ColliderPolyhedron::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32                   index = static_cast<I32>(renderer->VerticesSize(mode));
         std::vector<Vector3>* vertices;
@@ -269,14 +269,14 @@ namespace Engine5
         }
 
         //add indices
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < size; ++i)
             {
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             for (auto& face : *m_faces)
             {
@@ -285,7 +285,7 @@ namespace Engine5
                 renderer->PushLineIndices(index + (I32)face.c, index + (I32)face.a);
             }
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             for (auto& face : *m_faces)
             {

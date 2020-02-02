@@ -287,7 +287,7 @@ namespace Engine5
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
-    void ColliderPolygon::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void ColliderPolygon::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32                   index = static_cast<I32>(renderer->VerticesSize(mode));
         std::vector<Vector2>* vertices;
@@ -318,21 +318,21 @@ namespace Engine5
         }
 
         //add indices
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < size; ++i)
             {
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             for (auto& edge : *m_edges)
             {
                 renderer->PushLineIndices(index + (I32)edge.a, index + (I32)edge.b);
             }
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             Vector3 vertex_v3 = Math::Vector3::ORIGIN;
             vertex_v3         = m_orientation.Rotate(vertex_v3);

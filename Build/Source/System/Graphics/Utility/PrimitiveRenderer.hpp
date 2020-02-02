@@ -11,7 +11,7 @@ namespace Engine5
     class Camera;
     class ColorShader;
 
-    enum class RenderingMode
+    enum class eRenderingMode
     {
         Dot
       , Line
@@ -23,14 +23,14 @@ namespace Engine5
     public:
         explicit PrimitiveRenderer(DirectX3D11* dx11_api);
         ~PrimitiveRenderer();
-        void DrawPrimitive(Primitive* primitive, RenderingMode mode, Color color = Color());
-        void DrawPrimitive(const Primitive& primitive, RenderingMode mode, Color color = Color());
+        void DrawPrimitive(Primitive* primitive, eRenderingMode mode, Color color = Color());
+        void DrawPrimitive(const Primitive& primitive, eRenderingMode mode, Color color = Color());
 
         //Draw Direct Primitives
         void DrawPoint(const Vector3& point, Color color = Color());
         void DrawSegment(const Vector3& start, const Vector3& end, Color color = Color());
-        void DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, RenderingMode mode, Color color = Color());
-        void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, RenderingMode mode, Color color = Color());
+        void DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, eRenderingMode mode, Color color = Color());
+        void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
 
 
         void Initialize(ColorShader* color_shader);
@@ -45,14 +45,14 @@ namespace Engine5
         void SetRendererCameraRotation(const Quaternion& rot);
         //void SyncWithCamera(Camera* camera);
 
-        void   PushVertex(const Vector3& pos, RenderingMode mode, const Color& color = Color());
-        void   PushIndex(I32 index, RenderingMode mode);
+        void   PushVertex(const Vector3& pos, eRenderingMode mode, const Color& color = Color());
+        void   PushIndex(I32 index, eRenderingMode mode);
         void   PushLineIndices(I32 a, I32 b);
         void   PushFaceIndices(I32 a, I32 b, I32 c);
-        void   ReserveVertices(size_t adding_count, RenderingMode mode);
-        void   ReserveIndices(size_t adding_count, RenderingMode mode);
-        size_t VerticesSize(RenderingMode mode) const;
-        size_t IndicesSize(RenderingMode mode) const;
+        void   ReserveVertices(size_t adding_count, eRenderingMode mode);
+        void   ReserveIndices(size_t adding_count, eRenderingMode mode);
+        size_t VerticesSize(eRenderingMode mode) const;
+        size_t IndicesSize(eRenderingMode mode) const;
 
 
     private:

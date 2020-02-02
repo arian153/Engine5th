@@ -3,7 +3,7 @@
 namespace Engine5
 {
     ColliderPrimitive::ColliderPrimitive()
-        : m_mass(1.0f), m_type(ColliderType::InvalidPrimitive)
+        : m_mass(1.0f), m_type(eColliderType::InvalidPrimitive)
     {
     }
 

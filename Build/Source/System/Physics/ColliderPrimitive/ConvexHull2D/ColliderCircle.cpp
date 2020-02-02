@@ -166,7 +166,7 @@ namespace Engine5
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
-    void ColliderCircle::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void ColliderCircle::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = renderer->CIRCULAR_VERTICES_COUNT;
@@ -185,14 +185,14 @@ namespace Engine5
             vertex += body_position;
             renderer->PushVertex(vertex, mode, color);
         }
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < count; ++i)
             {
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             renderer->ReserveIndices(200, mode);
             for (int i = 0; i < count - 1; ++i)
@@ -201,7 +201,7 @@ namespace Engine5
             }
             renderer->PushLineIndices(index + count - 1, index);
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             //add a center pos
             I32     center   = static_cast<I32>(renderer->VerticesSize(mode));

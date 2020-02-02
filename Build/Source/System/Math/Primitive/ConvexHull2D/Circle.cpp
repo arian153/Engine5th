@@ -7,7 +7,7 @@ namespace Engine5
 {
     Circle::Circle()
     {
-        type = PrimitiveType::Circle;
+        type = ePrimitiveType::Circle;
 
     }
 
@@ -109,7 +109,7 @@ namespace Engine5
         return Math::Vector3::Z_AXIS;
     }
 
-    void Circle::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void Circle::DrawPrimitive(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = renderer->CIRCULAR_VERTICES_COUNT;
@@ -123,14 +123,14 @@ namespace Engine5
             vertex += position;
             renderer->PushVertex(vertex, mode, color);
         }
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < count; ++i)
             {
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             renderer->ReserveIndices(static_cast<size_t>(200), mode);
             for (int i = 0; i < count - 1; ++i)
@@ -139,7 +139,7 @@ namespace Engine5
             }
             renderer->PushLineIndices(index + count - 1, index);
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             I32 center = static_cast<I32>(renderer->VerticesSize(mode));
             renderer->PushVertex(position, mode, color);

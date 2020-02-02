@@ -6,7 +6,7 @@ namespace Engine5
 {
     ColliderBox::ColliderBox()
     {
-        m_type = ColliderType::Box;
+        m_type = eColliderType::Box;
     }
 
     ColliderBox::~ColliderBox()
@@ -229,7 +229,7 @@ namespace Engine5
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
-    void ColliderBox::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void ColliderBox::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         renderer->ReserveVertices(8, mode);
@@ -258,14 +258,14 @@ namespace Engine5
         }
 
         //add indices
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < 8; ++i)
             {
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             //front
             renderer->PushLineIndices(index + 0, index + 2);
@@ -283,7 +283,7 @@ namespace Engine5
             renderer->PushLineIndices(index + 6, index + 7);
             renderer->PushLineIndices(index + 4, index + 5);
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             //front
             renderer->PushFaceIndices(index + 0, index + 2, index + 4);

@@ -4,7 +4,7 @@
 
 namespace Engine5
 {
-    enum class CollisionState : int
+    enum class eCollisionState : int
     {
         None = 0
       , Start
@@ -22,7 +22,7 @@ namespace Engine5
     public:
         ColliderSet*   set_a = nullptr;
         ColliderSet*   set_b = nullptr;
-        CollisionState state = CollisionState::None;
+        eCollisionState state = eCollisionState::None;
     };
 
     class ManifoldTable

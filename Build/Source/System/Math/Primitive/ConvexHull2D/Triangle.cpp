@@ -7,18 +7,18 @@ namespace Engine5
 {
     Triangle::Triangle()
     {
-        type = PrimitiveType::Triangle;
+        type = ePrimitiveType::Triangle;
     }
 
     Triangle::Triangle(const Vector2& p0, const Vector2& p1, const Vector2& p2)
     {
-        type = PrimitiveType::Triangle;
+        type = ePrimitiveType::Triangle;
         SetTriangle(p0, p1, p2);
     }
 
     Triangle::Triangle(const Vector3& p0, const Vector3& p1, const Vector3& p2)
     {
-        type = PrimitiveType::Triangle;
+        type = ePrimitiveType::Triangle;
         SetTriangle(p0, p1, p2);
     }
 
@@ -214,7 +214,7 @@ namespace Engine5
         return local_point_on_primitive;
     }
 
-    void Triangle::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void Triangle::DrawPrimitive(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = 3;
@@ -229,14 +229,14 @@ namespace Engine5
             //push to renderer
             renderer->PushVertex(vertex, mode, color);
         }
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < count; ++i)
             {
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             for (int i = 0; i < count; ++i)
             {
@@ -244,7 +244,7 @@ namespace Engine5
                 renderer->PushLineIndices(index + i, index + j);
             }
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             renderer->PushFaceIndices(index + 0, index + 2, index + 1);
         }

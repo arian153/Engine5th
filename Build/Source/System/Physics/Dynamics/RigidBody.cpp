@@ -69,7 +69,7 @@ namespace Engine5
     {
         m_mass_data = mass_data;
 
-        if (m_motion_mode != MotionMode::Dynamic)
+        if (m_motion_mode != eMotionMode::Dynamic)
         {
             SetMassInfinite();
             SetInertiaInfinite();
@@ -244,12 +244,12 @@ namespace Engine5
         m_global_inverse_inertia_tensor          = m_orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
     }
 
-    void RigidBody::SetMotionMode(MotionMode motion_mode)
+    void RigidBody::SetMotionMode(eMotionMode motion_mode)
     {
         m_motion_mode = motion_mode;
     }
 
-    MotionMode RigidBody::GetMotionMode() const
+    eMotionMode RigidBody::GetMotionMode() const
     {
         return m_motion_mode;
     }

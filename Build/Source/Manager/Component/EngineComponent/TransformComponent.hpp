@@ -22,8 +22,8 @@ namespace Engine5
         void SetOrientation(const AxisRadian& axis_radian);
         void SetOrientation(const EulerAngle& rotation);
         void SetOrientationAxis(const Vector3& axis);
-        void SetScale(const Vector3& scale, Anchor3D anchor = Anchor3D::CCC);
-        void SetScale(Real x, Real y, Real z, Anchor3D anchor = Anchor3D::CCC);
+        void SetScale(const Vector3& scale, eAnchor3D anchor = eAnchor3D::CCC);
+        void SetScale(Real x, Real y, Real z, eAnchor3D anchor = eAnchor3D::CCC);
 
         //Adder
         void AddPosition(const Vector3& delta_position);
@@ -33,7 +33,7 @@ namespace Engine5
         void AddRotationY(Real radian);
         void AddRotationZ(Real radian);
         void AddRotationA(Real radian);
-        void AddScale(const Vector3& delta_scale, Anchor3D anchor = Anchor3D::CCC);
+        void AddScale(const Vector3& delta_scale, eAnchor3D anchor = eAnchor3D::CCC);
 
         //Getter
         Vector3 GetPosition() const;

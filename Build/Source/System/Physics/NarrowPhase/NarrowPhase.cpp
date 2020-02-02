@@ -50,7 +50,7 @@ namespace Engine5
                                                           simplex.simplex_vertex_b.global,
                                                           simplex.simplex_vertex_c.global,
                                                           simplex.simplex_vertex_d.global,
-                                                          RenderingMode::Line, gjk_flag.color);
+                                                          eRenderingMode::Line, gjk_flag.color);
                 }
                 Polytope polytope = Polytope(simplex);
                 //draw gjk result simplex
@@ -66,7 +66,7 @@ namespace Engine5
                                                                polytope.vertices[face.a].global,
                                                                polytope.vertices[face.b].global,
                                                                polytope.vertices[face.c].global,
-                                                               RenderingMode::Line, epa_flag.color);
+                                                               eRenderingMode::Line, epa_flag.color);
                         }
                     }
                     //send a event about start and persist.
@@ -86,8 +86,8 @@ namespace Engine5
                         Vector3    pos_a = new_contact_data.global_position_a;
                         Vector3    pos_b = new_contact_data.global_position_b;
                         Quaternion no_rotation;
-                        m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), RenderingMode::Face, contact_flag.color);
-                        m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), RenderingMode::Face, contact_flag.color);
+                        m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), eRenderingMode::Face, contact_flag.color);
+                        m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), eRenderingMode::Face, contact_flag.color);
                         m_primitive_renderer->DrawSegment(pos_a, pos_a + new_contact_data.normal, contact_flag.color);
                         m_primitive_renderer->DrawSegment(pos_b, pos_b + new_contact_data.normal, contact_flag.color);
                     }

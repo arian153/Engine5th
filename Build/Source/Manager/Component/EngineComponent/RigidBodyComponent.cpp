@@ -77,7 +77,7 @@ namespace Engine5
         m_rigid_body->SetRotationalConstraints(angular);
     }
 
-    void RigidBodyComponent::SetMotionMode(MotionMode motion_mode) const
+    void RigidBodyComponent::SetMotionMode(eMotionMode motion_mode) const
     {
         m_rigid_body->SetMotionMode(motion_mode);
     }
@@ -122,7 +122,7 @@ namespace Engine5
         return m_rigid_body->InverseInertia();
     }
 
-    MotionMode RigidBodyComponent::GetMotionMode() const
+    eMotionMode RigidBodyComponent::GetMotionMode() const
     {
         return m_rigid_body->GetMotionMode();
     }

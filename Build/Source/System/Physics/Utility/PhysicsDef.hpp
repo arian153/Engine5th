@@ -2,7 +2,7 @@
 
 namespace Engine5
 {
-    enum class ColliderType : int
+    enum class eColliderType : int
     {
         Box
       , Capsule
@@ -17,14 +17,14 @@ namespace Engine5
       , InvalidPrimitive
     };
 
-    enum class MotionMode : int
+    enum class eMotionMode : int
     {
         Dynamic
       , Static
       , Kinematic
     };
 
-    enum class BroadPhaseMode : int
+    enum class eBroadPhaseMode : int
     {
         DynamicBVH
       , StaticBVH
@@ -32,30 +32,44 @@ namespace Engine5
       , GridPartition
     };
 
-    enum class CollisionDetectionMode : int
+    enum class eCollisionDetectionMode : int
     {
         Discrete
       , ContinuousStatic
       , ContinuousFull
     };
 
-
-    namespace Dynamics
+    namespace Physics
     {
-        const Real ELASTIC_THRESHOLD = 1.0f;
-        const Real BAUMGRATE = 0.2f;
-        
+        enum class eMaterial
+        {
+
+        };
+
+        namespace Dynamics
+        {
+            const Real ELASTIC_THRESHOLD = 1.0f;
+            const Real BAUMGRATE = 0.2f;
+
+        }
+
+        namespace Collision
+        {
+            const Real BROAD_PHASE_MARGIN = 0.1f;
+            const Real PERSISTENT_THRESHOLD = 2.0f;
+            const Real PERSISTENT_THRESHOLD_SQUARED = PERSISTENT_THRESHOLD * PERSISTENT_THRESHOLD;
+            const Real LINEAR_SLOP = 0.005f;
+            const Real ANGULAR_SLOP = Math::RADIAN * 2.0f;
+            const Real MAX_LINEAR_CORRECTION = 0.2f;
+            const Real SEPARATION_SLOP = 0.02f;
+        }
+
+        namespace Material
+        {
+            
+        }
+
     }
 
-    namespace Collision
-    {
-        const Real BROAD_PHASE_MARGIN = 0.1f;
-        const Real PERSISTENT_THRESHOLD = 2.0f;
-        const Real PERSISTENT_THRESHOLD_SQUARED = PERSISTENT_THRESHOLD * PERSISTENT_THRESHOLD;
-        const Real LINEAR_SLOP = 0.005f;
-        const Real ANGULAR_SLOP = Math::RADIAN * 2.0f;
-        const Real MAX_LINEAR_CORRECTION = 0.2f;
-        const Real SEPARATION_SLOP = 0.02f;
-
-    }
+    
 }

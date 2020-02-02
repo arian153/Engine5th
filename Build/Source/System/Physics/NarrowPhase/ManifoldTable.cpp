@@ -38,11 +38,11 @@ namespace Engine5
                     is_duplicated = true;
                     if (was_collision == true)
                     {
-                        (*it).second.state = CollisionState::Persist;
+                        (*it).second.state = eCollisionState::Persist;
                     }
                     else
                     {
-                        (*it).second.state = CollisionState::Start;
+                        (*it).second.state = eCollisionState::Start;
                     }
                     break;
                 }
@@ -56,11 +56,11 @@ namespace Engine5
                 collision_data.set_b = b;
                 if (was_collision == true)
                 {
-                    collision_data.state = CollisionState::Persist;
+                    collision_data.state = eCollisionState::Persist;
                 }
                 else
                 {
-                    collision_data.state = CollisionState::Start;
+                    collision_data.state = eCollisionState::Start;
                 }
                 m_state_table.emplace(key, collision_data);
             }
@@ -73,11 +73,11 @@ namespace Engine5
             collision_data.set_b = b;
             if (was_collision == true)
             {
-                collision_data.state = CollisionState::Persist;
+                collision_data.state = eCollisionState::Persist;
             }
             else
             {
-                collision_data.state = CollisionState::Start;
+                collision_data.state = eCollisionState::Start;
             }
             m_state_table.emplace(key, collision_data);
         }
@@ -99,11 +99,11 @@ namespace Engine5
                     is_duplicated = true;
                     if (was_collision == true)
                     {
-                        (*it).second.state = CollisionState::End;
+                        (*it).second.state = eCollisionState::End;
                     }
                     else
                     {
-                        (*it).second.state = CollisionState::None;
+                        (*it).second.state = eCollisionState::None;
                     }
                     break;
                 }
@@ -117,11 +117,11 @@ namespace Engine5
                 collision_data.set_b = b;
                 if (was_collision == true)
                 {
-                    collision_data.state = CollisionState::End;
+                    collision_data.state = eCollisionState::End;
                 }
                 else
                 {
-                    collision_data.state = CollisionState::None;
+                    collision_data.state = eCollisionState::None;
                 }
                 m_state_table.emplace(key, collision_data);
             }
@@ -134,11 +134,11 @@ namespace Engine5
             collision_data.set_b = b;
             if (was_collision == true)
             {
-                collision_data.state = CollisionState::End;
+                collision_data.state = eCollisionState::End;
             }
             else
             {
-                collision_data.state = CollisionState::None;
+                collision_data.state = eCollisionState::None;
             }
             m_state_table.emplace(key, collision_data);
         }
@@ -158,7 +158,7 @@ namespace Engine5
                 {
                     // in this case, keep previous contact data for collision event.
                     is_duplicated      = true;
-                    (*it).second.state = CollisionState::Invalid;
+                    (*it).second.state = eCollisionState::Invalid;
                     break;
                 }
             }
@@ -169,7 +169,7 @@ namespace Engine5
                 CollisionStateData collision_data;
                 collision_data.set_a = a;
                 collision_data.set_b = b;
-                collision_data.state = CollisionState::Invalid;
+                collision_data.state = eCollisionState::Invalid;
                 m_state_table.emplace(key, collision_data);
             }
         }
@@ -179,7 +179,7 @@ namespace Engine5
             CollisionStateData collision_data;
             collision_data.set_a = a;
             collision_data.set_b = b;
-            collision_data.state = CollisionState::Invalid;
+            collision_data.state = eCollisionState::Invalid;
             m_state_table.emplace(key, collision_data);
         }
     }
@@ -251,7 +251,7 @@ namespace Engine5
                 }
             }
         }
-        return CollisionState::None;
+        return eCollisionState::None;
     }
 
     ContactManifold* ManifoldTable::FindManifold(ColliderSet* a, ColliderSet* b)

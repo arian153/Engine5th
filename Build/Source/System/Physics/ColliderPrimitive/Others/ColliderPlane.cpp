@@ -50,7 +50,7 @@ namespace Engine5
         m_bounding_volume->Set(Math::Vector3::ORIGIN, Math::Vector3::ORIGIN);
     }
 
-    void ColliderPlane::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void ColliderPlane::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
     }
 }

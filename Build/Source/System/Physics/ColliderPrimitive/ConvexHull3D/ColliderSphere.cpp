@@ -6,7 +6,7 @@ namespace Engine5
 {
     ColliderSphere::ColliderSphere()
     {
-        m_type = ColliderType::Sphere;
+        m_type = eColliderType::Sphere;
     }
 
     ColliderSphere::~ColliderSphere()
@@ -105,7 +105,7 @@ namespace Engine5
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
-    void ColliderSphere::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void ColliderSphere::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32 index       = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count = renderer->SPHERICAL_STACK_COUNT;
@@ -162,7 +162,7 @@ namespace Engine5
             }
         }
         renderer->PushVertex(bottom_vertex_local_pos, mode, color);
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             I32 count = renderer->SPHERICAL_VERTICES_COUNT;
             for (I32 i = 0; i < count; ++i)
@@ -170,7 +170,7 @@ namespace Engine5
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             for (I32 i = 1; i <= slice_count; ++i)
             {
@@ -193,7 +193,7 @@ namespace Engine5
                 renderer->PushLineIndices(south_pole_index, base + i);
             }
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             for (I32 i = 1; i <= slice_count; ++i)
             {

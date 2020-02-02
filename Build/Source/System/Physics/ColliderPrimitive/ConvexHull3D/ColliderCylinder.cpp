@@ -6,7 +6,7 @@ namespace Engine5
 {
     ColliderCylinder::ColliderCylinder()
     {
-        m_type = ColliderType::Cylinder;
+        m_type = eColliderType::Cylinder;
     }
 
     ColliderCylinder::~ColliderCylinder()
@@ -280,7 +280,7 @@ namespace Engine5
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
-    void ColliderCylinder::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void ColliderCylinder::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32 index       = static_cast<I32>(renderer->VerticesSize(mode));
         int stack_count = renderer->CYLINDRICAL_STACK_COUNT;
@@ -312,7 +312,7 @@ namespace Engine5
             }
         }
         I32 ring = slice_count + 1;
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             I32 count = renderer->CYLINDRICAL_VERTICES_COUNT;
             for (I32 i = 0; i < count; ++i)
@@ -320,7 +320,7 @@ namespace Engine5
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             for (I32 i = 0; i < stack_count; ++i)
             {
@@ -333,7 +333,7 @@ namespace Engine5
                 }
             }
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             for (I32 i = 0; i < stack_count; ++i)
             {

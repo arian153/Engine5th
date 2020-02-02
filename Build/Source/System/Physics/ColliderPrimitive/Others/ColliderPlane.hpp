@@ -27,7 +27,7 @@ namespace Engine5
 
         //collider 
         void UpdateBoundingVolume() const;
-        void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const;
+        void Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const;
 
     private:
         Vector3 m_normal;

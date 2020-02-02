@@ -7,7 +7,7 @@ namespace Engine5
 {
     Polygon::Polygon()
     {
-        type = PrimitiveType::Polygon;
+        type = ePrimitiveType::Polygon;
     }
 
     Polygon::~Polygon()
@@ -159,7 +159,7 @@ namespace Engine5
         return Math::Vector3::Z_AXIS;
     }
 
-    void Polygon::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void Polygon::DrawPrimitive(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
     }
 }

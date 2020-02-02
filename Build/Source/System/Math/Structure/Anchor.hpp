@@ -5,7 +5,7 @@
 namespace Engine5
 {
     //Left-Right, Up-Down
-    enum class Anchor2D : size_t
+    enum class eAnchor2D : size_t
     {
         LU = 110, CU = 210, RU = 310,
         LC = 120, CC = 220, RC = 320,
@@ -14,7 +14,7 @@ namespace Engine5
     };
 
     //Left-Right, Up-Down, Front-Back
-    enum class Anchor3D : size_t
+    enum class eAnchor3D : size_t
     {
         LUF = 111, CUF = 211, RUF = 311,
         LUC = 112, CUC = 212, RUC = 312,
@@ -30,17 +30,17 @@ namespace Engine5
         Invalid = 000
     };
 
-    enum class AnchorLR : size_t
+    enum class eAnchorLR : size_t
     {
         Left = 100, Center = 200, Right = 300
     };
 
-    enum class AnchorUD : size_t
+    enum class eAnchorUD : size_t
     {
         Up = 10, Center = 20, Down = 30
     };
 
-    enum class AnchorFB : size_t
+    enum class eAnchorFB : size_t
     {
         Front = 1, Center = 2, Back = 3
     };
@@ -51,13 +51,13 @@ namespace Engine5
         Anchor();
         ~Anchor();
 
-        static Anchor2D ToAnchor2D(AnchorLR left_right, AnchorUD up_down);
-        static Anchor3D ToAnchor3D(AnchorLR left_right, AnchorUD up_down, AnchorFB front_back);
-        static Vector2 AnchorVector2(Anchor2D anchor);
-        static Vector3 AnchorVector3(Anchor3D anchor);
+        static eAnchor2D ToAnchor2D(eAnchorLR left_right, eAnchorUD up_down);
+        static eAnchor3D ToAnchor3D(eAnchorLR left_right, eAnchorUD up_down, eAnchorFB front_back);
+        static Vector2 AnchorVector2(eAnchor2D anchor);
+        static Vector3 AnchorVector3(eAnchor3D anchor);
 
-        static Vector2 ToVector2(AnchorLR left_right, AnchorUD up_down);
-        static Vector3 ToVector3(AnchorLR left_right, AnchorUD up_down, AnchorFB front_back);
+        static Vector2 ToVector2(eAnchorLR left_right, eAnchorUD up_down);
+        static Vector3 ToVector3(eAnchorLR left_right, eAnchorUD up_down, eAnchorFB front_back);
         
     private:
 

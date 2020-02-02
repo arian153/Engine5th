@@ -2,7 +2,7 @@
 
 namespace Engine5
 {
-    enum class ControlType : int
+    enum class eControlType : int
     {
         Button,
         Label,

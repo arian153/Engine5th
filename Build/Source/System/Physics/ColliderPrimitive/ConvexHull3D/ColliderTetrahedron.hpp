@@ -31,7 +31,7 @@ namespace Engine5
         void SetScaleData(const Vector3& scale) override;
         void SetUnit() override;
         void UpdateBoundingVolume() override;
-        void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
+        void Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const override;
 
         Vector3 Vertex(size_t i) const;
         void    SetTetrahedron(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector3& v3);

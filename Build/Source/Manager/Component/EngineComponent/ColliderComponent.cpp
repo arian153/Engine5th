@@ -29,7 +29,7 @@ namespace Engine5
         m_collider_set->Shutdown();
     }
 
-    ColliderPrimitive* ColliderComponent::AddCollider(ColliderType type) const
+    ColliderPrimitive* ColliderComponent::AddCollider(eColliderType type) const
     {
         return m_collider_set->AddCollider(type);
     }

@@ -12,12 +12,12 @@ namespace Engine5
     {
     }
 
-    void PrimitiveRenderer::DrawPrimitive(Primitive* primitive, RenderingMode mode, Color color)
+    void PrimitiveRenderer::DrawPrimitive(Primitive* primitive, eRenderingMode mode, Color color)
     {
         primitive->DrawPrimitive(this, mode, color);
     }
 
-    void PrimitiveRenderer::DrawPrimitive(const Primitive& primitive, RenderingMode mode, Color color)
+    void PrimitiveRenderer::DrawPrimitive(const Primitive& primitive, eRenderingMode mode, Color color)
     {
         primitive.DrawPrimitive(this, mode, color);
     }
@@ -41,7 +41,7 @@ namespace Engine5
         PushLineIndices(index, index + 1);
     }
 
-    void PrimitiveRenderer::DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, RenderingMode mode, Color color)
+    void PrimitiveRenderer::DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, eRenderingMode mode, Color color)
     {
         I32 index = static_cast<I32>(VerticesSize(mode));
         I32 count = 3;
@@ -49,14 +49,14 @@ namespace Engine5
         PushVertex(p0, mode, color);
         PushVertex(p1, mode, color);
         PushVertex(p2, mode, color);
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < count; ++i)
             {
                 PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             for (int i = 0; i < count; ++i)
             {
@@ -64,13 +64,13 @@ namespace Engine5
                 PushLineIndices(index + i, index + j);
             }
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             PushFaceIndices(index + 0, index + 1, index + 2);
         }
     }
 
-    void PrimitiveRenderer::DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, RenderingMode mode, Color color)
+    void PrimitiveRenderer::DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color)
     {
         I32 index = static_cast<I32>(VerticesSize(mode));
         I32 count = 4;
@@ -79,14 +79,14 @@ namespace Engine5
         PushVertex(p1, mode, color);
         PushVertex(p2, mode, color);
         PushVertex(p3, mode, color);
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < count; ++i)
             {
                 PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             PushLineIndices(index, index + 1);
             PushLineIndices(index, index + 2);
@@ -95,7 +95,7 @@ namespace Engine5
             PushLineIndices(index + 2, index + 3);
             PushLineIndices(index + 3, index + 1);
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             PushFaceIndices(index, index + 1, index + 2);
             PushFaceIndices(index, index + 2, index + 3);
@@ -439,17 +439,17 @@ namespace Engine5
         this->UpdatePrimitiveRendererCamera();
     }
 
-    void PrimitiveRenderer::PushVertex(const Vector3& pos, RenderingMode mode, const Color& color)
+    void PrimitiveRenderer::PushVertex(const Vector3& pos, eRenderingMode mode, const Color& color)
     {
         switch (mode)
         {
-        case Engine5::RenderingMode::Dot:
+        case Engine5::eRenderingMode::Dot:
             m_dot_vertices.emplace_back(pos, color);
             break;
-        case Engine5::RenderingMode::Line:
+        case Engine5::eRenderingMode::Line:
             m_line_vertices.emplace_back(pos, color);
             break;
-        case Engine5::RenderingMode::Face:
+        case Engine5::eRenderingMode::Face:
             m_face_vertices.emplace_back(pos, color);
             break;
         default:
@@ -457,17 +457,17 @@ namespace Engine5
         }
     }
 
-    void PrimitiveRenderer::PushIndex(I32 index, RenderingMode mode)
+    void PrimitiveRenderer::PushIndex(I32 index, eRenderingMode mode)
     {
         switch (mode)
         {
-        case Engine5::RenderingMode::Dot:
+        case Engine5::eRenderingMode::Dot:
             m_dot_indices.push_back(index);
             break;
-        case Engine5::RenderingMode::Line:
+        case Engine5::eRenderingMode::Line:
             m_line_indices.push_back(index);
             break;
-        case Engine5::RenderingMode::Face:
+        case Engine5::eRenderingMode::Face:
             m_face_indices.push_back(index);
             break;
         default:
@@ -488,17 +488,17 @@ namespace Engine5
         m_face_indices.push_back(c);
     }
 
-    void PrimitiveRenderer::ReserveVertices(size_t adding_count, RenderingMode mode)
+    void PrimitiveRenderer::ReserveVertices(size_t adding_count, eRenderingMode mode)
     {
         switch (mode)
         {
-        case Engine5::RenderingMode::Dot:
+        case Engine5::eRenderingMode::Dot:
             m_dot_vertices.reserve(m_dot_vertices.size() + adding_count);
             break;
-        case Engine5::RenderingMode::Line:
+        case Engine5::eRenderingMode::Line:
             m_line_vertices.reserve(m_line_vertices.size() + adding_count);
             break;
-        case Engine5::RenderingMode::Face:
+        case Engine5::eRenderingMode::Face:
             m_face_vertices.reserve(m_face_vertices.size() + adding_count);
             break;
         default:
@@ -506,17 +506,17 @@ namespace Engine5
         }
     }
 
-    void PrimitiveRenderer::ReserveIndices(size_t adding_count, RenderingMode mode)
+    void PrimitiveRenderer::ReserveIndices(size_t adding_count, eRenderingMode mode)
     {
         switch (mode)
         {
-        case Engine5::RenderingMode::Dot:
+        case Engine5::eRenderingMode::Dot:
             m_dot_indices.reserve(m_dot_indices.size() + adding_count);
             break;
-        case Engine5::RenderingMode::Line:
+        case Engine5::eRenderingMode::Line:
             m_line_indices.reserve(m_line_indices.size() + adding_count);
             break;
-        case Engine5::RenderingMode::Face:
+        case Engine5::eRenderingMode::Face:
             m_face_indices.reserve(m_face_indices.size() + adding_count);
             break;
         default:
@@ -524,15 +524,15 @@ namespace Engine5
         }
     }
 
-    size_t PrimitiveRenderer::VerticesSize(RenderingMode mode) const
+    size_t PrimitiveRenderer::VerticesSize(eRenderingMode mode) const
     {
         switch (mode)
         {
-        case Engine5::RenderingMode::Dot:
+        case Engine5::eRenderingMode::Dot:
             return m_dot_vertices.size();
-        case Engine5::RenderingMode::Line:
+        case Engine5::eRenderingMode::Line:
             return m_line_vertices.size();
-        case Engine5::RenderingMode::Face:
+        case Engine5::eRenderingMode::Face:
             return m_face_vertices.size();
         default:
             break;
@@ -540,15 +540,15 @@ namespace Engine5
         return 0;
     }
 
-    size_t PrimitiveRenderer::IndicesSize(RenderingMode mode) const
+    size_t PrimitiveRenderer::IndicesSize(eRenderingMode mode) const
     {
         switch (mode)
         {
-        case Engine5::RenderingMode::Dot:
+        case Engine5::eRenderingMode::Dot:
             return m_dot_indices.size();
-        case Engine5::RenderingMode::Line:
+        case Engine5::eRenderingMode::Line:
             return m_line_indices.size();
-        case Engine5::RenderingMode::Face:
+        case Engine5::eRenderingMode::Face:
             return m_face_indices.size();
         default:
             break;

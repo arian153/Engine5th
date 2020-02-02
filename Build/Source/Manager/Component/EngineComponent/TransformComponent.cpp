@@ -71,9 +71,9 @@ namespace Engine5
         UpdateChildrenOrientationRecursive(m_transform.orientation);
     }
 
-    void TransformComponent::SetScale(const Vector3& scale, Anchor3D anchor)
+    void TransformComponent::SetScale(const Vector3& scale, eAnchor3D anchor)
     {
-        if (anchor == Anchor3D::CCC)
+        if (anchor == eAnchor3D::CCC)
         {
             m_transform.scale = scale;
         }
@@ -86,10 +86,10 @@ namespace Engine5
         }
     }
 
-    void TransformComponent::SetScale(Real x, Real y, Real z, Anchor3D anchor)
+    void TransformComponent::SetScale(Real x, Real y, Real z, eAnchor3D anchor)
     {
         Vector3 scale(x, y, z);
-        if (anchor == Anchor3D::CCC)
+        if (anchor == eAnchor3D::CCC)
         {
             m_transform.scale = scale;
         }
@@ -150,9 +150,9 @@ namespace Engine5
         UpdateChildrenOrientationRecursive(m_transform.orientation);
     }
 
-    void TransformComponent::AddScale(const Vector3& delta_scale, Anchor3D anchor)
+    void TransformComponent::AddScale(const Vector3& delta_scale, eAnchor3D anchor)
     {
-        if (anchor == Anchor3D::CCC)
+        if (anchor == eAnchor3D::CCC)
         {
             m_transform.scale += delta_scale;
         }

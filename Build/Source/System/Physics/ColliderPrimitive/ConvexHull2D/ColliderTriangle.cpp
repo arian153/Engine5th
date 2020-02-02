@@ -341,7 +341,7 @@ namespace Engine5
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
-    void ColliderTriangle::Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void ColliderTriangle::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = 3;
@@ -362,14 +362,14 @@ namespace Engine5
             //push to renderer
             renderer->PushVertex(vertex, mode, color);
         }
-        if (mode == RenderingMode::Dot)
+        if (mode == eRenderingMode::Dot)
         {
             for (I32 i = 0; i < count; ++i)
             {
                 renderer->PushIndex(index + i, mode);
             }
         }
-        else if (mode == RenderingMode::Line)
+        else if (mode == eRenderingMode::Line)
         {
             for (int i = 0; i < count; ++i)
             {
@@ -377,7 +377,7 @@ namespace Engine5
                 renderer->PushLineIndices(index + i, index + j);
             }
         }
-        else if (mode == RenderingMode::Face)
+        else if (mode == eRenderingMode::Face)
         {
             renderer->PushFaceIndices(index + 0, index + 1, index + 2);
         }

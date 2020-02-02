@@ -23,7 +23,7 @@ namespace Engine5
         void SetMass(Real mass = 1.0f) const;
         void SetPositionalConstraints(const Vector3& linear) const;
         void SetRotationalConstraints(const Vector3& angular) const;
-        void SetMotionMode(MotionMode motion_mode) const;
+        void SetMotionMode(eMotionMode motion_mode) const;
 
         //getter
         Vector3    GetLinearVelocity() const;
@@ -34,7 +34,7 @@ namespace Engine5
         Matrix33   GetInverseMassMatrix() const;
         Matrix33   GetInertia() const;
         Matrix33   GetInverseInertia() const;
-        MotionMode GetMotionMode() const;
+        eMotionMode GetMotionMode() const;
 
 
     private:

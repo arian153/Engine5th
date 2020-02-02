@@ -51,39 +51,39 @@ namespace Engine5
     }
 
 
-    ColliderPrimitive* ColliderSet::AddCollider(ColliderType type)
+    ColliderPrimitive* ColliderSet::AddCollider(eColliderType type)
     {
         ColliderPrimitive* primitive;
         switch (type)
         {
-        case Engine5::ColliderType::Box:
+        case Engine5::eColliderType::Box:
             primitive = new ColliderBox();
             break;
-        case Engine5::ColliderType::Capsule:
+        case Engine5::eColliderType::Capsule:
             primitive = new ColliderCapsule();
             break;
-        case Engine5::ColliderType::Cone:
+        case Engine5::eColliderType::Cone:
             primitive = new ColliderCone();
             break;
-        case Engine5::ColliderType::Cylinder:
+        case Engine5::eColliderType::Cylinder:
             primitive = new ColliderCylinder();
             break;
-        case Engine5::ColliderType::Dome:
+        case Engine5::eColliderType::Dome:
             primitive = new ColliderDome();
             break;
-        case Engine5::ColliderType::Ellipsoid:
+        case Engine5::eColliderType::Ellipsoid:
             primitive = new ColliderEllipsoid();
             break;
-        case Engine5::ColliderType::Polyhedron:
+        case Engine5::eColliderType::Polyhedron:
             primitive = new ColliderPolyhedron();
             break;
-        case Engine5::ColliderType::Sphere:
+        case Engine5::eColliderType::Sphere:
             primitive = new ColliderSphere();
             break;
-        case Engine5::ColliderType::Tetrahedron:
+        case Engine5::eColliderType::Tetrahedron:
             primitive = new ColliderTetrahedron();
             break;
-        case Engine5::ColliderType::Truncated:
+        case Engine5::eColliderType::Truncated:
             primitive = new ColliderTruncated();
             break;
         default:

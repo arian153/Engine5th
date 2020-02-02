@@ -61,8 +61,8 @@ namespace Engine5
         Matrix33 InverseLocalInertia() const;
         void     SetLocalInertia(const Matrix33& inertia);
 
-        void       SetMotionMode(MotionMode motion_mode);
-        MotionMode GetMotionMode() const;
+        void       SetMotionMode(eMotionMode motion_mode);
+        eMotionMode GetMotionMode() const;
 
         Vector3 LocalToWorldPoint(const Vector3& local_point) const;
         Vector3 WorldToLocalPoint(const Vector3& world_point) const;
@@ -98,7 +98,7 @@ namespace Engine5
         Matrix33 m_global_inverse_inertia_tensor;
 
         //others
-        MotionMode m_motion_mode = MotionMode::Dynamic;
+        eMotionMode m_motion_mode = eMotionMode::Dynamic;
         World*     m_world       = nullptr;
     };
 }

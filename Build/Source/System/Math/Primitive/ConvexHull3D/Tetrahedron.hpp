@@ -24,7 +24,7 @@ namespace Engine5
         Vector3 GetNormal(const Vector3& local_point_on_primitive) override;
 
         //Draw
-        void DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
+        void DrawPrimitive(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const override;
        
     public:
         Vector3 vertices[4];

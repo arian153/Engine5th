@@ -7,7 +7,7 @@
 namespace Engine5
 {
     class Color;
-    enum class RenderingMode;
+    enum class eRenderingMode;
     class PrimitiveRenderer;
     class BoundingAABB;
     class RigidBody;
@@ -58,7 +58,7 @@ namespace Engine5
         //collider 
         virtual void SetUnit() = 0;
         virtual void UpdateBoundingVolume() = 0;
-        virtual void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const = 0;
+        virtual void Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const = 0;
 
     protected:
         void UpdatePrimitive();
@@ -94,6 +94,6 @@ namespace Engine5
         RigidBody*    m_rigid_body      = nullptr;
         ColliderSet*  m_collider_set    = nullptr;
         BoundingAABB* m_bounding_volume = nullptr;
-        ColliderType  m_type;
+        eColliderType  m_type;
     };
 }

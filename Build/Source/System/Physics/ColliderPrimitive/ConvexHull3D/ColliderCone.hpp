@@ -33,7 +33,7 @@ namespace Engine5
         void SetScaleData(const Vector3& scale) override;
         void SetUnit() override;
         void UpdateBoundingVolume() override;
-        void Draw(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const override;
+        void Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const override;
 
         Real    HalfHeight() const;
         Real    Height() const;

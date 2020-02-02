@@ -5,7 +5,7 @@ namespace Engine5
 {
     Polyhedron::Polyhedron()
     {
-        type = PrimitiveType::Polyhedron;
+        type = ePrimitiveType::Polyhedron;
     }
 
     Polyhedron::~Polyhedron()
@@ -73,7 +73,7 @@ namespace Engine5
         return local_point_on_primitive;
     }
 
-    void Polyhedron::DrawPrimitive(PrimitiveRenderer* renderer, RenderingMode mode, const Color& color) const
+    void Polyhedron::DrawPrimitive(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
     }
 

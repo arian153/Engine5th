@@ -6,7 +6,7 @@
 namespace Engine5
 {
     class RigidBody;
-    enum class ColliderType;
+    enum class eColliderType;
     class ColliderPrimitive;
     class World;
 
@@ -20,7 +20,7 @@ namespace Engine5
         void Shutdown();
 
         //primitives
-        ColliderPrimitive* AddCollider(ColliderType type);
+        ColliderPrimitive* AddCollider(eColliderType type);
         ColliderPrimitive* GetCollider(size_t index) const;
         void EraseCollider(ColliderPrimitive* collider) const;
 

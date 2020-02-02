@@ -74,8 +74,8 @@ namespace Engine5
         Vector3 rb_tb     = CrossProduct(contact_point.r_b, tb);
         Vector3 ra_n      = CrossProduct(contact_point.r_a, n);
         Vector3 rb_n      = CrossProduct(contact_point.r_b, n);
-        bool    motion_a  = body_a->GetMotionMode() == MotionMode::Dynamic;
-        bool    motion_b  = body_b->GetMotionMode() == MotionMode::Dynamic;
+        bool    motion_a  = body_a->GetMotionMode() == eMotionMode::Dynamic;
+        bool    motion_b  = body_b->GetMotionMode() == eMotionMode::Dynamic;
         Real    tangent_a_mass
                 = (motion_a ? m_mass.m_a + ra_ta * m_mass.i_a * ra_ta : 0.0f)
                 + (motion_b ? m_mass.m_b + rb_ta * m_mass.i_b * rb_ta : 0.0f);
@@ -92,7 +92,7 @@ namespace Engine5
         Real rel                    = DotProduct(
                                                  n, m_velocity.v_b + CrossProduct(m_velocity.w_b, contact_point.r_b)
                                                  - m_velocity.v_a - CrossProduct(m_velocity.w_a, contact_point.r_a));
-        if (rel < -Dynamics::ELASTIC_THRESHOLD)
+        if (rel < -Physics::Dynamics::ELASTIC_THRESHOLD)
         {
             contact_point.velocity_bias = -m_restitution * rel;
         }
@@ -189,8 +189,8 @@ namespace Engine5
         // Solve normal constraints
         for (auto& contact : manifold.contacts)
         {
-            Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Collision::SEPARATION_SLOP;
-            Real    c          = Utility::Clamp(Dynamics::BAUMGRATE * (separation + Collision::LINEAR_SLOP), -Collision::MAX_LINEAR_CORRECTION, 0.0f);
+            Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
+            Real    c          = Utility::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
             Vector3 c_a        = body_a->GetCentroid(); //global centroid.
             Vector3 c_b        = body_b->GetCentroid(); //global centroid.
             Vector3 r_a        = contact.global_position_a - c_a;

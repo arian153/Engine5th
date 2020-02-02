@@ -22,9 +22,9 @@ namespace Engine5
         void Update(Real dt);
         void Shutdown();
 
-        void SetBroadPhaseMode(BroadPhaseMode mode);
+        void SetBroadPhaseMode(eBroadPhaseMode mode);
 
-        ColliderPrimitive* CreateCollider(ColliderSet* collider_set, ColliderType type) const;
+        ColliderPrimitive* CreateCollider(ColliderSet* collider_set, eColliderType type) const;
 
         RigidBody*   AddRigidBody(RigidBody* body);
         ColliderSet* AddColliderSet(ColliderSet* set);
@@ -33,7 +33,7 @@ namespace Engine5
     private:
 
     private:
-        BroadPhaseMode m_mode             = BroadPhaseMode::DynamicBVH;
+        eBroadPhaseMode m_mode             = eBroadPhaseMode::DynamicBVH;
         BroadPhase*    m_broad_phase      = nullptr;
         NarrowPhase*   m_narrow_phase     = nullptr;
         Resolution*    m_resolution_phase = nullptr;
