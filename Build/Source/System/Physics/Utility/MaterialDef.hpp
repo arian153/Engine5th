@@ -107,26 +107,6 @@ namespace Engine5
         {
         }
 
-        class FrictionCoefficient
-        {
-        public:
-            explicit FrictionCoefficient(Real static_friction = 0.5f, Real dynamic_friction = 0.4f);
-            ~FrictionCoefficient();
-
-        public:
-            Real static_friction;
-            Real dynamic_friction;
-        };
-
-        inline FrictionCoefficient::FrictionCoefficient(Real static_friction, Real dynamic_friction)
-            : static_friction(static_friction), dynamic_friction(dynamic_friction)
-        {
-        }
-
-        inline FrictionCoefficient::~FrictionCoefficient()
-        {
-        }
-
         namespace Material
         {
             const MaterialCoefficient ROCK        = MaterialCoefficient(eMaterial::Rock);
