@@ -16,6 +16,16 @@ namespace Engine5
     {
     }
 
+    void Resolution::Initialize()
+    {
+        m_friction.Initialize();
+    }
+
+    void Resolution::Shutdown()
+    {
+        m_friction.Shutdown();
+    }
+
     void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt) const
     {
         //resolution phase

@@ -7,7 +7,6 @@
 #include "ColliderSet.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "../Resolution/Resolution.hpp"
-#include "../Resolution/Constraints/ContactConstraints.hpp"
 
 namespace Engine5
 {
@@ -47,6 +46,7 @@ namespace Engine5
         m_narrow_phase   = new NarrowPhase();
         m_narrow_phase->Initialize();
         m_resolution_phase = new Resolution();
+        m_resolution_phase->Initialize();
     }
 
     void World::Update(Real dt)
@@ -56,11 +56,16 @@ namespace Engine5
         m_broad_phase->ComputePairs(m_pairs);
         //narrow phase
         m_narrow_phase->GenerateContact(m_pairs, m_manifold_table, m_draw_gjk, m_draw_epa, m_draw_contact);
-        
     }
 
     void World::Shutdown()
     {
+        if (m_resolution_phase != nullptr)
+        {
+            m_resolution_phase->Shutdown();
+            delete m_resolution_phase;
+            m_resolution_phase = nullptr;
+        }
         if (m_narrow_phase != nullptr)
         {
             m_narrow_phase->Shutdown();
