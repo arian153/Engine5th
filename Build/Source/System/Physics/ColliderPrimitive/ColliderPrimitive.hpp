@@ -3,6 +3,7 @@
 #include "..//Dynamics/RigidBody.hpp"
 #include "../BroadPhase/RayCast.hpp"
 #include "../Dynamics/ColliderSet.hpp"
+#include "../Utility/MaterialDef.hpp"
 
 namespace Engine5
 {
@@ -37,9 +38,11 @@ namespace Engine5
         ColliderSet*  GetColliderSet() const;
         Real          GetDensity() const;
 
-        Vector3 ConvertBodyWorldPoint(const Vector3& local_point) const;
-        void    SetScale(const Vector3& scale);
-        void    SetMass(Real density);
+        Vector3            ConvertBodyWorldPoint(const Vector3& local_point) const;
+        void               SetScale(const Vector3& scale);
+        void               SetMass(Real density);
+        void               SetMaterial(Physics::eMaterial material);
+        Physics::eMaterial GetMaterial() const;
 
     public: //virtual methods
         virtual void Initialize() = 0;
@@ -90,10 +93,12 @@ namespace Engine5
         Matrix33 m_local_inertia_tensor;
         Real     m_density = 1.0f;
 
+        Physics::eMaterial m_material = Physics::eMaterial::Rock;
+
         //other data
         RigidBody*    m_rigid_body      = nullptr;
         ColliderSet*  m_collider_set    = nullptr;
         BoundingAABB* m_bounding_volume = nullptr;
-        eColliderType  m_type;
+        eColliderType m_type;
     };
 }

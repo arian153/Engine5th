@@ -176,6 +176,16 @@ namespace Engine5
         UpdateMassData();
     }
 
+    void ColliderPrimitive::SetMaterial(Physics::eMaterial material)
+    {
+        m_material = material;
+    }
+
+    Physics::eMaterial ColliderPrimitive::GetMaterial() const
+    {
+        return m_material;
+    }
+
     void ColliderPrimitive::UpdatePrimitive()
     {
         if (m_collider_set != nullptr)
