@@ -7,8 +7,8 @@
 
 namespace Engine5
 {
-    ContactConstraints::ContactConstraints(ContactManifold* input, Real friction, Real restitution, Real tangent_speed)
-        : m_manifold(input), m_restitution(restitution), m_friction(friction), m_tangent_speed(tangent_speed)
+    ContactConstraints::ContactConstraints(ContactManifold* input, Physics::FrictionUtility& friction_utility, Real tangent_speed)
+        : m_manifold(input), m_friction_utility(friction_utility), m_tangent_speed(tangent_speed)
     {
     }
 
@@ -94,14 +94,15 @@ namespace Engine5
                                                  - m_velocity.v_a - CrossProduct(m_velocity.w_a, contact_point.r_a));
         if (rel < -Physics::Dynamics::ELASTIC_THRESHOLD)
         {
-            contact_point.velocity_bias = -m_restitution * rel;
+            Real restitution            = GetRestitution(contact_point.collider_a, contact_point.collider_b);
+            contact_point.velocity_bias = -restitution * rel;
         }
     }
 
     void ContactConstraints::SolveContactPoint(ContactPoint& contact_point)
     {
         // Solve tangent constraints first because non-penetration is more important than friction.
-        SolveTangentConstraints(m_mass, m_friction, m_tangent_speed, m_velocity, contact_point);
+        SolveTangentConstraints(m_mass, m_tangent_speed, m_velocity, contact_point);
         // Solve normal constraints
         SolveNormalConstraints(m_mass, m_velocity, contact_point);
     }
@@ -125,10 +126,11 @@ namespace Engine5
         velocity.w_b += mass.i_b * CrossProduct(contact_point.r_b, p);
     }
 
-    void ContactConstraints::SolveTangentConstraints(const MassTerm& mass, Real friction, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const
+    void ContactConstraints::SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const
     {
         Vector3 dv           = velocity.v_b + CrossProduct(velocity.w_b, contact_point.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact_point.r_a);
-        Real    max_friction = friction * contact_point.normal_impulse_sum; //max friction
+        auto    friction     = m_friction_utility.Find(contact_point.collider_a->GetMaterial(), contact_point.collider_b->GetMaterial());
+        Real    max_friction = friction.dynamic_friction * contact_point.normal_impulse_sum; //max friction
         // Compute tangent force
         Real vt_a     = DotProduct(dv, contact_point.tangent_a) - tangent_speed;
         Real lambda_a = contact_point.tangent_a_mass * (-vt_a);
@@ -211,5 +213,12 @@ namespace Engine5
         body_b->SetCentroid(position.p_b);
         body_a->SetOrientation(position.o_a);
         body_b->SetOrientation(position.o_b);
+    }
+
+    Real ContactConstraints::GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const
+    {
+        Physics::MaterialCoefficient m_a(a->GetMaterial());
+        Physics::MaterialCoefficient m_b(b->GetMaterial());
+        return Utility::Min(m_a.restitution, m_b.restitution);
     }
 }

@@ -1,9 +1,11 @@
 #pragma once
 #include "../../../Math/Math.hpp"
 #include "Constraints.hpp"
+#include "../../Utility/FrictionUtility.hpp"
 
 namespace Engine5
 {
+    class ColliderPrimitive;
     class ContactPoint;
     class ContactManifold;
     class RigidBody;
@@ -66,7 +68,7 @@ namespace Engine5
     class ContactConstraints final : public Constraints
     {
     public:
-        explicit ContactConstraints(ContactManifold* input, Real friction, Real restitution, Real tangent_speed = 0.0f);
+        explicit ContactConstraints(ContactManifold* input, Physics::FrictionUtility& friction_utility, Real tangent_speed = 0.0f);
         ~ContactConstraints();
 
         void Initialize() override;
@@ -77,17 +79,18 @@ namespace Engine5
         void SolveContactPoint(ContactPoint& contact_point);
 
         void SolveNormalConstraints(const MassTerm& mass, VelocityTerm& velocity, ContactPoint& contact_point) const;
-        void SolveTangentConstraints(const MassTerm& mass, Real friction, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const;
+        void SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void WarmStart();
 
         static void SolvePositionConstraints(const ContactManifold& manifold);
 
+        Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
+
     private:
+        Physics::FrictionUtility& m_friction_utility;
         ContactManifold* m_manifold = nullptr;
         VelocityTerm     m_velocity;
         MassTerm         m_mass;
-        Real             m_restitution   = 1.0f;
-        Real             m_friction      = 1.0f;
         Real             m_tangent_speed = 0.0f;
     };
 }
