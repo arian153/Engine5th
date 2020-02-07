@@ -18,7 +18,7 @@ namespace Engine5
         void Initialize();
         void Shutdown();
 
-        void Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt) const;
+        void Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt);
 
         void SolveConstraints(Constraints* constraints, Real dt) const;
 

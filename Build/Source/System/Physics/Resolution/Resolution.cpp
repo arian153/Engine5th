@@ -26,33 +26,27 @@ namespace Engine5
         m_friction.Shutdown();
     }
 
-    void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt) const
+    void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
     {
         //resolution phase
         //solve contact manifold
         for (auto& manifold : manifold_table->m_manifold_table)
         {
-            ContactConstraints contact(&manifold.second, 1.0f, 1.0f);
+            ContactConstraints contact(&manifold.second, &m_friction);
             contact.Initialize();
-
-            if(m_b_warm_starting == true)
+            if (m_b_warm_starting == true)
             {
                 contact.WarmStart();
             }
-
             //iterate n
             contact.Solve(dt);
-
-
             contact.Apply();
         }
-
         //integration phase
         for (auto& body : *rigid_bodies)
         {
             body->Integrate(dt);
         }
-
         //solve position constraints.
         for (auto& manifold : manifold_table->m_manifold_table)
         {
@@ -66,5 +60,4 @@ namespace Engine5
         constraints->Solve(dt);
         constraints->Apply();
     }
-
 }

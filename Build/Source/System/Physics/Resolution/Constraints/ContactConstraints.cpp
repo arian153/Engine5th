@@ -7,8 +7,8 @@
 
 namespace Engine5
 {
-    ContactConstraints::ContactConstraints(ContactManifold* input, Physics::FrictionUtility& friction_utility, Real tangent_speed)
-        : m_manifold(input), m_friction_utility(friction_utility), m_tangent_speed(tangent_speed)
+    ContactConstraints::ContactConstraints(ContactManifold* input, Physics::FrictionUtility* friction_utility, Real tangent_speed)
+        : m_friction_utility(friction_utility), m_manifold(input), m_tangent_speed(tangent_speed)
     {
     }
 
@@ -129,7 +129,7 @@ namespace Engine5
     void ContactConstraints::SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const
     {
         Vector3 dv           = velocity.v_b + CrossProduct(velocity.w_b, contact_point.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact_point.r_a);
-        auto    friction     = m_friction_utility.Find(contact_point.collider_a->GetMaterial(), contact_point.collider_b->GetMaterial());
+        auto    friction     = m_friction_utility->Find(contact_point.collider_a->GetMaterial(), contact_point.collider_b->GetMaterial());
         Real    max_friction = friction.dynamic_friction * contact_point.normal_impulse_sum; //max friction
         // Compute tangent force
         Real vt_a     = DotProduct(dv, contact_point.tangent_a) - tangent_speed;

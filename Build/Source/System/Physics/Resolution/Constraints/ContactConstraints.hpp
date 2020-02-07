@@ -68,7 +68,7 @@ namespace Engine5
     class ContactConstraints final : public Constraints
     {
     public:
-        explicit ContactConstraints(ContactManifold* input, Physics::FrictionUtility& friction_utility, Real tangent_speed = 0.0f);
+        explicit ContactConstraints(ContactManifold* input, Physics::FrictionUtility* friction_utility, Real tangent_speed = 0.0f);
         ~ContactConstraints();
 
         void Initialize() override;
@@ -87,7 +87,7 @@ namespace Engine5
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
 
     private:
-        Physics::FrictionUtility& m_friction_utility;
+        Physics::FrictionUtility* m_friction_utility = nullptr;
         ContactManifold* m_manifold = nullptr;
         VelocityTerm     m_velocity;
         MassTerm         m_mass;
