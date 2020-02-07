@@ -3,6 +3,8 @@
 #include "../NarrowPhase/ManifoldTable.hpp"
 #include "../Dynamics/RigidBody.hpp"
 #include "../Utility/FrictionUtility.hpp"
+#include <vector>
+#include "Constraints/ContactConstraints.hpp"
 
 namespace Engine5
 {
@@ -25,8 +27,12 @@ namespace Engine5
 
     private:
         bool m_b_warm_starting = true;
+
+        size_t m_velocity_iteration = 8;
+        size_t m_position_iteration = 3;
+
         Physics::FrictionUtility m_friction;
-        
+        std::vector<ContactConstraints> m_contacts;
 
     };
 }

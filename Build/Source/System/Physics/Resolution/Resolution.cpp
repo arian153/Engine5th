@@ -32,14 +32,26 @@ namespace Engine5
         //solve contact manifold
         for (auto& manifold : manifold_table->m_manifold_table)
         {
-            ContactConstraints contact(&manifold.second, &m_friction);
+            auto contact = m_contacts.emplace_back(&manifold.second, &m_friction);
             contact.Initialize();
-            if (m_b_warm_starting == true)
+        }
+        if (m_b_warm_starting == true)
+        {
+            for (auto& contact : m_contacts)
             {
                 contact.WarmStart();
             }
-            //iterate n
-            contact.Solve(dt);
+        }
+        for (size_t i = 0; i < m_velocity_iteration; ++i)
+        {
+            for (auto& contact : m_contacts)
+            {
+                contact.Solve(dt);
+            }
+        }
+        //apply
+        for (auto& contact : m_contacts)
+        {
             contact.Apply();
         }
         //integration phase
@@ -48,9 +60,12 @@ namespace Engine5
             body->Integrate(dt);
         }
         //solve position constraints.
-        for (auto& manifold : manifold_table->m_manifold_table)
+        for (size_t i = 0; i < m_position_iteration; ++i)
         {
-            ContactConstraints::SolvePositionConstraints(manifold.second);
+            for (auto& contact : m_contacts)
+            {
+                contact.SolvePositionConstraints();
+            }
         }
     }
 

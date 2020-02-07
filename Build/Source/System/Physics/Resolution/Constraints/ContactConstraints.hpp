@@ -82,15 +82,18 @@ namespace Engine5
         void SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void WarmStart();
 
+        void SolvePositionConstraints();
+
         static void SolvePositionConstraints(const ContactManifold& manifold);
 
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
 
     private:
         Physics::FrictionUtility* m_friction_utility = nullptr;
-        ContactManifold* m_manifold = nullptr;
-        VelocityTerm     m_velocity;
-        MassTerm         m_mass;
-        Real             m_tangent_speed = 0.0f;
+        ContactManifold*          m_manifold         = nullptr;
+        PositionTerm              m_position;
+        VelocityTerm              m_velocity;
+        MassTerm                  m_mass;
+        Real                      m_tangent_speed = 0.0f;
     };
 }
