@@ -45,6 +45,18 @@ namespace Engine5
     void UnusedParameter();
 
     bool Assert(int expression, const String& output_message, const String& function_name, const String& file_name, unsigned line_number);
+
+    namespace Utility
+    {
+        template <typename T>
+        void Swap(T& a, T& b)
+        {
+            T temp = a;
+            a = b;
+            b = temp;
+        }
+    }
+
 }
 
 #include "CoreUtility.inl"

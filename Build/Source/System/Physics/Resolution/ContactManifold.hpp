@@ -12,7 +12,7 @@ namespace Engine5
     class ContactManifold
     {
     public:
-        ContactManifold();
+        ContactManifold() = delete;
         explicit ContactManifold(ColliderSet* a, ColliderSet* b);
         ~ContactManifold();
         ContactManifold(const ContactManifold& rhs);
@@ -22,7 +22,6 @@ namespace Engine5
         void SetPersistentThreshold(Real threshold);
         void UpdateInvalidContact();
         void UpdateCurrentManifold(const ContactPoint& new_contact);
-        void UpdateCollisionState();
         void CutDownManifold();
         size_t ContactsCount() const;
 

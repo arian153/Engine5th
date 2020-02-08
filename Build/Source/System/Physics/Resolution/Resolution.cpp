@@ -1,6 +1,5 @@
 #include "Resolution.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
-#include "Constraints/Constraints.hpp"
 #include "Constraints/ContactConstraints.hpp"
 #include <vector>
 // ReSharper disable once CppUnusedIncludeDirective
@@ -67,12 +66,5 @@ namespace Engine5
                 contact.SolvePositionConstraints();
             }
         }
-    }
-
-    void Resolution::SolveConstraints(Constraints* constraints, Real dt) const
-    {
-        constraints->Initialize();
-        constraints->Solve(dt);
-        constraints->Apply();
     }
 }

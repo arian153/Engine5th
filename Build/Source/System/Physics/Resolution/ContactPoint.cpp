@@ -1,4 +1,5 @@
 #include "ContactPoint.hpp"
+#include "../../Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -23,15 +24,16 @@ namespace Engine5
         normal_impulse_sum    = 0.0f;
         tangent_a_impulse_sum = 0.0f;
         tangent_b_impulse_sum = 0.0f;
-        is_valid              = true;
-        is_collide            = false;
-        is_persistent         = false;
+        b_valid               = true;
+        b_persistent          = false;
     }
 
     ContactPoint& ContactPoint::operator=(const ContactPoint& rhs)
     {
         if (this != &rhs)
         {
+            this->collider_a            = rhs.collider_a;
+            this->collider_b            = rhs.collider_b;
             this->global_position_a     = rhs.global_position_a;
             this->global_position_b     = rhs.global_position_b;
             this->local_position_a      = rhs.local_position_a;
@@ -43,6 +45,8 @@ namespace Engine5
             this->normal_impulse_sum    = rhs.normal_impulse_sum;
             this->tangent_a_impulse_sum = rhs.tangent_a_impulse_sum;
             this->tangent_b_impulse_sum = rhs.tangent_b_impulse_sum;
+            this->b_valid               = rhs.b_valid;
+            this->b_persistent          = rhs.b_persistent;
         }
         return *this;
     }
@@ -50,5 +54,36 @@ namespace Engine5
     bool ContactPoint::operator==(const ContactPoint& rhs) const
     {
         return (normal == rhs.normal && depth == rhs.depth && global_position_a == rhs.global_position_a);
+    }
+
+    void ContactPoint::Swap()
+    {
+        Utility::Swap(collider_a, collider_b);
+        Utility::Swap(global_position_a, global_position_b);
+        Utility::Swap(local_position_a, local_position_b);
+        Basis basis;
+        basis.CalculateBasisQuaternion(-normal);
+        normal    = basis.i;
+        tangent_a = basis.j;
+        tangent_b = basis.k;
+    }
+
+    ContactPoint ContactPoint::SwappedContactPoint() const
+    {
+        Basis basis;
+        basis.CalculateBasisQuaternion(-normal);
+        ContactPoint result;
+        result.normal            = basis.i;
+        result.tangent_a         = basis.j;
+        result.tangent_b         = basis.k;
+        result.depth             = this->depth;
+        result.collider_a        = this->collider_b;
+        result.collider_b        = this->collider_a;
+        result.global_position_a = this->global_position_b;
+        result.global_position_b = this->global_position_a;
+        result.local_position_a  = this->local_position_b;
+        result.local_position_b  = this->local_position_a;
+        result.b_valid           = this->b_valid;
+        return result;
     }
 }

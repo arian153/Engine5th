@@ -55,7 +55,9 @@ namespace Engine5
         m_broad_phase->Update(dt);
         m_broad_phase->ComputePairs(m_pairs);
         //narrow phase
-        m_narrow_phase->GenerateContact(m_pairs, m_manifold_table, m_draw_gjk, m_draw_epa, m_draw_contact);
+        m_narrow_phase->GenerateContact(m_pairs, m_manifold_table, m_draw_gjk, m_draw_epa);
+        //resolution
+        m_resolution_phase->Solve(m_manifold_table, &m_rigid_bodies, dt);
     }
 
     void World::Shutdown()

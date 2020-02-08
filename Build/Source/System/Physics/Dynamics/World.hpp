@@ -34,10 +34,10 @@ namespace Engine5
 
     private:
         eBroadPhaseMode m_mode             = eBroadPhaseMode::DynamicBVH;
-        BroadPhase*    m_broad_phase      = nullptr;
-        NarrowPhase*   m_narrow_phase     = nullptr;
-        Resolution*    m_resolution_phase = nullptr;
-        ManifoldTable* m_manifold_table   = nullptr;
+        BroadPhase*     m_broad_phase      = nullptr;
+        NarrowPhase*    m_narrow_phase     = nullptr;
+        Resolution*     m_resolution_phase = nullptr;
+        ManifoldTable*  m_manifold_table   = nullptr;
 
         std::vector<ColliderSet*> m_collider_sets;
         std::vector<RigidBody*>   m_rigid_bodies;

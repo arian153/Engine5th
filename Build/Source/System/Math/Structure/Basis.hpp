@@ -17,6 +17,7 @@ namespace Engine5
 
         void CalculateBasis(const Vector3& normal);
         void CalculateBasisApprox(const Vector3& normal);
+        void CalculateBasisQuaternion(const Vector3& normal);
         void CalculateBasis(const Vector3& a, const Vector3& b);
         void Rotate(const Quaternion& orientation);
         void Normalize();

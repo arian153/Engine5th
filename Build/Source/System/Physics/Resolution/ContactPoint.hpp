@@ -10,10 +10,11 @@ namespace Engine5
     public:
         ContactPoint();
         ~ContactPoint();
-        void     Clear();
+        void          Clear();
         ContactPoint& operator=(const ContactPoint& rhs);
-        bool     operator==(const ContactPoint& rhs) const;
-
+        bool          operator==(const ContactPoint& rhs) const;
+        void          Swap();
+        ContactPoint  SwappedContactPoint() const;
     public:
         //Two contact points in world space, each representing the deepest penetrating point of one collider.
         Vector3 global_position_a;
@@ -45,7 +46,7 @@ namespace Engine5
         Real tangent_a_impulse_sum = 0.0f;
         Real tangent_b_impulse_sum = 0.0f;
 
-        Real normal_mass = 0.0f;
+        Real normal_mass    = 0.0f;
         Real tangent_a_mass = 0.0f;
         Real tangent_b_mass = 0.0f;
 
@@ -54,8 +55,7 @@ namespace Engine5
         ColliderPrimitive* collider_a = nullptr;
         ColliderPrimitive* collider_b = nullptr;
 
-        bool is_valid      = true;
-        bool is_collide    = false;
-        bool is_persistent = false;
+        bool b_valid      = true;
+        bool b_persistent = false;
     };
 }

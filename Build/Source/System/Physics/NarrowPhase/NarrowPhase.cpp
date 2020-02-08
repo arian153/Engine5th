@@ -28,7 +28,7 @@ namespace Engine5
         m_primitive_renderer = primitive_renderer;
     }
 
-    void NarrowPhase::GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table, const ColorFlag& gjk_flag, const ColorFlag& epa_flag, const ColorFlag& contact_flag)
+    void NarrowPhase::GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table, const ColorFlag& gjk_flag, const ColorFlag& epa_flag)
     {
         data_table->FilteringManifolds();
         for (auto& pair : potential_list)
@@ -79,18 +79,17 @@ namespace Engine5
                     found->UpdateCurrentManifold(new_contact_data);
                     found->CutDownManifold();
                     found->is_collide = true;
-                    found->UpdateCollisionState();
-                    //draw contact result.
-                    if (contact_flag.b_flag)
-                    {
-                        Vector3    pos_a = new_contact_data.global_position_a;
-                        Vector3    pos_b = new_contact_data.global_position_b;
-                        Quaternion no_rotation;
-                        m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), eRenderingMode::Face, contact_flag.color);
-                        m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), eRenderingMode::Face, contact_flag.color);
-                        m_primitive_renderer->DrawSegment(pos_a, pos_a + new_contact_data.normal, contact_flag.color);
-                        m_primitive_renderer->DrawSegment(pos_b, pos_b + new_contact_data.normal, contact_flag.color);
-                    }
+                    ////draw contact result.
+                    //if (contact_flag.b_flag)
+                    //{
+                    //    Vector3    pos_a = new_contact_data.global_position_a;
+                    //    Vector3    pos_b = new_contact_data.global_position_b;
+                    //    Quaternion no_rotation;
+                    //    m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), eRenderingMode::Face, contact_flag.color);
+                    //    m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), eRenderingMode::Face, contact_flag.color);
+                    //    m_primitive_renderer->DrawSegment(pos_a, pos_a + new_contact_data.normal, contact_flag.color);
+                    //    m_primitive_renderer->DrawSegment(pos_b, pos_b + new_contact_data.normal, contact_flag.color);
+                    //}
                 }
                 else
                 {
@@ -108,7 +107,6 @@ namespace Engine5
                 {
                     data_table->SendNotCollision(set_a, set_b, found->is_collide);
                     found->is_collide = false;
-                    found->UpdateCollisionState();
                 }
             }
         }
@@ -166,7 +164,7 @@ namespace Engine5
                 if (Utility::IsValid(u) == false || Utility::IsValid(v) == false || Utility::IsValid(w) == false)
                 {
                     //barycentric can fail and generate invalid coordinates, if this happens return invalid result.
-                    result.is_valid = false;
+                    result.b_valid = false;
                     return false;
                 }
                 if (fabsf(u) > 1.0f || fabsf(v) > 1.0f || fabsf(w) > 1.0f)
@@ -174,7 +172,7 @@ namespace Engine5
                     //if any of the barycentric coefficients have a magnitude greater than 1, 
                     //then the origin is not within the triangular prism described by 'triangle'
                     //thus, there is no collision here, return invalid result.
-                    result.is_valid = false;
+                    result.b_valid = false;
                     return false;
                 }
                 result.collider_a       = a;
@@ -193,8 +191,7 @@ namespace Engine5
             polytope.Push(p);
             polytope.Expand(p);
         }
-        result.is_valid   = false;
-        result.is_collide = false;
+        result.b_valid = false;
         return false;
     }
 
@@ -264,7 +261,6 @@ namespace Engine5
             return 1;
         return 2;
     }
-
 
     void NarrowPhase::BlowUpSimplexToTetrahedron(ColliderPrimitive* collider_a, ColliderPrimitive* collider_b, const Simplex& simplex)
     {

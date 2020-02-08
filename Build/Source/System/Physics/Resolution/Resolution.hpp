@@ -22,9 +22,6 @@ namespace Engine5
 
         void Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt);
 
-        void SolveConstraints(Constraints* constraints, Real dt) const;
-
-
     private:
         bool m_b_warm_starting = true;
 
