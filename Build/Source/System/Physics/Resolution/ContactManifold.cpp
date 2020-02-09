@@ -305,9 +305,15 @@ namespace Engine5
             Vector3 tangent  = (pos_t + c0n_t + c1n_t).Unit();
             manifold_normal  = line_dir.CrossProduct(tangent).Unit();
         }
-        else if (contact_size == 3 || contact_size == 4)
+        else if (contact_size == 3)
         {
             manifold_normal = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(2).global_position_a);
+        }
+        else
+        {
+            Vector3 n_a     = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(2).global_position_a);
+            Vector3 n_b     = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(3).global_position_a);
+            manifold_normal = (n_a + n_b).Unit();
         }
     }
 }
