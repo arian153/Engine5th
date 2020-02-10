@@ -1,4 +1,5 @@
 #include "ColliderComponent.hpp"
+#include "../../../System/Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -22,6 +23,7 @@ namespace Engine5
 
     void ColliderComponent::Update(Real dt)
     {
+        E5_UNUSED_PARAM(dt);
     }
 
     void ColliderComponent::Shutdown()

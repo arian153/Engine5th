@@ -8,6 +8,12 @@ namespace Engine5
         ComponentManager();
         ~ComponentManager();
 
+        void Initialize();
+        void Shutdown();
+
+        
+
+
     private:
     };
 }
