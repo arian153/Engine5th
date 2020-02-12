@@ -18,6 +18,12 @@ namespace Engine5
         Object* GetParent() const;
         Object* GetAncestor() const;
 
+        std::vector<Object*>* GetChildren() const;
+        std::vector<Object*>* GetSibling() const;
+
+        void AddChild(Object* baby_child);
+        void ClearFamily();
+
     private:
         inline static size_t s_id = 0;
 
