@@ -17,7 +17,7 @@ namespace Engine5
         size_t GetID() const;
 
         std::string GetName() const;
-        void SetName(const std::string& name);
+        void        SetName(const std::string& name);
 
         Object* Clone(ObjectManager* manager = nullptr);
 
@@ -30,10 +30,12 @@ namespace Engine5
         std::vector<Object*>* GetSibling() const;
 
         void AddChild(Object* baby_child);
+        void RemoveChild(Object* child) const;
+        void RemoveSibling(Object* sibling) const;
         void ClearObjectHierarchy();
         void ReleaseObjectHierarchy();
         void DestroyObjectHierarchy();
-        void InheritObjectHierarchy();
+        void DestroyFamilyRecursive();
 
         void ClearComponents();
 
@@ -41,8 +43,9 @@ namespace Engine5
         inline static size_t s_id = 0;
 
     private:
-        size_t      m_id;
-        std::string m_name;
+        size_t         m_id;
+        std::string    m_name;
+        ObjectManager* m_manager = nullptr;
 
         //family
         Object*               m_ancestor = nullptr;

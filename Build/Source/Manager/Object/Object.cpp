@@ -101,6 +101,24 @@ namespace Engine5
         }
     }
 
+    void Object::RemoveChild(Object* child) const
+    {
+        if (m_children != nullptr)
+        {
+            auto it = std::find(m_children->begin(), m_children->end(), child);
+            m_children->erase(it++);
+        }
+    }
+
+    void Object::RemoveSibling(Object* sibling) const
+    {
+        if (m_children != nullptr)
+        {
+            auto it = std::find(m_sibling->begin(), m_sibling->end(), sibling);
+            m_sibling->erase(it++);
+        }
+    }
+
     void Object::ClearObjectHierarchy()
     {
         if (m_children != nullptr)
@@ -121,15 +139,13 @@ namespace Engine5
     {
         if (m_parent != nullptr)
         {
-            auto it = std::find(m_parent->m_children->begin(), m_parent->m_children->end(), this);
-            m_parent->m_children->erase(it++);
+            m_parent->RemoveChild(this);
         }
         if (m_sibling != nullptr)
         {
-            for (auto brother : *m_sibling)
+            for (auto sibling : *m_sibling)
             {
-                auto it = std::find(brother->m_sibling->begin(), brother->m_sibling->end(), this);
-                brother->m_sibling->erase(it++);
+                sibling->RemoveSibling(this);
             }
         }
         if (m_children != nullptr)
@@ -153,13 +169,55 @@ namespace Engine5
 
     void Object::DestroyObjectHierarchy()
     {
+        if (m_parent != nullptr)
+        {
+            m_parent->RemoveChild(this);
+        }
+        if (m_sibling != nullptr)
+        {
+            for (auto& sibling : *m_sibling)
+            {
+                sibling->RemoveSibling(this);
+            }
+        }
+        if (m_children != nullptr)
+        {
+            DestroyFamilyRecursive();
+        }
     }
 
-    void Object::InheritObjectHierarchy()
+    void Object::DestroyFamilyRecursive()
     {
+        if (m_children != nullptr)
+        {
+            for (auto& child : *m_children)
+            {
+                child->DestroyFamilyRecursive();
+                child->m_parent   = nullptr;
+                child->m_ancestor = nullptr;
+                //m_object_manager->EraseObject(child);
+                child->ClearComponents();
+                delete child;
+                child = nullptr;
+            }
+            m_children->clear();
+            delete m_children;
+            m_children = nullptr;
+        }
+        if (m_sibling != nullptr)
+        {
+            m_sibling->clear();
+            delete m_sibling;
+            m_sibling = nullptr;
+        }
     }
 
     void Object::ClearComponents()
     {
+        //for (auto& component : m_components)
+        //{
+        //    //remove
+        //}
+        m_components.clear();
     }
 }
