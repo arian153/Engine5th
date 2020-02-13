@@ -5,11 +5,29 @@ namespace Engine5
     Object::Object()
         : m_id(s_id++)
     {
-       
     }
 
     Object::~Object()
     {
+    }
+
+    size_t Object::GetID() const
+    {
+        return m_id;
+    }
+
+    std::string Object::GetName() const
+    {
+        return m_name;
+    }
+
+    void Object::SetName(const std::string& name)
+    {
+    }
+
+    Object* Object::Clone(ObjectManager* manager)
+    {
+        return nullptr;
     }
 
     Object* Object::GetChildAt(size_t index) const
@@ -58,12 +76,10 @@ namespace Engine5
             {
                 m_children = new std::vector<Object*>();
             }
-
             if (baby_child->m_sibling == nullptr)
             {
                 baby_child->m_sibling = new std::vector<Object*>();
             }
-
             if (m_children->empty() == false)
             {
                 for (auto& child : *m_children)
@@ -72,7 +88,6 @@ namespace Engine5
                     baby_child->m_sibling->push_back(child);
                 }
             }
-            
             m_children->push_back(baby_child);
             baby_child->m_parent = this;
             if (this->m_ancestor == nullptr)
@@ -86,8 +101,7 @@ namespace Engine5
         }
     }
 
-   
-    void Object::ClearFamily()
+    void Object::ClearObjectHierarchy()
     {
         if (m_children != nullptr)
         {
@@ -101,5 +115,51 @@ namespace Engine5
             delete m_sibling;
             m_sibling = nullptr;
         }
+    }
+
+    void Object::ReleaseObjectHierarchy()
+    {
+        if (m_parent != nullptr)
+        {
+            auto it = std::find(m_parent->m_children->begin(), m_parent->m_children->end(), this);
+            m_parent->m_children->erase(it++);
+        }
+        if (m_sibling != nullptr)
+        {
+            for (auto brother : *m_sibling)
+            {
+                auto it = std::find(brother->m_sibling->begin(), brother->m_sibling->end(), this);
+                brother->m_sibling->erase(it++);
+            }
+        }
+        if (m_children != nullptr)
+        {
+            for (auto& child : *m_children)
+            {
+                child->m_parent   = nullptr;
+                child->m_ancestor = nullptr;
+                if (child->m_sibling != nullptr)
+                {
+                    child->m_sibling->clear();
+                    delete child->m_sibling;
+                    child->m_sibling = nullptr;
+                }
+            }
+            m_children->clear();
+            delete m_children;
+            m_children = nullptr;
+        }
+    }
+
+    void Object::DestroyObjectHierarchy()
+    {
+    }
+
+    void Object::InheritObjectHierarchy()
+    {
+    }
+
+    void Object::ClearComponents()
+    {
     }
 }

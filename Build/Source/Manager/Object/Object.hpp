@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class ObjectManager;
     class Component;
 
     class Object
@@ -12,6 +13,13 @@ namespace Engine5
     public:
         Object();
         ~Object();
+
+        size_t GetID() const;
+
+        std::string GetName() const;
+        void SetName(const std::string& name);
+
+        Object* Clone(ObjectManager* manager = nullptr);
 
         Object* GetChildAt(size_t index) const;
         Object* GetSiblingAt(size_t index) const;
@@ -22,7 +30,12 @@ namespace Engine5
         std::vector<Object*>* GetSibling() const;
 
         void AddChild(Object* baby_child);
-        void ClearFamily();
+        void ClearObjectHierarchy();
+        void ReleaseObjectHierarchy();
+        void DestroyObjectHierarchy();
+        void InheritObjectHierarchy();
+
+        void ClearComponents();
 
     private:
         inline static size_t s_id = 0;
