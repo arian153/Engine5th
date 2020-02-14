@@ -1,18 +1,8 @@
 #pragma once
 #include "..//Component.hpp"
-#include "../ComponentFactory.hpp"
 
 namespace Engine5
 {
-    class CameraFactory final : public ComponentFactory
-    {
-        CameraFactory();
-        ~CameraFactory();
-
-        Component* Create(Object* owner) override;
-        Component* Clone(Component* origin, Object* dest) override;
-    };
-
     class CameraComponent final : public Component
     {
     public:

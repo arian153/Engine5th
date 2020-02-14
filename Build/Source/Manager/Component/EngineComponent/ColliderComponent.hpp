@@ -1,25 +1,15 @@
 #pragma once
 #include "../Component.hpp"
 #include "../../../System/Physics/Physics.hpp"
-#include "../ComponentFactory.hpp"
 
 namespace Engine5
 {
-    class ColliderFactory final : public ComponentFactory
-    {
-        ColliderFactory();
-        ~ColliderFactory();
-
-        Component* Create(Object* owner) override;
-        Component* Clone(Component* origin, Object* dest) override;
-    };
-
     class ColliderComponent final : public Component
     {
     public:
         ~ColliderComponent();
-        ColliderComponent() = delete;
-        ColliderComponent(const ColliderComponent& rhs) = delete;
+        ColliderComponent()                                        = delete;
+        ColliderComponent(const ColliderComponent& rhs)            = delete;
         ColliderComponent& operator=(const ColliderComponent& rhs) = delete;
 
         void Initialize() override;
@@ -28,13 +18,13 @@ namespace Engine5
 
         ColliderPrimitive* AddCollider(eColliderType type) const;
         ColliderPrimitive* GetCollider(size_t index) const;
-        void EraseCollider(ColliderPrimitive* collider) const;
+        void               EraseCollider(ColliderPrimitive* collider) const;
 
         void SetMass(Real density) const;
         void SetScale(const Vector3& scale) const;
 
         MassData GetMass() const;
-        Vector3 GetScale() const;
+        Vector3  GetScale() const;
 
     protected:
         void Load() override;
@@ -49,11 +39,10 @@ namespace Engine5
         explicit ColliderComponent(Object* owner);
         void     Clone(ColliderComponent* cloned);
 
-
     private:
         ColliderSet* m_collider_set = nullptr;
-        RigidBody* m_rigid_body = nullptr;
-        Transform* m_transform = nullptr;
+        RigidBody*   m_rigid_body   = nullptr;
+        Transform*   m_transform    = nullptr;
 
         bool m_b_init = false;
     };

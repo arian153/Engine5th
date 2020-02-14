@@ -2,29 +2,6 @@
 
 namespace Engine5
 {
-    //factory code
-    CameraFactory::CameraFactory()
-    {
-    }
-
-    CameraFactory::~CameraFactory()
-    {
-    }
-
-    Component* CameraFactory::Create(Object* owner)
-    {
-        return new CameraComponent(owner);
-    }
-
-    Component* CameraFactory::Clone(Component* origin, Object* dest)
-    {
-        auto source = static_cast<CameraComponent*>(origin);
-        auto cloned = static_cast<CameraComponent*>(this->Create(dest));
-        source->Clone(cloned);
-        return cloned;
-    }
-
-    //camera code
     CameraComponent::~CameraComponent()
     {
     }

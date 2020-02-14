@@ -1,32 +1,21 @@
 #pragma once
 #include "../Component.hpp"
 #include "../../../System/Math/Math.hpp"
-#include "../ComponentFactory.hpp"
 
 namespace Engine5
 {
-    class TransformFactory final : public ComponentFactory
-    {
-        TransformFactory();
-        ~TransformFactory();
-
-        Component* Create(Object* owner) override;
-        Component* Clone(Component* origin, Object* dest) override;
-    };
-
     class TransformComponent final : public Component
     {
     public:
         ~TransformComponent();
-        TransformComponent() = delete;
-        TransformComponent(const TransformComponent& rhs) = delete;
+        TransformComponent()                                         = delete;
+        TransformComponent(const TransformComponent& rhs)            = delete;
         TransformComponent& operator=(const TransformComponent& rhs) = delete;
-
 
         void Initialize() override;
         void Update(Real dt) override;
         void Shutdown() override;
-        
+
         //Setter
         void SetPosition(const Vector3& position);
         void SetPosition(Real x, Real y, Real z);
@@ -49,11 +38,11 @@ namespace Engine5
         void AddScale(const Vector3& delta_scale, eAnchor3D anchor = eAnchor3D::CCC);
 
         //Getter
-        Vector3 GetPosition() const;
-        Vector3 GetScale() const;
+        Vector3    GetPosition() const;
+        Vector3    GetScale() const;
         Quaternion GetOrientation() const;
-        Matrix33 GetRotationMatrix() const;
-        Matrix44 GetTransformMatrix() const;
+        Matrix33   GetRotationMatrix() const;
+        Matrix44   GetTransformMatrix() const;
 
         Vector3 LocalToWorldPoint(const Vector3& local_point) const;
         Vector3 WorldToLocalPoint(const Vector3& world_point) const;
@@ -75,7 +64,6 @@ namespace Engine5
 
         void UpdateChildrenPositionRecursive(const Vector3& position);
         void UpdateChildrenOrientationRecursive(const Quaternion& orientation);
-
 
     private:
         Transform  m_transform;

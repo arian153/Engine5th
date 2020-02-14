@@ -1,25 +1,15 @@
 #pragma once
 #include "..//Component.hpp"
 #include "../../../System/Physics/Physics.hpp"
-#include "../ComponentFactory.hpp"
 
 namespace Engine5
 {
-    class RigidBodyFactory final : public ComponentFactory
-    {
-        RigidBodyFactory();
-        ~RigidBodyFactory();
-
-        Component* Create(Object* owner) override;
-        Component* Clone(Component* origin, Object* dest) override;
-    };
-
     class RigidBodyComponent final : public Component
     {
     public:
         ~RigidBodyComponent();
-        RigidBodyComponent() = delete;
-        RigidBodyComponent(const RigidBodyComponent& rhs) = delete;
+        RigidBodyComponent()                                         = delete;
+        RigidBodyComponent(const RigidBodyComponent& rhs)            = delete;
         RigidBodyComponent& operator=(const RigidBodyComponent& rhs) = delete;
 
         void Initialize() override;
@@ -38,16 +28,15 @@ namespace Engine5
         void SetMotionMode(eMotionMode motion_mode) const;
 
         //getter
-        Vector3    GetLinearVelocity() const;
-        Vector3    GetAngularVelocity() const;
-        Real       GetMass() const;
-        Real       GetInverseMass() const;
-        Matrix33   GetMassMatrix() const;
-        Matrix33   GetInverseMassMatrix() const;
-        Matrix33   GetInertia() const;
-        Matrix33   GetInverseInertia() const;
+        Vector3     GetLinearVelocity() const;
+        Vector3     GetAngularVelocity() const;
+        Real        GetMass() const;
+        Real        GetInverseMass() const;
+        Matrix33    GetMassMatrix() const;
+        Matrix33    GetInverseMassMatrix() const;
+        Matrix33    GetInertia() const;
+        Matrix33    GetInverseInertia() const;
         eMotionMode GetMotionMode() const;
-
 
     protected:
         void Load() override;
