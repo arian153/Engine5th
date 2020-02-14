@@ -3,8 +3,25 @@
 
 namespace Engine5
 {
-    TransformComponent::TransformComponent()
+    TransformFactory::TransformFactory()
     {
+    }
+
+    TransformFactory::~TransformFactory()
+    {
+    }
+
+    Component* TransformFactory::Create(Object* owner)
+    {
+        return new TransformComponent(owner);
+    }
+
+    Component* TransformFactory::Clone(Component* origin, Object* dest)
+    {
+        auto source = static_cast<TransformComponent*>(origin);
+        auto cloned = static_cast<TransformComponent*>(this->Create(dest));
+        source->Clone(cloned);
+        return cloned;
     }
 
     TransformComponent::~TransformComponent()
@@ -208,6 +225,35 @@ namespace Engine5
     Vector3 TransformComponent::WorldToLocalVector(const Vector3& world_vector) const
     {
         return m_transform.orientation.Inverse().Rotate(world_vector);
+    }
+
+    void TransformComponent::Load()
+    {
+    }
+
+    void TransformComponent::Unload()
+    {
+    }
+
+    void TransformComponent::Subscribe()
+    {
+    }
+
+    void TransformComponent::Unsubscribe()
+    {
+    }
+
+    TransformComponent::TransformComponent(Object* owner)
+        : Component(owner)
+    {
+    }
+
+    void TransformComponent::Clone(TransformComponent* cloned)
+    {
+        if (cloned != nullptr && cloned != this)
+        {
+            //copy data
+        }
     }
 
     void TransformComponent::UpdateChildrenPositionRecursive(const Vector3& position)

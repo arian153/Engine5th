@@ -8,7 +8,7 @@ namespace Engine5
     class Component
     {
     public:
-        Component();
+        explicit Component(Object* owner);
         virtual ~Component();
 
         virtual void Initialize() = 0;

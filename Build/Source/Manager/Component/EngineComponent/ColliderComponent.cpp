@@ -3,8 +3,25 @@
 
 namespace Engine5
 {
-    ColliderComponent::ColliderComponent()
+    ColliderFactory::ColliderFactory()
     {
+    }
+
+    ColliderFactory::~ColliderFactory()
+    {
+    }
+
+    Component* ColliderFactory::Create(Object* owner)
+    {
+        return new ColliderComponent(owner);
+    }
+
+    Component* ColliderFactory::Clone(Component* origin, Object* dest)
+    {
+        auto source = static_cast<ColliderComponent*>(origin);
+        auto cloned = static_cast<ColliderComponent*>(this->Create(dest));
+        source->Clone(cloned);
+        return cloned;
     }
 
     ColliderComponent::~ColliderComponent()
@@ -68,5 +85,34 @@ namespace Engine5
     Vector3 ColliderComponent::GetScale() const
     {
         return m_collider_set->GetScale();
+    }
+
+    void ColliderComponent::Load()
+    {
+    }
+
+    void ColliderComponent::Unload()
+    {
+    }
+
+    void ColliderComponent::Subscribe()
+    {
+    }
+
+    void ColliderComponent::Unsubscribe()
+    {
+    }
+
+    ColliderComponent::ColliderComponent(Object* owner)
+        : Component(owner)
+    {
+    }
+
+    void ColliderComponent::Clone(ColliderComponent* cloned)
+    {
+        if (cloned != nullptr && cloned != this)
+        {
+            //copy data
+        }
     }
 }

@@ -1,14 +1,26 @@
 #pragma once
 #include "..//Component.hpp"
 #include "../../../System/Physics/Physics.hpp"
+#include "../ComponentFactory.hpp"
 
 namespace Engine5
 {
+    class RigidBodyFactory final : public ComponentFactory
+    {
+        RigidBodyFactory();
+        ~RigidBodyFactory();
+
+        Component* Create(Object* owner) override;
+        Component* Clone(Component* origin, Object* dest) override;
+    };
+
     class RigidBodyComponent final : public Component
     {
     public:
-        RigidBodyComponent();
         ~RigidBodyComponent();
+        RigidBodyComponent() = delete;
+        RigidBodyComponent(const RigidBodyComponent& rhs) = delete;
+        RigidBodyComponent& operator=(const RigidBodyComponent& rhs) = delete;
 
         void Initialize() override;
         void Update(Real dt) override;
@@ -36,6 +48,19 @@ namespace Engine5
         Matrix33   GetInverseInertia() const;
         eMotionMode GetMotionMode() const;
 
+
+    protected:
+        void Load() override;
+        void Unload() override;
+        void Subscribe() override;
+        void Unsubscribe() override;
+
+    private:
+        friend class RigidBodyFactory;
+
+    private:
+        explicit RigidBodyComponent(Object* owner);
+        void     Clone(RigidBodyComponent* cloned);
 
     private:
         RigidBody*   m_rigid_body   = nullptr;

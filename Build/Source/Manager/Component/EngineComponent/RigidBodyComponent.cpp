@@ -2,8 +2,25 @@
 
 namespace Engine5
 {
-    RigidBodyComponent::RigidBodyComponent()
+    RigidBodyFactory::RigidBodyFactory()
     {
+    }
+
+    RigidBodyFactory::~RigidBodyFactory()
+    {
+    }
+
+    Component* RigidBodyFactory::Create(Object* owner)
+    {
+        return new RigidBodyComponent(owner);
+    }
+
+    Component* RigidBodyFactory::Clone(Component* origin, Object* dest)
+    {
+        auto source = static_cast<RigidBodyComponent*>(origin);
+        auto cloned = static_cast<RigidBodyComponent*>(this->Create(dest));
+        source->Clone(cloned);
+        return cloned;
     }
 
     RigidBodyComponent::~RigidBodyComponent()
@@ -125,5 +142,34 @@ namespace Engine5
     eMotionMode RigidBodyComponent::GetMotionMode() const
     {
         return m_rigid_body->GetMotionMode();
+    }
+
+    void RigidBodyComponent::Load()
+    {
+    }
+
+    void RigidBodyComponent::Unload()
+    {
+    }
+
+    void RigidBodyComponent::Subscribe()
+    {
+    }
+
+    void RigidBodyComponent::Unsubscribe()
+    {
+    }
+
+    RigidBodyComponent::RigidBodyComponent(Object* owner)
+        : Component(owner)
+    {
+    }
+
+    void RigidBodyComponent::Clone(RigidBodyComponent* cloned)
+    {
+        if (cloned != nullptr && cloned != this)
+        {
+            //copy data
+        }
     }
 }

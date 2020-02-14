@@ -1,19 +1,32 @@
 #pragma once
 #include "../Component.hpp"
 #include "../../../System/Math/Math.hpp"
+#include "../ComponentFactory.hpp"
 
 namespace Engine5
 {
+    class TransformFactory final : public ComponentFactory
+    {
+        TransformFactory();
+        ~TransformFactory();
+
+        Component* Create(Object* owner) override;
+        Component* Clone(Component* origin, Object* dest) override;
+    };
+
     class TransformComponent final : public Component
     {
     public:
-        TransformComponent();
         ~TransformComponent();
+        TransformComponent() = delete;
+        TransformComponent(const TransformComponent& rhs) = delete;
+        TransformComponent& operator=(const TransformComponent& rhs) = delete;
+
 
         void Initialize() override;
         void Update(Real dt) override;
         void Shutdown() override;
-
+        
         //Setter
         void SetPosition(const Vector3& position);
         void SetPosition(Real x, Real y, Real z);
@@ -47,9 +60,22 @@ namespace Engine5
         Vector3 LocalToWorldVector(const Vector3& local_vector) const;
         Vector3 WorldToLocalVector(const Vector3& world_vector) const;
 
+    protected:
+        void Load() override;
+        void Unload() override;
+        void Subscribe() override;
+        void Unsubscribe() override;
+
     private:
+        friend class TransformFactory;
+
+    private:
+        explicit TransformComponent(Object* owner);
+        void     Clone(TransformComponent* cloned);
+
         void UpdateChildrenPositionRecursive(const Vector3& position);
         void UpdateChildrenOrientationRecursive(const Quaternion& orientation);
+
 
     private:
         Transform  m_transform;

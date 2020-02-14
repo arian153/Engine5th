@@ -2,7 +2,8 @@
 
 namespace Engine5
 {
-    Component::Component()
+    Component::Component(Object* owner)
+        : m_owner(owner)
     {
     }
 

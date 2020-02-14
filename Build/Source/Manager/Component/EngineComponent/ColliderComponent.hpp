@@ -1,14 +1,26 @@
 #pragma once
 #include "../Component.hpp"
 #include "../../../System/Physics/Physics.hpp"
+#include "../ComponentFactory.hpp"
 
 namespace Engine5
 {
+    class ColliderFactory final : public ComponentFactory
+    {
+        ColliderFactory();
+        ~ColliderFactory();
+
+        Component* Create(Object* owner) override;
+        Component* Clone(Component* origin, Object* dest) override;
+    };
+
     class ColliderComponent final : public Component
     {
     public:
-        ColliderComponent();
         ~ColliderComponent();
+        ColliderComponent() = delete;
+        ColliderComponent(const ColliderComponent& rhs) = delete;
+        ColliderComponent& operator=(const ColliderComponent& rhs) = delete;
 
         void Initialize() override;
         void Update(Real dt) override;
@@ -23,6 +35,20 @@ namespace Engine5
 
         MassData GetMass() const;
         Vector3 GetScale() const;
+
+    protected:
+        void Load() override;
+        void Unload() override;
+        void Subscribe() override;
+        void Unsubscribe() override;
+
+    private:
+        friend class ColliderFactory;
+
+    private:
+        explicit ColliderComponent(Object* owner);
+        void     Clone(ColliderComponent* cloned);
+
 
     private:
         ColliderSet* m_collider_set = nullptr;
