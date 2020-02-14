@@ -22,7 +22,7 @@ namespace Engine5
         void Find(const std::string& type, std::vector<Component*>& components);
 
         void Remove(Component* component);
-        void Remove(Component* component, Object* object);
+        void Remove(Component* component, Object* owner);
 
 
     private:

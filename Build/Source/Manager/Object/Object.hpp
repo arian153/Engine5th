@@ -5,6 +5,8 @@
 
 namespace Engine5
 {
+    class ComponentManager;
+    class ObjectFactory;
     class ObjectManager;
     class Component;
 
@@ -39,6 +41,31 @@ namespace Engine5
 
         void ClearComponents();
 
+    public: //template member functions
+        template <typename T>
+        T* AddComponent();
+
+        template <typename T>
+        bool HasComponent() const;
+
+        template <typename T>
+        T* GetComponent() const;
+
+        template <typename T>
+        void RemoveComponent();
+
+    private:
+        void SetManager(ObjectManager* obj_manager, ComponentManager* cmp_manager);
+        void SetFactory(ObjectFactory* factory);
+
+        Component* AddComponent(Component* component);
+        Component* AddComponent(const std::string& type);
+        Component* GetComponent(const std::string& type);
+
+        bool HasComponent(const std::string& type);
+        void RemoveComponent(Component* component);
+        void RemoveComponent(const std::string& type);
+
     private:
         inline static size_t s_id = 0;
 
@@ -55,7 +82,9 @@ namespace Engine5
 
         //components
         std::unordered_map<std::string, Component*> m_components;
+        ComponentManager* m_component_manager = nullptr;
     };
 }
 
+// ReSharper disable once CppUnusedIncludeDirective
 #include "ObjectTemplate.cpp"

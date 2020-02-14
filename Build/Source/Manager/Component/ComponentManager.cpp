@@ -1,4 +1,5 @@
 #include "ComponentManager.hpp"
+#include "Component.hpp"
 
 namespace Engine5
 {
@@ -24,6 +25,7 @@ namespace Engine5
 
     Component* ComponentManager::Find(const std::string& type, Object* owner)
     {
+
     }
 
     Component* ComponentManager::Clone(Component* origin, Object* dest)
@@ -46,9 +48,36 @@ namespace Engine5
 
     void ComponentManager::Remove(Component* component)
     {
+        auto compo_ret = m_components.equal_range(component->m_owner);
+        for (auto it = compo_ret.first; it != compo_ret.second; ++it)
+        {
+            if (it->second == component)
+            {
+                it->second->Shutdown();
+                delete it->second;
+                it->second = nullptr;
+                m_components.erase(it);
+                break;
+            }
+        }
     }
 
-    void ComponentManager::Remove(Component* component, Object* object)
+    void ComponentManager::Remove(Component* component, Object* owner)
     {
+        if (component->m_owner == owner)
+        {
+            auto compo_ret = m_components.equal_range(owner);
+            for (auto it = compo_ret.first; it != compo_ret.second; ++it)
+            {
+                if (it->second == component)
+                {
+                    it->second->Shutdown();
+                    delete it->second;
+                    it->second = nullptr;
+                    m_components.erase(it);
+                    break;
+                }
+            }
+        }
     }
 }

@@ -220,4 +220,36 @@ namespace Engine5
         //}
         m_components.clear();
     }
+
+    void Object::SetManager(ObjectManager* obj_manager, ComponentManager* cmp_manager)
+    {
+    }
+
+    void Object::SetFactory(ObjectFactory* factory)
+    {
+    }
+
+    Component* Object::AddComponent(Component* component)
+    {
+    }
+
+    Component* Object::AddComponent(const std::string& type)
+    {
+    }
+
+    Component* Object::GetComponent(const std::string& type)
+    {
+    }
+
+    bool Object::HasComponent(const std::string& type)
+    {
+    }
+
+    void Object::RemoveComponent(Component* component)
+    {
+    }
+
+    void Object::RemoveComponent(const std::string& type)
+    {
+    }
 }

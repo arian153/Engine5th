@@ -4,6 +4,7 @@
 
 namespace Engine5
 {
+    class Object;
     class Component
     {
     public:
@@ -17,6 +18,7 @@ namespace Engine5
         String Type() const;
         bool   IsLoaded() const;
         bool   IsUnloaded() const;
+        Object* GetOwner() const;
 
     protected:
         virtual void Load() = 0;
@@ -25,8 +27,12 @@ namespace Engine5
         virtual void Unsubscribe() = 0;
 
     protected:
-        String m_type;
-        bool   m_b_loaded   = false;
-        bool   m_b_unloaded = false;
+        Object* m_owner = nullptr;
+        String  m_type;
+        bool    m_b_loaded   = false;
+        bool    m_b_unloaded = false;
+
+    private:
+        friend class ComponentManager;
     };
 }

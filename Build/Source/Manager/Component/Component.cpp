@@ -24,4 +24,9 @@ namespace Engine5
     {
         return m_b_unloaded;
     }
+
+    Object* Component::GetOwner() const
+    {
+        return m_owner;
+    }
 }
