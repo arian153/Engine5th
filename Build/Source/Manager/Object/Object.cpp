@@ -1,4 +1,6 @@
 #include "Object.hpp"
+#include "../Component/ComponentManager.hpp"
+#include "../Component/Component.hpp"
 
 namespace Engine5
 {
@@ -214,10 +216,10 @@ namespace Engine5
 
     void Object::ClearComponents()
     {
-        //for (auto& component : m_components)
-        //{
-        //    //remove
-        //}
+        for (auto& component : m_components)
+        {
+            m_component_manager->Remove(component.second, this);
+        }
         m_components.clear();
     }
 
@@ -231,25 +233,66 @@ namespace Engine5
 
     Component* Object::AddComponent(Component* component)
     {
+        auto type  = component->Type();
+        auto found = m_components.find(type);
+        if (found == m_components.end())
+        {
+            m_components.emplace(type, component);
+            return component;
+        }
+        return nullptr;
     }
 
     Component* Object::AddComponent(const std::string& type)
     {
+        auto found = m_components.find(type);
+        if (found == m_components.end())
+        {
+            auto created = m_component_manager->Create(type, this);
+            m_components.emplace(type, created);
+            return created;
+        }
+        return nullptr;
     }
 
     Component* Object::GetComponent(const std::string& type)
     {
+        auto found = m_components.find(type);
+        if (found != m_components.end())
+        {
+            return found->second;
+        }
+        return nullptr;
     }
 
     bool Object::HasComponent(const std::string& type)
     {
+        auto found = m_components.find(type);
+        if (found != m_components.end())
+        {
+            return true;
+        }
+        return false;
     }
 
     void Object::RemoveComponent(Component* component)
     {
+        auto type  = component->Type();
+        auto found = m_components.find(type);
+        if (found != m_components.end())
+        {
+            m_component_manager->Remove(component, this);
+            m_components.erase(found);
+        }
     }
 
     void Object::RemoveComponent(const std::string& type)
     {
+        auto found = m_components.find(type);
+        if (found != m_components.end())
+        {
+            m_component_manager->Remove(found->second, this);
+            m_components.erase(found);
+        }
     }
 }

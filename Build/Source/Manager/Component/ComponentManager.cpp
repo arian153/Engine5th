@@ -1,5 +1,6 @@
 #include "ComponentManager.hpp"
 #include "Component.hpp"
+#include "../Object/Object.hpp"
 
 namespace Engine5
 {
@@ -25,7 +26,7 @@ namespace Engine5
 
     Component* ComponentManager::Find(const std::string& type, Object* owner)
     {
-
+        return owner->GetComponent(type);
     }
 
     Component* ComponentManager::Clone(Component* origin, Object* dest)

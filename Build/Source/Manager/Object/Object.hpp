@@ -70,6 +70,9 @@ namespace Engine5
         inline static size_t s_id = 0;
 
     private:
+        friend class ComponentManager;
+
+    private:
         size_t         m_id;
         std::string    m_name;
         ObjectManager* m_manager = nullptr;
