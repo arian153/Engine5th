@@ -5,6 +5,7 @@ namespace Engine5
 {
     RigidBodyFactory::RigidBodyFactory()
     {
+        type = typeid(RigidBodyComponent).name();
     }
 
     RigidBodyFactory::~RigidBodyFactory()

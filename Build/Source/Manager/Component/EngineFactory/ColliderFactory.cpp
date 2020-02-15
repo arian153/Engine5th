@@ -5,6 +5,7 @@ namespace Engine5
 {
     ColliderFactory::ColliderFactory()
     {
+        type = typeid(ColliderComponent).name();
     }
 
     ColliderFactory::~ColliderFactory()

@@ -5,6 +5,7 @@ namespace Engine5
 {
     TransformFactory::TransformFactory()
     {
+        type = typeid(TransformComponent).name();
     }
 
     TransformFactory::~TransformFactory()

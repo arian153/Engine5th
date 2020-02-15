@@ -8,6 +8,7 @@ namespace Engine5
 
     class TransformFactory final : public ComponentFactory
     {
+    public:
         TransformFactory();
         ~TransformFactory();
 

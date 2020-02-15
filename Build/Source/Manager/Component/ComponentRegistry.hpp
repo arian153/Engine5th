@@ -15,7 +15,7 @@ namespace Engine5
 
         bool RegisterFactories();
         bool AbolishFactories();
-        bool AddFactory(const std::string& name, ComponentFactory* factory);
+        bool AddFactory(ComponentFactory* factory);
 
     private:
         std::unordered_map<std::string, ComponentFactory*> m_factories;

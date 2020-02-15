@@ -8,6 +8,7 @@ namespace Engine5
 
     class RigidBodyFactory final : public ComponentFactory
     {
+    public:
         RigidBodyFactory();
         ~RigidBodyFactory();
 

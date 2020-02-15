@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace Engine5
 {
@@ -18,5 +19,8 @@ namespace Engine5
 
         virtual Component* Create(Object* owner) = 0;
         virtual Component* Clone(Component* origin, Object* dest) = 0;
+
+    public:
+        std::string type;
     };
 }

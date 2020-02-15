@@ -8,6 +8,7 @@ namespace Engine5
 
     class ColliderFactory final : public ComponentFactory
     {
+    public:
         ColliderFactory();
         ~ColliderFactory();
 

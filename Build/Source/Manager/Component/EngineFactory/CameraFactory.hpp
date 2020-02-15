@@ -8,6 +8,7 @@ namespace Engine5
 
     class CameraFactory final : public ComponentFactory
     {
+    public:
         CameraFactory();
         ~CameraFactory();
 

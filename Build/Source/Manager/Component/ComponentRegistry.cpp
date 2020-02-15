@@ -1,4 +1,11 @@
 #include "ComponentRegistry.hpp"
+#include "ComponentFactory.hpp"
+
+//factories
+#include "EngineFactory/CameraFactory.hpp"
+#include "EngineFactory/ColliderFactory.hpp"
+#include "EngineFactory/RigidBodyFactory.hpp"
+#include "EngineFactory/TransformFactory.hpp"
 
 namespace Engine5
 {
@@ -12,6 +19,10 @@ namespace Engine5
 
     bool ComponentRegistry::RegisterFactories()
     {
+        AddFactory(new TransformFactory());
+        AddFactory(new RigidBodyFactory());
+        AddFactory(new ColliderFactory());
+        AddFactory(new CameraFactory());
         return true;
     }
 
@@ -19,7 +30,7 @@ namespace Engine5
     {
         for (auto it = m_factories.begin(); it != m_factories.end(); ++it)
         {
-            //delete it->second;
+            delete it->second;
             it->second = nullptr;
         }
         m_keys.clear();
@@ -27,13 +38,16 @@ namespace Engine5
         return true;
     }
 
-    bool ComponentRegistry::AddFactory(const std::string& name, ComponentFactory* factory)
+    bool ComponentRegistry::AddFactory(ComponentFactory* factory)
     {
-        if (m_factories.find(name) == m_factories.end())
+        if (factory != nullptr)
         {
-            m_keys.push_back(name);
-            m_factories.emplace(name, factory);
-            return true;
+            if (m_factories.find(factory->type) == m_factories.end())
+            {
+                m_keys.push_back(factory->type);
+                m_factories.emplace(factory->type, factory);
+                return true;
+            }
         }
         return false;
     }

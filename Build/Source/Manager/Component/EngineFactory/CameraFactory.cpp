@@ -5,6 +5,7 @@ namespace Engine5
 {
     CameraFactory::CameraFactory()
     {
+        type = typeid(CameraComponent).name();
     }
 
     CameraFactory::~CameraFactory()
