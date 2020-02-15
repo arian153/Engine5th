@@ -1,6 +1,8 @@
 #include "ComponentManager.hpp"
 #include "Component.hpp"
 #include "../Object/Object.hpp"
+#include "ComponentRegistry.hpp"
+#include "ComponentFactory.hpp"
 
 namespace Engine5
 {
@@ -22,6 +24,14 @@ namespace Engine5
 
     Component* ComponentManager::Create(const std::string& type, Object* owner)
     {
+        auto found = m_registry->m_factories.find(type);
+        if (found != m_registry->m_factories.end())
+        {
+            auto created = found->second->Create(owner);
+            m_components.emplace(owner, created);
+            return created;
+        }
+        return nullptr;
     }
 
     Component* ComponentManager::Find(const std::string& type, Object* owner)
@@ -31,6 +41,14 @@ namespace Engine5
 
     Component* ComponentManager::Clone(Component* origin, Object* dest)
     {
+        auto found = m_registry->m_factories.find(origin->m_type);
+        if (found != m_registry->m_factories.end())
+        {
+            auto cloned = found->second->Clone(origin, dest);
+            m_components.emplace(dest, cloned);
+            return cloned;
+        }
+        return nullptr;
     }
 
     void ComponentManager::Find(const std::string& type, std::vector<Component*>& components)

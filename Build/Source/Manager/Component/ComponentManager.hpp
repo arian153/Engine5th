@@ -5,6 +5,7 @@ namespace Engine5
 {
     class Object;
     class Component;
+    class ComponentRegistry;
 
     class ComponentManager
     {
@@ -24,8 +25,9 @@ namespace Engine5
         void Remove(Component* component);
         void Remove(Component* component, Object* owner);
 
-
     private:
         std::unordered_multimap<Object*, Component*> m_components;
+
+        ComponentRegistry* m_registry = nullptr;
     };
 }
