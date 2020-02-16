@@ -14,12 +14,9 @@ namespace Engine5
     {
     }
 
-    void ComponentManager::Initialize()
+    void ComponentManager::SetRegistry(ComponentRegistry* registry)
     {
-    }
-
-    void ComponentManager::Shutdown()
-    {
+        m_registry = registry;
     }
 
     Component* ComponentManager::Create(const std::string& type, Object* owner)
@@ -98,5 +95,19 @@ namespace Engine5
                 }
             }
         }
+    }
+
+    void ComponentManager::Clear()
+    {
+        for (auto& component : m_components)
+        {
+            if (component.second != nullptr)
+            {
+                component.second->Shutdown();
+                delete component.second;
+                component.second = nullptr;
+            }
+        }
+        m_components.clear();
     }
 }

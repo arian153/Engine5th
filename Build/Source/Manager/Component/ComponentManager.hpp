@@ -13,8 +13,8 @@ namespace Engine5
         ComponentManager();
         ~ComponentManager();
 
-        void Initialize();
-        void Shutdown();
+        void SetRegistry(ComponentRegistry* registry);
+       
 
         Component* Create(const std::string& type, Object* owner);
         Component* Find(const std::string& type, Object* owner);
@@ -24,6 +24,7 @@ namespace Engine5
 
         void Remove(Component* component);
         void Remove(Component* component, Object* owner);
+        void Clear();
 
     private:
         std::unordered_multimap<Object*, Component*> m_components;

@@ -20,7 +20,8 @@ namespace Engine5
         virtual Component* Create(Object* owner) = 0;
         virtual Component* Clone(Component* origin, Object* dest) = 0;
 
-    public:
+    protected:
+        friend class ComponentRegistry;
         std::string type;
     };
 }
