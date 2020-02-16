@@ -216,10 +216,7 @@ namespace Engine5
 
     void Object::ClearComponents()
     {
-        for (auto& component : m_components)
-        {
-            m_component_manager->Remove(component.second, this);
-        }
+        m_component_manager->Remove(this);
         m_components.clear();
     }
 

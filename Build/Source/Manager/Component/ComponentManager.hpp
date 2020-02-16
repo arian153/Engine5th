@@ -24,6 +24,7 @@ namespace Engine5
 
         void Remove(Component* component);
         void Remove(Component* component, Object* owner);
+        void Remove(Object* owner);
         void Clear();
 
     private:

@@ -97,6 +97,21 @@ namespace Engine5
         }
     }
 
+    void ComponentManager::Remove(Object* owner)
+    {
+        auto compo_ret = m_components.equal_range(owner);
+        for (auto it = compo_ret.first; it != compo_ret.second;)
+        {
+            if (it->second != nullptr)
+            {
+                it->second->Shutdown();
+                delete it->second;
+                it->second = nullptr;
+            }
+            m_components.erase(it++);
+        }
+    }
+
     void ComponentManager::Clear()
     {
         for (auto& component : m_components)
