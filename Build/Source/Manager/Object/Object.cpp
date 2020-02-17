@@ -25,6 +25,17 @@ namespace Engine5
 
     void Object::SetName(const std::string& name)
     {
+        if (m_name != name)
+        {
+            if (m_object_manager != nullptr)
+            {
+                m_object_manager->ChangeName(this, name);
+            }
+            else
+            {
+                m_name = name;
+            }
+        }
     }
 
     Object* Object::Clone(ObjectManager* manager)

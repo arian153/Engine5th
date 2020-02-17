@@ -35,6 +35,9 @@ namespace Engine5
         void ResetID();
 
     private:
+        friend class Object;
+
+    private:
         std::unordered_multimap<std::string, Object*> m_object_map;
         std::vector<Object*>                          m_objects;
     };

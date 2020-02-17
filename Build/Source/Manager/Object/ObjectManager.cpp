@@ -41,8 +41,8 @@ namespace Engine5
 
     Object* ObjectManager::FindObjectBegin(const std::string& name)
     {
-        auto range  = m_object_map.equal_range(name);
-        auto result = range.first;
+        auto ret    = m_object_map.equal_range(name);
+        auto result = ret.first;
         if (result != m_object_map.end())
         {
             return result->second;
@@ -154,18 +154,49 @@ namespace Engine5
 
     void ObjectManager::ClearObjects()
     {
+        for (auto& object : m_objects)
+        {
+            object->ClearComponents();
+            object->ClearObjectHierarchy();
+            delete object;
+            object = nullptr;
+        }
+        m_objects.clear();
+        m_object_map.clear();
     }
 
     bool ObjectManager::HasObject(const std::string& name)
     {
+        auto result = m_object_map.find(name);
+        if (result != m_object_map.end())
+        {
+            return true;
+        }
+        return false;
     }
 
     bool ObjectManager::HasObject(Object* object)
     {
+        auto ret = m_object_map.equal_range(object->m_name);
+        for (auto it = ret.first; it != ret.second; ++it)
+        {
+            if (it->second == object)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void ObjectManager::ChangeName(Object* object, const std::string& new_name)
     {
+        auto ret = m_object_map.equal_range(object->m_name);
+        if (ret.first != ret.second)
+        {
+            m_object_map.erase(std::find(ret.first, ret.second, object));
+            m_object_map.emplace(new_name, object);
+            object->m_name = new_name;
+        }
     }
 
     void ObjectManager::ResetID()
