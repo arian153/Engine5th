@@ -2,6 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "../../System/Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
@@ -55,7 +56,8 @@ namespace Engine5
         void RemoveComponent();
 
     private:
-        void SetManager(ObjectManager* obj_manager, ComponentManager* cmp_manager);
+        void SetManager(ObjectManager* object_manager);
+        void SetManager(ComponentManager* component_manager);
         void SetFactory(ObjectFactory* factory);
 
         Component* AddComponent(Component* component);
@@ -67,15 +69,13 @@ namespace Engine5
         void RemoveComponent(const std::string& type);
 
     private:
-        inline static size_t s_id = 0;
-
-    private:
         friend class ComponentManager;
+        friend class ObjectManager;
 
     private:
-        size_t         m_id;
-        std::string    m_name;
-        ObjectManager* m_manager = nullptr;
+        //identifier
+        size_t      m_id = Core::I64_MAX;
+        std::string m_name;
 
         //family
         Object*               m_ancestor = nullptr;
@@ -85,6 +85,9 @@ namespace Engine5
 
         //components
         std::unordered_map<std::string, Component*> m_components;
+
+        //others
+        ObjectManager*    m_object_manager    = nullptr;
         ComponentManager* m_component_manager = nullptr;
     };
 }

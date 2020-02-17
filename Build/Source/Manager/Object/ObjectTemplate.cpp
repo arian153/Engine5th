@@ -1,4 +1,3 @@
-
 namespace Engine5
 {
     template <typename T>

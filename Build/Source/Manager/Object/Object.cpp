@@ -1,11 +1,11 @@
 #include "Object.hpp"
 #include "../Component/ComponentManager.hpp"
 #include "../Component/Component.hpp"
+#include "ObjectManager.hpp"
 
 namespace Engine5
 {
     Object::Object()
-        : m_id(s_id++)
     {
     }
 
@@ -197,7 +197,7 @@ namespace Engine5
                 child->DestroyFamilyRecursive();
                 child->m_parent   = nullptr;
                 child->m_ancestor = nullptr;
-                //m_object_manager->EraseObject(child);
+                m_object_manager->EraseObject(child);
                 child->ClearComponents();
                 delete child;
                 child = nullptr;
@@ -220,8 +220,14 @@ namespace Engine5
         m_components.clear();
     }
 
-    void Object::SetManager(ObjectManager* obj_manager, ComponentManager* cmp_manager)
+    void Object::SetManager(ObjectManager* object_manager)
     {
+        m_object_manager = object_manager;
+    }
+
+    void Object::SetManager(ComponentManager* component_manager)
+    {
+        m_component_manager = component_manager;
     }
 
     void Object::SetFactory(ObjectFactory* factory)
