@@ -19,10 +19,10 @@ namespace Engine5
         Object* FindObjectEnd(const std::string& name);
         Object* FindObjectAt(size_t id);
 
-        void RemoveObjects(const std::string& name);
-        void RemoveObject(const std::string& name);
-        void RemoveObjectAt(size_t id);
-        void RemoveObject(Object* object);
+        void RemoveObjects(const std::string& name, bool b_remove_hierarchy = true);
+        void RemoveObject(const std::string& name, bool b_remove_hierarchy = true);
+        void RemoveObjectAt(size_t id, bool b_remove_hierarchy = true);
+        void RemoveObject(Object* object, bool b_remove_hierarchy = true);
 
         Object* EraseObject(Object* object);
         Object* EraseObjectAt(size_t id);
@@ -34,6 +34,7 @@ namespace Engine5
     private:
         void ChangeName(Object* object, const std::string& new_name);
         void ResetID();
+        void EraseObject(Object* object, bool b_erase_hierarchy);
 
     private:
         friend class Object;

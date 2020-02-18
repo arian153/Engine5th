@@ -18,7 +18,7 @@ namespace Engine5
         size_t  id     = m_objects.size();
         if (created == nullptr)
         {
-            object = m_object_factory->CreateRawObject(nullptr, name);
+            object = m_object_factory->CreateRawObject(name, nullptr);
         }
         object->m_name = name;
         object->m_id   = id;
@@ -66,27 +66,38 @@ namespace Engine5
         return m_objects.at(id);
     }
 
-    void ObjectManager::RemoveObjects(const std::string& name)
+    void ObjectManager::RemoveObjects(const std::string& name, bool b_remove_hierarchy)
     {
-        auto ret = m_object_map.equal_range(name);
+        std::vector<Object*> removals;
+        auto                 ret = m_object_map.equal_range(name);
         for (auto it = ret.first; it != ret.second;)
         {
+            removals.push_back(it->second);
             m_objects.erase(std::find(m_objects.begin(), m_objects.end(), it->second));
-            it->second->ClearComponents();
-            delete it->second;
-            it->second = nullptr;
             m_object_map.erase(it++);
         }
+        for (auto& removal : removals)
+        {
+            if (removal != nullptr)
+            {
+                removal->ClearComponents();
+                b_remove_hierarchy ? removal->RemoveObjectHierarchy() : removal->EraseObjectHierarchy();
+                delete removal;
+                removal = nullptr;
+            }
+        }
+        removals.clear();
         ResetID();
     }
 
-    void ObjectManager::RemoveObject(const std::string& name)
+    void ObjectManager::RemoveObject(const std::string& name, bool b_remove_hierarchy)
     {
         auto found = m_object_map.find(name);
         if (found != m_object_map.end())
         {
             m_objects.erase(std::find(m_objects.begin(), m_objects.end(), found->second));
             found->second->ClearComponents();
+            b_remove_hierarchy ? found->second->RemoveObjectHierarchy() : found->second->EraseObjectHierarchy();
             delete found->second;
             found->second = nullptr;
             m_object_map.erase(found);
@@ -94,7 +105,7 @@ namespace Engine5
         ResetID();
     }
 
-    void ObjectManager::RemoveObjectAt(size_t id)
+    void ObjectManager::RemoveObjectAt(size_t id, bool b_remove_hierarchy)
     {
         auto found = m_objects.at(id);
         m_objects.erase(m_objects.begin() + id);
@@ -104,6 +115,7 @@ namespace Engine5
             if (it->second == found)
             {
                 it->second->ClearComponents();
+                b_remove_hierarchy ? it->second->RemoveObjectHierarchy() : it->second->EraseObjectHierarchy();
                 delete it->second;
                 it->second = nullptr;
                 m_object_map.erase(it);
@@ -113,7 +125,7 @@ namespace Engine5
         ResetID();
     }
 
-    void ObjectManager::RemoveObject(Object* object)
+    void ObjectManager::RemoveObject(Object* object, bool b_remove_hierarchy)
     {
         m_objects.erase(m_objects.begin() + object->m_id);
         auto ret = m_object_map.equal_range(object->m_name);
@@ -122,6 +134,7 @@ namespace Engine5
             if (it->second == object)
             {
                 object->ClearComponents();
+                b_remove_hierarchy ? object->RemoveObjectHierarchy() : object->EraseObjectHierarchy();
                 delete object;
                 object = nullptr;
                 m_object_map.erase(it);
@@ -136,6 +149,7 @@ namespace Engine5
         auto ret = m_object_map.equal_range(object->m_name);
         m_object_map.erase(std::find(ret.first, ret.second, object));
         m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
+        object->EraseObjectHierarchy();
         ResetID();
         return object;
     }
@@ -146,6 +160,7 @@ namespace Engine5
         m_objects.erase(m_objects.begin() + id);
         auto ret = m_object_map.equal_range(object->m_name);
         m_object_map.erase(std::find(ret.first, ret.second, object));
+        object->EraseObjectHierarchy();
         ResetID();
         return object;
     }
@@ -204,5 +219,17 @@ namespace Engine5
         {
             object->m_id = id++;
         }
+    }
+
+    void ObjectManager::EraseObject(Object* object, bool b_erase_hierarchy)
+    {
+        auto ret = m_object_map.equal_range(object->m_name);
+        m_object_map.erase(std::find(ret.first, ret.second, object));
+        m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
+        if (b_erase_hierarchy == true)
+        {
+            object->EraseObjectHierarchy();
+        }
+        ResetID();
     }
 }

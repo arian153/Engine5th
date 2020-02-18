@@ -20,7 +20,7 @@ namespace Engine5
     {
     }
 
-    Object* ObjectFactory::CreateRawObject(ObjectManager* object_manager, const std::string& name)
+    Object* ObjectFactory::CreateRawObject(const std::string& name, ObjectManager* object_manager)
     {
         Object* created = new Object();
         if (object_manager == nullptr)
@@ -35,11 +35,11 @@ namespace Engine5
         }
     }
 
-    Object* ObjectFactory::CreateArchetypeObject(size_t archetype_id, ObjectManager* object_manager)
+    Object* ObjectFactory::CreateArchetypeObject(size_t archetype_id, const std::string& name, ObjectManager* object_manager)
     {
         if (m_archetypes.size() > archetype_id)
         {
-            auto archetype = m_archetypes.at(archetype_id)->Clone(object_manager);
+            auto archetype = m_archetypes.at(archetype_id)->Clone(name, object_manager);
             return archetype;
         }
         return nullptr;
@@ -47,5 +47,13 @@ namespace Engine5
 
     void ObjectFactory::ClearArchetypes()
     {
+        for (auto& archetype : m_archetypes)
+        {
+            archetype->ClearComponents();
+            archetype->RemoveObjectHierarchy();
+            delete archetype;
+            archetype = nullptr;
+        }
+        m_archetypes.clear();
     }
 }

@@ -22,7 +22,7 @@ namespace Engine5
         std::string GetName() const;
         void        SetName(const std::string& name);
 
-        Object* Clone(ObjectManager* manager = nullptr);
+        Object* Clone(const std::string& name = "", ObjectManager* manager = nullptr);
 
         Object* GetChildAt(size_t index) const;
         Object* GetSiblingAt(size_t index) const;
@@ -35,10 +35,9 @@ namespace Engine5
         void AddChild(Object* baby_child);
         void RemoveChild(Object* child) const;
         void RemoveSibling(Object* sibling) const;
-        void ClearObjectHierarchy();
-        void ReleaseObjectHierarchy();
-        void DestroyObjectHierarchy();
-        void DestroyFamilyRecursive();
+        void EraseObjectHierarchy();
+        void RemoveObjectHierarchy();
+        
 
         void ClearComponents();
 
@@ -68,6 +67,9 @@ namespace Engine5
         void RemoveComponent(Component* component);
         void RemoveComponent(const std::string& type);
 
+        void ClearObjectHierarchy();
+        void RemoveChildrenRecursive();
+
     private:
         friend class ComponentManager;
         friend class ObjectManager;
@@ -81,7 +83,7 @@ namespace Engine5
         Object*               m_ancestor = nullptr;
         Object*               m_parent   = nullptr;
         std::vector<Object*>* m_children = nullptr;
-        std::vector<Object*>* m_sibling  = nullptr;
+        std::vector<Object*>* m_siblings  = nullptr;
 
         //components
         std::unordered_map<std::string, Component*> m_components;

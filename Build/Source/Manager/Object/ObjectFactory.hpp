@@ -16,8 +16,8 @@ namespace Engine5
         void Init();
         void Shutdown();
 
-        Object* CreateRawObject(ObjectManager* object_manager = nullptr, const std::string& name = "Empty Object");
-        Object* CreateArchetypeObject(size_t archetype_id, ObjectManager* object_manager = nullptr);
+        Object* CreateRawObject(const std::string& name = "Empty Object", ObjectManager* object_manager = nullptr);
+        Object* CreateArchetypeObject(size_t archetype_id, const std::string& name = "", ObjectManager* object_manager = nullptr);
 
     private:
         void ClearArchetypes();

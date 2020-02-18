@@ -38,7 +38,7 @@ namespace Engine5
         }
     }
 
-    Object* Object::Clone(ObjectManager* manager)
+    Object* Object::Clone(const std::string& name, ObjectManager* manager)
     {
         return nullptr;
     }
@@ -54,9 +54,9 @@ namespace Engine5
 
     Object* Object::GetSiblingAt(size_t index) const
     {
-        if (m_sibling != nullptr)
+        if (m_siblings != nullptr)
         {
-            return m_sibling->at(index);
+            return m_siblings->at(index);
         }
         return nullptr;
     }
@@ -78,7 +78,7 @@ namespace Engine5
 
     std::vector<Object*>* Object::GetSibling() const
     {
-        return m_sibling;
+        return m_siblings;
     }
 
     void Object::AddChild(Object* baby_child)
@@ -89,16 +89,16 @@ namespace Engine5
             {
                 m_children = new std::vector<Object*>();
             }
-            if (baby_child->m_sibling == nullptr)
+            if (baby_child->m_siblings == nullptr)
             {
-                baby_child->m_sibling = new std::vector<Object*>();
+                baby_child->m_siblings = new std::vector<Object*>();
             }
             if (m_children->empty() == false)
             {
                 for (auto& child : *m_children)
                 {
-                    child->m_sibling->push_back(baby_child);
-                    baby_child->m_sibling->push_back(child);
+                    child->m_siblings->push_back(baby_child);
+                    baby_child->m_siblings->push_back(child);
                 }
             }
             m_children->push_back(baby_child);
@@ -127,39 +127,26 @@ namespace Engine5
     {
         if (m_children != nullptr)
         {
-            auto it = std::find(m_sibling->begin(), m_sibling->end(), sibling);
-            m_sibling->erase(it++);
+            auto it = std::find(m_siblings->begin(), m_siblings->end(), sibling);
+            m_siblings->erase(it++);
         }
     }
 
-    void Object::ClearObjectHierarchy()
-    {
-        if (m_children != nullptr)
-        {
-            m_children->clear();
-            delete m_children;
-            m_children = nullptr;
-        }
-        if (m_sibling != nullptr)
-        {
-            m_sibling->clear();
-            delete m_sibling;
-            m_sibling = nullptr;
-        }
-    }
-
-    void Object::ReleaseObjectHierarchy()
+    void Object::EraseObjectHierarchy()
     {
         if (m_parent != nullptr)
         {
             m_parent->RemoveChild(this);
         }
-        if (m_sibling != nullptr)
+        if (m_siblings != nullptr)
         {
-            for (auto sibling : *m_sibling)
+            for (auto sibling : *m_siblings)
             {
                 sibling->RemoveSibling(this);
             }
+            m_siblings->clear();
+            delete m_siblings;
+            m_siblings = nullptr;
         }
         if (m_children != nullptr)
         {
@@ -167,11 +154,11 @@ namespace Engine5
             {
                 child->m_parent   = nullptr;
                 child->m_ancestor = nullptr;
-                if (child->m_sibling != nullptr)
+                if (child->m_siblings != nullptr)
                 {
-                    child->m_sibling->clear();
-                    delete child->m_sibling;
-                    child->m_sibling = nullptr;
+                    child->m_siblings->clear();
+                    delete child->m_siblings;
+                    child->m_siblings = nullptr;
                 }
             }
             m_children->clear();
@@ -180,48 +167,22 @@ namespace Engine5
         }
     }
 
-    void Object::DestroyObjectHierarchy()
+    void Object::RemoveObjectHierarchy()
     {
         if (m_parent != nullptr)
         {
             m_parent->RemoveChild(this);
         }
-        if (m_sibling != nullptr)
+        if (m_siblings != nullptr)
         {
-            for (auto& sibling : *m_sibling)
+            for (auto& sibling : *m_siblings)
             {
                 sibling->RemoveSibling(this);
             }
         }
         if (m_children != nullptr)
         {
-            DestroyFamilyRecursive();
-        }
-    }
-
-    void Object::DestroyFamilyRecursive()
-    {
-        if (m_children != nullptr)
-        {
-            for (auto& child : *m_children)
-            {
-                child->DestroyFamilyRecursive();
-                child->m_parent   = nullptr;
-                child->m_ancestor = nullptr;
-                m_object_manager->EraseObject(child);
-                child->ClearComponents();
-                delete child;
-                child = nullptr;
-            }
-            m_children->clear();
-            delete m_children;
-            m_children = nullptr;
-        }
-        if (m_sibling != nullptr)
-        {
-            m_sibling->clear();
-            delete m_sibling;
-            m_sibling = nullptr;
+            RemoveChildrenRecursive();
         }
     }
 
@@ -307,6 +268,51 @@ namespace Engine5
         {
             m_component_manager->Remove(found->second, this);
             m_components.erase(found);
+        }
+    }
+
+    void Object::ClearObjectHierarchy()
+    {
+        if (m_children != nullptr)
+        {
+            m_children->clear();
+            delete m_children;
+            m_children = nullptr;
+        }
+        if (m_siblings != nullptr)
+        {
+            m_siblings->clear();
+            delete m_siblings;
+            m_siblings = nullptr;
+        }
+    }
+
+    void Object::RemoveChildrenRecursive()
+    {
+        if (m_children != nullptr)
+        {
+            for (auto& child : *m_children)
+            {
+                child->RemoveChildrenRecursive();
+                child->m_parent   = nullptr;
+                child->m_ancestor = nullptr;
+                if (m_object_manager != nullptr)
+                {
+                    m_object_manager->EraseObject(child, false);
+                }
+                child->ClearComponents();
+                delete child;
+                child = nullptr;
+            }
+            m_children->clear();
+            delete m_children;
+            m_children = nullptr;
+        }
+        if (m_siblings != nullptr)
+        {
+            m_siblings->clear();
+            delete m_siblings;
+            m_siblings = nullptr;
         }
     }
 }
