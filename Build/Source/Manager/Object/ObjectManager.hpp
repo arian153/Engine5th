@@ -4,6 +4,7 @@
 namespace Engine5
 {
     class Object;
+    class ObjectFactory;
 
     class ObjectManager
     {
@@ -40,5 +41,7 @@ namespace Engine5
     private:
         std::unordered_multimap<std::string, Object*> m_object_map;
         std::vector<Object*>                          m_objects;
+
+        ObjectFactory* m_object_factory = nullptr;
     };
 }

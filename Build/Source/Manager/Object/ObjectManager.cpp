@@ -1,5 +1,6 @@
 #include "ObjectManager.hpp"
 #include "Object.hpp"
+#include "ObjectFactory.hpp"
 
 namespace Engine5
 {
@@ -17,16 +18,13 @@ namespace Engine5
         size_t  id     = m_objects.size();
         if (created == nullptr)
         {
-            //object = m_object_factory->CreateRawObject(nullptr);
+            object = m_object_factory->CreateRawObject(nullptr, name);
         }
-        else
-        {
-            object->m_name = name;
-            object->m_id   = id;
-            object->SetManager(this);
-            m_objects.push_back(object);
-            m_object_map.emplace(name, object);
-        }
+        object->m_name = name;
+        object->m_id   = id;
+        object->SetManager(this);
+        m_objects.push_back(object);
+        m_object_map.emplace(name, object);
         return object;
     }
 
