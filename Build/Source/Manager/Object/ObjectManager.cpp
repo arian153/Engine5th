@@ -1,6 +1,7 @@
 #include "ObjectManager.hpp"
 #include "Object.hpp"
 #include "ObjectFactory.hpp"
+#include "../Component/ComponentManager.hpp"
 
 namespace Engine5
 {
@@ -156,7 +157,7 @@ namespace Engine5
     Object* ObjectManager::EraseObject(Object* object)
     {
         auto ret = m_object_map.equal_range(object->m_name);
-        m_object_map.erase(std::find(ret.first, ret.second, object));
+        //m_object_map.erase(std::find(ret.first, ret.second, object));
         m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
         object->EraseObjectHierarchy();
         ResetID();
@@ -168,7 +169,7 @@ namespace Engine5
         auto object = m_objects.at(id);
         m_objects.erase(m_objects.begin() + id);
         auto ret = m_object_map.equal_range(object->m_name);
-        m_object_map.erase(std::find(ret.first, ret.second, object));
+       // m_object_map.erase(std::find(ret.first, ret.second, object));
         object->EraseObjectHierarchy();
         ResetID();
         return object;
@@ -215,7 +216,7 @@ namespace Engine5
         auto ret = m_object_map.equal_range(object->m_name);
         if (ret.first != ret.second)
         {
-            m_object_map.erase(std::find(ret.first, ret.second, object));
+            //m_object_map.erase(std::find(ret.first, ret.second, object));
             m_object_map.emplace(new_name, object);
             object->m_name = new_name;
         }
@@ -233,7 +234,7 @@ namespace Engine5
     void ObjectManager::EraseObject(Object* object, bool b_erase_hierarchy)
     {
         auto ret = m_object_map.equal_range(object->m_name);
-        m_object_map.erase(std::find(ret.first, ret.second, object));
+        //m_object_map.erase(std::find(ret.first, ret.second, object));
         m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
         if (b_erase_hierarchy == true)
         {

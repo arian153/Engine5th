@@ -356,4 +356,18 @@ namespace Engine5
             }
         }
     }
+
+    void Object::CloneChildrenRecursive(Object* cloned_object, ObjectFactory* obj, ComponentManager* cmp) const
+    {
+        if (m_children != nullptr)
+        {
+            for (auto& child : *m_children)
+            {
+                Object* cloned_child = obj->CreateRawObject(child->m_name, nullptr);
+                child->CloneComponents(cloned_child, cmp);
+                cloned_object->AddChild(cloned_child);
+                child->CloneChildrenRecursive(cloned_child, obj, cmp);
+            }
+        }
+    }
 }

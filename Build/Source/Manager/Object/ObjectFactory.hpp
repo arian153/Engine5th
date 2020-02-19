@@ -4,6 +4,7 @@
 
 namespace Engine5
 {
+    class ComponentManager;
     class Object;
     class ObjectManager;
 
@@ -17,12 +18,15 @@ namespace Engine5
         void Shutdown();
 
         Object* CreateRawObject(const std::string& name = "Empty Object", ObjectManager* object_manager = nullptr);
-        Object* CreateArchetypeObject(size_t archetype_id, const std::string& name = "", ObjectManager* object_manager = nullptr);
+        Object* CreateArchetypeObject(size_t archetype_id, ComponentManager* component_manager, const std::string& name = "", ObjectManager* object_manager = nullptr);
+
+        void AddArchetype(Object* object);
 
     private:
         void ClearArchetypes();
 
     private:
         std::vector<Object*> m_archetypes;
+        ComponentManager*    m_component_manager = nullptr;
     };
 }

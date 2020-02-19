@@ -35,14 +35,24 @@ namespace Engine5
         }
     }
 
-    Object* ObjectFactory::CreateArchetypeObject(size_t archetype_id, const std::string& name, ObjectManager* object_manager)
+    Object* ObjectFactory::CreateArchetypeObject(size_t archetype_id, ComponentManager* component_manager, const std::string& name, ObjectManager* object_manager)
     {
         if (m_archetypes.size() > archetype_id)
         {
-            auto archetype = m_archetypes.at(archetype_id)->Clone(name, object_manager);
+            auto archetype = m_archetypes.at(archetype_id)->Clone(name, object_manager, component_manager);
             return archetype;
         }
         return nullptr;
+    }
+
+    void ObjectFactory::AddArchetype(Object* object)
+    {
+        Object* archetype = CreateRawObject("", nullptr);
+        object->CloneComponents(archetype, m_component_manager);
+        if (object->m_children != nullptr)
+        {
+            object->CloneChildrenRecursive(archetype, this, m_component_manager);
+        }
     }
 
     void ObjectFactory::ClearArchetypes()
