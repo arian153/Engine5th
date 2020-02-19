@@ -40,17 +40,16 @@ namespace Engine5
         }
     }
 
-    Object* Object::Clone(const std::string& name, ObjectManager* manager)
+    Object* Object::Clone(const std::string& name, ObjectManager* obj_m, ComponentManager* cmp_m)
     {
-        if (manager == nullptr && m_object_manager == nullptr)
+        if (obj_m == nullptr && m_object_manager == nullptr)
         {
             return nullptr;
         }
-        std::string cloned_name   = name == "" ? m_name : name;
-        Object*     cloned_object = manager == nullptr
-                                        ? m_object_manager->CloneObject(cloned_name, this)
-                                        : manager->CloneObject(cloned_name, this);
-        return cloned_object;
+        auto        obj         = obj_m == nullptr ? m_object_manager : obj_m;
+        auto        cmp         = cmp_m == nullptr ? m_component_manager : cmp_m;
+        std::string cloned_name = name == "" ? m_name : name;
+        return obj->CloneObject(cloned_name, this, cmp);
     }
 
     Object* Object::GetChildAt(size_t index) const
@@ -316,24 +315,26 @@ namespace Engine5
         }
     }
 
-    bool Object::CloneComponents(Object* cloned_object) const
+    bool Object::CloneComponents(Object* cloned_object, ComponentManager* manager) const
     {
         for (auto& compo : m_components)
         {
-            auto cloned_compo = m_component_manager->Clone(compo.second, cloned_object);
+            auto cloned_compo = manager->Clone(compo.second, cloned_object);
             auto result       = cloned_object->AddComponent(cloned_compo);
             E5_ASSERT(result == nullptr, "ERROR : Clone " + compo.first + " Failed!");
         }
         return true;
     }
 
-    bool Object::CloneHierarchy(Object* cloned_object) const
+    bool Object::CloneHierarchy(Object* cloned_object, ObjectManager* manager) const
     {
-        if (m_parent != nullptr)
+        if (manager == m_object_manager)
         {
-            m_parent->AddChild(cloned_object);
+            if (m_parent != nullptr)
+            {
+                m_parent->AddChild(cloned_object);
+            }
         }
-
         if (m_children != nullptr)
         {
             //copy recursive.

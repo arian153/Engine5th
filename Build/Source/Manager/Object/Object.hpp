@@ -22,7 +22,7 @@ namespace Engine5
         std::string GetName() const;
         void        SetName(const std::string& name);
 
-        Object* Clone(const std::string& name = "", ObjectManager* manager = nullptr);
+        Object* Clone(const std::string& name = "", ObjectManager* obj_m = nullptr, ComponentManager* cmp_m = nullptr);
 
         Object* GetChildAt(size_t index) const;
         Object* GetSiblingAt(size_t index) const;
@@ -70,8 +70,8 @@ namespace Engine5
         void ClearObjectHierarchy();
         void RemoveChildrenRecursive();
 
-        bool CloneComponents(Object* cloned) const;
-        bool CloneHierarchy(Object* cloned) const;
+        bool CloneComponents(Object* cloned_object, ComponentManager* manager) const;
+        bool CloneHierarchy(Object* cloned_object, ObjectManager* manager) const;
 
     private:
         friend class ComponentManager;

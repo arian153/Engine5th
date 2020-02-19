@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class ComponentManager;
     class Object;
     class ObjectFactory;
 
@@ -13,7 +14,7 @@ namespace Engine5
         ~ObjectManager();
 
         Object* AddObject(const std::string& name, Object* created = nullptr);
-        Object* CloneObject(const std::string& name, Object* origin);
+        Object* CloneObject(const std::string& name, Object* origin, ComponentManager* cmp_m = nullptr);
 
         void    FindObjects(const std::string& name, std::vector<Object*>& objects);
         Object* FindObjectBegin(const std::string& name);
@@ -27,7 +28,7 @@ namespace Engine5
 
         Object* EraseObject(Object* object);
         Object* EraseObjectAt(size_t id);
-        void ClearObjects();
+        void    ClearObjects();
 
         bool HasObject(const std::string& name);
         bool HasObject(Object* object);
