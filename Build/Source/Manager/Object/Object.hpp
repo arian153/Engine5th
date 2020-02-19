@@ -70,6 +70,9 @@ namespace Engine5
         void ClearObjectHierarchy();
         void RemoveChildrenRecursive();
 
+        bool CloneComponents(Object* cloned) const;
+        bool CloneHierarchy(Object* cloned) const;
+
     private:
         friend class ComponentManager;
         friend class ObjectManager;

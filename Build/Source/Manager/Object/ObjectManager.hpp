@@ -13,6 +13,7 @@ namespace Engine5
         ~ObjectManager();
 
         Object* AddObject(const std::string& name, Object* created = nullptr);
+        Object* CloneObject(const std::string& name, Object* origin);
 
         void    FindObjects(const std::string& name, std::vector<Object*>& objects);
         Object* FindObjectBegin(const std::string& name);

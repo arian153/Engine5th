@@ -28,6 +28,16 @@ namespace Engine5
         return object;
     }
 
+    Object* ObjectManager::CloneObject(const std::string& name, Object* origin)
+    {
+        Object* cloned_object = AddObject(name);
+
+        origin->CloneComponents(cloned_object);
+        origin->CloneHierarchy(cloned_object);
+
+        return cloned_object;
+    }
+
     void ObjectManager::FindObjects(const std::string& name, std::vector<Object*>& objects)
     {
         auto ret = m_object_map.equal_range(name);
