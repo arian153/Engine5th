@@ -326,9 +326,9 @@ namespace Engine5
         return true;
     }
 
-    bool Object::CloneHierarchy(Object* cloned_object, ObjectManager* manager) const
+    bool Object::CloneHierarchy(Object* cloned_object, ObjectManager* obj, ComponentManager* cmp) const
     {
-        if (manager == m_object_manager)
+        if (obj == m_object_manager)
         {
             if (m_parent != nullptr)
             {
@@ -338,7 +338,22 @@ namespace Engine5
         if (m_children != nullptr)
         {
             //copy recursive.
+            CloneChildrenRecursive(cloned_object, obj, cmp);
         }
         return true;
+    }
+
+    void Object::CloneChildrenRecursive(Object* cloned_object, ObjectManager* obj, ComponentManager* cmp) const
+    {
+        if (m_children != nullptr)
+        {
+            for (auto& child : *m_children)
+            {
+                Object* cloned_child = obj->AddObject(child->m_name);
+                child->CloneComponents(cloned_child, cmp);
+                cloned_object->AddChild(cloned_child);
+                child->CloneChildrenRecursive(cloned_child, obj, cmp);
+            }
+        }
     }
 }

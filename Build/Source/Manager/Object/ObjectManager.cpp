@@ -33,7 +33,7 @@ namespace Engine5
         Object* cloned_object = AddObject(name);
         auto    cmp           = cmp_m == nullptr ? origin->m_component_manager : cmp_m;
         origin->CloneComponents(cloned_object, cmp);
-        origin->CloneHierarchy(cloned_object, this);
+        origin->CloneHierarchy(cloned_object, this, cmp);
         return cloned_object;
     }
 
