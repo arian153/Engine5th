@@ -12,6 +12,8 @@ namespace Engine5
 
     void Space::Initialize()
     {
+        
+
     }
 
     void Space::Update(Real dt)
