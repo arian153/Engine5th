@@ -17,7 +17,7 @@ namespace Engine5
 
     void PhysicsSystem::Update(Real dt)
     {
-        for(auto& world : m_worlds)
+        for (auto& world : m_worlds)
         {
             world->Update(dt);
         }
@@ -25,21 +25,20 @@ namespace Engine5
 
     void PhysicsSystem::Shutdown()
     {
-        for(auto& world : m_worlds)
+        for (auto& world : m_worlds)
         {
             world->Shutdown();
             delete world;
             world = nullptr;
         }
-
         m_worlds.clear();
-
     }
 
     World* PhysicsSystem::CreateWorld()
     {
         World* world = new World();
         m_worlds.push_back(world);
+        world->Initialize();
         return world;
     }
 
@@ -47,16 +46,7 @@ namespace Engine5
     {
         if (world != nullptr)
         {
-            auto end = m_worlds.end();
-            for (auto it = m_worlds.begin(); it != end;)
-            {
-                if (*it == world)
-                {
-                    m_worlds.erase(it++);
-                    break;
-                }
-                ++it;
-            }
+            m_worlds.erase(std::find(m_worlds.begin(), m_worlds.end(), world));
             world->Shutdown();
             delete world;
             world = nullptr;

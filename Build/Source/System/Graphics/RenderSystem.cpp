@@ -23,14 +23,6 @@ namespace Engine5
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
         m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
-        //auto result = Triangle::DistanceSquared(Vector3(2, 0.5f, 0), Vector3(0, 1, 0), Vector3(-1, 0, 0), Vector3(1, 0, 0));
-
-        //Triangle triangle;
-        //triangle.SetTriangle(Vector3(1, 2, 3), Vector3(3, -4, 5), Vector3(1, 1, 1));
-        
-        //auto p0 = triangle.Vertex(0);
-        //auto p1 = triangle.Vertex(1);
-        //auto p2 = triangle.Vertex(2);
     }
 
     void RenderSystem::Update(Real dt)
@@ -40,15 +32,12 @@ namespace Engine5
             m_renderer->BeginScene(m_background_color);
             m_renderer->Update(dt);
             m_primitive_renderer->Update(dt);
-
             Triangle triangle;
             //triangle.SetTriangle(Vector3(1, 0, 0), Vector3(0, 1, 0), Vector3(-1, 0, 0));
             triangle.SetTriangle(Vector3(1, 2, 3), Vector3(3, -4, 5), Vector3(1, 1, 1));
             triangle.DrawPrimitive(m_primitive_renderer, eRenderingMode::Face, ColorDef::Pure::Red);
-
             triangle.SetTriangle(Vector3(), Vector3(1.0f), Vector3(0.0f, -1.0f));
             triangle.DrawPrimitive(m_primitive_renderer, eRenderingMode::Line, ColorDef::Pure::Yellow);
-
             //update scene
             for (auto& scene : m_scenes)
             {
@@ -128,5 +117,24 @@ namespace Engine5
     Color RenderSystem::GetBackgroundColor() const
     {
         return m_background_color;
+    }
+
+    Scene* RenderSystem::CreateScene()
+    {
+        Scene* scene = new Scene();
+        m_scenes.push_back(scene);
+        scene->Initialize();
+        return scene;
+    }
+
+    void RenderSystem::RemoveScene(Scene* scene)
+    {
+        if (scene != nullptr)
+        {
+            m_scenes.erase(std::find(m_scenes.begin(), m_scenes.end(), scene));
+            scene->Shutdown();
+            delete scene;
+            scene = nullptr;
+        }
     }
 }

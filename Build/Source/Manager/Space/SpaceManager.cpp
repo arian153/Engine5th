@@ -1,10 +1,10 @@
 #include "SpaceManager.hpp"
 #include "Space.hpp"
-#include "SpaceFactory.hpp"
 
 namespace Engine5
 {
-    SpaceManager::SpaceManager()
+    SpaceManager::SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentFactory* cmp)
+        : m_physics_system(physics), m_render_system(renderer), m_object_factory(obj), m_component_factory(cmp)
     {
     }
 
@@ -14,13 +14,9 @@ namespace Engine5
 
     void SpaceManager::Initialize()
     {
-        if (m_space_factory == nullptr)
-        {
-            m_space_factory = new SpaceFactory();
-        }
         if (m_global_space == nullptr)
         {
-            m_global_space = m_space_factory->Create();
+            m_global_space = new Space();
             m_global_space->Initialize();
         }
     }
@@ -36,11 +32,6 @@ namespace Engine5
 
     void SpaceManager::Shutdown()
     {
-        if (m_space_factory != nullptr)
-        {
-            delete m_space_factory;
-            m_space_factory = nullptr;
-        }
     }
 
     void SpaceManager::Activate(Space* space)
@@ -58,6 +49,26 @@ namespace Engine5
     void SpaceManager::SetGlobalOrder(bool b_first)
     {
         m_b_next_order = b_first;
+    }
+
+    Space* SpaceManager::CreateSpace()
+    {
+        Space* space = new Space();
+        m_active_spaces.push_back(space);
+        space->Initialize();
+        return space;
+    }
+
+    void SpaceManager::RemoveSpace(Space* space)
+    {
+        if (space != nullptr)
+        {
+            m_active_spaces.erase(std::find(m_active_spaces.begin(), m_active_spaces.end(), space));
+            m_inactive_spaces.erase(std::find(m_inactive_spaces.begin(), m_inactive_spaces.end(), space));
+            space->Shutdown();
+            delete space;
+            space = nullptr;
+        }
     }
 
     void SpaceManager::UpdateFirst(Real dt)

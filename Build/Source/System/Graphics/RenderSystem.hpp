@@ -33,11 +33,9 @@ namespace Engine5
         void  SetBackgroundColor(const Color& color);
         Color GetBackgroundColor() const;
 
-        //shader manager
-        //resource manager - texture, mesh, ...
-        //primitive renderer
-        //mesh generator
-        //
+        Scene* CreateScene();
+        void RemoveScene(Scene* scene);
+
 
     private:
         WindowsAPI*        m_os_api             = nullptr;

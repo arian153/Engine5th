@@ -5,12 +5,16 @@
 namespace Engine5
 {
     class Space;
-    class SpaceFactory;
+    class ObjectFactory;
+    class ComponentFactory;
+    class PhysicsSystem;
+    class RenderSystem;
 
     class SpaceManager
     {
     public:
-        SpaceManager();
+        SpaceManager() = delete;
+        explicit SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentFactory* cmp);
         ~SpaceManager();
 
         void Initialize();
@@ -22,17 +26,28 @@ namespace Engine5
 
         void SetGlobalOrder(bool b_first);
 
+        Space* CreateSpace();
+        void RemoveSpace(Space* space);
+
     private:
         void UpdateFirst(Real dt);
         void UpdateLast(Real dt);
 
     private:
         bool m_b_global_first = true;
-        bool m_b_next_order = true;
+        bool m_b_next_order   = true;
 
-        SpaceFactory*       m_space_factory = nullptr;
         Space*              m_global_space  = nullptr;
         std::vector<Space*> m_active_spaces;
         std::vector<Space*> m_inactive_spaces;
+
+        //systems
+
+        PhysicsSystem* m_physics_system = nullptr;
+        RenderSystem*  m_render_system  = nullptr;
+
+        //factory
+        ObjectFactory*    m_object_factory    = nullptr;
+        ComponentFactory* m_component_factory = nullptr;
     };
 }
