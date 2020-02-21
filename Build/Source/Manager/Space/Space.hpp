@@ -4,7 +4,7 @@
 
 namespace Engine5
 {
-    class ComponentFactory;
+    class ComponentRegistry;
     class ObjectFactory;
     class RenderSystem;
     class PhysicsSystem;
@@ -20,14 +20,15 @@ namespace Engine5
         Space();
         ~Space();
 
-        void Initialize(eSubsystemFlag flag);
-        void Update(Real dt);
+        void Initialize();
+        void Update(Real dt) const;
         void Shutdown();
 
     private:
         void InitializeWorld(PhysicsSystem* physics_system);
         void InitializeScene(RenderSystem* render_system);
-        void InitializeManager(ObjectFactory* obj_factory, ComponentFactory* cmp_factory);
+        void InitializeManager(ObjectFactory* obj_factory);
+        void InitializeManager(ComponentRegistry* cmp_registry);
 
         void ShutdownWorld(PhysicsSystem* physics_system);
         void ShutdownScene(RenderSystem* render_system);

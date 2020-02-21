@@ -1,12 +1,13 @@
 #pragma once
 #include "../../System/Math/Utility/MathDef.hpp"
+#include "SpaceFlag.hpp"
 #include <vector>
 
 namespace Engine5
 {
     class Space;
     class ObjectFactory;
-    class ComponentFactory;
+    class ComponentRegistry;
     class PhysicsSystem;
     class RenderSystem;
 
@@ -14,7 +15,7 @@ namespace Engine5
     {
     public:
         SpaceManager() = delete;
-        explicit SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentFactory* cmp);
+        explicit SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentRegistry* cmp);
         ~SpaceManager();
 
         void Initialize();
@@ -26,7 +27,7 @@ namespace Engine5
 
         void SetGlobalOrder(bool b_first);
 
-        Space* CreateSpace();
+        Space* CreateSpace(eSubsystemFlag flag);
         void RemoveSpace(Space* space);
 
     private:
@@ -50,6 +51,6 @@ namespace Engine5
 
         //factory
         ObjectFactory*    m_object_factory    = nullptr;
-        ComponentFactory* m_component_factory = nullptr;
+        ComponentRegistry* m_component_registry = nullptr;
     };
 }

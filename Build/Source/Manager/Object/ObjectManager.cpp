@@ -13,6 +13,11 @@ namespace Engine5
     {
     }
 
+    void ObjectManager::Initialize(ObjectFactory* object_factory)
+    {
+        m_object_factory = object_factory;
+    }
+
     void ObjectManager::Shutdown()
     {
         for (auto& object : m_objects)

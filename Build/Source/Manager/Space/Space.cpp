@@ -2,7 +2,6 @@
 #include "../../System/Physics/Dynamics/World.hpp"
 #include "../../System/Physics/PhysicsSystem.hpp"
 #include "../../System/Graphics/RenderSystem.hpp"
-#include "SpaceManager.hpp"
 #include "../Object/ObjectManager.hpp"
 #include "../Component/ComponentManager.hpp"
 
@@ -16,60 +15,64 @@ namespace Engine5
     {
     }
 
-    void Space::Initialize(eSubsystemFlag flag)
+    void Space::Initialize()
     {
-        if (HasFlag(flag, eSubsystemFlag::ComponentManager))
-        {
-        }
-        if (HasFlag(flag, eSubsystemFlag::ObjectManager))
-        {
-        }
-        if (HasFlag(flag, eSubsystemFlag::Scene))
-        {
-        }
-        if (HasFlag(flag, eSubsystemFlag::World))
-        {
-            //InitializeWorld();
-        }
+        //maybe add a load data from file.
     }
 
-    void Space::Update(Real dt)
+    void Space::Update(Real dt) const
     {
-        //update world
-        //update scene
+        //Update Game Logic
+        //Update World
+        if (m_world != nullptr)
+        {
+            m_world->Update(dt);
+        }
+        //Update Animation
+        //Update Scene
+        if (m_scene != nullptr)
+        {
+            m_scene->Update(dt);
+        }
     }
 
     void Space::Shutdown()
     {
-        if (m_world != nullptr)
-        {
-            ShutdownWorld(m_space_manager->m_physics_system);
-        }
-        if (m_scene != nullptr)
-        {
-            ShutdownScene(m_space_manager->m_render_system);
-        }
-        if (m_object_manager != nullptr)
-        {
-            ShutdownManager(m_object_manager);
-        }
-        if (m_component_manager != nullptr)
-        {
-            ShutdownManager(m_component_manager);
-        }
+        //maybe add a save data to file.
     }
 
     void Space::InitializeWorld(PhysicsSystem* physics_system)
     {
-        m_world = physics_system->CreateWorld();
+        if (m_world == nullptr)
+        {
+            m_world = physics_system->CreateWorld();
+        }
     }
 
     void Space::InitializeScene(RenderSystem* render_system)
     {
+        if (m_scene == nullptr)
+        {
+            m_scene = render_system->CreateScene();
+        }
     }
 
-    void Space::InitializeManager(ObjectFactory* obj_factory, ComponentFactory* cmp_factory)
+    void Space::InitializeManager(ObjectFactory* obj_factory)
     {
+        if (m_object_manager == nullptr)
+        {
+            m_object_manager = new ObjectManager();
+            m_object_manager->Initialize(obj_factory);
+        }
+    }
+
+    void Space::InitializeManager(ComponentRegistry* cmp_registry)
+    {
+        if (m_component_manager == nullptr)
+        {
+            m_component_manager = new ComponentManager();
+            m_component_manager->Initialize(cmp_registry);
+        }
     }
 
     void Space::ShutdownWorld(PhysicsSystem* physics_system)

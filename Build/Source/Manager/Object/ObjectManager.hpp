@@ -13,6 +13,7 @@ namespace Engine5
         ObjectManager();
         ~ObjectManager();
 
+        void Initialize(ObjectFactory* object_factory);
         void Shutdown();
 
         Object* AddObject(const std::string& name, Object* created = nullptr);
