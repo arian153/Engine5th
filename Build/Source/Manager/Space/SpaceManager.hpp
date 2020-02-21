@@ -34,13 +34,15 @@ namespace Engine5
         void UpdateLast(Real dt);
 
     private:
+        friend class Space;
+
+    private:
         bool m_b_global_first = true;
         bool m_b_next_order   = true;
 
         Space*              m_global_space  = nullptr;
         std::vector<Space*> m_active_spaces;
         std::vector<Space*> m_inactive_spaces;
-
         //systems
 
         PhysicsSystem* m_physics_system = nullptr;

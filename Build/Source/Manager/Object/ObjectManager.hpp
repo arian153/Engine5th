@@ -13,6 +13,8 @@ namespace Engine5
         ObjectManager();
         ~ObjectManager();
 
+        void Shutdown();
+
         Object* AddObject(const std::string& name, Object* created = nullptr);
         Object* CloneObject(const std::string& name, Object* origin, ComponentManager* cmp_m = nullptr);
 

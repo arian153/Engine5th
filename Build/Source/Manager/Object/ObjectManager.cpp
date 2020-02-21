@@ -13,6 +13,20 @@ namespace Engine5
     {
     }
 
+    void ObjectManager::Shutdown()
+    {
+        for (auto& object : m_objects)
+        {
+            object->m_components.clear();
+            object->ClearObjectHierarchy();
+            delete object;
+            object = nullptr;
+        }
+
+        m_objects.clear();
+        m_object_map.clear();
+    }
+
     Object* ObjectManager::AddObject(const std::string& name, Object* created)
     {
         Object* object = created;

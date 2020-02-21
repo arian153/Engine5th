@@ -14,9 +14,14 @@ namespace Engine5
     {
     }
 
-    void ComponentManager::SetRegistry(ComponentRegistry* registry)
+    void ComponentManager::Initialize(ComponentRegistry* registry)
     {
         m_registry = registry;
+    }
+
+    void ComponentManager::Shutdown()
+    {
+        Clear();
     }
 
     Component* ComponentManager::Create(const std::string& type, Object* owner)
