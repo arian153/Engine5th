@@ -4,7 +4,8 @@ namespace Engine5
 {
     enum class eSubsystemFlag : size_t
     {
-        ComponentManager = 0x1
+        None = 0x00
+      , ComponentManager = 0x1
       , ObjectManager = 0x2
       , Scene = 0x4
       , World = 0x8

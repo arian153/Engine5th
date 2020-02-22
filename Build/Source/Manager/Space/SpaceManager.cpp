@@ -17,7 +17,8 @@ namespace Engine5
         if (m_global_space == nullptr)
         {
             m_global_space = new Space();
-            m_global_space->Initialize();
+            m_global_flag = eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager | eSubsystemFlag::Scene | eSubsystemFlag::World;
+            m_global_space->Initialize(m_global_flag, m_physics_system, m_render_system, m_object_factory, m_component_registry);
         }
     }
 
@@ -55,23 +56,8 @@ namespace Engine5
     {
         Space* space = new Space();
         m_active_spaces.push_back(space);
-        if (HasFlag(flag, eSubsystemFlag::ComponentManager))
-        {
-            space->InitializeManager(m_component_registry);
-        }
-        if (HasFlag(flag, eSubsystemFlag::ObjectManager))
-        {
-            space->InitializeManager(m_object_factory);
-        }
-        if (HasFlag(flag, eSubsystemFlag::Scene))
-        {
-            space->InitializeScene(m_render_system);
-        }
-        if (HasFlag(flag, eSubsystemFlag::World))
-        {
-            space->InitializeWorld(m_physics_system);
-        }
-        space->Initialize();
+        space->m_subsystem_flag = flag;
+        space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry);
         return space;
     }
 
@@ -81,11 +67,7 @@ namespace Engine5
         {
             m_active_spaces.erase(std::find(m_active_spaces.begin(), m_active_spaces.end(), space));
             m_inactive_spaces.erase(std::find(m_inactive_spaces.begin(), m_inactive_spaces.end(), space));
-            space->Shutdown();
-            space->ShutdownWorld(m_physics_system);
-            space->ShutdownScene(m_render_system);
-            space->ShutdownManager(space->m_object_manager);
-            space->ShutdownManager(space->m_component_manager);
+            space->Shutdown(m_physics_system, m_render_system);
             delete space;
             space = nullptr;
         }

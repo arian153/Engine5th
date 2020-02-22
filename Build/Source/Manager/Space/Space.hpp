@@ -1,6 +1,6 @@
 #pragma once
 #include "../../System/Math/Utility/MathDef.hpp"
-#include "SpaceFlag.hpp"
+#include "SubsystemFlag.hpp"
 
 namespace Engine5
 {
@@ -20,26 +20,28 @@ namespace Engine5
         Space();
         ~Space();
 
-        void Initialize();
+        void Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry);
         void Update(Real dt) const;
-        void Shutdown();
+        void Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system);
+
+        void ConnectSubsystem(ComponentManager* component_manager);
+        void ConnectSubsystem(ObjectManager* object_manager);
+        void ConnectSubsystem(Scene* scene);
+        void ConnectSubsystem(World* world);
+
+        ObjectManager*    GetObjectManager() const;
+        ComponentManager* GetComponentManager() const;
+        Scene*            GetScene() const;
+        World*            GetWorld() const;
 
     private:
-        void InitializeWorld(PhysicsSystem* physics_system);
-        void InitializeScene(RenderSystem* render_system);
-        void InitializeManager(ObjectFactory* obj_factory);
-        void InitializeManager(ComponentRegistry* cmp_registry);
-
-        void ShutdownWorld(PhysicsSystem* physics_system);
-        void ShutdownScene(RenderSystem* render_system);
-        void ShutdownManager(ComponentManager* cmp_manager);
-        void ShutdownManager(ObjectManager* obj_manager);
 
     private:
         friend class SpaceManager;
 
     private:
         bool              m_b_activate        = false;
+        eSubsystemFlag    m_subsystem_flag    = eSubsystemFlag::None;
         SpaceManager*     m_space_manager     = nullptr;
         ComponentManager* m_component_manager = nullptr;
         ObjectManager*    m_object_manager    = nullptr;

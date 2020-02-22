@@ -1,6 +1,6 @@
 #pragma once
 #include "../../System/Math/Utility/MathDef.hpp"
-#include "SpaceFlag.hpp"
+#include "SubsystemFlag.hpp"
 #include <vector>
 
 namespace Engine5
@@ -40,6 +40,7 @@ namespace Engine5
     private:
         bool m_b_global_first = true;
         bool m_b_next_order   = true;
+        eSubsystemFlag m_global_flag = eSubsystemFlag::None;
 
         Space*              m_global_space  = nullptr;
         std::vector<Space*> m_active_spaces;
