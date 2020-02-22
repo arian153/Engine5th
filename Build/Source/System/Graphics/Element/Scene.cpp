@@ -1,4 +1,5 @@
 #include "Scene.hpp"
+#include "../Renderer/DX11/RendererDX11.hpp"
 
 namespace Engine5
 {
@@ -46,7 +47,7 @@ namespace Engine5
         }
     }
 
-    void Scene::SetDX11(DirectX3D11* dx11_api)
+    void Scene::SetDX11(RendererDX11* dx11_api)
     {
         m_dx11_api = dx11_api;
     }

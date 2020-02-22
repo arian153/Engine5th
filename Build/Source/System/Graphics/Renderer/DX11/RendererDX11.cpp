@@ -1,12 +1,13 @@
-#include "DirectX3D11.hpp"
-#include "../../Core/Utility/CoreUtility.hpp"
-#include "../Utility/Color.hpp"
-#include "../Utility/MatrixGenerator.hpp"
-#include "../../Math/Math.hpp"
+#include "RendererDX11.hpp"
+#include "../RendererCommon.hpp"
+#include "../../../Core/Utility/CoreUtility.hpp"
+#include "../../Utility/Color.hpp"
+#include "../../Utility/MatrixGenerator.hpp"
+#include "../../../Math/Math.hpp"
 
 namespace Engine5
 {
-    DirectX3D11::DirectX3D11(HWND hwnd, MatrixGenerator* matrix_gen)
+    RendererDX11::RendererDX11(HWND hwnd, MatrixGenerator* matrix_gen)
         : m_hwnd(hwnd),
           m_matrix_generator(matrix_gen),
           m_d3d_feature_level(),
@@ -28,11 +29,16 @@ namespace Engine5
     {
     }
 
-    DirectX3D11::~DirectX3D11()
+    RendererDX11::RendererDX11()
+        : m_d3d_feature_level(), m_projection_matrix(), m_world_matrix(), m_ortho_matrix(), m_oblique_matrix(), m_cavalier_matrix(), m_cabinet_matrix(), m_dimetric_matrix(), m_trimetric_matrix(), m_isometric_matrix(), m_ndc_to_screen_matrix(), m_numerator(0), m_denominator(0), m_video_card_memory(0), m_client_width(0), m_client_height(0)
     {
     }
 
-    void DirectX3D11::Initialize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view)
+    RendererDX11::~RendererDX11()
+    {
+    }
+
+    void RendererDX11::Initialize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view)
     {
         this->SetUpDevice();
         this->SetUpMultiSamplingLevel();
@@ -50,12 +56,12 @@ namespace Engine5
         this->SetUpDWRenderTarget();
     }
 
-    void DirectX3D11::Update(Real dt)
+    void RendererDX11::Update(Real dt)
     {
         E5_UNUSED_PARAM(dt);
     }
 
-    void DirectX3D11::Shutdown()
+    void RendererDX11::Shutdown()
     {
         if (m_d2d_factory != nullptr)
         {
@@ -143,7 +149,7 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::OnResize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view)
+    void RendererDX11::OnResize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view)
     {
         m_d2d_device_context->SetTarget(nullptr);
         m_device_context->ClearState();
@@ -171,36 +177,31 @@ namespace Engine5
         this->SetUpBackBuffer();
         this->SetUpDepthBufferDescription(client_width, client_height);
         this->SetUpDepthStencilViewDescription();
-
         // Set the viewport transform.
         this->SetUpViewport(client_width, client_height);
         this->SetUpMatrices(client_width, client_height, far_plane, near_plane, field_of_view);
         this->SetUpDWRenderTarget();
     }
 
-    void DirectX3D11::OnFullscreen(bool fullscreen_flag) const
+    void RendererDX11::OnFullscreen(bool fullscreen_flag) const
     {
         m_swap_chain->SetFullscreenState(fullscreen_flag, nullptr);
     }
 
-    void DirectX3D11::BeginScene(Color color) const
+    void RendererDX11::BeginScene(Color color) const
     {
         Real color_arr[4];
-
         // Setup the color to clear the buffer to.
         color_arr[0] = color.r;
         color_arr[1] = color.g;
         color_arr[2] = color.b;
         color_arr[3] = color.a;
-
         // Clear the back buffer.
         m_device_context->ClearRenderTargetView(m_render_target_view, color_arr);
-
         /*if (m_render_target_view != nullptr)
         {
 
         }*/
-
         // Clear the depth buffer.
         if (m_depth_stencil_view != nullptr)
         {
@@ -209,7 +210,7 @@ namespace Engine5
         m_d2d_device_context->BeginDraw();
     }
 
-    void DirectX3D11::EndScene() const
+    void RendererDX11::EndScene() const
     {
         m_d2d_device_context->EndDraw();
         if (m_vsync_enabled)
@@ -224,47 +225,45 @@ namespace Engine5
         }
     }
 
-    ID3D11Device* DirectX3D11::GetDevice() const
+    ID3D11Device* RendererDX11::GetDevice() const
     {
         return m_device;
     }
 
-    ID3D11DeviceContext* DirectX3D11::GetDeviceContext() const
+    ID3D11DeviceContext* RendererDX11::GetDeviceContext() const
     {
         return m_device_context;
     }
 
-    ID3D11DepthStencilView* DirectX3D11::GetDepthStencilView() const
+    ID3D11DepthStencilView* RendererDX11::GetDepthStencilView() const
     {
         return m_depth_stencil_view;
     }
 
-    String DirectX3D11::GetVideoCardInfo(size_t& memory) const
+    String RendererDX11::GetVideoCardInfo(size_t& memory) const
     {
         memory = m_video_card_memory;
         return m_video_card_description;
     }
 
-    DirectX::XMMATRIX DirectX3D11::GetProjectionMatrix() const
+    DirectX::XMMATRIX RendererDX11::GetProjectionMatrix() const
     {
         return m_projection_matrix;
     }
 
-    void DirectX3D11::SetVSync(bool flag)
+    void RendererDX11::SetVSync(bool flag)
     {
         m_vsync_enabled = flag;
     }
 
-    void DirectX3D11::SetAlphaBlending(bool flag) const
+    void RendererDX11::SetAlphaBlending(bool flag) const
     {
         Real blend_factor[4];
-
         // Setup the blend factor.
         blend_factor[0] = 0.0f;
         blend_factor[1] = 0.0f;
         blend_factor[2] = 0.0f;
         blend_factor[3] = 0.0f;
-
         // Turn on the alpha blending.
         if (flag == true)
         {
@@ -276,7 +275,7 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::SetZBuffering(bool flag) const
+    void RendererDX11::SetZBuffering(bool flag) const
     {
         if (flag == true)
         {
@@ -288,12 +287,12 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::SetBackBufferRenderTarget() const
+    void RendererDX11::SetBackBufferRenderTarget() const
     {
         m_device_context->OMSetRenderTargets(1, &m_render_target_view, m_depth_stencil_view);
     }
 
-    void DirectX3D11::SetRasterStateWireFrame(bool flag) const
+    void RendererDX11::SetRasterStateWireFrame(bool flag) const
     {
         if (flag == true)
         {
@@ -305,44 +304,37 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::SetUpAdapterDescription(int client_width, int client_height)
+    void RendererDX11::SetUpAdapterDescription(int client_width, int client_height)
     {
         IDXGIFactory*     factory;
         IDXGIAdapter*     adapter;
         IDXGIOutput*      adapter_output;
         UINT              num_modes = 0;
         DXGI_ADAPTER_DESC adapter_desc;
-
         // Create a DirectX graphics interface factory.
-        HRESULT result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)& factory);
+        HRESULT result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
         if (FAILED(result))
             return;
-
         // Use the factory to create an adapter for the primary graphics interface (video card).
         result = factory->EnumAdapters(0, &adapter);
         if (FAILED(result))
             return;
-
         // Enumerate the primary adapter output (monitor).
         result = adapter->EnumOutputs(0, &adapter_output);
         if (FAILED(result))
             return;
-
         // Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM display format for the adapter output (monitor).
         result = adapter_output->GetDisplayModeList(m_dxgi_color_format, DXGI_ENUM_MODES_INTERLACED, &num_modes, nullptr);
         if (FAILED(result))
             return;
-
         // Create a list to hold all the possible display modes for this monitor/video card combination.
         DXGI_MODE_DESC* display_mode_list = new DXGI_MODE_DESC[num_modes];
         if (!display_mode_list)
             return;
-
         // Now fill the display mode list structures.
         result = adapter_output->GetDisplayModeList(m_dxgi_color_format, DXGI_ENUM_MODES_INTERLACED, &num_modes, display_mode_list);
         if (FAILED(result))
             return;
-
         // Now go through all the display modes and find the one that matches the screen width and height.
         // When a match is found store the numerator and denominator of the refresh rate for that monitor.
         for (size_t i = 0; i < num_modes; i++)
@@ -353,40 +345,33 @@ namespace Engine5
                 m_denominator = display_mode_list[i].RefreshRate.Denominator;
             }
         }
-
         // Get the adapter (video card) description.
         result = adapter->GetDesc(&adapter_desc);
         if (FAILED(result))
             return;
-
         // Store the dedicated video card memory in megabytes.
         m_video_card_memory = (int)(adapter_desc.DedicatedVideoMemory / 1024 / 1024);
-
         //char video_card_description[128];
         //// Convert the name of the video card to a character array and store it.
         //error = wcstombs(video_card_description, adapter_desc.Description, 128);
         //
         //if (error != 0) return;
         m_video_card_description = WStringToString(std::wstring(adapter_desc.Description));
-
         // Release the display mode list.
         delete[] display_mode_list;
         display_mode_list = nullptr;
-
         // Release the adapter output.
         adapter_output->Release();
         adapter_output = nullptr;
-
         // Release the adapter.
         adapter->Release();
         adapter = nullptr;
-
         // Release the factory.
         factory->Release();
         factory = nullptr;
     }
 
-    void DirectX3D11::SetUpDevice()
+    void RendererDX11::SetUpDevice()
     {
         UINT create_device_flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #if defined(DEBUG) || defined(_DEBUG)
@@ -410,23 +395,18 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::SetUpSwapChain(int client_width, int client_height, HWND hwnd, bool fullscreen_flag)
+    void RendererDX11::SetUpSwapChain(int client_width, int client_height, HWND hwnd, bool fullscreen_flag)
     {
         DXGI_SWAP_CHAIN_DESC swap_chain_desc;
-
         // Initialize the swap chain description.
         ZeroMemory(&swap_chain_desc, sizeof(swap_chain_desc));
-
         // Set to a single back buffer.
         swap_chain_desc.BufferCount = m_back_buffer_count;
-
         // Set the width and height of the back buffer.
         swap_chain_desc.BufferDesc.Width  = client_width;
         swap_chain_desc.BufferDesc.Height = client_height;
-
         // Set regular 32-bit surface for the back buffer.
         swap_chain_desc.BufferDesc.Format = m_dxgi_color_format;
-
         // Set the refresh rate of the back buffer.
         if (m_vsync_enabled)
         {
@@ -438,15 +418,12 @@ namespace Engine5
             swap_chain_desc.BufferDesc.RefreshRate.Numerator   = 0;
             swap_chain_desc.BufferDesc.RefreshRate.Denominator = 1;
         }
-
         // Set the usage of the back buffer.
         swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-
         // Set the handle for the window to render to.
         swap_chain_desc.OutputWindow       = hwnd;
         swap_chain_desc.SampleDesc.Count   = 1;
         swap_chain_desc.SampleDesc.Quality = 0;
-
         // Use 4X MSAA? Turn multi sampling on.
         if (m_enable_msaa)
         {
@@ -459,7 +436,6 @@ namespace Engine5
             swap_chain_desc.SampleDesc.Count   = 1;
             swap_chain_desc.SampleDesc.Quality = 0;
         }
-
         // Set to full screen or windowed mode.
         if (fullscreen_flag)
         {
@@ -469,26 +445,23 @@ namespace Engine5
         {
             swap_chain_desc.Windowed = true;
         }
-
         // Set the scan line ordering and scaling to unspecified.
         swap_chain_desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
         swap_chain_desc.BufferDesc.Scaling          = DXGI_MODE_SCALING_UNSPECIFIED;
-
         // Discard the back buffer contents after presenting.
         swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
         // Don't set the advanced flags.
         swap_chain_desc.Flags    = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
         IDXGIDevice* dxgi_device = nullptr;
-        HRESULT      result      = m_device->QueryInterface(__uuidof(IDXGIDevice), (void**)& dxgi_device);
+        HRESULT      result      = m_device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgi_device);
         if (FAILED(result))
             return;
         IDXGIAdapter* dxgi_adapter = nullptr;
-        result                     = dxgi_device->GetParent(__uuidof(IDXGIAdapter), (void**)& dxgi_adapter);
+        result                     = dxgi_device->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgi_adapter);
         if (FAILED(result))
             return;
         IDXGIFactory* dxgi_factory = nullptr;
-        result                     = dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)& dxgi_factory);
+        result                     = dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgi_factory);
         if (FAILED(result))
             return;
         result = dxgi_factory->CreateSwapChain(m_device, &swap_chain_desc, &m_swap_chain);
@@ -503,14 +476,13 @@ namespace Engine5
         dxgi_adapter = nullptr;
         dxgi_factory->Release();
         dxgi_factory = nullptr;
-
         //// Create the swap chain, Direct3D device, and Direct3D device context.
         //HRESULT result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &m_d3d_feature_level, 1,
         //	D3D11_SDK_VERSION, &swap_chain_desc, &m_swap_chain, &m_device, NULL, &m_device_context);
         //if (FAILED(result)) return;
     }
 
-    void DirectX3D11::SetUpBackBuffer()
+    void RendererDX11::SetUpBackBuffer()
     {
         ID3D11Texture2D* back_buffer;
         HRESULT          result = m_swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&back_buffer));
@@ -526,20 +498,17 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::SetUpDepthBufferDescription(int client_width, int client_height)
+    void RendererDX11::SetUpDepthBufferDescription(int client_width, int client_height)
     {
         D3D11_TEXTURE2D_DESC depth_buffer_desc;
-
         // Initialize the description of the depth buffer.
         ZeroMemory(&depth_buffer_desc, sizeof(depth_buffer_desc));
-
         // Set up the description of the depth buffer.
         depth_buffer_desc.Width     = client_width;
         depth_buffer_desc.Height    = client_height;
         depth_buffer_desc.MipLevels = 1;
         depth_buffer_desc.ArraySize = 1;
         depth_buffer_desc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
         // Use 4X MSAA? --must match swap chain MSAA values.
         if (m_enable_msaa)
         {
@@ -556,7 +525,6 @@ namespace Engine5
         depth_buffer_desc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
         depth_buffer_desc.CPUAccessFlags = 0;
         depth_buffer_desc.MiscFlags      = 0;
-
         // Create the texture for the depth buffer using the filled out description.
         HRESULT result = m_device->CreateTexture2D(&depth_buffer_desc, nullptr, &m_depth_stencil_buffer);
         if (FAILED(result))
@@ -564,13 +532,11 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::SetUpStencilStateDescription()
+    void RendererDX11::SetUpStencilStateDescription()
     {
         D3D11_DEPTH_STENCIL_DESC depth_stencil_desc;
-
         // Initialize the description of the stencil state.
         ZeroMemory(&depth_stencil_desc, sizeof(depth_stencil_desc));
-
         // Set up the description of the stencil state.
         depth_stencil_desc.DepthEnable      = true;
         depth_stencil_desc.DepthWriteMask   = D3D11_DEPTH_WRITE_MASK_ALL;
@@ -578,30 +544,25 @@ namespace Engine5
         depth_stencil_desc.StencilEnable    = true;
         depth_stencil_desc.StencilReadMask  = 0xFF;
         depth_stencil_desc.StencilWriteMask = 0xFF;
-
         // Stencil operations if pixel is front-facing.
         depth_stencil_desc.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
         depth_stencil_desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
         depth_stencil_desc.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
         depth_stencil_desc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
-
         // Stencil operations if pixel is back-facing.
         depth_stencil_desc.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
         depth_stencil_desc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
         depth_stencil_desc.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
         depth_stencil_desc.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
-
         // Create the depth stencil state.
         HRESULT result = m_device->CreateDepthStencilState(&depth_stencil_desc, &m_depth_stencil_state);
         if (FAILED(result))
             return;
-
         // Set the depth stencil state.
         m_device_context->OMSetDepthStencilState(m_depth_stencil_state, 1);
         D3D11_DEPTH_STENCIL_DESC depth_disabled_stencil_desc;
         // Clear the second depth stencil state before setting the parameters.
         ZeroMemory(&depth_disabled_stencil_desc, sizeof(depth_disabled_stencil_desc));
-
         // Now create a second depth stencil state which turns off the Z buffer for 2D rendering.  The only difference is 
         // that DepthEnable is set to false, all other parameters are the same as the other depth stencil state.
         depth_disabled_stencil_desc.DepthEnable                  = false;
@@ -618,7 +579,6 @@ namespace Engine5
         depth_disabled_stencil_desc.BackFace.StencilDepthFailOp  = D3D11_STENCIL_OP_DECR;
         depth_disabled_stencil_desc.BackFace.StencilPassOp       = D3D11_STENCIL_OP_KEEP;
         depth_disabled_stencil_desc.BackFace.StencilFunc         = D3D11_COMPARISON_ALWAYS;
-
         // Create the state using the device.
         result = m_device->CreateDepthStencilState(&depth_disabled_stencil_desc, &m_depth_disabled_stencil_state);
         if (FAILED(result))
@@ -626,31 +586,26 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::SetUpDepthStencilViewDescription()
+    void RendererDX11::SetUpDepthStencilViewDescription()
     {
         D3D11_DEPTH_STENCIL_VIEW_DESC depth_stencil_view_desc;
-
         // Initialize the depth stencil view.
         ZeroMemory(&depth_stencil_view_desc, sizeof(depth_stencil_view_desc));
-
         // Set up the depth stencil view description.
         depth_stencil_view_desc.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
         depth_stencil_view_desc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
         depth_stencil_view_desc.Texture2D.MipSlice = 0;
-
         // Create the depth stencil view.
         HRESULT result = m_device->CreateDepthStencilView(m_depth_stencil_buffer, &depth_stencil_view_desc, &m_depth_stencil_view);
         if (FAILED(result))
             return;
-
         // Bind the render target view and depth stencil buffer to the output render pipeline.
         m_device_context->OMSetRenderTargets(1, &m_render_target_view, m_depth_stencil_view);
     }
 
-    void DirectX3D11::SetUpRasterDescription()
+    void RendererDX11::SetUpRasterDescription()
     {
         D3D11_RASTERIZER_DESC raster_desc;
-
         // Setup the raster description which will determine how and what polygons will be drawn.
         raster_desc.AntialiasedLineEnable = false;
         raster_desc.CullMode              = D3D11_CULL_BACK;
@@ -662,13 +617,11 @@ namespace Engine5
         raster_desc.MultisampleEnable     = false;
         raster_desc.ScissorEnable         = false;
         raster_desc.SlopeScaledDepthBias  = 0.0f;
-
         // Create the rasterizer state from the description we just filled out.
         HRESULT result = m_device->CreateRasterizerState(&raster_desc, &m_raster_state);
         if (FAILED(result))
             return;
         D3D11_RASTERIZER_DESC wire_frame_desc;
-
         // Setup the raster description which will determine how and what polygons will be drawn.
         wire_frame_desc.AntialiasedLineEnable = false;
         wire_frame_desc.CullMode              = D3D11_CULL_BACK;
@@ -680,17 +633,15 @@ namespace Engine5
         wire_frame_desc.MultisampleEnable     = false;
         wire_frame_desc.ScissorEnable         = false;
         wire_frame_desc.SlopeScaledDepthBias  = 0.0f;
-
         // Create the rasterizer state from the description we just filled out.
         result = m_device->CreateRasterizerState(&wire_frame_desc, &m_wire_frame_raster_state);
         if (FAILED(result))
             return;
-
         // Now set the rasterizer state.
         m_device_context->RSSetState(m_raster_state);
     }
 
-    void DirectX3D11::SetUpViewport(int client_width, int client_height) const
+    void RendererDX11::SetUpViewport(int client_width, int client_height) const
     {
         D3D11_VIEWPORT viewport;
         // Setup the viewport for rendering.
@@ -700,19 +651,18 @@ namespace Engine5
         viewport.MaxDepth = 1.0f;
         viewport.TopLeftX = 0.0f;
         viewport.TopLeftY = 0.0f;
-
         // Create the viewport.
         m_device_context->RSSetViewports(1, &viewport);
     }
 
-    void DirectX3D11::SetUpMatrices(int client_width, int client_height, Real far_plane, Real near_plane, Real field_of_view)
+    void RendererDX11::SetUpMatrices(int client_width, int client_height, Real far_plane, Real near_plane, Real field_of_view)
     {
         Real screen_aspect  = (Real)client_width / (Real)client_height;
         m_projection_matrix = Converter::ToXMMatrix(m_matrix_generator->ProjectionMatrix(screen_aspect, field_of_view, far_plane, near_plane));
         m_ortho_matrix      = OrthoGraphicMatrix(client_width, client_height, far_plane, near_plane);
     }
 
-    void DirectX3D11::SetUpMultiSamplingLevel()
+    void RendererDX11::SetUpMultiSamplingLevel()
     {
         HRESULT result = m_device->CheckMultisampleQualityLevels(m_dxgi_color_format, 4, &m_msaa_quality);
         if (FAILED(result))
@@ -720,7 +670,7 @@ namespace Engine5
         assert(m_msaa_quality > 0);
     }
 
-    void DirectX3D11::SetUpBlendState()
+    void RendererDX11::SetUpBlendState()
     {
         D3D11_BLEND_DESC blend_state_description;
         ZeroMemory(&blend_state_description, sizeof(D3D11_BLEND_DESC));
@@ -744,17 +694,17 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::SetUpDWDevice()
+    void RendererDX11::SetUpDWDevice()
     {
         //create D2D device, DW factory
         HRESULT result = D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED, &m_d2d_factory);
         if (FAILED(result))
             return;
-        result = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown * *>(&m_write_factory));
+        result = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown* *>(&m_write_factory));
         if (FAILED(result))
             return;
         IDXGIDevice* dxgi_device = nullptr;
-        result                   = m_device->QueryInterface(__uuidof(IDXGIDevice), (void**)& dxgi_device);
+        result                   = m_device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgi_device);
         if (FAILED(result))
             return;
         result = m_d2d_factory->CreateDevice(dxgi_device, &m_d2d_device);
@@ -770,20 +720,18 @@ namespace Engine5
         }
     }
 
-    void DirectX3D11::SetUpDWRenderTarget()
+    void RendererDX11::SetUpDWRenderTarget()
     {
         D2D1_BITMAP_PROPERTIES1 bitmap_property =
                 D2D1::BitmapProperties1(
                                         D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
                                         D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
                                         m_dw_dpi, m_dw_dpi);
-
         // Direct2D needs the DXGI version of the back buffer
         IDXGISurface* dxgi_buffer = nullptr;
         HRESULT       result      = m_swap_chain->GetBuffer(0, __uuidof(IDXGISurface), reinterpret_cast<void**>(&dxgi_buffer));
         if (FAILED(result))
             return;
-
         // create the bitmap
         result = m_d2d_device_context->CreateBitmapFromDxgiSurface(dxgi_buffer, &bitmap_property, &m_target_bitmap);
         if (FAILED(result))
@@ -795,7 +743,6 @@ namespace Engine5
             }
             return;
         }
-
         //// set the newly created bitmap as render target
         m_d2d_device_context->SetTarget(m_target_bitmap);
         if (dxgi_buffer != nullptr)
@@ -810,11 +757,19 @@ namespace Engine5
         }
     }
 
-
-    DirectX::XMMATRIX DirectX3D11::OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane) const
+    DirectX::XMMATRIX RendererDX11::OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane) const
     {
         Real half_x = static_cast<Real>(client_width >> 1);
         Real half_y = static_cast<Real>(client_height >> 1);
         return DirectX::XMMatrixOrthographicOffCenterLH(-half_x, half_x, -half_y, half_y, near_plane, far_plane);
+    }
+
+    RendererCommon::RendererCommon()
+        : RendererDX11()
+    {
+    }
+
+    RendererCommon::~RendererCommon()
+    {
     }
 }

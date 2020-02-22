@@ -1,9 +1,10 @@
 #include "PrimitiveRenderer.hpp"
 #include "../Shader/ColorShader.hpp"
+#include "../Renderer/DX11/RendererDX11.hpp"
 
 namespace Engine5
 {
-    PrimitiveRenderer::PrimitiveRenderer(DirectX3D11* dx11_api)
+    PrimitiveRenderer::PrimitiveRenderer(RendererDX11* dx11_api)
         : m_view_matrix(), m_world_matrix(), m_proj_matrix(), m_dx11_api(dx11_api)
     {
     }

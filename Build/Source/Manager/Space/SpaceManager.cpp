@@ -17,7 +17,7 @@ namespace Engine5
         if (m_global_space == nullptr)
         {
             m_global_space = new Space();
-            m_global_flag = eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager | eSubsystemFlag::Scene | eSubsystemFlag::World;
+            m_global_flag  = eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager | eSubsystemFlag::Scene | eSubsystemFlag::World;
             m_global_space->Initialize(m_global_flag, m_physics_system, m_render_system, m_object_factory, m_component_registry);
         }
     }
@@ -33,6 +33,26 @@ namespace Engine5
 
     void SpaceManager::Shutdown()
     {
+        for (auto& space : m_active_spaces)
+        {
+            space->Shutdown(m_physics_system, m_render_system);
+            delete space;
+            space = nullptr;
+        }
+        m_active_spaces.clear();
+        for (auto& space : m_inactive_spaces)
+        {
+            space->Shutdown(m_physics_system, m_render_system);
+            delete space;
+            space = nullptr;
+        }
+        m_inactive_spaces.clear();
+        if (m_global_space != nullptr)
+        {
+            m_global_space->Shutdown(m_physics_system, m_render_system);
+            delete m_global_space;
+            m_global_space = nullptr;
+        }
     }
 
     void SpaceManager::Activate(Space* space)

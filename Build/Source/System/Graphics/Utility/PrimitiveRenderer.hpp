@@ -4,10 +4,10 @@
 #include <directxmath.h>
 #include <d3d11.h>
 #include <vector>
-#include "../RenderingAPI/DirectX3D11.hpp"
 
 namespace Engine5
 {
+    class RendererDX11;
     class Camera;
     class ColorShader;
 
@@ -21,7 +21,7 @@ namespace Engine5
     class PrimitiveRenderer
     {
     public:
-        explicit PrimitiveRenderer(DirectX3D11* dx11_api);
+        explicit PrimitiveRenderer(RendererDX11* dx11_api);
         ~PrimitiveRenderer();
         void DrawPrimitive(Primitive* primitive, eRenderingMode mode, Color color = Color());
         void DrawPrimitive(const Primitive& primitive, eRenderingMode mode, Color color = Color());
@@ -102,7 +102,7 @@ namespace Engine5
         DirectX::XMMATRIX    m_world_matrix;
         DirectX::XMMATRIX    m_proj_matrix;
         ColorShader*         m_color_shader   = nullptr;
-        DirectX3D11*         m_dx11_api       = nullptr;
+        RendererDX11*         m_dx11_api       = nullptr;
         ID3D11DeviceContext* m_device_context = nullptr;
 
         std::vector<ColorVertex> m_dot_vertices;

@@ -1,6 +1,7 @@
 #include "RenderSystem.hpp"
 #include "../Core/OS-API/Windows/Windows.hpp"
 #include "Utility/Color.hpp"
+#include "Renderer/DX11/RendererDX11.hpp"
 
 namespace Engine5
 {
@@ -15,7 +16,7 @@ namespace Engine5
 
     void RenderSystem::Initialize()
     {
-        m_renderer = new DirectX3D11(m_os_api->AppHWnd(), &m_matrix_generator);
+        m_renderer = new RendererDX11(m_os_api->AppHWnd(), &m_matrix_generator);
         m_renderer->Initialize((int)m_render_width, (int)m_render_height, m_os_api->IsFullscreen(), m_far_plane, m_near_plane, Math::PI_DIV_4);
         m_shader_manager = new ShaderManager(m_renderer->GetDevice(), m_os_api->AppHWnd());
         m_shader_manager->Initialize();

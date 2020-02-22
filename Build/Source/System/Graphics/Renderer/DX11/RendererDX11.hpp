@@ -6,19 +6,20 @@
 #include <dwrite_2.h>
 #include <directxmath.h>
 #include <string>
-#include "../../Math/Utility/MathDef.hpp"
-#include "../../Core/Utility/CoreDef.hpp"
+#include "../../../Math/Utility/MathDef.hpp"
+#include "../../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
     class MatrixGenerator;
     class Color;
 
-    class DirectX3D11
+    class RendererDX11
     {
     public:
-        explicit DirectX3D11(HWND hwnd, MatrixGenerator* matrix_gen);
-        ~DirectX3D11();
+        explicit RendererDX11(HWND hwnd, MatrixGenerator* matrix_gen);
+        RendererDX11();
+        ~RendererDX11();
         void Initialize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view);
         void Update(Real dt);
         void Shutdown();

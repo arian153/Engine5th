@@ -2,7 +2,6 @@
 #include "Element/Scene.hpp"
 #include <vector>
 #include "../Math/Utility/MathDef.hpp"
-#include "RenderingAPI/DirectX3D11.hpp"
 #include "Utility/Color.hpp"
 #include "Utility/ShaderManager.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
@@ -13,6 +12,7 @@
 namespace Engine5
 {
     class OSAPI;
+    class RendererDX11;
 
     class RenderSystem
     {
@@ -39,7 +39,7 @@ namespace Engine5
 
     private:
         WindowsAPI*        m_os_api             = nullptr;
-        DirectX3D11*       m_renderer           = nullptr;
+        RendererDX11*       m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;
         MatrixGenerator    m_matrix_generator;
