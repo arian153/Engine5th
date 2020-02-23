@@ -1,7 +1,7 @@
 #include "RenderSystem.hpp"
 #include "../Core/OS-API/Windows/Windows.hpp"
 #include "Utility/Color.hpp"
-#include "Renderer/DX11/RendererDX11.hpp"
+#include "Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {
@@ -16,7 +16,9 @@ namespace Engine5
 
     void RenderSystem::Initialize()
     {
-        m_renderer = new RendererDX11(m_os_api->AppHWnd(), &m_matrix_generator);
+        m_renderer = new RendererCommon();
+        m_renderer->SetHwnd(m_os_api->AppHWnd());
+        m_renderer->SetMatrixGenerator(&m_matrix_generator);
         m_renderer->Initialize((int)m_render_width, (int)m_render_height, m_os_api->IsFullscreen(), m_far_plane, m_near_plane, Math::PI_DIV_4);
         m_shader_manager = new ShaderManager(m_renderer->GetDevice(), m_os_api->AppHWnd());
         m_shader_manager->Initialize();
@@ -31,7 +33,6 @@ namespace Engine5
         if (m_renderer != nullptr)
         {
             m_renderer->BeginScene(m_background_color);
-            m_renderer->Update(dt);
             m_primitive_renderer->Update(dt);
             Triangle triangle;
             //triangle.SetTriangle(Vector3(1, 0, 0), Vector3(0, 1, 0), Vector3(-1, 0, 0));

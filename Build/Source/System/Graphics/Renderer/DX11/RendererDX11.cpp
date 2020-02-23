@@ -1,3 +1,5 @@
+#pragma warning( disable : 26812)
+
 #include "RendererDX11.hpp"
 #include "../RendererCommon.hpp"
 #include "../../../Core/Utility/CoreUtility.hpp"
@@ -7,10 +9,9 @@
 
 namespace Engine5
 {
-    RendererDX11::RendererDX11(HWND hwnd, MatrixGenerator* matrix_gen)
-        : m_hwnd(hwnd),
-          m_matrix_generator(matrix_gen),
-          m_d3d_feature_level(),
+    RendererDX11::RendererDX11()
+        : m_d3d_feature_level(),
+          m_dxgi_color_format(DXGI_FORMAT_B8G8R8A8_UNORM),
           m_projection_matrix(),
           m_world_matrix(),
           m_ortho_matrix(),
@@ -29,200 +30,8 @@ namespace Engine5
     {
     }
 
-    RendererDX11::RendererDX11()
-        : m_d3d_feature_level(), m_projection_matrix(), m_world_matrix(), m_ortho_matrix(), m_oblique_matrix(), m_cavalier_matrix(), m_cabinet_matrix(), m_dimetric_matrix(), m_trimetric_matrix(), m_isometric_matrix(), m_ndc_to_screen_matrix(), m_numerator(0), m_denominator(0), m_video_card_memory(0), m_client_width(0), m_client_height(0)
-    {
-    }
-
     RendererDX11::~RendererDX11()
     {
-    }
-
-    void RendererDX11::Initialize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view)
-    {
-        this->SetUpDevice();
-        this->SetUpMultiSamplingLevel();
-        this->SetUpAdapterDescription(client_width, client_height);
-        this->SetUpSwapChain(client_width, client_height, m_hwnd, fullscreen_flag);
-        this->SetUpBackBuffer();
-        this->SetUpDepthBufferDescription(client_width, client_height);
-        this->SetUpStencilStateDescription();
-        this->SetUpDepthStencilViewDescription();
-        this->SetUpRasterDescription();
-        this->SetUpViewport(client_width, client_height);
-        this->SetUpMatrices(client_width, client_height, far_plane, near_plane, field_of_view);
-        this->SetUpBlendState();
-        this->SetUpDWDevice();
-        this->SetUpDWRenderTarget();
-    }
-
-    void RendererDX11::Update(Real dt)
-    {
-        E5_UNUSED_PARAM(dt);
-    }
-
-    void RendererDX11::Shutdown()
-    {
-        if (m_d2d_factory != nullptr)
-        {
-            m_d2d_factory->Release();
-            m_d2d_factory = nullptr;
-        }
-        if (m_write_factory != nullptr)
-        {
-            m_write_factory->Release();
-            m_write_factory = nullptr;
-        }
-        if (m_d2d_device != nullptr)
-        {
-            m_d2d_device->Release();
-            m_d2d_device = nullptr;
-        }
-        if (m_d2d_device_context != nullptr)
-        {
-            m_d2d_device_context->Release();
-            m_d2d_device_context = nullptr;
-        }
-        if (m_swap_chain != nullptr)
-        {
-            m_swap_chain->SetFullscreenState(false, nullptr);
-        }
-        if (m_alpha_enabled_blending_state != nullptr)
-        {
-            m_alpha_enabled_blending_state->Release();
-            m_alpha_enabled_blending_state = nullptr;
-        }
-        if (m_alpha_disabled_blending_state != nullptr)
-        {
-            m_alpha_disabled_blending_state->Release();
-            m_alpha_disabled_blending_state = nullptr;
-        }
-        if (m_raster_state != nullptr)
-        {
-            m_raster_state->Release();
-            m_raster_state = nullptr;
-        }
-        if (m_wire_frame_raster_state != nullptr)
-        {
-            m_wire_frame_raster_state->Release();
-            m_wire_frame_raster_state = nullptr;
-        }
-        if (m_depth_stencil_view != nullptr)
-        {
-            m_depth_stencil_view->Release();
-            m_depth_stencil_view = nullptr;
-        }
-        if (m_depth_disabled_stencil_state != nullptr)
-        {
-            m_depth_disabled_stencil_state->Release();
-            m_depth_disabled_stencil_state = nullptr;
-        }
-        if (m_depth_stencil_state != nullptr)
-        {
-            m_depth_stencil_state->Release();
-            m_depth_stencil_state = nullptr;
-        }
-        if (m_depth_stencil_buffer != nullptr)
-        {
-            m_depth_stencil_buffer->Release();
-            m_depth_stencil_buffer = nullptr;
-        }
-        if (m_render_target_view != nullptr)
-        {
-            m_render_target_view->Release();
-            m_render_target_view = nullptr;
-        }
-        if (m_device_context != nullptr)
-        {
-            m_device_context->Release();
-            m_device_context = nullptr;
-        }
-        if (m_device != nullptr)
-        {
-            m_device->Release();
-            m_device = nullptr;
-        }
-        if (m_swap_chain != nullptr)
-        {
-            m_swap_chain->Release();
-            m_swap_chain = nullptr;
-        }
-    }
-
-    void RendererDX11::OnResize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view)
-    {
-        m_d2d_device_context->SetTarget(nullptr);
-        m_device_context->ClearState();
-        // do not call finish command list on state.
-        //m_device_context->FinishCommandList(false, nullptr);
-        if (m_render_target_view != nullptr)
-        {
-            m_render_target_view->Release();
-            m_render_target_view = nullptr;
-        }
-        if (m_depth_stencil_view != nullptr)
-        {
-            m_depth_stencil_view->Release();
-            m_depth_stencil_view = nullptr;
-        }
-        if (m_depth_stencil_buffer != nullptr)
-        {
-            m_depth_stencil_buffer->Release();
-            m_depth_stencil_buffer = nullptr;
-        }
-        HRESULT result = m_swap_chain->ResizeBuffers(m_back_buffer_count, client_width, client_height, m_dxgi_color_format, 0);
-        this->OnFullscreen(fullscreen_flag);
-        if (FAILED(result))
-            return;
-        this->SetUpBackBuffer();
-        this->SetUpDepthBufferDescription(client_width, client_height);
-        this->SetUpDepthStencilViewDescription();
-        // Set the viewport transform.
-        this->SetUpViewport(client_width, client_height);
-        this->SetUpMatrices(client_width, client_height, far_plane, near_plane, field_of_view);
-        this->SetUpDWRenderTarget();
-    }
-
-    void RendererDX11::OnFullscreen(bool fullscreen_flag) const
-    {
-        m_swap_chain->SetFullscreenState(fullscreen_flag, nullptr);
-    }
-
-    void RendererDX11::BeginScene(Color color) const
-    {
-        Real color_arr[4];
-        // Setup the color to clear the buffer to.
-        color_arr[0] = color.r;
-        color_arr[1] = color.g;
-        color_arr[2] = color.b;
-        color_arr[3] = color.a;
-        // Clear the back buffer.
-        m_device_context->ClearRenderTargetView(m_render_target_view, color_arr);
-        /*if (m_render_target_view != nullptr)
-        {
-
-        }*/
-        // Clear the depth buffer.
-        if (m_depth_stencil_view != nullptr)
-        {
-            m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
-        }
-        m_d2d_device_context->BeginDraw();
-    }
-
-    void RendererDX11::EndScene() const
-    {
-        m_d2d_device_context->EndDraw();
-        if (m_vsync_enabled)
-        {
-            // Lock to screen refresh rate.
-            m_swap_chain->Present(1, 0);
-        }
-        else
-        {
-            // Present as fast as possible.
-            m_swap_chain->Present(0, 0);
-        }
     }
 
     ID3D11Device* RendererDX11::GetDevice() const
@@ -251,40 +60,9 @@ namespace Engine5
         return m_projection_matrix;
     }
 
-    void RendererDX11::SetVSync(bool flag)
+    void RendererDX11::SetHwnd(HWND hwnd)
     {
-        m_vsync_enabled = flag;
-    }
-
-    void RendererDX11::SetAlphaBlending(bool flag) const
-    {
-        Real blend_factor[4];
-        // Setup the blend factor.
-        blend_factor[0] = 0.0f;
-        blend_factor[1] = 0.0f;
-        blend_factor[2] = 0.0f;
-        blend_factor[3] = 0.0f;
-        // Turn on the alpha blending.
-        if (flag == true)
-        {
-            m_device_context->OMSetBlendState(m_alpha_enabled_blending_state, blend_factor, 0xffffffff);
-        }
-        else
-        {
-            m_device_context->OMSetBlendState(m_alpha_disabled_blending_state, blend_factor, 0xffffffff);
-        }
-    }
-
-    void RendererDX11::SetZBuffering(bool flag) const
-    {
-        if (flag == true)
-        {
-            m_device_context->OMSetDepthStencilState(m_depth_stencil_state, 1);
-        }
-        else
-        {
-            m_device_context->OMSetDepthStencilState(m_depth_disabled_stencil_state, 1);
-        }
+        m_hwnd = hwnd;
     }
 
     void RendererDX11::SetBackBufferRenderTarget() const
@@ -395,7 +173,7 @@ namespace Engine5
         }
     }
 
-    void RendererDX11::SetUpSwapChain(int client_width, int client_height, HWND hwnd, bool fullscreen_flag)
+    void RendererDX11::SetUpSwapChain(int client_width, int client_height, bool fullscreen_flag)
     {
         DXGI_SWAP_CHAIN_DESC swap_chain_desc;
         // Initialize the swap chain description.
@@ -421,7 +199,7 @@ namespace Engine5
         // Set the usage of the back buffer.
         swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         // Set the handle for the window to render to.
-        swap_chain_desc.OutputWindow       = hwnd;
+        swap_chain_desc.OutputWindow       = m_hwnd;
         swap_chain_desc.SampleDesc.Count   = 1;
         swap_chain_desc.SampleDesc.Quality = 0;
         // Use 4X MSAA? Turn multi sampling on.
@@ -467,7 +245,7 @@ namespace Engine5
         result = dxgi_factory->CreateSwapChain(m_device, &swap_chain_desc, &m_swap_chain);
         if (FAILED(result))
             return;
-        result = dxgi_factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER);
+        result = dxgi_factory->MakeWindowAssociation(m_hwnd, DXGI_MWA_NO_ALT_ENTER);
         if (FAILED(result))
             return;
         dxgi_device->Release();
@@ -771,5 +549,228 @@ namespace Engine5
 
     RendererCommon::~RendererCommon()
     {
+    }
+
+    void RendererCommon::Initialize(int client_width, int client_height, bool b_fullscreen, Real far_plane, Real near_plane, Real field_of_view)
+    {
+        this->SetUpDevice();
+        this->SetUpMultiSamplingLevel();
+        this->SetUpAdapterDescription(client_width, client_height);
+        this->SetUpSwapChain(client_width, client_height, b_fullscreen);
+        this->SetUpBackBuffer();
+        this->SetUpDepthBufferDescription(client_width, client_height);
+        this->SetUpStencilStateDescription();
+        this->SetUpDepthStencilViewDescription();
+        this->SetUpRasterDescription();
+        this->SetUpViewport(client_width, client_height);
+        this->SetUpMatrices(client_width, client_height, far_plane, near_plane, field_of_view);
+        this->SetUpBlendState();
+        this->SetUpDWDevice();
+        this->SetUpDWRenderTarget();
+    }
+
+    void RendererCommon::Shutdown()
+    {
+        if (m_d2d_factory != nullptr)
+        {
+            m_d2d_factory->Release();
+            m_d2d_factory = nullptr;
+        }
+        if (m_write_factory != nullptr)
+        {
+            m_write_factory->Release();
+            m_write_factory = nullptr;
+        }
+        if (m_d2d_device != nullptr)
+        {
+            m_d2d_device->Release();
+            m_d2d_device = nullptr;
+        }
+        if (m_d2d_device_context != nullptr)
+        {
+            m_d2d_device_context->Release();
+            m_d2d_device_context = nullptr;
+        }
+        if (m_swap_chain != nullptr)
+        {
+            m_swap_chain->SetFullscreenState(false, nullptr);
+        }
+        if (m_alpha_enabled_blending_state != nullptr)
+        {
+            m_alpha_enabled_blending_state->Release();
+            m_alpha_enabled_blending_state = nullptr;
+        }
+        if (m_alpha_disabled_blending_state != nullptr)
+        {
+            m_alpha_disabled_blending_state->Release();
+            m_alpha_disabled_blending_state = nullptr;
+        }
+        if (m_raster_state != nullptr)
+        {
+            m_raster_state->Release();
+            m_raster_state = nullptr;
+        }
+        if (m_wire_frame_raster_state != nullptr)
+        {
+            m_wire_frame_raster_state->Release();
+            m_wire_frame_raster_state = nullptr;
+        }
+        if (m_depth_stencil_view != nullptr)
+        {
+            m_depth_stencil_view->Release();
+            m_depth_stencil_view = nullptr;
+        }
+        if (m_depth_disabled_stencil_state != nullptr)
+        {
+            m_depth_disabled_stencil_state->Release();
+            m_depth_disabled_stencil_state = nullptr;
+        }
+        if (m_depth_stencil_state != nullptr)
+        {
+            m_depth_stencil_state->Release();
+            m_depth_stencil_state = nullptr;
+        }
+        if (m_depth_stencil_buffer != nullptr)
+        {
+            m_depth_stencil_buffer->Release();
+            m_depth_stencil_buffer = nullptr;
+        }
+        if (m_render_target_view != nullptr)
+        {
+            m_render_target_view->Release();
+            m_render_target_view = nullptr;
+        }
+        if (m_device_context != nullptr)
+        {
+            m_device_context->Release();
+            m_device_context = nullptr;
+        }
+        if (m_device != nullptr)
+        {
+            m_device->Release();
+            m_device = nullptr;
+        }
+        if (m_swap_chain != nullptr)
+        {
+            m_swap_chain->Release();
+            m_swap_chain = nullptr;
+        }
+    }
+
+    void RendererCommon::OnResize(int client_width, int client_height, bool b_fullscreen, Real far_plane, Real near_plane, Real field_of_view)
+    {
+        m_d2d_device_context->SetTarget(nullptr);
+        m_device_context->ClearState();
+        // do not call finish command list on state.
+        //m_device_context->FinishCommandList(false, nullptr);
+        if (m_render_target_view != nullptr)
+        {
+            m_render_target_view->Release();
+            m_render_target_view = nullptr;
+        }
+        if (m_depth_stencil_view != nullptr)
+        {
+            m_depth_stencil_view->Release();
+            m_depth_stencil_view = nullptr;
+        }
+        if (m_depth_stencil_buffer != nullptr)
+        {
+            m_depth_stencil_buffer->Release();
+            m_depth_stencil_buffer = nullptr;
+        }
+        HRESULT result = m_swap_chain->ResizeBuffers(m_back_buffer_count, client_width, client_height, m_dxgi_color_format, 0);
+        this->OnFullscreen(b_fullscreen);
+        if (FAILED(result))
+            return;
+        this->SetUpBackBuffer();
+        this->SetUpDepthBufferDescription(client_width, client_height);
+        this->SetUpDepthStencilViewDescription();
+        // Set the viewport transform.
+        this->SetUpViewport(client_width, client_height);
+        this->SetUpMatrices(client_width, client_height, far_plane, near_plane, field_of_view);
+        this->SetUpDWRenderTarget();
+    }
+
+    void RendererCommon::OnFullscreen(bool b_fullscreen) const
+    {
+        m_swap_chain->SetFullscreenState(b_fullscreen, nullptr);
+    }
+
+    void RendererCommon::BeginScene(Color color) const
+    {
+        Real color_arr[ 4 ];
+        // Setup the color to clear the buffer to.
+        color_arr[0] = color.r;
+        color_arr[1] = color.g;
+        color_arr[2] = color.b;
+        color_arr[3] = color.a;
+        // Clear the back buffer.
+        m_device_context->ClearRenderTargetView(m_render_target_view, color_arr);
+        /*if (m_render_target_view != nullptr)
+        {
+
+        }*/
+        // Clear the depth buffer.
+        if (m_depth_stencil_view != nullptr)
+        {
+            m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+        }
+        m_d2d_device_context->BeginDraw();
+    }
+
+    void RendererCommon::EndScene() const
+    {
+        m_d2d_device_context->EndDraw();
+        if (m_vsync_enabled)
+        {
+            // Lock to screen refresh rate.
+            m_swap_chain->Present(1, 0);
+        }
+        else
+        {
+            // Present as fast as possible.
+            m_swap_chain->Present(0, 0);
+        }
+    }
+
+    void RendererCommon::SetVSync(bool flag)
+    {
+        m_vsync_enabled = flag;
+    }
+
+    void RendererCommon::SetAlphaBlending(bool flag) const
+    {
+        Real blend_factor[ 4 ];
+        // Setup the blend factor.
+        blend_factor[0] = 0.0f;
+        blend_factor[1] = 0.0f;
+        blend_factor[2] = 0.0f;
+        blend_factor[3] = 0.0f;
+        // Turn on the alpha blending.
+        if (flag == true)
+        {
+            m_device_context->OMSetBlendState(m_alpha_enabled_blending_state, blend_factor, 0xffffffff);
+        }
+        else
+        {
+            m_device_context->OMSetBlendState(m_alpha_disabled_blending_state, blend_factor, 0xffffffff);
+        }
+    }
+
+    void RendererCommon::SetZBuffering(bool flag) const
+    {
+        if (flag == true)
+        {
+            m_device_context->OMSetDepthStencilState(m_depth_stencil_state, 1);
+        }
+        else
+        {
+            m_device_context->OMSetDepthStencilState(m_depth_disabled_stencil_state, 1);
+        }
+    }
+
+    void RendererCommon::SetMatrixGenerator(MatrixGenerator* matrix_generator)
+    {
+        m_matrix_generator = matrix_generator;
     }
 }

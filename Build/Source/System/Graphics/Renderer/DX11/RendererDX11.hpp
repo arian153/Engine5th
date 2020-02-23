@@ -17,37 +17,24 @@ namespace Engine5
     class RendererDX11
     {
     public:
-        explicit RendererDX11(HWND hwnd, MatrixGenerator* matrix_gen);
         RendererDX11();
         ~RendererDX11();
-        void Initialize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view);
-        void Update(Real dt);
-        void Shutdown();
-        void OnResize(int client_width, int client_height, bool fullscreen_flag, Real far_plane, Real near_plane, Real field_of_view);
-        void OnFullscreen(bool fullscreen_flag) const;
-
-        void BeginScene(Color color) const;
-        void EndScene() const;
-        void SetVSync(bool flag);
-        void SetAlphaBlending(bool flag) const;
-        void SetZBuffering(bool flag) const;
-
 
         ID3D11Device*           GetDevice() const;
         ID3D11DeviceContext*    GetDeviceContext() const;
         ID3D11DepthStencilView* GetDepthStencilView() const;
-        //RenderSystem* GetRenderSystem();
+        std::string             GetVideoCardInfo(size_t& memory) const;
+        DirectX::XMMATRIX       GetProjectionMatrix() const;
 
-        String            GetVideoCardInfo(size_t& memory) const;
-        DirectX::XMMATRIX GetProjectionMatrix() const;
-
+        void SetHwnd(HWND hwnd);
         void SetBackBufferRenderTarget() const;
         void SetRasterStateWireFrame(bool flag) const;
 
-    private:
+    protected:
+
         void SetUpAdapterDescription(int client_width, int client_height);
         void SetUpDevice();
-        void SetUpSwapChain(int client_width, int client_height, HWND hwnd, bool fullscreen_flag);
+        void SetUpSwapChain(int client_width, int client_height, bool fullscreen_flag);
         void SetUpBackBuffer();
         void SetUpDepthBufferDescription(int client_width, int client_height);
         void SetUpStencilStateDescription();
@@ -63,7 +50,7 @@ namespace Engine5
 
         DirectX::XMMATRIX OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane) const;
 
-    private:
+    protected:
         IDXGISwapChain*          m_swap_chain                    = nullptr;
         ID3D11Device*            m_device                        = nullptr;
         ID3D11DeviceContext*     m_device_context                = nullptr;
@@ -84,8 +71,7 @@ namespace Engine5
         HWND                     m_hwnd                          = nullptr;
         MatrixGenerator*         m_matrix_generator              = nullptr;
         D3D_FEATURE_LEVEL        m_d3d_feature_level;
-        DXGI_FORMAT              m_dxgi_color_format = DXGI_FORMAT_B8G8R8A8_UNORM;
-
+        DXGI_FORMAT              m_dxgi_color_format;
 
         DirectX::XMMATRIX m_projection_matrix;
         DirectX::XMMATRIX m_world_matrix;
@@ -109,7 +95,5 @@ namespace Engine5
         size_t m_client_width;
         size_t m_client_height;
         Real   m_dw_dpi = 96.0f;
-
-    private:
     };
 }

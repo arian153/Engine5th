@@ -7,7 +7,7 @@
 
 namespace Engine5
 {
-    class RendererDX11;
+    class RendererCommon;
     class Camera;
     class ColorShader;
 
@@ -21,7 +21,7 @@ namespace Engine5
     class PrimitiveRenderer
     {
     public:
-        explicit PrimitiveRenderer(RendererDX11* dx11_api);
+        explicit PrimitiveRenderer(RendererCommon* dx11_api);
         ~PrimitiveRenderer();
         void DrawPrimitive(Primitive* primitive, eRenderingMode mode, Color color = Color());
         void DrawPrimitive(const Primitive& primitive, eRenderingMode mode, Color color = Color());
@@ -31,7 +31,6 @@ namespace Engine5
         void DrawSegment(const Vector3& start, const Vector3& end, Color color = Color());
         void DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, eRenderingMode mode, Color color = Color());
         void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
-
 
         void Initialize(ColorShader* color_shader);
         void Update(Real dt);
@@ -54,7 +53,6 @@ namespace Engine5
         size_t VerticesSize(eRenderingMode mode) const;
         size_t IndicesSize(eRenderingMode mode) const;
 
-
     private:
         void BuildDotBuffer();
         void UpdateDotBuffer(Real dt) const;
@@ -65,7 +63,6 @@ namespace Engine5
         void BuildTriangleBuffer();
         void UpdateTriangleBuffer(Real dt) const;
 
-        
     private:
 
         class ColorVertex
@@ -102,7 +99,7 @@ namespace Engine5
         DirectX::XMMATRIX    m_world_matrix;
         DirectX::XMMATRIX    m_proj_matrix;
         ColorShader*         m_color_shader   = nullptr;
-        RendererDX11*         m_dx11_api       = nullptr;
+        RendererCommon*      m_dx11_api       = nullptr;
         ID3D11DeviceContext* m_device_context = nullptr;
 
         std::vector<ColorVertex> m_dot_vertices;
@@ -121,12 +118,12 @@ namespace Engine5
         ID3D11Buffer*            m_face_index_buffer  = nullptr;
 
     public:
-        const int CIRCULAR_VERTICES_COUNT = 100;
-        const int SPHERICAL_SLICE_COUNT = 14;
-        const int SPHERICAL_STACK_COUNT = 15;
-        const int SPHERICAL_VERTICES_COUNT = 212; //(stack_count - 1) * (slice_count + 1) + 2;
-        const int CYLINDRICAL_SLICE_COUNT = 20;
-        const int CYLINDRICAL_STACK_COUNT = 1;
+        const int CIRCULAR_VERTICES_COUNT    = 100;
+        const int SPHERICAL_SLICE_COUNT      = 14;
+        const int SPHERICAL_STACK_COUNT      = 15;
+        const int SPHERICAL_VERTICES_COUNT   = 212; //(stack_count - 1) * (slice_count + 1) + 2;
+        const int CYLINDRICAL_SLICE_COUNT    = 20;
+        const int CYLINDRICAL_STACK_COUNT    = 1;
         const int CYLINDRICAL_VERTICES_COUNT = 42; //(stack_count + 1) * (slice_count + 1)
     };
 }

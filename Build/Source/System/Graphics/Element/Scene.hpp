@@ -6,6 +6,7 @@
 
 namespace Engine5
 {
+    class RendererCommon;
     class RendererDX11;
 
     class Scene
@@ -18,13 +19,13 @@ namespace Engine5
         void Update(Real dt) const;
         void Shutdown();
 
-        void SetDX11(RendererDX11* m_dx11_api);
+        void SetDX11(RendererCommon* m_dx11_api);
         void SetShaderManager(ShaderManager* shader_manager);
 
     private:
-        RendererDX11*   m_dx11_api       = nullptr;
-        ShaderManager* m_shader_manager = nullptr;
-        Camera*        m_camera         = nullptr;
-        Mesh*          m_mesh           = nullptr;
+        RendererCommon* m_dx11_api       = nullptr;
+        ShaderManager*  m_shader_manager = nullptr;
+        Camera*         m_camera         = nullptr;
+        Mesh*           m_mesh           = nullptr;
     };
 }

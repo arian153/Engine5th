@@ -12,7 +12,7 @@
 namespace Engine5
 {
     class OSAPI;
-    class RendererDX11;
+    class RendererCommon;
 
     class RenderSystem
     {
@@ -39,7 +39,7 @@ namespace Engine5
 
     private:
         WindowsAPI*        m_os_api             = nullptr;
-        RendererDX11*       m_renderer           = nullptr;
+        RendererCommon*       m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;
         MatrixGenerator    m_matrix_generator;
