@@ -48,8 +48,6 @@ namespace Engine5
         void SetUpDWDevice();
         void SetUpDWRenderTarget();
 
-        DirectX::XMMATRIX OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane) const;
-
     protected:
         IDXGISwapChain*          m_swap_chain                    = nullptr;
         ID3D11Device*            m_device                        = nullptr;

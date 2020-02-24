@@ -12,6 +12,10 @@ namespace Engine5
 
     Matrix44 MatrixGenerator::ProjectionMatrix(Real screen_aspect, Real field_of_view, Real far_plane, Real near_plane)
     {
+        SetScreenAspect(screen_aspect);
+        SetFieldOfView(field_of_view);
+        SetFarPlane(far_plane);
+        SetNearPlane(near_plane);
         Real     alpha = field_of_view * 0.5f;
         Real     cot   = cosf(alpha) / sinf(alpha);
         Matrix44 result;
@@ -26,24 +30,33 @@ namespace Engine5
 
     Matrix44 MatrixGenerator::OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane)
     {
+        SetClientRect(client_width, client_height);
+        SetFarPlane(far_plane);
+        SetNearPlane(near_plane);
+
+        Real plane = 1.0f / (far_plane - near_plane);
+
         Matrix44 result;
         result.data[0]  = 2.0f / client_width;
         result.data[5]  = 2.0f / client_height;
-        result.data[10] = 2.0f / (far_plane - near_plane);
-        result.data[14] = -near_plane / (far_plane - near_plane);
+        result.data[10] = plane;
+        result.data[14] = plane * -near_plane;
         result.data[15] = 1.0f;
         return result;
     }
 
     Matrix44 MatrixGenerator::OrthoGraphicCenterMatrix(Real right, Real left, Real top, Real bottom, Real far_plane, Real near_plane)
     {
+        SetClientRect(right, left, top, bottom);
+        SetFarPlane(far_plane);
+        SetNearPlane(near_plane);
         Matrix44 result;
         result.data[0]  = 2.0f / (right - left);
         result.data[5]  = 2.0f / (top - bottom);
-        result.data[10] = 2.0f / (far_plane - near_plane);
+        result.data[10] = 1.0f / (far_plane - near_plane);
         result.data[12] = (left + right) / (left - right);
         result.data[13] = (top + bottom) / (bottom - top);
-        result.data[14] = -near_plane / (far_plane - near_plane);
+        result.data[14] = near_plane / (near_plane - far_plane);
         result.data[15] = 1.0f;
         return result;
     }
@@ -99,6 +112,17 @@ namespace Engine5
         m_top           = half_y;
         m_bottom        = -half_y;
         m_screen_aspect = (m_right - m_left) / (Real)client_height;
+    }
+
+    void MatrixGenerator::SetClientRect(size_t client_width, size_t client_height)
+    {
+        Real half_x     = static_cast<Real>(client_width >> 1);
+        Real half_y     = static_cast<Real>(client_height >> 1);
+        m_right         = half_x;
+        m_left          = -half_x;
+        m_top           = half_y;
+        m_bottom        = -half_y;
+        m_screen_aspect = (Real)client_width / (Real)client_height;
     }
 
     void MatrixGenerator::SetClientRect(Real right, Real left, Real top, Real bottom)

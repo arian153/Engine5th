@@ -429,7 +429,7 @@ namespace Engine5
     {
         Real screen_aspect  = (Real)client_width / (Real)client_height;
         m_projection_matrix = Converter::ToXMMatrix(m_matrix_generator->ProjectionMatrix(screen_aspect, field_of_view, far_plane, near_plane));
-        m_ortho_matrix      = OrthoGraphicMatrix(client_width, client_height, far_plane, near_plane);
+        m_ortho_matrix      = Converter::ToXMMatrix(m_matrix_generator->OrthoGraphicMatrix(client_width, client_height, far_plane, near_plane));
     }
 
     void RendererDX11::SetUpMultiSamplingLevel()
@@ -525,13 +525,6 @@ namespace Engine5
             m_target_bitmap->Release();
             m_target_bitmap = nullptr;
         }
-    }
-
-    DirectX::XMMATRIX RendererDX11::OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane) const
-    {
-        Real half_x = static_cast<Real>(client_width >> 1);
-        Real half_y = static_cast<Real>(client_height >> 1);
-        return DirectX::XMMatrixOrthographicOffCenterLH(-half_x, half_x, -half_y, half_y, near_plane, far_plane);
     }
 
     RendererCommon::RendererCommon()

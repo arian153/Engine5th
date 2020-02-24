@@ -22,6 +22,7 @@ namespace Engine5
         void SetNearPlane(Real near_plane);
         void SetClientWidth(size_t client_width);
         void SetClientHeight(size_t client_height);
+        void SetClientRect(size_t client_width, size_t client_height);
         void SetClientRect(Real right, Real left, Real top, Real bottom);
 
         //Getter
