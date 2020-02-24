@@ -5,7 +5,7 @@
 namespace Engine5
 {
     PrimitiveRenderer::PrimitiveRenderer(RendererCommon* dx11_api)
-        : m_view_matrix(), m_world_matrix(), m_proj_matrix(), m_dx11_api(dx11_api)
+        : m_view_matrix(), m_world_matrix(), m_proj_matrix(), m_renderer(dx11_api)
     {
     }
 
@@ -112,7 +112,7 @@ namespace Engine5
         m_rotation     = Quaternion();
         UpdatePrimitiveRendererCamera();
         UpdateProjectionMatrix();
-        m_device_context = m_dx11_api->GetDeviceContext();
+        m_device_context = m_renderer->GetDeviceContext();
         m_world_matrix   = DirectX::XMMatrixIdentity();
     }
 
@@ -225,7 +225,7 @@ namespace Engine5
             vertex_data.SysMemSlicePitch = 0;
 
             // Now create the vertex buffer.
-            HRESULT result = m_dx11_api->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_dot_vertex_buffer);
+            HRESULT result = m_renderer->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_dot_vertex_buffer);
             if (FAILED(result))
                 return;
 
@@ -245,7 +245,7 @@ namespace Engine5
             index_data.SysMemSlicePitch = 0;
 
             // Create the index buffer.
-            result = m_dx11_api->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_dot_index_buffer);
+            result = m_renderer->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_dot_index_buffer);
             if (FAILED(result))
                 return;
         }
@@ -301,7 +301,7 @@ namespace Engine5
             vertex_data.SysMemSlicePitch = 0;
 
             // Now create the vertex buffer.
-            HRESULT result = m_dx11_api->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_line_vertex_buffer);
+            HRESULT result = m_renderer->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_line_vertex_buffer);
             if (FAILED(result))
                 return;
 
@@ -321,7 +321,7 @@ namespace Engine5
             index_data.SysMemSlicePitch = 0;
 
             // Create the index buffer.
-            result = m_dx11_api->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_line_index_buffer);
+            result = m_renderer->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_line_index_buffer);
             if (FAILED(result))
                 return;
         }
@@ -377,7 +377,7 @@ namespace Engine5
             vertex_data.SysMemSlicePitch = 0;
 
             // Now create the vertex buffer.
-            HRESULT result = m_dx11_api->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_face_vertex_buffer);
+            HRESULT result = m_renderer->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_face_vertex_buffer);
             if (FAILED(result))
                 return;
 
@@ -397,7 +397,7 @@ namespace Engine5
             index_data.SysMemSlicePitch = 0;
 
             // Create the index buffer.
-            result = m_dx11_api->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_face_index_buffer);
+            result = m_renderer->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_face_index_buffer);
             if (FAILED(result))
                 return;
         }
@@ -425,7 +425,7 @@ namespace Engine5
 
     void PrimitiveRenderer::UpdateProjectionMatrix()
     {
-        m_proj_matrix = m_dx11_api->GetProjectionMatrix();
+        m_proj_matrix = m_renderer->GetProjectionMatrix();
     }
 
     void PrimitiveRenderer::SetRendererCameraPosition(const Vector3& pos)

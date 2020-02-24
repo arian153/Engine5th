@@ -74,15 +74,7 @@ namespace Engine5
         DXGI_FORMAT              m_dxgi_color_format;
 
         DirectX::XMMATRIX m_projection_matrix;
-        DirectX::XMMATRIX m_world_matrix;
         DirectX::XMMATRIX m_ortho_matrix;
-        DirectX::XMMATRIX m_oblique_matrix;
-        DirectX::XMMATRIX m_cavalier_matrix;
-        DirectX::XMMATRIX m_cabinet_matrix;
-        DirectX::XMMATRIX m_dimetric_matrix;
-        DirectX::XMMATRIX m_trimetric_matrix;
-        DirectX::XMMATRIX m_isometric_matrix;
-        DirectX::XMMATRIX m_ndc_to_screen_matrix;
 
         UINT   m_back_buffer_count = 1;
         bool   m_enable_msaa       = false;

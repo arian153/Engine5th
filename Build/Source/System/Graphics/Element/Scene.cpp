@@ -17,7 +17,7 @@ namespace Engine5
         m_camera->SetPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_camera->Initialize();
         m_mesh = new Mesh();
-        m_mesh->SetDevice(m_dx11_api->GetDevice(), m_dx11_api->GetDeviceContext());
+        m_mesh->SetDevice(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
         m_mesh->Initialize();
     }
 
@@ -26,9 +26,9 @@ namespace Engine5
         m_camera->Update(dt);
         auto world = DirectX::XMMatrixIdentity();
         auto view  = m_camera->GetViewMatrix();
-        auto proj  = m_dx11_api->GetProjectionMatrix();
+        auto proj  = m_renderer->GetProjectionMatrix();
         m_mesh->Update(dt);
-        m_shader_manager->GetColorShader()->Update(dt, m_dx11_api->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, proj);
+        m_shader_manager->GetColorShader()->Update(dt, m_renderer->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, proj);
     }
 
     void Scene::Shutdown()
@@ -47,9 +47,9 @@ namespace Engine5
         }
     }
 
-    void Scene::SetDX11(RendererCommon* dx11_api)
+    void Scene::SetRenderer(RendererCommon* renderer)
     {
-        m_dx11_api = dx11_api;
+        m_renderer = renderer;
     }
 
     void Scene::SetShaderManager(ShaderManager* shader_manager)

@@ -8,7 +8,6 @@
 #include "../Core/OS-API/Windows/Windows.hpp"
 #include "Utility/MatrixGenerator.hpp"
 
-
 namespace Engine5
 {
     class OSAPI;
@@ -34,12 +33,11 @@ namespace Engine5
         Color GetBackgroundColor() const;
 
         Scene* CreateScene();
-        void RemoveScene(Scene* scene);
-
+        void   RemoveScene(Scene* scene);
 
     private:
         WindowsAPI*        m_os_api             = nullptr;
-        RendererCommon*       m_renderer           = nullptr;
+        RendererCommon*    m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;
         MatrixGenerator    m_matrix_generator;

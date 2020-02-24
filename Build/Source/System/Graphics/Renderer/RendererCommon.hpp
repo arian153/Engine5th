@@ -22,7 +22,7 @@ namespace Engine5
         void SetAlphaBlending(bool flag) const;
         void SetZBuffering(bool flag) const;
         void SetMatrixGenerator(MatrixGenerator* matrix_generator);
-
+        
     private:
     };
 }

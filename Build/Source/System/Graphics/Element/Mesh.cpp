@@ -13,8 +13,6 @@ namespace Engine5
 
     void Mesh::Initialize()
     {
-        
-
         // Set the number of vertices in the vertex array.
         m_vertex_count = 3;
 
@@ -98,7 +96,7 @@ namespace Engine5
         indices = nullptr;
     }
 
-    void Mesh::Update(Real dt)
+    void Mesh::Update(Real dt) const
     {
         E5_UNUSED_PARAM(dt);
         RenderBuffers();

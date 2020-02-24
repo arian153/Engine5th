@@ -99,7 +99,7 @@ namespace Engine5
         DirectX::XMMATRIX    m_world_matrix;
         DirectX::XMMATRIX    m_proj_matrix;
         ColorShader*         m_color_shader   = nullptr;
-        RendererCommon*      m_dx11_api       = nullptr;
+        RendererCommon*      m_renderer       = nullptr;
         ID3D11DeviceContext* m_device_context = nullptr;
 
         std::vector<ColorVertex> m_dot_vertices;

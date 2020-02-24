@@ -13,15 +13,7 @@ namespace Engine5
         : m_d3d_feature_level(),
           m_dxgi_color_format(DXGI_FORMAT_B8G8R8A8_UNORM),
           m_projection_matrix(),
-          m_world_matrix(),
           m_ortho_matrix(),
-          m_oblique_matrix(),
-          m_cavalier_matrix(),
-          m_cabinet_matrix(),
-          m_dimetric_matrix(),
-          m_trimetric_matrix(),
-          m_isometric_matrix(),
-          m_ndc_to_screen_matrix(),
           m_numerator(0),
           m_denominator(0),
           m_video_card_memory(0),
@@ -685,7 +677,6 @@ namespace Engine5
         this->SetUpBackBuffer();
         this->SetUpDepthBufferDescription(client_width, client_height);
         this->SetUpDepthStencilViewDescription();
-        // Set the viewport transform.
         this->SetUpViewport(client_width, client_height);
         this->SetUpMatrices(client_width, client_height, far_plane, near_plane, field_of_view);
         this->SetUpDWRenderTarget();

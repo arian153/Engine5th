@@ -19,11 +19,11 @@ namespace Engine5
         void Update(Real dt) const;
         void Shutdown();
 
-        void SetDX11(RendererCommon* m_dx11_api);
+        void SetRenderer(RendererCommon* renderer);
         void SetShaderManager(ShaderManager* shader_manager);
 
     private:
-        RendererCommon* m_dx11_api       = nullptr;
+        RendererCommon* m_renderer       = nullptr;
         ShaderManager*  m_shader_manager = nullptr;
         Camera*         m_camera         = nullptr;
         Mesh*           m_mesh           = nullptr;

@@ -11,19 +11,17 @@ namespace Engine5
         DirectX::XMFLOAT4 color;
     };
 
-
     class Mesh
     {
     public:
         Mesh();
         ~Mesh();
         void Initialize();
-        void Update(Real dt);
+        void Update(Real dt) const;
         void Shutdown();
 
-
         void SetDevice(ID3D11Device* device, ID3D11DeviceContext* context);
-        int GetIndexCount() const;
+        int  GetIndexCount() const;
     private:
         void RenderBuffers() const;
 
@@ -33,6 +31,6 @@ namespace Engine5
         ID3D11Buffer*        m_vertex_buffer  = nullptr;
         ID3D11Buffer*        m_index_buffer   = nullptr;;
         int                  m_vertex_count   = 0;
-        int                  m_index_count     = 0;
+        int                  m_index_count    = 0;
     };
 }
