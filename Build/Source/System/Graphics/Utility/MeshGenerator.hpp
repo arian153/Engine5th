@@ -1,22 +1,11 @@
 #pragma once
 #include "Vertex.hpp"
-#include <vector>
 #include "../../Core/Utility/CoreDef.hpp"
+
 
 namespace Engine5
 {
-    class MeshData
-    {
-    public:
-        MeshData();
-        ~MeshData();
-
-    public:
-        std::vector<Vertex> vertices;
-        std::vector<I32>    indices;
-        bool                is_resource = false;
-    };
-
+    class MeshData;
     class MeshGenerator
     {
     public:
@@ -31,11 +20,11 @@ namespace Engine5
         MeshData* CreateQuad(Real x, Real y, Real w, Real h, Real depth) const;
 
     private:
-    private:
         void   Subdivide(MeshData& mesh_data) const;
         Vertex MidPoint(const Vertex& v0, const Vertex& v1) const;
         void   BuildCylinderTopCap(Real bottom_radius, Real top_radius, Real height, I32 slice_count, I32 stack_count, MeshData* mesh_data) const;
         void   BuildCylinderBottomCap(Real bottom_radius, Real top_radius, Real height, I32 slice_count, I32 stack_count, MeshData* mesh_data) const;
         void   CalculateBinormal(MeshData& mesh_data) const;
     };
+
 }
