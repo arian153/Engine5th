@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Core/Utility/CoreDef.hpp"
-#include "Vertex.hpp"
+#include "../Vertex/TextureVertex.hpp"
 #include <vector>
 
 namespace Engine5
@@ -17,7 +17,7 @@ namespace Engine5
         }
 
     public:
-        std::vector<Vertex>   vertices;
+        std::vector<TextureVertex>   vertices;
         std::vector<U32> indices;
         bool             b_resource = false;
     };

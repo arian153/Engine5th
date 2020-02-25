@@ -18,40 +18,40 @@ namespace Engine5
     MeshData* MeshGenerator::CreateBox(Real width, Real height, Real depth, I32 num_subdivisions) const
     {
         MeshData* mesh_data = new MeshData();
-        Vertex    v[24];
+        TextureVertex    v[24];
         Real      w2 = 0.5f * width;
         Real      h2 = 0.5f * height;
         Real      d2 = 0.5f * depth;
         // Fill in the front face vertex data.
-        v[0] = Vertex(-w2, -h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-        v[1] = Vertex(-w2, +h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-        v[2] = Vertex(+w2, +h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-        v[3] = Vertex(+w2, -h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+        v[0] = TextureVertex(-w2, -h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        v[1] = TextureVertex(-w2, +h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        v[2] = TextureVertex(+w2, +h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        v[3] = TextureVertex(+w2, -h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
         // Fill in the back face vertex data.
-        v[4] = Vertex(-w2, -h2, +d2, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
-        v[5] = Vertex(+w2, -h2, +d2, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-        v[6] = Vertex(+w2, +h2, +d2, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-        v[7] = Vertex(-w2, +h2, +d2, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        v[4] = TextureVertex(-w2, -h2, +d2, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+        v[5] = TextureVertex(+w2, -h2, +d2, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        v[6] = TextureVertex(+w2, +h2, +d2, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        v[7] = TextureVertex(-w2, +h2, +d2, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
         // Fill in the top face vertex data.
-        v[8]  = Vertex(-w2, +h2, -d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-        v[9]  = Vertex(-w2, +h2, +d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-        v[10] = Vertex(+w2, +h2, +d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-        v[11] = Vertex(+w2, +h2, -d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+        v[8]  = TextureVertex(-w2, +h2, -d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        v[9]  = TextureVertex(-w2, +h2, +d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        v[10] = TextureVertex(+w2, +h2, +d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        v[11] = TextureVertex(+w2, +h2, -d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
         // Fill in the bottom face vertex data.
-        v[12] = Vertex(-w2, -h2, -d2, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
-        v[13] = Vertex(+w2, -h2, -d2, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-        v[14] = Vertex(+w2, -h2, +d2, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-        v[15] = Vertex(-w2, -h2, +d2, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        v[12] = TextureVertex(-w2, -h2, -d2, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+        v[13] = TextureVertex(+w2, -h2, -d2, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        v[14] = TextureVertex(+w2, -h2, +d2, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        v[15] = TextureVertex(-w2, -h2, +d2, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
         // Fill in the left face vertex data.
-        v[16] = Vertex(-w2, -h2, +d2, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f);
-        v[17] = Vertex(-w2, +h2, +d2, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f);
-        v[18] = Vertex(-w2, +h2, -d2, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f);
-        v[19] = Vertex(-w2, -h2, -d2, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f);
+        v[16] = TextureVertex(-w2, -h2, +d2, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f);
+        v[17] = TextureVertex(-w2, +h2, +d2, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f);
+        v[18] = TextureVertex(-w2, +h2, -d2, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f);
+        v[19] = TextureVertex(-w2, -h2, -d2, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f);
         // Fill in the right face vertex data.
-        v[20] = Vertex(+w2, -h2, -d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f);
-        v[21] = Vertex(+w2, +h2, -d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-        v[22] = Vertex(+w2, +h2, +d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f);
-        v[23] = Vertex(+w2, -h2, +d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+        v[20] = TextureVertex(+w2, -h2, -d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f);
+        v[21] = TextureVertex(+w2, +h2, -d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        v[22] = TextureVertex(+w2, +h2, +d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f);
+        v[23] = TextureVertex(+w2, -h2, +d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
         mesh_data->vertices.assign(&v[0], &v[24]);
         // Create the indices.
         I32 i[36];
@@ -108,8 +108,8 @@ namespace Engine5
     MeshData* MeshGenerator::CreateSphere(Real radius, I32 slice_count, I32 stack_count) const
     {
         MeshData* mesh_data = new MeshData();
-        Vertex    top_vertex(0.0f, +radius, 0.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-        Vertex    bottom_vertex(0.0f, -radius, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        TextureVertex    top_vertex(0.0f, +radius, 0.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        TextureVertex    bottom_vertex(0.0f, -radius, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
         mesh_data->vertices.push_back(top_vertex);
         Real phi_step   = Math::PI / stack_count;
         Real theta_step = Math::TWO_PI / slice_count;
@@ -121,7 +121,7 @@ namespace Engine5
             for (I32 j = 0; j <= slice_count; ++j)
             {
                 Real   theta = j * theta_step;
-                Vertex v;
+                TextureVertex v;
                 // spherical to cartesian
                 v.position.x = radius * sinf(phi) * cosf(theta);
                 v.position.y = radius * cosf(phi);
@@ -247,7 +247,7 @@ namespace Engine5
             Real d_theta = Math::TWO_PI / slice_count;
             for (I32 j = 0; j <= slice_count; ++j)
             {
-                Vertex vertex;
+                TextureVertex vertex;
                 Real   c        = cosf(j * d_theta);
                 Real   s        = sinf(j * d_theta);
                 vertex.position = DirectX::XMFLOAT3(r * c, y, r * s);
@@ -337,22 +337,22 @@ namespace Engine5
         mesh_data->vertices.resize(4);
         mesh_data->indices.resize(6);
         // Position coordinates specified in NDC space.
-        mesh_data->vertices[0] = Vertex(
+        mesh_data->vertices[0] = TextureVertex(
                                         x, y - h, depth,
                                         0.0f, 0.0f, -1.0f,
                                         1.0f, 0.0f, 0.0f,
                                         0.0f, 1.0f);
-        mesh_data->vertices[1] = Vertex(
+        mesh_data->vertices[1] = TextureVertex(
                                         x, y, depth,
                                         0.0f, 0.0f, -1.0f,
                                         1.0f, 0.0f, 0.0f,
                                         0.0f, 0.0f);
-        mesh_data->vertices[2] = Vertex(
+        mesh_data->vertices[2] = TextureVertex(
                                         x + w, y, depth,
                                         0.0f, 0.0f, -1.0f,
                                         1.0f, 0.0f, 0.0f,
                                         1.0f, 0.0f);
-        mesh_data->vertices[3] = Vertex(
+        mesh_data->vertices[3] = TextureVertex(
                                         x + w, y - h, depth,
                                         0.0f, 0.0f, -1.0f,
                                         1.0f, 0.0f, 0.0f,
@@ -376,12 +376,12 @@ namespace Engine5
         I32 tri_angle_count = (I32)input_data.indices.size() / 3;
         for (I32 i = 0; i < tri_angle_count; ++i)
         {
-            Vertex v0 = input_data.vertices[input_data.indices[i * 3 + 0]];
-            Vertex v1 = input_data.vertices[input_data.indices[i * 3 + 1]];
-            Vertex v2 = input_data.vertices[input_data.indices[i * 3 + 2]];
-            Vertex m0 = MidPoint(v0, v1);
-            Vertex m1 = MidPoint(v1, v2);
-            Vertex m2 = MidPoint(v0, v2);
+            TextureVertex v0 = input_data.vertices[input_data.indices[i * 3 + 0]];
+            TextureVertex v1 = input_data.vertices[input_data.indices[i * 3 + 1]];
+            TextureVertex v2 = input_data.vertices[input_data.indices[i * 3 + 2]];
+            TextureVertex m0 = MidPoint(v0, v1);
+            TextureVertex m1 = MidPoint(v1, v2);
+            TextureVertex m2 = MidPoint(v0, v2);
             mesh_data.vertices.push_back(v0); // 0
             mesh_data.vertices.push_back(v1); // 1
             mesh_data.vertices.push_back(v2); // 2
@@ -403,7 +403,7 @@ namespace Engine5
         }
     }
 
-    Vertex MeshGenerator::MidPoint(const Vertex& v0, const Vertex& v1) const
+    TextureVertex MeshGenerator::MidPoint(const TextureVertex& v0, const TextureVertex& v1) const
     {
         DirectX::XMVECTOR p0   = DirectX::XMLoadFloat3(&v0.position);
         DirectX::XMVECTOR p1   = DirectX::XMLoadFloat3(&v1.position);
@@ -420,7 +420,7 @@ namespace Engine5
         DirectX::XMVECTOR tangent  = DirectX::XMVector3Normalize(DirectX::XMVectorScale(DirectX::XMVectorAdd(tan0, tan1), 0.5f));
         DirectX::XMVECTOR uv       = DirectX::XMVectorScale(DirectX::XMVectorAdd(uv0, uv1), 0.5f);
         DirectX::XMVECTOR binormal = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(tangent, normal));
-        Vertex            v;
+        TextureVertex            v;
         DirectX::XMStoreFloat3(&v.position, pos);
         DirectX::XMStoreFloat3(&v.normal, normal);
         DirectX::XMStoreFloat3(&v.tangent, tangent);
@@ -445,10 +445,10 @@ namespace Engine5
             // proportional to base.
             Real u = x / height + 0.5f;
             Real v = z / height + 0.5f;
-            mesh_data->vertices.push_back(Vertex(x, y, z, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, u, v));
+            mesh_data->vertices.push_back(TextureVertex(x, y, z, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, u, v));
         }
         // Cap center vertex.
-        mesh_data->vertices.push_back(Vertex(0.0f, y, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f, 0.5f));
+        mesh_data->vertices.push_back(TextureVertex(0.0f, y, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f, 0.5f));
         // Index of center vertex.
         I32 center_index = (I32)mesh_data->vertices.size() - 1;
         for (I32 i = 0; i < slice_count; ++i)
@@ -475,10 +475,10 @@ namespace Engine5
             // proportional to base.
             Real u = x / height + 0.5f;
             Real v = z / height + 0.5f;
-            mesh_data->vertices.push_back(Vertex(x, y, z, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, u, v));
+            mesh_data->vertices.push_back(TextureVertex(x, y, z, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, u, v));
         }
         // Cap center vertex.
-        mesh_data->vertices.push_back(Vertex(0.0f, y, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f, 0.5f));
+        mesh_data->vertices.push_back(TextureVertex(0.0f, y, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f, 0.5f));
         // Cache the index of center vertex.
         I32 center_index = (I32)mesh_data->vertices.size() - 1;
         for (I32 i = 0; i < slice_count; ++i)

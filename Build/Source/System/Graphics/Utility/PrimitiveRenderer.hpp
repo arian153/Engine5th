@@ -4,6 +4,7 @@
 #include <directxmath.h>
 #include <d3d11.h>
 #include <vector>
+#include "../Vertex/ColorVertex.hpp"
 
 namespace Engine5
 {
@@ -62,35 +63,6 @@ namespace Engine5
 
         void BuildTriangleBuffer();
         void UpdateTriangleBuffer(Real dt) const;
-
-    private:
-
-        class ColorVertex
-        {
-        public:
-            ColorVertex()
-            {
-                pos.x = 0.0f;
-                pos.y = 0.0f;
-                pos.z = 0.0f;
-                clr.w = 1.0f;
-                clr.x = 1.0f;
-                clr.y = 1.0f;
-                clr.z = 1.0f;
-            }
-
-            ColorVertex(const Vector3& position, const Color& color)
-            {
-                pos.x = position.x;
-                pos.y = position.y;
-                pos.z = position.z;
-                clr   = color.ToXMFloat4();
-            }
-
-        public:
-            DirectX::XMFLOAT3 pos;
-            DirectX::XMFLOAT4 clr;
-        };
 
     private:
         Vector3              m_position = Vector3(0.0f, 0.0f, -10.0f);

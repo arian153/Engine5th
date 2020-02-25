@@ -1,5 +1,5 @@
 #pragma once
-#include "Vertex.hpp"
+#include "../Vertex/TextureVertex.hpp"
 #include "../../Core/Utility/CoreDef.hpp"
 
 
@@ -21,7 +21,7 @@ namespace Engine5
 
     private:
         void   Subdivide(MeshData& mesh_data) const;
-        Vertex MidPoint(const Vertex& v0, const Vertex& v1) const;
+        TextureVertex MidPoint(const TextureVertex& v0, const TextureVertex& v1) const;
         void   BuildCylinderTopCap(Real bottom_radius, Real top_radius, Real height, I32 slice_count, I32 stack_count, MeshData* mesh_data) const;
         void   BuildCylinderBottomCap(Real bottom_radius, Real top_radius, Real height, I32 slice_count, I32 stack_count, MeshData* mesh_data) const;
         void   CalculateBinormal(MeshData& mesh_data) const;
