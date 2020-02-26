@@ -1,3 +1,5 @@
+#pragma warning( disable : 26451)
+
 #include "MeshGenerator.hpp"
 #include <algorithm>
 #include "../../Core/Utility/CoreUtility.hpp"

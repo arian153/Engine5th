@@ -2,10 +2,10 @@
 #include "../../Math/Utility/MathDef.hpp"
 #include "Camera.hpp"
 #include "Mesh.hpp"
-#include "../Utility/ShaderManager.hpp"
 
 namespace Engine5
 {
+    class ShaderManager;
     class RendererCommon;
     class RendererDX11;
 

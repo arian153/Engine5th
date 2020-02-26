@@ -1,5 +1,6 @@
 #include "Scene.hpp"
 #include "../Renderer/RendererCommon.hpp"
+#include "../Shader/ShaderManager.hpp"
 
 namespace Engine5
 {

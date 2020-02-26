@@ -3,7 +3,6 @@
 #include <vector>
 #include "../Math/Utility/MathDef.hpp"
 #include "Utility/Color.hpp"
-#include "Utility/ShaderManager.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
 #include "../Core/OS-API/Windows/Windows.hpp"
 #include "Utility/MatrixGenerator.hpp"

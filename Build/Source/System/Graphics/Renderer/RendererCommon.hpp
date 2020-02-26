@@ -16,6 +16,8 @@ namespace Engine5
         void OnResize(int client_width, int client_height, bool b_fullscreen, Real far_plane, Real near_plane, Real field_of_view);
         void OnFullscreen(bool b_fullscreen) const;
 
+        void Render() const;
+
         void BeginScene(Color color) const;
         void EndScene() const;
         void SetVSync(bool flag);

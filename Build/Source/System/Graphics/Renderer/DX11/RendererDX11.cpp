@@ -680,6 +680,11 @@ namespace Engine5
         m_swap_chain->SetFullscreenState(b_fullscreen, nullptr);
     }
 
+    void RendererCommon::Render() const
+    {
+        
+    }
+
     void RendererCommon::BeginScene(Color color) const
     {
         Real color_arr[ 4 ];
