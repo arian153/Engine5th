@@ -29,7 +29,7 @@ namespace Engine5
         ID3D11Device*        m_device         = nullptr;
         ID3D11DeviceContext* m_device_context = nullptr;
         ID3D11Buffer*        m_vertex_buffer  = nullptr;
-        ID3D11Buffer*        m_index_buffer   = nullptr;;
+        ID3D11Buffer*        m_index_buffer   = nullptr;
         int                  m_vertex_count   = 0;
         int                  m_index_count    = 0;
     };

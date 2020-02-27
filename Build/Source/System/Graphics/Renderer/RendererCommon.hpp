@@ -1,6 +1,6 @@
 #pragma once
-#include "RenderingAPI.hpp"
 #include "DX11/RendererDX11.hpp"
+#include "APIMacro.hpp"
 
 namespace Engine5
 {
