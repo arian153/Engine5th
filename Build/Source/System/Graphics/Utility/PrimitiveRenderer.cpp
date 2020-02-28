@@ -114,20 +114,24 @@ namespace Engine5
         UpdateProjectionMatrix();
         m_device_context = m_renderer->GetDeviceContext();
         m_world_matrix   = DirectX::XMMatrixIdentity();
+
+        m_dot_buffer = new BufferCommon();
+        m_line_buffer = new BufferCommon();
+        m_face_buffer = new BufferCommon();
     }
 
     void PrimitiveRenderer::Update(Real dt)
     {
         UpdatePrimitiveRendererCamera();
-        //
-        BuildDotBuffer();
+        //dot
+        m_dot_buffer->BuildBuffer(m_renderer, m_dot_vertices, m_dot_indices);
         UpdateDotBuffer(dt);
         //line
-        BuildLineBuffer();
+        m_line_buffer->BuildBuffer(m_renderer, m_line_vertices, m_line_indices);
         UpdateLineBuffer(dt);
         
         //face
-        BuildTriangleBuffer();
+        m_face_buffer->BuildBuffer(m_renderer, m_face_vertices, m_face_indices);
         UpdateTriangleBuffer(dt);
         Clear();
     }
@@ -135,37 +139,29 @@ namespace Engine5
     void PrimitiveRenderer::Shutdown()
     {
         Clear();
-        if (m_dot_vertex_buffer != nullptr)
+
+        if (m_dot_buffer != nullptr)
         {
-            m_dot_vertex_buffer->Release();
-            m_dot_vertex_buffer = nullptr;
+            m_dot_buffer->Shutdown();
+            delete m_dot_buffer;
+            m_dot_buffer = nullptr;
         }
-        if (m_dot_index_buffer != nullptr)
+
+        if (m_line_buffer != nullptr)
         {
-            m_dot_index_buffer->Release();
-            m_dot_index_buffer = nullptr;
+            m_line_buffer->Shutdown();
+            delete m_line_buffer;
+            m_line_buffer = nullptr;
         }
-        if (m_line_vertex_buffer != nullptr)
+
+        if (m_face_buffer != nullptr)
         {
-            m_line_vertex_buffer->Release();
-            m_line_vertex_buffer = nullptr;
+            m_face_buffer->Shutdown();
+            delete m_face_buffer;
+            m_face_buffer = nullptr;
         }
-        if (m_line_index_buffer != nullptr)
-        {
-            m_line_index_buffer->Release();
-            m_line_index_buffer = nullptr;
-        }
-        if (m_face_vertex_buffer != nullptr)
-        {
-            m_face_vertex_buffer->Release();
-            m_face_vertex_buffer = nullptr;
-        }
-        if (m_face_index_buffer != nullptr)
-        {
-            m_face_index_buffer->Release();
-            m_face_index_buffer = nullptr;
-        }
-    }
+
+            }
 
     void PrimitiveRenderer::UpdatePrimitiveRendererCamera()
     {
@@ -195,62 +191,7 @@ namespace Engine5
         m_face_indices.clear();
     }
 
-    void PrimitiveRenderer::BuildDotBuffer()
-    {
-        if (m_dot_vertex_buffer != nullptr)
-        {
-            m_dot_vertex_buffer->Release();
-            m_dot_vertex_buffer = nullptr;
-        }
-        if (m_dot_index_buffer != nullptr)
-        {
-            m_dot_index_buffer->Release();
-            m_dot_index_buffer = nullptr;
-        }
-        if (m_dot_vertices.empty() == false)
-        {
-            // Set up the description of the static vertex buffer.
-            D3D11_BUFFER_DESC vertex_buffer_desc;
-            vertex_buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
-            vertex_buffer_desc.ByteWidth           = sizeof(ColorVertex) * static_cast<I32>(m_dot_vertices.size());
-            vertex_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-            vertex_buffer_desc.CPUAccessFlags      = 0;
-            vertex_buffer_desc.MiscFlags           = 0;
-            vertex_buffer_desc.StructureByteStride = 0;
-
-            // Give the sub resource structure a pointer to the vertex data.
-            D3D11_SUBRESOURCE_DATA vertex_data;
-            vertex_data.pSysMem          = m_dot_vertices.data();
-            vertex_data.SysMemPitch      = 0;
-            vertex_data.SysMemSlicePitch = 0;
-
-            // Now create the vertex buffer.
-            HRESULT result = m_renderer->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_dot_vertex_buffer);
-            if (FAILED(result))
-                return;
-
-            // Set up the description of the static index buffer.
-            D3D11_BUFFER_DESC index_buffer_desc;
-            index_buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
-            index_buffer_desc.ByteWidth           = sizeof(I32) * static_cast<I32>(m_dot_indices.size());;
-            index_buffer_desc.BindFlags           = D3D11_BIND_INDEX_BUFFER;
-            index_buffer_desc.CPUAccessFlags      = 0;
-            index_buffer_desc.MiscFlags           = 0;
-            index_buffer_desc.StructureByteStride = 0;
-
-            // Give the sub resource structure a pointer to the index data.
-            D3D11_SUBRESOURCE_DATA index_data;
-            index_data.pSysMem          = m_dot_indices.data();
-            index_data.SysMemPitch      = 0;
-            index_data.SysMemSlicePitch = 0;
-
-            // Create the index buffer.
-            result = m_renderer->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_dot_index_buffer);
-            if (FAILED(result))
-                return;
-        }
-    }
-
+    
     void PrimitiveRenderer::UpdateDotBuffer(Real dt) const
     {
         if (m_dot_vertices.empty() == false)
@@ -260,10 +201,10 @@ namespace Engine5
             unsigned int offset = 0;
 
             // Set the vertex buffer to active in the input assembler so it can be rendered.
-            m_device_context->IASetVertexBuffers(0, 1, &m_dot_vertex_buffer, &stride, &offset);
+            m_device_context->IASetVertexBuffers(0, 1, &m_dot_buffer->m_vertex_buffer, &stride, &offset);
 
             // Set the index buffer to active in the input assembler so it can be rendered.
-            m_device_context->IASetIndexBuffer(m_dot_index_buffer, DXGI_FORMAT_R32_UINT, 0);
+            m_device_context->IASetIndexBuffer(m_dot_buffer->m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
 
             // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
             m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
@@ -271,62 +212,7 @@ namespace Engine5
         }
     }
 
-    void PrimitiveRenderer::BuildLineBuffer()
-    {
-        if (m_line_vertex_buffer != nullptr)
-        {
-            m_line_vertex_buffer->Release();
-            m_line_vertex_buffer = nullptr;
-        }
-        if (m_line_index_buffer != nullptr)
-        {
-            m_line_index_buffer->Release();
-            m_line_index_buffer = nullptr;
-        }
-        if (m_line_vertices.empty() == false)
-        {
-            // Set up the description of the static vertex buffer.
-            D3D11_BUFFER_DESC vertex_buffer_desc;
-            vertex_buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
-            vertex_buffer_desc.ByteWidth           = sizeof(ColorVertex) * static_cast<I32>(m_line_vertices.size());
-            vertex_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-            vertex_buffer_desc.CPUAccessFlags      = 0;
-            vertex_buffer_desc.MiscFlags           = 0;
-            vertex_buffer_desc.StructureByteStride = 0;
-
-            // Give the sub resource structure a pointer to the vertex data.
-            D3D11_SUBRESOURCE_DATA vertex_data;
-            vertex_data.pSysMem          = m_line_vertices.data();
-            vertex_data.SysMemPitch      = 0;
-            vertex_data.SysMemSlicePitch = 0;
-
-            // Now create the vertex buffer.
-            HRESULT result = m_renderer->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_line_vertex_buffer);
-            if (FAILED(result))
-                return;
-
-            // Set up the description of the static index buffer.
-            D3D11_BUFFER_DESC index_buffer_desc;
-            index_buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
-            index_buffer_desc.ByteWidth           = sizeof(I32) * static_cast<I32>(m_line_indices.size());;
-            index_buffer_desc.BindFlags           = D3D11_BIND_INDEX_BUFFER;
-            index_buffer_desc.CPUAccessFlags      = 0;
-            index_buffer_desc.MiscFlags           = 0;
-            index_buffer_desc.StructureByteStride = 0;
-
-            // Give the sub resource structure a pointer to the index data.
-            D3D11_SUBRESOURCE_DATA index_data;
-            index_data.pSysMem          = m_line_indices.data();
-            index_data.SysMemPitch      = 0;
-            index_data.SysMemSlicePitch = 0;
-
-            // Create the index buffer.
-            result = m_renderer->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_line_index_buffer);
-            if (FAILED(result))
-                return;
-        }
-    }
-
+   
     void PrimitiveRenderer::UpdateLineBuffer(Real dt) const
     {
         if (m_line_vertices.empty() == false)
@@ -336,70 +222,14 @@ namespace Engine5
             unsigned int offset = 0;
 
             // Set the vertex buffer to active in the input assembler so it can be rendered.
-            m_device_context->IASetVertexBuffers(0, 1, &m_line_vertex_buffer, &stride, &offset);
+            m_device_context->IASetVertexBuffers(0, 1, &m_line_buffer->m_vertex_buffer, &stride, &offset);
 
             // Set the index buffer to active in the input assembler so it can be rendered.
-            m_device_context->IASetIndexBuffer(m_line_index_buffer, DXGI_FORMAT_R32_UINT, 0);
+            m_device_context->IASetIndexBuffer(m_line_buffer->m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
 
             // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
             m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
             m_color_shader->Update(dt, m_device_context, static_cast<int>(m_line_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
-        }
-    }
-
-    void PrimitiveRenderer::BuildTriangleBuffer()
-    {
-        if (m_face_vertex_buffer != nullptr)
-        {
-            m_face_vertex_buffer->Release();
-            m_face_vertex_buffer = nullptr;
-        }
-        if (m_face_index_buffer != nullptr)
-        {
-            m_face_index_buffer->Release();
-            m_face_index_buffer = nullptr;
-        }
-        if (m_face_vertices.empty() == false)
-        {
-            // Set up the description of the static vertex buffer.
-            D3D11_BUFFER_DESC vertex_buffer_desc;
-            vertex_buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
-            vertex_buffer_desc.ByteWidth           = sizeof(ColorVertex) * static_cast<I32>(m_face_vertices.size());
-            vertex_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-            vertex_buffer_desc.CPUAccessFlags      = 0;
-            vertex_buffer_desc.MiscFlags           = 0;
-            vertex_buffer_desc.StructureByteStride = 0;
-
-            // Give the sub resource structure a pointer to the vertex data.
-            D3D11_SUBRESOURCE_DATA vertex_data;
-            vertex_data.pSysMem          = m_face_vertices.data();
-            vertex_data.SysMemPitch      = 0;
-            vertex_data.SysMemSlicePitch = 0;
-
-            // Now create the vertex buffer.
-            HRESULT result = m_renderer->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_face_vertex_buffer);
-            if (FAILED(result))
-                return;
-
-            // Set up the description of the static index buffer.
-            D3D11_BUFFER_DESC index_buffer_desc;
-            index_buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
-            index_buffer_desc.ByteWidth           = sizeof(I32) * static_cast<I32>(m_face_indices.size());;
-            index_buffer_desc.BindFlags           = D3D11_BIND_INDEX_BUFFER;
-            index_buffer_desc.CPUAccessFlags      = 0;
-            index_buffer_desc.MiscFlags           = 0;
-            index_buffer_desc.StructureByteStride = 0;
-
-            // Give the sub resource structure a pointer to the index data.
-            D3D11_SUBRESOURCE_DATA index_data;
-            index_data.pSysMem          = m_face_indices.data();
-            index_data.SysMemPitch      = 0;
-            index_data.SysMemSlicePitch = 0;
-
-            // Create the index buffer.
-            result = m_renderer->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_face_index_buffer);
-            if (FAILED(result))
-                return;
         }
     }
 
@@ -412,10 +242,10 @@ namespace Engine5
             unsigned int offset = 0;
 
             // Set the vertex buffer to active in the input assembler so it can be rendered.
-            m_device_context->IASetVertexBuffers(0, 1, &m_face_vertex_buffer, &stride, &offset);
+            m_device_context->IASetVertexBuffers(0, 1, &m_face_buffer->m_vertex_buffer, &stride, &offset);
 
             // Set the index buffer to active in the input assembler so it can be rendered.
-            m_device_context->IASetIndexBuffer(m_face_index_buffer, DXGI_FORMAT_R32_UINT, 0);
+            m_device_context->IASetIndexBuffer(m_face_buffer->m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
 
             // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
             m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include <vector>
 #include "../Vertex/ColorVertex.hpp"
+#include "../Renderer/BufferCommon.hpp"
 
 namespace Engine5
 {
@@ -55,13 +56,8 @@ namespace Engine5
         size_t IndicesSize(eRenderingMode mode) const;
 
     private:
-        void BuildDotBuffer();
         void UpdateDotBuffer(Real dt) const;
-
-        void BuildLineBuffer();
         void UpdateLineBuffer(Real dt) const;
-
-        void BuildTriangleBuffer();
         void UpdateTriangleBuffer(Real dt) const;
 
     private:
@@ -75,19 +71,18 @@ namespace Engine5
         ID3D11DeviceContext* m_device_context = nullptr;
 
         std::vector<ColorVertex> m_dot_vertices;
-        std::vector<I32>         m_dot_indices;
-        ID3D11Buffer*            m_dot_vertex_buffer = nullptr;
-        ID3D11Buffer*            m_dot_index_buffer  = nullptr;
+        std::vector<U32>         m_dot_indices;
+        BufferCommon* m_dot_buffer = nullptr;
 
         std::vector<ColorVertex> m_line_vertices;
-        std::vector<I32>         m_line_indices;
-        ID3D11Buffer*            m_line_vertex_buffer = nullptr;
-        ID3D11Buffer*            m_line_index_buffer  = nullptr;
+        std::vector<U32>         m_line_indices;
+        BufferCommon* m_line_buffer = nullptr;
 
         std::vector<ColorVertex> m_face_vertices;
-        std::vector<I32>         m_face_indices;
-        ID3D11Buffer*            m_face_vertex_buffer = nullptr;
-        ID3D11Buffer*            m_face_index_buffer  = nullptr;
+        std::vector<U32>         m_face_indices;
+        BufferCommon* m_face_buffer = nullptr;
+       
+       
 
     public:
         const int CIRCULAR_VERTICES_COUNT    = 100;
