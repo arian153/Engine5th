@@ -1,7 +1,6 @@
 #pragma once
 #include "../../Math/Math.hpp"
 #include "Color.hpp"
-#include <directxmath.h>
 #include <d3d11.h>
 #include <vector>
 #include "../Vertex/ColorVertex.hpp"
@@ -11,7 +10,7 @@ namespace Engine5
 {
     class RendererCommon;
     class Camera;
-    class ColorShader;
+    class ColorShaderCommon;
 
     enum class eRenderingMode
     {
@@ -34,7 +33,7 @@ namespace Engine5
         void DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, eRenderingMode mode, Color color = Color());
         void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
 
-        void Initialize(ColorShader* color_shader);
+        void Initialize(ColorShaderCommon* color_shader);
         void Update(Real dt);
         void Shutdown();
 
@@ -63,26 +62,24 @@ namespace Engine5
     private:
         Vector3              m_position = Vector3(0.0f, 0.0f, -10.0f);
         Quaternion           m_rotation = Quaternion();
-        DirectX::XMMATRIX    m_view_matrix;
-        DirectX::XMMATRIX    m_world_matrix;
-        DirectX::XMMATRIX    m_proj_matrix;
-        ColorShader*         m_color_shader   = nullptr;
+        Matrix44             m_view_matrix;
+        Matrix44             m_world_matrix;
+        Matrix44             m_proj_matrix;
+        ColorShaderCommon*   m_color_shader   = nullptr;
         RendererCommon*      m_renderer       = nullptr;
         ID3D11DeviceContext* m_device_context = nullptr;
 
         std::vector<ColorVertex> m_dot_vertices;
         std::vector<U32>         m_dot_indices;
-        BufferCommon* m_dot_buffer = nullptr;
+        BufferCommon*            m_dot_buffer = nullptr;
 
         std::vector<ColorVertex> m_line_vertices;
         std::vector<U32>         m_line_indices;
-        BufferCommon* m_line_buffer = nullptr;
+        BufferCommon*            m_line_buffer = nullptr;
 
         std::vector<ColorVertex> m_face_vertices;
         std::vector<U32>         m_face_indices;
-        BufferCommon* m_face_buffer = nullptr;
-       
-       
+        BufferCommon*            m_face_buffer = nullptr;
 
     public:
         const int CIRCULAR_VERTICES_COUNT    = 100;

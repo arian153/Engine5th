@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class RendererCommon;
     class ColorShaderCommon;
 
     class ShaderManager : public ShaderManagerAPI

@@ -1,6 +1,6 @@
 #include "PrimitiveRenderer.hpp"
-#include "../Shader/ColorShader.hpp"
 #include "../Renderer/RendererCommon.hpp"
+#include "../Shader/ColorShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -105,7 +105,7 @@ namespace Engine5
         }
     }
 
-    void PrimitiveRenderer::Initialize(ColorShader* color_shader)
+    void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader)
     {
         m_color_shader = color_shader;
         m_position     = Vector3(0.0f, 0.0f, -60.0f);
@@ -113,11 +113,9 @@ namespace Engine5
         UpdatePrimitiveRendererCamera();
         UpdateProjectionMatrix();
         m_device_context = m_renderer->GetDeviceContext();
-        m_world_matrix   = DirectX::XMMatrixIdentity();
-
-        m_dot_buffer = new BufferCommon();
-        m_line_buffer = new BufferCommon();
-        m_face_buffer = new BufferCommon();
+        m_dot_buffer     = new BufferCommon();
+        m_line_buffer    = new BufferCommon();
+        m_face_buffer    = new BufferCommon();
     }
 
     void PrimitiveRenderer::Update(Real dt)
@@ -129,7 +127,6 @@ namespace Engine5
         //line
         m_line_buffer->BuildBuffer(m_renderer, m_line_vertices, m_line_indices);
         UpdateLineBuffer(dt);
-        
         //face
         m_face_buffer->BuildBuffer(m_renderer, m_face_vertices, m_face_indices);
         UpdateTriangleBuffer(dt);
@@ -139,29 +136,25 @@ namespace Engine5
     void PrimitiveRenderer::Shutdown()
     {
         Clear();
-
         if (m_dot_buffer != nullptr)
         {
             m_dot_buffer->Shutdown();
             delete m_dot_buffer;
             m_dot_buffer = nullptr;
         }
-
         if (m_line_buffer != nullptr)
         {
             m_line_buffer->Shutdown();
             delete m_line_buffer;
             m_line_buffer = nullptr;
         }
-
         if (m_face_buffer != nullptr)
         {
             m_face_buffer->Shutdown();
             delete m_face_buffer;
             m_face_buffer = nullptr;
         }
-
-            }
+    }
 
     void PrimitiveRenderer::UpdatePrimitiveRendererCamera()
     {
@@ -169,16 +162,13 @@ namespace Engine5
         DirectX::XMVECTOR pos_vector      = Converter::ToXMVector(m_position);
         DirectX::XMVECTOR look_vector     = Converter::ToXMVector(Math::Vector3::Z_AXIS);
         DirectX::XMMATRIX rotation_matrix = DirectX::XMMatrixRotationQuaternion(Converter::ToXMVector(m_rotation));
-
         // Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
         look_vector = DirectX::XMVector3TransformCoord(look_vector, rotation_matrix);
         up_vector   = DirectX::XMVector3TransformCoord(up_vector, rotation_matrix);
-
         // Translate the rotated camera position to the location of the viewer.
         look_vector = DirectX::XMVectorAdd(pos_vector, look_vector);
-
         // Finally create the view matrix from the three updated vectors.
-        m_view_matrix = DirectX::XMMatrixLookAtLH(pos_vector, look_vector, up_vector);
+        m_view_matrix = Converter::ToMatrix44(DirectX::XMMatrixLookAtLH(pos_vector, look_vector, up_vector));
     }
 
     void PrimitiveRenderer::Clear()
@@ -191,7 +181,6 @@ namespace Engine5
         m_face_indices.clear();
     }
 
-    
     void PrimitiveRenderer::UpdateDotBuffer(Real dt) const
     {
         if (m_dot_vertices.empty() == false)
@@ -199,20 +188,16 @@ namespace Engine5
             // Set vertex buffer stride and offset.
             unsigned int stride = sizeof(ColorVertex);
             unsigned int offset = 0;
-
             // Set the vertex buffer to active in the input assembler so it can be rendered.
             m_device_context->IASetVertexBuffers(0, 1, &m_dot_buffer->m_vertex_buffer, &stride, &offset);
-
             // Set the index buffer to active in the input assembler so it can be rendered.
             m_device_context->IASetIndexBuffer(m_dot_buffer->m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
-
             // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
             m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-            m_color_shader->Update(dt, m_device_context, static_cast<int>(m_dot_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
+            m_color_shader->Render(static_cast<U32>(m_dot_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
         }
     }
 
-   
     void PrimitiveRenderer::UpdateLineBuffer(Real dt) const
     {
         if (m_line_vertices.empty() == false)
@@ -220,16 +205,13 @@ namespace Engine5
             // Set vertex buffer stride and offset.
             unsigned int stride = sizeof(ColorVertex);
             unsigned int offset = 0;
-
             // Set the vertex buffer to active in the input assembler so it can be rendered.
             m_device_context->IASetVertexBuffers(0, 1, &m_line_buffer->m_vertex_buffer, &stride, &offset);
-
             // Set the index buffer to active in the input assembler so it can be rendered.
             m_device_context->IASetIndexBuffer(m_line_buffer->m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
-
             // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
             m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-            m_color_shader->Update(dt, m_device_context, static_cast<int>(m_line_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
+            m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
         }
     }
 
@@ -240,22 +222,19 @@ namespace Engine5
             // Set vertex buffer stride and offset.
             unsigned int stride = sizeof(ColorVertex);
             unsigned int offset = 0;
-
             // Set the vertex buffer to active in the input assembler so it can be rendered.
             m_device_context->IASetVertexBuffers(0, 1, &m_face_buffer->m_vertex_buffer, &stride, &offset);
-
             // Set the index buffer to active in the input assembler so it can be rendered.
             m_device_context->IASetIndexBuffer(m_face_buffer->m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
-
             // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
             m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-            m_color_shader->Update(dt, m_device_context, static_cast<int>(m_face_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
+            m_color_shader->Render(static_cast<U32>(m_face_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
         }
     }
 
     void PrimitiveRenderer::UpdateProjectionMatrix()
     {
-        m_proj_matrix = m_renderer->GetProjectionMatrix();
+        m_proj_matrix = Converter::ToMatrix44(m_renderer->GetProjectionMatrix());
     }
 
     void PrimitiveRenderer::SetRendererCameraPosition(const Vector3& pos)

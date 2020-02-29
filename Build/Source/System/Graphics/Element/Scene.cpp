@@ -25,11 +25,11 @@ namespace Engine5
     void Scene::Update(Real dt) const
     {
         m_camera->Update(dt);
-        auto world = DirectX::XMMatrixIdentity();
-        auto view  = m_camera->GetViewMatrix();
-        auto proj  = m_renderer->GetProjectionMatrix();
+        //auto world = DirectX::XMMatrixIdentity();
+        //auto view  = m_camera->GetViewMatrix();
+        //auto proj  = m_renderer->GetProjectionMatrix();
         m_mesh->Update(dt);
-        m_shader_manager->GetColorShader()->Update(dt, m_renderer->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, proj);
+        //m_shader_manager->GetColorShader()->Update(dt, m_renderer->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, proj);
     }
 
     void Scene::Shutdown()
