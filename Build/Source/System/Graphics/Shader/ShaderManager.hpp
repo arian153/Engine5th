@@ -1,25 +1,25 @@
 #pragma once
-#include "../Shader/ColorShader.hpp"
+#include "../../Math/Utility/MathDef.hpp"
+#include "../Renderer/APIMacro.hpp"
+#include "../Renderer/DX11/Shader/ShaderManagerDX11.hpp"
 
 namespace Engine5
 {
-    class ShaderManager
+    class ColorShaderCommon;
+
+    class ShaderManager : public ShaderManagerAPI
     {
     public:
-        ShaderManager(ID3D11Device* device, HWND hwnd);
+        ShaderManager();
         ~ShaderManager();
-
-        void Initialize();
+        void Initialize(RendererCommon* renderer);
         void Update(Real dt);
         void Shutdown();
 
-        ColorShader* GetColorShader() const;
+        ColorShaderCommon* GetColorShader() const;
 
     private:
-        ID3D11Device* m_device = nullptr;
-        HWND          m_hwnd   = nullptr;
-
         //shader list
-        ColorShader* m_color_shader = nullptr;
+        ColorShaderCommon* m_color_shader = nullptr;
     };
 }

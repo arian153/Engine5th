@@ -41,6 +41,11 @@ namespace Engine5
         return m_depth_stencil_view;
     }
 
+    HWND RendererDX11::GetHwnd() const
+    {
+        return m_hwnd;
+    }
+
     String RendererDX11::GetVideoCardInfo(size_t& memory) const
     {
         memory = m_video_card_memory;
@@ -682,7 +687,6 @@ namespace Engine5
 
     void RendererCommon::Render() const
     {
-        
     }
 
     void RendererCommon::BeginScene(Color color) const

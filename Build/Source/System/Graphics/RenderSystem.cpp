@@ -21,8 +21,8 @@ namespace Engine5
         m_renderer->SetHwnd(m_os_api->AppHWnd());
         m_renderer->SetMatrixGenerator(&m_matrix_generator);
         m_renderer->Initialize((int)m_render_width, (int)m_render_height, m_os_api->IsFullscreen(), m_far_plane, m_near_plane, Math::PI_DIV_4);
-        m_shader_manager = new ShaderManager(m_renderer->GetDevice(), m_os_api->AppHWnd());
-        m_shader_manager->Initialize();
+        m_shader_manager = new ShaderManager();
+        m_shader_manager->Initialize(m_renderer);
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
         m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));

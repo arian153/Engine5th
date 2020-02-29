@@ -23,8 +23,10 @@ namespace Engine5
         ID3D11Device*           GetDevice() const;
         ID3D11DeviceContext*    GetDeviceContext() const;
         ID3D11DepthStencilView* GetDepthStencilView() const;
-        std::string             GetVideoCardInfo(size_t& memory) const;
-        DirectX::XMMATRIX       GetProjectionMatrix() const;
+        HWND                    GetHwnd() const;
+
+        std::string       GetVideoCardInfo(size_t& memory) const;
+        DirectX::XMMATRIX GetProjectionMatrix() const;
 
         void SetHwnd(HWND hwnd);
         void SetBackBufferRenderTarget() const;
