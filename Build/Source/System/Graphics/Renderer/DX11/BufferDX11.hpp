@@ -10,7 +10,8 @@ namespace Engine5
         ~BufferDX11();
 
     public:
-        ID3D11Buffer* m_vertex_buffer = nullptr;
-        ID3D11Buffer* m_index_buffer = nullptr;
+        ID3D11Buffer*        m_vertex_buffer  = nullptr;
+        ID3D11Buffer*        m_index_buffer   = nullptr;
+        ID3D11DeviceContext* m_device_context = nullptr;
     };
 }

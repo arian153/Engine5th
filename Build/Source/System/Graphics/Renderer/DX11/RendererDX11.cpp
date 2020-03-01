@@ -4,16 +4,14 @@
 #include "../RendererCommon.hpp"
 #include "../../../Core/Utility/CoreUtility.hpp"
 #include "../../Utility/Color.hpp"
-#include "../../Utility/MatrixGenerator.hpp"
 #include "../../../Math/Math.hpp"
+#include "../../Vertex/ColorVertex.hpp"
 
 namespace Engine5
 {
     RendererDX11::RendererDX11()
         : m_d3d_feature_level(),
           m_dxgi_color_format(DXGI_FORMAT_B8G8R8A8_UNORM),
-          m_projection_matrix(),
-          m_ortho_matrix(),
           m_numerator(0),
           m_denominator(0),
           m_video_card_memory(0),
@@ -50,11 +48,6 @@ namespace Engine5
     {
         memory = m_video_card_memory;
         return m_video_card_description;
-    }
-
-    DirectX::XMMATRIX RendererDX11::GetProjectionMatrix() const
-    {
-        return m_projection_matrix;
     }
 
     void RendererDX11::SetHwnd(HWND hwnd)
@@ -430,13 +423,6 @@ namespace Engine5
         m_device_context->RSSetViewports(1, &viewport);
     }
 
-    void RendererDX11::SetUpMatrices(int client_width, int client_height, Real far_plane, Real near_plane, Real field_of_view)
-    {
-        Real screen_aspect  = (Real)client_width / (Real)client_height;
-        m_projection_matrix = Converter::ToXMMatrix(m_matrix_generator->ProjectionMatrix(screen_aspect, field_of_view, far_plane, near_plane));
-        m_ortho_matrix      = Converter::ToXMMatrix(m_matrix_generator->OrthoGraphicMatrix(client_width, client_height, far_plane, near_plane));
-    }
-
     void RendererDX11::SetUpMultiSamplingLevel()
     {
         HRESULT result = m_device->CheckMultisampleQualityLevels(m_dxgi_color_format, 4, &m_msaa_quality);
@@ -541,22 +527,21 @@ namespace Engine5
     {
     }
 
-    void RendererCommon::Initialize(int client_width, int client_height, bool b_fullscreen, Real far_plane, Real near_plane, Real field_of_view)
+    void RendererCommon::Initialize(int client_width, int client_height, bool b_fullscreen)
     {
-        this->SetUpDevice();
-        this->SetUpMultiSamplingLevel();
-        this->SetUpAdapterDescription(client_width, client_height);
-        this->SetUpSwapChain(client_width, client_height, b_fullscreen);
-        this->SetUpBackBuffer();
-        this->SetUpDepthBufferDescription(client_width, client_height);
-        this->SetUpStencilStateDescription();
-        this->SetUpDepthStencilViewDescription();
-        this->SetUpRasterDescription();
-        this->SetUpViewport(client_width, client_height);
-        this->SetUpMatrices(client_width, client_height, far_plane, near_plane, field_of_view);
-        this->SetUpBlendState();
-        this->SetUpDWDevice();
-        this->SetUpDWRenderTarget();
+        SetUpDevice();
+        SetUpMultiSamplingLevel();
+        SetUpAdapterDescription(client_width, client_height);
+        SetUpSwapChain(client_width, client_height, b_fullscreen);
+        SetUpBackBuffer();
+        SetUpDepthBufferDescription(client_width, client_height);
+        SetUpStencilStateDescription();
+        SetUpDepthStencilViewDescription();
+        SetUpRasterDescription();
+        SetUpViewport(client_width, client_height);
+        SetUpBlendState();
+        SetUpDWDevice();
+        SetUpDWRenderTarget();
     }
 
     void RendererCommon::Shutdown()
@@ -647,7 +632,7 @@ namespace Engine5
         }
     }
 
-    void RendererCommon::OnResize(int client_width, int client_height, bool b_fullscreen, Real far_plane, Real near_plane, Real field_of_view)
+    void RendererCommon::OnResize(int client_width, int client_height, bool b_fullscreen)
     {
         m_d2d_device_context->SetTarget(nullptr);
         m_device_context->ClearState();
@@ -669,24 +654,21 @@ namespace Engine5
             m_depth_stencil_buffer = nullptr;
         }
         HRESULT result = m_swap_chain->ResizeBuffers(m_back_buffer_count, client_width, client_height, m_dxgi_color_format, 0);
-        this->OnFullscreen(b_fullscreen);
         if (FAILED(result))
+        {
             return;
-        this->SetUpBackBuffer();
-        this->SetUpDepthBufferDescription(client_width, client_height);
-        this->SetUpDepthStencilViewDescription();
-        this->SetUpViewport(client_width, client_height);
-        this->SetUpMatrices(client_width, client_height, far_plane, near_plane, field_of_view);
-        this->SetUpDWRenderTarget();
+        }
+        OnFullscreen(b_fullscreen);
+        SetUpBackBuffer();
+        SetUpDepthBufferDescription(client_width, client_height);
+        SetUpDepthStencilViewDescription();
+        SetUpViewport(client_width, client_height);
+        SetUpDWRenderTarget();
     }
 
     void RendererCommon::OnFullscreen(bool b_fullscreen) const
     {
         m_swap_chain->SetFullscreenState(b_fullscreen, nullptr);
-    }
-
-    void RendererCommon::Render() const
-    {
     }
 
     void RendererCommon::BeginScene(Color color) const
@@ -762,8 +744,4 @@ namespace Engine5
         }
     }
 
-    void RendererCommon::SetMatrixGenerator(MatrixGenerator* matrix_generator)
-    {
-        m_matrix_generator = matrix_generator;
     }
-}

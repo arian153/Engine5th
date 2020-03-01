@@ -27,7 +27,7 @@ namespace Engine5
         m_os_api = new WindowsAPI(this);
         m_os_api->Initialize();
         m_render_system = new RenderSystem(m_os_api);
-        m_render_system->Initialize();
+        m_render_system->Initialize(1280, 720);
     }
 
     void Application::Update()

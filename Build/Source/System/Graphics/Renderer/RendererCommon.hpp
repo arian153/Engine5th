@@ -4,6 +4,8 @@
 
 namespace Engine5
 {
+    class BufferCommon;
+    class ColorShaderCommon;
 
     class RendererCommon : public RendererAPI
     {
@@ -11,20 +13,17 @@ namespace Engine5
         RendererCommon();
         ~RendererCommon();
 
-        void Initialize(int client_width, int client_height, bool b_fullscreen, Real far_plane, Real near_plane, Real field_of_view);
+        void Initialize(int client_width, int client_height, bool b_fullscreen);
         void Shutdown();
-        void OnResize(int client_width, int client_height, bool b_fullscreen, Real far_plane, Real near_plane, Real field_of_view);
+        void OnResize(int client_width, int client_height, bool b_fullscreen);
         void OnFullscreen(bool b_fullscreen) const;
-
-        void Render() const;
-
         void BeginScene(Color color) const;
         void EndScene() const;
+
+        //setter
         void SetVSync(bool flag);
         void SetAlphaBlending(bool flag) const;
         void SetZBuffering(bool flag) const;
-        void SetMatrixGenerator(MatrixGenerator* matrix_generator);
-        
     private:
     };
 }

@@ -4,7 +4,6 @@
 #include <d3d11.h>
 #include <d2d1_2.h>
 #include <dwrite_2.h>
-#include <directxmath.h>
 #include <string>
 #include "../../../Math/Utility/MathDef.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
@@ -25,15 +24,13 @@ namespace Engine5
         ID3D11DepthStencilView* GetDepthStencilView() const;
         HWND                    GetHwnd() const;
 
-        std::string       GetVideoCardInfo(size_t& memory) const;
-        DirectX::XMMATRIX GetProjectionMatrix() const;
+        std::string GetVideoCardInfo(size_t& memory) const;
 
         void SetHwnd(HWND hwnd);
         void SetBackBufferRenderTarget() const;
         void SetRasterStateWireFrame(bool flag) const;
 
     protected:
-
         void SetUpAdapterDescription(int client_width, int client_height);
         void SetUpDevice();
         void SetUpSwapChain(int client_width, int client_height, bool fullscreen_flag);
@@ -43,8 +40,6 @@ namespace Engine5
         void SetUpDepthStencilViewDescription();
         void SetUpRasterDescription();
         void SetUpViewport(int client_width, int client_height) const;
-        void SetUpMatrices(int client_width, int client_height, Real far_plane, Real near_plane, Real field_of_view);
-
         void SetUpMultiSamplingLevel();
         void SetUpBlendState();
         void SetUpDWDevice();
@@ -72,9 +67,6 @@ namespace Engine5
         MatrixGenerator*         m_matrix_generator              = nullptr;
         D3D_FEATURE_LEVEL        m_d3d_feature_level;
         DXGI_FORMAT              m_dxgi_color_format;
-
-        DirectX::XMMATRIX m_projection_matrix;
-        DirectX::XMMATRIX m_ortho_matrix;
 
         UINT   m_back_buffer_count = 1;
         bool   m_enable_msaa       = false;

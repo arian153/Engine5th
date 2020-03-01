@@ -4,6 +4,8 @@
 #include "../../Core/Utility/CoreDef.hpp"
 #include "../Vertex/ColorVertex.hpp"
 #include "../Vertex/TextureVertex.hpp"
+#include "../Utility/TopologyType.hpp"
+
 #include <vector>
 
 namespace Engine5
@@ -16,6 +18,8 @@ namespace Engine5
         BufferCommon();
         ~BufferCommon();
 
+        void Render(U32 stride, U32 offset, eTopologyType topology) const;
+        void Render(U32 stride, U32 offset) const;
         void Shutdown();
 
         bool BuildBuffer(RendererCommon* renderer, const std::vector<ColorVertex>& vertices, const std::vector<U32>& indices);
