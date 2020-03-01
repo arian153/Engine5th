@@ -41,7 +41,6 @@ namespace Engine5
         SetHWnd(renderer->GetHwnd());
         SetDevice(renderer->GetDevice());
         SetDeviceContext(renderer->GetDeviceContext());
-
         m_color_shader = new ColorShaderCommon();
         m_color_shader->SetVertexShaderPath("../../Resource/Shader/Color.vs");
         m_color_shader->SetPixelShaderPath("../../Resource/Shader/Color.ps");
@@ -69,4 +68,5 @@ namespace Engine5
     {
         return m_color_shader;
     }
-}
+
+   }
