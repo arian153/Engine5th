@@ -102,7 +102,7 @@ namespace Engine5
         Real point_radius = local_point_on_collider.x * local_point_on_collider.x + local_point_on_collider.y * local_point_on_collider.y;
         if (Utility::IsEqual(point_radius, radius * radius))
         {
-            return local_point_on_collider.Unit();;
+            return local_point_on_collider.Normalize();
         }
         return Math::Vector3::Z_AXIS;
     }

@@ -263,7 +263,7 @@ namespace Engine5
     {
         Vector3    ab     = p1 - p0;
         Vector3    ac     = p2 - p0;
-        Vector3    normal = ab.CrossProduct(ac).Unit();
+        Vector3    normal = ab.CrossProduct(ac).Normalize();
         Quaternion rotation(normal, Math::Vector3::Z_AXIS);
         position    = (p0 + p1 + p2) / 3.0f;
         auto v0     = p0 - position;

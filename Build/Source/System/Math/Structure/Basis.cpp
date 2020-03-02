@@ -60,9 +60,9 @@ namespace Engine5
                 axis.z = 1.0f; // Z > Y > X
         }
         // compute tangents
-        i = normal.Unit();
-        j = normal.CrossProduct(axis).Unit();
-        k = i.CrossProduct(j).Unit();
+        i = normal.Normalize();
+        j = normal.CrossProduct(axis).Normalize();
+        k = i.CrossProduct(j).Normalize();
     }
 
     void Basis::CalculateBasisApprox(const Vector3& normal)
@@ -76,14 +76,14 @@ namespace Engine5
         {
             j.Set(0.0f, normal.z, -normal.y);
         }
-        i = normal.Unit();
+        i = normal.Normalize();
         j.SetNormalize();
-        k = i.CrossProduct(j).Unit();
+        k = i.CrossProduct(j).Normalize();
     }
 
     void Basis::CalculateBasisQuaternion(const Vector3& normal)
     {
-        i = normal.Unit();
+        i = normal.Normalize();
         Quaternion rotation(i, Math::Vector3::Y_AXIS);
         j = rotation.Rotate(Math::Vector3::X_AXIS);
         j.SetNormalize();
@@ -93,9 +93,9 @@ namespace Engine5
 
     void Basis::CalculateBasis(const Vector3& a, const Vector3& b)
     {
-        i = a.Unit();
-        j = b.Unit();
-        k = a.CrossProduct(b).Unit();
+        i = a.Normalize();
+        j = b.Normalize();
+        k = a.CrossProduct(b).Normalize();
     }
 
     void Basis::Rotate(const Quaternion& orientation)

@@ -44,6 +44,7 @@ namespace Engine5
         Real    DistanceSquaredTo(const Vector3& rhs) const;
         Vector3 ProjectionTo(const Vector3& rhs) const;
         Vector3 ProjectionFrom(const Vector3& rhs) const;
+        Vector3 Normalize() const;
         Vector3 Unit() const;
         Vector3 Half() const;
         Vector3 Inverse() const;

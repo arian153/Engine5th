@@ -298,12 +298,12 @@ namespace Engine5
         }
         else if (contact_size == 2)
         {
-            Vector3 line_dir = (contacts.at(1).global_position_a - contacts.at(0).global_position_a).Unit();
-            Vector3 pos_t    = line_dir.CrossProduct((m_set_b->m_rigid_body->GetPosition() - m_set_a->m_rigid_body->GetPosition()).Unit()).Unit();
-            Vector3 c0n_t    = line_dir.CrossProduct(contacts.at(0).normal).Unit();
-            Vector3 c1n_t    = line_dir.CrossProduct(contacts.at(1).normal).Unit();
-            Vector3 tangent  = (pos_t + c0n_t + c1n_t).Unit();
-            manifold_normal  = line_dir.CrossProduct(tangent).Unit();
+            Vector3 line_dir = (contacts.at(1).global_position_a - contacts.at(0).global_position_a).Normalize();
+            Vector3 pos_t    = CrossProduct(line_dir, (m_set_b->m_rigid_body->GetPosition() - m_set_a->m_rigid_body->GetPosition()).Normalize());
+            Vector3 c0n_t    = CrossProduct(line_dir, contacts.at(0).normal);
+            Vector3 c1n_t    = CrossProduct(line_dir, contacts.at(1).normal);
+            Vector3 tangent  = (pos_t + c0n_t + c1n_t).Normalize();
+            manifold_normal  = line_dir.CrossProduct(tangent);
         }
         else if (contact_size == 3)
         {
@@ -313,7 +313,7 @@ namespace Engine5
         {
             Vector3 n_a     = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(2).global_position_a);
             Vector3 n_b     = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(3).global_position_a);
-            manifold_normal = (n_a + n_b).Unit();
+            manifold_normal = (n_a + n_b).Normalize();
         }
     }
 }

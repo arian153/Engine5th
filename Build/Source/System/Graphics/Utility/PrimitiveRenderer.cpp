@@ -112,7 +112,7 @@ namespace Engine5
         m_color_shader     = color_shader;
         m_matrix_generator = matrix_generator;
         m_position         = Vector3(0.0f, 0.0f, -60.0f);
-        //m_rotation.Set(Vector3(3, 4, 5).Unit(), Utility::DegreesToRadians(45.0f));
+        //m_rotation.Set(Vector3(3, 4, 5).Normalize(), Utility::DegreesToRadians(45.0f));
         UpdateViewMatrix();
         UpdateProjectionMatrix();
         m_dot_buffer  = new BufferCommon();

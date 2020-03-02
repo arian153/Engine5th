@@ -63,7 +63,7 @@ namespace Engine5
 
     Vector3 Sphere::GetNormal(const Vector3& local_point_on_primitive)
     {
-        return local_point_on_primitive.Unit();
+        return local_point_on_primitive.Normalize();
     }
 
     void Sphere::DrawPrimitive(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const

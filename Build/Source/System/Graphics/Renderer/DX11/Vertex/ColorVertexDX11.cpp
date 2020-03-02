@@ -31,4 +31,14 @@ namespace Engine5
         position = Converter::ToXMFloat3(_position);
         color    = Converter::ToXMFloat4(_color);
     }
+
+    Vector3 ColorVertex::GetPosition() const
+    {
+        return Converter::ToVector3(position);
+    }
+
+    Color ColorVertex::GetColor() const
+    {
+        return Converter::ToColor(color);
+    }
 }

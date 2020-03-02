@@ -5,6 +5,7 @@
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../DataType/MeshData.hpp"
+#include "../../Math/Algebra/Vector2.hpp"
 
 namespace Engine5
 {
@@ -406,28 +407,24 @@ namespace Engine5
 
     TextureVertex MeshGenerator::MidPoint(const TextureVertex& v0, const TextureVertex& v1) const
     {
-        DirectX::XMVECTOR p0   = DirectX::XMLoadFloat3(&v0.position);
-        DirectX::XMVECTOR p1   = DirectX::XMLoadFloat3(&v1.position);
-        DirectX::XMVECTOR n0   = DirectX::XMLoadFloat3(&v0.normal);
-        DirectX::XMVECTOR n1   = DirectX::XMLoadFloat3(&v1.normal);
-        DirectX::XMVECTOR tan0 = DirectX::XMLoadFloat3(&v0.tangent);
-        DirectX::XMVECTOR tan1 = DirectX::XMLoadFloat3(&v1.tangent);
-        DirectX::XMVECTOR uv0  = DirectX::XMLoadFloat2(&v0.uv);
-        DirectX::XMVECTOR uv1  = DirectX::XMLoadFloat2(&v1.uv);
-        // Compute the midpoints of all the attributes. 
-        //Vectors need to be normalized since linear interpolating can make them not unit length.  
-        DirectX::XMVECTOR pos      = DirectX::XMVectorScale(DirectX::XMVectorAdd(p0, p1), 0.5f);
-        DirectX::XMVECTOR normal   = DirectX::XMVector3Normalize(DirectX::XMVectorScale(DirectX::XMVectorAdd(n0, n1), 0.5f));
-        DirectX::XMVECTOR tangent  = DirectX::XMVector3Normalize(DirectX::XMVectorScale(DirectX::XMVectorAdd(tan0, tan1), 0.5f));
-        DirectX::XMVECTOR uv       = DirectX::XMVectorScale(DirectX::XMVectorAdd(uv0, uv1), 0.5f);
-        DirectX::XMVECTOR binormal = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(tangent, normal));
-        TextureVertex     v;
-        DirectX::XMStoreFloat3(&v.position, pos);
-        DirectX::XMStoreFloat3(&v.normal, normal);
-        DirectX::XMStoreFloat3(&v.tangent, tangent);
-        DirectX::XMStoreFloat3(&v.binormal, binormal);
-        DirectX::XMStoreFloat2(&v.uv, uv);
-        return v;
+        //vertex0
+        Vector3           pos0 = v0.GetPosition();
+        Vector2           uv0  = v0.GetUV();
+        Vector3           nor0 = v0.GetNormal();
+        Vector3           tan0 = v0.GetTangent();
+        //vertex1
+        Vector3           pos1 = v1.GetPosition();
+        Vector2           uv1  = v1.GetUV();
+        Vector3           nor1 = v1.GetNormal();
+        Vector3           tan1 = v1.GetTangent();
+
+        Vector3 pos = (pos0 + pos1).Half();
+        Vector2 uv = (uv0 + uv1).Half();
+        Vector3 nor = (nor0 + nor1).Half().Normalize();
+        Vector3 tan = (tan0 + tan1).Half().Normalize();
+        Vector3 bin = CrossProduct(tan, nor).Normalize();
+
+        return TextureVertex(pos, uv, nor, tan, bin);
     }
 
     void MeshGenerator::BuildCylinderTopCap(Real bottom_radius, Real top_radius, Real height, I32 slice_count, I32 stack_count, MeshData* mesh_data) const

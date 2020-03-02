@@ -150,11 +150,18 @@ namespace Engine5
         return result;
     }
 
-    Vector3 Vector3::Unit() const
+    Vector3 Vector3::Normalize() const
     {
         Vector3 result = *this;
         result.SetNormalize();
         return result;
+    }
+
+    Vector3 Vector3::Unit() const
+    {
+        Real length = sqrtf(x * x + y * y + z * z);
+        length      = length > 0.0f ? 1.0f / length : 0.0f;
+        return Vector3(x * length, y * length, z * length);
     }
 
     Vector3 Vector3::Half() const
@@ -486,7 +493,7 @@ namespace Engine5
 
     Real Radian(const Vector3& a, const Vector3& b)
     {
-        Real cos_theta = (a.Unit()).DotProduct(b.Unit());
+        Real cos_theta = (a.Normalize()).DotProduct(b.Normalize());
         if (fabsf(cos_theta) > 1.0f)
         {
             return 0.0f;

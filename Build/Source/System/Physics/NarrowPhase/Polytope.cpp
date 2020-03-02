@@ -207,7 +207,7 @@ namespace Engine5
 
     Real Polytope::PointFaceTest(const Vector3& point, const Vector3& normal, const Vector3& v0)
     {
-        Vector3 unit = normal.Unit();
+        Vector3 unit = normal.Normalize();
         Real    d    = -unit.DotProduct(v0);
         return normal.DotProduct(point) + d;
     }

@@ -104,7 +104,7 @@ namespace Engine5
         Real point_radius = local_point_on_primitive.x * local_point_on_primitive.x + local_point_on_primitive.y * local_point_on_primitive.y;
         if (Utility::IsEqual(point_radius, radius * radius))
         {
-            return local_point_on_primitive.Unit();;
+            return local_point_on_primitive.Normalize();
         }
         return Math::Vector3::Z_AXIS;
     }

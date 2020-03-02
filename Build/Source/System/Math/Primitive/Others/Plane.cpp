@@ -24,20 +24,20 @@ namespace Engine5
 
     Plane::Plane(const Plane& rhs)
     {
-        this->a = rhs.a;
-        this->b = rhs.b;
-        this->c = rhs.c;
-        this->d = rhs.d;
+        a = rhs.a;
+        b = rhs.b;
+        c = rhs.c;
+        d = rhs.d;
     }
 
     Plane& Plane::operator=(const Plane& rhs)
     {
         if (this != &rhs)
         {
-            this->a = rhs.a;
-            this->b = rhs.b;
-            this->c = rhs.c;
-            this->d = rhs.d;
+            a = rhs.a;
+            b = rhs.b;
+            c = rhs.c;
+            d = rhs.d;
         }
         return *this;
     }
@@ -47,18 +47,18 @@ namespace Engine5
         Real length_squared = _a * _a + _b * _b + _c * _c;
         if (Utility::IsZero(length_squared) == true)
         {
-            this->a = 0.0f;
-            this->b = 0.0f;
-            this->c = 0.0f;
-            this->d = 0.0f;
+            a = 0.0f;
+            b = 0.0f;
+            c = 0.0f;
+            d = 0.0f;
         }
         else
         {
             Real inv_sqrt = Utility::InvSqrt(length_squared);
-            this->a       = _a * inv_sqrt;
-            this->b       = _b * inv_sqrt;
-            this->c       = _c * inv_sqrt;
-            this->d       = _d * inv_sqrt;
+            a             = _a * inv_sqrt;
+            b             = _b * inv_sqrt;
+            c             = _c * inv_sqrt;
+            d             = _d * inv_sqrt;
         }
     }
 
@@ -66,18 +66,18 @@ namespace Engine5
     {
         if (Utility::IsZero(normal.LengthSquared()) == true)
         {
-            this->a = 0.0f;
-            this->b = 0.0f;
-            this->c = 0.0f;
-            this->d = 0.0f;
+            a = 0.0f;
+            b = 0.0f;
+            c = 0.0f;
+            d = 0.0f;
         }
         else
         {
-            Vector3 unit = normal.Unit();
-            this->a      = unit.x;
-            this->b      = unit.y;
-            this->c      = unit.z;
-            this->d      = offset / unit.Length();
+            Vector3 n = normal.Normalize();
+            a         = n.x;
+            b         = n.y;
+            c         = n.z;
+            d         = offset / n.Length();
         }
     }
 
@@ -88,18 +88,18 @@ namespace Engine5
         Vector3 w = u.CrossProduct(v);
         if (Utility::IsZero(w.LengthSquared()) == true)
         {
-            this->a = 0.0f;
-            this->b = 0.0f;
-            this->c = 0.0f;
-            this->d = 0.0f;
+            a = 0.0f;
+            b = 0.0f;
+            c = 0.0f;
+            d = 0.0f;
         }
         else
         {
-            Vector3 unit = w.Unit();
-            this->a      = unit.x;
-            this->b      = unit.y;
-            this->c      = unit.z;
-            this->d      = -unit.DotProduct(p0);
+            Vector3 n = w.Normalize();
+            a         = n.x;
+            b         = n.y;
+            c         = n.z;
+            d         = -n.DotProduct(p0);
         }
     }
 
@@ -123,6 +123,6 @@ namespace Engine5
 
     Vector3 Plane::Normal() const
     {
-        return Vector3(a, b, c).Unit();
+        return Vector3(a, b, c).Normalize();
     }
 }

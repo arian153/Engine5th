@@ -70,8 +70,8 @@ namespace Engine5
 
     Matrix44 MatrixGenerator::LookTo(const Vector3& eye_position, const Vector3& eye_direction, const Vector3& up_direction) const
     {
-        Vector3 r2 = eye_direction.Unit();
-        Vector3 r0 = CrossProduct(up_direction, r2).Unit();
+        Vector3 r2 = eye_direction.Normalize();
+        Vector3 r0 = CrossProduct(up_direction, r2).Normalize();
         Vector3 r1 = CrossProduct(r2, r0);
         Vector3 neg_eye_position = eye_position.Negate();
 

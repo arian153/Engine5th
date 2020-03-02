@@ -50,7 +50,7 @@ namespace Engine5
 
     Ray Ray::GetReflectedRay(const Vector3& normal, const Vector3& new_position) const
     {
-        Vector3 n                 = normal.Unit();
+        Vector3 n                 = normal.Normalize();
         Vector3 reflect_direction = -2.0f * direction.DotProduct(n) * n + direction;
         return Ray(new_position, reflect_direction);
     }

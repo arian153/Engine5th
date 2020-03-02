@@ -54,7 +54,7 @@ namespace Engine5
 
     Vector3 ColliderSphere::GetNormal(const Vector3& local_point_on_collider)
     {
-        return local_point_on_collider.Unit();
+        return local_point_on_collider.Normalize();
     }
 
     void ColliderSphere::SetMassData(Real density)

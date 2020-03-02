@@ -183,7 +183,7 @@ namespace Engine5
                         + (v * polytope.vertices[closest_face.b].local2) + (w * polytope.vertices[closest_face.c].local2);
                 result.global_position_a = a->m_rigid_body->LocalToWorldPoint(result.local_position_a);
                 result.global_position_b = b->m_rigid_body->LocalToWorldPoint(result.local_position_b);
-                result.normal            = closest_face.normal.Unit();
+                result.normal            = closest_face.normal.Normalize();
                 result.depth             = closest_face.distance;
                 ComputeBasisQuaternion(result.normal, result.tangent_a, result.tangent_b);
                 return true;
@@ -226,8 +226,8 @@ namespace Engine5
                 axis.z = 1.0f; // Z > Y > X
         }
         // compute tangents
-        tangent_a = normal.CrossProduct(axis).Unit();
-        tangent_b = normal.CrossProduct(tangent_a).Unit();
+        tangent_a = normal.CrossProduct(axis).Normalize();
+        tangent_b = normal.CrossProduct(tangent_a).Normalize();
     }
 
     void NarrowPhase::ComputeBasisFast(const Vector3& normal, Vector3& tangent_a, Vector3& tangent_b)
@@ -242,7 +242,7 @@ namespace Engine5
             tangent_a.Set(0.0f, normal.z, -normal.y);
         }
         tangent_a.SetNormalize();
-        tangent_b = normal.CrossProduct(tangent_a).Unit();
+        tangent_b = normal.CrossProduct(tangent_a).Normalize();
     }
 
     size_t NarrowPhase::FindLeastSignificantComponent(const Vector3& vector3)

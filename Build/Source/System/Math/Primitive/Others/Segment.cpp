@@ -38,7 +38,7 @@ namespace Engine5
 
     Vector3 Segment::ClosestPoint(const Vector3& point) const
     {
-        Vector3 n      = (end - start).Unit();
+        Vector3 n      = (end - start).Normalize();
         Real    length = (end - start).Length();
         Real    u      = (end - point).DotProduct(n) / length;
         Real    v      = (point - start).DotProduct(n) / length;
