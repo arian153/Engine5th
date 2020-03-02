@@ -1,7 +1,6 @@
 #pragma once
 #include "../../Math/Math.hpp"
 #include "Color.hpp"
-#include <d3d11.h>
 #include <vector>
 #include "../Vertex/ColorVertex.hpp"
 #include "../Renderer/BufferCommon.hpp"
@@ -37,10 +36,9 @@ namespace Engine5
         void Initialize(ColorShaderCommon* color_shader, MatrixGenerator* matrix_generator);
         void Update(Real dt);
         void Shutdown();
-
-        void UpdatePrimitiveRendererCamera();
         void Clear();
 
+        void UpdateViewMatrix();
         void UpdateProjectionMatrix();
         void SetRendererCameraPosition(const Vector3& pos);
         void SetRendererCameraRotation(const Quaternion& rot);

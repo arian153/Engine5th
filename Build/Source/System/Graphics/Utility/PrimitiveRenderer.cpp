@@ -112,7 +112,7 @@ namespace Engine5
         m_matrix_generator = matrix_generator;
         m_position         = Vector3(0.0f, 0.0f, -60.0f);
         //m_rotation.Set(Vector3(3, 4, 5).Unit(), Utility::DegreesToRadians(45.0f));
-        UpdatePrimitiveRendererCamera();
+        UpdateViewMatrix();
         UpdateProjectionMatrix();
         m_dot_buffer  = new BufferCommon();
         m_line_buffer = new BufferCommon();
@@ -121,7 +121,6 @@ namespace Engine5
 
     void PrimitiveRenderer::Update(Real dt)
     {
-        UpdatePrimitiveRendererCamera();
         if (m_dot_vertices.empty() == false)
         {
             m_dot_buffer->BuildBuffer(m_renderer, m_dot_vertices, m_dot_indices);
@@ -166,26 +165,6 @@ namespace Engine5
         }
     }
 
-    void PrimitiveRenderer::UpdatePrimitiveRendererCamera()
-    {
-        DirectX::XMVECTOR up_vector       = Converter::ToXMVector(Math::Vector3::Y_AXIS);
-        DirectX::XMVECTOR pos_vector      = Converter::ToXMVector(m_position);
-        DirectX::XMVECTOR look_vector     = Converter::ToXMVector(Math::Vector3::Z_AXIS);
-        DirectX::XMMATRIX rotation_matrix = DirectX::XMMatrixRotationQuaternion(Converter::ToXMVector(m_rotation));
-        // Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
-        look_vector = DirectX::XMVector3TransformCoord(look_vector, rotation_matrix);
-        up_vector   = DirectX::XMVector3TransformCoord(up_vector, rotation_matrix);
-        // Translate the rotated camera position to the location of the viewer.
-        look_vector = DirectX::XMVectorAdd(pos_vector, look_vector);
-
-        Vector3 up = Math::Vector3::Y_AXIS;
-        Vector3 look = Math::Vector3::Z_AXIS;
-
-
-        // Finally create the view matrix from the three updated vectors.
-        m_view_matrix = m_matrix_generator->LookAt(m_position, Converter::ToVector3(look_vector), Converter::ToVector3(up_vector));
-    }
-
     void PrimitiveRenderer::Clear()
     {
         m_dot_vertices.clear();
@@ -196,6 +175,13 @@ namespace Engine5
         m_face_indices.clear();
     }
 
+    void PrimitiveRenderer::UpdateViewMatrix()
+    {
+        Vector3 up    = m_rotation.Rotate(Math::Vector3::Y_AXIS);
+        Vector3 look  = m_rotation.Rotate(Math::Vector3::Z_AXIS) + m_position;
+        m_view_matrix = m_matrix_generator->LookAt(m_position, look, up);
+    }
+
     void PrimitiveRenderer::UpdateProjectionMatrix()
     {
         m_proj_matrix = m_matrix_generator->GetProjectionMatrix();
@@ -204,13 +190,13 @@ namespace Engine5
     void PrimitiveRenderer::SetRendererCameraPosition(const Vector3& pos)
     {
         m_position = pos;
-        this->UpdatePrimitiveRendererCamera();
+        UpdateViewMatrix();
     }
 
     void PrimitiveRenderer::SetRendererCameraRotation(const Quaternion& rot)
     {
         m_rotation = rot;
-        this->UpdatePrimitiveRendererCamera();
+        UpdateViewMatrix();
     }
 
     void PrimitiveRenderer::PushVertex(const Vector3& pos, eRenderingMode mode, const Color& color)
