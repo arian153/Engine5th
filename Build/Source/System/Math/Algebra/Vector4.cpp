@@ -38,6 +38,11 @@ namespace Engine5
     {
     }
 
+    Vector4::Vector4(const Vector3& rhs, Real w)
+        : x(rhs.x), y(rhs.y), z(rhs.z), w(w)
+    {
+    }
+
     Vector4::Vector4(const Vector4& rhs)
         : x(rhs.x), y(rhs.y), z(rhs.z), w(rhs.w)
     {

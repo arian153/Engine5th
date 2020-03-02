@@ -10,9 +10,11 @@ namespace Engine5
         ~MatrixGenerator();
 
         //Direct Create
-        Matrix44 ProjectionMatrix(Real screen_aspect, Real field_of_view, Real far_plane, Real near_plane) ;
-        Matrix44 OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane) ;
-        Matrix44 OrthoGraphicCenterMatrix(Real right, Real left, Real top, Real bottom, Real far_plane, Real near_plane) ;
+        Matrix44 ProjectionMatrix(Real screen_aspect, Real field_of_view, Real far_plane, Real near_plane);
+        Matrix44 OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane);
+        Matrix44 OrthoGraphicCenterMatrix(Real right, Real left, Real top, Real bottom, Real far_plane, Real near_plane);
+        Matrix44 LookAt(const Vector3& eye_position, const Vector3& focus_position, const Vector3& up_direction) const;
+        Matrix44 LookTo(const Vector3&  eye_position, const Vector3& eye_direction, const Vector3& up_direction) const;
 
         //Setter
         void SetScreenAspect(Real screen_aspect);

@@ -108,10 +108,10 @@ namespace Engine5
 
     void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader, MatrixGenerator* matrix_generator)
     {
-        m_color_shader = color_shader;
+        m_color_shader     = color_shader;
         m_matrix_generator = matrix_generator;
-        m_position     = Vector3(0.0f, 0.0f, -60.0f);
-        m_rotation     = Quaternion();
+        m_position         = Vector3(0.0f, 0.0f, -60.0f);
+        //m_rotation.Set(Vector3(3, 4, 5).Unit(), Utility::DegreesToRadians(45.0f));
         UpdatePrimitiveRendererCamera();
         UpdateProjectionMatrix();
         m_dot_buffer  = new BufferCommon();
@@ -177,8 +177,13 @@ namespace Engine5
         up_vector   = DirectX::XMVector3TransformCoord(up_vector, rotation_matrix);
         // Translate the rotated camera position to the location of the viewer.
         look_vector = DirectX::XMVectorAdd(pos_vector, look_vector);
+
+        Vector3 up = Math::Vector3::Y_AXIS;
+        Vector3 look = Math::Vector3::Z_AXIS;
+
+
         // Finally create the view matrix from the three updated vectors.
-        m_view_matrix = Converter::ToMatrix44(DirectX::XMMatrixLookAtLH(pos_vector, look_vector, up_vector));
+        m_view_matrix = m_matrix_generator->LookAt(m_position, Converter::ToVector3(look_vector), Converter::ToVector3(up_vector));
     }
 
     void PrimitiveRenderer::Clear()

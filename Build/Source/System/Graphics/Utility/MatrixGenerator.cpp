@@ -1,4 +1,6 @@
 #include "MatrixGenerator.hpp"
+#include "../../Math/Algebra/Vector3.hpp"
+#include "../../Math/Utility/VectorDef.hpp"
 
 namespace Engine5
 {
@@ -61,6 +63,28 @@ namespace Engine5
         return result;
     }
 
+    Matrix44 MatrixGenerator::LookAt(const Vector3& eye_position, const Vector3& focus_position, const Vector3& up_direction) const
+    {
+        return LookTo(eye_position, focus_position - eye_position, up_direction);
+    }
+
+    Matrix44 MatrixGenerator::LookTo(const Vector3& eye_position, const Vector3& eye_direction, const Vector3& up_direction) const
+    {
+        Vector3 r2 = eye_direction.Unit();
+        Vector3 r0 = CrossProduct(up_direction, r2).Unit();
+        Vector3 r1 = CrossProduct(r2, r0);
+        Vector3 neg_eye_position = eye_position.Negate();
+
+        Real d0 = DotProduct(r0, neg_eye_position);
+        Real d1 = DotProduct(r1, neg_eye_position);
+        Real d2 = DotProduct(r2, neg_eye_position);
+
+        Matrix44 M;
+        M.SetColumns(Vector4(r0, d0), Vector4(r1, d1), Vector4(r2, d2), Math::Vector4::W_AXIS);
+        return M;
+    }
+
+   
     void MatrixGenerator::SetScreenAspect(Real screen_aspect)
     {
         m_screen_aspect      = screen_aspect;

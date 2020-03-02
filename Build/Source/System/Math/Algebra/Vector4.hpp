@@ -24,6 +24,7 @@ namespace Engine5
         explicit Vector4(Real arr[4]);
         explicit Vector4(const Vector2& rhs);
         explicit Vector4(const Vector3& rhs);
+        explicit Vector4(const Vector3& rhs, Real w);
         Vector4(const Vector4& rhs);
         ~Vector4();
 
