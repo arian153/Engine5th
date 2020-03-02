@@ -2,6 +2,7 @@
 #include "../Renderer/RendererCommon.hpp"
 #include "../Shader/ColorShaderCommon.hpp"
 #include "MatrixGenerator.hpp"
+#include "../Data/BufferCommon.hpp"
 
 namespace Engine5
 {

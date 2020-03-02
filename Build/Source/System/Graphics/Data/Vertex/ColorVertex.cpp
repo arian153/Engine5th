@@ -1,7 +1,7 @@
 #include "ColorVertex.hpp"
-#include "../../Math/Algebra/Vector3.hpp"
-#include "../Utility/Color.hpp"
-#include "../../Math/Math.hpp"
+#include "../../../Math/Algebra/Vector3.hpp"
+#include "../Color.hpp"
+#include "../../../Math/Math.hpp"
 
 namespace Engine5
 {

@@ -1,12 +1,12 @@
 #pragma once
-#include "APIMacro.hpp"
-#include "DX11/BufferDX11.hpp"
 #include "../../Core/Utility/CoreDef.hpp"
-#include "../Vertex/ColorVertex.hpp"
-#include "../Vertex/TextureVertex.hpp"
-#include "../Utility/TopologyType.hpp"
 
 #include <vector>
+#include "../Data/Vertex/ColorVertex.hpp"
+#include "../Data/Vertex/TextureVertex.hpp"
+#include "../Data/TopologyDef.hpp"
+#include "../Renderer/APIMacro.hpp"
+#include "../Renderer/DX11/BufferDX11.hpp"
 
 namespace Engine5
 {

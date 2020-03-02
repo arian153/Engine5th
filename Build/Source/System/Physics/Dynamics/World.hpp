@@ -6,7 +6,7 @@
 #include "../BroadPhase/BroadPhase.hpp"
 #include "../Resolution/ContactManifold.hpp"
 #include <unordered_map>
-#include "../../Graphics/Utility/Color.hpp"
+#include "../../Graphics/Data/Color.hpp"
 
 namespace Engine5
 {

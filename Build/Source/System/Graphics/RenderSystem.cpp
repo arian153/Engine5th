@@ -1,6 +1,5 @@
 #include "RenderSystem.hpp"
 #include "../Core/OS-API/Windows/Windows.hpp"
-#include "Utility/Color.hpp"
 #include "Renderer/RendererCommon.hpp"
 #include "Shader/ShaderManager.hpp"
 

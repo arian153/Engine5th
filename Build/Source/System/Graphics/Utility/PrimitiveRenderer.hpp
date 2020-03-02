@@ -1,13 +1,13 @@
 #pragma once
 #include "../../Math/Math.hpp"
-#include "Color.hpp"
 #include <vector>
-#include "../Vertex/ColorVertex.hpp"
-#include "../Renderer/BufferCommon.hpp"
+#include "../Data/Color.hpp"
+#include "../Data/Vertex/ColorVertex.hpp"
 
 namespace Engine5
 {
     class MatrixGenerator;
+    class BufferCommon;
     class RendererCommon;
     class Camera;
     class ColorShaderCommon;
