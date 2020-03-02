@@ -2,9 +2,9 @@
 #include "../../Core/Utility/CoreDef.hpp"
 
 #include <vector>
-#include "../Data/Vertex/ColorVertex.hpp"
-#include "../Data/Vertex/TextureVertex.hpp"
-#include "../Data/TopologyDef.hpp"
+#include "../DataType/Vertex/ColorVertex.hpp"
+#include "../DataType/Vertex/TextureVertex.hpp"
+#include "../DataType/TopologyDef.hpp"
 #include "../Renderer/APIMacro.hpp"
 #include "../Renderer/DX11/BufferDX11.hpp"
 

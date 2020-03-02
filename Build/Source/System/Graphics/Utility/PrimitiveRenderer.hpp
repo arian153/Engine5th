@@ -1,8 +1,8 @@
 #pragma once
 #include "../../Math/Math.hpp"
 #include <vector>
-#include "../Data/Color.hpp"
-#include "../Data/Vertex/ColorVertex.hpp"
+#include "../DataType/Color.hpp"
+#include "../DataType/Vertex/ColorVertex.hpp"
 
 namespace Engine5
 {

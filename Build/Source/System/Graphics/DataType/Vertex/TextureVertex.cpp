@@ -1,6 +1,5 @@
 #include "TextureVertex.hpp"
-#include "../../Math/Utility/Converter.hpp"
-#include "../../Math/Algebra/Vector3.hpp"
+#include "../../../Math/Math.hpp"
 
 namespace Engine5
 {

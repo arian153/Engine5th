@@ -5,7 +5,7 @@
 #include "Utility/PrimitiveRenderer.hpp"
 #include "../Core/OS-API/Windows/Windows.hpp"
 #include "Utility/MatrixGenerator.hpp"
-#include "Data/Color.hpp"
+#include "DataType/Color.hpp"
 
 namespace Engine5
 {
