@@ -1,10 +1,10 @@
 #include "Converter.hpp"
-#include "../Algebra/Vector3.hpp"
-#include "../Algebra/Vector4.hpp"
-#include "../Algebra/Quaternion.hpp"
-#include "../Algebra/Matrix44.hpp"
-#include "../Algebra/Vector2.hpp"
-
+#include "../../../Math/Algebra/Vector2.hpp"
+#include "../../../Math/Algebra/Vector3.hpp"
+#include "../../../Math/Algebra/Vector4.hpp"
+#include "../../../Math/Algebra/Quaternion.hpp"
+#include "../../../Math/Algebra/Matrix44.hpp"
+#include "../../DataType/Color.hpp"
 
 namespace Engine5
 {
@@ -78,6 +78,11 @@ namespace Engine5
             return DirectX::XMFLOAT4(quaternion.i, quaternion.j, quaternion.k, quaternion.r);
         }
 
+        DirectX::XMFLOAT4 ToXMFloat4(const Color& color)
+        {
+            return DirectX::XMFLOAT4(color.r, color.g, color.b, color.a);
+        }
+
         Matrix44 ToMatrix44(const DirectX::XMMATRIX& xmmatrix)
         {
             return Matrix44(
@@ -98,25 +103,28 @@ namespace Engine5
                            );
         }
 
+        Color ToColor(const DirectX::XMFLOAT4& xmfloat4)
+        {
+            return Color(xmfloat4.x, xmfloat4.y, xmfloat4.z, xmfloat4.w);
+        }
+
         DirectX::XMFLOAT4X4 ToXMFloat4X4(const Matrix44& matrix)
         {
             DirectX::XMFLOAT4X4 result(
-                matrix.data[0], matrix.data[1], matrix.data[2], matrix.data[3],
-                matrix.data[4], matrix.data[5], matrix.data[6], matrix.data[7], 
-                matrix.data[8], matrix.data[9], matrix.data[10], matrix.data[11],
-                matrix.data[12], matrix.data[13], matrix.data[14], matrix.data[15]);
-
+                                       matrix.data[0], matrix.data[1], matrix.data[2], matrix.data[3],
+                                       matrix.data[4], matrix.data[5], matrix.data[6], matrix.data[7],
+                                       matrix.data[8], matrix.data[9], matrix.data[10], matrix.data[11],
+                                       matrix.data[12], matrix.data[13], matrix.data[14], matrix.data[15]);
             return result;
         }
 
         DirectX::XMMATRIX ToXMMatrix(const Matrix44& matrix)
         {
             DirectX::XMFLOAT4X4 result(
-                matrix.data[0], matrix.data[1], matrix.data[2], matrix.data[3],
-                matrix.data[4], matrix.data[5], matrix.data[6], matrix.data[7],
-                matrix.data[8], matrix.data[9], matrix.data[10], matrix.data[11],
-                matrix.data[12], matrix.data[13], matrix.data[14], matrix.data[15]);
-
+                                       matrix.data[0], matrix.data[1], matrix.data[2], matrix.data[3],
+                                       matrix.data[4], matrix.data[5], matrix.data[6], matrix.data[7],
+                                       matrix.data[8], matrix.data[9], matrix.data[10], matrix.data[11],
+                                       matrix.data[12], matrix.data[13], matrix.data[14], matrix.data[15]);
             return DirectX::XMLoadFloat4x4(&result);
         }
     }

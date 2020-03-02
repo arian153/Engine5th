@@ -1,9 +1,9 @@
 #pragma once
-
 #include <directxmath.h>
 
 namespace Engine5
 {
+    class Color;
     class Vector2;
     class Vector3;
     class Vector4;
@@ -25,6 +25,7 @@ namespace Engine5
         Matrix44 ToMatrix44(const DirectX::XMMATRIX& xmmatrix);
         Matrix44 ToMatrix44(const DirectX::XMFLOAT4X4& xmfloat44);
 
+        Color ToColor(const DirectX::XMFLOAT4& xmfloat4);
 
         DirectX::XMVECTOR ToXMVector(const Vector3& vector);
         DirectX::XMVECTOR ToXMVector(const Vector4& vector);
@@ -35,9 +36,8 @@ namespace Engine5
         DirectX::XMFLOAT3 ToXMFloat3(const Vector3& vector);
         DirectX::XMFLOAT4 ToXMFloat4(const Vector4& vector);
         DirectX::XMFLOAT4 ToXMFloat4(const Quaternion& quaternion);
-        
-        DirectX::XMFLOAT4X4 ToXMFloat4X4(const Matrix44& matrix);
-       
+        DirectX::XMFLOAT4 ToXMFloat4(const Color& color);
 
+        DirectX::XMFLOAT4X4 ToXMFloat4X4(const Matrix44& matrix);
     }
 }

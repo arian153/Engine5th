@@ -1,7 +1,6 @@
 #pragma once
 #include "../../Math/Utility/MathDef.hpp"
 #include "../../Core/Utility/CoreDef.hpp"
-#include <directxmath.h>
 
 namespace Engine5
 {
@@ -15,7 +14,7 @@ namespace Engine5
         Real              ToReal(int color);
         U8                ToByte(Real color);
         int               ToInt(Real color);
-        DirectX::XMFLOAT4 ToXMFloat4() const;
+        
 
     public:
         Real r, g, b, a;

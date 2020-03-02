@@ -19,6 +19,24 @@
 #define BufferAPI BufferOpenGL4
 #endif
 
+//ColorVertex
+#if defined(E5_DIRECTX11)
+#define ColorVertexAPI ColorVertexDX11
+#elif defined(E5_DIRECTX12)
+#define ColorVertexAPI ColorVertexDX12
+#elif defined(E5_OPENGL4)
+#define ColorVertexAPI ColorVertexOpenGL4
+#endif
+
+//TextureVertex
+#if defined(E5_DIRECTX11)
+#define TextureVertexAPI TextureVertexDX11
+#elif defined(E5_DIRECTX12)
+#define TextureVertexAPI TextureVertexDX12
+#elif defined(E5_OPENGL4)
+#define TextureVertexAPI TextureVertexOpenGL4
+#endif
+
 //Shader Manager
 #if defined(E5_DIRECTX11)
 #define ShaderManagerAPI ShaderManagerDX11
@@ -36,5 +54,3 @@
 #elif defined(E5_OPENGL4)
 #define ColorShaderAPI ColorShaderOpenGL4
 #endif
-
-

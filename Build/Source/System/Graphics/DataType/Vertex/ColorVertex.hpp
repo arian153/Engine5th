@@ -1,18 +1,18 @@
 #pragma once
-#include <directxmath.h>
+#include "../../Renderer/APIMacro.hpp"
+#include "../../Renderer/DX11/Vertex/ColorVertexDX11.hpp"
 
 namespace Engine5
 {
     class Vector3;
     class Color;
-    class ColorVertex
+
+    class ColorVertex : public ColorVertexAPI
     {
     public:
         ColorVertex();
         ColorVertex(const Vector3& position, const Color& color);
 
     public:
-        DirectX::XMFLOAT3 position;
-        DirectX::XMFLOAT4 color;
     };
 }

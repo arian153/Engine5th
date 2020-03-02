@@ -3,9 +3,8 @@
 #include "MeshGenerator.hpp"
 #include <algorithm>
 #include "../../Core/Utility/CoreUtility.hpp"
-#include "../../Math/Utility/Converter.hpp"
 #include "../../Math/Algebra/Vector3.hpp"
-#include "MeshData.hpp"
+#include "../DataType/MeshData.hpp"
 
 namespace Engine5
 {
@@ -19,11 +18,11 @@ namespace Engine5
 
     MeshData* MeshGenerator::CreateBox(Real width, Real height, Real depth, I32 num_subdivisions) const
     {
-        MeshData* mesh_data = new MeshData();
-        TextureVertex    v[24];
-        Real      w2 = 0.5f * width;
-        Real      h2 = 0.5f * height;
-        Real      d2 = 0.5f * depth;
+        MeshData*     mesh_data = new MeshData();
+        TextureVertex v[24];
+        Real          w2 = 0.5f * width;
+        Real          h2 = 0.5f * height;
+        Real          d2 = 0.5f * depth;
         // Fill in the front face vertex data.
         v[0] = TextureVertex(-w2, -h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
         v[1] = TextureVertex(-w2, +h2, -d2, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -109,9 +108,9 @@ namespace Engine5
 
     MeshData* MeshGenerator::CreateSphere(Real radius, I32 slice_count, I32 stack_count) const
     {
-        MeshData* mesh_data = new MeshData();
-        TextureVertex    top_vertex(0.0f, +radius, 0.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-        TextureVertex    bottom_vertex(0.0f, -radius, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        MeshData*     mesh_data = new MeshData();
+        TextureVertex top_vertex(0.0f, +radius, 0.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        TextureVertex bottom_vertex(0.0f, -radius, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
         mesh_data->vertices.push_back(top_vertex);
         Real phi_step   = Math::PI / stack_count;
         Real theta_step = Math::TWO_PI / slice_count;
@@ -122,7 +121,7 @@ namespace Engine5
             // Vertices of ring.
             for (I32 j = 0; j <= slice_count; ++j)
             {
-                Real   theta = j * theta_step;
+                Real          theta = j * theta_step;
                 TextureVertex v;
                 // spherical to cartesian
                 v.position.x = radius * sinf(phi) * cosf(theta);
@@ -250,8 +249,8 @@ namespace Engine5
             for (I32 j = 0; j <= slice_count; ++j)
             {
                 TextureVertex vertex;
-                Real   c        = cosf(j * d_theta);
-                Real   s        = sinf(j * d_theta);
+                Real          c = cosf(j * d_theta);
+                Real          s = sinf(j * d_theta);
                 vertex.position = DirectX::XMFLOAT3(r * c, y, r * s);
                 vertex.uv.x     = (float)j / slice_count;
                 vertex.uv.y     = 1.0f - (float)i / stack_count;
@@ -340,25 +339,25 @@ namespace Engine5
         mesh_data->indices.resize(6);
         // Position coordinates specified in NDC space.
         mesh_data->vertices[0] = TextureVertex(
-                                        x, y - h, depth,
-                                        0.0f, 0.0f, -1.0f,
-                                        1.0f, 0.0f, 0.0f,
-                                        0.0f, 1.0f);
+                                               x, y - h, depth,
+                                               0.0f, 0.0f, -1.0f,
+                                               1.0f, 0.0f, 0.0f,
+                                               0.0f, 1.0f);
         mesh_data->vertices[1] = TextureVertex(
-                                        x, y, depth,
-                                        0.0f, 0.0f, -1.0f,
-                                        1.0f, 0.0f, 0.0f,
-                                        0.0f, 0.0f);
+                                               x, y, depth,
+                                               0.0f, 0.0f, -1.0f,
+                                               1.0f, 0.0f, 0.0f,
+                                               0.0f, 0.0f);
         mesh_data->vertices[2] = TextureVertex(
-                                        x + w, y, depth,
-                                        0.0f, 0.0f, -1.0f,
-                                        1.0f, 0.0f, 0.0f,
-                                        1.0f, 0.0f);
+                                               x + w, y, depth,
+                                               0.0f, 0.0f, -1.0f,
+                                               1.0f, 0.0f, 0.0f,
+                                               1.0f, 0.0f);
         mesh_data->vertices[3] = TextureVertex(
-                                        x + w, y - h, depth,
-                                        0.0f, 0.0f, -1.0f,
-                                        1.0f, 0.0f, 0.0f,
-                                        1.0f, 1.0f);
+                                               x + w, y - h, depth,
+                                               0.0f, 0.0f, -1.0f,
+                                               1.0f, 0.0f, 0.0f,
+                                               1.0f, 1.0f);
         mesh_data->indices[0] = 0;
         mesh_data->indices[1] = 1;
         mesh_data->indices[2] = 2;
@@ -422,7 +421,7 @@ namespace Engine5
         DirectX::XMVECTOR tangent  = DirectX::XMVector3Normalize(DirectX::XMVectorScale(DirectX::XMVectorAdd(tan0, tan1), 0.5f));
         DirectX::XMVECTOR uv       = DirectX::XMVectorScale(DirectX::XMVectorAdd(uv0, uv1), 0.5f);
         DirectX::XMVECTOR binormal = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(tangent, normal));
-        TextureVertex            v;
+        TextureVertex     v;
         DirectX::XMStoreFloat3(&v.position, pos);
         DirectX::XMStoreFloat3(&v.normal, normal);
         DirectX::XMStoreFloat3(&v.tangent, tangent);
@@ -495,13 +494,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < mesh_data.vertices.size(); ++i)
         {
-            Vector3 tangent  = Converter::ToVector3(mesh_data.vertices[i].tangent);
-            Vector3 normal   = Converter::ToVector3(mesh_data.vertices[i].normal);
-            Vector3 binormal = tangent.CrossProduct(normal);
-            binormal.SetNormalize();
-            mesh_data.vertices[i].binormal.x = binormal.x;
-            mesh_data.vertices[i].binormal.y = binormal.y;
-            mesh_data.vertices[i].binormal.z = binormal.z;
+            mesh_data.vertices[i].CalculateBinormal();
         }
     }
 }

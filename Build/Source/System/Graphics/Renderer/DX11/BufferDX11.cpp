@@ -1,8 +1,8 @@
 #include "BufferDX11.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
 #include "../RendererCommon.hpp"
-#include "../../Data/TopologyDef.hpp"
-#include "../../Data/BufferCommon.hpp"
+#include "../../DataType/TopologyDef.hpp"
+#include "../../DataType/BufferCommon.hpp"
 
 namespace Engine5
 {

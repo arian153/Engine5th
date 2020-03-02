@@ -1,7 +1,7 @@
 #include "Camera.hpp"
 #include "../../Core/Utility/CoreUtility.hpp"
-#include "../../Math/Algebra/Matrix33.hpp"
-#include "../Utility/RTTGenerator.hpp"
+#include "../../Math/Math.hpp"
+#include "../Renderer/DX11/Converter.hpp"
 
 namespace Engine5
 {

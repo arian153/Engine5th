@@ -3,9 +3,9 @@
 #include "RendererDX11.hpp"
 #include "../RendererCommon.hpp"
 #include "../../../Core/Utility/CoreUtility.hpp"
-#include "../../Utility/Color.hpp"
 #include "../../../Math/Math.hpp"
-#include "../../Vertex/ColorVertex.hpp"
+#include "../../DataType/Color.hpp"
+#include <cassert>
 
 namespace Engine5
 {

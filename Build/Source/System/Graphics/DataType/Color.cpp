@@ -38,9 +38,4 @@ namespace Engine5
     {
         return static_cast<int>(color) * 255;
     }
-
-    DirectX::XMFLOAT4 Color::ToXMFloat4() const
-    {
-        return DirectX::XMFLOAT4(r, g, b, a);
-    }
 }

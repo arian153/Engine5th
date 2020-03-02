@@ -80,8 +80,8 @@ namespace Engine5
 
     size_t Random::NPercentSuccessMTimesResult(size_t m, Real percent)
     {
-        std::binomial_distribution<> dist(m, percent);
-        return dist(m_random32);
+        std::binomial_distribution<size_t> dist(m, percent);
+        return static_cast<size_t>(dist(m_random32));
     }
 
     unsigned Random::GetNormalDistributionUnsigned(unsigned average, unsigned deviation)
@@ -207,7 +207,7 @@ namespace Engine5
     R32 Random::GetNormalDistributionR32(R32 average, R32 deviation)
     {
         std::normal_distribution<> dist(average, deviation);
-        return dist(m_random32);
+        return static_cast<R32>(dist(m_random32));
     }
 
     R64 Random::GetNormalDistributionR64(R64 average, R64 deviation)

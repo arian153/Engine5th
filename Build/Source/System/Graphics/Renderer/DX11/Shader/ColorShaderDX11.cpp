@@ -1,8 +1,8 @@
 #include "ColorShaderDX11.hpp"
 #include "../../../Shader/ColorShaderCommon.hpp"
 #include "../../../../Core/Utility/CoreUtility.hpp"
-#include "../../../../Math/Utility/Converter.hpp"
 #include <fstream>
+#include "../Converter.hpp"
 
 namespace Engine5
 {
