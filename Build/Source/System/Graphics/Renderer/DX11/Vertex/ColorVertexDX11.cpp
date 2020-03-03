@@ -2,7 +2,7 @@
 #include "ColorVertexDX11.hpp"
 #include "../../../../Math/Math.hpp"
 #include "../../../DataType/Color.hpp"
-#include "../Converter.hpp"
+#include "../ConverterDX11.hpp"
 
 namespace Engine5
 {
@@ -28,17 +28,17 @@ namespace Engine5
 
     ColorVertex::ColorVertex(const Vector3& _position, const Color& _color)
     {
-        position = Converter::ToXMFloat3(_position);
-        color    = Converter::ToXMFloat4(_color);
+        position = ConverterDX11::ToXMFloat3(_position);
+        color    = ConverterDX11::ToXMFloat4(_color);
     }
 
     Vector3 ColorVertex::GetPosition() const
     {
-        return Converter::ToVector3(position);
+        return ConverterDX11::ToVector3(position);
     }
 
     Color ColorVertex::GetColor() const
     {
-        return Converter::ToColor(color);
+        return ConverterDX11::ToColor(color);
     }
 }

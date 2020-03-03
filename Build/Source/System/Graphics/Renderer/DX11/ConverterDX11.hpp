@@ -11,7 +11,7 @@ namespace Engine5
     class Matrix33;
     class Matrix44;
 
-    namespace Converter
+    namespace ConverterDX11
     {
         Vector3 ToVector3(const DirectX::XMVECTOR& xmvector);
         Vector3 ToVector3(const DirectX::XMFLOAT3& xmfloat3);

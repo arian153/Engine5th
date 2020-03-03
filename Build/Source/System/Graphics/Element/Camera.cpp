@@ -1,7 +1,7 @@
 #include "Camera.hpp"
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "../../Math/Math.hpp"
-#include "../Renderer/DX11/Converter.hpp"
+#include "../Renderer/DX11/ConverterDX11.hpp"
 
 namespace Engine5
 {
@@ -90,10 +90,10 @@ namespace Engine5
 
     void Camera::UpdateCamera()
     {
-        DirectX::XMVECTOR up_vector       = Converter::ToXMVector(Math::Vector3::Y_AXIS);
-        DirectX::XMVECTOR pos_vector      = Converter::ToXMVector(m_position);
-        DirectX::XMVECTOR look_vector     = Converter::ToXMVector(Math::Vector3::Z_AXIS);
-        DirectX::XMMATRIX rotation_matrix = DirectX::XMMatrixRotationQuaternion(Converter::ToXMVector(m_orientation));
+        DirectX::XMVECTOR up_vector       = ConverterDX11::ToXMVector(Math::Vector3::Y_AXIS);
+        DirectX::XMVECTOR pos_vector      = ConverterDX11::ToXMVector(m_position);
+        DirectX::XMVECTOR look_vector     = ConverterDX11::ToXMVector(Math::Vector3::Z_AXIS);
+        DirectX::XMMATRIX rotation_matrix = DirectX::XMMatrixRotationQuaternion(ConverterDX11::ToXMVector(m_orientation));
 
         // Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
         look_vector = DirectX::XMVector3TransformCoord(look_vector, rotation_matrix);

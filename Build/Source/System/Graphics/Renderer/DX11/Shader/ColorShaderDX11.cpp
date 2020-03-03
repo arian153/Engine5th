@@ -2,7 +2,7 @@
 #include "../../../Shader/ColorShaderCommon.hpp"
 #include "../../../../Core/Utility/CoreUtility.hpp"
 #include <fstream>
-#include "../Converter.hpp"
+#include "../ConverterDX11.hpp"
 
 namespace Engine5
 {
@@ -179,9 +179,9 @@ namespace Engine5
         MatrixBufferType* data_ptr = (MatrixBufferType*)mapped_resource.pData;
         // Transpose the matrices to prepare them for the shader.
         // Copy the matrices into the constant buffer.
-        data_ptr->world = XMMatrixTranspose(Converter::ToXMMatrix(world));
-        data_ptr->view = XMMatrixTranspose(Converter::ToXMMatrix(view));
-        data_ptr->projection = XMMatrixTranspose(Converter::ToXMMatrix(proj));
+        data_ptr->world = XMMatrixTranspose(ConverterDX11::ToXMMatrix(world));
+        data_ptr->view = XMMatrixTranspose(ConverterDX11::ToXMMatrix(view));
+        data_ptr->projection = XMMatrixTranspose(ConverterDX11::ToXMMatrix(proj));
         // Unlock the constant buffer.
         m_device_context->Unmap(m_matrix_buffer, 0);
         // Set the position of the constant buffer in the vertex shader.

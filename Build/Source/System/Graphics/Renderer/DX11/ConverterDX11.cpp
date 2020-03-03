@@ -1,4 +1,4 @@
-#include "Converter.hpp"
+#include "ConverterDX11.hpp"
 #include "../../../Math/Algebra/Vector2.hpp"
 #include "../../../Math/Algebra/Vector3.hpp"
 #include "../../../Math/Algebra/Vector4.hpp"
@@ -8,7 +8,7 @@
 
 namespace Engine5
 {
-    namespace Converter
+    namespace ConverterDX11
     {
         Vector3 ToVector3(const DirectX::XMVECTOR& xmvector)
         {
