@@ -1,8 +1,8 @@
 #pragma once
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../../Math/Algebra/Quaternion.hpp"
-#include <directxmath.h>
 #include "../../Math/Structure/Basis.hpp"
+#include "../../Math/Algebra/Matrix44.hpp"
 
 namespace Engine5
 {
@@ -21,7 +21,7 @@ namespace Engine5
 
         Vector3           GetPosition() const;
         Quaternion        GetOrientation() const;
-        DirectX::XMMATRIX GetViewMatrix() const;
+        Matrix44 GetViewMatrix() const;
         Basis             GetBasis() const;
 
     private:
@@ -30,7 +30,7 @@ namespace Engine5
         void SyncToTransform();
 
     private:
-        DirectX::XMMATRIX m_view_matrix = DirectX::XMMatrixIdentity();
+        Matrix44 m_view_matrix;
         Vector3           m_position;
         Quaternion        m_orientation;
         Real              m_zoom = 1.0f;

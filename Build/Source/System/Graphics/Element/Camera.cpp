@@ -51,7 +51,7 @@ namespace Engine5
         return m_orientation;
     }
 
-    DirectX::XMMATRIX Camera::GetViewMatrix() const
+    Matrix44 Camera::GetViewMatrix() const
     {
         return m_view_matrix;
     }
