@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Renderer/APIMacro.hpp"
-#include "../../Renderer/DX11/Vertex/ColorVertexDX11.hpp"
+#include IncludeColorVertexAPI
 
 namespace Engine5
 {

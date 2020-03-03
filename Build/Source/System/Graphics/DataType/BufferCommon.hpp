@@ -6,7 +6,7 @@
 #include "../DataType/Vertex/TextureVertex.hpp"
 #include "../DataType/TopologyDef.hpp"
 #include "../Renderer/APIMacro.hpp"
-#include "../Renderer/DX11/BufferDX11.hpp"
+#include IncludeBufferAPI
 
 namespace Engine5
 {

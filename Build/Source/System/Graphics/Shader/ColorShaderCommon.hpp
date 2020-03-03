@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Renderer/APIMacro.hpp"
-#include "../Renderer/DX11/Shader/ColorShaderDX11.hpp"
+#include IncludeColorShaderAPI
 #include <string>
 #include "../../Core/Utility/CoreDef.hpp"
 

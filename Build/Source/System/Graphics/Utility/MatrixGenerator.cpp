@@ -35,9 +35,7 @@ namespace Engine5
         SetClientRect(client_width, client_height);
         SetFarPlane(far_plane);
         SetNearPlane(near_plane);
-
-        Real plane = 1.0f / (far_plane - near_plane);
-
+        Real     plane = 1.0f / (far_plane - near_plane);
         Matrix44 result;
         result.data[0]  = 2.0f / client_width;
         result.data[5]  = 2.0f / client_height;
@@ -70,21 +68,23 @@ namespace Engine5
 
     Matrix44 MatrixGenerator::LookTo(const Vector3& eye_position, const Vector3& eye_direction, const Vector3& up_direction) const
     {
-        Vector3 r2 = eye_direction.Normalize();
-        Vector3 r0 = CrossProduct(up_direction, r2).Normalize();
-        Vector3 r1 = CrossProduct(r2, r0);
-        Vector3 neg_eye_position = eye_position.Negate();
+        if (eye_direction.IsZero())
+        {
+            return Matrix44();
+        }
 
-        Real d0 = DotProduct(r0, neg_eye_position);
-        Real d1 = DotProduct(r1, neg_eye_position);
-        Real d2 = DotProduct(r2, neg_eye_position);
-
-        Matrix44 M;
-        M.SetColumns(Vector4(r0, d0), Vector4(r1, d1), Vector4(r2, d2), Math::Vector4::W_AXIS);
-        return M;
+        Vector3  r2               = eye_direction.Normalize();
+        Vector3  r0               = CrossProduct(up_direction, r2).Normalize();
+        Vector3  r1               = CrossProduct(r2, r0);
+        Vector3  neg_eye_position = eye_position.Negate();
+        Real     d0               = DotProduct(r0, neg_eye_position);
+        Real     d1               = DotProduct(r1, neg_eye_position);
+        Real     d2               = DotProduct(r2, neg_eye_position);
+        Matrix44 result;
+        result.SetColumns(Vector4(r0, d0), Vector4(r1, d1), Vector4(r2, d2), Math::Vector4::W_AXIS);
+        return result;
     }
 
-   
     void MatrixGenerator::SetScreenAspect(Real screen_aspect)
     {
         m_screen_aspect      = screen_aspect;

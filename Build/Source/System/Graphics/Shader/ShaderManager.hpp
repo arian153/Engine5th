@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Math/Utility/MathDef.hpp"
 #include "../Renderer/APIMacro.hpp"
-#include "../Renderer/DX11/Shader/ShaderManagerDX11.hpp"
+#include IncludeShaderManagerAPI
 
 namespace Engine5
 {
