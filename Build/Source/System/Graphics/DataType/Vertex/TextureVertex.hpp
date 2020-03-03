@@ -29,6 +29,12 @@ namespace Engine5
         Vector3 GetTangent() const;
         Vector3 GetBinormal() const;
 
+        void SetPosition(const Vector3& p);
+        void SetUV(const Vector2& _uv);
+        void SetNormal(const Vector3& n);
+        void SetTangent(const Vector3& t);
+        void SetBinormal(const Vector3& b);
+
     public:
     };
 }

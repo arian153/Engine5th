@@ -125,6 +125,8 @@ namespace Engine5
                 Real          theta = j * theta_step;
                 TextureVertex v;
                 // spherical to cartesian
+
+
                 v.position.x = radius * sinf(phi) * cosf(theta);
                 v.position.y = radius * cosf(phi);
                 v.position.z = radius * sinf(phi) * sinf(theta);
@@ -408,22 +410,21 @@ namespace Engine5
     TextureVertex MeshGenerator::MidPoint(const TextureVertex& v0, const TextureVertex& v1) const
     {
         //vertex0
-        Vector3           pos0 = v0.GetPosition();
-        Vector2           uv0  = v0.GetUV();
-        Vector3           nor0 = v0.GetNormal();
-        Vector3           tan0 = v0.GetTangent();
+        Vector3 pos0 = v0.GetPosition();
+        Vector2 uv0  = v0.GetUV();
+        Vector3 nor0 = v0.GetNormal();
+        Vector3 tan0 = v0.GetTangent();
         //vertex1
-        Vector3           pos1 = v1.GetPosition();
-        Vector2           uv1  = v1.GetUV();
-        Vector3           nor1 = v1.GetNormal();
-        Vector3           tan1 = v1.GetTangent();
-
-        Vector3 pos = (pos0 + pos1).Half();
-        Vector2 uv = (uv0 + uv1).Half();
-        Vector3 nor = (nor0 + nor1).Half().Normalize();
-        Vector3 tan = (tan0 + tan1).Half().Normalize();
-        Vector3 bin = CrossProduct(tan, nor).Normalize();
-
+        Vector3 pos1 = v1.GetPosition();
+        Vector2 uv1  = v1.GetUV();
+        Vector3 nor1 = v1.GetNormal();
+        Vector3 tan1 = v1.GetTangent();
+        //mid vertex
+        Vector3 pos  = (pos0 + pos1).Half();
+        Vector2 uv   = (uv0 + uv1).Half();
+        Vector3 nor  = (nor0 + nor1).Half().Normalize();
+        Vector3 tan  = (tan0 + tan1).Half().Normalize();
+        Vector3 bin  = CrossProduct(tan, nor).Normalize();
         return TextureVertex(pos, uv, nor, tan, bin);
     }
 

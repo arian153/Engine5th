@@ -130,4 +130,29 @@ namespace Engine5
     {
         return Converter::ToVector3(binormal);
     }
+
+    void TextureVertex::SetPosition(const Vector3& p)
+    {
+        position = Converter::ToXMFloat3(p);
+    }
+
+    void TextureVertex::SetUV(const Vector2& _uv)
+    {
+        uv = Converter::ToXMFloat2(_uv);
+    }
+
+    void TextureVertex::SetNormal(const Vector3& n)
+    {
+        normal = Converter::ToXMFloat3(n);
+    }
+
+    void TextureVertex::SetTangent(const Vector3& t)
+    {
+        tangent = Converter::ToXMFloat3(t);
+    }
+
+    void TextureVertex::SetBinormal(const Vector3& b)
+    {
+        binormal = Converter::ToXMFloat3(b);
+    }
 }
