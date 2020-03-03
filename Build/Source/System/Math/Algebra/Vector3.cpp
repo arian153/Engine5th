@@ -184,6 +184,11 @@ namespace Engine5
         return Vector3(-this->x, -this->y, -this->z);
     }
 
+    Vector3 Vector3::Scale(Real scale) const
+    {
+        return Vector3(x * scale, y * scale, z * scale);
+    }
+
     Real Vector3::DotProduct(const Vector3& rhs) const
     {
         return (x * rhs.x + y * rhs.y + z * rhs.z);
