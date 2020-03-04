@@ -23,20 +23,22 @@ namespace Engine5
     {
     public:
         explicit Quaternion(Real r = 1.0f, Real i = 0.0f, Real j = 0.0f, Real k = 0.0f);
-        Quaternion(const Vector3& axis, Real radian);
-        Quaternion(const Vector3& from, const Vector3& to);
         explicit Quaternion(const Vector3& vector);
         explicit Quaternion(const Matrix33& rotation_matrix);
+        explicit Quaternion(const AxisRadian& axis_radian);
         explicit Quaternion(const EulerAngle& euler_angle);
+        Quaternion(const Vector3& axis, Real radian);
+        Quaternion(const Vector3& from, const Vector3& to);
         Quaternion(const Quaternion& rhs);
 
         ~Quaternion();
 
         void Set(Real r = 1.0f, Real i = 0.0f, Real j = 0.0f, Real k = 0.0f);
-        void Set(const Vector3& axis, Real radian);
         void Set(const Vector3& from, const Vector3& to);
+        void Set(const Vector3& axis, Real radian);
         void Set(const Vector3& vector);
         void Set(const Matrix33& rotation_matrix);
+        void Set(const AxisRadian& axis_radian);
         void Set(const EulerAngle& euler_angle);
         void Set(const Quaternion& rhs);
 

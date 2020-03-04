@@ -14,6 +14,7 @@
 
 namespace Engine5
 {
+    class AxisRadian;
     class Quaternion;
     class Vector3;
     class Vector4;
@@ -41,18 +42,19 @@ namespace Engine5
         void SetTranspose();
         void SetZero();
 
-        void SetTransformationRotation(const Quaternion& quaternion);
-        void SetTransformationRotation(const Matrix33& rotation_matrix);
-        void SetTransformationRotation(const EulerAngle& euler_angle);
-        void SetTransformationRotation(const Vector3& axis, Real radian);
+        void SetRotation(const Quaternion& quaternion);
+        void SetRotation(const Matrix33& rotation_matrix);
+        void SetRotation(const EulerAngle& euler_angle);
+        void SetRotation(const AxisRadian& axis_radian);
+        void SetRotation(const Vector3& axis, Real radian);
 
-        void SetTransformationRotationX(Real radian);
-        void SetTransformationRotationY(Real radian);
-        void SetTransformationRotationZ(Real radian);
+        void SetRotationX(Real radian);
+        void SetRotationY(Real radian);
+        void SetRotationZ(Real radian);
 
-        void SetTransformationScaling(const Vector4& scale);
-        void SetTransformationScaling(const Vector3& scale, Real w = 1.0f);
-        void SetTransformationTranslation(const Vector3& translation);
+        void SetScale(const Vector4& scale);
+        void SetScale(const Vector3& scale, Real w = 1.0f);
+        void SetTranslation(const Vector3& translation);
 
         bool IsZero() const;
         bool IsIdentity() const;

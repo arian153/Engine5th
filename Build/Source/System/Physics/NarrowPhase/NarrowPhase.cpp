@@ -303,7 +303,7 @@ namespace Engine5
             // initial search direction
             search_dir_case2 = line_vec_case2.CrossProduct(m_axes[least_significant_axis]);
             // build a rotation matrix of 60 degrees about line vector
-            rot_case2.SetTransformationRotation(line_vec_case2, Math::PI_DIV_3);
+            rot_case2.SetRotation(line_vec_case2, Math::PI_DIV_3);
             // find up to 6 directions perpendicular to the line vector
             // until a good search direction is used
             for (int i = 0; i < 6; ++i)

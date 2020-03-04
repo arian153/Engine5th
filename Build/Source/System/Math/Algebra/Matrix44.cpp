@@ -174,7 +174,7 @@ namespace Engine5
         data[15] = 0.0f;
     }
 
-    void Matrix44::SetTransformationRotation(const Quaternion& quaternion)
+    void Matrix44::SetRotation(const Quaternion& quaternion)
     {
         if (quaternion.IsUnit())
         {
@@ -209,7 +209,7 @@ namespace Engine5
         }
     }
 
-    void Matrix44::SetTransformationRotation(const Matrix33& rotation_matrix)
+    void Matrix44::SetRotation(const Matrix33& rotation_matrix)
     {
         data[0]  = rotation_matrix.data[0];
         data[1]  = rotation_matrix.data[1];
@@ -229,7 +229,7 @@ namespace Engine5
         data[15] = 1.0f;
     }
 
-    void Matrix44::SetTransformationRotation(const EulerAngle& euler_angle)
+    void Matrix44::SetRotation(const EulerAngle& euler_angle)
     {
         Real sin_x = sinf(euler_angle.x_rotation);
         Real cos_x = cosf(euler_angle.x_rotation);
@@ -255,41 +255,73 @@ namespace Engine5
         data[15]   = 1.0f;
     }
 
-    void Matrix44::SetTransformationRotation(const Vector3& axis, Real radian)
+    void Matrix44::SetRotation(const AxisRadian& axis_radian)
     {
-        Real    sin  = sinf(radian);
-        Real    cos  = cosf(radian);
-        Real    t    = 1.0f - cos;
-        Vector3 Axis = axis;
-        Axis.SetNormalize();
-        Real tx  = t * Axis.x;
-        Real ty  = t * Axis.y;
-        Real tz  = t * Axis.z;
-        Real sx  = sin * Axis.x;
-        Real sy  = sin * Axis.y;
-        Real sz  = sin * Axis.z;
-        Real txy = tx * Axis.y;
-        Real tyz = tx * Axis.z;
-        Real txz = tx * Axis.z;
-        data[0]  = (tx * Axis.x + cos);
-        data[1]  = (txy - sz);
-        data[2]  = (txz + sy);
-        data[3]  = 0.0f;
-        data[4]  = (txy + sz);
-        data[5]  = (ty * Axis.y + cos);
-        data[6]  = (tyz - sx);
-        data[7]  = 0.0f;
-        data[8]  = (txz - sy);
-        data[9]  = (tyz + sx);
-        data[10] = (tz * Axis.z + cos);
-        data[11] = 0.0f;
-        data[12] = 0.0f;
-        data[13] = 0.0f;
-        data[14] = 0.0f;
-        data[15] = 1.0f;
+        Real    sin       = sinf(axis_radian.radian);
+        Real    cos       = cosf(axis_radian.radian);
+        Real    t         = 1.0f - cos;
+        Vector3 unit_axis = axis_radian.axis.Unit();
+        Real    tx        = t * unit_axis.x;
+        Real    ty        = t * unit_axis.y;
+        Real    tz        = t * unit_axis.z;
+        Real    sx        = sin * unit_axis.x;
+        Real    sy        = sin * unit_axis.y;
+        Real    sz        = sin * unit_axis.z;
+        Real    txy       = tx * unit_axis.y;
+        Real    tyz       = tx * unit_axis.z;
+        Real    txz       = tx * unit_axis.z;
+        data[0]           = (tx * unit_axis.x + cos);
+        data[1]           = (txy - sz);
+        data[2]           = (txz + sy);
+        data[3]           = 0.0f;
+        data[4]           = (txy + sz);
+        data[5]           = (ty * unit_axis.y + cos);
+        data[6]           = (tyz - sx);
+        data[7]           = 0.0f;
+        data[8]           = (txz - sy);
+        data[9]           = (tyz + sx);
+        data[10]          = (tz * unit_axis.z + cos);
+        data[11]          = 0.0f;
+        data[12]          = 0.0f;
+        data[13]          = 0.0f;
+        data[14]          = 0.0f;
+        data[15]          = 1.0f;
     }
 
-    void Matrix44::SetTransformationRotationX(Real radian)
+    void Matrix44::SetRotation(const Vector3& axis, Real radian)
+    {
+        Real    sin       = sinf(radian);
+        Real    cos       = cosf(radian);
+        Real    t         = 1.0f - cos;
+        Vector3 unit_axis = axis.Unit();
+        Real    tx        = t * unit_axis.x;
+        Real    ty        = t * unit_axis.y;
+        Real    tz        = t * unit_axis.z;
+        Real    sx        = sin * unit_axis.x;
+        Real    sy        = sin * unit_axis.y;
+        Real    sz        = sin * unit_axis.z;
+        Real    txy       = tx * unit_axis.y;
+        Real    tyz       = tx * unit_axis.z;
+        Real    txz       = tx * unit_axis.z;
+        data[0]           = (tx * unit_axis.x + cos);
+        data[1]           = (txy - sz);
+        data[2]           = (txz + sy);
+        data[3]           = 0.0f;
+        data[4]           = (txy + sz);
+        data[5]           = (ty * unit_axis.y + cos);
+        data[6]           = (tyz - sx);
+        data[7]           = 0.0f;
+        data[8]           = (txz - sy);
+        data[9]           = (tyz + sx);
+        data[10]          = (tz * unit_axis.z + cos);
+        data[11]          = 0.0f;
+        data[12]          = 0.0f;
+        data[13]          = 0.0f;
+        data[14]          = 0.0f;
+        data[15]          = 1.0f;
+    }
+
+    void Matrix44::SetRotationX(Real radian)
     {
         Real sin = sinf(radian);
         Real cos = cosf(radian);
@@ -311,7 +343,7 @@ namespace Engine5
         data[15] = 1.0f;
     }
 
-    void Matrix44::SetTransformationRotationY(Real radian)
+    void Matrix44::SetRotationY(Real radian)
     {
         Real sin = sinf(radian);
         Real cos = cosf(radian);
@@ -333,7 +365,7 @@ namespace Engine5
         data[15] = 1.0f;
     }
 
-    void Matrix44::SetTransformationRotationZ(Real radian)
+    void Matrix44::SetRotationZ(Real radian)
     {
         Real sin = sinf(radian);
         Real cos = cosf(radian);
@@ -355,7 +387,7 @@ namespace Engine5
         data[15] = 1.0f;
     }
 
-    void Matrix44::SetTransformationScaling(const Vector4& scale)
+    void Matrix44::SetScale(const Vector4& scale)
     {
         data[0]  = scale.x;
         data[1]  = 0.0f;
@@ -375,18 +407,18 @@ namespace Engine5
         data[15] = scale.w;
     }
 
-    void Matrix44::SetTransformationScaling(const Vector3& scale, Real w)
+    void Matrix44::SetScale(const Vector3& scale, Real w)
     {
-        data[0] = scale.x;
-        data[1] = 0.0f;
-        data[2] = 0.0f;
-        data[3] = 0.0f;
-        data[4] = 0.0f;
-        data[5] = scale.y;
-        data[6] = 0.0f;
-        data[7] = 0.0f;
-        data[8] = 0.0f;
-        data[9] = 0.0f;
+        data[0]  = scale.x;
+        data[1]  = 0.0f;
+        data[2]  = 0.0f;
+        data[3]  = 0.0f;
+        data[4]  = 0.0f;
+        data[5]  = scale.y;
+        data[6]  = 0.0f;
+        data[7]  = 0.0f;
+        data[8]  = 0.0f;
+        data[9]  = 0.0f;
         data[10] = scale.z;
         data[11] = 0.0f;
         data[12] = 0.0f;
@@ -395,7 +427,7 @@ namespace Engine5
         data[15] = w;
     }
 
-    void Matrix44::SetTransformationTranslation(const Vector3& translation)
+    void Matrix44::SetTranslation(const Vector3& translation)
     {
         data[0]  = 1.0f;
         data[1]  = 0.0f;

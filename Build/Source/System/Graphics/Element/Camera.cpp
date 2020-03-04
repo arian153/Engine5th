@@ -58,7 +58,7 @@ namespace Engine5
 
     void Camera::LookAt(const Vector3& position, const Vector3& target, const Vector3& up)
     {
-        DirectX::XMVECTOR pos_vector    = DirectX::XMVectorSet(position.x, position.y, position.z, 1.0f);
+       /* DirectX::XMVECTOR pos_vector    = DirectX::XMVectorSet(position.x, position.y, position.z, 1.0f);
         DirectX::XMVECTOR target_vector = DirectX::XMVectorSet(target.x, target.y, target.z, 0.0f);
         DirectX::XMVECTOR up_vector     = DirectX::XMVectorSet(up.x, up.y, up.z, 0.0f);
         m_view_matrix                   = DirectX::XMMatrixLookAtLH(pos_vector, target_vector, up_vector);
@@ -80,7 +80,7 @@ namespace Engine5
         m_orientation           = rotation_matrix.ToQuaternion();
         m_basis                 = Basis();
         m_basis.Rotate(m_orientation);
-        SyncToTransform();
+        SyncToTransform();*/
     }
 
     Basis Camera::GetBasis() const
@@ -103,7 +103,7 @@ namespace Engine5
         look_vector = DirectX::XMVectorAdd(pos_vector, look_vector);
 
         // Finally create the view matrix from the three updated vectors.
-        m_view_matrix = DirectX::XMMatrixLookAtLH(pos_vector, look_vector, up_vector);
+        //m_view_matrix = DirectX::XMMatrixLookAtLH(pos_vector, look_vector, up_vector);
     }
 
     void Camera::SyncFromTransform()

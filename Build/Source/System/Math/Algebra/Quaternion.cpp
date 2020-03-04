@@ -15,17 +15,11 @@
 #include <ostream>
 #include "../Utility/VectorDef.hpp"
 
-
 namespace Engine5
 {
     Quaternion::Quaternion(Real r, Real i, Real j, Real k)
         : r(r), i(i), j(j), k(k)
     {
-    }
-
-    Quaternion::Quaternion(const Vector3& axis, Real radian)
-    {
-        Set(axis, radian);
     }
 
     Quaternion::Quaternion(const Vector3& from, const Vector3& to)
@@ -43,9 +37,19 @@ namespace Engine5
         Set(rotation_matrix);
     }
 
+    Quaternion::Quaternion(const AxisRadian& axis_radian)
+    {
+        Set(axis_radian);
+    }
+
     Quaternion::Quaternion(const EulerAngle& euler_angle)
     {
         Set(euler_angle);
+    }
+
+    Quaternion::Quaternion(const Vector3& axis, Real radian)
+    {
+        Set(axis, radian);
     }
 
     Quaternion::Quaternion(const Quaternion& rhs)
@@ -65,32 +69,10 @@ namespace Engine5
         k = _k;
     }
 
-    void Quaternion::Set(const Vector3& axis, Real radian)
-    {
-        // if axis of rotation is zero vector, just set to identity quat
-        Real length = axis.LengthSquared();
-        if (Utility::IsZero(length) == true)
-        {
-            SetIdentity();
-            return;
-        }
-
-        // take half-angle
-        Real half_rad  = radian * 0.5f;
-        Real sin_theta = sinf(half_rad);
-        Real cos_theta = cosf(half_rad);
-        Real scale     = sin_theta / sqrtf(length);
-        r              = cos_theta;
-        i              = scale * axis.x;
-        j              = scale * axis.y;
-        k              = scale * axis.z;
-    }
-
     void Quaternion::Set(const Vector3& from, const Vector3& to)
     {
         // get axis of rotation
         Vector3 axis = from.CrossProduct(to);
-
         // get scaled cos of angle between vectors and set initial quaternion
         Set(from.DotProduct(to), axis.x, axis.y, axis.z);
         // quaternion at this point is ||from||*||to||*( cos(theta), r*sin(theta) )
@@ -100,7 +82,6 @@ namespace Engine5
         // what we want is ( cos(theta/2), r*sin(theta/2) )
         // set up for half angle calculation
         r += 1.0f;
-
         // now when we normalize, we'll be dividing by sqrt(2*(1+cos(theta))), which is 
         // what we want for r*sin(theta) to give us r*sin(theta/2)
         // w will become 
@@ -123,6 +104,26 @@ namespace Engine5
         //r = s * 0.5f; i = axis.x / s; j = axis.y / s; k = axis.z / s;
         //s is equal to norm. so just normalize again to get rotation quaternion.
         SetNormalize();
+    }
+
+    void Quaternion::Set(const Vector3& axis, Real radian)
+    {
+        // if axis of rotation is zero vector, just set to identity quat
+        Real length = axis.LengthSquared();
+        if (Utility::IsZero(length) == true)
+        {
+            SetIdentity();
+            return;
+        }
+        // take half-angle
+        Real half_rad  = radian * 0.5f;
+        Real sin_theta = sinf(half_rad);
+        Real cos_theta = cosf(half_rad);
+        Real scale     = sin_theta / sqrtf(length);
+        r              = cos_theta;
+        i              = scale * axis.x;
+        j              = scale * axis.y;
+        k              = scale * axis.z;
     }
 
     void Quaternion::Set(const Vector3& vector)
@@ -167,6 +168,26 @@ namespace Engine5
         }
     }
 
+    void Quaternion::Set(const AxisRadian& axis_radian)
+    {
+        // if axis of rotation is zero vector, just set to identity quat
+        Real length = axis_radian.axis.LengthSquared();
+        if (Utility::IsZero(length) == true)
+        {
+            SetIdentity();
+            return;
+        }
+        // take half-angle
+        Real half_rad  = axis_radian.radian * 0.5f;
+        Real sin_theta = sinf(half_rad);
+        Real cos_theta = cosf(half_rad);
+        Real scale     = sin_theta / sqrtf(length);
+        r              = cos_theta;
+        i              = scale * axis_radian.axis.x;
+        j              = scale * axis_radian.axis.y;
+        k              = scale * axis_radian.axis.z;
+    }
+
     void Quaternion::Set(const EulerAngle& euler_angle)
     {
         Real roll      = euler_angle.x_rotation * .5f;
@@ -195,7 +216,6 @@ namespace Engine5
     void Quaternion::SetNormalize()
     {
         Real d = r * r + i * i + j * j + k * k;
-
         // Check for zero length quaternion, 
         //and use the no-rotation quaternion in that case.
         if (Utility::IsZero(d) == true)
@@ -407,7 +427,6 @@ namespace Engine5
                            p_multiplier * vector.y + v_multiplier * j + c_multiplier * (k * vector.x - i * vector.z),
                            p_multiplier * vector.z + v_multiplier * k + c_multiplier * (i * vector.y - j * vector.x));
         }
-        
         //"Rotate non-unit quaternion"
         return Vector3();
     }
@@ -416,7 +435,6 @@ namespace Engine5
     {
         Quaternion inverse = Inverse();
         Quaternion given_vector(0.0f, vector.x, vector.y, vector.z);
-
         //calculate qpq^-1
         Quaternion result = ((*this) * given_vector) * inverse;
         return Vector3(result.i, result.j, result.k);
@@ -433,7 +451,7 @@ namespace Engine5
 
     void Quaternion::AddRotation(const Vector3& axis, Real radian)
     {
-        Quaternion quaternion(axis, radian);
+        Quaternion quaternion(AxisRadian(axis, radian));
         *this = quaternion * (*this);
         SetNormalize();
     }
@@ -691,10 +709,8 @@ namespace Engine5
     Quaternion LinearInterpolation(const Quaternion& start, const Quaternion& end, Real t)
     {
         Real cos_theta = start.DotProduct(end);
-
         // initialize result
         Quaternion result = t * end;
-
         // if "angle" between quaternions is less than 90 degrees
         if (cos_theta >= Math::EPSILON)
         {
@@ -714,7 +730,6 @@ namespace Engine5
         // get cosine of "angle" between quaternions
         Real cos_theta = start.DotProduct(end);
         Real start_interp, end_interp;
-
         // if "angle" between quaternions is less than 90 degrees
         if (cos_theta >= Math::EPSILON)
         {
@@ -765,7 +780,6 @@ namespace Engine5
         Quaternion swing_full;
         Quaternion twist_full;
         Vector3    r = Vector3(delta_rotation.i, delta_rotation.j, delta_rotation.k);
-
         // singularity: rotation by 180 degree
         if (r.LengthSquared() < Math::EPSILON)
         {
@@ -782,7 +796,6 @@ namespace Engine5
                 // rotation axis parallel to twist axis
                 swing_full = Quaternion::Identity(); // no swing
             }
-
             // always twist 180 degree on singularity
             twist_full = Quaternion(twist_axis, Math::PI);
         }

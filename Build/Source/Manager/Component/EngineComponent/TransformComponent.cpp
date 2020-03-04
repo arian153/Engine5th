@@ -49,7 +49,7 @@ namespace Engine5
     void TransformComponent::SetOrientation(const AxisRadian& axis_radian)
     {
         m_axis_holder = axis_radian;
-        m_transform.orientation.Set(axis_radian.axis, axis_radian.radian);
+        m_transform.orientation.Set(axis_radian);
         UpdateChildrenOrientationRecursive(m_transform.orientation);
     }
 
@@ -63,7 +63,7 @@ namespace Engine5
     void TransformComponent::SetOrientationAxis(const Vector3& axis)
     {
         m_axis_holder.axis = axis;
-        m_transform.orientation.Set(m_axis_holder.axis, m_axis_holder.radian);
+        m_transform.orientation.Set(m_axis_holder);
         UpdateChildrenOrientationRecursive(m_transform.orientation);
     }
 
@@ -142,7 +142,7 @@ namespace Engine5
     void TransformComponent::AddRotationA(Real radian)
     {
         m_axis_holder.radian += radian;
-        m_transform.orientation.Set(m_axis_holder.axis, m_axis_holder.radian);
+        m_transform.orientation.Set(m_axis_holder);
         UpdateChildrenOrientationRecursive(m_transform.orientation);
     }
 

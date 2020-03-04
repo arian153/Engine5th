@@ -16,7 +16,6 @@
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "../Utility/VectorDef.hpp"
 
-
 namespace Engine5
 {
     Matrix33::Matrix33(Real c0, Real c1, Real c2, Real c3, Real c4, Real c5, Real c6, Real c7, Real c8)
@@ -47,17 +46,22 @@ namespace Engine5
 
     Matrix33::Matrix33(const Quaternion& quaternion)
     {
-        SetTransformationRotation(quaternion);
+        SetRotation(quaternion);
     }
 
     Matrix33::Matrix33(const EulerAngle& euler_angle)
     {
-        SetTransformationRotation(euler_angle);
+        SetRotation(euler_angle);
+    }
+
+    Matrix33::Matrix33(const AxisRadian& axis_radian)
+    {
+        SetRotation(axis_radian);
     }
 
     Matrix33::Matrix33(const Vector3& axis, Real radian)
     {
-        SetTransformationRotation(axis, radian);
+        SetRotation(axis, radian);
     }
 
     Matrix33::~Matrix33()
@@ -142,7 +146,7 @@ namespace Engine5
         data[8] = 0.0f;
     }
 
-    void Matrix33::SetTransformationRotation(const Quaternion& quaternion)
+    void Matrix33::SetRotation(const Quaternion& quaternion)
     {
         if (quaternion.IsUnit())
         {
@@ -170,7 +174,7 @@ namespace Engine5
         }
     }
 
-    void Matrix33::SetTransformationRotation(const EulerAngle& euler_angle)
+    void Matrix33::SetRotation(const EulerAngle& euler_angle)
     {
         Real sin_x = sinf(euler_angle.x_rotation);
         Real cos_x = cosf(euler_angle.x_rotation);
@@ -189,34 +193,59 @@ namespace Engine5
         data[8]    = (cos_x * cos_y);
     }
 
-    void Matrix33::SetTransformationRotation(const Vector3& axis, Real radian)
+    void Matrix33::SetRotation(const AxisRadian& axis_radian)
     {
-        Real    sin  = sinf(radian);
-        Real    cos  = cosf(radian);
-        Real    t    = 1.0f - cos;
-        Vector3 Axis = axis;
-        Axis.SetNormalize();
-        Real tx  = t * Axis.x;
-        Real ty  = t * Axis.y;
-        Real tz  = t * Axis.z;
-        Real sx  = sin * Axis.x;
-        Real sy  = sin * Axis.y;
-        Real sz  = sin * Axis.z;
-        Real txy = tx * Axis.y;
-        Real tyz = tx * Axis.z;
-        Real txz = tx * Axis.z;
-        data[0]  = (tx * Axis.x + cos);
-        data[1]  = (txy - sz);
-        data[2]  = (txz + sy);
-        data[3]  = (txy + sz);
-        data[4]  = (ty * Axis.y + cos);
-        data[5]  = (tyz - sx);
-        data[6]  = (txz - sy);
-        data[7]  = (tyz + sx);
-        data[8]  = (tz * Axis.z + cos);
+        Real    sin       = sinf(axis_radian.radian);
+        Real    cos       = cosf(axis_radian.radian);
+        Real    t         = 1.0f - cos;
+        Vector3 unit_axis = axis_radian.axis.Unit();
+        Real    tx        = t * unit_axis.x;
+        Real    ty        = t * unit_axis.y;
+        Real    tz        = t * unit_axis.z;
+        Real    sx        = sin * unit_axis.x;
+        Real    sy        = sin * unit_axis.y;
+        Real    sz        = sin * unit_axis.z;
+        Real    txy       = tx * unit_axis.y;
+        Real    tyz       = tx * unit_axis.z;
+        Real    txz       = tx * unit_axis.z;
+        data[0]           = (tx * unit_axis.x + cos);
+        data[1]           = (txy - sz);
+        data[2]           = (txz + sy);
+        data[3]           = (txy + sz);
+        data[4]           = (ty * unit_axis.y + cos);
+        data[5]           = (tyz - sx);
+        data[6]           = (txz - sy);
+        data[7]           = (tyz + sx);
+        data[8]           = (tz * unit_axis.z + cos);
     }
 
-    void Matrix33::SetTransformationRotationX(Real radian)
+    void Matrix33::SetRotation(const Vector3& axis, Real radian)
+    {
+        Real    sin       = sinf(radian);
+        Real    cos       = cosf(radian);
+        Real    t         = 1.0f - cos;
+        Vector3 unit_axis = axis.Unit();
+        Real    tx        = t * unit_axis.x;
+        Real    ty        = t * unit_axis.y;
+        Real    tz        = t * unit_axis.z;
+        Real    sx        = sin * unit_axis.x;
+        Real    sy        = sin * unit_axis.y;
+        Real    sz        = sin * unit_axis.z;
+        Real    txy       = tx * unit_axis.y;
+        Real    tyz       = tx * unit_axis.z;
+        Real    txz       = tx * unit_axis.z;
+        data[0]           = (tx * unit_axis.x + cos);
+        data[1]           = (txy - sz);
+        data[2]           = (txz + sy);
+        data[3]           = (txy + sz);
+        data[4]           = (ty * unit_axis.y + cos);
+        data[5]           = (tyz - sx);
+        data[6]           = (txz - sy);
+        data[7]           = (tyz + sx);
+        data[8]           = (tz * unit_axis.z + cos);
+    }
+
+    void Matrix33::SetRotationX(Real radian)
     {
         Real sin = sinf(radian);
         Real cos = cosf(radian);
@@ -231,7 +260,7 @@ namespace Engine5
         data[8]  = cos;
     }
 
-    void Matrix33::SetTransformationRotationY(Real radian)
+    void Matrix33::SetRotationY(Real radian)
     {
         Real sin = sinf(radian);
         Real cos = cosf(radian);
@@ -246,7 +275,7 @@ namespace Engine5
         data[8]  = cos;
     }
 
-    void Matrix33::SetTransformationRotationZ(Real radian)
+    void Matrix33::SetRotationZ(Real radian)
     {
         Real sin = sinf(radian);
         Real cos = cosf(radian);
@@ -261,7 +290,7 @@ namespace Engine5
         data[8]  = 1.0f;
     }
 
-    void Matrix33::SetTransformationScaling(const Vector3& scale)
+    void Matrix33::SetScale(const Vector3& scale)
     {
         data[0] = scale.x;
         data[1] = 0.0f;
@@ -274,7 +303,7 @@ namespace Engine5
         data[8] = scale.z;
     }
 
-    void Matrix33::SetTransformationTranslation(const Vector2& translation)
+    void Matrix33::SetTranslation(const Vector2& translation)
     {
         data[0] = 1.0f;
         data[1] = 0.0f;
@@ -410,7 +439,6 @@ namespace Engine5
         Real    cos_theta = 0.5f * (trace - 1.0f);
         Real    radian    = acosf(cos_theta);
         Vector3 axis;
-
         // angle is zero, axis can be anything
         if (Utility::IsZero(radian))
         {
@@ -434,9 +462,9 @@ namespace Engine5
             {
                 i = 2;
             }
-            size_t j  = (i + 1) % 3;
-            size_t k  = (j + 1) % 3;
-            Real         s  = sqrtf(data[i + 3 * i] - data[j + 3 * j] - data[k + 3 * k] + 1.0f);
+            size_t j        = (i + 1) % 3;
+            size_t k        = (j + 1) % 3;
+            Real   s        = sqrtf(data[i + 3 * i] - data[j + 3 * j] - data[k + 3 * k] + 1.0f);
             axis[i]         = 0.5f * s;
             Real multiplier = 1.0f / s;
             axis[j]         = (data[3 * i + j]) * multiplier;
@@ -474,7 +502,6 @@ namespace Engine5
     Matrix33 Matrix33::Adjoint() const
     {
         Matrix33 result;
-
         // compute transpose of cofactors
         result.data[0] = data[4] * data[8] - data[7] * data[5];
         result.data[3] = data[6] * data[5] - data[3] * data[8];
@@ -503,7 +530,6 @@ namespace Engine5
     Matrix33 Matrix33::Inverse() const
     {
         Matrix33 result;
-
         // compute determinant
         Real cofactor0 = this->data[4] * this->data[8] - this->data[5] * this->data[7];
         Real cofactor3 = this->data[5] * this->data[6] - this->data[3] * this->data[8];
@@ -514,7 +540,6 @@ namespace Engine5
             E5_ASSERT(false, "Inverse singular matrix");
             return result;
         }
-
         // create adjoint matrix and multiply by 1/det to get inverse
         Real inv_det   = 1.0f / det;
         result.data[0] = inv_det * cofactor0;
@@ -666,7 +691,6 @@ namespace Engine5
         }
         return result;
     }
-
 
     Matrix33 Matrix33::operator*(const Matrix33& matrix) const
     {

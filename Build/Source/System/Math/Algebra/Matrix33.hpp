@@ -31,6 +31,7 @@ namespace Engine5
         Matrix33(const Matrix33& rhs);
         explicit Matrix33(const Quaternion& quaternion);
         explicit Matrix33(const EulerAngle& euler_angle);
+        explicit Matrix33(const AxisRadian& axis_radian);
         explicit Matrix33(const Vector3& axis, Real radian);
 
         ~Matrix33();
@@ -45,16 +46,17 @@ namespace Engine5
         void SetTranspose();
         void SetZero();
 
-        void SetTransformationRotation(const Quaternion& quaternion);
-        void SetTransformationRotation(const EulerAngle& euler_angle);
-        void SetTransformationRotation(const Vector3& axis, Real radian);
+        void SetRotation(const Quaternion& quaternion);
+        void SetRotation(const EulerAngle& euler_angle);
+        void SetRotation(const AxisRadian& axis_radian);
+        void SetRotation(const Vector3& axis, Real radian);
 
-        void SetTransformationRotationX(Real radian);
-        void SetTransformationRotationY(Real radian);
-        void SetTransformationRotationZ(Real radian);
+        void SetRotationX(Real radian);
+        void SetRotationY(Real radian);
+        void SetRotationZ(Real radian);
 
-        void SetTransformationScaling(const Vector3& scale);
-        void SetTransformationTranslation(const Vector2& translation);
+        void SetScale(const Vector3& scale);
+        void SetTranslation(const Vector2& translation);
 
         bool IsZero() const;
         bool IsIdentity() const;
