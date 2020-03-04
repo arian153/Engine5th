@@ -269,6 +269,79 @@ namespace Engine5
                 result.data[15] = 1.0f;
                 return result;
             }
+
+            Engine5::Matrix44 AffineTransformation(const Engine5::Vector3& scale, const Engine5::Vector3& origin, const Quaternion& rotation, const Engine5::Vector3& translation)
+            {
+                Engine5::Matrix44 result = Scale(scale, 1.0f);
+                result.AddVectorColumn(3, -origin);
+                result = Rotation(rotation) * result;
+                result.AddVectorColumn(3, origin);
+                result.AddVectorColumn(3, translation);
+                result.SetTranspose();
+                return result;
+            }
+
+            Engine5::Matrix44 ProjectionMatrix(Real screen_aspect, Real field_of_view, Real far_plane, Real near_plane)
+            {
+                Real              alpha = field_of_view * 0.5f;
+                Real              cot   = cosf(alpha) / sinf(alpha);
+                Engine5::Matrix44 result;
+                result.data[0]  = cot / screen_aspect;
+                result.data[5]  = cot;
+                result.data[10] = far_plane / (far_plane - near_plane);
+                result.data[11] = 1.0f;
+                result.data[14] = -near_plane * far_plane / (far_plane - near_plane);
+                result.data[15] = 0.0f;
+                return result;
+            }
+
+            Engine5::Matrix44 OrthoGraphicMatrix(size_t client_width, size_t client_height, Real far_plane, Real near_plane)
+            {
+                Real              plane = 1.0f / (far_plane - near_plane);
+                Engine5::Matrix44 result;
+                result.data[0]  = 2.0f / client_width;
+                result.data[5]  = 2.0f / client_height;
+                result.data[10] = plane;
+                result.data[14] = plane * -near_plane;
+                result.data[15] = 1.0f;
+                return result;
+            }
+
+            Engine5::Matrix44 OrthoGraphicCenterMatrix(Real right, Real left, Real top, Real bottom, Real far_plane, Real near_plane)
+            {
+                Engine5::Matrix44 result;
+                result.data[0]  = 2.0f / (right - left);
+                result.data[5]  = 2.0f / (top - bottom);
+                result.data[10] = 1.0f / (far_plane - near_plane);
+                result.data[12] = (left + right) / (left - right);
+                result.data[13] = (top + bottom) / (bottom - top);
+                result.data[14] = near_plane / (near_plane - far_plane);
+                result.data[15] = 1.0f;
+                return result;
+            }
+
+            Engine5::Matrix44 LookAt(const Engine5::Vector3& eye_position, const Engine5::Vector3& focus_position, const Engine5::Vector3& up_direction)
+            {
+                return LookTo(eye_position, focus_position - eye_position, up_direction);
+            }
+
+            Engine5::Matrix44 LookTo(const Engine5::Vector3& eye_position, const Engine5::Vector3& eye_direction, const Engine5::Vector3& up_direction)
+            {
+                if (eye_direction.IsZero())
+                {
+                    return Engine5::Matrix44();
+                }
+                Engine5::Vector3  r2               = eye_direction.Normalize();
+                Engine5::Vector3  r0               = CrossProduct(up_direction, r2).Normalize();
+                Engine5::Vector3  r1               = CrossProduct(r2, r0);
+                Engine5::Vector3  neg_eye_position = eye_position.Negate();
+                Real              d0               = DotProduct(r0, neg_eye_position);
+                Real              d1               = DotProduct(r1, neg_eye_position);
+                Real              d2               = DotProduct(r2, neg_eye_position);
+                Engine5::Matrix44 result;
+                result.SetColumns(Engine5::Vector4(r0, d0), Engine5::Vector4(r1, d1), Engine5::Vector4(r2, d2), Math::Vector4::W_AXIS);
+                return result;
+            }
         }
 
         namespace Matrix33

@@ -32,6 +32,55 @@ namespace Engine5
 
             //translation
             Engine5::Matrix44 Translation(const Engine5::Vector3& translation);
+
+            //Matrix Generation
+            Engine5::Matrix44 AffineTransformation
+            (
+                const Engine5::Vector3& scale,
+                const Engine5::Vector3& origin,
+                const Quaternion&       rotation,
+                const Engine5::Vector3& translation
+            );
+
+            Engine5::Matrix44 ProjectionMatrix
+            (
+                Real screen_aspect,
+                Real field_of_view,
+                Real far_plane,
+                Real near_plane
+            );
+
+            Engine5::Matrix44 OrthoGraphicMatrix
+            (
+                size_t client_width,
+                size_t client_height,
+                Real   far_plane,
+                Real   near_plane
+            );
+
+            Engine5::Matrix44 OrthoGraphicCenterMatrix
+            (
+                Real right,
+                Real left,
+                Real top,
+                Real bottom,
+                Real far_plane,
+                Real near_plane
+            );
+
+            Engine5::Matrix44 LookAt
+            (
+                const Engine5::Vector3& eye_position,
+                const Engine5::Vector3& focus_position,
+                const Engine5::Vector3& up_direction
+            );
+
+            Engine5::Matrix44 LookTo
+            (
+                const Engine5::Vector3& eye_position,
+                const Engine5::Vector3& eye_direction,
+                const Engine5::Vector3& up_direction
+            );
         }
 
         namespace Matrix33

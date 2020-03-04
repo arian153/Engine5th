@@ -10,7 +10,7 @@
 
 namespace Engine5
 {
-    class MatrixGenerator;
+    class MatrixManager;
     class Color;
 
     class RendererDX11
@@ -64,7 +64,7 @@ namespace Engine5
         IDWriteFactory2*         m_write_factory                 = nullptr;
         ID2D1Bitmap1*            m_target_bitmap                 = nullptr;
         HWND                     m_hwnd                          = nullptr;
-        MatrixGenerator*         m_matrix_generator              = nullptr;
+        MatrixManager*         m_matrix_generator              = nullptr;
         D3D_FEATURE_LEVEL        m_d3d_feature_level;
         DXGI_FORMAT              m_dxgi_color_format;
 

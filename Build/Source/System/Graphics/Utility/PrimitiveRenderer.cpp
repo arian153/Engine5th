@@ -1,8 +1,9 @@
 #include "PrimitiveRenderer.hpp"
 #include "../Renderer/RendererCommon.hpp"
 #include "../Shader/ColorShaderCommon.hpp"
-#include "MatrixGenerator.hpp"
+#include "MatrixManager.hpp"
 #include "../DataType/BufferCommon.hpp"
+#include "../../Math/Utility/MatrixUtility.hpp"
 
 namespace Engine5
 {
@@ -107,7 +108,7 @@ namespace Engine5
         }
     }
 
-    void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader, MatrixGenerator* matrix_generator)
+    void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader, MatrixManager* matrix_generator)
     {
         m_color_shader     = color_shader;
         m_matrix_generator = matrix_generator;
@@ -180,7 +181,7 @@ namespace Engine5
     {
         Vector3 up    = m_rotation.Rotate(Math::Vector3::Y_AXIS);
         Vector3 look  = m_rotation.Rotate(Math::Vector3::Z_AXIS) + m_position;
-        m_view_matrix = m_matrix_generator->LookAt(m_position, look, up);
+        m_view_matrix = Math::Matrix44::LookAt(m_position, look, up);
     }
 
     void PrimitiveRenderer::UpdateProjectionMatrix()

@@ -115,6 +115,42 @@ namespace Engine5
         data[15] = d;
     }
 
+    void Matrix44::AddVectorRow(size_t i, const Vector4& vector)
+    {
+        size_t index = i % 4;
+        data[4 * index] += vector.x;
+        data[4 * index + 1] += vector.y;
+        data[4 * index + 2] += vector.z;
+        data[4 * index + 3] += vector.w;
+    }
+
+    void Matrix44::AddVectorRow(size_t i, const Vector3& vector, Real w)
+    {
+        size_t index = i % 4;
+        data[4 * index] += vector.x;
+        data[4 * index + 1] += vector.y;
+        data[4 * index + 2] += vector.z;
+        data[4 * index + 3] += w;
+    }
+
+    void Matrix44::AddVectorColumn(size_t i, const Vector4& vector)
+    {
+        size_t index = i % 4;
+        data[index] += vector.x;
+        data[index + 4] += vector.y;
+        data[index + 8] += vector.z;
+        data[index + 12] += vector.w;
+    }
+
+    void Matrix44::AddVectorColumn(size_t i, const Vector3& vector, Real w)
+    {
+        size_t index = i % 4;
+        data[index] += vector.x;
+        data[index + 4] += vector.y;
+        data[index + 8] += vector.z;
+        data[index + 12] += w;
+    }
+
     void Matrix44::SetClean()
     {
         for (size_t i = 0; i < 16; ++i)

@@ -6,7 +6,7 @@
 
 namespace Engine5
 {
-    class MatrixGenerator;
+    class MatrixManager;
     class BufferCommon;
     class RendererCommon;
     class Camera;
@@ -33,7 +33,7 @@ namespace Engine5
         void DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, eRenderingMode mode, Color color = Color());
         void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
 
-        void Initialize(ColorShaderCommon* color_shader, MatrixGenerator* matrix_generator);
+        void Initialize(ColorShaderCommon* color_shader, MatrixManager* matrix_generator);
         void Update(Real dt);
         void Shutdown();
         void Clear();
@@ -59,7 +59,7 @@ namespace Engine5
         Matrix44           m_proj_matrix;
         ColorShaderCommon* m_color_shader     = nullptr;
         RendererCommon*    m_renderer         = nullptr;
-        MatrixGenerator*   m_matrix_generator = nullptr;
+        MatrixManager*   m_matrix_generator = nullptr;
 
         std::vector<ColorVertex> m_dot_vertices;
         std::vector<U32>         m_dot_indices;

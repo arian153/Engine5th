@@ -4,7 +4,7 @@
 #include "../Math/Utility/MathDef.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
 #include "../Core/OS-API/Windows/Windows.hpp"
-#include "Utility/MatrixGenerator.hpp"
+#include "Utility/MatrixManager.hpp"
 #include "DataType/Color.hpp"
 
 namespace Engine5
@@ -39,7 +39,7 @@ namespace Engine5
         RendererCommon*    m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;
-        MatrixGenerator*   m_matrix_generator   = nullptr;
+        MatrixManager*   m_matrix_generator   = nullptr;
 
         std::vector<Scene*> m_scenes;
         bool                m_b_vsync          = true;

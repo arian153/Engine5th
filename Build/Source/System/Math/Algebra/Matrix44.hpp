@@ -36,6 +36,11 @@ namespace Engine5
         void SetColumns(const Vector4& col1, const Vector4& col2, const Vector4& col3, const Vector4& col4);
         void SetDiagonal(Real a = 1.0f, Real b = 1.0f, Real c = 1.0f, Real d = 1.0f);
 
+        void AddVectorRow(size_t i, const Vector4& vector);
+        void AddVectorRow(size_t i, const Vector3& vector, Real w = 0.0f);
+        void AddVectorColumn(size_t i, const Vector4& vector);
+        void AddVectorColumn(size_t i, const Vector3& vector, Real w = 0.0f);
+
         void SetClean();
         void SetIdentity();
         void SetInverse();

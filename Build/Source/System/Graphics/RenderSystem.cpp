@@ -24,7 +24,7 @@ namespace Engine5
         m_shader_manager = new ShaderManager();
         m_shader_manager->Initialize(m_renderer);
         //matrix generator
-        m_matrix_generator = new MatrixGenerator();
+        m_matrix_generator = new MatrixManager();
         m_matrix_generator->SetClientRect(rendering_width, rendering_height);
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
