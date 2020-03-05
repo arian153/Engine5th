@@ -3,6 +3,8 @@
 
 namespace Engine5
 {
+    class RendererCommon;
+    class MeshData;
     class BufferCommon;
 
     class Mesh
@@ -11,10 +13,12 @@ namespace Engine5
         Mesh();
         ~Mesh();
         void Initialize();
-        void Update(Real dt) const;
+        void Render() const;
         void Shutdown();
 
     private:
-        BufferCommon* m_buffer = nullptr;
+        RendererCommon* m_renderer  = nullptr;
+        BufferCommon*   m_buffer    = nullptr;
+        MeshData*       m_mesh_data = nullptr;
     };
 }
