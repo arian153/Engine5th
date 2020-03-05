@@ -2,6 +2,7 @@
 #include "../../Math/Utility/MathDef.hpp"
 #include "Camera.hpp"
 #include "Mesh.hpp"
+#include "../Shader/ShaderType.hpp"
 
 namespace Engine5
 {
@@ -21,6 +22,8 @@ namespace Engine5
 
         void SetRenderer(RendererCommon* renderer);
         void SetShaderManager(ShaderManager* shader_manager);
+
+        void DrawShader(eShaderType shader_type);
 
     private:
         RendererCommon* m_renderer       = nullptr;

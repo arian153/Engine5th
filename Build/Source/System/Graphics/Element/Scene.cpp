@@ -1,6 +1,7 @@
 #include "Scene.hpp"
 #include "../Renderer/RendererCommon.hpp"
 #include "../Shader/ShaderManager.hpp"
+#include "../Shader/ColorShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -54,5 +55,17 @@ namespace Engine5
     void Scene::SetShaderManager(ShaderManager* shader_manager)
     {
         m_shader_manager = shader_manager;
+    }
+
+    void Scene::DrawShader(eShaderType shader_type)
+    {
+        switch (shader_type)
+        {
+        case eShaderType::Color:
+            //m_shader_manager->GetColorShader()->Render();
+            break;
+        default:
+            break;
+        }
     }
 }
