@@ -2,9 +2,9 @@
 #include "../../Math/Utility/MathDef.hpp"
 #include "../../Graphics/RenderSystem.hpp"
 
-
 namespace Engine5
 {
+    class PhysicsSystem;
     class WindowsAPI;
 
     class Application
@@ -35,7 +35,6 @@ namespace Engine5
     private:
         friend class WindowsAPI;
 
-
     private:
         //time-frame data
         int  m_frame_count  = 0;
@@ -44,12 +43,13 @@ namespace Engine5
         Real m_curr_mspf    = 0.0f;
 
         //application name
-        String m_application_caption = "Engine 5";
+        String m_application_caption = "Engine 5th";
 
     private:
         static inline Application* m_s_application = nullptr;
         //sub systems
-        WindowsAPI*   m_os_api        = nullptr;
-        RenderSystem* m_render_system = nullptr;
+        WindowsAPI*    m_os_api         = nullptr;
+        RenderSystem*  m_render_system  = nullptr;
+        PhysicsSystem* m_physics_system = nullptr;
     };
 }

@@ -27,7 +27,6 @@ namespace Engine5
         //auto world = DirectX::XMMatrixIdentity();
         //auto view  = m_camera->GetViewMatrix();
         //auto proj  = m_renderer->GetProjectionMatrix();
-        m_mesh->Update(dt);
         //m_shader_manager->GetColorShader()->Update(dt, m_renderer->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, proj);
     }
 

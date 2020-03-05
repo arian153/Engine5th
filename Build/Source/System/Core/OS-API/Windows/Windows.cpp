@@ -1,3 +1,5 @@
+#pragma warning( disable : 26812)
+
 #include "Windows.hpp"
 #include "../Application.hpp"
 #include "../../Utility/CoreUtility.hpp"

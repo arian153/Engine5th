@@ -1,6 +1,7 @@
 #include "Application.hpp"
 
 #include "Windows/Windows.hpp"
+#include "../../Physics/PhysicsSystem.hpp"
 
 namespace Engine5
 {
@@ -28,6 +29,9 @@ namespace Engine5
         m_os_api->Initialize();
         m_render_system = new RenderSystem(m_os_api);
         m_render_system->Initialize(1280, 720);
+
+        m_physics_system = new PhysicsSystem();
+        m_physics_system->Initialize();
     }
 
     void Application::Update()
@@ -42,6 +46,13 @@ namespace Engine5
 
     void Application::Shutdown()
     {
+        if(m_physics_system != nullptr)
+        {
+            m_physics_system->Shutdown();
+            delete m_physics_system;
+            m_physics_system = nullptr;
+        }
+
         if (m_render_system != nullptr)
         {
             m_render_system->Shutdown();
