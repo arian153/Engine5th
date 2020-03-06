@@ -6,7 +6,7 @@ namespace Engine5
 {
     class Application;
 
-    class WindowsAPI 
+    class WindowsAPI
     {
     public:
         explicit WindowsAPI(Application* application);
@@ -28,7 +28,7 @@ namespace Engine5
         DWORD     GetWindowModeRelatedResolution() const;
         HINSTANCE AppInstance() const;
         HWND      AppHWnd() const;
-        Real MonitorScaleFactor() const;
+        Real      MonitorScaleFactor() const;
 
         int  ClientWidth() const;
         int  ClientHeight() const;

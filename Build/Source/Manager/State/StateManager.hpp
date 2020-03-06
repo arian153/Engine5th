@@ -8,9 +8,6 @@ namespace Engine5
         StateManager();
         ~StateManager();
 
-
     private:
-
     };
-
 }
