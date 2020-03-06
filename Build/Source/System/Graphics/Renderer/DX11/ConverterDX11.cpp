@@ -12,7 +12,7 @@ namespace Engine5
     {
         Vector3 ToVector3(const DirectX::XMVECTOR& xmvector)
         {
-            return Vector3(xmvector.m128_f32[0], xmvector.m128_f32[1], xmvector.m128_f32[2]);
+            return Vector3(xmvector.m128_f32[ 0 ], xmvector.m128_f32[ 1 ], xmvector.m128_f32[ 2 ]);
         }
 
         Vector3 ToVector3(const DirectX::XMFLOAT3& xmfloat3)
@@ -22,7 +22,7 @@ namespace Engine5
 
         Vector4 ToVector4(const DirectX::XMVECTOR& xmvector)
         {
-            return Vector4(xmvector.m128_f32[0], xmvector.m128_f32[1], xmvector.m128_f32[2], xmvector.m128_f32[3]);
+            return Vector4(xmvector.m128_f32[ 0 ], xmvector.m128_f32[ 1 ], xmvector.m128_f32[ 2 ], xmvector.m128_f32[ 3 ]);
         }
 
         Vector4 ToVector4(const DirectX::XMFLOAT4& xmfloat4)
@@ -32,7 +32,7 @@ namespace Engine5
 
         Quaternion ToQuaternion(const DirectX::XMVECTOR& xmvector)
         {
-            return Quaternion(xmvector.m128_f32[3], xmvector.m128_f32[0], xmvector.m128_f32[1], xmvector.m128_f32[2]);
+            return Quaternion(xmvector.m128_f32[ 3 ], xmvector.m128_f32[ 0 ], xmvector.m128_f32[ 1 ], xmvector.m128_f32[ 2 ]);
         }
 
         Quaternion ToQuaternion(const DirectX::XMFLOAT4& xmfloat4)
@@ -86,21 +86,21 @@ namespace Engine5
         Matrix44 ToMatrix44(const DirectX::XMMATRIX& xmmatrix)
         {
             return Matrix44(
-                            xmmatrix.r[0].m128_f32[0], xmmatrix.r[0].m128_f32[1], xmmatrix.r[0].m128_f32[2], xmmatrix.r[0].m128_f32[3],
-                            xmmatrix.r[1].m128_f32[0], xmmatrix.r[1].m128_f32[1], xmmatrix.r[1].m128_f32[2], xmmatrix.r[1].m128_f32[3],
-                            xmmatrix.r[2].m128_f32[0], xmmatrix.r[2].m128_f32[1], xmmatrix.r[2].m128_f32[2], xmmatrix.r[2].m128_f32[3],
-                            xmmatrix.r[3].m128_f32[0], xmmatrix.r[3].m128_f32[1], xmmatrix.r[3].m128_f32[2], xmmatrix.r[3].m128_f32[3]
-                           );
+                xmmatrix.r[ 0 ].m128_f32[ 0 ], xmmatrix.r[ 0 ].m128_f32[ 1 ], xmmatrix.r[ 0 ].m128_f32[ 2 ], xmmatrix.r[ 0 ].m128_f32[ 3 ],
+                xmmatrix.r[ 1 ].m128_f32[ 0 ], xmmatrix.r[ 1 ].m128_f32[ 1 ], xmmatrix.r[ 1 ].m128_f32[ 2 ], xmmatrix.r[ 1 ].m128_f32[ 3 ],
+                xmmatrix.r[ 2 ].m128_f32[ 0 ], xmmatrix.r[ 2 ].m128_f32[ 1 ], xmmatrix.r[ 2 ].m128_f32[ 2 ], xmmatrix.r[ 2 ].m128_f32[ 3 ],
+                xmmatrix.r[ 3 ].m128_f32[ 0 ], xmmatrix.r[ 3 ].m128_f32[ 1 ], xmmatrix.r[ 3 ].m128_f32[ 2 ], xmmatrix.r[ 3 ].m128_f32[ 3 ]
+            );
         }
 
         Matrix44 ToMatrix44(const DirectX::XMFLOAT4X4& xmfloat44)
         {
             return Matrix44(
-                            xmfloat44._11, xmfloat44._12, xmfloat44._13, xmfloat44._14,
-                            xmfloat44._21, xmfloat44._22, xmfloat44._23, xmfloat44._24,
-                            xmfloat44._31, xmfloat44._32, xmfloat44._33, xmfloat44._34,
-                            xmfloat44._41, xmfloat44._42, xmfloat44._43, xmfloat44._44
-                           );
+                xmfloat44._11, xmfloat44._12, xmfloat44._13, xmfloat44._14,
+                xmfloat44._21, xmfloat44._22, xmfloat44._23, xmfloat44._24,
+                xmfloat44._31, xmfloat44._32, xmfloat44._33, xmfloat44._34,
+                xmfloat44._41, xmfloat44._42, xmfloat44._43, xmfloat44._44
+            );
         }
 
         Color ToColor(const DirectX::XMFLOAT4& xmfloat4)
@@ -111,20 +111,20 @@ namespace Engine5
         DirectX::XMFLOAT4X4 ToXMFloat4X4(const Matrix44& matrix)
         {
             DirectX::XMFLOAT4X4 result(
-                                       matrix.data[0], matrix.data[1], matrix.data[2], matrix.data[3],
-                                       matrix.data[4], matrix.data[5], matrix.data[6], matrix.data[7],
-                                       matrix.data[8], matrix.data[9], matrix.data[10], matrix.data[11],
-                                       matrix.data[12], matrix.data[13], matrix.data[14], matrix.data[15]);
+                matrix.data[ 0 ], matrix.data[ 1 ], matrix.data[ 2 ], matrix.data[ 3 ],
+                matrix.data[ 4 ], matrix.data[ 5 ], matrix.data[ 6 ], matrix.data[ 7 ],
+                matrix.data[ 8 ], matrix.data[ 9 ], matrix.data[ 10 ], matrix.data[ 11 ],
+                matrix.data[ 12 ], matrix.data[ 13 ], matrix.data[ 14 ], matrix.data[ 15 ]);
             return result;
         }
 
         DirectX::XMMATRIX ToXMMatrix(const Matrix44& matrix)
         {
             DirectX::XMFLOAT4X4 result(
-                                       matrix.data[0], matrix.data[1], matrix.data[2], matrix.data[3],
-                                       matrix.data[4], matrix.data[5], matrix.data[6], matrix.data[7],
-                                       matrix.data[8], matrix.data[9], matrix.data[10], matrix.data[11],
-                                       matrix.data[12], matrix.data[13], matrix.data[14], matrix.data[15]);
+                matrix.data[ 0 ], matrix.data[ 1 ], matrix.data[ 2 ], matrix.data[ 3 ],
+                matrix.data[ 4 ], matrix.data[ 5 ], matrix.data[ 6 ], matrix.data[ 7 ],
+                matrix.data[ 8 ], matrix.data[ 9 ], matrix.data[ 10 ], matrix.data[ 11 ],
+                matrix.data[ 12 ], matrix.data[ 13 ], matrix.data[ 14 ], matrix.data[ 15 ]);
             return DirectX::XMLoadFloat4x4(&result);
         }
     }
