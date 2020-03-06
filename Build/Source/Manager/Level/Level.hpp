@@ -7,11 +7,11 @@ namespace Engine5
 {
     class Space;
 
-    class State
+    class Level
     {
     public:
-        explicit State(const std::string& name);
-        ~State();
+        explicit Level(const std::string& name);
+        ~Level();
 
         Space* GetGlobalSpace() const;
 

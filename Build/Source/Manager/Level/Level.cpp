@@ -2,15 +2,15 @@
 
 namespace Engine5
 {
-    State::State(const std::string& name)
+    Level::Level(const std::string& name)
     {
     }
 
-    State::~State()
+    Level::~Level()
     {
     }
 
-    Space* State::GetGlobalSpace() const
+    Space* Level::GetGlobalSpace() const
     {
         return m_global_space;
     }
