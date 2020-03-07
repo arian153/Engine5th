@@ -19,12 +19,19 @@ namespace Engine5
         void Stop();
         void Tick();
 
+        void RecordBegin();
+        Real RecordEnd();
+        
+
     private:
         //time data
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_base_time;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_previous_time;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_current_time;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_stop_time;
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_base_point;
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_prev_point;
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_curr_point;
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_stop_point;
+
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_point;
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_end_point;
 
         //duration
         std::chrono::duration<R64> m_tick_duration;
