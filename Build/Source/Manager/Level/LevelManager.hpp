@@ -25,10 +25,10 @@ namespace Engine5
         void SetQuit();
 
         //state change methods
-        void ChangeNextLevel(const std::string& level_name);
+        void ChangeLevel(const std::string& level_name);
         void RestartLevel();
         void ReloadLevel();
-        void PauseAndNextLevel(const std::string& level_name);
+        void PauseAndChangeLevel(const std::string& level_name);
         bool ResumeLevel();
         bool ResumeAndRestartLevel();
 
@@ -36,15 +36,14 @@ namespace Engine5
         Level*      GetCurrentLevel() const;
 
     private:
-        void ChangeLevel();
-        void UpdatePausedLevel(Real dt);
-        void RemovePausedLevel();
-
-        void InitializePhase();
-        void UpdatePhase();
-        void ShutdownPhase();
-        void LoadPhase();
-        void UnloadPhase();
+        void   UpdatePausedLevel(Real dt);
+        void   RemovePausedLevel();
+        void   InitLevel(Level* level);
+        void   UpdateLevel(Level* level, Real dt);
+        void   ShutdownLevel(Level* level);
+        void   LoadLevel(Level* level);
+        void   UnloadLevel(Level* level);
+        Level* CreateLevel(const std::string& level_name);
 
     private:
         Real m_fixed_time_step = 0.0f;
@@ -68,7 +67,7 @@ namespace Engine5
         struct PauseInfo
         {
             std::string type;
-            Level*      level;
+            Level*      level = nullptr;
         };
 
     private:
