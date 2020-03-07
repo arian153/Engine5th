@@ -19,7 +19,7 @@ namespace Engine5
         return convertedString;
     }
 
-    String WStringToString(const std::wstring& wstr)
+    String WStringToString(const WString& wstr)
     {
         String convertedString;
         int         requiredSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, 0, 0, 0, 0);

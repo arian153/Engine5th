@@ -34,7 +34,7 @@
 namespace Engine5
 {
     WString StringToWString(const String& str);
-    String  WStringToString(const std::wstring& wstr);
+    String  WStringToString(const WString& wstr);
 
     template <typename First, typename... Rest>
     void UnusedParameter(const First& first, const Rest& ...rest);
