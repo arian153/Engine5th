@@ -73,4 +73,36 @@ namespace Engine5
     Level* LevelManager::GetCurrentLevel() const
     {
     }
+
+    void LevelManager::InitializePhase()
+    {
+    }
+
+    void LevelManager::UpdatePhase()
+    {
+        //while (m_b_set_quit == false && m_b_restart == false && m_current == m_next)
+        {
+            //m_application->UpdateApplication();
+            //Real time_step = m_application->m_timer->DeltaTime();
+            //UpdateLevel(m_level, time_step);
+            //m_elapsed_time += time_step;
+            if (m_elapsed_time >= m_fixed_time_step)
+            {
+                //Update Fixed Update
+                m_elapsed_time = 0.0f;
+            }
+        }
+    }
+
+    void LevelManager::ShutdownPhase()
+    {
+    }
+
+    void LevelManager::LoadPhase()
+    {
+    }
+
+    void LevelManager::UnloadPhase()
+    {
+    }
 }

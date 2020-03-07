@@ -34,5 +34,20 @@ namespace Engine5
         Level*      GetCurrentLevel() const;
 
     private:
+        void InitializePhase();
+        void UpdatePhase();
+        void ShutdownPhase();
+        void LoadPhase();
+        void UnloadPhase();
+
+    private:
+        Real m_fixed_time_step = 0.0f;
+        Real m_elapsed_time    = 0.0f;
+
+        std::string m_current;
+        std::string m_next;
+        Level* m_level;
+
+       
     };
 }
