@@ -21,14 +21,14 @@ namespace Engine5
 
     private:
         //time data
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_base_time;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_previous_time;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_current_time;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_base_time;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_paused_time;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_stop_time;
 
         //duration
-        std::chrono::duration<R64> m_duration;
+        std::chrono::duration<R64> m_tick_duration;
+        std::chrono::duration<R64> m_paused_duration;
 
         //others
         R64  m_delta_time = -1.0;
