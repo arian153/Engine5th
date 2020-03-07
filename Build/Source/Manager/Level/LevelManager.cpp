@@ -13,7 +13,7 @@ namespace Engine5
     {
     }
 
-    void LevelManager::Init()
+    void LevelManager::Initialize()
     {
     }
 
@@ -25,19 +25,17 @@ namespace Engine5
             return;
         }
         //load phase
-        if ((m_b_restart == false && m_b_resume == false) || m_b_reload == true)
+        if (m_b_restart == false && m_b_resume == false || m_b_reload == true)
         {
-            m_current   = m_next;
-            m_b_restart = false;
-            if (m_current_level != nullptr)
+            m_b_reload = false;
+            m_current  = m_next;
+            if (m_level != nullptr)
             {
-                delete m_current_level;
-                m_current_level = nullptr;
+                delete m_level;
+                m_level = nullptr;
             }
-            m_current_level = CreateLevel(m_current);
-            LoadLevel(m_current_level);
-            m_b_reload  = false;
-            m_b_restart = false;
+            m_level = CreateLevel(m_current);
+            LoadLevel(m_level);
         }
         else
         {
@@ -47,27 +45,28 @@ namespace Engine5
         if (m_b_resume == true)
         {
             m_b_resume = false;
-            delete m_current_level;
-            m_current_level = m_pause_levels.front().level;
+            delete m_level;
+            m_level = m_pause_levels.front().level;
             m_pause_levels.pop_front();
             m_current = m_next;
+            //only resume and restart case
             if (m_b_resume_restart == true)
             {
-                ShutdownLevel(m_current_level);
                 m_b_resume_restart = false;
-                InitLevel(m_current_level);
+                ShutdownLevel(m_level);
+                InitializeLevel(m_level);
             }
         }
         else
         {
-            InitLevel(m_current_level);
+            InitializeLevel(m_level);
         }
         //update phase
-        while (m_b_quit_state_machine == false && m_b_restart == false && m_current == m_next)
+        while (m_b_quit_state_machine == false && m_b_restart == false && m_b_reload == false && m_current == m_next)
         {
             //m_application->UpdateApplication();
             Real time_step = 0.0f;//m_application->m_timer->DeltaTime();
-            UpdateLevel(m_current_level, time_step);
+            UpdateLevel(m_level, time_step);
             m_elapsed_time += time_step;
             if (m_elapsed_time >= m_fixed_time_step)
             {
@@ -76,28 +75,25 @@ namespace Engine5
             }
         }
         //shutdown phase
-        if (m_b_pause == false)
+        if (m_b_pause_and_change == false)
         {
-            ShutdownLevel(m_current_level);
+            ShutdownLevel(m_level);
+            if (m_b_restart == false || m_b_resume_restart == true || m_b_reload == true)
+            {
+                UnloadLevel(m_level);
+            }
         }
         else
         {
-            m_b_pause       = false;
-            m_current_level = nullptr;
-        }
-        if (m_b_pause == false)
-        {
-            if (m_b_restart == false || m_b_resume_restart == true || m_b_reload == true)
-            {
-                UnloadLevel(m_current_level);
-            }
+            m_b_pause_and_change = false;
+            m_level              = nullptr;
         }
     }
 
     void LevelManager::Shutdown()
     {
-        delete m_current_level;
-        m_current_level = nullptr;
+        delete m_level;
+        m_level = nullptr;
         RemovePausedLevel();
     }
 
@@ -149,10 +145,10 @@ namespace Engine5
 
     void LevelManager::PauseAndChangeLevel(const std::string& level_name)
     {
-        m_b_pause = true;
+        m_b_pause_and_change = true;
         PauseInfo info;
         info.type  = m_current;
-        info.level = m_current_level;
+        info.level = m_level;
         m_pause_levels.push_front(info);
         m_next = level_name;
     }
@@ -188,7 +184,7 @@ namespace Engine5
 
     Level* LevelManager::GetCurrentLevel() const
     {
-        return m_current_level;
+        return m_level;
     }
 
     void LevelManager::UpdatePausedLevel(Real dt)
@@ -215,7 +211,7 @@ namespace Engine5
         }
     }
 
-    void LevelManager::InitLevel(Level* level)
+    void LevelManager::InitializeLevel(Level* level)
     {
     }
 
@@ -229,10 +225,16 @@ namespace Engine5
 
     void LevelManager::LoadLevel(Level* level)
     {
+        if (m_b_enable_load_phase)
+        {
+        }
     }
 
     void LevelManager::UnloadLevel(Level* level)
     {
+        if (m_b_enable_load_phase)
+        {
+        }
     }
 
     Level* LevelManager::CreateLevel(const std::string& level_name)

@@ -15,7 +15,7 @@ namespace Engine5
         LevelManager();
         ~LevelManager();
 
-        void Init();
+        void Initialize();
         void Update();
         void Shutdown();
 
@@ -38,12 +38,14 @@ namespace Engine5
     private:
         void   UpdatePausedLevel(Real dt);
         void   RemovePausedLevel();
-        void   InitLevel(Level* level);
-        void   UpdateLevel(Level* level, Real dt);
-        void   ShutdownLevel(Level* level);
-        void   LoadLevel(Level* level);
-        void   UnloadLevel(Level* level);
         Level* CreateLevel(const std::string& level_name);
+
+        //loop state
+        void InitializeLevel(Level* level);
+        void UpdateLevel(Level* level, Real dt);
+        void ShutdownLevel(Level* level);
+        void LoadLevel(Level* level);
+        void UnloadLevel(Level* level);
 
     private:
         Real m_fixed_time_step = 0.0f;
@@ -51,17 +53,17 @@ namespace Engine5
 
         std::string m_current;
         std::string m_next;
-        Level*      m_current_level = nullptr;
+        Level*      m_level = nullptr;
 
         bool m_b_set_initial_level  = false;
         bool m_b_enable_load_phase  = false;
         bool m_b_quit_state_machine = false;
 
-        bool m_b_reload         = false;
-        bool m_b_restart        = false;
-        bool m_b_pause          = false;
-        bool m_b_resume         = false;
-        bool m_b_resume_restart = false;
+        bool m_b_reload           = false;
+        bool m_b_restart          = false;
+        bool m_b_pause_and_change = false;
+        bool m_b_resume           = false;
+        bool m_b_resume_restart   = false;
 
     private:
         struct PauseInfo
