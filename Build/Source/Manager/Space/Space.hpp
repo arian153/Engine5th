@@ -1,5 +1,4 @@
 #pragma once
-#include "../../System/Math/Utility/MathDef.hpp"
 #include "SubsystemFlag.hpp"
 
 namespace Engine5
@@ -21,10 +20,6 @@ namespace Engine5
         ~Space();
 
         void Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry);
-        void Update(Real dt, eSubsystemFlag flag) const;
-        void FixedUpdate(Real dt, eSubsystemFlag flag) const;
-        void Update(Real dt) const;
-        void FixedUpdate(Real dt) const;
         void Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system);
 
         void ConnectSubsystem(ComponentManager* component_manager);
@@ -36,6 +31,9 @@ namespace Engine5
         ComponentManager* GetComponentManager() const;
         Scene*            GetScene() const;
         World*            GetWorld() const;
+
+        bool IsSubsystemUpdate(eSubsystemFlag flag) const;
+        bool IsSubsystemFixedUpdate(eSubsystemFlag flag) const;
 
     private:
 

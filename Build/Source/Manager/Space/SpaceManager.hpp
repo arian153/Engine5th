@@ -1,7 +1,7 @@
 #pragma once
-#include "../../System/Math/Utility/MathDef.hpp"
 #include "SubsystemFlag.hpp"
 #include <vector>
+#include "../../System/Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -19,36 +19,28 @@ namespace Engine5
         ~SpaceManager();
 
         void Initialize();
-       
         void Shutdown();
 
-        void Activate(Space* space);
-        void Deactivate(Space* space);
 
-        void SetGlobalOrder(bool b_first);
-
+        Space* GetGlobalSpace() const;
         Space* CreateSpace(eSubsystemFlag flag);
-        void RemoveSpace(Space* space);
+        void   RemoveSpace(Space* space);
 
-        
     private:
         friend class Space;
 
     private:
-        bool m_b_global_first = true;
-        bool m_b_next_order   = true;
         eSubsystemFlag m_global_flag = eSubsystemFlag::None;
 
-        Space*              m_global_space  = nullptr;
+        Space*              m_global_space = nullptr;
+        std::vector<Space*> m_spaces;
         std::vector<Space*> m_active_spaces;
-        std::vector<Space*> m_inactive_spaces;
-        //systems
 
         PhysicsSystem* m_physics_system = nullptr;
         RenderSystem*  m_render_system  = nullptr;
 
         //factory
-        ObjectFactory*    m_object_factory    = nullptr;
+        ObjectFactory*     m_object_factory     = nullptr;
         ComponentRegistry* m_component_registry = nullptr;
     };
 }

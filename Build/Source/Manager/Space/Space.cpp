@@ -43,70 +43,6 @@ namespace Engine5
         //load data from file.
     }
 
-    void Space::Update(Real dt, eSubsystemFlag flag) const
-    {
-        //Update Game Logic
-        //Update World
-        if (m_world != nullptr && HasFlag(flag, eSubsystemFlag::World))
-        {
-            m_world->Update(dt);
-        }
-        //Update Animation
-        //Update Scene
-        if (m_scene != nullptr && HasFlag(flag, eSubsystemFlag::Scene))
-        {
-            m_scene->Update(dt);
-        }
-    }
-
-    void Space::FixedUpdate(Real dt, eSubsystemFlag flag) const
-    {
-        //Update Game Logic
-        //Update World
-        if (m_world != nullptr && HasFlag(flag, eSubsystemFlag::World))
-        {
-            m_world->Update(dt);
-        }
-        //Update Animation
-        //Update Scene
-        if (m_scene != nullptr && HasFlag(flag, eSubsystemFlag::Scene))
-        {
-            m_scene->Update(dt);
-        }
-    }
-
-    void Space::Update(Real dt) const
-    {
-        //Update Game Logic
-        //Update World
-        if (m_world != nullptr && HasFlag(m_update_flag, eSubsystemFlag::World))
-        {
-            m_world->Update(dt);
-        }
-        //Update Animation
-        //Update Scene
-        if (m_scene != nullptr && HasFlag(m_update_flag, eSubsystemFlag::Scene))
-        {
-            m_scene->Update(dt);
-        }
-    }
-
-    void Space::FixedUpdate(Real dt) const
-    {
-        //Update Game Logic
-        //Update World
-        if (m_world != nullptr && HasFlag(m_fixed_update_flag, eSubsystemFlag::World))
-        {
-            m_world->Update(dt);
-        }
-        //Update Animation
-        //Update Scene
-        if (m_scene != nullptr && HasFlag(m_fixed_update_flag, eSubsystemFlag::Scene))
-        {
-            m_scene->Update(dt);
-        }
-    }
-
     void Space::Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system)
     {
         //maybe add a save data to file.
@@ -186,5 +122,15 @@ namespace Engine5
     World* Space::GetWorld() const
     {
         return m_world;
+    }
+
+    bool Space::IsSubsystemUpdate(eSubsystemFlag flag) const
+    {
+        return HasFlag(m_update_flag, flag);
+    }
+
+    bool Space::IsSubsystemFixedUpdate(eSubsystemFlag flag) const
+    {
+        return HasFlag(m_fixed_update_flag, flag);
     }
 }

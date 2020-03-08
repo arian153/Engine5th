@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -13,12 +12,10 @@ namespace Engine5
         ~PhysicsSystem();
 
         void Initialize();
-        void Update(Real dt);
         void Shutdown();
 
         World* CreateWorld();
-        void RemoveWorld(World* world);
-
+        void   RemoveWorld(World* world);
 
     private:
         std::vector<World*> m_worlds;

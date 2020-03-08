@@ -34,7 +34,7 @@ namespace Engine5
         void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
 
         void Initialize(ColorShaderCommon* color_shader, MatrixManager* matrix_generator);
-        void Update(Real dt);
+        void Update();
         void Shutdown();
         void Clear();
 

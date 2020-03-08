@@ -13,7 +13,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     return static_cast<Engine5::WindowsAPI*>(os_api)->MessageProc(hwnd, msg, wparam, lparam);
 }
 
-
 namespace Engine5
 {
     WindowsAPI::WindowsAPI(Application* application)
@@ -49,7 +48,6 @@ namespace Engine5
             return;
         }
         m_style = GetWindowModeRelatedResolution();
-
         // Compute window rectangle dimensions based on requested client area dimensions.
         RECT R = {0, 0, m_curr_client_width, m_curr_client_height};
         int  width_start, height_start;
@@ -73,9 +71,8 @@ namespace Engine5
         m_b_init = true;
     }
 
-    void WindowsAPI::Update(Real dt)
+    void WindowsAPI::Update() const
     {
-        E5_UNUSED_PARAM(dt);
         MessagePump();
     }
 
@@ -119,12 +116,10 @@ namespace Engine5
                 m_curr_client_height = m_monitor_screen_height;
             }
         }
-
         /*Create variables to adjust window size and start position*/
         RECT rect      = {0, 0, m_curr_client_width, m_curr_client_height};
         int  xStart    = 0, yStart = 0;
         m_b_fullscreen = flag;
-
         /*Check if we are going into full screen or not*/
         if (flag == true)
         {
@@ -132,16 +127,13 @@ namespace Engine5
             DEVMODE dmScreenSettings;
             dmScreenSettings.dmSize = sizeof(dmScreenSettings);
             EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &dmScreenSettings);
-
             /*Change the resolution to the resolution of my window*/
             dmScreenSettings.dmPelsWidth  = (DWORD)m_curr_client_width;
             dmScreenSettings.dmPelsHeight = (DWORD)m_curr_client_height;
             //dmScreenSettings.dmBitsPerPel = 32;
             dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-
             /*Make sure my window style is full screen*/
             m_style = FULLSCREEN_STYLE;
-
             //ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
             /*Check if it worked.  If it didn't set to window mode.*/
             if (ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
@@ -158,14 +150,12 @@ namespace Engine5
             ChangeDisplaySettings(nullptr, 0);/*If So Switch Back To The Desktop*/
             m_style = GetWindowModeRelatedResolution();
         }
-        
         /*This will change my windows style*/
         SetWindowLong(m_h_wnd, GWL_STYLE, m_style);
         /*This will make window the correct size and find the start position*/
         AdjustAndCenterWindow(m_style, rect, xStart, yStart);
         /*This changes my window size and start position*/
         MoveWindow(m_h_wnd, xStart, yStart, rect.right - rect.left, rect.bottom - rect.top, TRUE);
-
         /*This is required after SetWindowLong*/
         ShowWindow(m_h_wnd, SW_SHOWNORMAL);
         /*This sets my window to the front.*/
@@ -194,7 +184,6 @@ namespace Engine5
         m_monitor_screen_height = GetSystemMetrics(SM_CYSCREEN);
     }
 
-
     LRESULT WindowsAPI::MessageProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     {
         switch (msg)
@@ -214,7 +203,6 @@ namespace Engine5
                 //m_timer->Start();
             }
             break;
-
             // WM_SIZE is sent when the user resizes the window.  
         case WM_SIZE:
             // Save the new client area dimensions.
@@ -247,7 +235,6 @@ namespace Engine5
                     m_b_minimized  = false;
                     m_application->OnResize(m_curr_client_width, m_curr_client_height);
                 }
-
                     // Restoring from maximized state?
                 else if (m_b_maximized)
                 {
@@ -272,14 +259,12 @@ namespace Engine5
                 }
             }
             break;
-
             // WM_EXITSIZEMOVE is sent when the user grabs the resize bars.
         case WM_ENTERSIZEMOVE:
             m_b_app_paused = true;
             m_b_resizable = true;
             //m_timer->Stop();
             break;
-
             // WM_EXITSIZEMOVE is sent when the user releases the resize bars.
             // Here we reset everything based on the new window dimensions.
         case WM_EXITSIZEMOVE:
@@ -288,8 +273,6 @@ namespace Engine5
             //m_timer->Start();
             m_application->OnResize(m_curr_client_width, m_curr_client_height);
             break;
-
-       
             // The WM_MENUCHAR message is sent when a menu is active and the user presses 
             // a key that does not correspond to any mnemonic or accelerator key. 
         case WM_MENUCHAR:
@@ -347,7 +330,6 @@ namespace Engine5
         case WM_KEYUP:
             //m_keyboard_input->ProcKeyBoardEvent(false, wparam, lparam);
             break;
-         
             // WM_DESTROY is sent when the window is being destroyed.
         case WM_DESTROY:
             m_b_quit = true;
@@ -376,26 +358,20 @@ namespace Engine5
         }
     }
 
-    void WindowsAPI::AdjustAndCenterWindow(DWORD style, RECT& size, int& x_start, int& y_start)
+    void WindowsAPI::AdjustAndCenterWindow(DWORD style, RECT& size, int& x_start, int& y_start) const
     {
         DEVMODE dm = {0};
-
         /*Get the size of the screen*/
         dm.dmSize = sizeof(dm);
         EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &dm);
-
         /*Make client area of window the correct size */
         AdjustWindowRect(&size, style, false);
-
         /*Calculate new width and height */
-        int win_width  = size.right - size.left;
-        int win_height = size.bottom - size.top;
-
-        Real monitor_scale = MonitorScaleFactor();
-
-        Real movement_width = (Real)win_width * monitor_scale / 2.0f;
+        int  win_width       = size.right - size.left;
+        int  win_height      = size.bottom - size.top;
+        Real monitor_scale   = MonitorScaleFactor();
+        Real movement_width  = (Real)win_width * monitor_scale / 2.0f;
         Real movement_height = (Real)win_height * monitor_scale / 2.0f;
-
         /* Get start position for center */
         x_start = (dm.dmPelsWidth / 2) - static_cast<int>(movement_width);
         y_start = (dm.dmPelsHeight / 2) - static_cast<int>(movement_height);
@@ -422,12 +398,10 @@ namespace Engine5
 
     Real WindowsAPI::MonitorScaleFactor() const
     {
-        POINT pt_zero = { 0, 0 };
-        HMONITOR primary_monitor = MonitorFromPoint(pt_zero, MONITOR_DEFAULTTOPRIMARY);
-
-        DEVICE_SCALE_FACTOR result = GetScaleFactorForDevice(DEVICE_PRIMARY);
-
-        Real scale_result = -1.0f;
+        //POINT               pt_zero         = {0, 0};
+        //HMONITOR            primary_monitor = MonitorFromPoint(pt_zero, MONITOR_DEFAULTTOPRIMARY);
+        DEVICE_SCALE_FACTOR result          = GetScaleFactorForDevice(DEVICE_PRIMARY);
+        Real                scale_result    = -1.0f;
         switch (result)
         {
         case DEVICE_SCALE_FACTOR_INVALID:
@@ -484,7 +458,6 @@ namespace Engine5
             scale_result = 1.0f;
             break;
         }
-
         return scale_result;
     }
 

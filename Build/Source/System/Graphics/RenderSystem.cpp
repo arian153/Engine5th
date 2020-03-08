@@ -24,34 +24,13 @@ namespace Engine5
         m_shader_manager = new ShaderManager();
         m_shader_manager->Initialize(m_renderer);
         //matrix generator
-        m_matrix_generator = new MatrixManager();
-        m_matrix_generator->SetClientRect(rendering_width, rendering_height);
+        m_matrix_manager = new MatrixManager();
+        m_matrix_manager->SetClientRect(rendering_width, rendering_height);
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
-        m_primitive_renderer->Initialize(m_shader_manager->GetColorShader(), m_matrix_generator);
+        m_primitive_renderer->Initialize(m_shader_manager->GetColorShader(), m_matrix_manager);
         m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
-    }
-
-    void RenderSystem::Update(Real dt)
-    {
-        if (m_renderer != nullptr)
-        {
-            m_renderer->BeginScene(m_background_color);
-            m_primitive_renderer->Update(dt);
-            Triangle triangle;
-            //triangle.SetTriangle(Vector3(1, 0, 0), Vector3(0, 1, 0), Vector3(-1, 0, 0));
-            triangle.SetTriangle(Vector3(1, 2, 3), Vector3(3, -4, 5), Vector3(1, 1, 1));
-            triangle.DrawPrimitive(m_primitive_renderer, eRenderingMode::Face, ColorDef::Pure::Red);
-            triangle.SetTriangle(Vector3(), Vector3(1.0f), Vector3(0.0f, -1.0f));
-            triangle.DrawPrimitive(m_primitive_renderer, eRenderingMode::Line, ColorDef::Pure::Yellow);
-            //update scene
-            for (auto& scene : m_scenes)
-            {
-                scene->Update(dt);
-            }
-            m_renderer->EndScene();
-        }
     }
 
     void RenderSystem::Shutdown()
@@ -69,10 +48,10 @@ namespace Engine5
             delete m_primitive_renderer;
             m_primitive_renderer = nullptr;
         }
-        if (m_matrix_generator != nullptr)
+        if (m_matrix_manager != nullptr)
         {
-            delete m_matrix_generator;
-            m_matrix_generator = nullptr;
+            delete m_matrix_manager;
+            m_matrix_manager = nullptr;
         }
         if (m_renderer != nullptr)
         {
@@ -88,12 +67,23 @@ namespace Engine5
         }
     }
 
+    void RenderSystem::Begin() const
+    {
+        m_renderer->BeginScene(m_background_color);
+        m_primitive_renderer->Update();
+    }
+
+    void RenderSystem::End() const
+    {
+        m_renderer->EndScene();
+    }
+
     void RenderSystem::OnResize(int width, int height) const
     {
         if (m_renderer != nullptr)
         {
             m_renderer->OnResize(width, height, m_os_api->IsFullscreen());
-            m_matrix_generator->SetClientRect(static_cast<size_t>(width), static_cast<size_t>(height));
+            m_matrix_manager->SetClientRect(static_cast<size_t>(width), static_cast<size_t>(height));
             m_primitive_renderer->UpdateProjectionMatrix();
         }
     }
@@ -111,14 +101,14 @@ namespace Engine5
 
     void RenderSystem::SetFarNearPlane(Real far_plane, Real near_plane) const
     {
-        m_matrix_generator->SetFarPlane(far_plane);
-        m_matrix_generator->SetNearPlane(near_plane);
+        m_matrix_manager->SetFarPlane(far_plane);
+        m_matrix_manager->SetNearPlane(near_plane);
         m_primitive_renderer->UpdateProjectionMatrix();
     }
 
     void RenderSystem::SetFieldOfView(Real field_of_view) const
     {
-        m_matrix_generator->SetFieldOfView(field_of_view);
+        m_matrix_manager->SetFieldOfView(field_of_view);
         m_primitive_renderer->UpdateProjectionMatrix();
     }
 

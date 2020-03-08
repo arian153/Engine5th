@@ -120,7 +120,7 @@ namespace Engine5
         m_face_buffer = new BufferCommon();
     }
 
-    void PrimitiveRenderer::Update(Real dt)
+    void PrimitiveRenderer::Update()
     {
         if (m_dot_vertices.empty() == false)
         {

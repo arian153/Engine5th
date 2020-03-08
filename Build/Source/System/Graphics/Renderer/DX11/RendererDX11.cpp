@@ -681,10 +681,6 @@ namespace Engine5
         color_arr[3] = color.a;
         // Clear the back buffer.
         m_device_context->ClearRenderTargetView(m_render_target_view, color_arr);
-        /*if (m_render_target_view != nullptr)
-        {
-
-        }*/
         // Clear the depth buffer.
         if (m_depth_stencil_view != nullptr)
         {
@@ -743,5 +739,4 @@ namespace Engine5
             m_device_context->OMSetDepthStencilState(m_depth_disabled_stencil_state, 1);
         }
     }
-
-    }
+}

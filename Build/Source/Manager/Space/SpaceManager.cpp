@@ -1,5 +1,6 @@
 #include "SpaceManager.hpp"
 #include "Space.hpp"
+#include "../../System/Physics/PhysicsSystem.hpp"
 
 namespace Engine5
 {
@@ -24,20 +25,13 @@ namespace Engine5
 
     void SpaceManager::Shutdown()
     {
-        for (auto& space : m_active_spaces)
+        for (auto& space : m_spaces)
         {
             space->Shutdown(m_physics_system, m_render_system);
             delete space;
             space = nullptr;
         }
-        m_active_spaces.clear();
-        for (auto& space : m_inactive_spaces)
-        {
-            space->Shutdown(m_physics_system, m_render_system);
-            delete space;
-            space = nullptr;
-        }
-        m_inactive_spaces.clear();
+        m_spaces.clear();
         if (m_global_space != nullptr)
         {
             m_global_space->Shutdown(m_physics_system, m_render_system);
@@ -46,27 +40,15 @@ namespace Engine5
         }
     }
 
-    void SpaceManager::Activate(Space* space)
+    Space* SpaceManager::GetGlobalSpace() const
     {
-        m_inactive_spaces.erase(std::find(m_inactive_spaces.begin(), m_inactive_spaces.end(), space));
-        m_active_spaces.push_back(space);
-    }
-
-    void SpaceManager::Deactivate(Space* space)
-    {
-        m_active_spaces.erase(std::find(m_active_spaces.begin(), m_active_spaces.end(), space));
-        m_inactive_spaces.push_back(space);
-    }
-
-    void SpaceManager::SetGlobalOrder(bool b_first)
-    {
-        m_b_next_order = b_first;
+        return m_global_space;
     }
 
     Space* SpaceManager::CreateSpace(eSubsystemFlag flag)
     {
         Space* space = new Space();
-        m_active_spaces.push_back(space);
+        m_spaces.push_back(space);
         space->m_creation_flag = flag;
         space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry);
         return space;
@@ -74,10 +56,13 @@ namespace Engine5
 
     void SpaceManager::RemoveSpace(Space* space)
     {
+        if (space == m_global_space)
+        {
+            return;
+        }
         if (space != nullptr)
         {
-            m_active_spaces.erase(std::find(m_active_spaces.begin(), m_active_spaces.end(), space));
-            m_inactive_spaces.erase(std::find(m_inactive_spaces.begin(), m_inactive_spaces.end(), space));
+            m_spaces.erase(std::find(m_spaces.begin(), m_spaces.end(), space));
             space->Shutdown(m_physics_system, m_render_system);
             delete space;
             space = nullptr;

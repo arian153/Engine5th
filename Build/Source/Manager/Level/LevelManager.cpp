@@ -3,6 +3,9 @@
 #include "../../System/Core/Utility/CoreUtility.hpp"
 #include "../Resource/ResourceType/LevelResource.hpp"
 #include "../Space/SpaceManager.hpp"
+#include "../Space/Space.hpp"
+#include "../../System/Graphics/Element/Scene.hpp"
+#include "../../System/Physics/Dynamics/World.hpp"
 
 namespace Engine5
 {
@@ -14,7 +17,7 @@ namespace Engine5
     {
     }
 
-    void LevelManager::Initialize()
+    void LevelManager::Initialize(SpaceManager* space_manager)
     {
     }
 
@@ -188,13 +191,26 @@ namespace Engine5
         return m_level;
     }
 
-    void LevelManager::UpdatePausedLevel(Real dt)
+    void LevelManager::UpdatePausedSpace(Real dt, const std::string& level_name, size_t space_index, eSubsystemFlag flag)
     {
         if (m_pause_levels.empty() == false)
         {
             for (auto info : m_pause_levels)
             {
-                //Todo add Space Info
+                if (info.type == level_name)
+                {
+                    info.level->UpdateSpace(dt, space_index, flag);
+                }
+            }
+        }
+    }
+
+    void LevelManager::UpdatePausedLevels(Real dt)
+    {
+        if (m_pause_levels.empty() == false)
+        {
+            for (auto info : m_pause_levels)
+            {
                 UpdateLevel(info.level, dt);
             }
         }
@@ -212,35 +228,50 @@ namespace Engine5
         }
     }
 
-    void LevelManager::InitializeLevel(Level* level)
+    void LevelManager::InitializeLevel(Level* level) const
     {
+        level->Initialize();
+        level->m_global_space = m_space_manager->GetGlobalSpace();
+        level->m_world_space  = m_space_manager->CreateSpace(level->m_world_flag);
+        level->m_ui_space     = m_space_manager->CreateSpace(level->m_ui_flag);
     }
 
-    void LevelManager::UpdateLevel(Level* level, Real dt)
+    void LevelManager::UpdateLevel(Level* level, Real dt) const
     {
         level->Update(dt);
+
+        //update physics
+
+
     }
 
-    void LevelManager::FixedUpdateLevel(Level* level, Real dt)
+    void LevelManager::FixedUpdateLevel(Level* level, Real dt) const
     {
         level->FixedUpdate(dt);
     }
 
-    void LevelManager::ShutdownLevel(Level* level)
+    void LevelManager::ShutdownLevel(Level* level) const
     {
-    }
-
-    void LevelManager::LoadLevel(Level* level)
-    {
-        if (m_b_enable_load_phase)
+        level->Shutdown();
+        for (auto& space : level->m_spaces)
         {
+            m_space_manager->RemoveSpace(space);
         }
     }
 
-    void LevelManager::UnloadLevel(Level* level)
+    void LevelManager::LoadLevel(Level* level) const
     {
         if (m_b_enable_load_phase)
         {
+            level->Load();
+        }
+    }
+
+    void LevelManager::UnloadLevel(Level* level) const
+    {
+        if (m_b_enable_load_phase)
+        {
+            level->Unload();
         }
     }
 

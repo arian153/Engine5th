@@ -1,11 +1,12 @@
 #pragma once
 #include "../../Math/Utility/MathDef.hpp"
-#include "../../Graphics/RenderSystem.hpp"
 
 namespace Engine5
 {
+    class RenderSystem;
     class PhysicsSystem;
     class WindowsAPI;
+    class TimeUtility;
 
     class Application
     {
@@ -27,7 +28,7 @@ namespace Engine5
         WindowsAPI*         GetOSAPI() const;
 
     private:
-        void CalculateFrameStats();
+        void CalculateFrameStatus();
         void OnResize(int client_width, int client_height) const;
         void OnFullscreen();
         void OnQuit();
@@ -43,7 +44,7 @@ namespace Engine5
         Real m_curr_mspf    = 0.0f;
 
         //application name
-        String m_application_caption = "Engine 5th";
+        std::string m_application_caption = "Engine 5th";
 
     private:
         static inline Application* m_s_application = nullptr;
@@ -51,5 +52,6 @@ namespace Engine5
         WindowsAPI*    m_os_api         = nullptr;
         RenderSystem*  m_render_system  = nullptr;
         PhysicsSystem* m_physics_system = nullptr;
+        TimeUtility*   m_time_utility   = nullptr;
     };
 }

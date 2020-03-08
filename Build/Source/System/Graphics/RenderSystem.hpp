@@ -19,8 +19,10 @@ namespace Engine5
         ~RenderSystem();
 
         void Initialize(int rendering_width, int rendering_height);
-        void Update(Real dt);
         void Shutdown();
+
+        void Begin() const;
+        void End() const;
 
         void OnResize(int width, int height) const;
 
@@ -39,7 +41,7 @@ namespace Engine5
         RendererCommon*    m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;
-        MatrixManager*   m_matrix_generator   = nullptr;
+        MatrixManager*     m_matrix_manager     = nullptr;
 
         std::vector<Scene*> m_scenes;
         bool                m_b_vsync          = true;

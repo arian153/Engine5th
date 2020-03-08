@@ -13,7 +13,7 @@ namespace Engine5
         ~WindowsAPI();
 
         void Initialize();
-        void Update(Real dt);
+        void Update() const;
         void Shutdown();
 
         void SetConfineCursor(bool flag);
@@ -24,7 +24,7 @@ namespace Engine5
 
         LRESULT   MessageProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
         void      MessagePump() const;
-        void      AdjustAndCenterWindow(DWORD style, RECT& size, int& x_start, int& y_start);
+        void      AdjustAndCenterWindow(DWORD style, RECT& size, int& x_start, int& y_start) const;
         DWORD     GetWindowModeRelatedResolution() const;
         HINSTANCE AppInstance() const;
         HWND      AppHWnd() const;

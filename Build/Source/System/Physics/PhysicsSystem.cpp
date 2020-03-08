@@ -15,14 +15,6 @@ namespace Engine5
     {
     }
 
-    void PhysicsSystem::Update(Real dt)
-    {
-        for (auto& world : m_worlds)
-        {
-            world->Update(dt);
-        }
-    }
-
     void PhysicsSystem::Shutdown()
     {
         for (auto& world : m_worlds)
