@@ -64,7 +64,7 @@ namespace Engine5
         {
             space->GetScene()->Update(dt);
         }
-        if (space->GetWorld() != nullptr && HasFlag(flag, eSubsystemFlag::Scene))
+        if (space->GetWorld() != nullptr && HasFlag(flag, eSubsystemFlag::World))
         {
             space->GetWorld()->Update(dt);
         }
@@ -74,31 +74,24 @@ namespace Engine5
     {
         for (auto& space : m_spaces)
         {
-            bool b_update = space->IsSubsystemUpdate(flag);
-            switch (flag)
+            if (space->IsSubsystemUpdate(flag))
             {
-            case Engine5::eSubsystemFlag::None:
-                break;
-            case Engine5::eSubsystemFlag::ComponentManager:
-                break;
-            case Engine5::eSubsystemFlag::ObjectManager:
-                break;
-            case Engine5::eSubsystemFlag::Scene:
-                auto scene = space->GetScene();
-                if (scene != nullptr && b_update)
+                if (flag == eSubsystemFlag::Scene)
                 {
-                    scene->Update(dt);
+                    auto scene = space->GetScene();
+                    if (scene != nullptr)
+                    {
+                        scene->Update(dt);
+                    }
                 }
-                break;
-            case Engine5::eSubsystemFlag::World:
-                auto world = space->GetWorld();
-                if (world != nullptr && b_update)
+                else if (flag == eSubsystemFlag::World)
                 {
-                    world->Update(dt);
+                    auto world = space->GetWorld();
+                    if (world != nullptr)
+                    {
+                        world->Update(dt);
+                    }
                 }
-                break;
-            default:
-                break;
             }
         }
     }
@@ -107,31 +100,24 @@ namespace Engine5
     {
         for (auto& space : m_spaces)
         {
-            bool b_fixed_update = space->IsSubsystemFixedUpdate(flag);
-            switch (flag)
+            if (space->IsSubsystemFixedUpdate(flag))
             {
-            case Engine5::eSubsystemFlag::None:
-                break;
-            case Engine5::eSubsystemFlag::ComponentManager:
-                break;
-            case Engine5::eSubsystemFlag::ObjectManager:
-                break;
-            case Engine5::eSubsystemFlag::Scene:
-                auto scene = space->GetScene();
-                if (scene != nullptr && b_fixed_update)
+                if (flag == eSubsystemFlag::Scene)
                 {
-                    scene->Update(dt);
+                    auto scene = space->GetScene();
+                    if (scene != nullptr)
+                    {
+                        scene->Update(dt);
+                    }
                 }
-                break;
-            case Engine5::eSubsystemFlag::World:
-                auto world = space->GetWorld();
-                if (world != nullptr && b_fixed_update)
+                else if (flag == eSubsystemFlag::World)
                 {
-                    world->Update(dt);
+                    auto world = space->GetWorld();
+                    if (world != nullptr)
+                    {
+                        world->Update(dt);
+                    }
                 }
-                break;
-            default:
-                break;
             }
         }
     }

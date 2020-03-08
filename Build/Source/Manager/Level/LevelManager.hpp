@@ -5,7 +5,6 @@
 
 namespace Engine5
 {
-    class PhysicsSystem;
     class RenderSystem;
     enum class eSubsystemFlag : unsigned long long;
     class LevelResource;
@@ -49,6 +48,7 @@ namespace Engine5
         void InitializeLevel(Level* level) const;
         void UpdateLevel(Level* level, Real dt) const;
         void FixedUpdateLevel(Level* level, Real dt) const;
+        void RenderLevel(Level* level, Real dt);
         void ShutdownLevel(Level* level) const;
         void LoadLevel(Level* level) const;
         void UnloadLevel(Level* level) const;
@@ -56,6 +56,7 @@ namespace Engine5
     private:
         Real m_fixed_time_step = 0.0f;
         Real m_elapsed_time    = 0.0f;
+        bool m_b_fixed_update  = false;
 
         std::string m_current;
         std::string m_next;
@@ -80,10 +81,8 @@ namespace Engine5
 
     private:
         std::list<PauseInfo> m_pause_levels;
-        SpaceManager*        m_space_manager = nullptr;
-        PhysicsSystem* m_physics_system = nullptr;
-        RenderSystem* m_render_system = nullptr;
-
+        SpaceManager*        m_space_manager  = nullptr;
+        RenderSystem*        m_render_system  = nullptr;
 
         //resource
         std::unordered_map<std::string, LevelResource*> m_level_resources;

@@ -4,8 +4,7 @@
 #include "../Resource/ResourceType/LevelResource.hpp"
 #include "../Space/SpaceManager.hpp"
 #include "../Space/Space.hpp"
-#include "../../System/Graphics/Element/Scene.hpp"
-#include "../../System/Physics/Dynamics/World.hpp"
+#include "../../System/Graphics/RenderSystem.hpp"
 
 namespace Engine5
 {
@@ -75,13 +74,16 @@ namespace Engine5
             if (m_elapsed_time >= m_fixed_time_step)
             {
                 FixedUpdateLevel(m_level, m_fixed_time_step);
-                m_elapsed_time = 0.0f;
+                m_elapsed_time   = 0.0f;
+                m_b_fixed_update = true;
             }
+            RenderLevel(m_level, time_step);
         }
         //shutdown phase
         if (m_b_pause_and_change == false)
         {
             ShutdownLevel(m_level);
+            //unload phase
             if (m_b_restart == false || m_b_resume_restart == true || m_b_reload == true)
             {
                 UnloadLevel(m_level);
@@ -239,15 +241,34 @@ namespace Engine5
     void LevelManager::UpdateLevel(Level* level, Real dt) const
     {
         level->Update(dt);
-
+        //update logic
         //update physics
-
-
+        level->UpdateSubsystem(dt, eSubsystemFlag::World);
+        //update animation
+        //update sound
     }
 
     void LevelManager::FixedUpdateLevel(Level* level, Real dt) const
     {
         level->FixedUpdate(dt);
+        //update logic
+        //update physics
+        level->FixedUpdateSubsystem(dt, eSubsystemFlag::World);
+        //update animation
+        //update sound
+    }
+
+    void LevelManager::RenderLevel(Level* level, Real dt)
+    {
+        //update scene
+        m_render_system->BeginUpdate();
+        level->UpdateSubsystem(dt, eSubsystemFlag::Scene);
+        if (m_b_fixed_update == true)
+        {
+            level->FixedUpdateSubsystem(m_fixed_time_step, eSubsystemFlag::Scene);
+            m_b_fixed_update = false;
+        }
+        m_render_system->EndUpdate();
     }
 
     void LevelManager::ShutdownLevel(Level* level) const

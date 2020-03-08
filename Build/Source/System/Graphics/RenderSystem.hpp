@@ -21,8 +21,8 @@ namespace Engine5
         void Initialize(int rendering_width, int rendering_height);
         void Shutdown();
 
-        void Begin() const;
-        void End() const;
+        void BeginUpdate() const;
+        void EndUpdate() const;
 
         void OnResize(int width, int height) const;
 

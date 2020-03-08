@@ -67,13 +67,13 @@ namespace Engine5
         }
     }
 
-    void RenderSystem::Begin() const
+    void RenderSystem::BeginUpdate() const
     {
         m_renderer->BeginScene(m_background_color);
         m_primitive_renderer->Update();
     }
 
-    void RenderSystem::End() const
+    void RenderSystem::EndUpdate() const
     {
         m_renderer->EndScene();
     }
