@@ -17,7 +17,7 @@ namespace Engine5
 
     void Space::Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry)
     {
-        m_subsystem_flag = flag;
+        m_creation_flag = flag;
         //create component manager
         if (m_component_manager == nullptr && HasFlag(flag, eSubsystemFlag::ComponentManager))
         {
@@ -43,17 +43,65 @@ namespace Engine5
         //load data from file.
     }
 
-    void Space::Update(Real dt) const
+    void Space::Update(Real dt, eSubsystemFlag flag) const
     {
         //Update Game Logic
         //Update World
-        if (m_world != nullptr)
+        if (m_world != nullptr && HasFlag(flag, eSubsystemFlag::World))
         {
             m_world->Update(dt);
         }
         //Update Animation
         //Update Scene
-        if (m_scene != nullptr)
+        if (m_scene != nullptr && HasFlag(flag, eSubsystemFlag::Scene))
+        {
+            m_scene->Update(dt);
+        }
+    }
+
+    void Space::FixedUpdate(Real dt, eSubsystemFlag flag) const
+    {
+        //Update Game Logic
+        //Update World
+        if (m_world != nullptr && HasFlag(flag, eSubsystemFlag::World))
+        {
+            m_world->Update(dt);
+        }
+        //Update Animation
+        //Update Scene
+        if (m_scene != nullptr && HasFlag(flag, eSubsystemFlag::Scene))
+        {
+            m_scene->Update(dt);
+        }
+    }
+
+    void Space::Update(Real dt) const
+    {
+        //Update Game Logic
+        //Update World
+        if (m_world != nullptr && HasFlag(m_update_flag, eSubsystemFlag::World))
+        {
+            m_world->Update(dt);
+        }
+        //Update Animation
+        //Update Scene
+        if (m_scene != nullptr && HasFlag(m_update_flag, eSubsystemFlag::Scene))
+        {
+            m_scene->Update(dt);
+        }
+    }
+
+    void Space::FixedUpdate(Real dt) const
+    {
+        //Update Game Logic
+        //Update World
+        if (m_world != nullptr && HasFlag(m_fixed_update_flag, eSubsystemFlag::World))
+        {
+            m_world->Update(dt);
+        }
+        //Update Animation
+        //Update Scene
+        if (m_scene != nullptr && HasFlag(m_fixed_update_flag, eSubsystemFlag::Scene))
         {
             m_scene->Update(dt);
         }
@@ -63,24 +111,24 @@ namespace Engine5
     {
         //maybe add a save data to file.
         //shutdown world
-        if (m_world != nullptr && HasFlag(m_subsystem_flag, eSubsystemFlag::World))
+        if (m_world != nullptr && HasFlag(m_creation_flag, eSubsystemFlag::World))
         {
             physics_system->RemoveWorld(m_world);
         }
         //shutdown scene
-        if (m_scene != nullptr && HasFlag(m_subsystem_flag, eSubsystemFlag::Scene))
+        if (m_scene != nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Scene))
         {
             render_system->RemoveScene(m_scene);
         }
         //shutdown object manager
-        if (m_object_manager != nullptr && HasFlag(m_subsystem_flag, eSubsystemFlag::ObjectManager))
+        if (m_object_manager != nullptr && HasFlag(m_creation_flag, eSubsystemFlag::ObjectManager))
         {
             m_object_manager->Shutdown();
             delete m_object_manager;
             m_object_manager = nullptr;
         }
         //shutdown component manager
-        if (m_component_manager != nullptr && HasFlag(m_subsystem_flag, eSubsystemFlag::ComponentManager))
+        if (m_component_manager != nullptr && HasFlag(m_creation_flag, eSubsystemFlag::ComponentManager))
         {
             m_component_manager->Shutdown();
             delete m_component_manager;
@@ -90,7 +138,7 @@ namespace Engine5
 
     void Space::ConnectSubsystem(ComponentManager* component_manager)
     {
-        if (m_component_manager == nullptr && HasFlag(m_subsystem_flag, eSubsystemFlag::ComponentManager) == false)
+        if (m_component_manager == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::ComponentManager) == false)
         {
             m_component_manager = component_manager;
         }
@@ -98,7 +146,7 @@ namespace Engine5
 
     void Space::ConnectSubsystem(ObjectManager* object_manager)
     {
-        if (m_object_manager == nullptr && HasFlag(m_subsystem_flag, eSubsystemFlag::ObjectManager) == false)
+        if (m_object_manager == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::ObjectManager) == false)
         {
             m_object_manager = object_manager;
         }
@@ -106,7 +154,7 @@ namespace Engine5
 
     void Space::ConnectSubsystem(Scene* scene)
     {
-        if (m_scene == nullptr && HasFlag(m_subsystem_flag, eSubsystemFlag::Scene) == false)
+        if (m_scene == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Scene) == false)
         {
             m_scene = scene;
         }
@@ -114,7 +162,7 @@ namespace Engine5
 
     void Space::ConnectSubsystem(World* world)
     {
-        if (m_world == nullptr && HasFlag(m_subsystem_flag, eSubsystemFlag::World) == false)
+        if (m_world == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::World) == false)
         {
             m_world = world;
         }

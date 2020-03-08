@@ -19,7 +19,7 @@ namespace Engine5
         ~SpaceManager();
 
         void Initialize();
-        void Update(Real dt);
+       
         void Shutdown();
 
         void Activate(Space* space);
@@ -30,10 +30,7 @@ namespace Engine5
         Space* CreateSpace(eSubsystemFlag flag);
         void RemoveSpace(Space* space);
 
-    private:
-        void UpdateFirst(Real dt);
-        void UpdateLast(Real dt);
-
+        
     private:
         friend class Space;
 

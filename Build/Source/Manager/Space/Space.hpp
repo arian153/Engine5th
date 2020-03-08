@@ -21,7 +21,10 @@ namespace Engine5
         ~Space();
 
         void Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry);
+        void Update(Real dt, eSubsystemFlag flag) const;
+        void FixedUpdate(Real dt, eSubsystemFlag flag) const;
         void Update(Real dt) const;
+        void FixedUpdate(Real dt) const;
         void Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system);
 
         void ConnectSubsystem(ComponentManager* component_manager);
@@ -40,8 +43,11 @@ namespace Engine5
         friend class SpaceManager;
 
     private:
-        bool              m_b_activate        = false;
-        eSubsystemFlag    m_subsystem_flag    = eSubsystemFlag::None;
+        bool           m_b_activate        = false;
+        eSubsystemFlag m_creation_flag     = eSubsystemFlag::None;
+        eSubsystemFlag m_update_flag       = eSubsystemFlag::None;
+        eSubsystemFlag m_fixed_update_flag = eSubsystemFlag::None;
+
         SpaceManager*     m_space_manager     = nullptr;
         ComponentManager* m_component_manager = nullptr;
         ObjectManager*    m_object_manager    = nullptr;

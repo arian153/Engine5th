@@ -43,6 +43,7 @@ namespace Engine5
         //loop state
         void InitializeLevel(Level* level);
         void UpdateLevel(Level* level, Real dt);
+        void FixedUpdateLevel(Level* level, Real dt);
         void ShutdownLevel(Level* level);
         void LoadLevel(Level* level);
         void UnloadLevel(Level* level);
@@ -73,7 +74,9 @@ namespace Engine5
         };
 
     private:
-        std::list<PauseInfo>                            m_pause_levels;
+        std::list<PauseInfo> m_pause_levels;
+        SpaceManager*        m_space_manager = nullptr;
+        //resource
         std::unordered_map<std::string, LevelResource*> m_level_resources;
     };
 }

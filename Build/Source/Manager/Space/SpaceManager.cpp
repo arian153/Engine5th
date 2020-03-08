@@ -22,15 +22,6 @@ namespace Engine5
         }
     }
 
-    void SpaceManager::Update(Real dt)
-    {
-        m_b_global_first ? UpdateFirst(dt) : UpdateLast(dt);
-        if (m_b_next_order != m_b_global_first)
-        {
-            m_b_global_first = m_b_next_order;
-        }
-    }
-
     void SpaceManager::Shutdown()
     {
         for (auto& space : m_active_spaces)
@@ -76,7 +67,7 @@ namespace Engine5
     {
         Space* space = new Space();
         m_active_spaces.push_back(space);
-        space->m_subsystem_flag = flag;
+        space->m_creation_flag = flag;
         space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry);
         return space;
     }
@@ -91,23 +82,5 @@ namespace Engine5
             delete space;
             space = nullptr;
         }
-    }
-
-    void SpaceManager::UpdateFirst(Real dt)
-    {
-        m_global_space->Update(dt);
-        for (auto& space : m_active_spaces)
-        {
-            space->Update(dt);
-        }
-    }
-
-    void SpaceManager::UpdateLast(Real dt)
-    {
-        for (auto& space : m_active_spaces)
-        {
-            space->Update(dt);
-        }
-        m_global_space->Update(dt);
     }
 }

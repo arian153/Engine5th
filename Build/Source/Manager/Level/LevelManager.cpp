@@ -2,6 +2,7 @@
 #include "Level.hpp"
 #include "../../System/Core/Utility/CoreUtility.hpp"
 #include "../Resource/ResourceType/LevelResource.hpp"
+#include "../Space/SpaceManager.hpp"
 
 namespace Engine5
 {
@@ -70,7 +71,7 @@ namespace Engine5
             m_elapsed_time += time_step;
             if (m_elapsed_time >= m_fixed_time_step)
             {
-                //Update Fixed Update
+                FixedUpdateLevel(m_level, m_fixed_time_step);
                 m_elapsed_time = 0.0f;
             }
         }
@@ -217,6 +218,12 @@ namespace Engine5
 
     void LevelManager::UpdateLevel(Level* level, Real dt)
     {
+        level->Update(dt);
+    }
+
+    void LevelManager::FixedUpdateLevel(Level* level, Real dt)
+    {
+        level->FixedUpdate(dt);
     }
 
     void LevelManager::ShutdownLevel(Level* level)
