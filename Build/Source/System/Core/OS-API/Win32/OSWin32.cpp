@@ -8,12 +8,12 @@
 #include "../../Utility/TimeUtility.hpp"
 #include "../../../../Manager/Level/LevelManager.hpp"
 
-LRESULT CALLBACK ProcessWindow(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+namespace
 {
-    // Forward hwnd on because we can get messages (e.g., WM_CREATE)
-    // before CreateWindow returns, and thus before mhMainWnd is valid.
-    auto os_api = Engine5::Application::GetApplication()->GetOperatingSystem();
-    return static_cast<Engine5::OSWin32*>(os_api)->ProcessMessage(hwnd, msg, wparam, lparam);
+    LRESULT CALLBACK ProcessWindow(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+    {
+        return Engine5::Application::GetApplication()->GetOperatingSystem()->ProcessMessage(hwnd, msg, wparam, lparam);
+    }
 }
 
 namespace Engine5
@@ -400,6 +400,26 @@ namespace Engine5
     }
 
     void OSCommon::DispatchMessagePump() const
+    {
+        m_b_app_paused ? DispatchPaused() : DispatchActive();
+    }
+
+    void OSCommon::DispatchPaused() const
+    {
+        MSG msg = {nullptr};
+        while (GetMessage(&msg, m_h_wnd, 0, 0))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            //exit pause state
+            if (m_b_app_paused == false)
+            {
+                break;
+            }
+        }
+    }
+
+    void OSCommon::DispatchActive() const
     {
         MSG msg = {nullptr};
         while (PeekMessage(&msg, m_h_wnd, 0, 0, PM_REMOVE))

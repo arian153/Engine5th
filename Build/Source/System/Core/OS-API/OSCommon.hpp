@@ -22,6 +22,7 @@ namespace Engine5
         void SetClientResolution(int width, int height);
         void SetMonitorResolution();
         void DispatchMessagePump() const;
+       
 
         int  ClientWidth() const;
         int  ClientHeight() const;
@@ -37,6 +38,8 @@ namespace Engine5
         void SetLevelManager(LevelManager* level_manager);
     private :
         void OnResize() const;
+        void DispatchPaused() const;
+        void DispatchActive() const;
 
     private:
         friend class OSAPI;

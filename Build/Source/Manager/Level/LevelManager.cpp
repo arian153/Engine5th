@@ -77,7 +77,12 @@ namespace Engine5
         //update phase
         while (m_b_quit_state_machine == false && m_b_restart == false && m_b_reload == false && m_current == m_next)
         {
+
+
             m_operating_system->DispatchMessagePump();
+
+
+
             //m_game_input->ProcGamePadEvent();
             //m_game_input->ProcessPressed();
             //m_keyboard_input->ProcessPressed();
@@ -332,5 +337,13 @@ namespace Engine5
             //Todo initialize level ...
         }
         return created;
+    }
+
+    void LevelManager::UpdateActive()
+    {
+    }
+
+    void LevelManager::UpdatePaused()
+    {
     }
 }

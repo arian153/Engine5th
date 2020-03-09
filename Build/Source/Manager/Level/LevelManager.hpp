@@ -48,6 +48,9 @@ namespace Engine5
         void   RemovePausedLevel();
         Level* CreateLevel(const std::string& level_name);
 
+        void UpdateActive();
+        void UpdatePaused();
+
         //loop state
         void InitializeLevel(Level* level) const;
         void UpdateLevel(Level* level, Real dt) const;
