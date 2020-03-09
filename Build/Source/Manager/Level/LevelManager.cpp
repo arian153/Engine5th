@@ -8,6 +8,7 @@
 #include "../../System/Core/OS-API/Application.hpp"
 #include "../../System/Core/Utility/TimeUtility.hpp"
 #include "../../System/Core/OS-API/OSCommon.hpp"
+#include "../../System/Core/Utility/FrameUtility.hpp"
 
 namespace Engine5
 {
@@ -26,6 +27,7 @@ namespace Engine5
         m_render_system     = application->GetRenderSystem();
         m_operating_system  = application->GetOperatingSystem();
         m_application_timer = application->GetApplicationTimer();
+        m_frame_utility     = application->GetFrameUtility();
     }
 
     void LevelManager::Update()
@@ -75,21 +77,16 @@ namespace Engine5
         //update phase
         while (m_b_quit_state_machine == false && m_b_restart == false && m_b_reload == false && m_current == m_next)
         {
-
             m_operating_system->DispatchMessagePump();
-
             //m_game_input->ProcGamePadEvent();
             //m_game_input->ProcessPressed();
             //m_keyboard_input->ProcessPressed();
             //m_mouse_input->ProcessPressed();
-
             m_application_timer->Tick();
-
             if (m_operating_system->IsPaused() == false)
             {
-                m_application->CalculateFrameStatus();
+                m_frame_utility->CalculateFrameStatus(m_application_timer->TotalTime());
             }
-
             Real time_step = m_application_timer->DeltaTime();
             UpdateLevel(m_level, time_step);
             m_elapsed_time += time_step;
@@ -116,6 +113,7 @@ namespace Engine5
             m_b_pause_and_change = false;
             m_level              = nullptr;
         }
+        m_operating_system->SetQuit(m_b_quit_state_machine);
     }
 
     void LevelManager::Shutdown()
@@ -123,6 +121,12 @@ namespace Engine5
         delete m_level;
         m_level = nullptr;
         RemovePausedLevel();
+        for (auto& resource : m_level_resources)
+        {
+            delete resource.second;
+            resource.second = nullptr;
+        }
+        m_level_resources.clear();
     }
 
     void LevelManager::AddLevel(const std::string& level_name, LevelResource* level_resource)

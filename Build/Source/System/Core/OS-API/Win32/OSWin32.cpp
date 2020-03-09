@@ -5,6 +5,8 @@
 #include "../../Utility/CoreUtility.hpp"
 #include <ShellScalingApi.h>
 #include "../OSCommon.hpp"
+#include "../../Utility/TimeUtility.hpp"
+#include "../../../../Manager/Level/LevelManager.hpp"
 
 LRESULT CALLBACK ProcessWindow(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
@@ -38,12 +40,12 @@ namespace Engine5
             if (LOWORD(wparam) == WA_INACTIVE)
             {
                 m_os_common->m_b_app_paused = true;
-                //m_timer->Stop();
+                m_os_common->m_application_timer->Stop();
             }
             else
             {
                 m_os_common->m_b_app_paused = false;
-                //m_timer->Start();
+                m_os_common->m_application_timer->Start();
             }
             break;
             // WM_SIZE is sent when the user resizes the window.  
@@ -106,14 +108,14 @@ namespace Engine5
         case WM_ENTERSIZEMOVE:
             m_os_common->m_b_app_paused = true;
             m_os_common->m_b_resizable = true;
-            //m_timer->Stop();
+            m_os_common->m_application_timer->Stop();
             break;
             // WM_EXITSIZEMOVE is sent when the user releases the resize bars.
             // Here we reset everything based on the new window dimensions.
         case WM_EXITSIZEMOVE:
             m_os_common->m_b_app_paused = false;
             m_os_common->m_b_resizable = false;
-            //m_timer->Start();
+            m_os_common->m_application_timer->Start();
             m_os_common->OnResize();
             break;
             // The WM_MENUCHAR message is sent when a menu is active and the user presses 
@@ -176,7 +178,7 @@ namespace Engine5
             // WM_DESTROY is sent when the window is being destroyed.
         case WM_DESTROY:
             m_os_common->m_b_quit = true;
-            //m_level_manager->SetQuit();
+            m_os_common->m_level_manager->SetQuit();
             PostQuitMessage(0);
             break;
         case WM_CLOSE:
@@ -232,6 +234,7 @@ namespace Engine5
     OSCommon::OSCommon(Application* application)
         : OSWin32(application, this)
     {
+        m_application_timer = m_application->GetApplicationTimer();
     }
 
     OSCommon::~OSCommon()
@@ -283,7 +286,6 @@ namespace Engine5
         m_b_init = true;
     }
 
-    
     void OSCommon::Shutdown()
     {
     }
@@ -368,6 +370,11 @@ namespace Engine5
         ShowWindow(m_h_wnd, SW_SHOWNORMAL);
         /*This sets my window to the front.*/
         SetForegroundWindow(m_h_wnd);
+    }
+
+    void OSCommon::SetQuit(bool b_quit)
+    {
+        m_b_quit = b_quit;
     }
 
     void OSCommon::SetClientResolution(int width, int height)
@@ -508,6 +515,11 @@ namespace Engine5
             break;
         }
         return scale_result;
+    }
+
+    void OSCommon::SetLevelManager(LevelManager* level_manager)
+    {
+        m_level_manager = level_manager;
     }
 
     void OSCommon::OnResize() const

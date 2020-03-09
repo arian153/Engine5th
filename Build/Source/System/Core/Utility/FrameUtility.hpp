@@ -10,6 +10,10 @@ namespace Engine5
         ~FrameUtility();
 
         void CalculateFrameStatus(Real total_time);
+        Real GetFramePerSecond() const;
+        Real GetMillisecondPerFrame() const;
+        Real GetSecondPerFrame() const;
+
     private:
         size_t m_frame_count  = 0;
         Real   m_time_elapsed = 0.0f;

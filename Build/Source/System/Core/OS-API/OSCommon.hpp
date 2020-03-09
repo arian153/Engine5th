@@ -4,6 +4,8 @@
 
 namespace Engine5
 {
+    class LevelManager;
+    class TimeUtility;
     class OSCommon : public OSAPI
     {
     public:
@@ -16,6 +18,7 @@ namespace Engine5
         void SetConfineCursor(bool b_confine_cursor);
         void SetShowCursor(bool b_show_cursor);
         void SetFullscreen(bool b_fullscreen);
+        void SetQuit(bool b_quit);
         void SetClientResolution(int width, int height);
         void SetMonitorResolution();
         void DispatchMessagePump() const;
@@ -31,6 +34,7 @@ namespace Engine5
         Real AspectRatio() const;
         Real MonitorScaleFactor() const;
 
+        void SetLevelManager(LevelManager* level_manager);
     private :
         void OnResize() const;
 
@@ -38,8 +42,8 @@ namespace Engine5
         friend class OSAPI;
 
     private:
-        bool m_b_loaded     = false;
-        bool m_b_init       = false;
+        bool m_b_loaded = false;
+        bool m_b_init   = false;
 
         //mouse option
         bool m_b_show_mouse_cursor = true;
@@ -47,24 +51,27 @@ namespace Engine5
 
         //window style option
         bool m_b_fullscreen = false;
-        bool m_b_invisible = false;
+        bool m_b_invisible  = false;
         bool m_b_borderless = false;
-        bool m_b_resizable = false;
+        bool m_b_resizable  = false;
 
         //window application state
         bool m_b_app_paused = false;
-        bool m_b_minimized = false;
-        bool m_b_maximized = false;
-        bool m_b_quit = false;
+        bool m_b_minimized  = false;
+        bool m_b_maximized  = false;
+        bool m_b_quit       = false;
 
         //application window size
-        int m_curr_client_width = 1280;
+        int m_curr_client_width  = 1280;
         int m_curr_client_height = 720;
-        int m_prev_client_width = 1280;
+        int m_prev_client_width  = 1280;
         int m_prev_client_height = 720;
 
         //actual monitor resolution
-        int m_monitor_screen_width = 0;
+        int m_monitor_screen_width  = 0;
         int m_monitor_screen_height = 0;
+
+        TimeUtility* m_application_timer = nullptr;
+        LevelManager* m_level_manager = nullptr;
     };
 }

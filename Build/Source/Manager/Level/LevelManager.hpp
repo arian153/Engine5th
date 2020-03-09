@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class FrameUtility;
     class Application;
     class TimeUtility;
     class OSCommon;
@@ -88,6 +89,7 @@ namespace Engine5
         RenderSystem*        m_render_system     = nullptr;
         OSCommon*            m_operating_system  = nullptr;
         TimeUtility*         m_application_timer = nullptr;
+        FrameUtility* m_frame_utility = nullptr;
         Application*         m_application       = nullptr;
 
         //resource

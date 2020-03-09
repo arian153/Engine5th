@@ -22,17 +22,14 @@ namespace Engine5
         void Run();
 
         void Initialize();
-        void Update();
+        void Update() const;
         void Shutdown();
-
-        Real CurrentFPS() const;
-        Real CurrentMSPF() const;
-        Real CurrentSPF() const;
 
         static Application* GetApplication();
         OSCommon*           GetOperatingSystem() const;
         RenderSystem*       GetRenderSystem() const;
         PhysicsSystem*      GetPhysicsSystem() const;
+        FrameUtility*       GetFrameUtility() const;
         TimeUtility*        GetApplicationTimer() const;
         LevelManager*       GetLevelManager() const;
         SpaceManager*       GetSpaceManager() const;
@@ -40,7 +37,6 @@ namespace Engine5
         ComponentRegistry*  GetComponentRegistry() const;
 
     private:
-        void CalculateFrameStatus();
         void OnResize(int client_width, int client_height) const;
         void OnFullscreen();
         void OnQuit();

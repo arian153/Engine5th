@@ -23,4 +23,19 @@ namespace Engine5
             m_time_elapsed += 1.0f;
         }
     }
+
+    Real FrameUtility::GetFramePerSecond() const
+    {
+        return m_curr_fps;
+    }
+
+    Real FrameUtility::GetMillisecondPerFrame() const
+    {
+        return m_curr_mspf;
+    }
+
+    Real FrameUtility::GetSecondPerFrame() const
+    {
+        return (1.0f / m_curr_fps);
+    }
 }

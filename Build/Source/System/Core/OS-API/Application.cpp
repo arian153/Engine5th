@@ -12,6 +12,7 @@
 #include "../../../Manager/Component/ComponentRegistry.hpp"
 #include "../../../Manager/Space/SpaceManager.hpp"
 #include "../../../Manager/Level/LevelManager.hpp"
+#include "../Utility/FrameUtility.hpp"
 
 namespace Engine5
 {
@@ -33,14 +34,18 @@ namespace Engine5
 
     void Application::Initialize()
     {
+        //create independent utility
+        m_time_utility = new TimeUtility();
+        m_time_utility->Reset();
+        m_frame_utility = new FrameUtility();
+        //create systems
         m_operating_system = new OSCommon(this);
         m_operating_system->Initialize();
         m_render_system = new RenderSystem(m_operating_system);
         m_render_system->Initialize(1280, 720);
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
-        m_time_utility = new TimeUtility();
-        m_time_utility->Reset();
+        //create managers
         m_component_registry = new ComponentRegistry();
         m_component_registry->RegisterFactories();
         m_object_factory = new ObjectFactory();
@@ -49,9 +54,13 @@ namespace Engine5
         m_space_manager->Initialize();
         m_level_manager = new LevelManager();
         m_level_manager->Initialize(this);
+        m_level_manager->AddLevel("Test");
+        m_level_manager->SetInitialLevel("Test");
+        //setup missing system parameters
+        m_operating_system->SetLevelManager(m_level_manager);
     }
 
-    void Application::Update()
+    void Application::Update() const
     {
         while (m_operating_system->IsQuit() == false && m_operating_system->IsInit() == true)
         {
@@ -90,6 +99,11 @@ namespace Engine5
             delete m_time_utility;
             m_time_utility = nullptr;
         }
+        if (m_frame_utility != nullptr)
+        {
+            delete m_frame_utility;
+            m_frame_utility = nullptr;
+        }
         if (m_physics_system != nullptr)
         {
             m_physics_system->Shutdown();
@@ -110,21 +124,6 @@ namespace Engine5
         }
     }
 
-    Real Application::CurrentFPS() const
-    {
-        return m_curr_fps;
-    }
-
-    Real Application::CurrentMSPF() const
-    {
-        return m_curr_mspf;
-    }
-
-    Real Application::CurrentSPF() const
-    {
-        return (1.0f / m_curr_fps);
-    }
-
     Application* Application::GetApplication()
     {
         return m_s_application;
@@ -143,6 +142,11 @@ namespace Engine5
     PhysicsSystem* Application::GetPhysicsSystem() const
     {
         return m_physics_system;
+    }
+
+    FrameUtility* Application::GetFrameUtility() const
+    {
+        return m_frame_utility;
     }
 
     TimeUtility* Application::GetApplicationTimer() const
@@ -168,20 +172,6 @@ namespace Engine5
     ComponentRegistry* Application::GetComponentRegistry() const
     {
         return m_component_registry;
-    }
-
-    void Application::CalculateFrameStatus()
-    {
-        m_frame_count++;
-        // Compute averages over one second period.
-        if (m_time_utility->TotalTime() - m_time_elapsed >= 1.0f)
-        {
-            m_curr_fps  = (Real)m_frame_count; // fps = frame count / 1 second
-            m_curr_mspf = 1000.0f / m_curr_fps;
-            // Reset for next average.
-            m_frame_count = 0;
-            m_time_elapsed += 1.0f;
-        }
     }
 
     void Application::OnResize(int client_width, int client_height) const
