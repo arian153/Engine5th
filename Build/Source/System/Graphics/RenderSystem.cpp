@@ -5,8 +5,8 @@
 
 namespace Engine5
 {
-    RenderSystem::RenderSystem(OSCommon* os_api)
-        : m_os_api(os_api)
+    RenderSystem::RenderSystem(OSCommon* operating_system)
+        : m_operating_system(operating_system)
     {
     }
 
@@ -18,8 +18,8 @@ namespace Engine5
     {
         //renderer
         m_renderer = new RendererCommon();
-        m_renderer->SetHwnd(m_os_api->AppHWnd());
-        m_renderer->Initialize(rendering_width, rendering_height, m_os_api->IsFullscreen());
+        m_renderer->SetHwnd(m_operating_system->AppHWnd());
+        m_renderer->Initialize(rendering_width, rendering_height, m_operating_system->IsFullscreen());
         //shader
         m_shader_manager = new ShaderManager();
         m_shader_manager->Initialize(m_renderer);
@@ -82,7 +82,7 @@ namespace Engine5
     {
         if (m_renderer != nullptr)
         {
-            m_renderer->OnResize(width, height, m_os_api->IsFullscreen());
+            m_renderer->OnResize(width, height, m_operating_system->IsFullscreen());
             m_matrix_manager->SetClientRect(static_cast<size_t>(width), static_cast<size_t>(height));
             m_primitive_renderer->UpdateProjectionMatrix();
         }

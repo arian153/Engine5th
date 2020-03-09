@@ -10,7 +10,7 @@ LRESULT CALLBACK ProcessWindow(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam
 {
     // Forward hwnd on because we can get messages (e.g., WM_CREATE)
     // before CreateWindow returns, and thus before mhMainWnd is valid.
-    auto os_api = Engine5::Application::GetApplication()->GetOSAPI();
+    auto os_api = Engine5::Application::GetApplication()->GetOperatingSystem();
     return static_cast<Engine5::OSWin32*>(os_api)->ProcessMessage(hwnd, msg, wparam, lparam);
 }
 
@@ -283,11 +283,7 @@ namespace Engine5
         m_b_init = true;
     }
 
-    void OSCommon::Update() const
-    {
-        MessagePump();
-    }
-
+    
     void OSCommon::Shutdown()
     {
     }
@@ -396,7 +392,7 @@ namespace Engine5
         m_monitor_screen_height = GetSystemMetrics(SM_CYSCREEN);
     }
 
-    void OSCommon::MessagePump() const
+    void OSCommon::DispatchMessagePump() const
     {
         MSG msg = {nullptr};
         while (PeekMessage(&msg, m_h_wnd, 0, 0, PM_REMOVE))
@@ -439,6 +435,11 @@ namespace Engine5
     bool OSCommon::IsQuit() const
     {
         return m_b_quit;
+    }
+
+    bool OSCommon::IsPaused() const
+    {
+        return m_b_app_paused;
     }
 
     Real OSCommon::AspectRatio() const

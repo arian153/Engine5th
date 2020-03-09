@@ -5,6 +5,9 @@
 #include "../Space/SpaceManager.hpp"
 #include "../Space/Space.hpp"
 #include "../../System/Graphics/RenderSystem.hpp"
+#include "../../System/Core/OS-API/Application.hpp"
+#include "../../System/Core/Utility/TimeUtility.hpp"
+#include "../../System/Core/OS-API/OSCommon.hpp"
 
 namespace Engine5
 {
@@ -16,8 +19,13 @@ namespace Engine5
     {
     }
 
-    void LevelManager::Initialize(SpaceManager* space_manager)
+    void LevelManager::Initialize(Application* application)
     {
+        m_application       = application;
+        m_space_manager     = application->GetSpaceManager();
+        m_render_system     = application->GetRenderSystem();
+        m_operating_system  = application->GetOperatingSystem();
+        m_application_timer = application->GetApplicationTimer();
     }
 
     void LevelManager::Update()
@@ -67,8 +75,22 @@ namespace Engine5
         //update phase
         while (m_b_quit_state_machine == false && m_b_restart == false && m_b_reload == false && m_current == m_next)
         {
-            //m_application->UpdateApplication();
-            Real time_step = 0.0f;//m_application->m_timer->DeltaTime();
+
+            m_operating_system->DispatchMessagePump();
+
+            //m_game_input->ProcGamePadEvent();
+            //m_game_input->ProcessPressed();
+            //m_keyboard_input->ProcessPressed();
+            //m_mouse_input->ProcessPressed();
+
+            m_application_timer->Tick();
+
+            if (m_operating_system->IsPaused() == false)
+            {
+                m_application->CalculateFrameStatus();
+            }
+
+            Real time_step = m_application_timer->DeltaTime();
             UpdateLevel(m_level, time_step);
             m_elapsed_time += time_step;
             if (m_elapsed_time >= m_fixed_time_step)

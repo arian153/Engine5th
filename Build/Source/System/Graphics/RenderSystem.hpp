@@ -14,7 +14,7 @@ namespace Engine5
     class RenderSystem
     {
     public:
-        explicit RenderSystem(OSCommon* os_api);
+        explicit RenderSystem(OSCommon* operating_system);
         ~RenderSystem();
 
         void Initialize(int rendering_width, int rendering_height);
@@ -36,7 +36,7 @@ namespace Engine5
         void   RemoveScene(Scene* scene);
 
     private:
-        OSCommon*        m_os_api             = nullptr;
+        OSCommon*          m_operating_system   = nullptr;
         RendererCommon*    m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;

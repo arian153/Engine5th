@@ -1,6 +1,7 @@
 #include "ObjectFactory.hpp"
 #include "Object.hpp"
 #include "ObjectManager.hpp"
+#include "../Component/ComponentManager.hpp"
 
 namespace Engine5
 {
@@ -12,12 +13,20 @@ namespace Engine5
     {
     }
 
-    void ObjectFactory::Init()
+    void ObjectFactory::Initialize(ComponentRegistry* component_registry)
     {
+        m_archetype_component_manager = new ComponentManager();
+        m_archetype_component_manager->Initialize(component_registry);
     }
 
     void ObjectFactory::Shutdown()
     {
+        if( m_archetype_component_manager != nullptr)
+        {
+            m_archetype_component_manager->Shutdown();
+            delete m_archetype_component_manager;
+            m_archetype_component_manager = nullptr;
+        }
     }
 
     Object* ObjectFactory::CreateRawObject(const std::string& name, ObjectManager* object_manager)
@@ -48,10 +57,10 @@ namespace Engine5
     void ObjectFactory::AddArchetype(Object* object)
     {
         Object* archetype = CreateRawObject("", nullptr);
-        object->CloneComponents(archetype, m_component_manager);
+        object->CloneComponents(archetype, m_archetype_component_manager);
         if (object->m_children != nullptr)
         {
-            object->CloneChildrenRecursive(archetype, this, m_component_manager);
+            object->CloneChildrenRecursive(archetype, this, m_archetype_component_manager);
         }
     }
 

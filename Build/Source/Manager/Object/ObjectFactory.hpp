@@ -4,6 +4,7 @@
 
 namespace Engine5
 {
+    class ComponentRegistry;
     class ComponentManager;
     class Object;
     class ObjectManager;
@@ -14,7 +15,7 @@ namespace Engine5
         ObjectFactory();
         ~ObjectFactory();
 
-        void Init();
+        void Initialize(ComponentRegistry* component_registry);
         void Shutdown();
 
         Object* CreateRawObject(const std::string& name = "Empty Object", ObjectManager* object_manager = nullptr);
@@ -27,6 +28,6 @@ namespace Engine5
 
     private:
         std::vector<Object*> m_archetypes;
-        ComponentManager*    m_component_manager = nullptr;
+        ComponentManager*    m_archetype_component_manager = nullptr;
     };
 }

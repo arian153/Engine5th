@@ -11,7 +11,6 @@ namespace Engine5
         ~OSCommon();
 
         void Initialize();
-        void Update() const;
         void Shutdown();
 
         void SetConfineCursor(bool b_confine_cursor);
@@ -19,7 +18,7 @@ namespace Engine5
         void SetFullscreen(bool b_fullscreen);
         void SetClientResolution(int width, int height);
         void SetMonitorResolution();
-        void MessagePump() const;
+        void DispatchMessagePump() const;
 
         int  ClientWidth() const;
         int  ClientHeight() const;
@@ -28,6 +27,7 @@ namespace Engine5
         bool IsShowCursor() const;
         bool IsInit() const;
         bool IsQuit() const;
+        bool IsPaused() const;
         Real AspectRatio() const;
         Real MonitorScaleFactor() const;
 

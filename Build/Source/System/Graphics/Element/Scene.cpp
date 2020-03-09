@@ -18,8 +18,8 @@ namespace Engine5
         m_camera = new Camera();
         m_camera->SetPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_camera->Initialize();
-        m_mesh = new Mesh();
-        m_mesh->Initialize();
+        //m_mesh = new Mesh();
+        //m_mesh->Initialize();
     }
 
     void Scene::Update(Real dt) const

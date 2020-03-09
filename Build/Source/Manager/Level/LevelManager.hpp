@@ -5,6 +5,9 @@
 
 namespace Engine5
 {
+    class Application;
+    class TimeUtility;
+    class OSCommon;
     class RenderSystem;
     enum class eSubsystemFlag : unsigned long long;
     class LevelResource;
@@ -17,7 +20,7 @@ namespace Engine5
         LevelManager();
         ~LevelManager();
 
-        void Initialize(SpaceManager* space_manager);
+        void Initialize(Application* application);
         void Update();
         void Shutdown();
 
@@ -81,8 +84,11 @@ namespace Engine5
 
     private:
         std::list<PauseInfo> m_pause_levels;
-        SpaceManager*        m_space_manager  = nullptr;
-        RenderSystem*        m_render_system  = nullptr;
+        SpaceManager*        m_space_manager     = nullptr;
+        RenderSystem*        m_render_system     = nullptr;
+        OSCommon*            m_operating_system  = nullptr;
+        TimeUtility*         m_application_timer = nullptr;
+        Application*         m_application       = nullptr;
 
         //resource
         std::unordered_map<std::string, LevelResource*> m_level_resources;
