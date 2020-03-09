@@ -3,19 +3,18 @@
 #include <vector>
 #include "../Math/Utility/MathDef.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
-#include "../Core/OS-API/Windows/Windows.hpp"
 #include "Utility/MatrixManager.hpp"
 #include "DataType/Color.hpp"
 
 namespace Engine5
 {
-    class OSAPI;
+    class OSCommon;
     class RendererCommon;
 
     class RenderSystem
     {
     public:
-        explicit RenderSystem(OSWin32* os_api);
+        explicit RenderSystem(OSCommon* os_api);
         ~RenderSystem();
 
         void Initialize(int rendering_width, int rendering_height);
@@ -37,7 +36,7 @@ namespace Engine5
         void   RemoveScene(Scene* scene);
 
     private:
-        OSWin32*        m_os_api             = nullptr;
+        OSCommon*        m_os_api             = nullptr;
         RendererCommon*    m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;

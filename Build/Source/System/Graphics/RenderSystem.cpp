@@ -1,11 +1,11 @@
 #include "RenderSystem.hpp"
-#include "../Core/OS-API/Windows/Windows.hpp"
 #include "Renderer/RendererCommon.hpp"
 #include "Shader/ShaderManager.hpp"
+#include "../Core/OS-API/OSCommon.hpp"
 
 namespace Engine5
 {
-    RenderSystem::RenderSystem(OSWin32* os_api)
+    RenderSystem::RenderSystem(OSCommon* os_api)
         : m_os_api(os_api)
     {
     }

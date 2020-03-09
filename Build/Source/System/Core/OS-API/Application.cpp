@@ -1,6 +1,5 @@
 #include "Application.hpp"
-
-#include "Windows/Windows.hpp"
+#include "OSCommon.hpp"
 
 //systems
 #include "../../Graphics/RenderSystem.hpp"
@@ -9,6 +8,7 @@
 //utilities
 #include "../Utility/TimeUtility.hpp"
 #include <string>
+
 
 namespace Engine5
 {
@@ -30,7 +30,7 @@ namespace Engine5
 
     void Application::Initialize()
     {
-        m_os_api = new OSWin32(this);
+        m_os_api = new OSCommon(this);
         m_os_api->Initialize();
         m_render_system = new RenderSystem(m_os_api);
         m_render_system->Initialize(1280, 720);
@@ -96,7 +96,7 @@ namespace Engine5
         return m_s_application;
     }
 
-    OSWin32* Application::GetOSAPI() const
+    OSCommon* Application::GetOSAPI() const
     {
         return m_os_api;
     }
