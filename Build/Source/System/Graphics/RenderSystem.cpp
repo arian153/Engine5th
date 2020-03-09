@@ -5,7 +5,7 @@
 
 namespace Engine5
 {
-    RenderSystem::RenderSystem(WindowsAPI* os_api)
+    RenderSystem::RenderSystem(OSWin32* os_api)
         : m_os_api(os_api)
     {
     }

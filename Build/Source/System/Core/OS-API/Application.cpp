@@ -30,7 +30,7 @@ namespace Engine5
 
     void Application::Initialize()
     {
-        m_os_api = new WindowsAPI(this);
+        m_os_api = new OSWin32(this);
         m_os_api->Initialize();
         m_render_system = new RenderSystem(m_os_api);
         m_render_system->Initialize(1280, 720);
@@ -96,7 +96,7 @@ namespace Engine5
         return m_s_application;
     }
 
-    WindowsAPI* Application::GetOSAPI() const
+    OSWin32* Application::GetOSAPI() const
     {
         return m_os_api;
     }

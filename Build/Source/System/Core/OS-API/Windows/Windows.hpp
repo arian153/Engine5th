@@ -6,11 +6,11 @@ namespace Engine5
 {
     class Application;
 
-    class WindowsAPI
+    class OSWin32
     {
     public:
-        explicit WindowsAPI(Application* application);
-        ~WindowsAPI();
+        explicit OSWin32(Application* application);
+        ~OSWin32();
 
         void Initialize();
         void Update() const;

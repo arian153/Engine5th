@@ -10,23 +10,23 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     // Forward hwnd on because we can get messages (e.g., WM_CREATE)
     // before CreateWindow returns, and thus before mhMainWnd is valid.
     auto os_api = Engine5::Application::GetApplication()->GetOSAPI();
-    return static_cast<Engine5::WindowsAPI*>(os_api)->MessageProc(hwnd, msg, wparam, lparam);
+    return static_cast<Engine5::OSWin32*>(os_api)->MessageProc(hwnd, msg, wparam, lparam);
 }
 
 namespace Engine5
 {
-    WindowsAPI::WindowsAPI(Application* application)
+    OSWin32::OSWin32(Application* application)
         : m_application(application)
     {
         m_h_instance = GetModuleHandle(nullptr);
         m_style      = WINDOWED_STYLE_COMMON;
     }
 
-    WindowsAPI::~WindowsAPI()
+    OSWin32::~OSWin32()
     {
     }
 
-    void WindowsAPI::Initialize()
+    void OSWin32::Initialize()
     {
         SetMonitorResolution();
         WNDCLASS wc;
@@ -71,16 +71,16 @@ namespace Engine5
         m_b_init = true;
     }
 
-    void WindowsAPI::Update() const
+    void OSWin32::Update() const
     {
         MessagePump();
     }
 
-    void WindowsAPI::Shutdown()
+    void OSWin32::Shutdown()
     {
     }
 
-    void WindowsAPI::SetConfineCursor(bool flag)
+    void OSWin32::SetConfineCursor(bool flag)
     {
         m_b_confine_cursor = flag;
         if (flag == true)
@@ -97,13 +97,13 @@ namespace Engine5
         }
     }
 
-    void WindowsAPI::SetShowCursor(bool flag)
+    void OSWin32::SetShowCursor(bool flag)
     {
         m_b_show_mouse_cursor = flag;
         ShowCursor(flag);
     }
 
-    void WindowsAPI::SetFullscreen(bool flag)
+    void OSWin32::SetFullscreen(bool flag)
     {
         if (flag == true)
         {
@@ -162,7 +162,7 @@ namespace Engine5
         SetForegroundWindow(m_h_wnd);
     }
 
-    void WindowsAPI::SetClientResolution(int width, int height)
+    void OSWin32::SetClientResolution(int width, int height)
     {
         if (m_b_fullscreen == true)
         {
@@ -178,13 +178,13 @@ namespace Engine5
         SetFullscreen(m_b_fullscreen);
     }
 
-    void WindowsAPI::SetMonitorResolution()
+    void OSWin32::SetMonitorResolution()
     {
         m_monitor_screen_width  = GetSystemMetrics(SM_CXSCREEN);
         m_monitor_screen_height = GetSystemMetrics(SM_CYSCREEN);
     }
 
-    LRESULT WindowsAPI::MessageProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+    LRESULT OSWin32::MessageProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     {
         switch (msg)
         {
@@ -348,7 +348,7 @@ namespace Engine5
         return 0;
     }
 
-    void WindowsAPI::MessagePump() const
+    void OSWin32::MessagePump() const
     {
         MSG msg = {nullptr};
         while (PeekMessage(&msg, m_h_wnd, 0, 0, PM_REMOVE))
@@ -358,7 +358,7 @@ namespace Engine5
         }
     }
 
-    void WindowsAPI::AdjustAndCenterWindow(DWORD style, RECT& size, int& x_start, int& y_start) const
+    void OSWin32::AdjustAndCenterWindow(DWORD style, RECT& size, int& x_start, int& y_start) const
     {
         DEVMODE dm = {0};
         /*Get the size of the screen*/
@@ -377,7 +377,7 @@ namespace Engine5
         y_start = (dm.dmPelsHeight / 2) - static_cast<int>(movement_height);
     }
 
-    DWORD WindowsAPI::GetWindowModeRelatedResolution() const
+    DWORD OSWin32::GetWindowModeRelatedResolution() const
     {
         if (m_curr_client_height >= m_monitor_screen_height)
         {
@@ -386,17 +386,17 @@ namespace Engine5
         return WINDOWED_STYLE_COMMON;
     }
 
-    HINSTANCE WindowsAPI::AppInstance() const
+    HINSTANCE OSWin32::AppInstance() const
     {
         return m_h_instance;
     }
 
-    HWND WindowsAPI::AppHWnd() const
+    HWND OSWin32::AppHWnd() const
     {
         return m_h_wnd;
     }
 
-    Real WindowsAPI::MonitorScaleFactor() const
+    Real OSWin32::MonitorScaleFactor() const
     {
         //POINT               pt_zero         = {0, 0};
         //HMONITOR            primary_monitor = MonitorFromPoint(pt_zero, MONITOR_DEFAULTTOPRIMARY);
@@ -461,47 +461,47 @@ namespace Engine5
         return scale_result;
     }
 
-    int WindowsAPI::ClientWidth() const
+    int OSWin32::ClientWidth() const
     {
         return m_curr_client_width;
     }
 
-    int WindowsAPI::ClientHeight() const
+    int OSWin32::ClientHeight() const
     {
         return m_curr_client_height;
     }
 
-    bool WindowsAPI::IsFullscreen() const
+    bool OSWin32::IsFullscreen() const
     {
         return m_b_fullscreen;
     }
 
-    bool WindowsAPI::IsConfineCursor() const
+    bool OSWin32::IsConfineCursor() const
     {
         return m_b_confine_cursor;
     }
 
-    bool WindowsAPI::IsShowCursor() const
+    bool OSWin32::IsShowCursor() const
     {
         return m_b_show_mouse_cursor;
     }
 
-    bool WindowsAPI::IsInit() const
+    bool OSWin32::IsInit() const
     {
         return m_b_init;
     }
 
-    bool WindowsAPI::IsQuit() const
+    bool OSWin32::IsQuit() const
     {
         return m_b_quit;
     }
 
-    Real WindowsAPI::AspectRatio() const
+    Real OSWin32::AspectRatio() const
     {
         return static_cast<Real>(m_curr_client_width) / m_curr_client_height;
     }
 
-    Application* WindowsAPI::GetApplication() const
+    Application* OSWin32::GetApplication() const
     {
         return m_application;
     }

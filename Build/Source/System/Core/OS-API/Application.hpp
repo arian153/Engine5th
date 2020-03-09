@@ -5,7 +5,7 @@ namespace Engine5
 {
     class RenderSystem;
     class PhysicsSystem;
-    class WindowsAPI;
+    class OSWin32;
     class TimeUtility;
 
     class Application
@@ -25,7 +25,7 @@ namespace Engine5
         Real CurrentSPF() const;
 
         static Application* GetApplication();
-        WindowsAPI*         GetOSAPI() const;
+        OSWin32*         GetOSAPI() const;
 
     private:
         void CalculateFrameStatus();
@@ -34,7 +34,7 @@ namespace Engine5
         void OnQuit();
 
     private:
-        friend class WindowsAPI;
+        friend class OSWin32;
 
     private:
         //time-frame data
@@ -49,7 +49,7 @@ namespace Engine5
     private:
         static inline Application* m_s_application = nullptr;
         //sub systems
-        WindowsAPI*    m_os_api         = nullptr;
+        OSWin32*    m_os_api         = nullptr;
         RenderSystem*  m_render_system  = nullptr;
         PhysicsSystem* m_physics_system = nullptr;
         TimeUtility*   m_time_utility   = nullptr;
