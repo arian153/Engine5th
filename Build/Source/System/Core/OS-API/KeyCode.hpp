@@ -105,7 +105,7 @@ namespace Engine5
       , Keyboard_MAX
     };
 
-    enum class KeyID_GamePad
+    enum class eKeyCodeGamePad
     {
         GamePad_NONE
       , GamePad_DPAD_Up
@@ -125,7 +125,7 @@ namespace Engine5
       , GamePad_MAX
     };
 
-    enum class KeyID_TextEditor
+    enum class eKeyCodeTextEditor
     {
         TextEdit_Tab
       , TextEdit_LeftArrow
@@ -151,7 +151,7 @@ namespace Engine5
       , TextEdit_MAX
     };
 
-    enum class KeyID_Editor
+    enum class eKeyCodeGeneralEditor
     {
         Editor_Delete
       , Editor_C //CTRL+C: copy
@@ -164,9 +164,9 @@ namespace Engine5
 
     struct ButtonState
     {
-        bool b_prev_pressed;
-        bool b_curr_pressed;
-        bool b_down;
+        bool b_prev_pressed = false;
+        bool b_curr_pressed = false;
+        bool b_down         = false;
     };
 
     enum class ButtonEventState
