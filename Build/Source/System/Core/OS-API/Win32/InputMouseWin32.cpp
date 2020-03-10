@@ -88,11 +88,17 @@ namespace Engine5
     void InputMouse::ProcessMouseEvent(bool down, eKeyCodeMouse code, int x, int y)
     {
         m_button_state[static_cast<size_t>(code)].b_down = down;
-        m_previous_position.x                            = m_current_position.x;
-        m_previous_position.y                            = m_current_position.y;
-        m_current_position.x                             = x;
-        m_current_position.y                             = y;
-        m_b_was_mouse_move                               = true;
+        /*if (down == false)
+        {
+            MouseEvent ms_event(ButtonEventState::ButtonUp);
+            ms_event.key = code;
+            m_subject->Notify(ms_event, MouseEvent::StateToString(ButtonEventState::ButtonUp));
+        }*/
+        m_previous_position.x = m_current_position.x;
+        m_previous_position.y = m_current_position.y;
+        m_current_position.x  = x;
+        m_current_position.y  = y;
+        m_b_was_mouse_move    = true;
     }
 
     void InputMouse::ProcessMouseEvent(int x, int y)
