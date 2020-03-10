@@ -1,6 +1,6 @@
 #include "InputMouseWin32.hpp"
-#include "../InputMouse.hpp"
 #include "../../Utility/CoreUtility.hpp"
+#include "../Input/MouseInput.hpp"
 
 namespace Engine5
 {
@@ -17,17 +17,17 @@ namespace Engine5
         switch (wparam)
         {
         case VK_LBUTTON:
-            return eKeyCodeMouse::Mouse_Left;
+            return eKeyCodeMouse::Left;
         case VK_RBUTTON:
-            return eKeyCodeMouse::Mouse_Right;
+            return eKeyCodeMouse::Right;
         case VK_MBUTTON:
-            return eKeyCodeMouse::Mouse_Middle;
+            return eKeyCodeMouse::Middle;
         case VK_XBUTTON1:
-            return eKeyCodeMouse::Mouse_X1;
+            return eKeyCodeMouse::X1;
         case VK_XBUTTON2:
-            return eKeyCodeMouse::Mouse_X2;
+            return eKeyCodeMouse::X2;
         default:
-            return eKeyCodeMouse::Mouse_NONE;
+            return eKeyCodeMouse::NONE;
         }
     }
 
@@ -35,35 +35,36 @@ namespace Engine5
     {
         switch (button_code)
         {
-        case eKeyCodeMouse::Mouse_NONE:
+        case eKeyCodeMouse::NONE:
             return 0;
-        case eKeyCodeMouse::Mouse_Left:
+        case eKeyCodeMouse::Left:
             return VK_LBUTTON;
-        case eKeyCodeMouse::Mouse_Right:
+        case eKeyCodeMouse::Right:
             return VK_RBUTTON;
-        case eKeyCodeMouse::Mouse_Middle:
+        case eKeyCodeMouse::Middle:
             return VK_MBUTTON;
-        case eKeyCodeMouse::Mouse_X1:
+        case eKeyCodeMouse::X1:
             return VK_XBUTTON1;
-        case eKeyCodeMouse::Mouse_X2:
+        case eKeyCodeMouse::X2:
             return VK_XBUTTON2;
-        case eKeyCodeMouse::Mouse_Max:
+        case eKeyCodeMouse::Max:
             return 0;
         default:
             return 0;
         }
     }
 
-    InputMouse::InputMouse()
+    MouseInput::MouseInput()
         : m_current_position(), m_previous_position(), m_button_state{}
     {
+        Reset();
     }
 
-    InputMouse::~InputMouse()
+    MouseInput::~MouseInput()
     {
     }
 
-    void InputMouse::Reset()
+    void MouseInput::Reset()
     {
         for (size_t i = 0; i < MAXIMUM_BUTTON_COUNT; ++i)
         {
@@ -77,7 +78,7 @@ namespace Engine5
         m_b_was_mouse_move = false;
     }
 
-    void InputMouse::ResetPressed()
+    void MouseInput::ResetPressed()
     {
         for (size_t i = 0; i < MAXIMUM_BUTTON_COUNT; ++i)
         {
@@ -85,9 +86,9 @@ namespace Engine5
         }
     }
 
-    void InputMouse::ProcessMouseEvent(bool down, eKeyCodeMouse code, int x, int y)
+    void MouseInput::ProcessMouseEvent(bool b_down, eKeyCodeMouse code, int x, int y)
     {
-        m_button_state[static_cast<size_t>(code)].b_down = down;
+        m_button_state[static_cast<size_t>(code)].b_down = b_down;
         /*if (down == false)
         {
             MouseEvent ms_event(ButtonEventState::ButtonUp);
@@ -101,7 +102,7 @@ namespace Engine5
         m_b_was_mouse_move    = true;
     }
 
-    void InputMouse::ProcessMouseEvent(int x, int y)
+    void MouseInput::ProcessMouseEvent(int x, int y)
     {
         m_previous_position.x = m_current_position.x;
         m_previous_position.y = m_current_position.y;
@@ -110,14 +111,14 @@ namespace Engine5
         m_b_was_mouse_move    = true;
     }
 
-    void InputMouse::ProcessMouseWheel(short wheel)
+    void MouseInput::ProcessMouseWheel(short wheel)
     {
         m_previous_wheel = m_current_wheel;
         m_current_wheel += wheel;
         m_b_was_wheel = true;
     }
 
-    void InputMouse::ProcessPressed()
+    void MouseInput::ProcessPressed()
     {
         for (int i = 0; i < MAXIMUM_BUTTON_COUNT; ++i)
         {
@@ -169,17 +170,17 @@ namespace Engine5
         }
     }
 
-    bool InputMouse::IsDown(eKeyCodeMouse key_code) const
+    bool MouseInput::IsDown(eKeyCodeMouse key_code) const
     {
         return m_button_state[static_cast<size_t>(key_code)].b_down;
     }
 
-    bool InputMouse::IsPressed(eKeyCodeMouse key_code) const
+    bool MouseInput::IsPressed(eKeyCodeMouse key_code) const
     {
         return m_button_state[static_cast<size_t>(key_code)].b_curr_pressed;
     }
 
-    bool InputMouse::IsAnyKeyDown() const
+    bool MouseInput::IsAnyKeyDown() const
     {
         for (size_t i = 0; i < MAXIMUM_BUTTON_COUNT; ++i)
         {
@@ -189,7 +190,7 @@ namespace Engine5
         return false;
     }
 
-    bool InputMouse::IsAnyKeyPressed() const
+    bool MouseInput::IsAnyKeyPressed() const
     {
         for (int i = 0; i < MAXIMUM_BUTTON_COUNT; ++i)
         {
@@ -199,38 +200,38 @@ namespace Engine5
         return false;
     }
 
-    size_t InputMouse::Repeated(eKeyCodeMouse key_code) const
+    size_t MouseInput::Repeated(eKeyCodeMouse key_code) const
     {
         E5_UNUSED_PARAM(key_code);
         return 0;
     }
 
-    MousePosition InputMouse::CurrentPosition() const
+    MousePosition MouseInput::CurrentPosition() const
     {
         return m_current_position;
     }
 
-    MousePosition InputMouse::PreviousPosition() const
+    MousePosition MouseInput::PreviousPosition() const
     {
         return m_previous_position;
     }
 
-    int InputMouse::CurrentMouseWheel() const
+    int MouseInput::CurrentMouseWheel() const
     {
         return static_cast<int>(m_current_wheel);
     }
 
-    int InputMouse::PreviousMouseWheel() const
+    int MouseInput::PreviousMouseWheel() const
     {
         return static_cast<int>(m_previous_wheel);
     }
 
-    bool InputMouse::IsWheelRolling() const
+    bool MouseInput::IsWheelRolling() const
     {
         return m_current_wheel != m_previous_wheel;
     }
 
-    Real InputMouse::MouseWheelRollingDirection() const
+    Real MouseInput::MouseWheelRollingDirection() const
     {
         int wheel_value = m_current_wheel - m_previous_wheel;
         return static_cast<Real>(wheel_value) / fabsf(static_cast<Real>(wheel_value));

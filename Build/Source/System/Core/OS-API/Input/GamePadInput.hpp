@@ -1,7 +1,7 @@
 #pragma once
-#include "OSAPI.hpp"
+#include "../OSAPI.hpp"
 #include IncludeGamePadAPI
-#include "../../Math/Utility/MathDef.hpp"
+#include "../../../Math/Utility/MathDef.hpp"
 #include "KeyCode.hpp"
 
 namespace Engine5
@@ -15,7 +15,7 @@ namespace Engine5
     struct PadState
     {
         bool        b_plugged = false;
-        ButtonState button_state[ (size_t)eKeyCodeGamePad::GamePad_MAX ];
+        ButtonState button_state[ (size_t)eKeyCodeGamePad::MAX ];
 
         //analog data
         Real trigger_right       = 0.0f;
@@ -26,21 +26,15 @@ namespace Engine5
         Real thumb_stick_left_y  = 0.0f;
     };
 
-    class InputGamePad : public InputGamePadAPI
+    class GamePadInput : public InputGamePadAPI
     {
     public:
-        InputGamePad();
-        ~InputGamePad();
-
-        void Reset();
-        void ResetPressed();
-
-        void ProcGamePadEvent();
-        void ProcessPressed();
+        GamePadInput();
+        ~GamePadInput();
 
     public: //interface 
-        bool IsDown(eKeyCodeGamePad id, size_t pad = 0) const;
-        bool IsPressed(eKeyCodeGamePad id, size_t pad = 0) const;
+        bool IsDown(eKeyCodeGamePad key_code, size_t pad = 0) const;
+        bool IsPressed(eKeyCodeGamePad key_code, size_t pad = 0) const;
 
         bool IsAnyKeyDown() const;
         bool IsAnyKeyPressed() const;
@@ -59,10 +53,16 @@ namespace Engine5
 
         bool IsGamePadPluggedIn(size_t pad = 0) const;
 
-        void MakeVibration(int lMotor = 4096, int rMotor = 4096, int pad = 0);
+        void MakeVibration(int left_motor = 4096, int right_motor = 4096, int pad = 0);
     private:
-        const size_t MAXIMUM_GAME_PAD_BUTTON_COUNT = (size_t)eKeyCodeGamePad::GamePad_MAX;
+        const size_t MAXIMUM_GAME_PAD_BUTTON_COUNT = (size_t)eKeyCodeGamePad::MAX;
 
+        void Reset();
+        void ResetPressed();
+        void ProcessGamePad();
+        void ProcessPressed();
+    private:
+        friend class InputManager;
     private:
         PadState m_game_pad_state[ USER_MAX_COUNT ];
     };

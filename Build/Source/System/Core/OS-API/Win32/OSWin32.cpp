@@ -7,6 +7,10 @@
 #include "../OSCommon.hpp"
 #include "../../Utility/TimeUtility.hpp"
 #include "../../../../Manager/Level/LevelManager.hpp"
+#include "../Input/InputManager.hpp"
+#include "../Input/MouseInput.hpp"
+#include "../Input/KeyboardInput.hpp"
+#include <WindowsX.h>
 
 namespace
 {
@@ -129,51 +133,45 @@ namespace Engine5
             ((MINMAXINFO*)lparam)->ptMinTrackSize.y = 200;
             break;
         case WM_LBUTTONUP:
-            //m_mouse_input->ProcMouseEvent(false, KeyID_Mouse::Mouse_Left, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+            m_mouse_input->ProcessMouseEvent(false, eKeyCodeMouse::Left, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
             ReleaseCapture();
             break;
         case WM_LBUTTONDOWN:
-            //m_mouse_input->ProcMouseEvent(true, KeyID_Mouse::Mouse_Left, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+            m_mouse_input->ProcessMouseEvent(true, eKeyCodeMouse::Left, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
             SetCapture(m_h_wnd);
             break;
         case WM_RBUTTONUP:
-            //m_mouse_input->ProcMouseEvent(false, KeyID_Mouse::Mouse_Right, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+            m_mouse_input->ProcessMouseEvent(false, eKeyCodeMouse::Right, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
             ReleaseCapture();
             break;
         case WM_RBUTTONDOWN:
-            //m_mouse_input->ProcMouseEvent(true, KeyID_Mouse::Mouse_Right, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+            m_mouse_input->ProcessMouseEvent(true, eKeyCodeMouse::Right, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
             SetCapture(m_h_wnd);
             break;
         case WM_MBUTTONUP:
-            //m_mouse_input->ProcMouseEvent(false, KeyID_Mouse::Mouse_Middle, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+            m_mouse_input->ProcessMouseEvent(false, eKeyCodeMouse::Middle, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
             ReleaseCapture();
             break;
         case WM_MBUTTONDOWN:
-            //m_mouse_input->ProcMouseEvent(true, KeyID_Mouse::Mouse_Middle, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+            m_mouse_input->ProcessMouseEvent(true, eKeyCodeMouse::Middle, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
             SetCapture(m_h_wnd);
             break;
         case WM_XBUTTONUP:
-            //m_mouse_input->ProcMouseEvent(false, KeyID_Mouse::Mouse_X1, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+            m_mouse_input->ProcessMouseEvent(false, eKeyCodeMouse::X1, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
             ReleaseCapture();
             break;
         case WM_XBUTTONDOWN:
-            //m_mouse_input->ProcMouseEvent(true, KeyID_Mouse::Mouse_X1, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+            m_mouse_input->ProcessMouseEvent(true, eKeyCodeMouse::X1, GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
             SetCapture(m_h_wnd);
             break;
         case WM_MOUSEMOVE:
-            //m_mouse_input->ProcMouseEvent(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+            m_mouse_input->ProcessMouseEvent(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
             break;
         case WM_MOUSEWHEEL:
-            //m_mouse_input->ProcMouseWheel(GET_WHEEL_DELTA_WPARAM(wparam));
+            m_mouse_input->ProcessMouseWheel(GET_WHEEL_DELTA_WPARAM(wparam));
             break;
         case WM_CHAR:
-            //m_keyboard_input->ProcessString(wparam);
-            break;
-        case WM_KEYDOWN:
-            //m_keyboard_input->ProcKeyBoardEvent(true, wparam, lparam);
-            break;
-        case WM_KEYUP:
-            //m_keyboard_input->ProcKeyBoardEvent(false, wparam, lparam);
+            m_keyboard_input->ProcessString(wparam);
             break;
             // WM_DESTROY is sent when the window is being destroyed.
         case WM_DESTROY:
@@ -229,6 +227,12 @@ namespace Engine5
     HWND OSWin32::AppHWnd() const
     {
         return m_h_wnd;
+    }
+
+    void OSWin32::SetInputManager(InputManager* input_manager)
+    {
+        m_keyboard_input = input_manager->GetKeyboardInput();
+        m_mouse_input    = input_manager->GetMouseInput();
     }
 
     OSCommon::OSCommon(Application* application)

@@ -11,9 +11,10 @@ namespace Engine5
         InputGamePadWin32();
         ~InputGamePadWin32();
 
+    protected:
         void ProcessButtons(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const;
-        void ProcessThumb_L(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const;
-        void ProcessThumb_R(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const;
+        void ProcessLeftThumb(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const;
+        void ProcessRightThumb(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const;
         void ProcessTrigger(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const;
 
     protected:

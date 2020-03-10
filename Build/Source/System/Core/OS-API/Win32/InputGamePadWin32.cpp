@@ -1,6 +1,7 @@
 #include "InputGamePadWin32.hpp"
-#include "../InputGamePad.hpp"
 #include "../../../Math/Utility/Utility.hpp"
+#include "../Input/KeyCode.hpp"
+#include "../Input/GamePadInput.hpp"
 
 namespace Engine5
 {
@@ -15,21 +16,21 @@ namespace Engine5
 
     void InputGamePadWin32::ProcessButtons(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
     {
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_DPAD_Up].b_down        = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_UP) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_DPAD_Down].b_down      = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_DOWN) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_DPAD_Left].b_down      = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_LEFT) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_DPAD_Right].b_down     = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_Start].b_down          = ((game_pad->wButtons & XINPUT_GAMEPAD_START) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_Back].b_down           = ((game_pad->wButtons & XINPUT_GAMEPAD_BACK) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_X].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_X) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_Y].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_Y) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_A].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_A) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_B].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_B) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_Shoulder_Left].b_down  = ((game_pad->wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_Shoulder_Right].b_down = ((game_pad->wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_Thumb_Left].b_down     = ((game_pad->wButtons & XINPUT_GAMEPAD_LEFT_THUMB) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::GamePad_Thumb_Right].b_down    = ((game_pad->wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) != 0);
-        for (size_t code = 0; code < (size_t)eKeyCodeGamePad::GamePad_MAX; ++code)
+        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Up].b_down        = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_UP) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Down].b_down      = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_DOWN) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Left].b_down      = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_LEFT) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Right].b_down     = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Start].b_down          = ((game_pad->wButtons & XINPUT_GAMEPAD_START) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Back].b_down           = ((game_pad->wButtons & XINPUT_GAMEPAD_BACK) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::X].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_X) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Y].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_Y) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::A].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_A) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::B].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_B) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Shoulder_Left].b_down  = ((game_pad->wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Shoulder_Right].b_down = ((game_pad->wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Thumb_Left].b_down     = ((game_pad->wButtons & XINPUT_GAMEPAD_LEFT_THUMB) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Thumb_Right].b_down    = ((game_pad->wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) != 0);
+        for (size_t code = 0; code < (size_t)eKeyCodeGamePad::MAX; ++code)
         {
             /*if (pad_state.button_state[code].b_down == true)
             {
@@ -51,7 +52,7 @@ namespace Engine5
         }
     }
 
-    void InputGamePadWin32::ProcessThumb_L(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
+    void InputGamePadWin32::ProcessLeftThumb(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
     {
         Real left_x = game_pad->sThumbLX;
         Real left_y = game_pad->sThumbLY;
@@ -81,7 +82,7 @@ namespace Engine5
         pad_state.thumb_stick_left_y = normalized_ly * normalized_magnitude;
     }
 
-    void InputGamePadWin32::ProcessThumb_R(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
+    void InputGamePadWin32::ProcessRightThumb(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
     {
         Real right_x = game_pad->sThumbRX;
         Real right_y = game_pad->sThumbRY;
@@ -119,16 +120,17 @@ namespace Engine5
         pad_state.trigger_right = right_trigger / 255.0f;
     }
 
-    InputGamePad::InputGamePad()
+    GamePadInput::GamePadInput()
         : m_game_pad_state{}
     {
+        Reset();
     }
 
-    InputGamePad::~InputGamePad()
+    GamePadInput::~GamePadInput()
     {
     }
 
-    void InputGamePad::Reset()
+    void GamePadInput::Reset()
     {
         for (size_t j = 0; j < USER_MAX_COUNT; ++j)
         {
@@ -141,7 +143,7 @@ namespace Engine5
         }
     }
 
-    void InputGamePad::ResetPressed()
+    void GamePadInput::ResetPressed()
     {
         for (size_t j = 0; j < USER_MAX_COUNT; ++j)
         {
@@ -152,7 +154,7 @@ namespace Engine5
         }
     }
 
-    void InputGamePad::ProcGamePadEvent()
+    void GamePadInput::ProcessGamePad()
     {
         for (DWORD controller_index = 0; controller_index < XUSER_MAX_COUNT; ++controller_index)
         {
@@ -163,8 +165,8 @@ namespace Engine5
                 //dwPacketNumber
                 XINPUT_GAMEPAD* game_pad = &m_controllers[controller_index].Gamepad;
                 ProcessButtons(game_pad, m_game_pad_state[controller_index]);
-                ProcessThumb_L(game_pad, m_game_pad_state[controller_index]);
-                ProcessThumb_R(game_pad, m_game_pad_state[controller_index]);
+                ProcessLeftThumb(game_pad, m_game_pad_state[controller_index]);
+                ProcessRightThumb(game_pad, m_game_pad_state[controller_index]);
                 ProcessTrigger(game_pad, m_game_pad_state[controller_index]);
             }
             else
@@ -175,7 +177,7 @@ namespace Engine5
         }
     }
 
-    void InputGamePad::ProcessPressed()
+    void GamePadInput::ProcessPressed()
     {
         for (size_t pad = 0; pad < USER_MAX_COUNT; ++pad)
             if (m_game_pad_state[pad].b_plugged == true)
@@ -207,17 +209,17 @@ namespace Engine5
             }
     }
 
-    bool InputGamePad::IsDown(eKeyCodeGamePad id, size_t pad) const
+    bool GamePadInput::IsDown(eKeyCodeGamePad key_code, size_t pad) const
     {
-        return m_game_pad_state[pad].button_state[static_cast<size_t>(id)].b_down;
+        return m_game_pad_state[pad].button_state[static_cast<size_t>(key_code)].b_down;
     }
 
-    bool InputGamePad::IsPressed(eKeyCodeGamePad id, size_t pad) const
+    bool GamePadInput::IsPressed(eKeyCodeGamePad key_code, size_t pad) const
     {
-        return m_game_pad_state[pad].button_state[static_cast<size_t>(id)].b_curr_pressed;
+        return m_game_pad_state[pad].button_state[static_cast<size_t>(key_code)].b_curr_pressed;
     }
 
-    bool InputGamePad::IsAnyKeyDown() const
+    bool GamePadInput::IsAnyKeyDown() const
     {
         for (size_t j = 0; j < USER_MAX_COUNT; ++j)
         {
@@ -232,7 +234,7 @@ namespace Engine5
         return false;
     }
 
-    bool InputGamePad::IsAnyKeyPressed() const
+    bool GamePadInput::IsAnyKeyPressed() const
     {
         for (size_t j = 0; j < USER_MAX_COUNT; ++j)
         {
@@ -247,7 +249,7 @@ namespace Engine5
         return false;
     }
 
-    AnalogStick InputGamePad::LeftAnalogStick(size_t pad) const
+    AnalogStick GamePadInput::LeftAnalogStick(size_t pad) const
     {
         AnalogStick result;
         result.x = m_game_pad_state[pad].thumb_stick_left_x;
@@ -255,7 +257,7 @@ namespace Engine5
         return result;
     }
 
-    AnalogStick InputGamePad::RightAnalogStick(size_t pad) const
+    AnalogStick GamePadInput::RightAnalogStick(size_t pad) const
     {
         AnalogStick result;
         result.x = m_game_pad_state[pad].thumb_stick_right_x;
@@ -263,47 +265,47 @@ namespace Engine5
         return result;
     }
 
-    Real InputGamePad::LeftStickAngle_Rad(size_t pad) const
+    Real GamePadInput::LeftStickAngle_Rad(size_t pad) const
     {
         return Utility::XYToRadian(m_game_pad_state[pad].thumb_stick_left_x, m_game_pad_state[pad].thumb_stick_left_y);
     }
 
-    Real InputGamePad::RightStickAngle_Rad(size_t pad) const
+    Real GamePadInput::RightStickAngle_Rad(size_t pad) const
     {
         return Utility::XYToRadian(m_game_pad_state[pad].thumb_stick_right_x, m_game_pad_state[pad].thumb_stick_right_y);
     }
 
-    Real InputGamePad::LeftStickAngle_Deg(size_t pad) const
+    Real GamePadInput::LeftStickAngle_Deg(size_t pad) const
     {
         return Utility::RadiansToDegrees(LeftStickAngle_Rad(pad));
     }
 
-    Real InputGamePad::RightStickAngle_Deg(size_t pad) const
+    Real GamePadInput::RightStickAngle_Deg(size_t pad) const
     {
         return Utility::RadiansToDegrees(RightStickAngle_Rad(pad));
     }
 
-    Real InputGamePad::LeftTrigger(size_t pad) const
+    Real GamePadInput::LeftTrigger(size_t pad) const
     {
         return m_game_pad_state[pad].trigger_left;
     }
 
-    Real InputGamePad::RightTrigger(size_t pad) const
+    Real GamePadInput::RightTrigger(size_t pad) const
     {
         return m_game_pad_state[pad].trigger_right;
     }
 
-    bool InputGamePad::IsGamePadPluggedIn(size_t pad) const
+    bool GamePadInput::IsGamePadPluggedIn(size_t pad) const
     {
         return m_game_pad_state[pad].b_plugged;
     }
 
-    void InputGamePad::MakeVibration(int lMotor, int rMotor, int pad)
+    void GamePadInput::MakeVibration(int left_motor, int right_motor, int pad)
     {
         XINPUT_VIBRATION Vibration;
         ZeroMemory(&Vibration, sizeof(XINPUT_VIBRATION));
-        Vibration.wLeftMotorSpeed  = (WORD)lMotor;
-        Vibration.wRightMotorSpeed = (WORD)rMotor;
+        Vibration.wLeftMotorSpeed  = (WORD)left_motor;
+        Vibration.wRightMotorSpeed = (WORD)right_motor;
         XInputSetState(pad, &Vibration);
     }
 }

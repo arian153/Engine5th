@@ -1,6 +1,6 @@
 #include "InputKeyboardWin32.hpp"
-#include "../InputKeyboard.hpp"
 #include "../../Utility/CoreUtility.hpp"
+#include "../Input/KeyboardInput.hpp"
 
 namespace Engine5
 {
@@ -12,11 +12,11 @@ namespace Engine5
     {
     }
 
-    void InputKeyboardWin32::ProcessString(WPARAM wparam, std::wstring* string)
+    void InputKeyboardWin32::ProcessString(WPARAM wparam) const
     {
-        if (string != nullptr)
+        if (m_string != nullptr)
         {
-            string->push_back((wchar_t)wparam);
+            m_string->push_back((wchar_t)wparam);
         }
     }
 
@@ -25,163 +25,163 @@ namespace Engine5
         switch (wparam)
         {
         case VK_RETURN:
-            return eKeyCodeKeyboard::Keyboard_Enter;
+            return eKeyCodeKeyboard::Enter;
         case VK_ESCAPE:
-            return eKeyCodeKeyboard::Keyboard_Escape;
+            return eKeyCodeKeyboard::Escape;
         case VK_BACK:
-            return eKeyCodeKeyboard::Keyboard_Backspace;
+            return eKeyCodeKeyboard::Backspace;
         case VK_TAB:
-            return eKeyCodeKeyboard::Keyboard_Tab;
+            return eKeyCodeKeyboard::Tab;
         case VK_SPACE:
-            return eKeyCodeKeyboard::Keyboard_Space;
+            return eKeyCodeKeyboard::Space;
         case VK_OEM_COMMA:
-            return eKeyCodeKeyboard::Keyboard_Comma;
+            return eKeyCodeKeyboard::Comma;
         case VK_OEM_MINUS:
-            return eKeyCodeKeyboard::Keyboard_Minus;
+            return eKeyCodeKeyboard::Minus;
         case VK_OEM_PERIOD:
-            return eKeyCodeKeyboard::Keyboard_Period;
+            return eKeyCodeKeyboard::Period;
         case 0x30:
-            return eKeyCodeKeyboard::Keyboard_0;
+            return eKeyCodeKeyboard::_0;
         case 0x31:
-            return eKeyCodeKeyboard::Keyboard_1;
+            return eKeyCodeKeyboard::_1;
         case 0x32:
-            return eKeyCodeKeyboard::Keyboard_2;
+            return eKeyCodeKeyboard::_2;
         case 0x33:
-            return eKeyCodeKeyboard::Keyboard_3;
+            return eKeyCodeKeyboard::_3;
         case 0x34:
-            return eKeyCodeKeyboard::Keyboard_4;
+            return eKeyCodeKeyboard::_4;
         case 0x35:
-            return eKeyCodeKeyboard::Keyboard_5;
+            return eKeyCodeKeyboard::_5;
         case 0x36:
-            return eKeyCodeKeyboard::Keyboard_6;
+            return eKeyCodeKeyboard::_6;
         case 0x37:
-            return eKeyCodeKeyboard::Keyboard_7;
+            return eKeyCodeKeyboard::_7;
         case 0x38:
-            return eKeyCodeKeyboard::Keyboard_8;
+            return eKeyCodeKeyboard::_8;
         case 0x39:
-            return eKeyCodeKeyboard::Keyboard_9;
+            return eKeyCodeKeyboard::_9;
         case VK_CAPITAL:
-            return eKeyCodeKeyboard::Keyboard_CapsLock;
+            return eKeyCodeKeyboard::CapsLock;
         case 0x41:
-            return eKeyCodeKeyboard::Keyboard_A;
+            return eKeyCodeKeyboard::A;
         case 0x42:
-            return eKeyCodeKeyboard::Keyboard_B;
+            return eKeyCodeKeyboard::B;
         case 0x43:
-            return eKeyCodeKeyboard::Keyboard_C;
+            return eKeyCodeKeyboard::C;
         case 0x44:
-            return eKeyCodeKeyboard::Keyboard_D;
+            return eKeyCodeKeyboard::D;
         case 0x45:
-            return eKeyCodeKeyboard::Keyboard_E;
+            return eKeyCodeKeyboard::E;
         case 0x46:
-            return eKeyCodeKeyboard::Keyboard_F;
+            return eKeyCodeKeyboard::F;
         case 0x47:
-            return eKeyCodeKeyboard::Keyboard_G;
+            return eKeyCodeKeyboard::G;
         case 0x48:
-            return eKeyCodeKeyboard::Keyboard_H;
+            return eKeyCodeKeyboard::H;
         case 0x49:
-            return eKeyCodeKeyboard::Keyboard_I;
+            return eKeyCodeKeyboard::I;
         case 0x4A:
-            return eKeyCodeKeyboard::Keyboard_J;
+            return eKeyCodeKeyboard::J;
         case 0x4B:
-            return eKeyCodeKeyboard::Keyboard_K;
+            return eKeyCodeKeyboard::K;
         case 0x4C:
-            return eKeyCodeKeyboard::Keyboard_L;
+            return eKeyCodeKeyboard::L;
         case 0x4D:
-            return eKeyCodeKeyboard::Keyboard_M;
+            return eKeyCodeKeyboard::M;
         case 0x4E:
-            return eKeyCodeKeyboard::Keyboard_N;
+            return eKeyCodeKeyboard::N;
         case 0x4F:
-            return eKeyCodeKeyboard::Keyboard_O;
+            return eKeyCodeKeyboard::O;
         case 0x50:
-            return eKeyCodeKeyboard::Keyboard_P;
+            return eKeyCodeKeyboard::P;
         case 0x51:
-            return eKeyCodeKeyboard::Keyboard_Q;
+            return eKeyCodeKeyboard::Q;
         case 0x52:
-            return eKeyCodeKeyboard::Keyboard_R;
+            return eKeyCodeKeyboard::R;
         case 0x53:
-            return eKeyCodeKeyboard::Keyboard_S;
+            return eKeyCodeKeyboard::S;
         case 0x54:
-            return eKeyCodeKeyboard::Keyboard_T;
+            return eKeyCodeKeyboard::T;
         case 0x55:
-            return eKeyCodeKeyboard::Keyboard_U;
+            return eKeyCodeKeyboard::U;
         case 0x56:
-            return eKeyCodeKeyboard::Keyboard_V;
+            return eKeyCodeKeyboard::V;
         case 0x57:
-            return eKeyCodeKeyboard::Keyboard_W;
+            return eKeyCodeKeyboard::W;
         case 0x58:
-            return eKeyCodeKeyboard::Keyboard_X;
+            return eKeyCodeKeyboard::X;
         case 0x59:
-            return eKeyCodeKeyboard::Keyboard_Y;
+            return eKeyCodeKeyboard::Y;
         case 0x5A:
-            return eKeyCodeKeyboard::Keyboard_Z;
+            return eKeyCodeKeyboard::Z;
         case VK_F1:
-            return eKeyCodeKeyboard::Keyboard_F1;
+            return eKeyCodeKeyboard::F1;
         case VK_F2:
-            return eKeyCodeKeyboard::Keyboard_F2;
+            return eKeyCodeKeyboard::F2;
         case VK_F3:
-            return eKeyCodeKeyboard::Keyboard_F3;
+            return eKeyCodeKeyboard::F3;
         case VK_F4:
-            return eKeyCodeKeyboard::Keyboard_F4;
+            return eKeyCodeKeyboard::F4;
         case VK_F5:
-            return eKeyCodeKeyboard::Keyboard_F5;
+            return eKeyCodeKeyboard::F5;
         case VK_F6:
-            return eKeyCodeKeyboard::Keyboard_F6;
+            return eKeyCodeKeyboard::F6;
         case VK_F7:
-            return eKeyCodeKeyboard::Keyboard_F7;
+            return eKeyCodeKeyboard::F7;
         case VK_F8:
-            return eKeyCodeKeyboard::Keyboard_F8;
+            return eKeyCodeKeyboard::F8;
         case VK_F9:
-            return eKeyCodeKeyboard::Keyboard_F9;
+            return eKeyCodeKeyboard::F9;
         case VK_F10:
-            return eKeyCodeKeyboard::Keyboard_F10;
+            return eKeyCodeKeyboard::F10;
         case VK_F11:
-            return eKeyCodeKeyboard::Keyboard_F11;
+            return eKeyCodeKeyboard::F11;
         case VK_F12:
-            return eKeyCodeKeyboard::Keyboard_F12;
+            return eKeyCodeKeyboard::F12;
         case VK_SNAPSHOT:
-            return eKeyCodeKeyboard::Keyboard_PrintScreen;
+            return eKeyCodeKeyboard::PrintScreen;
         case VK_SCROLL:
-            return eKeyCodeKeyboard::Keyboard_ScrollLock;
+            return eKeyCodeKeyboard::ScrollLock;
         case VK_PAUSE:
-            return eKeyCodeKeyboard::Keyboard_Pause;
+            return eKeyCodeKeyboard::Pause;
         case VK_INSERT:
-            return eKeyCodeKeyboard::Keyboard_Insert;
+            return eKeyCodeKeyboard::Insert;
         case VK_HOME:
-            return eKeyCodeKeyboard::Keyboard_Home;
+            return eKeyCodeKeyboard::Home;
         case VK_PRIOR:
-            return eKeyCodeKeyboard::Keyboard_PageUp;
+            return eKeyCodeKeyboard::PageUp;
         case VK_DELETE:
-            return eKeyCodeKeyboard::Keyboard_Delete;
+            return eKeyCodeKeyboard::Delete;
         case VK_END:
-            return eKeyCodeKeyboard::Keyboard_End;
+            return eKeyCodeKeyboard::End;
         case VK_NEXT:
-            return eKeyCodeKeyboard::Keyboard_PageDown;
+            return eKeyCodeKeyboard::PageDown;
         case VK_RIGHT:
-            return eKeyCodeKeyboard::Keyboard_Arrow_Right;
+            return eKeyCodeKeyboard::Arrow_Right;
         case VK_LEFT:
-            return eKeyCodeKeyboard::Keyboard_Arrow_Left;
+            return eKeyCodeKeyboard::Arrow_Left;
         case VK_DOWN:
-            return eKeyCodeKeyboard::Keyboard_Arrow_Down;
+            return eKeyCodeKeyboard::Arrow_Down;
         case VK_UP:
-            return eKeyCodeKeyboard::Keyboard_Arrow_Up;
+            return eKeyCodeKeyboard::Arrow_Up;
         case VK_APPS:
-            return eKeyCodeKeyboard::Keyboard_Application;
+            return eKeyCodeKeyboard::Application;
         case VK_LMENU:
-            return eKeyCodeKeyboard::Keyboard_Alt_Left;
+            return eKeyCodeKeyboard::Alt_Left;
         case VK_RMENU:
-            return eKeyCodeKeyboard::Keyboard_Alt_Right;
+            return eKeyCodeKeyboard::Alt_Right;
         case VK_SELECT:
-            return eKeyCodeKeyboard::Keyboard_Select;
+            return eKeyCodeKeyboard::Select;
         case VK_LCONTROL:
-            return eKeyCodeKeyboard::Keyboard_Control_Left;
+            return eKeyCodeKeyboard::Control_Left;
         case VK_LSHIFT:
-            return eKeyCodeKeyboard::Keyboard_Shift_Left;
+            return eKeyCodeKeyboard::Shift_Left;
         case VK_RCONTROL:
-            return eKeyCodeKeyboard::Keyboard_Control_Right;
+            return eKeyCodeKeyboard::Control_Right;
         case VK_RSHIFT:
-            return eKeyCodeKeyboard::Keyboard_Shift_Right;
+            return eKeyCodeKeyboard::Shift_Right;
         default:
-            return eKeyCodeKeyboard::Keyboard_NONE;
+            return eKeyCodeKeyboard::NONE;
         }
     }
 
@@ -189,196 +189,197 @@ namespace Engine5
     {
         switch (key_code)
         {
-        case eKeyCodeKeyboard::Keyboard_NONE:
+        case eKeyCodeKeyboard::NONE:
             return 0;
-        case eKeyCodeKeyboard::Keyboard_0:
+        case eKeyCodeKeyboard::_0:
             return 0x30;
-        case eKeyCodeKeyboard::Keyboard_1:
+        case eKeyCodeKeyboard::_1:
             return 0x31;
-        case eKeyCodeKeyboard::Keyboard_2:
+        case eKeyCodeKeyboard::_2:
             return 0x32;
-        case eKeyCodeKeyboard::Keyboard_3:
+        case eKeyCodeKeyboard::_3:
             return 0x33;
-        case eKeyCodeKeyboard::Keyboard_4:
+        case eKeyCodeKeyboard::_4:
             return 0x34;
-        case eKeyCodeKeyboard::Keyboard_5:
+        case eKeyCodeKeyboard::_5:
             return 0x35;
-        case eKeyCodeKeyboard::Keyboard_6:
+        case eKeyCodeKeyboard::_6:
             return 0x36;
-        case eKeyCodeKeyboard::Keyboard_7:
+        case eKeyCodeKeyboard::_7:
             return 0x37;
-        case eKeyCodeKeyboard::Keyboard_8:
+        case eKeyCodeKeyboard::_8:
             return 0x38;
-        case eKeyCodeKeyboard::Keyboard_9:
+        case eKeyCodeKeyboard::_9:
             return 0x39;
-        case eKeyCodeKeyboard::Keyboard_A:
+        case eKeyCodeKeyboard::A:
             return 0x41;
-        case eKeyCodeKeyboard::Keyboard_B:
+        case eKeyCodeKeyboard::B:
             return 0x42;
-        case eKeyCodeKeyboard::Keyboard_C:
+        case eKeyCodeKeyboard::C:
             return 0x43;
-        case eKeyCodeKeyboard::Keyboard_D:
+        case eKeyCodeKeyboard::D:
             return 0x44;
-        case eKeyCodeKeyboard::Keyboard_E:
+        case eKeyCodeKeyboard::E:
             return 0x45;
-        case eKeyCodeKeyboard::Keyboard_F:
+        case eKeyCodeKeyboard::F:
             return 0x46;
-        case eKeyCodeKeyboard::Keyboard_G:
+        case eKeyCodeKeyboard::G:
             return 0x47;
-        case eKeyCodeKeyboard::Keyboard_H:
+        case eKeyCodeKeyboard::H:
             return 0x48;
-        case eKeyCodeKeyboard::Keyboard_I:
+        case eKeyCodeKeyboard::I:
             return 0x49;
-        case eKeyCodeKeyboard::Keyboard_J:
+        case eKeyCodeKeyboard::J:
             return 0x4A;
-        case eKeyCodeKeyboard::Keyboard_K:
+        case eKeyCodeKeyboard::K:
             return 0x4B;
-        case eKeyCodeKeyboard::Keyboard_L:
+        case eKeyCodeKeyboard::L:
             return 0x4C;
-        case eKeyCodeKeyboard::Keyboard_M:
+        case eKeyCodeKeyboard::M:
             return 0x4D;
-        case eKeyCodeKeyboard::Keyboard_N:
+        case eKeyCodeKeyboard::N:
             return 0x4E;
-        case eKeyCodeKeyboard::Keyboard_O:
+        case eKeyCodeKeyboard::O:
             return 0x4F;
-        case eKeyCodeKeyboard::Keyboard_P:
+        case eKeyCodeKeyboard::P:
             return 0x50;
-        case eKeyCodeKeyboard::Keyboard_Q:
+        case eKeyCodeKeyboard::Q:
             return 0x51;
-        case eKeyCodeKeyboard::Keyboard_R:
+        case eKeyCodeKeyboard::R:
             return 0x52;
-        case eKeyCodeKeyboard::Keyboard_S:
+        case eKeyCodeKeyboard::S:
             return 0x53;
-        case eKeyCodeKeyboard::Keyboard_T:
+        case eKeyCodeKeyboard::T:
             return 0x54;
-        case eKeyCodeKeyboard::Keyboard_U:
+        case eKeyCodeKeyboard::U:
             return 0x55;
-        case eKeyCodeKeyboard::Keyboard_V:
+        case eKeyCodeKeyboard::V:
             return 0x56;
-        case eKeyCodeKeyboard::Keyboard_W:
+        case eKeyCodeKeyboard::W:
             return 0x57;
-        case eKeyCodeKeyboard::Keyboard_X:
+        case eKeyCodeKeyboard::X:
             return 0x58;
-        case eKeyCodeKeyboard::Keyboard_Y:
+        case eKeyCodeKeyboard::Y:
             return 0x59;
-        case eKeyCodeKeyboard::Keyboard_Z:
+        case eKeyCodeKeyboard::Z:
             return 0x5A;
-        case eKeyCodeKeyboard::Keyboard_F1:
+        case eKeyCodeKeyboard::F1:
             return VK_F1;
-        case eKeyCodeKeyboard::Keyboard_F2:
+        case eKeyCodeKeyboard::F2:
             return VK_F2;
-        case eKeyCodeKeyboard::Keyboard_F3:
+        case eKeyCodeKeyboard::F3:
             return VK_F3;
-        case eKeyCodeKeyboard::Keyboard_F4:
+        case eKeyCodeKeyboard::F4:
             return VK_F4;
-        case eKeyCodeKeyboard::Keyboard_F5:
+        case eKeyCodeKeyboard::F5:
             return VK_F5;
-        case eKeyCodeKeyboard::Keyboard_F6:
+        case eKeyCodeKeyboard::F6:
             return VK_F6;
-        case eKeyCodeKeyboard::Keyboard_F7:
+        case eKeyCodeKeyboard::F7:
             return VK_F7;
-        case eKeyCodeKeyboard::Keyboard_F8:
+        case eKeyCodeKeyboard::F8:
             return VK_F8;
-        case eKeyCodeKeyboard::Keyboard_F9:
+        case eKeyCodeKeyboard::F9:
             return VK_F9;
-        case eKeyCodeKeyboard::Keyboard_F10:
+        case eKeyCodeKeyboard::F10:
             return VK_F10;
-        case eKeyCodeKeyboard::Keyboard_F11:
+        case eKeyCodeKeyboard::F11:
             return VK_F11;
-        case eKeyCodeKeyboard::Keyboard_F12:
+        case eKeyCodeKeyboard::F12:
             return VK_F12;
-        case eKeyCodeKeyboard::Keyboard_Arrow_Up:
+        case eKeyCodeKeyboard::Arrow_Up:
             return VK_UP;
-        case eKeyCodeKeyboard::Keyboard_Arrow_Down:
+        case eKeyCodeKeyboard::Arrow_Down:
             return VK_DOWN;
-        case eKeyCodeKeyboard::Keyboard_Arrow_Right:
+        case eKeyCodeKeyboard::Arrow_Right:
             return VK_RIGHT;
-        case eKeyCodeKeyboard::Keyboard_Arrow_Left:
+        case eKeyCodeKeyboard::Arrow_Left:
             return VK_LEFT;
-        case eKeyCodeKeyboard::Keyboard_Enter:
+        case eKeyCodeKeyboard::Enter:
             return VK_RETURN;
-        case eKeyCodeKeyboard::Keyboard_Escape:
+        case eKeyCodeKeyboard::Escape:
             return VK_ESCAPE;
-        case eKeyCodeKeyboard::Keyboard_Backspace:
+        case eKeyCodeKeyboard::Backspace:
             return VK_BACK;
-        case eKeyCodeKeyboard::Keyboard_Tab:
+        case eKeyCodeKeyboard::Tab:
             return VK_TAB;
-        case eKeyCodeKeyboard::Keyboard_Space:
+        case eKeyCodeKeyboard::Space:
             return VK_SPACE;
-        case eKeyCodeKeyboard::Keyboard_Control_Left:
+        case eKeyCodeKeyboard::Control_Left:
             return VK_LCONTROL;
-        case eKeyCodeKeyboard::Keyboard_Control_Right:
+        case eKeyCodeKeyboard::Control_Right:
             return VK_RCONTROL;
-        case eKeyCodeKeyboard::Keyboard_Shift_Left:
+        case eKeyCodeKeyboard::Shift_Left:
             return VK_LSHIFT;
-        case eKeyCodeKeyboard::Keyboard_Shift_Right:
+        case eKeyCodeKeyboard::Shift_Right:
             return VK_RSHIFT;
-        case eKeyCodeKeyboard::Keyboard_Alt_Left:
+        case eKeyCodeKeyboard::Alt_Left:
             return VK_LMENU;
-        case eKeyCodeKeyboard::Keyboard_Alt_Right:
+        case eKeyCodeKeyboard::Alt_Right:
             return VK_RMENU;
-        case eKeyCodeKeyboard::Keyboard_Quote:
+        case eKeyCodeKeyboard::Quote:
             return 0;
-        case eKeyCodeKeyboard::Keyboard_Comma:
+        case eKeyCodeKeyboard::Comma:
             return VK_OEM_COMMA;
-        case eKeyCodeKeyboard::Keyboard_Minus:
+        case eKeyCodeKeyboard::Minus:
             return VK_OEM_MINUS;
-        case eKeyCodeKeyboard::Keyboard_Period:
+        case eKeyCodeKeyboard::Period:
             return VK_OEM_PERIOD;
-        case eKeyCodeKeyboard::Keyboard_Slash:
+        case eKeyCodeKeyboard::Slash:
             return 0;
-        case eKeyCodeKeyboard::Keyboard_Semicolon:
+        case eKeyCodeKeyboard::Semicolon:
             return 0;
-        case eKeyCodeKeyboard::Keyboard_Equal:
+        case eKeyCodeKeyboard::Equal:
             return 0;
-        case eKeyCodeKeyboard::Keyboard_Bracket_Left:
+        case eKeyCodeKeyboard::Bracket_Left:
             return 0;
-        case eKeyCodeKeyboard::Keyboard_Bracket_Right:
+        case eKeyCodeKeyboard::Bracket_Right:
             return 0;
-        case eKeyCodeKeyboard::Keyboard_Backslash:
+        case eKeyCodeKeyboard::Backslash:
             return 0;
-        case eKeyCodeKeyboard::Keyboard_PrintScreen:
+        case eKeyCodeKeyboard::PrintScreen:
             return VK_SNAPSHOT;
-        case eKeyCodeKeyboard::Keyboard_ScrollLock:
+        case eKeyCodeKeyboard::ScrollLock:
             return VK_SCROLL;
-        case eKeyCodeKeyboard::Keyboard_Pause:
+        case eKeyCodeKeyboard::Pause:
             return VK_PAUSE;
-        case eKeyCodeKeyboard::Keyboard_CapsLock:
+        case eKeyCodeKeyboard::CapsLock:
             return VK_CAPITAL;
-        case eKeyCodeKeyboard::Keyboard_Insert:
+        case eKeyCodeKeyboard::Insert:
             return VK_INSERT;
-        case eKeyCodeKeyboard::Keyboard_Home:
+        case eKeyCodeKeyboard::Home:
             return VK_HOME;
-        case eKeyCodeKeyboard::Keyboard_PageUp:
+        case eKeyCodeKeyboard::PageUp:
             return VK_PRIOR;
-        case eKeyCodeKeyboard::Keyboard_Delete:
+        case eKeyCodeKeyboard::Delete:
             return VK_DELETE;
-        case eKeyCodeKeyboard::Keyboard_End:
+        case eKeyCodeKeyboard::End:
             return VK_END;
-        case eKeyCodeKeyboard::Keyboard_PageDown:
+        case eKeyCodeKeyboard::PageDown:
             return VK_NEXT;
-        case eKeyCodeKeyboard::Keyboard_Application:
+        case eKeyCodeKeyboard::Application:
             return VK_APPS;
-        case eKeyCodeKeyboard::Keyboard_Power:
+        case eKeyCodeKeyboard::Power:
             return 0;
-        case eKeyCodeKeyboard::Keyboard_Select:
+        case eKeyCodeKeyboard::Select:
             return VK_SELECT;
-        case eKeyCodeKeyboard::Keyboard_MAX:
+        case eKeyCodeKeyboard::MAX:
             return 0;
         default:
             return 0;
         }
     }
 
-    InputKeyboard::InputKeyboard()
+    KeyboardInput::KeyboardInput()
+    {
+        Reset();
+    }
+
+    KeyboardInput::~KeyboardInput()
     {
     }
 
-    InputKeyboard::~InputKeyboard()
-    {
-    }
-
-    void InputKeyboard::Reset()
+    void KeyboardInput::Reset()
     {
         for (size_t i = 0; i < MAXIMUM_KEY_COUNT; ++i)
         {
@@ -388,7 +389,7 @@ namespace Engine5
         }
     }
 
-    void InputKeyboard::ResetPressed()
+    void KeyboardInput::ResetPressed()
     {
         for (size_t i = 0; i < MAXIMUM_KEY_COUNT; ++i)
         {
@@ -396,7 +397,7 @@ namespace Engine5
         }
     }
 
-    void InputKeyboard::ProcessPressed()
+    void KeyboardInput::ProcessPressed()
     {
         for (int i = 0; i < MAXIMUM_KEY_COUNT; ++i)
         {
@@ -438,17 +439,17 @@ namespace Engine5
         }
     }
 
-    bool InputKeyboard::IsDown(eKeyCodeKeyboard key_code) const
+    bool KeyboardInput::IsDown(eKeyCodeKeyboard key_code) const
     {
         return m_keyboard[static_cast<int>(key_code)].b_down;
     }
 
-    bool InputKeyboard::IsPressed(eKeyCodeKeyboard key_code) const
+    bool KeyboardInput::IsPressed(eKeyCodeKeyboard key_code) const
     {
         return m_keyboard[static_cast<int>(key_code)].b_curr_pressed;
     }
 
-    bool InputKeyboard::IsAnyKeyDown() const
+    bool KeyboardInput::IsAnyKeyDown() const
     {
         for (size_t i = 0; i < MAXIMUM_KEY_COUNT; ++i)
         {
@@ -458,7 +459,7 @@ namespace Engine5
         return false;
     }
 
-    bool InputKeyboard::IsAnyKeyPressed() const
+    bool KeyboardInput::IsAnyKeyPressed() const
     {
         for (int i = 0; i < MAXIMUM_KEY_COUNT; ++i)
         {
@@ -468,24 +469,24 @@ namespace Engine5
         return false;
     }
 
-    size_t InputKeyboard::Repeated(eKeyCodeKeyboard key_code) const
+    size_t KeyboardInput::Repeated(eKeyCodeKeyboard key_code) const
     {
         E5_UNUSED_PARAM(key_code);
         return 0;
     }
 
-    std::string InputKeyboard::TypedString() const
+    std::string KeyboardInput::TypedString() const
     {
-        return WStringToString(*m_edited_string);
+        return WStringToString(*m_string);
     }
 
-    std::wstring* InputKeyboard::TypedWString() const
+    std::wstring* KeyboardInput::TypedWString() const
     {
-        return m_edited_string;
+        return m_string;
     }
 
-    void InputKeyboard::SetEditingWString(std::wstring* string)
+    void KeyboardInput::SetEditingWString(std::wstring* string)
     {
-        m_edited_string = string;
+        m_string = string;
     }
 }

@@ -1,8 +1,8 @@
 #pragma once
-#include "OSAPI.hpp"
+#include "../OSAPI.hpp"
 #include IncludeMouseAPI
 #include "KeyCode.hpp"
-#include "../../Math/Utility/MathDef.hpp"
+#include "../../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -12,27 +12,14 @@ namespace Engine5
         int y;
     };
 
-    class InputMouse : public InputMouseAPI
+    class MouseInput : public InputMouseAPI
     {
     public:
-        InputMouse();
-        ~InputMouse();
+        MouseInput();
+        ~MouseInput();
 
-    private:
-        const static size_t MAXIMUM_BUTTON_COUNT = (size_t)eKeyCodeMouse::Mouse_Max;
-
-        void Reset();
-        void ResetPressed();
-
-        void ProcessMouseEvent(bool down, eKeyCodeMouse code, int x, int y);
-        void ProcessMouseEvent(int x, int y);
-        void ProcessMouseWheel(short wheel);
-        void ProcessPressed();
-
-    public: //interface 
         bool IsDown(eKeyCodeMouse key_code) const;
         bool IsPressed(eKeyCodeMouse key_code) const;
-
         bool IsAnyKeyDown() const;
         bool IsAnyKeyPressed() const;
 
@@ -45,6 +32,20 @@ namespace Engine5
         int  PreviousMouseWheel() const;
         bool IsWheelRolling() const;
         Real MouseWheelRollingDirection() const;
+
+    private:
+        const static size_t MAXIMUM_BUTTON_COUNT = (size_t)eKeyCodeMouse::Max;
+
+        void Reset();
+        void ResetPressed();
+        void ProcessMouseEvent(bool b_down, eKeyCodeMouse code, int x, int y);
+        void ProcessMouseEvent(int x, int y);
+        void ProcessMouseWheel(short wheel);
+        void ProcessPressed();
+
+    private:
+        friend class InputManager;
+        friend class OSAPI;
 
     private:
         MousePosition m_current_position;

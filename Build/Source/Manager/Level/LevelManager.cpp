@@ -83,7 +83,7 @@ namespace Engine5
 
 
 
-            //m_game_input->ProcGamePadEvent();
+            //m_game_input->ProcessGamePad();
             //m_game_input->ProcessPressed();
             //m_keyboard_input->ProcessPressed();
             //m_mouse_input->ProcessPressed();

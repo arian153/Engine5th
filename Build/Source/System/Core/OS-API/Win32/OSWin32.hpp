@@ -3,6 +3,9 @@
 
 namespace Engine5
 {
+    class InputManager;
+    class KeyboardInput;
+    class MouseInput;
     class Application;
     class OSCommon;
 
@@ -17,8 +20,8 @@ namespace Engine5
         DWORD     GetWindowModeRelatedResolution() const;
         HINSTANCE AppInstance() const;
         HWND      AppHWnd() const;
-      
 
+        void SetInputManager(InputManager* input_manager);
     protected:
         friend class Application;
 
@@ -35,7 +38,9 @@ namespace Engine5
 
         //api data
         Application* m_application = nullptr;
-        OSCommon* m_os_common = nullptr;
-       
+        OSCommon*    m_os_common   = nullptr;
+
+        MouseInput*    m_mouse_input    = nullptr;
+        KeyboardInput* m_keyboard_input = nullptr;
     };
 }

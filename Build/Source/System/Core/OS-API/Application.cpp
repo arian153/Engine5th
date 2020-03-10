@@ -13,6 +13,7 @@
 #include "../../../Manager/Space/SpaceManager.hpp"
 #include "../../../Manager/Level/LevelManager.hpp"
 #include "../Utility/FrameUtility.hpp"
+#include "Input/InputManager.hpp"
 
 namespace Engine5
 {
@@ -41,7 +42,9 @@ namespace Engine5
         //create systems
         m_operating_system = new OSCommon(this);
         m_operating_system->Initialize();
-        m_render_system = new RenderSystem(m_operating_system);
+        m_input_manager = new InputManager();
+        m_input_manager->Initialize();
+        m_render_system  = new RenderSystem(m_operating_system);
         m_render_system->Initialize(1280, 720);
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
@@ -58,6 +61,7 @@ namespace Engine5
         m_level_manager->SetInitialLevel("Test");
         //setup missing system parameters
         m_operating_system->SetLevelManager(m_level_manager);
+        m_operating_system->SetInputManager(m_input_manager);
     }
 
     void Application::Update() const
@@ -116,6 +120,13 @@ namespace Engine5
             delete m_render_system;
             m_render_system = nullptr;
         }
+        if (m_input_manager != nullptr)
+        {
+            m_input_manager->Shutdown();
+            delete m_input_manager;
+            m_input_manager = nullptr;
+        }
+
         if (m_operating_system != nullptr)
         {
             m_operating_system->Shutdown();
@@ -172,6 +183,11 @@ namespace Engine5
     ComponentRegistry* Application::GetComponentRegistry() const
     {
         return m_component_registry;
+    }
+
+    InputManager* Application::GetInputManager() const
+    {
+        return m_input_manager;
     }
 
     void Application::OnResize(int client_width, int client_height) const

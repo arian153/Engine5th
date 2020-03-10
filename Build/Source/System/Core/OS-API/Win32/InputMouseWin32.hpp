@@ -1,6 +1,6 @@
 #pragma once
 #include <windows.h>
-#include "../KeyCode.hpp"
+#include "../Input/KeyCode.hpp"
 
 namespace Engine5
 {
@@ -10,9 +10,11 @@ namespace Engine5
         InputMouseWin32();
         ~InputMouseWin32();
 
+    protected:
         eKeyCodeMouse TranslateMessage(WPARAM wparam);
-        int TranslateMessage(eKeyCodeMouse button_code);
-
+        int           TranslateMessage(eKeyCodeMouse button_code);
+        
     private:
+        friend class OSWin32;
     };
 }
