@@ -9,6 +9,7 @@
 #include "../../System/Core/Utility/TimeUtility.hpp"
 #include "../../System/Core/OS-API/OSCommon.hpp"
 #include "../../System/Core/Utility/FrameUtility.hpp"
+#include "../../System/Core/Input/InputCommon.hpp"
 
 namespace Engine5
 {
@@ -28,6 +29,7 @@ namespace Engine5
         m_operating_system  = application->GetOperatingSystem();
         m_application_timer = application->GetApplicationTimer();
         m_frame_utility     = application->GetFrameUtility();
+        m_input             = application->GetInput();
     }
 
     void LevelManager::Update()
@@ -77,17 +79,9 @@ namespace Engine5
         //update phase
         while (m_b_quit_state_machine == false && m_b_restart == false && m_b_reload == false && m_current == m_next)
         {
-
-
-            m_operating_system->DispatchMessagePump();
-
-
-
-            //m_game_input->ProcessGamePad();
-            //m_game_input->ProcessPressed();
-            //m_keyboard_input->ProcessPressed();
-            //m_mouse_input->ProcessPressed();
             m_application_timer->Tick();
+            m_operating_system->DispatchMessagePump();
+            m_input->Update();
             if (m_operating_system->IsPaused() == false)
             {
                 m_frame_utility->CalculateFrameStatus(m_application_timer->TotalTime());

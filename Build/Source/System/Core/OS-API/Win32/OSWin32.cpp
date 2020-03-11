@@ -228,10 +228,10 @@ namespace Engine5
         return m_h_wnd;
     }
 
-    void OSWin32::SetInputManager(InputCommon* input_manager)
+    void OSWin32::SetInput(InputCommon* input)
     {
-        m_keyboard_input = input_manager->GetKeyboardInput();
-        m_mouse_input    = input_manager->GetMouseInput();
+        m_keyboard_input = input->GetKeyboardInput();
+        m_mouse_input    = input->GetMouseInput();
     }
 
     OSCommon::OSCommon(Application* application)

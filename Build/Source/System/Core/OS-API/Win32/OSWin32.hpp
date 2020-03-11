@@ -21,7 +21,7 @@ namespace Engine5
         HINSTANCE AppInstance() const;
         HWND      AppHWnd() const;
 
-        void SetInputManager(InputCommon* input_manager);
+        void SetInput(InputCommon* input);
     protected:
         friend class Application;
 

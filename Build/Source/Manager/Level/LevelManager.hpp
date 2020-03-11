@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class InputCommon;
     class FrameUtility;
     class Application;
     class TimeUtility;
@@ -92,8 +93,9 @@ namespace Engine5
         RenderSystem*        m_render_system     = nullptr;
         OSCommon*            m_operating_system  = nullptr;
         TimeUtility*         m_application_timer = nullptr;
-        FrameUtility* m_frame_utility = nullptr;
+        FrameUtility*        m_frame_utility     = nullptr;
         Application*         m_application       = nullptr;
+        InputCommon*         m_input             = nullptr;
 
         //resource
         std::unordered_map<std::string, LevelResource*> m_level_resources;

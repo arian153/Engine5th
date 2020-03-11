@@ -42,8 +42,8 @@ namespace Engine5
         //create systems
         m_operating_system = new OSCommon(this);
         m_operating_system->Initialize();
-        m_input_manager = new InputCommon();
-        m_input_manager->Initialize();
+        m_input = new InputCommon();
+        m_input->Initialize();
         m_render_system  = new RenderSystem(m_operating_system);
         m_render_system->Initialize(1280, 720);
         m_physics_system = new PhysicsSystem();
@@ -61,7 +61,7 @@ namespace Engine5
         m_level_manager->SetInitialLevel("Test");
         //setup missing system parameters
         m_operating_system->SetLevelManager(m_level_manager);
-        m_operating_system->SetInputManager(m_input_manager);
+        m_operating_system->SetInput(m_input);
     }
 
     void Application::Update() const
@@ -120,11 +120,11 @@ namespace Engine5
             delete m_render_system;
             m_render_system = nullptr;
         }
-        if (m_input_manager != nullptr)
+        if (m_input != nullptr)
         {
-            m_input_manager->Shutdown();
-            delete m_input_manager;
-            m_input_manager = nullptr;
+            m_input->Shutdown();
+            delete m_input;
+            m_input = nullptr;
         }
 
         if (m_operating_system != nullptr)
@@ -187,7 +187,7 @@ namespace Engine5
 
     InputCommon* Application::GetInput() const
     {
-        return m_input_manager;
+        return m_input;
     }
 
     void Application::OnResize(int client_width, int client_height) const

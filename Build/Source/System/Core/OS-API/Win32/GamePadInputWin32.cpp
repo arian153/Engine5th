@@ -16,20 +16,20 @@ namespace Engine5
 
     void GamePadInputWin32::ProcessButtons(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
     {
-        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Up].b_down        = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_UP) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Down].b_down      = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_DOWN) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Left].b_down      = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_LEFT) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Right].b_down     = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::Start].b_down          = ((game_pad->wButtons & XINPUT_GAMEPAD_START) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::Back].b_down           = ((game_pad->wButtons & XINPUT_GAMEPAD_BACK) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::X].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_X) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::Y].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_Y) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::A].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_A) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::B].b_down              = ((game_pad->wButtons & XINPUT_GAMEPAD_B) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::Shoulder_Left].b_down  = ((game_pad->wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::Shoulder_Right].b_down = ((game_pad->wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::Thumb_Left].b_down     = ((game_pad->wButtons & XINPUT_GAMEPAD_LEFT_THUMB) != 0);
-        pad_state.button_state[(size_t)eKeyCodeGamePad::Thumb_Right].b_down    = ((game_pad->wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) != 0);
+        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Up].b_down        = (game_pad->wButtons & XINPUT_GAMEPAD_DPAD_UP) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Down].b_down      = (game_pad->wButtons & XINPUT_GAMEPAD_DPAD_DOWN) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Left].b_down      = (game_pad->wButtons & XINPUT_GAMEPAD_DPAD_LEFT) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Right].b_down     = (game_pad->wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Start].b_down          = (game_pad->wButtons & XINPUT_GAMEPAD_START) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Back].b_down           = (game_pad->wButtons & XINPUT_GAMEPAD_BACK) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::X].b_down              = (game_pad->wButtons & XINPUT_GAMEPAD_X) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Y].b_down              = (game_pad->wButtons & XINPUT_GAMEPAD_Y) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::A].b_down              = (game_pad->wButtons & XINPUT_GAMEPAD_A) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::B].b_down              = (game_pad->wButtons & XINPUT_GAMEPAD_B) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Shoulder_Left].b_down  = (game_pad->wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Shoulder_Right].b_down = (game_pad->wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Thumb_Left].b_down     = (game_pad->wButtons & XINPUT_GAMEPAD_LEFT_THUMB) != 0;
+        pad_state.button_state[(size_t)eKeyCodeGamePad::Thumb_Right].b_down    = (game_pad->wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) != 0;
         for (size_t code = 0; code < (size_t)eKeyCodeGamePad::MAX; ++code)
         {
             /*if (pad_state.button_state[code].b_down == true)

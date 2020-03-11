@@ -63,6 +63,6 @@ namespace Engine5
         SpaceManager*      m_space_manager      = nullptr;
         ObjectFactory*     m_object_factory     = nullptr;
         ComponentRegistry* m_component_registry = nullptr;
-        InputCommon*       m_input_manager      = nullptr;
+        InputCommon*       m_input              = nullptr;
     };
 }
