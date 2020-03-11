@@ -26,7 +26,7 @@ namespace Engine5
         Real thumb_stick_left_y  = 0.0f;
     };
 
-    class GamePadInput : public InputGamePadAPI
+    class GamePadInput : public GamePadInputAPI
     {
     public:
         GamePadInput();
@@ -62,7 +62,7 @@ namespace Engine5
         void ProcessGamePad();
         void ProcessPressed();
     private:
-        friend class InputManager;
+        friend class InputCommon;
     private:
         PadState m_game_pad_state[ USER_MAX_COUNT ];
     };

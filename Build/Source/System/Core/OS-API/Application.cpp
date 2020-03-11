@@ -13,7 +13,7 @@
 #include "../../../Manager/Space/SpaceManager.hpp"
 #include "../../../Manager/Level/LevelManager.hpp"
 #include "../Utility/FrameUtility.hpp"
-#include "Input/InputManager.hpp"
+#include "Input/InputCommon.hpp"
 
 namespace Engine5
 {
@@ -42,7 +42,7 @@ namespace Engine5
         //create systems
         m_operating_system = new OSCommon(this);
         m_operating_system->Initialize();
-        m_input_manager = new InputManager();
+        m_input_manager = new InputCommon();
         m_input_manager->Initialize();
         m_render_system  = new RenderSystem(m_operating_system);
         m_render_system->Initialize(1280, 720);
@@ -185,7 +185,7 @@ namespace Engine5
         return m_component_registry;
     }
 
-    InputManager* Application::GetInputManager() const
+    InputCommon* Application::GetInputManager() const
     {
         return m_input_manager;
     }

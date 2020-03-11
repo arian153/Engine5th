@@ -3,7 +3,7 @@
 
 namespace Engine5
 {
-    class InputManager;
+    class InputCommon;
     class KeyboardInput;
     class MouseInput;
     class Application;
@@ -21,7 +21,7 @@ namespace Engine5
         HINSTANCE AppInstance() const;
         HWND      AppHWnd() const;
 
-        void SetInputManager(InputManager* input_manager);
+        void SetInputManager(InputCommon* input_manager);
     protected:
         friend class Application;
 

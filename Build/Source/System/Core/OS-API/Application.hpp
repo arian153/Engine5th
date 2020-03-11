@@ -3,7 +3,7 @@
 
 namespace Engine5
 {
-    class InputManager;
+    class InputCommon;
     class ObjectFactory;
     class ComponentRegistry;
     class RenderSystem;
@@ -36,7 +36,7 @@ namespace Engine5
         SpaceManager*       GetSpaceManager() const;
         ObjectFactory*      GetObjectFactory() const;
         ComponentRegistry*  GetComponentRegistry() const;
-        InputManager* GetInputManager() const;
+        InputCommon* GetInputManager() const;
 
     private:
         void OnResize(int client_width, int client_height) const;
@@ -63,6 +63,6 @@ namespace Engine5
         SpaceManager*      m_space_manager      = nullptr;
         ObjectFactory*     m_object_factory     = nullptr;
         ComponentRegistry* m_component_registry = nullptr;
-        InputManager*      m_input_manager      = nullptr;
+        InputCommon*      m_input_manager      = nullptr;
     };
 }

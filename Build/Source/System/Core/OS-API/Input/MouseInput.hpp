@@ -12,7 +12,7 @@ namespace Engine5
         int y;
     };
 
-    class MouseInput : public InputMouseAPI
+    class MouseInput : public MouseInputAPI
     {
     public:
         MouseInput();
@@ -44,7 +44,7 @@ namespace Engine5
         void ProcessPressed();
 
     private:
-        friend class InputManager;
+        friend class InputCommon;
         friend class OSAPI;
 
     private:

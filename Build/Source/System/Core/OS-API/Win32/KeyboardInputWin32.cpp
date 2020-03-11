@@ -1,18 +1,18 @@
-#include "InputKeyboardWin32.hpp"
+#include "KeyboardInputWin32.hpp"
 #include "../../Utility/CoreUtility.hpp"
 #include "../Input/KeyboardInput.hpp"
 
 namespace Engine5
 {
-    InputKeyboardWin32::InputKeyboardWin32()
+    KeyboardInputWin32::KeyboardInputWin32()
     {
     }
 
-    InputKeyboardWin32::~InputKeyboardWin32()
+    KeyboardInputWin32::~KeyboardInputWin32()
     {
     }
 
-    void InputKeyboardWin32::ProcessString(WPARAM wparam) const
+    void KeyboardInputWin32::ProcessString(WPARAM wparam) const
     {
         if (m_string != nullptr)
         {
@@ -20,7 +20,7 @@ namespace Engine5
         }
     }
 
-    eKeyCodeKeyboard InputKeyboardWin32::TranslateMessage(WPARAM wparam)
+    eKeyCodeKeyboard KeyboardInputWin32::TranslateMessage(WPARAM wparam)
     {
         switch (wparam)
         {
@@ -185,7 +185,7 @@ namespace Engine5
         }
     }
 
-    int InputKeyboardWin32::TranslateMessage(eKeyCodeKeyboard key_code)
+    int KeyboardInputWin32::TranslateMessage(eKeyCodeKeyboard key_code)
     {
         switch (key_code)
         {

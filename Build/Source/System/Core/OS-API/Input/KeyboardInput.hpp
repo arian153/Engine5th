@@ -6,7 +6,7 @@
 
 namespace Engine5
 {
-    class KeyboardInput : public InputKeyboardAPI
+    class KeyboardInput : public KeyboardInputAPI
     {
     public:
         KeyboardInput();
@@ -31,7 +31,7 @@ namespace Engine5
         void ProcessPressed();
 
     private:
-        friend class InputManager;
+        friend class InputCommon;
 
     private:
         ButtonState   m_keyboard[ MAXIMUM_KEY_COUNT ];

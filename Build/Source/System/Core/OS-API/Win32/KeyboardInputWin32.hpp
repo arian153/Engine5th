@@ -5,11 +5,11 @@
 
 namespace Engine5
 {
-    class InputKeyboardWin32
+    class KeyboardInputWin32
     {
     public:
-        InputKeyboardWin32();
-        ~InputKeyboardWin32();
+        KeyboardInputWin32();
+        ~KeyboardInputWin32();
 
     protected:
         void             ProcessString(WPARAM wparam) const;

@@ -1,26 +1,26 @@
-#include "InputManager.hpp"
+#include "InputCommon.hpp"
 #include "MouseInput.hpp"
 #include "GamePadInput.hpp"
 #include "KeyboardInput.hpp"
 
 namespace Engine5
 {
-    InputManager::InputManager()
+    InputCommon::InputCommon()
     {
     }
 
-    InputManager::~InputManager()
+    InputCommon::~InputCommon()
     {
     }
 
-    void InputManager::Initialize()
+    void InputCommon::Initialize()
     {
         m_mouse_input    = new MouseInput();
         m_keyboard_input = new KeyboardInput();
         m_game_pad_input = new GamePadInput();
     }
 
-    void InputManager::Update() const
+    void InputCommon::Update() const
     {
         m_game_pad_input->ProcessGamePad();
         m_game_pad_input->ProcessPressed();
@@ -28,7 +28,7 @@ namespace Engine5
         m_mouse_input->ProcessPressed();
     }
 
-    void InputManager::Shutdown()
+    void InputCommon::Shutdown()
     {
         if (m_mouse_input != nullptr)
         {
@@ -47,17 +47,17 @@ namespace Engine5
         }
     }
 
-    MouseInput* InputManager::GetMouseInput() const
+    MouseInput* InputCommon::GetMouseInput() const
     {
         return m_mouse_input;
     }
 
-    KeyboardInput* InputManager::GetKeyboardInput() const
+    KeyboardInput* InputCommon::GetKeyboardInput() const
     {
         return m_keyboard_input;
     }
 
-    GamePadInput* InputManager::GetGamePadInput() const
+    GamePadInput* InputCommon::GetGamePadInput() const
     {
         return m_game_pad_input;
     }

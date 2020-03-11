@@ -6,11 +6,11 @@ namespace Engine5
     class KeyboardInput;
     class GamePadInput;
 
-    class InputManager
+    class InputCommon
     {
     public:
-        InputManager();
-        ~InputManager();
+        InputCommon();
+        ~InputCommon();
 
         void Initialize();
         void Update() const;

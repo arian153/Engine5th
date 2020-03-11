@@ -1,20 +1,20 @@
-#include "InputGamePadWin32.hpp"
+#include "GamePadInputWin32.hpp"
 #include "../../../Math/Utility/Utility.hpp"
 #include "../Input/KeyCode.hpp"
 #include "../Input/GamePadInput.hpp"
 
 namespace Engine5
 {
-    InputGamePadWin32::InputGamePadWin32()
+    GamePadInputWin32::GamePadInputWin32()
         : m_controllers{}
     {
     }
 
-    InputGamePadWin32::~InputGamePadWin32()
+    GamePadInputWin32::~GamePadInputWin32()
     {
     }
 
-    void InputGamePadWin32::ProcessButtons(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
+    void GamePadInputWin32::ProcessButtons(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
     {
         pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Up].b_down        = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_UP) != 0);
         pad_state.button_state[(size_t)eKeyCodeGamePad::DPAD_Down].b_down      = ((game_pad->wButtons & XINPUT_GAMEPAD_DPAD_DOWN) != 0);
@@ -52,7 +52,7 @@ namespace Engine5
         }
     }
 
-    void InputGamePadWin32::ProcessLeftThumb(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
+    void GamePadInputWin32::ProcessLeftThumb(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
     {
         Real left_x = game_pad->sThumbLX;
         Real left_y = game_pad->sThumbLY;
@@ -82,7 +82,7 @@ namespace Engine5
         pad_state.thumb_stick_left_y = normalized_ly * normalized_magnitude;
     }
 
-    void InputGamePadWin32::ProcessRightThumb(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
+    void GamePadInputWin32::ProcessRightThumb(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
     {
         Real right_x = game_pad->sThumbRX;
         Real right_y = game_pad->sThumbRY;
@@ -112,7 +112,7 @@ namespace Engine5
         pad_state.thumb_stick_right_y = normalized_ry * normalized_magnitude;
     }
 
-    void InputGamePadWin32::ProcessTrigger(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
+    void GamePadInputWin32::ProcessTrigger(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const
     {
         Real right_trigger      = game_pad->bRightTrigger;
         Real left_trigger       = game_pad->bLeftTrigger;

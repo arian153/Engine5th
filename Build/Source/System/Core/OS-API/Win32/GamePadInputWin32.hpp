@@ -5,11 +5,11 @@
 namespace Engine5
 {
     struct PadState;
-    class InputGamePadWin32
+    class GamePadInputWin32
     {
     public:
-        InputGamePadWin32();
-        ~InputGamePadWin32();
+        GamePadInputWin32();
+        ~GamePadInputWin32();
 
     protected:
         void ProcessButtons(XINPUT_GAMEPAD* game_pad, PadState& pad_state) const;

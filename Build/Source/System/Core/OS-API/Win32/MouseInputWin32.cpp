@@ -1,18 +1,18 @@
-#include "InputMouseWin32.hpp"
+#include "MouseInputWin32.hpp"
 #include "../../Utility/CoreUtility.hpp"
 #include "../Input/MouseInput.hpp"
 
 namespace Engine5
 {
-    InputMouseWin32::InputMouseWin32()
+    MouseInputWin32::MouseInputWin32()
     {
     }
 
-    InputMouseWin32::~InputMouseWin32()
+    MouseInputWin32::~MouseInputWin32()
     {
     }
 
-    eKeyCodeMouse InputMouseWin32::TranslateMessage(WPARAM wparam)
+    eKeyCodeMouse MouseInputWin32::TranslateMessage(WPARAM wparam)
     {
         switch (wparam)
         {
@@ -31,7 +31,7 @@ namespace Engine5
         }
     }
 
-    int InputMouseWin32::TranslateMessage(eKeyCodeMouse button_code)
+    int MouseInputWin32::TranslateMessage(eKeyCodeMouse button_code)
     {
         switch (button_code)
         {

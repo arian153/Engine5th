@@ -7,7 +7,7 @@
 #include "../OSCommon.hpp"
 #include "../../Utility/TimeUtility.hpp"
 #include "../../../../Manager/Level/LevelManager.hpp"
-#include "../Input/InputManager.hpp"
+#include "../Input/InputCommon.hpp"
 #include "../Input/MouseInput.hpp"
 #include "../Input/KeyboardInput.hpp"
 #include <WindowsX.h>
@@ -229,7 +229,7 @@ namespace Engine5
         return m_h_wnd;
     }
 
-    void OSWin32::SetInputManager(InputManager* input_manager)
+    void OSWin32::SetInputManager(InputCommon* input_manager)
     {
         m_keyboard_input = input_manager->GetKeyboardInput();
         m_mouse_input    = input_manager->GetMouseInput();

@@ -4,11 +4,11 @@
 
 namespace Engine5
 {
-    class InputMouseWin32
+    class MouseInputWin32
     {
     public:
-        InputMouseWin32();
-        ~InputMouseWin32();
+        MouseInputWin32();
+        ~MouseInputWin32();
 
     protected:
         eKeyCodeMouse TranslateMessage(WPARAM wparam);
