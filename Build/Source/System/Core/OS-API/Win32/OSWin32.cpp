@@ -7,9 +7,9 @@
 #include "../OSCommon.hpp"
 #include "../../Utility/TimeUtility.hpp"
 #include "../../../../Manager/Level/LevelManager.hpp"
-#include "../Input/InputCommon.hpp"
-#include "../Input/MouseInput.hpp"
-#include "../Input/KeyboardInput.hpp"
+#include "../../Input/InputCommon.hpp"
+#include "../../Input/MouseInput.hpp"
+#include "../../Input/KeyboardInput.hpp"
 #include <WindowsX.h>
 
 namespace
@@ -175,7 +175,6 @@ namespace Engine5
             break;
             // WM_DESTROY is sent when the window is being destroyed.
         case WM_DESTROY:
-            m_os_common->m_b_quit = true;
             m_os_common->m_level_manager->SetQuit();
             PostQuitMessage(0);
             break;

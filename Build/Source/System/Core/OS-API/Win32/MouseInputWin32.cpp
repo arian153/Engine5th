@@ -1,6 +1,6 @@
 #include "MouseInputWin32.hpp"
 #include "../../Utility/CoreUtility.hpp"
-#include "../Input/MouseInput.hpp"
+#include "../../Input/MouseInput.hpp"
 
 namespace Engine5
 {

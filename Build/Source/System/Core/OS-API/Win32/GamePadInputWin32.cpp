@@ -1,7 +1,7 @@
 #include "GamePadInputWin32.hpp"
 #include "../../../Math/Utility/Utility.hpp"
-#include "../Input/KeyCode.hpp"
-#include "../Input/GamePadInput.hpp"
+#include "../../Input/KeyCode.hpp"
+#include "../../Input/GamePadInput.hpp"
 
 namespace Engine5
 {

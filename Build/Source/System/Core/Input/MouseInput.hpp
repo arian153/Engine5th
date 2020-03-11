@@ -1,8 +1,8 @@
 #pragma once
-#include "../OSAPI.hpp"
+#include "../OS-API/OSAPI.hpp"
 #include IncludeMouseAPI
 #include "KeyCode.hpp"
-#include "../../../Math/Utility/MathDef.hpp"
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {

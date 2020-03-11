@@ -1,6 +1,6 @@
 #include "KeyboardInputWin32.hpp"
 #include "../../Utility/CoreUtility.hpp"
-#include "../Input/KeyboardInput.hpp"
+#include "../../Input/KeyboardInput.hpp"
 
 namespace Engine5
 {

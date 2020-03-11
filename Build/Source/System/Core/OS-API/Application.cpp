@@ -13,7 +13,7 @@
 #include "../../../Manager/Space/SpaceManager.hpp"
 #include "../../../Manager/Level/LevelManager.hpp"
 #include "../Utility/FrameUtility.hpp"
-#include "Input/InputCommon.hpp"
+#include "../Input/InputCommon.hpp"
 
 namespace Engine5
 {
@@ -185,7 +185,7 @@ namespace Engine5
         return m_component_registry;
     }
 
-    InputCommon* Application::GetInputManager() const
+    InputCommon* Application::GetInput() const
     {
         return m_input_manager;
     }

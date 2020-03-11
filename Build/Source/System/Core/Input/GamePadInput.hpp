@@ -1,7 +1,7 @@
 #pragma once
-#include "../OSAPI.hpp"
+#include "../OS-API/OSAPI.hpp"
 #include IncludeGamePadAPI
-#include "../../../Math/Utility/MathDef.hpp"
+#include "../../Math/Utility/MathDef.hpp"
 #include "KeyCode.hpp"
 
 namespace Engine5
