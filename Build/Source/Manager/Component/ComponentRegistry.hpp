@@ -13,8 +13,8 @@ namespace Engine5
         ComponentRegistry();
         ~ComponentRegistry();
 
-        bool RegisterFactories();
-        bool AbolishFactories();
+        bool Initialize();
+        bool Shutdown();
         bool AddFactory(ComponentFactory* factory);
 
     private:

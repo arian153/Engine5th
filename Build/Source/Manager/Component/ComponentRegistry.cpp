@@ -17,7 +17,7 @@ namespace Engine5
     {
     }
 
-    bool ComponentRegistry::RegisterFactories()
+    bool ComponentRegistry::Initialize()
     {
         AddFactory(new TransformFactory());
         AddFactory(new RigidBodyFactory());
@@ -26,7 +26,7 @@ namespace Engine5
         return true;
     }
 
-    bool ComponentRegistry::AbolishFactories()
+    bool ComponentRegistry::Shutdown()
     {
         for (auto it = m_factories.begin(); it != m_factories.end(); ++it)
         {
