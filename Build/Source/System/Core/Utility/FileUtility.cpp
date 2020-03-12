@@ -110,6 +110,59 @@ namespace Engine5
         return false;
     }
 
+    bool FileUtility::WriteStringToFile(const std::wstring& path, const std::wstring& data)
+    {
+        std::wofstream output(path);
+        if (output.is_open())
+        {
+            output << data;
+            output.close();
+            return true;
+        }
+        return false;
+    }
+
+    bool FileUtility::ReadAndWriteStringToFile(const std::wstring& path, const std::wstring& data) const
+    {
+        if (this->IsExist(path) == true)
+        {
+            std::wifstream input(path, std::wifstream::binary);
+            std::wstring   buffer_str = L"";
+            if (input.is_open() == true)
+            {
+                std::wstring line;
+                while (std::getline(input, line))
+                {
+                    buffer_str += line;
+                }
+                input.close();
+            }
+            else
+            {
+                return false;
+            }
+            buffer_str += data;
+            std::wofstream output(path);
+            if (output.is_open())
+            {
+                output << buffer_str;
+                output.close();
+                return true;
+            }
+        }
+        else
+        {
+            std::wofstream output(path);
+            if (output.is_open())
+            {
+                output << data;
+                output.close();
+                return true;
+            }
+        }
+        return false;
+    }
+
     bool FileUtility::RemoveFile(const std::wstring& path) const
     {
         if (this->IsExist(path) == true && this->IsDirectory(path) == false)

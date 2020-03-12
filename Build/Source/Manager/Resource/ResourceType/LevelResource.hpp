@@ -6,7 +6,7 @@ namespace Engine5
     class LevelResource : public Resource
     {
     public:
-        LevelResource(const std::wstring& path);
+        explicit LevelResource(const std::wstring& path);
         ~LevelResource();
 
     private:

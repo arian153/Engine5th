@@ -28,6 +28,8 @@ namespace Engine5
 
         bool WriteStringToFile(const std::wstring& path, const std::string& data);
         bool ReadAndWriteStringToFile(const std::wstring& path, const std::string& data) const;
+        bool WriteStringToFile(const std::wstring& path, const std::wstring& data);
+        bool ReadAndWriteStringToFile(const std::wstring& path, const std::wstring& data) const;
         bool RemoveFile(const std::wstring& path) const;
         bool RemoveAllInDirectory(const std::wstring& path) const;
         bool RemoveDirectory(const std::wstring& path) const;
