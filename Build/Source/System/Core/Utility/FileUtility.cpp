@@ -39,12 +39,15 @@ namespace Engine5
         return path.substr(0, path.find_last_of(L"/\\") + 1);
     }
 
-    void FileUtility::GetFileListsInPath(const std::wstring& path, std::list<std::wstring>& list)
+    void FileUtility::GetFileListsInPath(const std::wstring& path, std::list<std::wstring>& list) const
     {
-        for (auto& iterated_path : std::filesystem::directory_iterator(path))
+        if (IsExist(path))
         {
-            std::wstring str_path = iterated_path.path().generic_wstring();
-            list.emplace_back(str_path);
+            for (auto& iterated_path : std::filesystem::directory_iterator(path))
+            {
+                std::wstring str_path = iterated_path.path().generic_wstring();
+                list.emplace_back(str_path);
+            }
         }
     }
 

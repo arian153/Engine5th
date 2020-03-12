@@ -23,7 +23,7 @@ namespace Engine5
         std::wstring GetFileTypeFromPath(const std::wstring& path);
         std::wstring GetParentPathFromPath(const std::wstring& path);
 
-        void GetFileListsInPath(const std::wstring& path, std::list<std::wstring>& list);
+        void GetFileListsInPath(const std::wstring& path, std::list<std::wstring>& list) const;
         void GetFileListsInPathRecursive(const std::wstring& path, std::list<std::wstring>& list);
 
         bool WriteStringToFile(const std::wstring& path, const std::string& data);

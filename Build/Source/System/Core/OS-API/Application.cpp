@@ -14,6 +14,8 @@
 #include "../../../Manager/Level/LevelManager.hpp"
 #include "../Utility/FrameUtility.hpp"
 #include "../Input/InputCommon.hpp"
+#include "../Utility/FileUtility.hpp"
+#include "../../../Manager/Resource/ResourceManager.hpp"
 
 namespace Engine5
 {
@@ -36,21 +38,23 @@ namespace Engine5
     void Application::Initialize()
     {
         //create independent utility
-        m_time_utility = new TimeUtility();
-        m_time_utility->Reset();
-        m_frame_utility = new FrameUtility();
+        m_time_utility     = new TimeUtility();
+        m_frame_utility    = new FrameUtility();
+        m_file_utility     = new FileUtility();
+        m_resource_manager = new ResourceManager();
+        m_resource_manager->Initialize(m_file_utility);
         //create systems
         m_operating_system = new OSCommon(this);
         m_operating_system->Initialize();
         m_input = new InputCommon();
         m_input->Initialize();
-        m_render_system  = new RenderSystem(m_operating_system);
+        m_render_system = new RenderSystem(m_operating_system);
         m_render_system->Initialize(1280, 720);
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
         //create managers
         m_component_registry = new ComponentRegistry();
-        m_component_registry->RegisterFactories();
+        m_component_registry->Initialize();
         m_object_factory = new ObjectFactory();
         m_object_factory->Initialize(m_component_registry);
         m_space_manager = new SpaceManager(m_physics_system, m_render_system, m_object_factory, m_component_registry);
@@ -94,9 +98,20 @@ namespace Engine5
         }
         if (m_component_registry != nullptr)
         {
-            m_component_registry->AbolishFactories();
+            m_component_registry->Shutdown();
             delete m_component_registry;
             m_component_registry = nullptr;
+        }
+        if (m_resource_manager != nullptr)
+        {
+            m_resource_manager->Shutdown();
+            delete m_resource_manager;
+            m_resource_manager = nullptr;
+        }
+        if (m_file_utility != nullptr)
+        {
+            delete m_file_utility;
+            m_file_utility = nullptr;
         }
         if (m_time_utility != nullptr)
         {
@@ -126,7 +141,6 @@ namespace Engine5
             delete m_input;
             m_input = nullptr;
         }
-
         if (m_operating_system != nullptr)
         {
             m_operating_system->Shutdown();
@@ -188,6 +202,16 @@ namespace Engine5
     InputCommon* Application::GetInput() const
     {
         return m_input;
+    }
+
+    FileUtility* Application::GetFileUtility() const
+    {
+        return m_file_utility;
+    }
+
+    ResourceManager* Application::GetResourceManager() const
+    {
+        return m_resource_manager;
     }
 
     void Application::OnResize(int client_width, int client_height) const

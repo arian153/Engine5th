@@ -3,6 +3,8 @@
 
 namespace Engine5
 {
+    class FileUtility;
+    class ResourceManager;
     class InputCommon;
     class ObjectFactory;
     class ComponentRegistry;
@@ -21,7 +23,6 @@ namespace Engine5
         ~Application();
 
         void Run();
-
         void Initialize();
         void Update() const;
         void Shutdown();
@@ -37,6 +38,8 @@ namespace Engine5
         ObjectFactory*      GetObjectFactory() const;
         ComponentRegistry*  GetComponentRegistry() const;
         InputCommon*        GetInput() const;
+        FileUtility*        GetFileUtility() const;
+        ResourceManager*    GetResourceManager() const;
 
     private:
         void OnResize(int client_width, int client_height) const;
@@ -64,5 +67,7 @@ namespace Engine5
         ObjectFactory*     m_object_factory     = nullptr;
         ComponentRegistry* m_component_registry = nullptr;
         InputCommon*       m_input              = nullptr;
+        FileUtility*       m_file_utility       = nullptr;
+        ResourceManager*   m_resource_manager   = nullptr;
     };
 }
