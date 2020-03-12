@@ -14,9 +14,11 @@
 
 namespace
 {
+    Engine5::OSWin32* g_win32 = nullptr;
+
     LRESULT CALLBACK ProcessWindow(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     {
-        return Engine5::Application::GetApplication()->GetOperatingSystem()->ProcessMessage(hwnd, msg, wparam, lparam);
+        return g_win32->ProcessMessage(hwnd, msg, wparam, lparam);
     }
 }
 
@@ -27,6 +29,7 @@ namespace Engine5
     {
         m_h_instance = GetModuleHandle(nullptr);
         m_style      = WINDOWED_STYLE_COMMON;
+        g_win32      = this;
     }
 
     OSWin32::~OSWin32()

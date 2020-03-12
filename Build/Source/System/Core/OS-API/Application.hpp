@@ -27,19 +27,20 @@ namespace Engine5
         void Update() const;
         void Shutdown();
 
-        static Application* GetApplication();
-        OSCommon*           GetOperatingSystem() const;
-        RenderSystem*       GetRenderSystem() const;
-        PhysicsSystem*      GetPhysicsSystem() const;
-        FrameUtility*       GetFrameUtility() const;
-        TimeUtility*        GetApplicationTimer() const;
-        LevelManager*       GetLevelManager() const;
-        SpaceManager*       GetSpaceManager() const;
-        ObjectFactory*      GetObjectFactory() const;
-        ComponentRegistry*  GetComponentRegistry() const;
-        InputCommon*        GetInput() const;
-        FileUtility*        GetFileUtility() const;
-        ResourceManager*    GetResourceManager() const;
+        //subsystem getter
+        Application*       GetApplication();
+        OSCommon*          GetOperatingSystem() const;
+        RenderSystem*      GetRenderSystem() const;
+        PhysicsSystem*     GetPhysicsSystem() const;
+        FrameUtility*      GetFrameUtility() const;
+        TimeUtility*       GetApplicationTimer() const;
+        LevelManager*      GetLevelManager() const;
+        SpaceManager*      GetSpaceManager() const;
+        ObjectFactory*     GetObjectFactory() const;
+        ComponentRegistry* GetComponentRegistry() const;
+        InputCommon*       GetInput() const;
+        FileUtility*       GetFileUtility() const;
+        ResourceManager*   GetResourceManager() const;
 
     private:
         void OnResize(int client_width, int client_height) const;
@@ -55,7 +56,6 @@ namespace Engine5
         std::string m_application_caption = "Engine 5th";
 
     private:
-        static inline Application* m_s_application = nullptr;
         //sub systems
         OSCommon*          m_operating_system   = nullptr;
         RenderSystem*      m_render_system      = nullptr;

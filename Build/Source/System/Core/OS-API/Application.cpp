@@ -21,7 +21,6 @@ namespace Engine5
 {
     Application::Application()
     {
-        m_s_application = this;
     }
 
     Application::~Application()
@@ -151,7 +150,7 @@ namespace Engine5
 
     Application* Application::GetApplication()
     {
-        return m_s_application;
+        return this;
     }
 
     OSCommon* Application::GetOperatingSystem() const
