@@ -3,7 +3,7 @@
 
 namespace Engine5
 {
-    class AudioResource : public Resource
+    class AudioResource final : public Resource
     {
     public:
         explicit AudioResource(const std::wstring& path);

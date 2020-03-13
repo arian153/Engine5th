@@ -8,7 +8,7 @@ namespace Engine5
     {
     public:
         explicit Resource(const std::wstring& path);
-        ~Resource();
+        virtual ~Resource();
 
         bool IsLoaded() const;
         bool IsUnloaded() const;

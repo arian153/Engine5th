@@ -3,7 +3,7 @@
 
 namespace Engine5
 {
-    class TextureResource : public Resource
+    class TextureResource final : public Resource
     {
     public:
         explicit TextureResource(const std::wstring& path);

@@ -1,7 +1,7 @@
 #include "LevelManager.hpp"
 #include "Level.hpp"
 #include "../../System/Core/Utility/CoreUtility.hpp"
-#include "../Resource/ResourceType/LevelResource.hpp"
+#include "../Resource/ResourceType/JsonResource.hpp"
 #include "../Space/SpaceManager.hpp"
 #include "../Space/Space.hpp"
 #include "../../System/Graphics/RenderSystem.hpp"
@@ -128,14 +128,14 @@ namespace Engine5
         m_level_resources.clear();
     }
 
-    void LevelManager::AddLevel(const std::string& level_name, LevelResource* level_resource)
+    void LevelManager::AddLevel(const std::string& level_name, JsonResource* level_resource)
     {
         auto found = m_level_resources.find(level_name);
         if (found == m_level_resources.end())
         {
             if (level_resource == nullptr)
             {
-                level_resource = new LevelResource(StringToWString(level_name));
+                level_resource = new JsonResource(StringToWString(level_name));
             }
             m_level_resources.emplace(level_name, level_resource);
         }

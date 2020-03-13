@@ -12,7 +12,7 @@ namespace Engine5
     class OSCommon;
     class RenderSystem;
     enum class eSubsystemFlag : unsigned long long;
-    class LevelResource;
+    class JsonResource;
     class Level;
     class SpaceManager;
 
@@ -26,7 +26,7 @@ namespace Engine5
         void Update();
         void Shutdown();
 
-        void AddLevel(const std::string& level_name, LevelResource* level_resource = nullptr);
+        void AddLevel(const std::string& level_name, JsonResource* level_resource = nullptr);
         void SetInitialLevel(const std::string& level_name);
         void EnableLoadPhase(bool b_enable_load_phase = false);
         void SetQuit();
@@ -98,6 +98,6 @@ namespace Engine5
         InputCommon*         m_input             = nullptr;
 
         //resource
-        std::unordered_map<std::string, LevelResource*> m_level_resources;
+        std::unordered_map<std::string, JsonResource*> m_level_resources;
     };
 }

@@ -22,7 +22,6 @@ namespace Engine5
         void SetClientResolution(int width, int height);
         void SetMonitorResolution();
         void DispatchMessagePump() const;
-       
 
         int  ClientWidth() const;
         int  ClientHeight() const;

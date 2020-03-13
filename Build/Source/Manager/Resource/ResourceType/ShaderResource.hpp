@@ -3,7 +3,7 @@
 
 namespace Engine5
 {
-    class ShaderResource : public Resource
+    class ShaderResource final : public Resource
     {
     public:
         explicit ShaderResource(const std::wstring& path);

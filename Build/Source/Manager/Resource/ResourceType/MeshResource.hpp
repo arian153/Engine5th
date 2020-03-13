@@ -3,7 +3,7 @@
 
 namespace Engine5
 {
-    class MeshResource : public Resource
+    class MeshResource final : public Resource
     {
     public:
         explicit MeshResource(const std::wstring& path);

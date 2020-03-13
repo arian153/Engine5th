@@ -44,9 +44,8 @@ namespace Engine5
         SetDeviceContext(renderer->GetDeviceContext());
         m_resource_manager = resource_manager;
         m_color_shader     = new ColorShaderCommon();
-        m_resource_manager->GetShaderResourceMap();
-        m_color_shader->SetVertexShader(m_resource_manager->GetShaderResourceByName(L"Color.vs"));
-        m_color_shader->SetPixelShader(m_resource_manager->GetShaderResourceByName(L"Color.ps"));
+        m_color_shader->SetVertexShader(m_resource_manager->GetShaderResourceFileName(L"Color.vs"));
+        m_color_shader->SetPixelShader(m_resource_manager->GetShaderResourceFileName(L"Color.ps"));
         m_color_shader->SetHWnd(m_hwnd);
         m_color_shader->SetDevice(m_device);
         m_color_shader->SetDeviceContext(m_device_context);

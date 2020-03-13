@@ -9,9 +9,9 @@ namespace Engine5
       , Texture
       , Mesh
       , Audio
-      , Level
-      , Space
-      , Archetype
+      , Json
+      , Xml
+      , Txt
       , MAX
     };
 }

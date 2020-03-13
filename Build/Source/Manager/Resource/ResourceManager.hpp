@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class JsonResource;
     class ShaderResource;
     class TextureResource;
     class MeshResource;
@@ -22,36 +23,54 @@ namespace Engine5
         void Shutdown();
 
         Resource* GetResource(const std::wstring& path);
-        void      RemoveResource(const std::wstring& path);
-        void      RemoveResource(Resource* resource);
-        void      ClearResource();
-        void      BuildResource();
+        Resource* GetResourceFileName(const std::wstring& file_name);
+        void      GetResources(const std::wstring& file_name, std::vector<Resource*>& resources);
+
+        void RemoveResource(const std::wstring& path);
+        void RemoveResource(Resource* resource);
+        void ClearResource();
+        void BuildResource();
 
         //get specific resource
-        ShaderResource*  GetShaderResource(const std::wstring& path);
-        ShaderResource*  GetShaderResourceByName(const std::wstring& file_name);
-        TextureResource* GetTextureResource(const std::wstring& path);
-        MeshResource*    GetMeshResource(const std::wstring& path);
-        AudioResource*   GetAudioResource(const std::wstring& path);
 
-        std::unordered_map<std::wstring, ShaderResource*>*  GetShaderResourceMap();
-        std::unordered_map<std::wstring, TextureResource*>* GetTextureResourceMap();
-        std::unordered_map<std::wstring, MeshResource*>*    GetMeshResourceMap();
-        std::unordered_map<std::wstring, AudioResource*>*   GetAudioResourceMap();
+        //shader
+        ShaderResource* GetShaderResource(const std::wstring& path);
+        ShaderResource* GetShaderResourceFileName(const std::wstring& file_name);
+        void            GetShaderResources(const std::wstring& file_name, std::vector<ShaderResource*>& resources);
+
+        //texture
+        TextureResource* GetTextureResource(const std::wstring& path);
+        TextureResource* GetTextureResourceFileName(const std::wstring& file_name);
+        void             GetTextureResources(const std::wstring& file_name, std::vector<TextureResource*>& resources);
+
+        //mesh
+        MeshResource* GetMeshResource(const std::wstring& path);
+        MeshResource* GetMeshResourceFileName(const std::wstring& file_name);
+        void          GetMeshResources(const std::wstring& file_name, std::vector<MeshResource*>& resources);
+
+        //audio
+        AudioResource* GetAudioResource(const std::wstring& path);
+        AudioResource* GetAudioResourceFileName(const std::wstring& file_name);
+        void           GetAudioResources(const std::wstring& file_name, std::vector<AudioResource*>& resources);
+
+        //json
+        JsonResource* GetJsonResource(const std::wstring& path);
+        JsonResource* GetJsonResourceFileName(const std::wstring& file_name);
+        void          GetJsonResources(const std::wstring& file_name, std::vector<JsonResource*>& resources);
 
     private:
         void      QueryFilePathRecursive(const std::wstring& path, std::list<std::wstring>& file_list, std::list<std::wstring>& directory_list) const;
         Resource* AddResource(const std::wstring& path);
-
     private:
         std::list<std::wstring> m_file_list;
         std::list<std::wstring> m_directory_list;
 
-        std::unordered_map<std::wstring, Resource*>        m_resource_map;
+        std::unordered_map<std::wstring, Resource*>        m_other_resource_map;
         std::unordered_map<std::wstring, ShaderResource*>  m_shader_resource_map;
         std::unordered_map<std::wstring, TextureResource*> m_texture_resource_map;
         std::unordered_map<std::wstring, MeshResource*>    m_mesh_resource_map;
         std::unordered_map<std::wstring, AudioResource*>   m_audio_resource_map;
+        std::unordered_map<std::wstring, JsonResource*>    m_json_resource_map;
 
         FileUtility* m_file_utility = nullptr;
     private:
