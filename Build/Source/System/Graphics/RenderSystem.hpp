@@ -8,6 +8,7 @@
 
 namespace Engine5
 {
+    class ResourceManager;
     class OSCommon;
     class RendererCommon;
 
@@ -17,7 +18,7 @@ namespace Engine5
         explicit RenderSystem(OSCommon* operating_system);
         ~RenderSystem();
 
-        void Initialize(int rendering_width, int rendering_height);
+        void Initialize(int rendering_width, int rendering_height, ResourceManager* resource_manager);
         void Shutdown();
 
         void BeginUpdate() const;
@@ -41,6 +42,7 @@ namespace Engine5
         ShaderManager*     m_shader_manager     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;
         MatrixManager*     m_matrix_manager     = nullptr;
+        ResourceManager*   m_resource_manager   = nullptr;
 
         std::vector<Scene*> m_scenes;
         bool                m_b_vsync          = true;

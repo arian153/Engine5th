@@ -3,6 +3,7 @@
 #include "../../../../Core/Utility/CoreUtility.hpp"
 #include <fstream>
 #include "../ConverterDX11.hpp"
+#include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 
 namespace Engine5
 {
@@ -29,7 +30,7 @@ namespace Engine5
         m_device_context = device_context;
     }
 
-    void ColorShaderDX11::OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const std::string& shader_name)
+    void ColorShaderDX11::OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const std::wstring& shader_name)
     {
         std::ofstream file_out;
         // Get a pointer to the error message text buffer.
@@ -49,7 +50,7 @@ namespace Engine5
         error->Release();
         error = nullptr;
         // Pop a message up on the screen to notify the user to check the text file for compile errors.
-        MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", StringToWString(shader_name).c_str(), MB_OK);
+        MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shader_name.c_str(), MB_OK);
     }
 
     ColorShaderCommon::ColorShaderCommon()
@@ -60,50 +61,55 @@ namespace Engine5
     {
     }
 
-    void ColorShaderCommon::SetVertexShaderPath(const std::string& path)
+    void ColorShaderCommon::SetVertexShader(ShaderResource* shader)
     {
-        m_vertex_shader_path = path;
+        m_vertex_shader_resource = shader;
     }
 
-    void ColorShaderCommon::SetPixelShaderPath(const std::string& path)
+    void ColorShaderCommon::SetPixelShader(ShaderResource* shader)
     {
-        m_pixel_shader_path = path;
+        m_pixel_shader_resource = shader;
     }
 
+ 
     bool ColorShaderCommon::Initialize()
     {
         ID3D10Blob* error_message        = nullptr;
         ID3D10Blob* vertex_shader_buffer = nullptr;
         ID3D10Blob* pixel_shader_buffer  = nullptr;
+
+        auto vertex_shader_path = m_vertex_shader_resource->FilePath();
+        auto pixel_shader_path = m_pixel_shader_resource->FilePath();
+
         // Compile the vertex shader code.
-        HRESULT result = D3DCompileFromFile(StringToWString(m_vertex_shader_path).c_str(), nullptr, nullptr, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
+        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
         if (FAILED(result))
         {
             // If the shader failed to compile it should have written something to the error message.
             if (error_message)
             {
-                OutputShaderErrorMessage(error_message, m_hwnd, m_vertex_shader_path);
+                OutputShaderErrorMessage(error_message, m_hwnd, vertex_shader_path);
             }
                 // If there was  nothing in the error message then it simply could not find the shader file itself.
             else
             {
-                MessageBox(m_hwnd, StringToWString(m_vertex_shader_path).c_str(), L"Missing Shader File", MB_OK);
+                MessageBox(m_hwnd, vertex_shader_path.c_str(), L"Missing Shader File", MB_OK);
             }
             return false;
         }
         // Compile the pixel shader code.
-        result = D3DCompileFromFile(StringToWString(m_pixel_shader_path).c_str(), nullptr, nullptr, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
+        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
         if (FAILED(result))
         {
             // If the shader failed to compile it should have written something to the error message.
             if (error_message)
             {
-                OutputShaderErrorMessage(error_message, m_hwnd, m_pixel_shader_path);
+                OutputShaderErrorMessage(error_message, m_hwnd, pixel_shader_path);
             }
                 // If there was nothing in the error message then it simply could not find the file itself.
             else
             {
-                MessageBox(m_hwnd, StringToWString(m_pixel_shader_path).c_str(), L"Missing Shader File", MB_OK);
+                MessageBox(m_hwnd, pixel_shader_path.c_str(), L"Missing Shader File", MB_OK);
             }
             return false;
         }

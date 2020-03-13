@@ -219,7 +219,7 @@ namespace Engine5
     {
         m_file_list.clear();
         m_directory_list.clear();
-        QueryFilePathRecursive(L"Resource", m_file_list, m_directory_list);
+        QueryFilePathRecursive(L"../../Resource", m_file_list, m_directory_list);
         for (auto& file : m_file_list)
         {
             AddResource(file);
@@ -234,6 +234,19 @@ namespace Engine5
             return found->second;
         }
         return static_cast<ShaderResource*>(AddResource(path));
+    }
+
+    ShaderResource* ResourceManager::GetShaderResourceByName(const std::wstring& file_name)
+    {
+        for (auto& shader : m_shader_resource_map)
+        {
+            auto resource = shader.second;
+            if (resource->FileName() + resource->FileType() == file_name)
+            {
+                return resource;
+            }
+        }
+        return nullptr;
     }
 
     TextureResource* ResourceManager::GetTextureResource(const std::wstring& path)

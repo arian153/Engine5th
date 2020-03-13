@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class ResourceManager;
     class RendererCommon;
     class ColorShaderCommon;
 
@@ -13,7 +14,7 @@ namespace Engine5
     public:
         ShaderManager();
         ~ShaderManager();
-        void Initialize(RendererCommon* renderer);
+        void Initialize(RendererCommon* renderer, ResourceManager* resource_manager);
         void Update(Real dt);
         void Shutdown();
 
@@ -21,6 +22,7 @@ namespace Engine5
 
     private:
         //shader list
-        ColorShaderCommon* m_color_shader = nullptr;
+        ColorShaderCommon* m_color_shader     = nullptr;
+        ResourceManager*   m_resource_manager = nullptr;
     };
 }

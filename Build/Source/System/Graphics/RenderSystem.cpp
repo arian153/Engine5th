@@ -14,15 +14,16 @@ namespace Engine5
     {
     }
 
-    void RenderSystem::Initialize(int rendering_width, int rendering_height)
+    void RenderSystem::Initialize(int rendering_width, int rendering_height, ResourceManager* resource_manager)
     {
         //renderer
         m_renderer = new RendererCommon();
         m_renderer->SetHwnd(m_operating_system->AppHWnd());
         m_renderer->Initialize(rendering_width, rendering_height, m_operating_system->IsFullscreen());
         //shader
-        m_shader_manager = new ShaderManager();
-        m_shader_manager->Initialize(m_renderer);
+        m_resource_manager = resource_manager;
+        m_shader_manager   = new ShaderManager();
+        m_shader_manager->Initialize(m_renderer, resource_manager);
         //matrix generator
         m_matrix_manager = new MatrixManager();
         m_matrix_manager->SetClientRect(rendering_width, rendering_height);

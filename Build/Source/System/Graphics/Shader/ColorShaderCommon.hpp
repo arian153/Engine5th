@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class ShaderResource;
     class Matrix44;
 
     class ColorShaderCommon : public ColorShaderAPI
@@ -15,15 +16,15 @@ namespace Engine5
         ColorShaderCommon();
         ~ColorShaderCommon();
 
-        void SetVertexShaderPath(const std::string& path);
-        void SetPixelShaderPath(const std::string& path);
+        void SetVertexShader(ShaderResource* shader);
+        void SetPixelShader(ShaderResource* shader);
 
         bool Initialize();
         void Render(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj) const;
         void Shutdown();
 
     private:
-        std::string m_vertex_shader_path;
-        std::string m_pixel_shader_path;
+        ShaderResource* m_vertex_shader_resource = nullptr;
+        ShaderResource* m_pixel_shader_resource  = nullptr;
     };
 }

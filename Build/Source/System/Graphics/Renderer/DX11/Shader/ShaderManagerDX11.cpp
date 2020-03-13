@@ -2,6 +2,7 @@
 #include "../../../Shader/ShaderManager.hpp"
 #include "../../../Shader/ColorShaderCommon.hpp"
 #include "../../RendererCommon.hpp"
+#include "../../../../../Manager/Resource/ResourceManager.hpp"
 
 namespace Engine5
 {
@@ -36,14 +37,16 @@ namespace Engine5
     {
     }
 
-    void ShaderManager::Initialize(RendererCommon* renderer)
+    void ShaderManager::Initialize(RendererCommon* renderer, ResourceManager* resource_manager)
     {
         SetHWnd(renderer->GetHwnd());
         SetDevice(renderer->GetDevice());
         SetDeviceContext(renderer->GetDeviceContext());
-        m_color_shader = new ColorShaderCommon();
-        m_color_shader->SetVertexShaderPath("../../Resource/Shader/Color.vs");
-        m_color_shader->SetPixelShaderPath("../../Resource/Shader/Color.ps");
+        m_resource_manager = resource_manager;
+        m_color_shader     = new ColorShaderCommon();
+        m_resource_manager->GetShaderResourceMap();
+        m_color_shader->SetVertexShader(m_resource_manager->GetShaderResourceByName(L"Color.vs"));
+        m_color_shader->SetPixelShader(m_resource_manager->GetShaderResourceByName(L"Color.ps"));
         m_color_shader->SetHWnd(m_hwnd);
         m_color_shader->SetDevice(m_device);
         m_color_shader->SetDeviceContext(m_device_context);
@@ -68,5 +71,4 @@ namespace Engine5
     {
         return m_color_shader;
     }
-
-   }
+}

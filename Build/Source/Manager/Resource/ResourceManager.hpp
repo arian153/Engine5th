@@ -29,6 +29,7 @@ namespace Engine5
 
         //get specific resource
         ShaderResource*  GetShaderResource(const std::wstring& path);
+        ShaderResource*  GetShaderResourceByName(const std::wstring& file_name);
         TextureResource* GetTextureResource(const std::wstring& path);
         MeshResource*    GetMeshResource(const std::wstring& path);
         AudioResource*   GetAudioResource(const std::wstring& path);

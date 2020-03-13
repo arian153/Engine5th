@@ -26,7 +26,7 @@ namespace Engine5
         void SetDeviceContext(ID3D11DeviceContext* device_context);
 
     protected:
-        void OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const std::string& shader_name);
+        void OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const std::wstring& shader_name);
 
     protected:
         ID3D11VertexShader*  m_vertex_shader  = nullptr;
