@@ -86,7 +86,6 @@ namespace Engine5
                 m_other_resource_map.erase(found_in_resource);
             }
         }
-
         auto found_in_json = m_json_resource_map.find(path);
         if (found_in_json != m_json_resource_map.end())
         {
@@ -101,7 +100,6 @@ namespace Engine5
                 m_json_resource_map.erase(found_in_json);
             }
         }
-
         auto found_in_audio = m_audio_resource_map.find(path);
         if (found_in_audio != m_audio_resource_map.end())
         {
@@ -116,7 +114,6 @@ namespace Engine5
                 m_audio_resource_map.erase(found_in_audio);
             }
         }
-
         auto found_in_texture = m_texture_resource_map.find(path);
         if (found_in_texture != m_texture_resource_map.end())
         {
@@ -534,13 +531,14 @@ namespace Engine5
             resource->m_file_type = type;
             m_shader_resource_map.emplace(path, (ShaderResource*)resource);
         }
-        else if (type == L".dds" || type == L".DDS"
-            || type == L".png" || type == L".PNG"
-            || type == L".JPEG" || type == L".jpeg"
-            || type == L".JPG" || type == L".jpg"
-            || type == L".BMP" || type == L".bmp"
-            || type == L".TIFF" || type == L".tiff"
-            || type == L".GIF" || type == L".gif")
+        else if (
+            type == L".dds" || type == L".DDS" ||
+            type == L".png" || type == L".PNG" ||
+            type == L".jpeg" || type == L".JPEG" ||
+            type == L".jpg" || type == L".JPG" ||
+            type == L".bmp" || type == L".BMP" ||
+            type == L".tiff" || type == L".TIFF" ||
+            type == L".gif" || type == L".GIF")
         {
             resource              = new TextureResource(path);
             resource->m_file_name = name;

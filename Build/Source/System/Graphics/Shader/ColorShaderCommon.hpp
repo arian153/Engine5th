@@ -1,8 +1,6 @@
 #pragma once
-
 #include "../Renderer/RendererAPI.hpp"
 #include IncludeColorShaderAPI
-#include <string>
 #include "../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5

@@ -11,4 +11,9 @@ namespace Engine5
     TextureResource::~TextureResource()
     {
     }
+
+    TextureCommon* TextureResource::GetTexture() const
+    {
+        return m_texture;
+    }
 }
