@@ -12,16 +12,22 @@ namespace Engine5
 
     JsonResource::~JsonResource()
     {
-        delete m_reader;
-        m_reader = nullptr;
     }
 
     void JsonResource::Initialize()
     {
+        Json::CharReaderBuilder builder;
+        m_reader = builder.newCharReader();
+        LoadType();
     }
 
     void JsonResource::Shutdown()
     {
+        if (m_reader != nullptr)
+        {
+            delete m_reader;
+            m_reader = nullptr;
+        }
     }
 
     bool JsonResource::IsLevel() const
@@ -61,11 +67,9 @@ namespace Engine5
 
     bool JsonResource::LoadType()
     {
-        Json::Value root;   // will contains the root value after parsing.
-        Json::CharReaderBuilder builder;
-        m_reader = builder.newCharReader();
-        std::ifstream           file(m_file_path, std::ifstream::binary);
-        std::string             doc;
+        Json::Value   root;
+        std::ifstream file(m_file_path, std::ifstream::binary);
+        std::string   doc;
         std::getline(file, doc, static_cast<char>(EOF));
         bool b_parsing_successful = m_reader->parse(doc.data(), doc.data() + doc.size(), &root, nullptr);
         if (b_parsing_successful)

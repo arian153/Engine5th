@@ -233,128 +233,140 @@ namespace Engine5
         m_file_utility->RemoveFile(L"Resource Manager Report.txt");
         for (auto& resource : m_shader_resource_map)
         {
-            if (resource.second != nullptr)
+            auto found = resource.second;
+            if (found != nullptr)
             {
-                if (resource.second->IsLoaded() == false)
+                if (found->IsLoaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                if (resource.second->IsUnloaded() == false)
+                if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                delete resource.second;
-                resource.second = nullptr;
+                found->Shutdown();
+                delete found;
+                found = nullptr;
             }
         }
         m_shader_resource_map.clear();
         for (auto& resource : m_mesh_resource_map)
         {
-            if (resource.second != nullptr)
+            auto found = resource.second;
+            if (found != nullptr)
             {
-                if (resource.second->IsLoaded() == false)
+                if (found->IsLoaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                if (resource.second->IsUnloaded() == false)
+                if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                delete resource.second;
-                resource.second = nullptr;
+                found->Shutdown();
+                delete found;
+                found = nullptr;
             }
         }
         m_mesh_resource_map.clear();
         for (auto& resource : m_texture_resource_map)
         {
-            if (resource.second != nullptr)
+            auto found = resource.second;
+            if (found != nullptr)
             {
-                if (resource.second->IsLoaded() == false)
+                if (found->IsLoaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                if (resource.second->IsUnloaded() == false)
+                if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                delete resource.second;
-                resource.second = nullptr;
+                found->Shutdown();
+                delete found;
+                found = nullptr;
             }
         }
         m_texture_resource_map.clear();
         for (auto& resource : m_audio_resource_map)
         {
-            if (resource.second != nullptr)
+            auto found = resource.second;
+            if (found != nullptr)
             {
-                if (resource.second->IsLoaded() == false)
+                if (found->IsLoaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                if (resource.second->IsUnloaded() == false)
+                if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                delete resource.second;
-                resource.second = nullptr;
+                found->Shutdown();
+                delete found;
+                found = nullptr;
             }
         }
         m_audio_resource_map.clear();
         for (auto& resource : m_json_resource_map)
         {
-            if (resource.second != nullptr)
+            auto found = resource.second;
+            if (found != nullptr)
             {
-                if (resource.second->IsLoaded() == false)
+                if (found->IsLoaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                if (resource.second->IsUnloaded() == false)
+                if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                delete resource.second;
-                resource.second = nullptr;
+                found->Shutdown();
+                delete found;
+                found = nullptr;
             }
         }
         m_json_resource_map.clear();
         //remove remains
         for (auto& resource : m_undefined_resource_map)
         {
-            if (resource.second != nullptr)
+            auto found = resource.second;
+            if (found != nullptr)
             {
-                if (resource.second->IsLoaded() == false)
+                if (found->IsLoaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                if (resource.second->IsUnloaded() == false)
+                if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = resource.second->FileName() + resource.second->FileType();
+                    std::wstring result = found->FileName() + found->FileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                delete resource.second;
-                resource.second = nullptr;
+                found->Shutdown();
+                delete found;
+                found = nullptr;
             }
         }
         m_undefined_resource_map.clear();
@@ -630,9 +642,7 @@ namespace Engine5
         std::wstring name = m_file_utility->GetFileNameFromPath(path);
         if (type == L".ps" || type == L".vs")
         {
-            resource              = new ShaderResource(path);
-            resource->m_file_name = name;
-            resource->m_file_type = type;
+            resource = new ShaderResource(path);
             m_shader_resource_map.emplace(path, (ShaderResource*)resource);
         }
         else if (
@@ -644,40 +654,32 @@ namespace Engine5
             type == L".tiff" || type == L".TIFF" ||
             type == L".gif" || type == L".GIF")
         {
-            resource              = new TextureResource(path);
-            resource->m_file_name = name;
-            resource->m_file_type = type;
+            resource = new TextureResource(path);
             m_texture_resource_map.emplace(path, (TextureResource*)resource);
         }
         else if (type == L".jsonmdl" || type == L".txtmdl")
         {
-            resource              = new MeshResource(path);
-            resource->m_file_name = name;
-            resource->m_file_type = type;
+            resource = new MeshResource(path);
             m_mesh_resource_map.emplace(path, (MeshResource*)resource);
         }
         else if (type == L".wav")
         {
-            resource              = new AudioResource(path);
-            resource->m_file_name = name;
-            resource->m_file_type = type;
+            resource = new AudioResource(path);
             m_audio_resource_map.emplace(path, (AudioResource*)resource);
         }
         else if (type == L".json")
         {
-            resource              = new JsonResource(path);
-            resource->m_file_name = name;
-            resource->m_file_type = type;
-            static_cast<JsonResource*>(resource)->LoadType();
+            resource = new JsonResource(path);
             m_json_resource_map.emplace(path, (JsonResource*)resource);
         }
         else
         {
-            resource              = new UndefinedResource(path);
-            resource->m_file_name = name;
-            resource->m_file_type = type;
+            resource = new UndefinedResource(path);
             m_undefined_resource_map.emplace(path, (UndefinedResource*)resource);
         }
+        resource->m_file_name = name;
+        resource->m_file_type = type;
+        resource->Initialize();
         return resource;
     }
 }

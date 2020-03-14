@@ -1,7 +1,8 @@
 #pragma once
 #include "../Resource.hpp"
 
-namespace Json {
+namespace Json
+{
     class CharReader;
     class Value;
 }
@@ -41,7 +42,7 @@ namespace Engine5
         bool HasMember(const Json::Value& data, const std::string& find) const;
 
     private:
-        eJsonType m_json_type = eJsonType::None;
-        Json::CharReader* m_reader = nullptr;
+        eJsonType         m_json_type = eJsonType::None;
+        Json::CharReader* m_reader    = nullptr;
     };
 }
