@@ -1,13 +1,14 @@
 #pragma once
+
 #include "../Resource.hpp"
 
 namespace Engine5
 {
-    class ShaderResource final : public Resource
+    class UndefinedResource final : public Resource
     {
     public:
-        explicit ShaderResource(const std::wstring& path);
-        ~ShaderResource();
+        explicit UndefinedResource(const std::wstring& path);
+        ~UndefinedResource();
 
         void Initialize() override;
         void Shutdown() override;

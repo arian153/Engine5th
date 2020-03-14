@@ -10,6 +10,7 @@ namespace Engine5
     class TextureResource;
     class MeshResource;
     class AudioResource;
+    class UndefinedResource;
     class Resource;
     class FileUtility;
 
@@ -58,6 +59,11 @@ namespace Engine5
         JsonResource* GetJsonResourceFileName(const std::wstring& file_name);
         void          GetJsonResources(const std::wstring& file_name, std::vector<JsonResource*>& resources);
 
+        //undefined
+        UndefinedResource* GetUndefinedResource(const std::wstring& path);
+        UndefinedResource* GetUndefinedResourceFileName(const std::wstring& file_name);
+        void               GetUndefinedResources(const std::wstring& file_name, std::vector<UndefinedResource*>& resources);
+
     private:
         void      QueryFilePathRecursive(const std::wstring& path, std::list<std::wstring>& file_list, std::list<std::wstring>& directory_list) const;
         Resource* AddResource(const std::wstring& path);
@@ -65,12 +71,12 @@ namespace Engine5
         std::list<std::wstring> m_file_list;
         std::list<std::wstring> m_directory_list;
 
-        std::unordered_map<std::wstring, Resource*>        m_other_resource_map;
-        std::unordered_map<std::wstring, ShaderResource*>  m_shader_resource_map;
-        std::unordered_map<std::wstring, TextureResource*> m_texture_resource_map;
-        std::unordered_map<std::wstring, MeshResource*>    m_mesh_resource_map;
-        std::unordered_map<std::wstring, AudioResource*>   m_audio_resource_map;
-        std::unordered_map<std::wstring, JsonResource*>    m_json_resource_map;
+        std::unordered_map<std::wstring, UndefinedResource*> m_undefined_resource_map;
+        std::unordered_map<std::wstring, ShaderResource*>    m_shader_resource_map;
+        std::unordered_map<std::wstring, TextureResource*>   m_texture_resource_map;
+        std::unordered_map<std::wstring, MeshResource*>      m_mesh_resource_map;
+        std::unordered_map<std::wstring, AudioResource*>     m_audio_resource_map;
+        std::unordered_map<std::wstring, JsonResource*>      m_json_resource_map;
 
         FileUtility* m_file_utility = nullptr;
     private:

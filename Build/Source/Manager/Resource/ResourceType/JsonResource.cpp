@@ -1,4 +1,6 @@
 #include "JsonResource.hpp"
+#include "../../../External/JSONCPP/json/json.h"
+#include <fstream>
 
 namespace Engine5
 {
@@ -9,6 +11,16 @@ namespace Engine5
     }
 
     JsonResource::~JsonResource()
+    {
+        delete m_reader;
+        m_reader = nullptr;
+    }
+
+    void JsonResource::Initialize()
+    {
+    }
+
+    void JsonResource::Shutdown()
     {
     }
 
@@ -47,8 +59,56 @@ namespace Engine5
         return m_json_type;
     }
 
-    void JsonResource::LoadType()
+    bool JsonResource::LoadType()
     {
+        Json::Value root;   // will contains the root value after parsing.
+        Json::CharReaderBuilder builder;
+        m_reader = builder.newCharReader();
+        std::ifstream           file(m_file_path, std::ifstream::binary);
+        std::string             doc;
+        std::getline(file, doc, static_cast<char>(EOF));
+        bool b_parsing_successful = m_reader->parse(doc.data(), doc.data() + doc.size(), &root, nullptr);
+        if (b_parsing_successful)
+        {
+            if (HasMember(root, "Type") && root["Type"].isString())
+            {
+                std::string json_type = root["Type"].asString();
+                if (json_type == "Level")
+                {
+                    m_json_type = eJsonType::Level;
+                }
+                else if (json_type == "Space")
+                {
+                    m_json_type = eJsonType::Space;
+                }
+                else if (json_type == "Object")
+                {
+                    m_json_type = eJsonType::Object;
+                }
+                else if (json_type == "Archetype")
+                {
+                    m_json_type = eJsonType::Archetype;
+                }
+                else if (json_type == "MeshData")
+                {
+                    m_json_type = eJsonType::MeshData;
+                }
+                else if (json_type == "ParticleData")
+                {
+                    m_json_type = eJsonType::ParticleData;
+                }
+                else
+                {
+                    m_json_type = eJsonType::None;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
+    bool JsonResource::HasMember(const Json::Value& data, const std::string& find) const
+    {
+        return !(data[find].isNull());
     }
 }

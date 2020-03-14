@@ -12,6 +12,14 @@ namespace Engine5
     {
     }
 
+    void TextureResource::Initialize()
+    {
+    }
+
+    void TextureResource::Shutdown()
+    {
+    }
+
     TextureCommon* TextureResource::GetTexture() const
     {
         return m_texture;

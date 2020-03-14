@@ -11,4 +11,12 @@ namespace Engine5
     AudioResource::~AudioResource()
     {
     }
+
+    void AudioResource::Initialize()
+    {
+    }
+
+    void AudioResource::Shutdown()
+    {
+    }
 }

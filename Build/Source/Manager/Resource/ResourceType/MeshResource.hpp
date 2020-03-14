@@ -9,6 +9,9 @@ namespace Engine5
         explicit MeshResource(const std::wstring& path);
         ~MeshResource();
 
+        void Initialize() override;
+        void Shutdown() override;
+
     private:
     };
 }

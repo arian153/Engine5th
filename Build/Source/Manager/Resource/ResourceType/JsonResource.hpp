@@ -1,6 +1,11 @@
 #pragma once
 #include "../Resource.hpp"
 
+namespace Json {
+    class CharReader;
+    class Value;
+}
+
 namespace Engine5
 {
     enum class eJsonType : size_t
@@ -20,6 +25,9 @@ namespace Engine5
         explicit JsonResource(const std::wstring& path);
         ~JsonResource();
 
+        void Initialize() override;
+        void Shutdown() override;
+
         bool      IsLevel() const;
         bool      IsSpace() const;
         bool      IsArchetype() const;
@@ -28,9 +36,12 @@ namespace Engine5
         bool      IsParticleData() const;
         eJsonType GetType() const;
 
-        void LoadType();
+        bool LoadType();
+
+        bool HasMember(const Json::Value& data, const std::string& find) const;
 
     private:
         eJsonType m_json_type = eJsonType::None;
+        Json::CharReader* m_reader = nullptr;
     };
 }

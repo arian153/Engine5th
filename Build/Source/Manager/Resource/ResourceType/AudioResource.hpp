@@ -9,6 +9,9 @@ namespace Engine5
         explicit AudioResource(const std::wstring& path);
         ~AudioResource();
 
+        void Initialize() override;
+        void Shutdown() override;
+
     private:
     };
 }

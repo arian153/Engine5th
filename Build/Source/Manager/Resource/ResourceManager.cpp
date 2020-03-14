@@ -7,6 +7,7 @@
 #include "ResourceType/MeshResource.hpp"
 #include "ResourceType/ShaderResource.hpp"
 #include "ResourceType/JsonResource.hpp"
+#include "ResourceType/UndefinedResource.hpp"
 
 namespace Engine5
 {
@@ -33,47 +34,111 @@ namespace Engine5
 
     Resource* ResourceManager::GetResource(const std::wstring& path)
     {
-        auto found = m_other_resource_map.find(path);
-        if (found != m_other_resource_map.end())
-        {
-            return found->second;
-        }
-        return AddResource(path);
+        Resource* resource = nullptr;
+        //find resource
+        resource = resource != nullptr ? resource : GetAudioResource(path);
+        resource = resource != nullptr ? resource : GetJsonResource(path);
+        resource = resource != nullptr ? resource : GetMeshResource(path);
+        resource = resource != nullptr ? resource : GetShaderResource(path);
+        resource = resource != nullptr ? resource : GetTextureResource(path);
+        resource = resource != nullptr ? resource : GetUndefinedResource(path);
+        resource = resource != nullptr ? resource : AddResource(path);
+        return resource;
     }
 
     Resource* ResourceManager::GetResourceFileName(const std::wstring& file_name)
     {
-        for (auto& other : m_other_resource_map)
-        {
-            auto resource = other.second;
-            if (resource->FileName() + resource->FileType() == file_name)
-            {
-                return resource;
-            }
-        }
-        return nullptr;
+        Resource* resource = nullptr;
+        //find resource
+        resource = resource != nullptr ? resource : GetAudioResourceFileName(file_name);
+        resource = resource != nullptr ? resource : GetJsonResourceFileName(file_name);
+        resource = resource != nullptr ? resource : GetMeshResourceFileName(file_name);
+        resource = resource != nullptr ? resource : GetShaderResourceFileName(file_name);
+        resource = resource != nullptr ? resource : GetTextureResourceFileName(file_name);
+        resource = resource != nullptr ? resource : GetUndefinedResourceFileName(file_name);
+        return resource;
     }
 
     void ResourceManager::GetResources(const std::wstring& file_name, std::vector<Resource*>& resources)
     {
-        for (auto& other : m_other_resource_map)
+        for (auto& resource : m_audio_resource_map)
         {
-            auto resource = other.second;
-            if (resource->FileName() == file_name)
+            auto found = resource.second;
+            if (found->FileName() == file_name)
             {
-                resources.push_back(resource);
+                resources.push_back(found);
             }
-            else if (resource->FileName() + resource->FileType() == file_name)
+            else if (found->FileName() + found->FileType() == file_name)
             {
-                resources.push_back(resource);
+                resources.push_back(found);
+            }
+        }
+        for (auto& resource : m_json_resource_map)
+        {
+            auto found = resource.second;
+            if (found->FileName() == file_name)
+            {
+                resources.push_back(found);
+            }
+            else if (found->FileName() + found->FileType() == file_name)
+            {
+                resources.push_back(found);
+            }
+        }
+        for (auto& resource : m_mesh_resource_map)
+        {
+            auto found = resource.second;
+            if (found->FileName() == file_name)
+            {
+                resources.push_back(found);
+            }
+            else if (found->FileName() + found->FileType() == file_name)
+            {
+                resources.push_back(found);
+            }
+        }
+        for (auto& resource : m_shader_resource_map)
+        {
+            auto found = resource.second;
+            if (found->FileName() == file_name)
+            {
+                resources.push_back(found);
+            }
+            else if (found->FileName() + found->FileType() == file_name)
+            {
+                resources.push_back(found);
+            }
+        }
+        for (auto& resource : m_texture_resource_map)
+        {
+            auto found = resource.second;
+            if (found->FileName() == file_name)
+            {
+                resources.push_back(found);
+            }
+            else if (found->FileName() + found->FileType() == file_name)
+            {
+                resources.push_back(found);
+            }
+        }
+        for (auto& resource : m_undefined_resource_map)
+        {
+            auto found = resource.second;
+            if (found->FileName() == file_name)
+            {
+                resources.push_back(found);
+            }
+            else if (found->FileName() + found->FileType() == file_name)
+            {
+                resources.push_back(found);
             }
         }
     }
 
     void ResourceManager::RemoveResource(const std::wstring& path)
     {
-        auto found_in_resource = m_other_resource_map.find(path);
-        if (found_in_resource != m_other_resource_map.end())
+        auto found_in_resource = m_undefined_resource_map.find(path);
+        if (found_in_resource != m_undefined_resource_map.end())
         {
             if (found_in_resource->second->IsLoaded() == true &&
                 found_in_resource->second->IsUnloaded() == true)
@@ -83,7 +148,7 @@ namespace Engine5
                     delete found_in_resource->second;
                     found_in_resource->second = nullptr;
                 }
-                m_other_resource_map.erase(found_in_resource);
+                m_undefined_resource_map.erase(found_in_resource);
             }
         }
         auto found_in_json = m_json_resource_map.find(path);
@@ -272,7 +337,7 @@ namespace Engine5
         }
         m_json_resource_map.clear();
         //remove remains
-        for (auto& resource : m_other_resource_map)
+        for (auto& resource : m_undefined_resource_map)
         {
             if (resource.second != nullptr)
             {
@@ -292,7 +357,7 @@ namespace Engine5
                 resource.second = nullptr;
             }
         }
-        m_other_resource_map.clear();
+        m_undefined_resource_map.clear();
     }
 
     void ResourceManager::BuildResource()
@@ -313,7 +378,7 @@ namespace Engine5
         {
             return found->second;
         }
-        return static_cast<ShaderResource*>(AddResource(path));
+        return nullptr;
     }
 
     ShaderResource* ResourceManager::GetShaderResourceFileName(const std::wstring& file_name)
@@ -352,7 +417,7 @@ namespace Engine5
         {
             return found->second;
         }
-        return static_cast<TextureResource*>(AddResource(path));
+        return nullptr;
     }
 
     TextureResource* ResourceManager::GetTextureResourceFileName(const std::wstring& file_name)
@@ -391,7 +456,7 @@ namespace Engine5
         {
             return found->second;
         }
-        return static_cast<MeshResource*>(AddResource(path));
+        return nullptr;
     }
 
     MeshResource* ResourceManager::GetMeshResourceFileName(const std::wstring& file_name)
@@ -430,7 +495,7 @@ namespace Engine5
         {
             return found->second;
         }
-        return static_cast<AudioResource*>(AddResource(path));
+        return nullptr;
     }
 
     AudioResource* ResourceManager::GetAudioResourceFileName(const std::wstring& file_name)
@@ -469,7 +534,7 @@ namespace Engine5
         {
             return found->second;
         }
-        return static_cast<JsonResource*>(AddResource(path));
+        return nullptr;
     }
 
     JsonResource* ResourceManager::GetJsonResourceFileName(const std::wstring& file_name)
@@ -490,6 +555,45 @@ namespace Engine5
         for (auto& json : m_json_resource_map)
         {
             auto resource = json.second;
+            if (resource->FileName() == file_name)
+            {
+                resources.push_back(resource);
+            }
+            else if (resource->FileName() + resource->FileType() == file_name)
+            {
+                resources.push_back(resource);
+            }
+        }
+    }
+
+    UndefinedResource* ResourceManager::GetUndefinedResource(const std::wstring& path)
+    {
+        auto found = m_undefined_resource_map.find(path);
+        if (found != m_undefined_resource_map.end())
+        {
+            return found->second;
+        }
+        return nullptr;
+    }
+
+    UndefinedResource* ResourceManager::GetUndefinedResourceFileName(const std::wstring& file_name)
+    {
+        for (auto& other : m_undefined_resource_map)
+        {
+            auto resource = other.second;
+            if (resource->FileName() + resource->FileType() == file_name)
+            {
+                return resource;
+            }
+        }
+        return nullptr;
+    }
+
+    void ResourceManager::GetUndefinedResources(const std::wstring& file_name, std::vector<UndefinedResource*>& resources)
+    {
+        for (auto& other : m_undefined_resource_map)
+        {
+            auto resource = other.second;
             if (resource->FileName() == file_name)
             {
                 resources.push_back(resource);
@@ -564,14 +668,15 @@ namespace Engine5
             resource              = new JsonResource(path);
             resource->m_file_name = name;
             resource->m_file_type = type;
+            static_cast<JsonResource*>(resource)->LoadType();
             m_json_resource_map.emplace(path, (JsonResource*)resource);
         }
         else
         {
-            resource              = new Resource(path);
+            resource              = new UndefinedResource(path);
             resource->m_file_name = name;
             resource->m_file_type = type;
-            m_other_resource_map.emplace(path, resource);
+            m_undefined_resource_map.emplace(path, (UndefinedResource*)resource);
         }
         return resource;
     }

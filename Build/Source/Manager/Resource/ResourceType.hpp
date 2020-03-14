@@ -4,7 +4,7 @@ namespace Engine5
 {
     enum class eResourceType : int
     {
-        Unregistered
+        Undefined
       , Shader
       , Texture
       , Mesh

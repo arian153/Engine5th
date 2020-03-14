@@ -10,6 +10,9 @@ namespace Engine5
         explicit TextureResource(const std::wstring& path);
         ~TextureResource();
 
+         void Initialize() override;
+         void Shutdown() override;
+
         TextureCommon* GetTexture() const;
 
     private:

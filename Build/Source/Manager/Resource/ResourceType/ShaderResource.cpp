@@ -11,4 +11,12 @@ namespace Engine5
     ShaderResource::~ShaderResource()
     {
     }
+
+    void ShaderResource::Initialize()
+    {
+    }
+
+    void ShaderResource::Shutdown()
+    {
+    }
 }

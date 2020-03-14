@@ -11,4 +11,12 @@ namespace Engine5
     MeshResource::~MeshResource()
     {
     }
+
+    void MeshResource::Initialize()
+    {
+    }
+
+    void MeshResource::Shutdown()
+    {
+    }
 }
