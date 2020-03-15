@@ -9,6 +9,7 @@ namespace Json
 
 namespace Engine5
 {
+    class Space;
     class Level;
 
     enum class eJsonType : size_t
@@ -38,13 +39,18 @@ namespace Engine5
         bool      IsMeshData() const;
         bool      IsParticleData() const;
         eJsonType GetType() const;
-
-        bool LoadType();
-        bool LoadLevel(Level* level);
-
-        bool HasMember(const Json::Value& data, const std::string& find) const;
+        bool      LoadJsonType();
+        bool      HasMember(const Json::Value& data, const std::string& find) const;
 
     private:
+        bool LoadLevel(Level* level) const;
+        bool LoadSpace(Space* space);
+        bool LoadSpaceFlag(Space* space) const;
+
+    private:
+        friend class Space;
+        friend class Level;
+        friend class LevelManager;
 
     private:
         eJsonType         m_json_type = eJsonType::None;

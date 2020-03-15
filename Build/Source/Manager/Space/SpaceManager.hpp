@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class JsonResource;
     class Space;
     class ObjectFactory;
     class ComponentRegistry;
@@ -21,9 +22,9 @@ namespace Engine5
         void Initialize();
         void Shutdown();
 
-
         Space* GetGlobalSpace() const;
         Space* CreateSpace(eSubsystemFlag flag);
+        Space* CreateSpace(JsonResource* resource);
         void   RemoveSpace(Space* space);
 
     private:

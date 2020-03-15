@@ -384,6 +384,11 @@ namespace Engine5
         }
     }
 
+    std::wstring ResourceManager::GetRootPath() const
+    {
+        return m_root_path;
+    }
+
     ShaderResource* ResourceManager::GetShaderResource(const std::wstring& path)
     {
         auto found = m_shader_resource_map.find(path);
@@ -678,8 +683,9 @@ namespace Engine5
             resource = new UndefinedResource(path);
             m_undefined_resource_map.emplace(path, (UndefinedResource*)resource);
         }
-        resource->m_file_name = name;
-        resource->m_file_type = type;
+        resource->m_file_name        = name;
+        resource->m_file_type        = type;
+        resource->m_resource_manager = this;
         resource->Initialize();
         return resource;
     }

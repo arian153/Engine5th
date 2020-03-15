@@ -259,8 +259,12 @@ namespace Engine5
     {
         level->Initialize();
         level->m_global_space = m_space_manager->GetGlobalSpace();
-        level->m_world_space  = m_space_manager->CreateSpace(level->m_world_flag);
-        level->m_ui_space     = m_space_manager->CreateSpace(level->m_ui_flag);
+        level->m_spaces.push_back(level->m_global_space);
+        for (auto& resource : level->m_space_resources)
+        {
+            auto space = m_space_manager->CreateSpace(resource);
+            level->m_spaces.push_back(space);
+        }
     }
 
     void LevelManager::UpdateLevel(Level* level, Real dt) const
@@ -303,6 +307,7 @@ namespace Engine5
         {
             m_space_manager->RemoveSpace(space);
         }
+        level->m_space_resources.clear();
     }
 
     void LevelManager::LoadLevel(Level* level) const

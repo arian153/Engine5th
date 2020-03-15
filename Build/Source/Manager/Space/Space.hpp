@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class JsonResource;
     class ComponentRegistry;
     class ObjectFactory;
     class RenderSystem;
@@ -20,6 +21,7 @@ namespace Engine5
         ~Space();
 
         void Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry);
+        void Initialize(JsonResource* m_space_resource, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry);
         void Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system);
 
         void ConnectSubsystem(ComponentManager* component_manager);
@@ -39,12 +41,14 @@ namespace Engine5
 
     private:
         friend class SpaceManager;
+        friend class JsonResource;
 
     private:
         bool           m_b_activate        = false;
         eSubsystemFlag m_creation_flag     = eSubsystemFlag::None;
         eSubsystemFlag m_update_flag       = eSubsystemFlag::None;
         eSubsystemFlag m_fixed_update_flag = eSubsystemFlag::None;
+        JsonResource*  m_space_resource    = nullptr;
 
         SpaceManager*     m_space_manager     = nullptr;
         ComponentManager* m_component_manager = nullptr;

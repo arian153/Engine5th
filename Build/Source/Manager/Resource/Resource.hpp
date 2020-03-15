@@ -4,6 +4,8 @@
 
 namespace Engine5
 {
+    class ResourceManager;
+
     class Resource
     {
     public:
@@ -21,13 +23,13 @@ namespace Engine5
         std::wstring FileType() const;
 
     protected:
-        std::wstring  m_file_path;
-        std::wstring  m_file_name;
-        std::wstring  m_file_type;
-        eResourceType m_type       = eResourceType::Undefined;
-        bool          m_b_loaded   = false;
-        bool          m_b_unloaded = false;
-
+        std::wstring     m_file_path;
+        std::wstring     m_file_name;
+        std::wstring     m_file_type;
+        eResourceType    m_type             = eResourceType::Undefined;
+        bool             m_b_loaded         = false;
+        bool             m_b_unloaded       = false;
+        ResourceManager* m_resource_manager = nullptr;
     private:
         friend class ResourceManager;
     };

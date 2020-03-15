@@ -4,6 +4,7 @@
 #include "../../System/Graphics/RenderSystem.hpp"
 #include "../Object/ObjectManager.hpp"
 #include "../Component/ComponentManager.hpp"
+#include "../Resource/ResourceType/JsonResource.hpp"
 
 namespace Engine5
 {
@@ -40,7 +41,35 @@ namespace Engine5
         {
             m_world = physics_system->CreateWorld();
         }
-        //load data from file.
+    }
+
+    void Space::Initialize(JsonResource* space_resource, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry)
+    {
+        m_space_resource = space_resource;
+        space_resource->LoadSpaceFlag(this);
+        //create component manager
+        if (m_component_manager == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::ComponentManager))
+        {
+            m_component_manager = new ComponentManager();
+            m_component_manager->Initialize(cmp_registry);
+        }
+        //create object manager
+        if (m_object_manager == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::ObjectManager))
+        {
+            m_object_manager = new ObjectManager();
+            m_object_manager->Initialize(obj_factory);
+        }
+        //create scene
+        if (m_scene == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Scene))
+        {
+            m_scene = render_system->CreateScene();
+        }
+        //create world
+        if (m_world == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::World))
+        {
+            m_world = physics_system->CreateWorld();
+        }
+        m_space_resource->LoadSpace(this);
     }
 
     void Space::Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system)

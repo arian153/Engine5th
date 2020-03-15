@@ -1,6 +1,7 @@
 #include "SpaceManager.hpp"
 #include "Space.hpp"
 #include "../../System/Physics/PhysicsSystem.hpp"
+#include "../Resource/ResourceType/JsonResource.hpp"
 
 namespace Engine5
 {
@@ -51,6 +52,14 @@ namespace Engine5
         m_spaces.push_back(space);
         space->m_creation_flag = flag;
         space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry);
+        return space;
+    }
+
+    Space* SpaceManager::CreateSpace(JsonResource* resource)
+    {
+        Space* space = new Space();
+        m_spaces.push_back(space);
+        space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry);
         return space;
     }
 

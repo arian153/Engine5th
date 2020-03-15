@@ -2,6 +2,9 @@
 #include "../../../External/JSONCPP/json/json.h"
 #include <fstream>
 #include "../../Level/Level.hpp"
+#include "../ResourceManager.hpp"
+#include "../../../System/Core/Utility/CoreUtility.hpp"
+#include "../../Space/Space.hpp"
 
 namespace Engine5
 {
@@ -20,7 +23,7 @@ namespace Engine5
         Json::CharReaderBuilder builder;
         m_reader    = builder.newCharReader();
         m_root_data = new Json::Value();
-        LoadType();
+        LoadJsonType();
     }
 
     void JsonResource::Shutdown()
@@ -29,6 +32,11 @@ namespace Engine5
         {
             delete m_reader;
             m_reader = nullptr;
+        }
+        if (m_root_data != nullptr)
+        {
+            delete m_root_data;
+            m_root_data = nullptr;
         }
     }
 
@@ -67,7 +75,7 @@ namespace Engine5
         return m_json_type;
     }
 
-    bool JsonResource::LoadType()
+    bool JsonResource::LoadJsonType()
     {
         std::ifstream file(m_file_path, std::ifstream::binary);
         std::string   doc;
@@ -112,15 +120,61 @@ namespace Engine5
         return false;
     }
 
-    bool JsonResource::LoadLevel(Level* level)
-    {
-        ;
-
-        return true;
-    }
-
     bool JsonResource::HasMember(const Json::Value& data, const std::string& find) const
     {
         return !(data[find].isNull());
+    }
+
+    bool JsonResource::LoadLevel(Level* level) const
+    {
+        if (HasMember(*m_root_data, "Spaces") && (*m_root_data)["Spaces"].isArray())
+        {
+            for (auto it = (*m_root_data)["Spaces"].begin(); it != (*m_root_data)["Spaces"].end(); ++it)
+            {
+                if (it->isString())
+                {
+                    std::wstring path           = m_resource_manager->GetRootPath() + StringToWString(it->asString());
+                    auto         space_resource = m_resource_manager->GetJsonResource(path);
+                    level->AddSpaceResource(space_resource);
+                }
+            }
+        }
+        return true;
+    }
+
+    bool JsonResource::LoadSpace(Space* space)
+    {
+        return true;
+    }
+
+    bool JsonResource::LoadSpaceFlag(Space* space) const
+    {
+        if (HasMember(*m_root_data, "Flag") && (*m_root_data)["Flag"].isArray())
+        {
+            for (auto it = (*m_root_data)["Flag"].begin(); it != (*m_root_data)["Flag"].end(); ++it)
+            {
+                if (it->isString())
+                {
+                    std::string flag = it->asString();
+                    if (flag == "ComponentManager")
+                    {
+                        space->m_creation_flag |= eSubsystemFlag::ComponentManager;
+                    }
+                    else if (flag == "ObjectManager")
+                    {
+                        space->m_creation_flag |= eSubsystemFlag::ObjectManager;
+                    }
+                    else if (flag == "Scene")
+                    {
+                        space->m_creation_flag |= eSubsystemFlag::Scene;
+                    }
+                    else if (flag == "World")
+                    {
+                        space->m_creation_flag |= eSubsystemFlag::World;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

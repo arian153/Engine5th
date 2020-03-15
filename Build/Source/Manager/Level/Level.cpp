@@ -121,4 +121,9 @@ namespace Engine5
             }
         }
     }
+
+    void Level::AddSpaceResource(JsonResource* resource)
+    {
+        m_space_resources.push_back(resource);
+    }
 }

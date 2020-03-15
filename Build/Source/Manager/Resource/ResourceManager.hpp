@@ -32,7 +32,7 @@ namespace Engine5
         void ClearResource();
         void BuildResource();
 
-        //get specific resource
+        std::wstring GetRootPath() const;
 
         //shader
         ShaderResource* GetShaderResource(const std::wstring& path);

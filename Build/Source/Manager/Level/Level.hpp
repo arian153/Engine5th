@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class JsonResource;
     class Space;
 
     class Level
@@ -31,6 +32,8 @@ namespace Engine5
         void UpdateSubsystem(Real dt, eSubsystemFlag flag) const;
         void FixedUpdateSubsystem(Real dt, eSubsystemFlag flag);
 
+        void AddSpaceResource(JsonResource* resource);
+
     private:
         friend class LevelManager;
 
@@ -42,7 +45,8 @@ namespace Engine5
         eSubsystemFlag m_world_flag = eSubsystemFlag::None;
         eSubsystemFlag m_ui_flag    = eSubsystemFlag::None;
 
-        std::vector<Space*> m_spaces;
-        std::string         m_name = "Default";
+        std::vector<Space*>        m_spaces;
+        std::vector<JsonResource*> m_space_resources;
+        std::string                m_name = "Default";
     };
 }
