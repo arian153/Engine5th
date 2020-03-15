@@ -22,6 +22,7 @@ namespace Engine5
     void ResourceManager::Initialize(FileUtility* file_utility)
     {
         m_file_utility = file_utility;
+        m_root_path    = L"../../Resource";
         BuildResource();
     }
 
@@ -376,7 +377,7 @@ namespace Engine5
     {
         m_file_list.clear();
         m_directory_list.clear();
-        QueryFilePathRecursive(L"../../Resource", m_file_list, m_directory_list);
+        QueryFilePathRecursive(m_root_path, m_file_list, m_directory_list);
         for (auto& file : m_file_list)
         {
             AddResource(file);

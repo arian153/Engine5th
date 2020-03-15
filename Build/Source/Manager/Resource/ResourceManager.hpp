@@ -68,6 +68,7 @@ namespace Engine5
         void      QueryFilePathRecursive(const std::wstring& path, std::list<std::wstring>& file_list, std::list<std::wstring>& directory_list) const;
         Resource* AddResource(const std::wstring& path);
     private:
+        std::wstring            m_root_path;
         std::list<std::wstring> m_file_list;
         std::list<std::wstring> m_directory_list;
 

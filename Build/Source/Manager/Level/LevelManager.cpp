@@ -327,8 +327,12 @@ namespace Engine5
         auto   found   = m_level_resources.find(level_name);
         if (found != m_level_resources.end())
         {
-            created = new Level(level_name);
-            //Todo initialize level ...
+            created       = new Level(level_name);
+            auto resource = found->second;
+            if (resource->IsLevel())
+            {
+                resource->LoadLevel(created);
+            }
         }
         return created;
     }

@@ -1,6 +1,7 @@
 #include "JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include <fstream>
+#include "../../Level/Level.hpp"
 
 namespace Engine5
 {
@@ -17,7 +18,8 @@ namespace Engine5
     void JsonResource::Initialize()
     {
         Json::CharReaderBuilder builder;
-        m_reader = builder.newCharReader();
+        m_reader    = builder.newCharReader();
+        m_root_data = new Json::Value();
         LoadType();
     }
 
@@ -67,16 +69,15 @@ namespace Engine5
 
     bool JsonResource::LoadType()
     {
-        Json::Value   root;
         std::ifstream file(m_file_path, std::ifstream::binary);
         std::string   doc;
         std::getline(file, doc, static_cast<char>(EOF));
-        bool b_parsing_successful = m_reader->parse(doc.data(), doc.data() + doc.size(), &root, nullptr);
+        bool b_parsing_successful = m_reader->parse(doc.data(), doc.data() + doc.size(), m_root_data, nullptr);
         if (b_parsing_successful)
         {
-            if (HasMember(root, "Type") && root["Type"].isString())
+            if (HasMember(*m_root_data, "Type") && (*m_root_data)["Type"].isString())
             {
-                std::string json_type = root["Type"].asString();
+                std::string json_type = (*m_root_data)["Type"].asString();
                 if (json_type == "Level")
                 {
                     m_json_type = eJsonType::Level;
@@ -109,6 +110,13 @@ namespace Engine5
             }
         }
         return false;
+    }
+
+    bool JsonResource::LoadLevel(Level* level)
+    {
+        ;
+
+        return true;
     }
 
     bool JsonResource::HasMember(const Json::Value& data, const std::string& find) const

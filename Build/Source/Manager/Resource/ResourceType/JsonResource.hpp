@@ -9,6 +9,8 @@ namespace Json
 
 namespace Engine5
 {
+    class Level;
+
     enum class eJsonType : size_t
     {
         None
@@ -38,11 +40,15 @@ namespace Engine5
         eJsonType GetType() const;
 
         bool LoadType();
+        bool LoadLevel(Level* level);
 
         bool HasMember(const Json::Value& data, const std::string& find) const;
 
     private:
+
+    private:
         eJsonType         m_json_type = eJsonType::None;
         Json::CharReader* m_reader    = nullptr;
+        Json::Value*      m_root_data = nullptr;
     };
 }
