@@ -287,7 +287,7 @@ namespace Engine5
         int width  = R.right - R.left;
         int height = R.bottom - R.top;
         m_h_wnd    = CreateWindow(
-                                  L"E5hWnd", StringToWString(m_application->m_application_caption).c_str(), m_style,
+                                  L"E5hWnd", m_application->m_application_caption.c_str(), m_style,
                                   width_start, height_start, width, height, nullptr, nullptr, m_h_instance, this
                                  );
         if (!m_h_wnd)

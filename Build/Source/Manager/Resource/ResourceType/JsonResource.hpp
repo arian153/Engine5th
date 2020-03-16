@@ -9,6 +9,7 @@ namespace Json
 
 namespace Engine5
 {
+    struct ApplicationSetting;
     class Space;
     class Level;
 
@@ -43,7 +44,7 @@ namespace Engine5
         bool      HasMember(const Json::Value& data, const std::string& find) const;
 
     private:
-        bool LoadSetting();
+        bool LoadSetting(ApplicationSetting* app_setting);
         bool LoadData(Level* level) const;
         bool LoadData(Space* space) const;
         bool LoadSpaceFlag(Space* space) const;

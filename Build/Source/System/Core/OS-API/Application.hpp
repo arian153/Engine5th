@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    struct ApplicationSetting;
     class FileUtility;
     class ResourceManager;
     class InputCommon;
@@ -53,7 +54,8 @@ namespace Engine5
 
     private:
         //application name
-        std::string m_application_caption = "Engine 5th";
+        std::wstring        m_application_caption = L"Engine 5th";
+        ApplicationSetting* m_initial_setting     = nullptr;
 
     private:
         //sub systems

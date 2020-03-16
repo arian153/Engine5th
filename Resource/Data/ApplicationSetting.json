@@ -1,12 +1,12 @@
 {
-
     "Settings": {
-        "Cursor Confine": false,
-        "Cursor Show": true,
-        "Screen Resolution": [ 1280, 720 ],
+        "Confine Cursor": false,
+        "Show Cursor": true,
+        "Screen Resolution": [1280, 720],
         "Screen Scale": 3.5,
         "V-Sync": true,
-        "Window Mode": "Window"
+        "Window Mode": "Windowed",
+        "Window Caption" : "Engine 5th Test Project" 
     },
     "Type": "Setting"
 }
