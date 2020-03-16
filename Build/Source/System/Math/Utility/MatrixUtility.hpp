@@ -42,7 +42,7 @@ namespace Engine5
                 const Engine5::Vector3& translation
             );
 
-            Engine5::Matrix44 ProjectionMatrix
+            Engine5::Matrix44 PerspectiveMatrix
             (
                 Real screen_aspect,
                 Real field_of_view,

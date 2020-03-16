@@ -1,9 +1,17 @@
 {
-    "Type": "Space",
+    "Flag": [
+        "ComponentManager",
+        "ObjectManager",
+        "Scene",
+        "World"
+    ],
     "Objects": [
 
+    ],
+    "Type": "Space",
+    "Settings": [
+        {
 
+        }
     ]
-
-
 }

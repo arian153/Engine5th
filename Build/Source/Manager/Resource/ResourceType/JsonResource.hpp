@@ -18,7 +18,6 @@ namespace Engine5
       , Level
       , Space
       , Archetype
-      , Object
       , MeshData
       , ParticleData
     };
@@ -35,7 +34,6 @@ namespace Engine5
         bool      IsLevel() const;
         bool      IsSpace() const;
         bool      IsArchetype() const;
-        bool      IsObject() const;
         bool      IsMeshData() const;
         bool      IsParticleData() const;
         eJsonType GetType() const;
@@ -43,8 +41,8 @@ namespace Engine5
         bool      HasMember(const Json::Value& data, const std::string& find) const;
 
     private:
-        bool LoadLevel(Level* level) const;
-        bool LoadSpace(Space* space);
+        bool LoadData(Level* level) const;
+        bool LoadData(Space* space) const;
         bool LoadSpaceFlag(Space* space) const;
 
     private:

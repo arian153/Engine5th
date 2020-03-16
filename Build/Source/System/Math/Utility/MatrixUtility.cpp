@@ -281,7 +281,7 @@ namespace Engine5
                 return result;
             }
 
-            Engine5::Matrix44 ProjectionMatrix(Real screen_aspect, Real field_of_view, Real far_plane, Real near_plane)
+            Engine5::Matrix44 PerspectiveMatrix(Real screen_aspect, Real field_of_view, Real far_plane, Real near_plane)
             {
                 Real              alpha = field_of_view * 0.5f;
                 Real              cot   = cosf(alpha) / sinf(alpha);

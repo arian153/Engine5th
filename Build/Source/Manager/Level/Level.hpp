@@ -24,13 +24,11 @@ namespace Engine5
         void Unload() const;
 
         Space* GetGlobalSpace() const;
-        Space* GetUISpace() const;
-        Space* GetWorldSpace() const;
         Space* GetSpace(size_t index) const;
 
         void UpdateSpace(Real dt, size_t index, eSubsystemFlag flag) const;
         void UpdateSubsystem(Real dt, eSubsystemFlag flag) const;
-        void FixedUpdateSubsystem(Real dt, eSubsystemFlag flag);
+        void FixedUpdateSubsystem(Real dt, eSubsystemFlag flag) const;
 
         void AddSpaceResource(JsonResource* resource);
 
@@ -38,9 +36,10 @@ namespace Engine5
         friend class LevelManager;
 
     private:
+        void UpdateSpace(Real dt, Space* space, eSubsystemFlag flag) const;
+
+    private:
         Space* m_global_space = nullptr;
-        Space* m_world_space  = nullptr;
-        Space* m_ui_space     = nullptr;
 
         eSubsystemFlag m_world_flag = eSubsystemFlag::None;
         eSubsystemFlag m_ui_flag    = eSubsystemFlag::None;

@@ -69,7 +69,7 @@ namespace Engine5
         {
             m_world = physics_system->CreateWorld();
         }
-        m_space_resource->LoadSpace(this);
+        m_space_resource->LoadData(this);
     }
 
     void Space::Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system)

@@ -55,11 +55,6 @@ namespace Engine5
         return m_json_type == eJsonType::Archetype;
     }
 
-    bool JsonResource::IsObject() const
-    {
-        return m_json_type == eJsonType::Object;
-    }
-
     bool JsonResource::IsMeshData() const
     {
         return m_json_type == eJsonType::MeshData;
@@ -94,10 +89,6 @@ namespace Engine5
                 {
                     m_json_type = eJsonType::Space;
                 }
-                else if (json_type == "Object")
-                {
-                    m_json_type = eJsonType::Object;
-                }
                 else if (json_type == "Archetype")
                 {
                     m_json_type = eJsonType::Archetype;
@@ -125,7 +116,7 @@ namespace Engine5
         return !(data[find].isNull());
     }
 
-    bool JsonResource::LoadLevel(Level* level) const
+    bool JsonResource::LoadData(Level* level) const
     {
         if (HasMember(*m_root_data, "Spaces") && (*m_root_data)["Spaces"].isArray())
         {
@@ -142,8 +133,27 @@ namespace Engine5
         return true;
     }
 
-    bool JsonResource::LoadSpace(Space* space)
+    bool JsonResource::LoadData(Space* space) const
     {
+        if (HasMember(*m_root_data, "Objects") && (*m_root_data)["Objects"].isArray())
+        {
+            for (auto it = (*m_root_data)["Objects"].begin(); it != (*m_root_data)["Objects"].end(); ++it)
+            {
+                //Load Object
+            }
+        }
+        if (HasMember(*m_root_data, "Settings"))
+        {
+            Json::Value setting = (*m_root_data)["Settings"];
+            if (HasMember(setting, "ProjectionMatrix"))
+            {
+                //Load Setting
+            }
+            for (auto it = (*m_root_data)["Objects"].begin(); it != (*m_root_data)["Objects"].end(); ++it)
+            {
+                //Load Object
+            }
+        }
         return true;
     }
 

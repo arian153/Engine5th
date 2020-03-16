@@ -87,7 +87,7 @@ namespace Engine5
 
     Matrix44 MatrixManager::GetProjectionMatrix() const
     {
-        return Math::Matrix44::ProjectionMatrix(m_screen_aspect, m_field_of_view, m_far_plane, m_near_plane);
+        return Math::Matrix44::PerspectiveMatrix(m_screen_aspect, m_field_of_view, m_far_plane, m_near_plane);
     }
 
     Matrix44 MatrixManager::GetOrthoGraphicMatrix() const

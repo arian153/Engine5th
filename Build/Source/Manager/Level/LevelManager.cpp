@@ -257,34 +257,33 @@ namespace Engine5
 
     void LevelManager::InitializeLevel(Level* level) const
     {
-        level->Initialize();
         level->m_global_space = m_space_manager->GetGlobalSpace();
-        level->m_spaces.push_back(level->m_global_space);
         for (auto& resource : level->m_space_resources)
         {
             auto space = m_space_manager->CreateSpace(resource);
             level->m_spaces.push_back(space);
         }
+        level->Initialize();
     }
 
     void LevelManager::UpdateLevel(Level* level, Real dt) const
     {
-        level->Update(dt);
         //update logic
         //update physics
         level->UpdateSubsystem(dt, eSubsystemFlag::World);
         //update animation
         //update sound
+        level->Update(dt);
     }
 
     void LevelManager::FixedUpdateLevel(Level* level, Real dt) const
     {
-        level->FixedUpdate(dt);
         //update logic
         //update physics
         level->FixedUpdateSubsystem(dt, eSubsystemFlag::World);
         //update animation
         //update sound
+        level->FixedUpdate(dt);
     }
 
     void LevelManager::RenderLevel(Level* level, Real dt)
@@ -336,7 +335,7 @@ namespace Engine5
             auto resource = found->second;
             if (resource->IsLevel())
             {
-                resource->LoadLevel(created);
+                resource->LoadData(created);
             }
         }
         return created;
