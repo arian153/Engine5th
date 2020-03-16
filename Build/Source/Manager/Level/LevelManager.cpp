@@ -32,6 +32,14 @@ namespace Engine5
         m_frame_utility     = application->GetFrameUtility();
         m_input             = application->GetInput();
         m_resource_manager  = application->GetResourceManager();
+        for (auto& json : m_resource_manager->m_json_resource_map)
+        {
+            auto level = json.second;
+            if (level->IsLevel())
+            {
+                AddLevel(level);
+            }
+        }
     }
 
     void LevelManager::Update()
@@ -130,12 +138,21 @@ namespace Engine5
         auto found = m_level_resources.find(level_name);
         if (found == m_level_resources.end())
         {
-            std::wstring  level_path      = m_resource_manager->GetRootPath() + L"Data/Level/" + StringToWString(level_name) + L".json";
+            std::wstring  level_path      = m_resource_manager->GetRootPath() + L"/Data/Level/" + StringToWString(level_name) + L".json";
+            std::wstring  space_path      = L"Data/Space/" + StringToWString(level_name) + L"World.json";
             JsonResource* level_resource  = m_resource_manager->CreateJsonResource(level_path);
             level_resource->m_b_load_type = false;
             level_resource->Initialize();
             level_resource->m_json_type = eJsonType::Level;
+            level_resource->CreateLevelData(space_path);
+            level_resource->m_b_load_type = true;
             m_level_resources.emplace(level_name, level_resource);
+            JsonResource* space_resource  = m_resource_manager->CreateJsonResource(m_resource_manager->GetRootPath() + L"/" + space_path);
+            space_resource->m_b_load_type = false;
+            space_resource->Initialize();
+            space_resource->m_json_type = eJsonType::Space;
+            space_resource->CreateSpaceData();
+            space_resource->m_b_load_type = true;
         }
     }
 

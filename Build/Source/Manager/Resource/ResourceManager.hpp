@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class LevelManager;
     class JsonResource;
     class ShaderResource;
     class TextureResource;
@@ -68,6 +69,10 @@ namespace Engine5
     private:
         void      QueryFilePathRecursive(const std::wstring& path, std::list<std::wstring>& file_list, std::list<std::wstring>& directory_list) const;
         Resource* AddResource(const std::wstring& path);
+
+    private:
+        friend class LevelManager;
+
     private:
         std::wstring            m_root_path;
         std::list<std::wstring> m_file_list;

@@ -21,7 +21,7 @@ namespace Engine5
         void SetClientRect(Real right, Real left, Real top, Real bottom);
 
         //Getter
-        Matrix44 GetProjectionMatrix() const;
+        Matrix44 GetPerspectiveMatrix() const;
         Matrix44 GetOrthoGraphicMatrix() const;
 
     private:

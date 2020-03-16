@@ -3,9 +3,11 @@
 #include "Camera.hpp"
 #include "Mesh.hpp"
 #include "../Shader/ShaderType.hpp"
+#include "../DataType/ProjectionType.hpp"
 
 namespace Engine5
 {
+    class MatrixManager;
     class ShaderManager;
     class RendererCommon;
     class RendererDX11;
@@ -22,13 +24,17 @@ namespace Engine5
 
         void SetRenderer(RendererCommon* renderer);
         void SetShaderManager(ShaderManager* shader_manager);
+        void SetMatrixManager(MatrixManager* matrix_manager);
 
         void DrawShader(eShaderType shader_type);
-
+        void SetProjectionType(eProjectionType projection_type);
+        void UpdateProjection();
     private:
-        RendererCommon* m_renderer       = nullptr;
-        ShaderManager*  m_shader_manager = nullptr;
-        Camera*         m_camera         = nullptr;
-        Mesh*           m_mesh           = nullptr;
+        RendererCommon* m_renderer        = nullptr;
+        ShaderManager*  m_shader_manager  = nullptr;
+        MatrixManager*  m_matrix_manager  = nullptr;
+        Camera*         m_camera          = nullptr;
+        eProjectionType m_projection_type = eProjectionType::Perspective;
+        Matrix44        m_projection_matrix;
     };
 }

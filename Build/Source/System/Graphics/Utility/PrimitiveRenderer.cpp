@@ -185,7 +185,7 @@ namespace Engine5
 
     void PrimitiveRenderer::UpdateProjectionMatrix()
     {
-        m_proj_matrix = m_matrix_generator->GetProjectionMatrix();
+        m_proj_matrix = m_matrix_generator->GetPerspectiveMatrix();
     }
 
     void PrimitiveRenderer::SetRendererCameraPosition(const Vector3& pos)

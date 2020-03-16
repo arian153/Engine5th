@@ -45,6 +45,10 @@ namespace Engine5
         bool LoadData(Space* space) const;
         bool LoadSpaceFlag(Space* space) const;
 
+        //Create Empty Json Data
+        void CreateLevelData(const std::wstring& space_path) const;
+        void CreateSpaceData() const;
+
     private:
         friend class Space;
         friend class Level;

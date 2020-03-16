@@ -85,7 +85,7 @@ namespace Engine5
         m_screen_aspect = (m_right - m_left) / (m_top - m_bottom);
     }
 
-    Matrix44 MatrixManager::GetProjectionMatrix() const
+    Matrix44 MatrixManager::GetPerspectiveMatrix() const
     {
         return Math::Matrix44::PerspectiveMatrix(m_screen_aspect, m_field_of_view, m_far_plane, m_near_plane);
     }

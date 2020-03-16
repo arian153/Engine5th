@@ -8,7 +8,7 @@
 
     ],
     "Settings": {
-        "ProjectionMatrix": "OrthoGraphicMatrix"
+        "ProjectionMatrix": "OrthoGraphic"
     },
     "Type": "Space"
 }

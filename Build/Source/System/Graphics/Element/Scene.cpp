@@ -2,6 +2,7 @@
 #include "../Renderer/RendererCommon.hpp"
 #include "../Shader/ShaderManager.hpp"
 #include "../Shader/ColorShaderCommon.hpp"
+#include "../Utility/MatrixManager.hpp"
 
 namespace Engine5
 {
@@ -25,20 +26,16 @@ namespace Engine5
     void Scene::Update(Real dt) const
     {
         m_camera->Update(dt);
+
+        
         //auto world = DirectX::XMMatrixIdentity();
         //auto view  = m_camera->GetViewMatrix();
-        //auto proj  = m_renderer->GetProjectionMatrix();
+        //auto proj  = m_renderer->GetPerspectiveMatrix();
         //m_shader_manager->GetColorShader()->Update(dt, m_renderer->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, proj);
     }
 
     void Scene::Shutdown()
     {
-        if (m_mesh != nullptr)
-        {
-            m_mesh->Shutdown();
-            delete m_mesh;
-            m_mesh = nullptr;
-        }
         if (m_camera != nullptr)
         {
             m_camera->Shutdown();
@@ -57,12 +54,38 @@ namespace Engine5
         m_shader_manager = shader_manager;
     }
 
+    void Scene::SetMatrixManager(MatrixManager* matrix_manager)
+    {
+        m_matrix_manager = matrix_manager;
+    }
+
     void Scene::DrawShader(eShaderType shader_type)
     {
         switch (shader_type)
         {
         case eShaderType::Color:
             //m_shader_manager->GetColorShader()->Render();
+            break;
+        default:
+            break;
+        }
+    }
+
+    void Scene::SetProjectionType(eProjectionType projection_type)
+    {
+        m_projection_type = projection_type;
+        UpdateProjection();
+    }
+
+    void Scene::UpdateProjection()
+    {
+        switch (m_projection_type)
+        {
+        case eProjectionType::Perspective:
+            m_projection_matrix = m_matrix_manager->GetPerspectiveMatrix();
+            break;
+        case eProjectionType::OrthoGraphic:
+            m_projection_matrix = m_matrix_manager->GetOrthoGraphicMatrix();
             break;
         default:
             break;

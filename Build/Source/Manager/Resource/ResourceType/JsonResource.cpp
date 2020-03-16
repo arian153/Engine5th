@@ -5,6 +5,7 @@
 #include "../ResourceManager.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../Space/Space.hpp"
+#include "../../../System/Graphics/Element/Scene.hpp"
 
 namespace Engine5
 {
@@ -127,7 +128,7 @@ namespace Engine5
             {
                 if (it->isString())
                 {
-                    std::wstring path           = m_resource_manager->GetRootPath() + StringToWString(it->asString());
+                    std::wstring path           = m_resource_manager->GetRootPath() + L"/" + StringToWString(it->asString());
                     auto         space_resource = m_resource_manager->GetJsonResource(path);
                     level->AddSpaceResource(space_resource);
                 }
@@ -138,20 +139,24 @@ namespace Engine5
 
     bool JsonResource::LoadData(Space* space) const
     {
-        if (HasMember(*m_root_data, "Objects") && (*m_root_data)["Objects"].isArray())
-        {
-            for (auto it = (*m_root_data)["Objects"].begin(); it != (*m_root_data)["Objects"].end(); ++it)
-            {
-                //Load Object
-            }
-        }
         if (HasMember(*m_root_data, "Settings"))
         {
             Json::Value setting = (*m_root_data)["Settings"];
             if (HasMember(setting, "ProjectionMatrix"))
             {
-                //Load Setting
+                std::string type = setting["ProjectionMatrix"].asString();
+                if (type == "Perspective")
+                {
+                    space->GetScene()->SetProjectionType(eProjectionType::Perspective);
+                }
+                else if (type == "OrthoGraphic")
+                {
+                    space->GetScene()->SetProjectionType(eProjectionType::OrthoGraphic);
+                }
             }
+        }
+        if (HasMember(*m_root_data, "Objects") && (*m_root_data)["Objects"].isArray())
+        {
             for (auto it = (*m_root_data)["Objects"].begin(); it != (*m_root_data)["Objects"].end(); ++it)
             {
                 //Load Object
@@ -189,5 +194,21 @@ namespace Engine5
             }
         }
         return true;
+    }
+
+    void JsonResource::CreateLevelData(const std::wstring& space_path) const
+    {
+        (*m_root_data)["Type"].append("Level");
+        (*m_root_data)["Spaces"].append(WStringToString(space_path));
+    }
+
+    void JsonResource::CreateSpaceData() const
+    {
+        (*m_root_data)["Type"].append("Space");
+        (*m_root_data)["Flag"].append("ComponentManager");
+        (*m_root_data)["Flag"].append("ObjectManager");
+        (*m_root_data)["Flag"].append("Scene");
+        (*m_root_data)["Flag"].append("World");
+        (*m_root_data)["Settings"]["ProjectionMatrix"] = "Perspective";
     }
 }

@@ -12,5 +12,5 @@
     "Settings": {
         "ProjectionMatrix": "Perspective"
     },
-    "Type": "Space"
+    "Type": "Setting"
 }
