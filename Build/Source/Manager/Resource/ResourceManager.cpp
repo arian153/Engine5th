@@ -584,6 +584,16 @@ namespace Engine5
         }
     }
 
+    JsonResource* ResourceManager::CreateJsonResource(const std::wstring& path)
+    {
+        JsonResource* resource       = new JsonResource(path);
+        resource->m_file_name        = m_file_utility->GetFileNameFromPath(path);
+        resource->m_file_type        = m_file_utility->GetFileTypeFromPath(path);
+        resource->m_resource_manager = this;
+        m_json_resource_map.emplace(path, resource);
+        return resource;
+    }
+
     UndefinedResource* ResourceManager::GetUndefinedResource(const std::wstring& path)
     {
         auto found = m_undefined_resource_map.find(path);

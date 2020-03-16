@@ -58,6 +58,7 @@ namespace Engine5
         JsonResource* GetJsonResource(const std::wstring& path);
         JsonResource* GetJsonResourceFileName(const std::wstring& file_name);
         void          GetJsonResources(const std::wstring& file_name, std::vector<JsonResource*>& resources);
+        JsonResource* CreateJsonResource(const std::wstring& path);
 
         //undefined
         UndefinedResource* GetUndefinedResource(const std::wstring& path);

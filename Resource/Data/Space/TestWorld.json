@@ -9,10 +9,8 @@
 
 
     ],
-    "Type": "Space",
     "Settings": {
         "ProjectionMatrix": "PerspectiveMatrix"
-    }
-    
-
+    },
+    "Type": "Space"
 }

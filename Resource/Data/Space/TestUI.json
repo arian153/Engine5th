@@ -1,9 +1,14 @@
 {
-    "Type": "Space",
-    "Objects": 
-    [
-        "","",""
-    ]
+    "Flag": [
+        "ComponentManager",
+        "ObjectManager",
+        "Scene"
+    ],
+    "Objects": [
 
-    
+    ],
+    "Settings": {
+        "ProjectionMatrix": "OrthoGraphicMatrix"
+    },
+    "Type": "Space"
 }

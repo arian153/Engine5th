@@ -1,7 +1,8 @@
 {
     "Spaces": [
-        "Data/Space/TestUI.json",
-        "Data/Space/TestWorld.json"
+        "Data/Space/TestWorld.json",
+        "Data/Space/TestUI.json"
     ],
     "Type": "Level"
 }
+

@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class ResourceManager;
     class InputCommon;
     class FrameUtility;
     class Application;
@@ -26,7 +27,8 @@ namespace Engine5
         void Update();
         void Shutdown();
 
-        void AddLevel(const std::string& level_name, JsonResource* level_resource = nullptr);
+        void AddLevel(const std::string& level_name);
+        void AddLevel(JsonResource* level_resource);
         void SetInitialLevel(const std::string& level_name);
         void EnableLoadPhase(bool b_enable_load_phase = false);
         void SetQuit();
@@ -96,6 +98,7 @@ namespace Engine5
         FrameUtility*        m_frame_utility     = nullptr;
         Application*         m_application       = nullptr;
         InputCommon*         m_input             = nullptr;
+        ResourceManager*     m_resource_manager  = nullptr;
 
         //resource
         std::unordered_map<std::string, JsonResource*> m_level_resources;

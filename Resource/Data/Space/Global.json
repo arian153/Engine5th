@@ -8,10 +8,8 @@
     "Objects": [
 
     ],
-    "Type": "Space",
-    "Settings": [
-        {
-
-        }
-    ]
+    "Settings": {
+        "ProjectionMatrix": "PerspectiveMatrix"
+    },
+    "Type": "Space"
 }

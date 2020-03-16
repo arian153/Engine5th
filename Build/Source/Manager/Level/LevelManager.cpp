@@ -10,6 +10,7 @@
 #include "../../System/Core/OS-API/OSCommon.hpp"
 #include "../../System/Core/Utility/FrameUtility.hpp"
 #include "../../System/Core/Input/InputCommon.hpp"
+#include "../Resource/ResourceManager.hpp"
 
 namespace Engine5
 {
@@ -30,6 +31,7 @@ namespace Engine5
         m_application_timer = application->GetApplicationTimer();
         m_frame_utility     = application->GetFrameUtility();
         m_input             = application->GetInput();
+        m_resource_manager  = application->GetResourceManager();
     }
 
     void LevelManager::Update()
@@ -120,23 +122,26 @@ namespace Engine5
         delete m_level;
         m_level = nullptr;
         RemovePausedLevel();
-        for (auto& resource : m_level_resources)
-        {
-            delete resource.second;
-            resource.second = nullptr;
-        }
         m_level_resources.clear();
     }
 
-    void LevelManager::AddLevel(const std::string& level_name, JsonResource* level_resource)
+    void LevelManager::AddLevel(const std::string& level_name)
     {
         auto found = m_level_resources.find(level_name);
         if (found == m_level_resources.end())
         {
-            if (level_resource == nullptr)
-            {
-                level_resource = new JsonResource(StringToWString(level_name));
-            }
+            std::wstring  level_path     = m_resource_manager->GetRootPath() + L"Data/Level/" + StringToWString(level_name) + L".json";
+            JsonResource* level_resource = m_resource_manager->CreateJsonResource(level_path);
+            m_level_resources.emplace(level_name, level_resource);
+        }
+    }
+
+    void LevelManager::AddLevel(JsonResource* level_resource)
+    {
+        std::string level_name = WStringToString(level_resource->FileName());
+        auto        found      = m_level_resources.find(level_name);
+        if (found == m_level_resources.end())
+        {
             m_level_resources.emplace(level_name, level_resource);
         }
     }
