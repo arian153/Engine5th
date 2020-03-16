@@ -1,11 +1,13 @@
 #pragma once
 #include "OSAPI.hpp"
 #include IncludeOSAPI
+#include "WindowMode.hpp"
 
 namespace Engine5
 {
     class LevelManager;
     class TimeUtility;
+
     class OSCommon : public OSAPI
     {
     public:
@@ -17,7 +19,7 @@ namespace Engine5
 
         void SetConfineCursor(bool b_confine_cursor);
         void SetShowCursor(bool b_show_cursor);
-        void SetFullscreen(bool b_fullscreen);
+        void SetWindowMode(eWindowMode window_mode);
         void SetQuit(bool b_quit);
         void SetClientResolution(int width, int height);
         void SetMonitorResolution();
@@ -52,10 +54,8 @@ namespace Engine5
         bool m_b_confine_cursor    = false;
 
         //window style option
-        bool m_b_fullscreen = false;
-        bool m_b_invisible  = false;
-        bool m_b_borderless = false;
-        bool m_b_resizable  = false;
+        eWindowMode m_window_mode = eWindowMode::Windowed;
+        bool        m_b_resizable = false;
 
         //window application state
         bool m_b_app_paused = false;
@@ -73,7 +73,7 @@ namespace Engine5
         int m_monitor_screen_width  = 0;
         int m_monitor_screen_height = 0;
 
-        TimeUtility* m_application_timer = nullptr;
-        LevelManager* m_level_manager = nullptr;
+        TimeUtility*  m_application_timer = nullptr;
+        LevelManager* m_level_manager     = nullptr;
     };
 }

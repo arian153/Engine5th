@@ -1,16 +1,12 @@
 {
-    "Flag": [
-        "ComponentManager",
-        "ObjectManager",
-        "Scene",
-        "World"
-    ],
-    "Objects": [
 
-
-    ],
     "Settings": {
-        "ProjectionMatrix": "Perspective"
+        "Cursor Confine": false,
+        "Cursor Show": true,
+        "Screen Resolution": [ 1280, 720 ],
+        "Screen Scale": 3.5,
+        "V-Sync": true,
+        "Window Mode": "Window"
     },
     "Type": "Setting"
 }

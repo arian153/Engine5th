@@ -58,7 +58,7 @@ namespace Engine5
             // WM_SIZE is sent when the user resizes the window.  
         case WM_SIZE:
             // Save the new client area dimensions.
-            if (m_os_common->m_b_fullscreen == false)
+            if (m_os_common->m_window_mode == eWindowMode::Fullscreen)
             {
                 m_os_common->m_prev_client_width  = m_os_common->m_curr_client_width;
                 m_os_common->m_prev_client_height = m_os_common->m_curr_client_height;
@@ -212,13 +212,9 @@ namespace Engine5
         y_start = (dm.dmPelsHeight / 2) - static_cast<int>(movement_height);
     }
 
-    DWORD OSWin32::GetWindowModeRelatedResolution() const
+    DWORD OSWin32::GetWindowedStyle() const
     {
-        if (m_os_common->m_curr_client_height >= m_os_common->m_monitor_screen_height)
-        {
-            return WINDOWED_STYLE;
-        }
-        return WINDOWED_STYLE_COMMON;
+        return m_os_common->m_curr_client_height >= m_os_common->m_monitor_screen_height ? WINDOWED_STYLE : WINDOWED_STYLE_COMMON;
     }
 
     HINSTANCE OSWin32::AppInstance() const
@@ -235,6 +231,21 @@ namespace Engine5
     {
         m_keyboard_input = input->GetKeyboardInput();
         m_mouse_input    = input->GetMouseInput();
+    }
+
+    DWORD OSWin32::GetWindowModeStyle(eWindowMode window_mode) const
+    {
+        switch (window_mode)
+        {
+        case eWindowMode::Windowed:
+            return GetWindowedStyle();
+        case eWindowMode::Borderless:
+            return BORDERLESS_STYLE;
+        case eWindowMode::Fullscreen:
+            return FULLSCREEN_STYLE;
+        default:
+            return GetWindowedStyle();
+        }
     }
 
     OSCommon::OSCommon(Application* application)
@@ -268,7 +279,7 @@ namespace Engine5
             m_b_init = false;
             return;
         }
-        m_style = GetWindowModeRelatedResolution();
+        m_style = GetWindowedStyle();
         // Compute window rectangle dimensions based on requested client area dimensions.
         RECT R = {0, 0, m_curr_client_width, m_curr_client_height};
         int  width_start, height_start;
@@ -285,8 +296,7 @@ namespace Engine5
             m_b_init = false;
             return;
         }
-        if (m_b_fullscreen == true)
-            SetFullscreen(true);
+        SetWindowMode(m_window_mode);
         ShowWindow(m_h_wnd, SW_SHOW);
         UpdateWindow(m_h_wnd);
         m_b_init = true;
@@ -319,9 +329,9 @@ namespace Engine5
         ShowCursor(b_show_cursor);
     }
 
-    void OSCommon::SetFullscreen(bool b_fullscreen)
+    void OSCommon::SetWindowMode(eWindowMode window_mode)
     {
-        if (b_fullscreen == true)
+        if (window_mode == eWindowMode::Fullscreen)
         {
             if (m_curr_client_width > m_monitor_screen_width)
             {
@@ -332,12 +342,13 @@ namespace Engine5
                 m_curr_client_height = m_monitor_screen_height;
             }
         }
+        eWindowMode prev_mode = m_window_mode;
+        m_window_mode         = window_mode;
         /*Create variables to adjust window size and start position*/
-        RECT rect      = {0, 0, m_curr_client_width, m_curr_client_height};
-        int  xStart    = 0, yStart = 0;
-        m_b_fullscreen = b_fullscreen;
+        RECT rect   = {0, 0, m_curr_client_width, m_curr_client_height};
+        int  xStart = 0, yStart = 0;
         /*Check if we are going into full screen or not*/
-        if (b_fullscreen == true)
+        if (window_mode == eWindowMode::Fullscreen)
         {
             /*Get the current display settings*/
             DEVMODE dmScreenSettings;
@@ -354,9 +365,10 @@ namespace Engine5
             /*Check if it worked.  If it didn't set to window mode.*/
             if (ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
             {
-                m_b_fullscreen = false;
-                m_style        = GetWindowModeRelatedResolution();
-                ChangeDisplaySettings(nullptr, 0);/*If So Switch Back To The Desktop*/
+                m_window_mode = prev_mode;
+                m_style       = GetWindowModeStyle(prev_mode);
+                ChangeDisplaySettings(nullptr, 0);
+                //Switch Back To The Desktop
                 //("FullScreen is not supported. You are being switched to Windowed Mode");
                 SetClientResolution(m_prev_client_width, m_prev_client_height);
             }
@@ -364,7 +376,7 @@ namespace Engine5
         else
         {
             ChangeDisplaySettings(nullptr, 0);/*If So Switch Back To The Desktop*/
-            m_style = GetWindowModeRelatedResolution();
+            m_style = GetWindowModeStyle(window_mode);
         }
         /*This will change my windows style*/
         SetWindowLong(m_h_wnd, GWL_STYLE, m_style);
@@ -385,7 +397,7 @@ namespace Engine5
 
     void OSCommon::SetClientResolution(int width, int height)
     {
-        if (m_b_fullscreen == true)
+        if (m_window_mode == eWindowMode::Fullscreen)
         {
             if (width > m_monitor_screen_width)
                 return;
@@ -396,7 +408,7 @@ namespace Engine5
         m_prev_client_height = m_curr_client_height;
         m_curr_client_width  = width;
         m_curr_client_height = height;
-        SetFullscreen(m_b_fullscreen);
+        SetWindowMode(m_window_mode);
     }
 
     void OSCommon::SetMonitorResolution()
@@ -447,7 +459,7 @@ namespace Engine5
 
     bool OSCommon::IsFullscreen() const
     {
-        return m_b_fullscreen;
+        return m_window_mode == eWindowMode::Fullscreen;
     }
 
     bool OSCommon::IsConfineCursor() const

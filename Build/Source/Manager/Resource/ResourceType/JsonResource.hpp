@@ -15,6 +15,7 @@ namespace Engine5
     enum class eJsonType : size_t
     {
         None
+      , Setting
       , Level
       , Space
       , Archetype
@@ -31,6 +32,7 @@ namespace Engine5
         void Initialize() override;
         void Shutdown() override;
 
+        bool IsSetting() const;
         bool      IsLevel() const;
         bool      IsSpace() const;
         bool      IsArchetype() const;
@@ -41,6 +43,7 @@ namespace Engine5
         bool      HasMember(const Json::Value& data, const std::string& find) const;
 
     private:
+        bool LoadSetting();
         bool LoadData(Level* level) const;
         bool LoadData(Space* space) const;
         bool LoadSpaceFlag(Space* space) const;

@@ -44,6 +44,11 @@ namespace Engine5
         }
     }
 
+    bool JsonResource::IsSetting() const
+    {
+        return m_json_type == eJsonType::Setting;
+    }
+
     bool JsonResource::IsLevel() const
     {
         return m_json_type == eJsonType::Level;
@@ -85,7 +90,11 @@ namespace Engine5
             if (HasMember(*m_root_data, "Type") && (*m_root_data)["Type"].isString())
             {
                 std::string json_type = (*m_root_data)["Type"].asString();
-                if (json_type == "Level")
+                if (json_type == "Setting")
+                {
+                    m_json_type = eJsonType::Setting;
+                }
+                else if (json_type == "Level")
                 {
                     m_json_type = eJsonType::Level;
                 }
@@ -118,6 +127,42 @@ namespace Engine5
     bool JsonResource::HasMember(const Json::Value& data, const std::string& find) const
     {
         return !(data[find].isNull());
+    }
+
+    bool JsonResource::LoadSetting()
+    {
+        if (HasMember(*m_root_data, "Settings"))
+        {
+            Json::Value setting = (*m_root_data)["Settings"];
+            if (HasMember(setting, "Confine Cursor"))
+            {
+                bool b_confine_cursor = setting["Confine Cursor"].asBool();
+            }
+            if (HasMember(setting, "Show Cursor"))
+            {
+                bool b_show_cursor = setting["Show Cursor"].asBool();
+            }
+            if (HasMember(setting, "Screen Resolution"))
+            {
+                int width  = setting["Screen Resolution"][0].asInt();
+                int height = setting["Screen Resolution"][1].asInt();
+            }
+            if (HasMember(setting, "Screen Scale"))
+            {
+                Real scale = setting["Screen Scale"].asFloat();
+            }
+            if (HasMember(setting, "V-Sync"))
+            {
+                bool b_v_sync = setting["V-Sync"].asBool();
+            }
+            if (HasMember(setting, "Window Mode"))
+            {
+                bool b_confine_cursor = setting["ProjectionMatrix"].asBool();
+            }
+            return true;
+        }
+
+        return false;
     }
 
     bool JsonResource::LoadData(Level* level) const
