@@ -130,8 +130,11 @@ namespace Engine5
         auto found = m_level_resources.find(level_name);
         if (found == m_level_resources.end())
         {
-            std::wstring  level_path     = m_resource_manager->GetRootPath() + L"Data/Level/" + StringToWString(level_name) + L".json";
-            JsonResource* level_resource = m_resource_manager->CreateJsonResource(level_path);
+            std::wstring  level_path      = m_resource_manager->GetRootPath() + L"Data/Level/" + StringToWString(level_name) + L".json";
+            JsonResource* level_resource  = m_resource_manager->CreateJsonResource(level_path);
+            level_resource->m_b_load_type = false;
+            level_resource->Initialize();
+            level_resource->m_json_type = eJsonType::Level;
             m_level_resources.emplace(level_name, level_resource);
         }
     }

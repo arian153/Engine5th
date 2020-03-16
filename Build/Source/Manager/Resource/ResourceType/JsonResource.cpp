@@ -23,7 +23,10 @@ namespace Engine5
         Json::CharReaderBuilder builder;
         m_reader    = builder.newCharReader();
         m_root_data = new Json::Value();
-        LoadJsonType();
+        if (m_b_load_type)
+        {
+            LoadJsonType();
+        }
     }
 
     void JsonResource::Shutdown()

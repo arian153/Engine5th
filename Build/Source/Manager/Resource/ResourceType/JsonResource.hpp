@@ -51,8 +51,9 @@ namespace Engine5
         friend class LevelManager;
 
     private:
-        eJsonType         m_json_type = eJsonType::None;
-        Json::CharReader* m_reader    = nullptr;
-        Json::Value*      m_root_data = nullptr;
+        eJsonType         m_json_type   = eJsonType::None;
+        Json::CharReader* m_reader      = nullptr;
+        Json::Value*      m_root_data   = nullptr;
+        bool              m_b_load_type = true;
     };
 }
