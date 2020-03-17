@@ -44,7 +44,7 @@ namespace Engine5
         bool      HasMember(const Json::Value& data, const std::string& find) const;
 
     private:
-        bool LoadSetting(ApplicationSetting* app_setting);
+        bool LoadSetting(ApplicationSetting& app_setting) const;
         bool LoadData(Level* level) const;
         bool LoadData(Space* space) const;
         bool LoadSpaceFlag(Space* space) const;
@@ -57,6 +57,7 @@ namespace Engine5
         friend class Space;
         friend class Level;
         friend class LevelManager;
+        friend class Application;
 
     private:
         eJsonType         m_json_type   = eJsonType::None;

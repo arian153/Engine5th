@@ -2,7 +2,7 @@
     "Settings": {
         "Confine Cursor": false,
         "Show Cursor": true,
-        "Screen Resolution": [1280, 720],
+        "Screen Resolution": [1280, 800],
         "Screen Scale": 3.5,
         "V-Sync": true,
         "Window Mode": "Windowed",

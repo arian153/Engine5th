@@ -202,14 +202,17 @@ namespace Engine5
         /*Make client area of window the correct size */
         AdjustWindowRect(&size, style, false);
         /*Calculate new width and height */
-        int  win_width       = size.right - size.left;
-        int  win_height      = size.bottom - size.top;
-        Real monitor_scale   = m_os_common->MonitorScaleFactor();
-        Real movement_width  = (Real)win_width * monitor_scale / 2.0f;
-        Real movement_height = (Real)win_height * monitor_scale / 2.0f;
+        int win_width  = size.right - size.left;
+        int win_height = size.bottom - size.top;
+        //Real monitor_scale   = m_os_common->MonitorScaleFactor();
+        Real scale_factor    = 2.0f * m_os_common->m_screen_scale;
+        Real movement_width  = (Real)win_width / scale_factor;
+        Real movement_height = (Real)win_height / scale_factor;
+        Real width           = (Real)dm.dmPelsWidth / scale_factor;
+        Real height          = (Real)dm.dmPelsHeight / scale_factor;
         /* Get start position for center */
-        x_start = (dm.dmPelsWidth / 2) - static_cast<int>(movement_width);
-        y_start = (dm.dmPelsHeight / 2) - static_cast<int>(movement_height);
+        x_start = static_cast<int>(width - movement_width);
+        y_start = static_cast<int>(height - movement_height);
     }
 
     DWORD OSWin32::GetWindowedStyle() const
@@ -251,7 +254,19 @@ namespace Engine5
     OSCommon::OSCommon(Application* application)
         : OSWin32(application, this)
     {
-        m_application_timer = m_application->GetApplicationTimer();
+        m_application_timer         = m_application->GetApplicationTimer();
+        ApplicationSetting& setting = application->m_initial_setting;
+        m_b_show_cursor             = setting.b_show_cursor;
+        m_b_confine_cursor          = setting.b_confine_cursor;
+        //window style option
+        m_window_mode         = setting.window_mode;
+        m_application_caption = StringToWString(setting.caption);
+        //application window size
+        m_curr_client_width  = setting.screen_width;
+        m_curr_client_height = setting.screen_height;
+        m_prev_client_width  = setting.screen_width;
+        m_prev_client_height = setting.screen_height;
+        m_screen_scale       = setting.screen_scale;
     }
 
     OSCommon::~OSCommon()
@@ -261,19 +276,19 @@ namespace Engine5
     void OSCommon::Initialize()
     {
         SetMonitorResolution();
-        WNDCLASS wc;
+        WNDCLASS window_class;
         //DEVMODE dm_screen_settings;
-        wc.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-        wc.lpfnWndProc   = ProcessWindow;
-        wc.cbClsExtra    = 0;
-        wc.cbWndExtra    = 0;
-        wc.hInstance     = m_h_instance;
-        wc.hIcon         = LoadIcon(nullptr, IDI_WINLOGO);
-        wc.hCursor       = LoadCursor(nullptr, IDC_ARROW);
-        wc.hbrBackground = nullptr;//(HBRUSH)GetStockObject(BLACK_BRUSH);
-        wc.lpszMenuName  = nullptr;
-        wc.lpszClassName = L"E5hWnd";
-        if (!RegisterClass(&wc))
+        window_class.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+        window_class.lpfnWndProc   = ProcessWindow;
+        window_class.cbClsExtra    = 0;
+        window_class.cbWndExtra    = 0;
+        window_class.hInstance     = m_h_instance;
+        window_class.hIcon         = LoadIcon(nullptr, IDI_WINLOGO);
+        window_class.hCursor       = LoadCursor(nullptr, IDC_ARROW);
+        window_class.hbrBackground = nullptr;//(HBRUSH)GetStockObject(BLACK_BRUSH);
+        window_class.lpszMenuName  = nullptr;
+        window_class.lpszClassName = L"E5hWnd";
+        if (!RegisterClass(&window_class))
         {
             MessageBox(nullptr, L"Register Class Failed.", nullptr, 0);
             m_b_init = false;
@@ -281,13 +296,13 @@ namespace Engine5
         }
         m_style = GetWindowedStyle();
         // Compute window rectangle dimensions based on requested client area dimensions.
-        RECT R = {0, 0, m_curr_client_width, m_curr_client_height};
+        RECT window_rect = {0, 0, m_curr_client_width, m_curr_client_height};
         int  width_start, height_start;
-        AdjustAndCenterWindow(m_style, R, width_start, height_start);
-        int width  = R.right - R.left;
-        int height = R.bottom - R.top;
+        AdjustAndCenterWindow(m_style, window_rect, width_start, height_start);
+        int width  = window_rect.right - window_rect.left;
+        int height = window_rect.bottom - window_rect.top;
         m_h_wnd    = CreateWindow(
-                                  L"E5hWnd", m_application->m_application_caption.c_str(), m_style,
+                                  L"E5hWnd", m_os_common->m_application_caption.c_str(), m_style,
                                   width_start, height_start, width, height, nullptr, nullptr, m_h_instance, this
                                  );
         if (!m_h_wnd)
@@ -296,7 +311,10 @@ namespace Engine5
             m_b_init = false;
             return;
         }
-        SetWindowMode(m_window_mode);
+        if (m_window_mode != eWindowMode::Windowed)
+        {
+            SetWindowMode(m_window_mode);
+        }
         ShowWindow(m_h_wnd, SW_SHOW);
         UpdateWindow(m_h_wnd);
         m_b_init = true;
@@ -325,7 +343,7 @@ namespace Engine5
 
     void OSCommon::SetShowCursor(bool b_show_cursor)
     {
-        m_b_show_mouse_cursor = b_show_cursor;
+        m_b_show_cursor = b_show_cursor;
         ShowCursor(b_show_cursor);
     }
 

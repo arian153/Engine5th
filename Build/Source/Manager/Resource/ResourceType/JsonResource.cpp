@@ -130,51 +130,51 @@ namespace Engine5
         return !(data[find].isNull());
     }
 
-    bool JsonResource::LoadSetting(ApplicationSetting* app_setting) const
+    bool JsonResource::LoadSetting(ApplicationSetting& app_setting) const
     {
         if (HasMember(*m_root_data, "Settings"))
         {
             Json::Value setting = (*m_root_data)["Settings"];
             if (HasMember(setting, "Confine Cursor") && setting["Confine Cursor"].isBool())
             {
-                app_setting->b_confine_cursor = setting["Confine Cursor"].asBool();
+                app_setting.b_confine_cursor = setting["Confine Cursor"].asBool();
             }
             if (HasMember(setting, "Show Cursor") && setting["Show Cursor"].isBool())
             {
-                app_setting->b_show_cursor = setting["Show Cursor"].asBool();
+                app_setting.b_show_cursor = setting["Show Cursor"].asBool();
             }
             if (HasMember(setting, "Screen Resolution") && setting["Screen Resolution"].isArray())
             {
-                app_setting->screen_width  = setting["Screen Resolution"][0].asInt();
-                app_setting->screen_height = setting["Screen Resolution"][1].asInt();
+                app_setting.screen_width  = setting["Screen Resolution"][0].asInt();
+                app_setting.screen_height = setting["Screen Resolution"][1].asInt();
             }
             if (HasMember(setting, "Screen Scale") && setting["Screen Scale"].isDouble())
             {
-                app_setting->screen_scale = setting["Screen Scale"].asFloat();
+                app_setting.screen_scale = setting["Screen Scale"].asFloat();
             }
             if (HasMember(setting, "V-Sync") && setting["V-Sync"].isBool())
             {
-                app_setting->b_v_sync = setting["V-Sync"].asBool();
+                app_setting.b_v_sync = setting["V-Sync"].asBool();
             }
             if (HasMember(setting, "Window Mode") && setting["Window Mode"].isString())
             {
                 std::string type = setting["Window Mode"].asString();
                 if (type == "Windowed")
                 {
-                    app_setting->window_mode = eWindowMode::Windowed;
+                    app_setting.window_mode = eWindowMode::Windowed;
                 }
                 else if (type == "Fullscreen")
                 {
-                    app_setting->window_mode = eWindowMode::Fullscreen;
+                    app_setting.window_mode = eWindowMode::Fullscreen;
                 }
                 else if (type == "Borderless")
                 {
-                    app_setting->window_mode = eWindowMode::Borderless;
+                    app_setting.window_mode = eWindowMode::Borderless;
                 }
             }
             if (HasMember(setting, "Window Caption") && setting["Window Caption"].isString())
             {
-                app_setting->caption = setting["Window Caption"].asString();
+                app_setting.caption = setting["Window Caption"].asString();
             }
             return true;
         }

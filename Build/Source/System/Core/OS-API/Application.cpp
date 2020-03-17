@@ -16,10 +16,12 @@
 #include "../Input/InputCommon.hpp"
 #include "../Utility/FileUtility.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
+#include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 
 namespace Engine5
 {
     Application::Application()
+        : m_initial_setting()
     {
     }
 
@@ -42,6 +44,7 @@ namespace Engine5
         m_file_utility     = new FileUtility();
         m_resource_manager = new ResourceManager();
         m_resource_manager->Initialize(m_file_utility);
+        LoadSetting();
         //create systems
         m_operating_system = new OSCommon(this);
         m_operating_system->Initialize();
@@ -227,5 +230,29 @@ namespace Engine5
 
     void Application::OnQuit()
     {
+    }
+
+    void Application::LoadSetting()
+    {
+        std::vector<JsonResource*> resources;
+        m_resource_manager->GetJsonResources(eJsonType::Setting, resources);
+        if (resources.empty())
+        {
+            m_initial_setting.b_confine_cursor = false;
+            m_initial_setting.b_show_cursor    = true;
+            m_initial_setting.b_v_sync         = true;
+            m_initial_setting.caption          = "Engine 5th";
+            m_initial_setting.screen_height    = 720;
+            m_initial_setting.screen_width     = 1280;
+            m_initial_setting.screen_scale     = 1.0f;
+            m_initial_setting.window_mode      = eWindowMode::Windowed;
+        }
+        else
+        {
+            for(auto& resource: resources)
+            {
+                resource->LoadSetting(m_initial_setting);
+            }
+        }
     }
 }

@@ -1,9 +1,8 @@
 #pragma once
-#include "../../Math/Utility/MathDef.hpp"
+#include "ApplicationSetting.hpp"
 
 namespace Engine5
 {
-    struct ApplicationSetting;
     class FileUtility;
     class ResourceManager;
     class InputCommon;
@@ -47,15 +46,14 @@ namespace Engine5
         void OnResize(int client_width, int client_height) const;
         void OnFullscreen();
         void OnQuit();
+        void LoadSetting();
 
     private:
         friend class OSCommon;
         friend class LevelManager;
 
     private:
-        //application name
-        std::wstring        m_application_caption = L"Engine 5th";
-        ApplicationSetting* m_initial_setting     = nullptr;
+        ApplicationSetting m_initial_setting;
 
     private:
         //sub systems

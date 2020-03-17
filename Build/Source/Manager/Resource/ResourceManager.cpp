@@ -584,6 +584,26 @@ namespace Engine5
         }
     }
 
+    void ResourceManager::GetJsonResources(std::vector<JsonResource*>& resources)
+    {
+        for (auto& json : m_json_resource_map)
+        {
+            resources.push_back(json.second);
+        }
+    }
+
+    void ResourceManager::GetJsonResources(eJsonType type, std::vector<JsonResource*>& resources)
+    {
+        for (auto& json : m_json_resource_map)
+        {
+            auto resource = json.second;
+            if (resource->GetType() == type)
+            {
+                resources.push_back(resource);
+            }
+        }
+    }
+
     JsonResource* ResourceManager::CreateJsonResource(const std::wstring& path)
     {
         JsonResource* resource       = new JsonResource(path);

@@ -50,12 +50,13 @@ namespace Engine5
         bool m_b_init   = false;
 
         //mouse option
-        bool m_b_show_mouse_cursor = true;
-        bool m_b_confine_cursor    = false;
+        bool m_b_show_cursor    = true;
+        bool m_b_confine_cursor = false;
 
         //window style option
-        eWindowMode m_window_mode = eWindowMode::Windowed;
-        bool        m_b_resizable = false;
+        eWindowMode  m_window_mode         = eWindowMode::Windowed;
+        std::wstring m_application_caption = L"Engine 5th";
+        bool         m_b_resizable         = false;
 
         //window application state
         bool m_b_app_paused = false;
@@ -64,10 +65,11 @@ namespace Engine5
         bool m_b_quit       = false;
 
         //application window size
-        int m_curr_client_width  = 1280;
-        int m_curr_client_height = 720;
-        int m_prev_client_width  = 1280;
-        int m_prev_client_height = 720;
+        int  m_curr_client_width  = 1280;
+        int  m_curr_client_height = 720;
+        int  m_prev_client_width  = 1280;
+        int  m_prev_client_height = 720;
+        Real m_screen_scale       = 1.0f;
 
         //actual monitor resolution
         int m_monitor_screen_width  = 0;

@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    enum class eJsonType : unsigned long long;
     class LevelManager;
     class JsonResource;
     class ShaderResource;
@@ -59,7 +60,11 @@ namespace Engine5
         JsonResource* GetJsonResource(const std::wstring& path);
         JsonResource* GetJsonResourceFileName(const std::wstring& file_name);
         void          GetJsonResources(const std::wstring& file_name, std::vector<JsonResource*>& resources);
+        void          GetJsonResources(std::vector<JsonResource*>& resources);
+        void          GetJsonResources(eJsonType type, std::vector<JsonResource*>& resources);
         JsonResource* CreateJsonResource(const std::wstring& path);
+        
+       
 
         //undefined
         UndefinedResource* GetUndefinedResource(const std::wstring& path);
