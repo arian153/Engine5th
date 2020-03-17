@@ -1,7 +1,6 @@
 #pragma once
-#define Win32
 
-#if defined(Win32)
+#if defined(E5_WIN32)
 //classes
 #define OSAPI OSWin32
 #define KeyboardInputAPI KeyboardInputWin32
@@ -13,7 +12,7 @@
 #define IncludeMouseAPI "../OS-API/Win32/MouseInputWin32.hpp"
 #define IncludeGamePadAPI "../OS-API/Win32/GamePadInputWin32.hpp"
 
-#elif defined(UWP)
+#elif defined(E5_UWP)
 //classes
 #define OSAPI OSUWP
 

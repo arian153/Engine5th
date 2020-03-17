@@ -1,5 +1,4 @@
 #pragma once
-#define E5_DIRECTX11
 
 #if defined(E5_DIRECTX11)
 //classes
