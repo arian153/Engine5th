@@ -32,6 +32,13 @@ namespace Engine5
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader(), m_matrix_manager);
         m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
+
+        if(m_operating_system->WindowMode() == eWindowMode::Fullscreen)
+        {
+            m_operating_system->SetWindowMode(eWindowMode::Fullscreen);
+            m_renderer->OnFullscreen(true);
+        }
+        
     }
 
     void RenderSystem::Shutdown()
@@ -81,7 +88,7 @@ namespace Engine5
 
     void RenderSystem::OnResize(int width, int height) const
     {
-        if (m_renderer != nullptr)
+        if (m_renderer != nullptr && m_renderer->IsInit())
         {
             m_renderer->OnResize(width, height, m_operating_system->IsFullscreen());
             m_matrix_manager->SetClientRect(static_cast<size_t>(width), static_cast<size_t>(height));

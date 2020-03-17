@@ -29,6 +29,7 @@ namespace Engine5
         {
             LoadJsonType();
         }
+        m_b_loaded = true;
     }
 
     void JsonResource::Shutdown()
@@ -43,6 +44,7 @@ namespace Engine5
             delete m_root_data;
             m_root_data = nullptr;
         }
+        m_b_unloaded = true;
     }
 
     bool JsonResource::IsSetting() const

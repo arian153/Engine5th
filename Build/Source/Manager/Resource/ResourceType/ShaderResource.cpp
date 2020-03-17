@@ -14,9 +14,11 @@ namespace Engine5
 
     void ShaderResource::Initialize()
     {
+        m_b_loaded = true;
     }
 
     void ShaderResource::Shutdown()
     {
+        m_b_unloaded = true;
     }
 }

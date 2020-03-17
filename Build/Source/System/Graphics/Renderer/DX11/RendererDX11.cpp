@@ -542,6 +542,7 @@ namespace Engine5
         SetUpBlendState();
         SetUpDWDevice();
         SetUpDWRenderTarget();
+        m_b_init = true;
     }
 
     void RendererCommon::Shutdown()
@@ -634,6 +635,10 @@ namespace Engine5
 
     void RendererCommon::OnResize(int client_width, int client_height, bool b_fullscreen)
     {
+        if (m_b_init == false)
+        {
+            return;
+        }
         m_d2d_device_context->SetTarget(nullptr);
         m_device_context->ClearState();
         // do not call finish command list on state.
@@ -738,5 +743,10 @@ namespace Engine5
         {
             m_device_context->OMSetDepthStencilState(m_depth_disabled_stencil_state, 1);
         }
+    }
+
+    bool RendererCommon::IsInit() const
+    {
+        return m_b_init;
     }
 }

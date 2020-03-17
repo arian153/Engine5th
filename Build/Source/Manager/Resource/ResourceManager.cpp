@@ -237,6 +237,7 @@ namespace Engine5
             auto found = resource.second;
             if (found != nullptr)
             {
+                found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
                     std::wstring result = found->FileName() + found->FileType();
@@ -249,7 +250,6 @@ namespace Engine5
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                found->Shutdown();
                 delete found;
                 found = nullptr;
             }
@@ -260,6 +260,7 @@ namespace Engine5
             auto found = resource.second;
             if (found != nullptr)
             {
+                found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
                     std::wstring result = found->FileName() + found->FileType();
@@ -272,7 +273,6 @@ namespace Engine5
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                found->Shutdown();
                 delete found;
                 found = nullptr;
             }
@@ -283,6 +283,7 @@ namespace Engine5
             auto found = resource.second;
             if (found != nullptr)
             {
+                found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
                     std::wstring result = found->FileName() + found->FileType();
@@ -295,7 +296,6 @@ namespace Engine5
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                found->Shutdown();
                 delete found;
                 found = nullptr;
             }
@@ -306,6 +306,7 @@ namespace Engine5
             auto found = resource.second;
             if (found != nullptr)
             {
+                found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
                     std::wstring result = found->FileName() + found->FileType();
@@ -318,7 +319,6 @@ namespace Engine5
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                found->Shutdown();
                 delete found;
                 found = nullptr;
             }
@@ -329,6 +329,7 @@ namespace Engine5
             auto found = resource.second;
             if (found != nullptr)
             {
+                found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
                     std::wstring result = found->FileName() + found->FileType();
@@ -341,7 +342,6 @@ namespace Engine5
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                found->Shutdown();
                 delete found;
                 found = nullptr;
             }
@@ -353,6 +353,7 @@ namespace Engine5
             auto found = resource.second;
             if (found != nullptr)
             {
+                found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
                     std::wstring result = found->FileName() + found->FileType();
@@ -365,7 +366,6 @@ namespace Engine5
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
-                found->Shutdown();
                 delete found;
                 found = nullptr;
             }

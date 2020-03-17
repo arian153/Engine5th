@@ -24,6 +24,8 @@ namespace Engine5
         void SetVSync(bool flag);
         void SetAlphaBlending(bool flag) const;
         void SetZBuffering(bool flag) const;
+        bool IsInit() const;
     private:
+        bool m_b_init = false;
     };
 }

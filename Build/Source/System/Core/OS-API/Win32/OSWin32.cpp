@@ -340,7 +340,11 @@ namespace Engine5
                 m_curr_client_height = m_monitor_screen_height;
             }
         }
-        eWindowMode prev_mode = m_window_mode;
+        else if (window_mode == eWindowMode::Borderless)
+        {
+            m_curr_client_width  = m_monitor_screen_width;
+            m_curr_client_height = m_monitor_screen_height;
+        }
         m_window_mode         = window_mode;
         /*Create variables to adjust window size and start position*/
         RECT rect   = {0, 0, m_curr_client_width, m_curr_client_height};
@@ -353,8 +357,8 @@ namespace Engine5
             dmScreenSettings.dmSize = sizeof dmScreenSettings;
             EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &dmScreenSettings);
             /*Change the resolution to the resolution of my window*/
-            dmScreenSettings.dmPelsWidth  = (DWORD)m_curr_client_width;
-            dmScreenSettings.dmPelsHeight = (DWORD)m_curr_client_height;
+            //dmScreenSettings.dmPelsWidth  = (DWORD)m_curr_client_width;
+            //dmScreenSettings.dmPelsHeight = (DWORD)m_curr_client_height;
             //dmScreenSettings.dmBitsPerPel = 32;
             dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
             /*Make sure my window style is full screen*/
@@ -363,11 +367,10 @@ namespace Engine5
             /*Check if it worked.  If it didn't set to window mode.*/
             if (ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
             {
-                m_window_mode = prev_mode;
-                m_style       = GetWindowModeStyle(prev_mode);
+                m_window_mode = eWindowMode::Windowed;
+                m_style       = GetWindowModeStyle(m_window_mode);
                 ChangeDisplaySettings(nullptr, 0);
                 //Switch Back To The Desktop
-                //("FullScreen is not supported. You are being switched to Windowed Mode");
                 SetClientResolution(m_prev_client_width, m_prev_client_height);
             }
         }
@@ -401,6 +404,10 @@ namespace Engine5
                 return;
             if (height > m_monitor_screen_height)
                 return;
+        }
+        else if (m_window_mode == eWindowMode::Borderless)
+        {
+            return;
         }
         m_prev_client_width  = m_curr_client_width;
         m_prev_client_height = m_curr_client_height;
@@ -488,6 +495,11 @@ namespace Engine5
     Real OSCommon::AspectRatio() const
     {
         return static_cast<Real>(m_curr_client_width) / m_curr_client_height;
+    }
+
+    eWindowMode OSCommon::WindowMode() const
+    {
+        return m_window_mode;
     }
 
     void OSCommon::SetLevelManager(LevelManager* level_manager)

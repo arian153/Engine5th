@@ -35,6 +35,8 @@ namespace Engine5
         bool IsPaused() const;
         Real AspectRatio() const;
 
+        eWindowMode WindowMode() const;
+
         void SetLevelManager(LevelManager* level_manager);
     private :
         void OnResize() const;
