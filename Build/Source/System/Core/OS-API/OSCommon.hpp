@@ -34,7 +34,6 @@ namespace Engine5
         bool IsQuit() const;
         bool IsPaused() const;
         Real AspectRatio() const;
-        Real MonitorScaleFactor() const;
 
         void SetLevelManager(LevelManager* level_manager);
     private :
@@ -65,11 +64,10 @@ namespace Engine5
         bool m_b_quit       = false;
 
         //application window size
-        int  m_curr_client_width  = 1280;
-        int  m_curr_client_height = 720;
-        int  m_prev_client_width  = 1280;
-        int  m_prev_client_height = 720;
-        Real m_screen_scale       = 1.0f;
+        int m_curr_client_width  = 1280;
+        int m_curr_client_height = 720;
+        int m_prev_client_width  = 1280;
+        int m_prev_client_height = 720;
 
         //actual monitor resolution
         int m_monitor_screen_width  = 0;

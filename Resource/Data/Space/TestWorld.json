@@ -6,8 +6,10 @@
         "World"
     ],
     "Objects": [
-
-
+        {
+            "Name": "HelloWorld",
+            "Components": []
+        }
     ],
     "Settings": {
         "ProjectionMatrix": "Perspective"

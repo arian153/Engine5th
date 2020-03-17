@@ -27,7 +27,7 @@ project "Engine5"
         architecture "x64"
         defines {"_CRT_SECURE_NO_WARNINGS"}
         buildoptions {"-std:c++17"}
-        links {"dxgi", "d3d11", "d3dcompiler", "d2d1", "dwrite", "dsound", "dxguid", "winmm", "Xinput9_1_0", "Shcore"}
+        links {"dxgi", "d3d11", "d3dcompiler", "d2d1", "dwrite", "dsound", "dxguid", "winmm", "Xinput9_1_0"}
         disablewarnings {"4505", "4456", "4201", "4100", "4189", "4458", "4819", "4127", "4701", "4291", "6385"}
 
     filter "configurations:Debug"

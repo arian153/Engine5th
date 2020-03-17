@@ -3,7 +3,6 @@
 #include "OSWin32.hpp"
 #include "../Application.hpp"
 #include "../../Utility/CoreUtility.hpp"
-#include <ShellScalingApi.h>
 #include "../OSCommon.hpp"
 #include "../../Utility/TimeUtility.hpp"
 #include "../../../../Manager/Level/LevelManager.hpp"
@@ -185,7 +184,7 @@ namespace Engine5
             DestroyWindow(hwnd);
             break;
         case WM_SYSCOMMAND:
-            if (wparam == SC_KEYMENU && (lparam >> 16) <= 0)
+            if (wparam == SC_KEYMENU && lparam >> 16 <= 0)
                 break;
         default:
             return DefWindowProc(hwnd, msg, wparam, lparam);
@@ -195,24 +194,9 @@ namespace Engine5
 
     void OSWin32::AdjustAndCenterWindow(DWORD style, RECT& size, int& x_start, int& y_start) const
     {
-        DEVMODE dm = {0};
-        /*Get the size of the screen*/
-        dm.dmSize = sizeof(dm);
-        EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &dm);
-        /*Make client area of window the correct size */
         AdjustWindowRect(&size, style, false);
-        /*Calculate new width and height */
-        int win_width  = size.right - size.left;
-        int win_height = size.bottom - size.top;
-        //Real monitor_scale   = m_os_common->MonitorScaleFactor();
-        Real scale_factor    = 2.0f * m_os_common->m_screen_scale;
-        Real movement_width  = (Real)win_width / scale_factor;
-        Real movement_height = (Real)win_height / scale_factor;
-        Real width           = (Real)dm.dmPelsWidth / scale_factor;
-        Real height          = (Real)dm.dmPelsHeight / scale_factor;
-        /* Get start position for center */
-        x_start = static_cast<int>(width - movement_width);
-        y_start = static_cast<int>(height - movement_height);
+        x_start = (m_os_common->m_monitor_screen_width - size.right + size.left) / 2;
+        y_start = (m_os_common->m_monitor_screen_height - size.bottom + size.top) / 2;
     }
 
     DWORD OSWin32::GetWindowedStyle() const
@@ -266,7 +250,6 @@ namespace Engine5
         m_curr_client_height = setting.screen_height;
         m_prev_client_width  = setting.screen_width;
         m_prev_client_height = setting.screen_height;
-        m_screen_scale       = setting.screen_scale;
     }
 
     OSCommon::~OSCommon()
@@ -311,10 +294,7 @@ namespace Engine5
             m_b_init = false;
             return;
         }
-        if (m_window_mode != eWindowMode::Windowed)
-        {
-            SetWindowMode(m_window_mode);
-        }
+        SetWindowMode(m_window_mode);
         ShowWindow(m_h_wnd, SW_SHOW);
         UpdateWindow(m_h_wnd);
         m_b_init = true;
@@ -332,7 +312,7 @@ namespace Engine5
             RECT Clip;
             GetClientRect(m_h_wnd, &Clip);
             ClientToScreen(m_h_wnd, (LPPOINT)&Clip);
-            ClientToScreen(m_h_wnd, (LPPOINT)(&Clip.right));
+            ClientToScreen(m_h_wnd, (LPPOINT)&Clip.right);
             ClipCursor(&Clip);
         }
         else
@@ -370,7 +350,7 @@ namespace Engine5
         {
             /*Get the current display settings*/
             DEVMODE dmScreenSettings;
-            dmScreenSettings.dmSize = sizeof(dmScreenSettings);
+            dmScreenSettings.dmSize = sizeof dmScreenSettings;
             EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &dmScreenSettings);
             /*Change the resolution to the resolution of my window*/
             dmScreenSettings.dmPelsWidth  = (DWORD)m_curr_client_width;
@@ -508,69 +488,6 @@ namespace Engine5
     Real OSCommon::AspectRatio() const
     {
         return static_cast<Real>(m_curr_client_width) / m_curr_client_height;
-    }
-
-    Real OSCommon::MonitorScaleFactor() const
-    {
-        DEVICE_SCALE_FACTOR result       = GetScaleFactorForDevice(DEVICE_PRIMARY);
-        Real                scale_result = -1.0f;
-        switch (result)
-        {
-        case DEVICE_SCALE_FACTOR_INVALID:
-            break;
-        case SCALE_100_PERCENT:
-            scale_result = 1.0f;
-            break;
-        case SCALE_120_PERCENT:
-            scale_result = 1.2f;
-            break;
-        case SCALE_125_PERCENT:
-            scale_result = 1.25f;
-            break;
-        case SCALE_140_PERCENT:
-            scale_result = 1.4f;
-            break;
-        case SCALE_150_PERCENT:
-            scale_result = 1.5f;
-            break;
-        case SCALE_160_PERCENT:
-            scale_result = 1.6f;
-            break;
-        case SCALE_175_PERCENT:
-            scale_result = 1.75f;
-            break;
-        case SCALE_180_PERCENT:
-            scale_result = 1.8f;
-            break;
-        case SCALE_200_PERCENT:
-            scale_result = 2.0f;
-            break;
-        case SCALE_225_PERCENT:
-            scale_result = 2.25f;
-            break;
-        case SCALE_250_PERCENT:
-            scale_result = 2.5f;
-            break;
-        case SCALE_300_PERCENT:
-            scale_result = 3.0f;
-            break;
-        case SCALE_350_PERCENT:
-            scale_result = 3.5f;
-            break;
-        case SCALE_400_PERCENT:
-            scale_result = 4.0f;
-            break;
-        case SCALE_450_PERCENT:
-            scale_result = 4.5f;
-            break;
-        case SCALE_500_PERCENT:
-            scale_result = 5.0f;
-            break;
-        default:
-            scale_result = 1.0f;
-            break;
-        }
-        return scale_result;
     }
 
     void OSCommon::SetLevelManager(LevelManager* level_manager)
