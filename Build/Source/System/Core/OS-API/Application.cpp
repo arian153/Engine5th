@@ -224,8 +224,12 @@ namespace Engine5
         }
     }
 
-    void Application::OnFullscreen()
+    void Application::OnFullscreen() const
     {
+        if (m_render_system != nullptr)
+        {
+            m_render_system->OnFullscreen();
+        }
     }
 
     void Application::OnQuit()
@@ -249,7 +253,7 @@ namespace Engine5
         }
         else
         {
-            for(auto& resource: resources)
+            for (auto& resource : resources)
             {
                 resource->LoadSetting(m_initial_setting);
             }

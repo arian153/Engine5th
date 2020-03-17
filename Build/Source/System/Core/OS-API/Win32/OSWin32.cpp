@@ -345,50 +345,38 @@ namespace Engine5
             m_curr_client_width  = m_monitor_screen_width;
             m_curr_client_height = m_monitor_screen_height;
         }
-        m_window_mode         = window_mode;
-        /*Create variables to adjust window size and start position*/
-        RECT rect   = {0, 0, m_curr_client_width, m_curr_client_height};
-        int  xStart = 0, yStart = 0;
-        /*Check if we are going into full screen or not*/
+        m_window_mode = window_mode;
         if (window_mode == eWindowMode::Fullscreen)
         {
-            /*Get the current display settings*/
-            DEVMODE dmScreenSettings;
-            dmScreenSettings.dmSize = sizeof dmScreenSettings;
-            EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &dmScreenSettings);
-            /*Change the resolution to the resolution of my window*/
-            //dmScreenSettings.dmPelsWidth  = (DWORD)m_curr_client_width;
-            //dmScreenSettings.dmPelsHeight = (DWORD)m_curr_client_height;
-            //dmScreenSettings.dmBitsPerPel = 32;
-            dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-            /*Make sure my window style is full screen*/
-            m_style = FULLSCREEN_STYLE;
-            //ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
-            /*Check if it worked.  If it didn't set to window mode.*/
-            if (ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+            DEVMODE dm_screen_settings;
+            dm_screen_settings.dmSize = sizeof dm_screen_settings;
+            EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &dm_screen_settings);
+            dm_screen_settings.dmPelsWidth  = (DWORD)m_curr_client_width;
+            dm_screen_settings.dmPelsHeight = (DWORD)m_curr_client_height;
+            dm_screen_settings.dmBitsPerPel = 32;
+            dm_screen_settings.dmFields     = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+            m_style                         = FULLSCREEN_STYLE;
+            if (ChangeDisplaySettings(&dm_screen_settings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
             {
                 m_window_mode = eWindowMode::Windowed;
                 m_style       = GetWindowModeStyle(m_window_mode);
                 ChangeDisplaySettings(nullptr, 0);
-                //Switch Back To The Desktop
                 SetClientResolution(m_prev_client_width, m_prev_client_height);
             }
         }
         else
         {
-            ChangeDisplaySettings(nullptr, 0);/*If So Switch Back To The Desktop*/
+            ChangeDisplaySettings(nullptr, 0);
             m_style = GetWindowModeStyle(window_mode);
         }
-        /*This will change my windows style*/
         SetWindowLong(m_h_wnd, GWL_STYLE, m_style);
-        /*This will make window the correct size and find the start position*/
-        AdjustAndCenterWindow(m_style, rect, xStart, yStart);
-        /*This changes my window size and start position*/
-        MoveWindow(m_h_wnd, xStart, yStart, rect.right - rect.left, rect.bottom - rect.top, TRUE);
-        /*This is required after SetWindowLong*/
+        RECT rect    = {0, 0, m_curr_client_width, m_curr_client_height};
+        int  x_start = 0, y_start = 0;
+        AdjustAndCenterWindow(m_style, rect, x_start, y_start);
+        MoveWindow(m_h_wnd, x_start, y_start, rect.right - rect.left, rect.bottom - rect.top, TRUE);
         ShowWindow(m_h_wnd, SW_SHOWNORMAL);
-        /*This sets my window to the front.*/
         SetForegroundWindow(m_h_wnd);
+        m_application->OnFullscreen();
     }
 
     void OSCommon::SetQuit(bool b_quit)

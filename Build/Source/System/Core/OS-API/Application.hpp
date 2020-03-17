@@ -44,7 +44,7 @@ namespace Engine5
 
     private:
         void OnResize(int client_width, int client_height) const;
-        void OnFullscreen();
+        void OnFullscreen() const;
         void OnQuit();
         void LoadSetting();
 

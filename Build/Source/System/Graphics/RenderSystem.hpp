@@ -25,6 +25,7 @@ namespace Engine5
         void EndUpdate() const;
 
         void OnResize(int width, int height) const;
+        void OnFullscreen() const;
 
         void  SetVSyncEnable(bool vsync_flag);
         bool  IsVSyncEnable() const;
