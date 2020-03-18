@@ -377,7 +377,7 @@ namespace Engine5
         MoveWindow(m_h_wnd, x_start, y_start, rect.right - rect.left, rect.bottom - rect.top, TRUE);
         ShowWindow(m_h_wnd, SW_SHOWNORMAL);
         SetForegroundWindow(m_h_wnd);
-        //m_application->OnFullscreen();
+        m_application->OnFullscreen();
     }
 
     void OSCommon::SetQuit(bool b_quit)

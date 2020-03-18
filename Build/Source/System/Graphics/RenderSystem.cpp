@@ -35,7 +35,6 @@ namespace Engine5
         if (m_operating_system->WindowMode() == eWindowMode::Fullscreen)
         {
             m_operating_system->SetWindowMode(eWindowMode::Fullscreen);
-            m_renderer->OnFullscreen(true);
         }
     }
 

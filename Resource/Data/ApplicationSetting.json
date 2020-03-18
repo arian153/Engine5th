@@ -1,11 +1,11 @@
 {
     "Settings": {
         "Confine Cursor": false,
+        "Screen Resolution": [ 1280, 800 ],
         "Show Cursor": true,
-        "Screen Resolution": [1280, 800],
         "V-Sync": true,
-        "Window Mode": "Fullscreen",
-        "Window Caption": "Engine 5th Testbed"
+        "Window Caption": "Engine 5th Testbed",
+        "Window Mode": "Windowed"
     },
     "Type": "Setting"
 }
