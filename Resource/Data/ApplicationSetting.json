@@ -4,7 +4,7 @@
         "Show Cursor": true,
         "Screen Resolution": [1280, 800],
         "V-Sync": true,
-        "Window Mode": "Windowed",
+        "Window Mode": "Fullscreen",
         "Window Caption": "Engine 5th Testbed"
     },
     "Type": "Setting"

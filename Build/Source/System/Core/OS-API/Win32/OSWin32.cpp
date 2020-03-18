@@ -52,12 +52,13 @@ namespace Engine5
             {
                 m_os_common->m_b_app_paused = false;
                 m_os_common->m_application_timer->Start();
+                m_os_common->OnFullscreen();
             }
             break;
             // WM_SIZE is sent when the user resizes the window.  
         case WM_SIZE:
             // Save the new client area dimensions.
-            if (m_os_common->m_window_mode == eWindowMode::Fullscreen)
+            if (m_os_common->IsFullscreen())
             {
                 m_os_common->m_prev_client_width  = m_os_common->m_curr_client_width;
                 m_os_common->m_prev_client_height = m_os_common->m_curr_client_height;
@@ -376,7 +377,7 @@ namespace Engine5
         MoveWindow(m_h_wnd, x_start, y_start, rect.right - rect.left, rect.bottom - rect.top, TRUE);
         ShowWindow(m_h_wnd, SW_SHOWNORMAL);
         SetForegroundWindow(m_h_wnd);
-        m_application->OnFullscreen();
+        //m_application->OnFullscreen();
     }
 
     void OSCommon::SetQuit(bool b_quit)
@@ -412,7 +413,8 @@ namespace Engine5
 
     void OSCommon::DispatchMessagePump() const
     {
-        m_b_app_paused ? DispatchPaused() : DispatchActive();
+        DispatchActive();
+        //m_b_app_paused ? DispatchPaused() : DispatchActive();
     }
 
     void OSCommon::DispatchPaused() const
@@ -498,5 +500,10 @@ namespace Engine5
     void OSCommon::OnResize() const
     {
         m_application->OnResize(m_curr_client_width, m_curr_client_height);
+    }
+
+    void OSCommon::OnFullscreen() const
+    {
+        m_application->OnFullscreen();
     }
 }

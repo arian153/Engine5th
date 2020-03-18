@@ -40,6 +40,7 @@ namespace Engine5
         void SetLevelManager(LevelManager* level_manager);
     private :
         void OnResize() const;
+        void OnFullscreen() const;
         void DispatchPaused() const;
         void DispatchActive() const;
 
