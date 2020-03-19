@@ -27,8 +27,8 @@ namespace Engine5
         Vector3  GetScale() const;
 
     protected:
-        void Load() override;
-        void Unload() override;
+        bool Load(const Json::Value& data) override;
+        void Save(Json::Value& data) const override;
         void Subscribe() override;
         void Unsubscribe() override;
 

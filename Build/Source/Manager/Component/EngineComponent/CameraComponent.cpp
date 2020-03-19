@@ -18,11 +18,12 @@ namespace Engine5
     {
     }
 
-    void CameraComponent::Load()
+    bool CameraComponent::Load(const Json::Value& data)
     {
+        return true;
     }
 
-    void CameraComponent::Unload()
+    void CameraComponent::Save(Json::Value& data) const
     {
     }
 

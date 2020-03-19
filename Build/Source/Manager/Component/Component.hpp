@@ -2,6 +2,10 @@
 #include "../../System/Math/Utility/MathDef.hpp"
 #include "../../System/Core/Utility/CoreDef.hpp"
 
+namespace Json {
+    class Value;
+}
+
 namespace Engine5
 {
     class Object;
@@ -21,8 +25,8 @@ namespace Engine5
         Object* GetOwner() const;
 
     protected:
-        virtual void Load() = 0;
-        virtual void Unload() = 0;
+        virtual bool Load(const Json::Value& data) = 0;
+        virtual void Save(Json::Value& data) const = 0;
         virtual void Subscribe() = 0;
         virtual void Unsubscribe() = 0;
 

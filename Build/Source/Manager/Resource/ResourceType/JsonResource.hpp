@@ -1,5 +1,6 @@
 #pragma once
 #include "../Resource.hpp"
+#include "../../../System/Math/Math.hpp"
 
 namespace Json
 {
@@ -45,6 +46,22 @@ namespace Engine5
 
     public:
         static bool HasMember(const Json::Value& data, const std::string& find);
+        static bool IsVector2(const Json::Value& data);
+        static bool IsVector3(const Json::Value& data);
+        static bool IsVector4(const Json::Value& data);
+        static bool IsMatrix22(const Json::Value& data);
+        static bool IsMatrix33(const Json::Value& data);
+        static bool IsMatrix44(const Json::Value& data);
+        static bool IsQuaternion(const Json::Value& data);
+
+        static Vector2    AsVector2(const Json::Value& data);
+        static Vector3    AsVector3(const Json::Value& data);
+        static Vector4    AsVector4(const Json::Value& data);
+        static Matrix22   AsMatrix22(const Json::Value& data);
+        static Matrix33   AsMatrix33(const Json::Value& data);
+        static Matrix44   AsMatrix44(const Json::Value& data);
+        static Quaternion AsQuaternionRIJK(const Json::Value& data);
+        static Quaternion AsQuaternionXYZW(const Json::Value& data);
 
     private:
         bool LoadSetting(ApplicationSetting& app_setting) const;

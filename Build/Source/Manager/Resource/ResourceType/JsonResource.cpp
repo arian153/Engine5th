@@ -134,6 +134,116 @@ namespace Engine5
         return !data[find].isNull();
     }
 
+    bool JsonResource::IsVector2(const Json::Value& data)
+    {
+        return data.isArray() &&
+                data.size() == 2 &&
+                data[0].isNumeric() &&
+                data[1].isNumeric();
+    }
+
+    bool JsonResource::IsVector3(const Json::Value& data)
+    {
+        return data.isArray() &&
+                data.size() == 3 &&
+                data[0].isNumeric() &&
+                data[1].isNumeric() &&
+                data[2].isNumeric();
+    }
+
+    bool JsonResource::IsVector4(const Json::Value& data)
+    {
+        return data.isArray() &&
+                data.size() == 4 &&
+                data[0].isNumeric() &&
+                data[1].isNumeric() &&
+                data[2].isNumeric() &&
+                data[3].isNumeric();
+    }
+
+    bool JsonResource::IsMatrix22(const Json::Value& data)
+    {
+        return data.isArray() &&
+                data.size() == 2 &&
+                IsVector2(data[0]) &&
+                IsVector2(data[1]);
+    }
+
+    bool JsonResource::IsMatrix33(const Json::Value& data)
+    {
+        return data.isArray() &&
+                data.size() == 3 &&
+                IsVector3(data[0]) &&
+                IsVector3(data[1]) &&
+                IsVector3(data[2]);
+    }
+
+    bool JsonResource::IsMatrix44(const Json::Value& data)
+    {
+        return data.isArray() &&
+                data.size() == 4 &&
+                IsVector4(data[0]) &&
+                IsVector4(data[1]) &&
+                IsVector4(data[2]) &&
+                IsVector4(data[3]);
+    }
+
+    bool JsonResource::IsQuaternion(const Json::Value& data)
+    {
+        return data.isArray() &&
+                data.size() == 4 &&
+                data[0].isNumeric() &&
+                data[1].isNumeric() &&
+                data[2].isNumeric() &&
+                data[3].isNumeric();
+    }
+
+    Vector2 JsonResource::AsVector2(const Json::Value& data)
+    {
+        return Vector2(data[0].asFloat(), data[1].asFloat());
+    }
+
+    Vector3 JsonResource::AsVector3(const Json::Value& data)
+    {
+        return Vector3(data[0].asFloat(), data[1].asFloat(), data[2].asFloat());
+    }
+
+    Vector4 JsonResource::AsVector4(const Json::Value& data)
+    {
+        return Vector4(data[0].asFloat(), data[1].asFloat(), data[2].asFloat(), data[3].asFloat());
+    }
+
+    Matrix22 JsonResource::AsMatrix22(const Json::Value& data)
+    {
+        Matrix22 result;
+        result.SetRows(AsVector2(data[0]), AsVector2(data[1]));
+        return result;
+    }
+
+    Matrix33 JsonResource::AsMatrix33(const Json::Value& data)
+    {
+        Matrix33 result;
+        result.SetRows(AsVector3(data[0]), AsVector3(data[1]), AsVector3(data[2]));
+        return result;
+    }
+
+    Matrix44 JsonResource::AsMatrix44(const Json::Value& data)
+    {
+        Matrix44 result;
+        result.SetRows(AsVector4(data[0]), AsVector4(data[1]), AsVector4(data[2]), AsVector4(data[3]));
+        return result;
+    }
+
+    Quaternion JsonResource::AsQuaternionRIJK(const Json::Value& data)
+    {
+        return Quaternion(data[0].asFloat(), data[1].asFloat(), data[2].asFloat(), data[3].asFloat());
+    }
+
+    Quaternion JsonResource::AsQuaternionXYZW(const Json::Value& data)
+    {
+        return Quaternion(data[3].asFloat(), data[0].asFloat(), data[1].asFloat(), data[2].asFloat());
+    }
+
     bool JsonResource::LoadSetting(ApplicationSetting& app_setting) const
     {
         if (HasMember(*m_root_data, "Settings"))
@@ -281,5 +391,4 @@ namespace Engine5
         (*m_root_data)["Flag"].append("World");
         (*m_root_data)["Settings"]["ProjectionMatrix"] = "Perspective";
     }
-
-    }
+}

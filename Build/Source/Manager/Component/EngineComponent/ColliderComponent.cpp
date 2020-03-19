@@ -66,11 +66,12 @@ namespace Engine5
         return m_collider_set->GetScale();
     }
 
-    void ColliderComponent::Load()
+    bool ColliderComponent::Load(const Json::Value& data)
     {
+        return true;
     }
 
-    void ColliderComponent::Unload()
+    void ColliderComponent::Save(Json::Value& data) const
     {
     }
 

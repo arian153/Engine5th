@@ -122,11 +122,12 @@ namespace Engine5
         return m_rigid_body->GetMotionMode();
     }
 
-    void RigidBodyComponent::Load()
+    bool RigidBodyComponent::Load(const Json::Value& data)
     {
+        return true;
     }
 
-    void RigidBodyComponent::Unload()
+    void RigidBodyComponent::Save(Json::Value& data) const
     {
     }
 

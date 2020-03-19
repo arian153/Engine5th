@@ -195,8 +195,30 @@ namespace Engine5
 
     bool Object::Load(const Json::Value& data)
     {
-
-
+        //Add Components
+        if (JsonResource::HasMember(data, "Components") && data["Components"].isArray())
+        {
+            for (auto it = data["Components"].begin(); it != data["Components"].end(); ++it)
+            {
+                //Load Components
+                if (JsonResource::HasMember(*it, "Type") && (*it)["Type"].isString())
+                {
+                }
+            }
+        }
+        //Add Children Objects
+        if (JsonResource::HasMember(data, "Children") && data["Children"].isArray())
+        {
+            for (auto it = data["Children"].begin(); it != data["Children"].end(); ++it)
+            {
+                //Load Child
+                if (JsonResource::HasMember(*it, "Name") && (*it)["Name"].isString())
+                {
+                    auto child = m_object_manager->AddObject((*it)["Name"].asString());
+                    child->Load(*it);
+                }
+            }
+        }
         return true;
     }
 

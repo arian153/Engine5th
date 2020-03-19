@@ -39,8 +39,8 @@ namespace Engine5
         eMotionMode GetMotionMode() const;
 
     protected:
-        void Load() override;
-        void Unload() override;
+        bool Load(const Json::Value& data) override;
+        void Save(Json::Value& data) const override;
         void Subscribe() override;
         void Unsubscribe() override;
 

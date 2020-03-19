@@ -206,11 +206,13 @@ namespace Engine5
         return m_transform.orientation.Inverse().Rotate(world_vector);
     }
 
-    void TransformComponent::Load()
+    bool TransformComponent::Load(const Json::Value& data)
     {
+        
+        return true;
     }
 
-    void TransformComponent::Unload()
+    void TransformComponent::Save(Json::Value& data) const
     {
     }
 
