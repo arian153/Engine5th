@@ -9,6 +9,7 @@ namespace Json
 
 namespace Engine5
 {
+    class Object;
     struct ApplicationSetting;
     class Space;
     class Level;
@@ -33,7 +34,7 @@ namespace Engine5
         void Initialize() override;
         void Shutdown() override;
 
-        bool IsSetting() const;
+        bool      IsSetting() const;
         bool      IsLevel() const;
         bool      IsSpace() const;
         bool      IsArchetype() const;
@@ -41,7 +42,9 @@ namespace Engine5
         bool      IsParticleData() const;
         eJsonType GetType() const;
         bool      LoadJsonType();
-        bool      HasMember(const Json::Value& data, const std::string& find) const;
+
+    public:
+        static bool HasMember(const Json::Value& data, const std::string& find);
 
     private:
         bool LoadSetting(ApplicationSetting& app_setting) const;

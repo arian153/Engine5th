@@ -4,6 +4,10 @@
 #include <vector>
 #include "../../System/Core/Utility/CoreDef.hpp"
 
+namespace Json {
+    class Value;
+}
+
 namespace Engine5
 {
     class ComponentManager;
@@ -37,9 +41,10 @@ namespace Engine5
         void RemoveSibling(Object* sibling) const;
         void EraseObjectHierarchy();
         void RemoveObjectHierarchy();
-        
-
         void ClearComponents();
+
+        bool Load(const Json::Value& data);
+        bool Save(Json::Value& data) const;
 
     public: //template member functions
         template <typename T>

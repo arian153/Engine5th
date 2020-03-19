@@ -7,6 +7,8 @@
 #include "../../Space/Space.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
 #include "../../../System/Core/OS-API/ApplicationSetting.hpp"
+#include "../../Object/Object.hpp"
+#include "../../Object/ObjectManager.hpp"
 
 namespace Engine5
 {
@@ -127,9 +129,9 @@ namespace Engine5
         return false;
     }
 
-    bool JsonResource::HasMember(const Json::Value& data, const std::string& find) const
+    bool JsonResource::HasMember(const Json::Value& data, const std::string& find)
     {
-        return !(data[find].isNull());
+        return !data[find].isNull();
     }
 
     bool JsonResource::LoadSetting(ApplicationSetting& app_setting) const
@@ -223,6 +225,11 @@ namespace Engine5
             for (auto it = (*m_root_data)["Objects"].begin(); it != (*m_root_data)["Objects"].end(); ++it)
             {
                 //Load Object
+                if (HasMember(*it, "Name") && (*it)["Name"].isString())
+                {
+                    auto object = space->GetObjectManager()->AddObject((*it)["Name"].asString());
+                    object->Load(*it);
+                }
             }
         }
         return true;
@@ -274,4 +281,5 @@ namespace Engine5
         (*m_root_data)["Flag"].append("World");
         (*m_root_data)["Settings"]["ProjectionMatrix"] = "Perspective";
     }
-}
+
+    }

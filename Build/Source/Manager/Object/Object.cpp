@@ -4,6 +4,8 @@
 #include "ObjectManager.hpp"
 #include "ObjectFactory.hpp"
 #include "../../System/Core/Utility/CoreUtility.hpp"
+#include "../Resource/ResourceType/JsonResource.hpp"
+#include "../../External/JSONCPP/json/json.h"
 
 namespace Engine5
 {
@@ -189,6 +191,19 @@ namespace Engine5
     {
         m_component_manager->Remove(this);
         m_components.clear();
+    }
+
+    bool Object::Load(const Json::Value& data)
+    {
+
+
+        return true;
+    }
+
+    bool Object::Save(Json::Value& data) const
+    {
+        data["Name"] = m_name;
+        return true;
     }
 
     void Object::SetManager(ObjectManager* object_manager)
