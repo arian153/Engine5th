@@ -10,6 +10,7 @@ namespace Json
 
 namespace Engine5
 {
+    class ObjectFactory;
     class Object;
     struct ApplicationSetting;
     class Space;
@@ -78,6 +79,7 @@ namespace Engine5
         friend class Level;
         friend class LevelManager;
         friend class Application;
+        friend class ObjectFactory;
 
     private:
         eJsonType         m_json_type   = eJsonType::None;

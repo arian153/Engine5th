@@ -79,6 +79,8 @@ namespace Engine5
         bool CloneHierarchy(Object* cloned_object, ObjectManager* obj, ComponentManager* cmp) const;
         void CloneChildrenRecursive(Object* cloned_object, ObjectManager* obj, ComponentManager* cmp) const;
         void CloneChildrenRecursive(Object* cloned_object, ObjectFactory* obj, ComponentManager* cmp) const;
+
+        bool Load(const Json::Value& data, ObjectFactory* obj_factory);
     private:
         friend class ComponentManager;
         friend class ObjectManager;

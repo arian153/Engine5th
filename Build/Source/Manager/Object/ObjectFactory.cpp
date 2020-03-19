@@ -2,6 +2,9 @@
 #include "Object.hpp"
 #include "ObjectManager.hpp"
 #include "../Component/ComponentManager.hpp"
+#include "../Resource/ResourceType/JsonResource.hpp"
+#include "../../External/JSONCPP/json/json.h"
+#include "../Component/Component.hpp"
 
 namespace Engine5
 {
@@ -29,22 +32,23 @@ namespace Engine5
         }
     }
 
-    Object* ObjectFactory::CreateRawObject(const std::string& name, ObjectManager* object_manager)
+    Object* ObjectFactory::CreateRawObject(const std::string& name)
     {
         Object* created = new Object();
-        if (object_manager == nullptr)
-        {
-            created->SetName(name);
-            return created;
-        }
-        else
-        {
-            object_manager->AddObject(name, created);
-            return created;
-        }
+        created->m_name = name;
+        return created;
     }
 
-    Object* ObjectFactory::CreateArchetypeObject(size_t archetype_id, ComponentManager* component_manager, const std::string& name, ObjectManager* object_manager)
+    Object* ObjectFactory::CreateRawObject(const std::string& name, ObjectManager* object_manager)
+    {
+        if (object_manager != nullptr)
+        {
+            return object_manager->AddObject(name);
+        }
+        return nullptr;
+    }
+
+    Object* ObjectFactory::CreateArchetypeObject(const std::string& name, size_t archetype_id, ObjectManager* object_manager, ComponentManager* component_manager)
     {
         if (m_archetypes.size() > archetype_id)
         {
@@ -66,6 +70,16 @@ namespace Engine5
 
     void ObjectFactory::AddArchetype(JsonResource* resource)
     {
+        if (resource->IsArchetype() == true)
+        {
+            auto data = *resource->m_root_data;
+            if (JsonResource::HasMember(data, "Name") && (data)["Name"].isString())
+            {
+                std::string name   = data["Name"].asString();
+                Object*     object = CreateRawObject(name);
+                object->Load(data, this);
+            }
+        }
     }
 
     size_t ObjectFactory::GetArchetypeID(JsonResource* resource)

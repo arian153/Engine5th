@@ -16,7 +16,7 @@ namespace Engine5
         void Initialize(ObjectFactory* object_factory);
         void Shutdown();
 
-        Object* AddObject(const std::string& name, Object* created = nullptr);
+        Object* AddObject(const std::string& name);
         Object* AddObject(const std::string& name, size_t archetype_id, ComponentManager* cmp_m);
         Object* CloneObject(const std::string& name, Object* origin, ComponentManager* cmp_m = nullptr);
 
@@ -44,6 +44,7 @@ namespace Engine5
 
     private:
         friend class Object;
+        friend class JsonResource;
 
     private:
         std::unordered_multimap<std::string, Object*> m_object_map;

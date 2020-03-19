@@ -20,8 +20,9 @@ namespace Engine5
         void Initialize(ComponentRegistry* component_registry);
         void Shutdown();
 
-        Object* CreateRawObject(const std::string& name = "Empty Object", ObjectManager* object_manager = nullptr);
-        Object* CreateArchetypeObject(size_t archetype_id, ComponentManager* component_manager, const std::string& name = "", ObjectManager* object_manager = nullptr);
+        Object* CreateRawObject(const std::string& name);
+        Object* CreateRawObject(const std::string& name, ObjectManager* object_manager);
+        Object* CreateArchetypeObject(const std::string& name, size_t archetype_id, ObjectManager* object_manager, ComponentManager* component_manager);
 
         void AddArchetype(Object* object);
         void AddArchetype(JsonResource* resource);
@@ -29,6 +30,9 @@ namespace Engine5
         size_t GetArchetypeID(JsonResource* resource);
     private:
         void ClearArchetypes();
+
+    private:
+        friend class Object;
 
     private:
         std::unordered_map<JsonResource*, size_t> m_resource_id;

@@ -44,13 +44,9 @@ namespace Engine5
 
     Object* Object::Clone(const std::string& name, ObjectManager* obj_m, ComponentManager* cmp_m)
     {
-        if (obj_m == nullptr && m_object_manager == nullptr)
-        {
-            return nullptr;
-        }
-        auto        obj         = obj_m == nullptr ? m_object_manager : obj_m;
-        auto        cmp         = cmp_m == nullptr ? m_component_manager : cmp_m;
-        std::string cloned_name = name == "" ? m_name : name;
+        ObjectManager*    obj         = obj_m == nullptr ? m_object_manager : obj_m;
+        ComponentManager* cmp         = cmp_m == nullptr ? m_component_manager : cmp_m;
+        std::string       cloned_name = name == "" ? m_name : name;
         return obj->CloneObject(cloned_name, this, cmp);
     }
 
@@ -221,6 +217,7 @@ namespace Engine5
                 {
                     auto child = m_object_manager->AddObject((*it)["Name"].asString());
                     child->Load(*it);
+                    AddChild(child);
                 }
             }
         }
@@ -411,5 +408,40 @@ namespace Engine5
                 child->CloneChildrenRecursive(cloned_child, obj, cmp);
             }
         }
+    }
+
+    bool Object::Load(const Json::Value& data, ObjectFactory* obj_factory)
+    {
+        //Add Components
+        if (JsonResource::HasMember(data, "Components") && data["Components"].isArray())
+        {
+            for (auto it = data["Components"].begin(); it != data["Components"].end(); ++it)
+            {
+                //Load Components
+                if (JsonResource::HasMember(*it, "Type") && (*it)["Type"].isString())
+                {
+                    auto created = obj_factory->m_archetype_component_manager->Create((*it)["Type"].asString(), this);
+                    if (created != nullptr)
+                    {
+                        created->Load((*it)["Value"]);
+                    }
+                }
+            }
+        }
+        //Add Children Objects
+        if (JsonResource::HasMember(data, "Children") && data["Children"].isArray())
+        {
+            for (auto it = data["Children"].begin(); it != data["Children"].end(); ++it)
+            {
+                //Load Child
+                if (JsonResource::HasMember(*it, "Name") && (*it)["Name"].isString())
+                {
+                    auto child = obj_factory->CreateRawObject((*it)["Name"].asString());
+                    child->Load(*it, obj_factory);
+                    this->AddChild(child);
+                }
+            }
+        }
+        return true;
     }
 }

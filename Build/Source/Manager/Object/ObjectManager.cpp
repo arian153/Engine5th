@@ -31,31 +31,26 @@ namespace Engine5
         m_object_map.clear();
     }
 
-    Object* ObjectManager::AddObject(const std::string& name, Object* created)
+    Object* ObjectManager::AddObject(const std::string& name)
     {
-        Object* object = created;
-        size_t  id     = m_objects.size();
-        if (created == nullptr)
-        {
-            object = m_object_factory->CreateRawObject(name, nullptr);
-        }
-        object->m_name = name;
-        object->m_id   = id;
+        Object* object = m_object_factory->CreateRawObject(name);
+        object->m_id   = m_objects.size();
         object->SetManager(this);
         m_objects.push_back(object);
         m_object_map.emplace(name, object);
         return object;
     }
 
+   
     Object* ObjectManager::AddObject(const std::string& name, size_t archetype_id, ComponentManager* cmp_m)
     {
-        return m_object_factory->CreateArchetypeObject(archetype_id, cmp_m, name, this);
+        return m_object_factory->CreateArchetypeObject(name, archetype_id, this, cmp_m);
     }
 
     Object* ObjectManager::CloneObject(const std::string& name, Object* origin, ComponentManager* cmp_m)
     {
-        Object* cloned_object = AddObject(name);
-        auto    cmp           = cmp_m == nullptr ? origin->m_component_manager : cmp_m;
+        Object*           cloned_object = AddObject(name);
+        ComponentManager* cmp           = cmp_m == nullptr ? origin->m_component_manager : cmp_m;
         origin->CloneComponents(cloned_object, cmp);
         origin->CloneHierarchy(cloned_object, this, cmp);
         return cloned_object;
