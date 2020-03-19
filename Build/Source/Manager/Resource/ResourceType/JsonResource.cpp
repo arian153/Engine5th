@@ -9,6 +9,7 @@
 #include "../../../System/Core/OS-API/ApplicationSetting.hpp"
 #include "../../Object/Object.hpp"
 #include "../../Object/ObjectManager.hpp"
+#include "../../Object/ObjectFactory.hpp"
 
 namespace Engine5
 {
@@ -337,8 +338,29 @@ namespace Engine5
                 //Load Object
                 if (HasMember(*it, "Name") && (*it)["Name"].isString())
                 {
-                    auto object = space->GetObjectManager()->AddObject((*it)["Name"].asString());
-                    object->Load(*it);
+                    std::string name = (*it)["Name"].asString();
+                    Object*     created_object;
+                    //Check Archetype
+                    if (HasMember((*it), "Archetype"))
+                    {
+                        if ((*it)["Archetype"].isString())
+                        {
+                            auto path = (*it)[ "Archetype" ].asString();
+                            m_resource_manager->GetJsonResource(StringToWString(path));
+
+
+                        }
+                        else if ((*it)["Archetype"].isUInt())
+                        {
+                            size_t archetype_id = (*it)[ "Archetype" ].asUInt64();
+                            created_object = space->m_object_manager->AddObject(name, archetype_id, space->m_component_manager);
+                        }
+                    }
+                    else
+                    {
+                        created_object = space->GetObjectManager()->AddObject(name);
+                    }
+                    created_object->Load(*it);
                 }
             }
         }

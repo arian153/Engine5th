@@ -27,7 +27,6 @@ namespace Engine5
             delete object;
             object = nullptr;
         }
-
         m_objects.clear();
         m_object_map.clear();
     }
@@ -46,6 +45,11 @@ namespace Engine5
         m_objects.push_back(object);
         m_object_map.emplace(name, object);
         return object;
+    }
+
+    Object* ObjectManager::AddObject(const std::string& name, size_t archetype_id, ComponentManager* cmp_m)
+    {
+        return m_object_factory->CreateArchetypeObject(archetype_id, cmp_m, name, this);
     }
 
     Object* ObjectManager::CloneObject(const std::string& name, Object* origin, ComponentManager* cmp_m)

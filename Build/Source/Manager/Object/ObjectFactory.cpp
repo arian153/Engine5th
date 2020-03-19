@@ -21,7 +21,7 @@ namespace Engine5
 
     void ObjectFactory::Shutdown()
     {
-        if( m_archetype_component_manager != nullptr)
+        if (m_archetype_component_manager != nullptr)
         {
             m_archetype_component_manager->Shutdown();
             delete m_archetype_component_manager;
@@ -62,6 +62,20 @@ namespace Engine5
         {
             object->CloneChildrenRecursive(archetype, this, m_archetype_component_manager);
         }
+    }
+
+    void ObjectFactory::AddArchetype(JsonResource* resource)
+    {
+    }
+
+    size_t ObjectFactory::GetArchetypeID(JsonResource* resource)
+    {
+        auto found = m_resource_id.find(resource);
+        if (found != m_resource_id.end())
+        {
+            return found->second;
+        }
+        return m_archetypes.size() + 1;
     }
 
     void ObjectFactory::ClearArchetypes()

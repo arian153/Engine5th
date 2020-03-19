@@ -203,6 +203,11 @@ namespace Engine5
                 //Load Components
                 if (JsonResource::HasMember(*it, "Type") && (*it)["Type"].isString())
                 {
+                    auto created = m_component_manager->Create((*it)["Type"].asString(), this);
+                    if (created != nullptr)
+                    {
+                        created->Load((*it)["Value"]);
+                    }
                 }
             }
         }

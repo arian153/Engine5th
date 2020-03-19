@@ -17,6 +17,7 @@ namespace Engine5
         void Shutdown();
 
         Object* AddObject(const std::string& name, Object* created = nullptr);
+        Object* AddObject(const std::string& name, size_t archetype_id, ComponentManager* cmp_m);
         Object* CloneObject(const std::string& name, Object* origin, ComponentManager* cmp_m = nullptr);
 
         void    FindObjects(const std::string& name, std::vector<Object*>& objects);
