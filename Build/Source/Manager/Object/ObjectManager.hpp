@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class Space;
     class ComponentManager;
     class Object;
     class ObjectFactory;

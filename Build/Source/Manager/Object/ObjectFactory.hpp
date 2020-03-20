@@ -28,6 +28,8 @@ namespace Engine5
         void AddArchetype(JsonResource* resource);
 
         size_t GetArchetypeID(JsonResource* resource);
+        bool ValidateID(size_t archetype_id) const;
+        size_t InvalidID() const;
     private:
         void ClearArchetypes();
 

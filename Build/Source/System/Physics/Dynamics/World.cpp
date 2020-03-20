@@ -159,4 +159,21 @@ namespace Engine5
         BoundingAABB* bounding_volume = new BoundingAABB(collider_primitive);
         m_broad_phase->Add(bounding_volume);
     }
+
+    void World::RemoveRigidBody(RigidBody* body)
+    {
+        auto found = std::find(m_rigid_bodies.begin(), m_rigid_bodies.end(), body);
+        m_rigid_bodies.erase(found);
+    }
+
+    void World::RemoveColliderSet(ColliderSet* set)
+    {
+        auto found = std::find(m_collider_sets.begin(), m_collider_sets.end(), set);
+        m_collider_sets.erase(found);
+    }
+
+    void World::RemovePrimitive(ColliderPrimitive* collider_primitive) const
+    {
+        m_broad_phase->Remove(collider_primitive->GetBoundingVolume());
+    }
 }

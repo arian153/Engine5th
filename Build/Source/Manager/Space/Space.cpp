@@ -23,7 +23,7 @@ namespace Engine5
         if (m_component_manager == nullptr && HasFlag(flag, eSubsystemFlag::ComponentManager))
         {
             m_component_manager = new ComponentManager();
-            m_component_manager->Initialize(cmp_registry);
+            m_component_manager->Initialize(cmp_registry, this);
         }
         //create object manager
         if (m_object_manager == nullptr && HasFlag(flag, eSubsystemFlag::ObjectManager))
@@ -51,7 +51,7 @@ namespace Engine5
         if (m_component_manager == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::ComponentManager))
         {
             m_component_manager = new ComponentManager();
-            m_component_manager->Initialize(cmp_registry);
+            m_component_manager->Initialize(cmp_registry, this);
         }
         //create object manager
         if (m_object_manager == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::ObjectManager))

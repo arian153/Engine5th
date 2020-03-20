@@ -9,6 +9,7 @@ namespace Json
 
 namespace Engine5
 {
+    class Space;
     class Object;
 
     class Component
@@ -27,6 +28,9 @@ namespace Engine5
         bool    IsLoaded() const;
         bool    IsUnloaded() const;
         Object* GetOwner() const;
+        Space* GetSpace() const;
+        void SetSpace(Space* space);
+       
 
     protected:
 
@@ -35,6 +39,7 @@ namespace Engine5
 
     protected:
         Object* m_owner = nullptr;
+        Space*  m_space = nullptr;
         String  m_type;
         bool    m_b_loaded   = false;
         bool    m_b_unloaded = false;

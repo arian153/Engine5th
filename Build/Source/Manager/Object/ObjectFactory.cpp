@@ -19,7 +19,7 @@ namespace Engine5
     void ObjectFactory::Initialize(ComponentRegistry* component_registry)
     {
         m_archetype_component_manager = new ComponentManager();
-        m_archetype_component_manager->Initialize(component_registry);
+        m_archetype_component_manager->Initialize(component_registry, nullptr);
     }
 
     void ObjectFactory::Shutdown()
@@ -89,6 +89,16 @@ namespace Engine5
         {
             return found->second;
         }
+        return m_archetypes.size() + 1;
+    }
+
+    bool ObjectFactory::ValidateID(size_t archetype_id) const
+    {
+        return m_archetypes.size() > archetype_id;
+    }
+
+    size_t ObjectFactory::InvalidID() const
+    {
         return m_archetypes.size() + 1;
     }
 

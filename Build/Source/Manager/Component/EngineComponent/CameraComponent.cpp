@@ -1,4 +1,6 @@
 #include "CameraComponent.hpp"
+#include "../../Space/Space.hpp"
+#include "../../../System/Graphics/Element/Scene.hpp"
 
 namespace Engine5
 {
@@ -29,10 +31,18 @@ namespace Engine5
 
     void CameraComponent::Subscribe()
     {
+        if (m_space != nullptr)
+        {
+            m_space->GetScene();
+        }
     }
 
     void CameraComponent::Unsubscribe()
     {
+        if (m_space != nullptr)
+        {
+            m_space->GetScene();
+        }
     }
 
     CameraComponent::CameraComponent(Object* owner)

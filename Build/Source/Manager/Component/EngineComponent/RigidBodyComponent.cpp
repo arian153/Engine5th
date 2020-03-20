@@ -1,4 +1,5 @@
 #include "RigidBodyComponent.hpp"
+#include "../../Space/Space.hpp"
 
 namespace Engine5
 {
@@ -133,10 +134,18 @@ namespace Engine5
 
     void RigidBodyComponent::Subscribe()
     {
+        if (m_space != nullptr)
+        {
+            m_space->GetWorld()->AddRigidBody(m_rigid_body);
+        }
     }
 
     void RigidBodyComponent::Unsubscribe()
     {
+        if (m_space != nullptr)
+        {
+            m_space->GetWorld()->RemoveRigidBody(m_rigid_body);
+        }
     }
 
     RigidBodyComponent::RigidBodyComponent(Object* owner)

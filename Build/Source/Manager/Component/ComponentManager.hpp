@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class Space;
     class Object;
     class Component;
     class ComponentRegistry;
@@ -13,7 +14,7 @@ namespace Engine5
         ComponentManager();
         ~ComponentManager();
 
-        void Initialize(ComponentRegistry* registry);
+        void Initialize(ComponentRegistry* registry, Space* space);
         void Shutdown();
 
         Component* Create(const std::string& type, Object* owner);
@@ -25,8 +26,10 @@ namespace Engine5
         void       Remove(Object* owner);
         void       Clear();
 
+
     private:
         std::unordered_multimap<Object*, Component*> m_components;
         ComponentRegistry*                           m_registry = nullptr;
+        Space*                                       m_space    = nullptr;
     };
 }

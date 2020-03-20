@@ -30,4 +30,14 @@ namespace Engine5
     {
         return m_owner;
     }
+
+    Space* Component::GetSpace() const
+    {
+        return m_space;
+    }
+
+    void Component::SetSpace(Space* space)
+    {
+        m_space = space;
+    }
 }

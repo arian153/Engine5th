@@ -243,6 +243,7 @@ namespace Engine5
         return false;
     }
 
+    
     void ObjectManager::ChangeName(Object* object, const std::string& new_name)
     {
         auto ret = m_object_map.equal_range(object->m_name);

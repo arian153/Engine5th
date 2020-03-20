@@ -341,29 +341,33 @@ namespace Engine5
                     std::string name = (*it)["Name"].asString();
                     Object*     created_object;
                     //Check Archetype
-                    if (HasMember((*it), "Archetype"))
+                    if (HasMember(*it, "Archetype"))
                     {
-                        size_t archetype_id;
+                        size_t archetype_id = space->m_object_manager->m_object_factory->InvalidID();
                         if ((*it)["Archetype"].isString())
                         {
-                            auto path      = (*it)["Archetype"].asString();
-                            auto resource  = m_resource_manager->GetJsonResource(StringToWString(path));
-                            archetype_id   = space->m_object_manager->m_object_factory->GetArchetypeID(resource);
-                            created_object = space->m_object_manager->AddObject(name, archetype_id, space->m_component_manager);
-                            created_object->Load(*it);
+                            auto path     = (*it)["Archetype"].asString();
+                            auto resource = m_resource_manager->GetJsonResource(StringToWString(path));
+                            archetype_id  = space->m_object_manager->m_object_factory->GetArchetypeID(resource);
                         }
                         else if ((*it)["Archetype"].isUInt())
                         {
-                            archetype_id   = (*it)["Archetype"].asUInt64();
+                            archetype_id = (*it)["Archetype"].asUInt64();
+                        }
+                        if (space->m_object_manager->m_object_factory->ValidateID(archetype_id))
+                        {
                             created_object = space->m_object_manager->AddObject(name, archetype_id, space->m_component_manager);
-                            created_object->Load(*it);
+                        }
+                        else
+                        {
+                            created_object = space->GetObjectManager()->AddObject(name);
                         }
                     }
                     else
                     {
                         created_object = space->GetObjectManager()->AddObject(name);
-                        created_object->Load(*it);
                     }
+                    created_object->Load(*it);
                 }
             }
         }

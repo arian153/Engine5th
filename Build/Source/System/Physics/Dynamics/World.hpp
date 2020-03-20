@@ -30,6 +30,10 @@ namespace Engine5
         ColliderSet* AddColliderSet(ColliderSet* set);
         void         AddPrimitive(ColliderPrimitive* collider_primitive) const;
 
+        void RemoveRigidBody(RigidBody* body);
+        void RemoveColliderSet(ColliderSet* set);
+        void RemovePrimitive(ColliderPrimitive* collider_primitive) const;
+
     private:
 
     private:
