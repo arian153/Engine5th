@@ -30,7 +30,6 @@ namespace Engine5
     {
         World* world = new World();
         m_worlds.push_back(world);
-        world->Initialize();
         return world;
     }
 

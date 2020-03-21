@@ -24,16 +24,16 @@ namespace Engine5
         {
             switch (m_mode)
             {
-            case Engine5::eBroadPhaseMode::DynamicBVH:
+            case eBroadPhaseMode::DynamicBVH:
                 m_broad_phase = new DynamicBVH();
                 break;
-            case Engine5::eBroadPhaseMode::StaticBVH:
+            case eBroadPhaseMode::StaticBVH:
                 //m_broad_phase = new StaticBVH();
                 break;
-            case Engine5::eBroadPhaseMode::NSquared:
+            case eBroadPhaseMode::NSquared:
                 m_broad_phase = new NSquared();
                 break;
-            case Engine5::eBroadPhaseMode::GridPartition:
+            case eBroadPhaseMode::GridPartition:
                 m_broad_phase = new GridPartition();
                 break;
             default:
@@ -109,13 +109,13 @@ namespace Engine5
             BroadPhase* broad_phase;
             switch (mode)
             {
-            case Engine5::eBroadPhaseMode::DynamicBVH:
+            case eBroadPhaseMode::DynamicBVH:
                 broad_phase = new DynamicBVH();
                 break;
-            case Engine5::eBroadPhaseMode::NSquared:
+            case eBroadPhaseMode::NSquared:
                 broad_phase = new NSquared();
                 break;
-            case Engine5::eBroadPhaseMode::GridPartition:
+            case eBroadPhaseMode::GridPartition:
                 broad_phase = new GridPartition();
                 break;
             default:

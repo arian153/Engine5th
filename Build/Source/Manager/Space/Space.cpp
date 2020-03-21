@@ -35,11 +35,13 @@ namespace Engine5
         if (m_scene == nullptr && HasFlag(flag, eSubsystemFlag::Scene))
         {
             m_scene = render_system->CreateScene();
+            m_scene->Initialize();
         }
         //create world
         if (m_world == nullptr && HasFlag(flag, eSubsystemFlag::World))
         {
             m_world = physics_system->CreateWorld();
+            m_world->Initialize();
         }
     }
 
@@ -63,11 +65,13 @@ namespace Engine5
         if (m_scene == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Scene))
         {
             m_scene = render_system->CreateScene();
+            m_scene->Initialize();
         }
         //create world
         if (m_world == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::World))
         {
             m_world = physics_system->CreateWorld();
+            m_world->Initialize();
         }
         m_space_resource->LoadData(this);
     }
