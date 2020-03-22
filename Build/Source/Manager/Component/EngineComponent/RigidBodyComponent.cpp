@@ -1,5 +1,7 @@
 #include "RigidBodyComponent.hpp"
 #include "../../Space/Space.hpp"
+#include "../../Object/Object.hpp"
+#include "ColliderComponent.hpp"
 
 namespace Engine5
 {
@@ -9,6 +11,25 @@ namespace Engine5
 
     void RigidBodyComponent::Initialize()
     {
+        if (m_rigid_body == nullptr)
+        {
+            m_rigid_body = new RigidBody();
+            Subscribe();
+        }
+        if (m_collider_set != nullptr)
+        {
+            m_b_init = true;
+        }
+        else
+        {
+            if (m_owner->HasComponent<ColliderComponent>())
+            {
+                auto collider          = m_owner->GetComponent<ColliderComponent>();
+                m_collider_set         = collider->m_collider_set;
+                collider->m_rigid_body = m_rigid_body;
+                collider->Initialize();
+            }
+        }
     }
 
     void RigidBodyComponent::Update(Real dt)
@@ -26,6 +47,12 @@ namespace Engine5
 
     void RigidBodyComponent::Shutdown()
     {
+        Unsubscribe();
+        if (m_rigid_body != nullptr)
+        {
+            delete m_rigid_body;
+            m_rigid_body = nullptr;
+        }
     }
 
     void RigidBodyComponent::ApplyForce(const Vector3& force, const Vector3& at) const
@@ -76,6 +103,11 @@ namespace Engine5
     void RigidBodyComponent::SetMotionMode(eMotionMode motion_mode) const
     {
         m_rigid_body->SetMotionMode(motion_mode);
+    }
+
+    void RigidBodyComponent::SetTransform(Transform* transform)
+    {
+        m_transform = transform;
     }
 
     Vector3 RigidBodyComponent::GetLinearVelocity() const
@@ -134,7 +166,7 @@ namespace Engine5
 
     void RigidBodyComponent::Subscribe()
     {
-        if (m_space != nullptr)
+        if (m_space != nullptr && m_rigid_body != nullptr)
         {
             m_space->GetWorld()->AddRigidBody(m_rigid_body);
         }

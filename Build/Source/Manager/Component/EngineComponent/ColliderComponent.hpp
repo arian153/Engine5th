@@ -26,6 +26,8 @@ namespace Engine5
         MassData GetMass() const;
         Vector3  GetScale() const;
 
+        void SetTransform(Transform* transform);
+
     protected:
         bool Load(const Json::Value& data) override;
         void Save(Json::Value& data) const override;
@@ -34,6 +36,7 @@ namespace Engine5
 
     private:
         friend class ColliderFactory;
+        friend class RigidBodyComponent;
 
     private:
         explicit ColliderComponent(Object* owner);

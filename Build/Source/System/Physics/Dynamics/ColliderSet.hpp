@@ -22,7 +22,7 @@ namespace Engine5
         //primitives
         ColliderPrimitive* AddCollider(eColliderType type);
         ColliderPrimitive* GetCollider(size_t index) const;
-        void EraseCollider(ColliderPrimitive* collider) const;
+        void               EraseCollider(ColliderPrimitive* collider) const;
 
         RigidBody* GetRigidBody() const;
 
@@ -32,7 +32,7 @@ namespace Engine5
 
         //getters
         MassData GetMassData() const;
-        Vector3 GetScale() const;
+        Vector3  GetScale() const;
 
         //modify data
         void UpdateMassData();
@@ -42,7 +42,6 @@ namespace Engine5
 
     private:
 
-
     private:
         friend class World;
         friend class RigidBody;
@@ -51,10 +50,10 @@ namespace Engine5
         friend class ContactManifold;
 
     private:
-        RigidBody* m_rigid_body = nullptr;
-        World*     m_world      = nullptr;
-        MassData   m_mass_data;
-        Vector3    m_scale;
+        RigidBody*   m_rigid_body = nullptr;
+        World*       m_world      = nullptr;
+        MassData     m_mass_data;
+        Vector3      m_scale;
         BoundingAABB m_bounding_volume;
 
         //primitives

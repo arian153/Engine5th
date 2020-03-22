@@ -50,7 +50,6 @@ namespace Engine5
         }
     }
 
-
     ColliderPrimitive* ColliderSet::AddCollider(eColliderType type)
     {
         ColliderPrimitive* primitive;
@@ -89,11 +88,14 @@ namespace Engine5
         default:
             return nullptr;
         }
-        //each primitives must know both collider set and rigid body.
         primitive->m_collider_set = this;
         primitive->m_rigid_body   = m_rigid_body;
-        m_world->AddPrimitive(primitive);
+        if (m_world != nullptr)
+        {
+            m_world->AddPrimitive(primitive);
+        }
         primitive->Initialize();
+        m_colliders->push_back(primitive);
         return primitive;
     }
 
@@ -183,11 +185,9 @@ namespace Engine5
             {
                 // accumulate mass
                 m_mass_data.mass += collider_data->m_mass;
-
                 // accumulate weighted contribution
                 m_mass_data.local_centroid += collider_data->m_mass * collider_data->WorldCentroid();
             }
-
             // compute inverse mass
             if (Utility::IsZero(m_mass_data.mass) == false)
             {
@@ -198,10 +198,8 @@ namespace Engine5
                 //infinite mass.
                 m_mass_data.inverse_mass = 0.0f;
             }
-
             // compute final local centroid
             m_mass_data.local_centroid *= m_mass_data.inverse_mass;
-
             // compute local inertia tensor
             m_mass_data.local_inertia_tensor.SetZero();
             for (auto& collider_data : *m_colliders)
@@ -209,11 +207,9 @@ namespace Engine5
                 Vector3  r       = m_mass_data.local_centroid - collider_data->WorldCentroid();
                 Real     r_dot_r = r.DotProduct(r);
                 Matrix33 r_out_r = r.OuterProduct(r);
-
                 // accumulate local inertia tensor contribution, using Parallel Axis Theorem
                 m_mass_data.local_inertia_tensor += collider_data->WorldInertia() + collider_data->m_mass * (r_dot_r * Matrix33::Identity() - r_out_r);
             }
-
             // compute inverse inertia tensor
             m_mass_data.local_inverse_inertia_tensor = m_mass_data.local_inertia_tensor.Inverse();
         }
@@ -238,12 +234,13 @@ namespace Engine5
         if (m_colliders != nullptr)
         {
             m_bounding_volume.Set(Math::Vector3::ORIGIN, Math::Vector3::ORIGIN);
-
             for (auto& collider_data : *m_colliders)
             {
-                m_bounding_volume = collider_data->m_bounding_volume->Union(m_bounding_volume);
+                if (collider_data->m_bounding_volume != nullptr)
+                {
+                    m_bounding_volume = collider_data->m_bounding_volume->Union(m_bounding_volume);
+                }
             }
         }
     }
-
 }

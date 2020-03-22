@@ -26,6 +26,7 @@ namespace Engine5
         void SetPositionalConstraints(const Vector3& linear) const;
         void SetRotationalConstraints(const Vector3& angular) const;
         void SetMotionMode(eMotionMode motion_mode) const;
+        void SetTransform(Transform* transform);
 
         //getter
         Vector3     GetLinearVelocity() const;
@@ -46,14 +47,16 @@ namespace Engine5
 
     private:
         friend class RigidBodyFactory;
-
+        friend class ColliderComponent;
     private:
         explicit RigidBodyComponent(Object* owner);
         void     Clone(RigidBodyComponent* cloned);
 
     private:
         RigidBody*   m_rigid_body   = nullptr;
-        Transform*   m_transform    = nullptr;
         ColliderSet* m_collider_set = nullptr;
+        Transform*   m_transform    = nullptr;
+
+        bool m_b_init = false;
     };
 }

@@ -28,12 +28,10 @@ namespace Engine5
         bool    IsLoaded() const;
         bool    IsUnloaded() const;
         Object* GetOwner() const;
-        Space* GetSpace() const;
-        void SetSpace(Space* space);
-       
+        Space*  GetSpace() const;
+        void    SetSpace(Space* space);
 
     protected:
-
         virtual void Subscribe() = 0;
         virtual void Unsubscribe() = 0;
 

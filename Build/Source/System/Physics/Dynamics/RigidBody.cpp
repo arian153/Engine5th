@@ -3,8 +3,7 @@
 
 namespace Engine5
 {
-    RigidBody::RigidBody(World* world)
-        : m_world(world)
+    RigidBody::RigidBody()
     {
     }
 
@@ -16,17 +15,14 @@ namespace Engine5
     {
         // integrate linear velocity
         m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * dt;
-
         // integrate angular velocity
         m_angular_velocity += m_global_inverse_inertia_tensor * m_torque_accumulator * dt;
-
         // zero out accumulated force and torque
         m_force_accumulator.SetZero();
         m_torque_accumulator.SetZero();
         Vector3 delta_linear_velocity = m_linear_velocity * dt;
         delta_linear_velocity         = delta_linear_velocity.HadamardProduct(m_constraints_positional);
         m_global_centroid += delta_linear_velocity;
-
         // integrate orientation
         //Vector3 delta_angular_velocity = m_angular_velocity;
         Vector3 delta_angular_velocity(
@@ -37,7 +33,6 @@ namespace Engine5
         Vector3 axis           = delta_angular_velocity.Unit();
         Real    radian         = delta_angular_velocity.Length() * dt;
         m_orientation.AddRotation(axis, radian);
-
         // update physical properties
         UpdateOrientation();
         UpdatePositionFromGlobalCentroid();
@@ -68,7 +63,6 @@ namespace Engine5
     void RigidBody::SetMassData(const MassData& mass_data)
     {
         m_mass_data = mass_data;
-
         if (m_motion_mode != eMotionMode::Dynamic)
         {
             SetMassInfinite();
@@ -277,12 +271,12 @@ namespace Engine5
     void RigidBody::SyncToTransform(Transform* transform) const
     {
         transform->orientation = m_orientation;
-        transform->position = m_position;
+        transform->position    = m_position;
     }
 
     void RigidBody::SyncFromTransform(Transform* transform)
     {
-        m_position = transform->position;
+        m_position    = transform->position;
         m_orientation = transform->orientation;
         UpdateGlobalCentroidFromPosition();
         UpdateGlobalInertiaTensor();

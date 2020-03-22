@@ -1,5 +1,8 @@
 #include "ColliderComponent.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
+#include "../../Space/Space.hpp"
+#include "../../Object/Object.hpp"
+#include "RigidBodyComponent.hpp"
 
 namespace Engine5
 {
@@ -9,11 +12,26 @@ namespace Engine5
 
     void ColliderComponent::Initialize()
     {
-        //m_rigid_body = GetRigidBody();
+        if (m_collider_set == nullptr)
+        {
+            World* world   = m_space != nullptr ? m_space->GetWorld() : nullptr;
+            m_collider_set = new ColliderSet(world);
+            Subscribe();
+        }
         if (m_rigid_body != nullptr)
         {
             m_collider_set->Initialize(m_rigid_body);
             m_b_init = true;
+        }
+        else
+        {
+            if (m_owner->HasComponent<RigidBodyComponent>())
+            {
+                auto body            = m_owner->GetComponent<RigidBodyComponent>();
+                m_rigid_body         = body->m_rigid_body;
+                body->m_collider_set = m_collider_set;
+                body->Initialize();
+            }
         }
     }
 
@@ -66,6 +84,11 @@ namespace Engine5
         return m_collider_set->GetScale();
     }
 
+    void ColliderComponent::SetTransform(Transform* transform)
+    {
+        m_transform = transform;
+    }
+
     bool ColliderComponent::Load(const Json::Value& data)
     {
         return true;
@@ -77,10 +100,18 @@ namespace Engine5
 
     void ColliderComponent::Subscribe()
     {
+        if (m_space != nullptr && m_collider_set != nullptr)
+        {
+            m_space->GetWorld()->AddColliderSet(m_collider_set);
+        }
     }
 
     void ColliderComponent::Unsubscribe()
     {
+        if (m_space != nullptr)
+        {
+            m_space->GetWorld()->RemoveColliderSet(m_collider_set);
+        }
     }
 
     ColliderComponent::ColliderComponent(Object* owner)

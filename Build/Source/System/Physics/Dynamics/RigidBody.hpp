@@ -5,12 +5,10 @@
 
 namespace Engine5
 {
-    class World;
-
     class RigidBody
     {
     public:
-        explicit RigidBody(World* world);
+        RigidBody();
         ~RigidBody();
 
         void Integrate(Real dt);
@@ -61,7 +59,7 @@ namespace Engine5
         Matrix33 InverseLocalInertia() const;
         void     SetLocalInertia(const Matrix33& inertia);
 
-        void       SetMotionMode(eMotionMode motion_mode);
+        void        SetMotionMode(eMotionMode motion_mode);
         eMotionMode GetMotionMode() const;
 
         Vector3 LocalToWorldPoint(const Vector3& local_point) const;
@@ -99,6 +97,5 @@ namespace Engine5
 
         //others
         eMotionMode m_motion_mode = eMotionMode::Dynamic;
-        World*     m_world       = nullptr;
     };
 }
