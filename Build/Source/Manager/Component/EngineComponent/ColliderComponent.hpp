@@ -28,7 +28,7 @@ namespace Engine5
 
         void SetTransform(Transform* transform);
         void SetRigidBody(RigidBody* rigid_body);
-
+        
     protected:
         bool Load(const Json::Value& data) override;
         void Save(Json::Value& data) const override;

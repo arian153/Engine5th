@@ -2,6 +2,7 @@
 #include "../../Space/Space.hpp"
 #include "../../Object/Object.hpp"
 #include "ColliderComponent.hpp"
+#include "TransformComponent.hpp"
 
 namespace Engine5
 {
@@ -29,6 +30,13 @@ namespace Engine5
                 collider->m_rigid_body = m_rigid_body;
                 collider->Initialize();
                 m_b_init = true;
+            }
+        }
+        if (m_transform == nullptr)
+        {
+            if (m_owner->HasComponent<TransformComponent>())
+            {
+                m_transform = m_owner->GetComponent<TransformComponent>()->GetTransform();
             }
         }
     }

@@ -37,6 +37,13 @@ namespace Engine5
                 m_b_init = true;
             }
         }
+        if (m_transform == nullptr)
+        {
+            if (m_owner->HasComponent<TransformComponent>())
+            {
+                m_transform = m_owner->GetComponent<TransformComponent>()->GetTransform();
+            }
+        }
     }
 
     void ColliderComponent::Update(Real dt)

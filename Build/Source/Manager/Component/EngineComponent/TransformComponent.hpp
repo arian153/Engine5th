@@ -43,11 +43,13 @@ namespace Engine5
         Quaternion GetOrientation() const;
         Matrix33   GetRotationMatrix() const;
         Matrix44   GetTransformMatrix() const;
+        Transform* GetTransform();
 
         Vector3 LocalToWorldPoint(const Vector3& local_point) const;
         Vector3 WorldToLocalPoint(const Vector3& world_point) const;
         Vector3 LocalToWorldVector(const Vector3& local_vector) const;
         Vector3 WorldToLocalVector(const Vector3& world_vector) const;
+       
 
     protected:
         bool Load(const Json::Value& data) override;

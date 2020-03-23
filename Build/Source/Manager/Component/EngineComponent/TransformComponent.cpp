@@ -186,6 +186,11 @@ namespace Engine5
         return m_transform.LocalToWorldMatrix();
     }
 
+    Transform* TransformComponent::GetTransform()
+    {
+        return &m_transform;
+    }
+
     Vector3 TransformComponent::LocalToWorldPoint(const Vector3& local_point) const
     {
         return m_transform.orientation.Rotate(local_point) + m_transform.position;
@@ -208,7 +213,6 @@ namespace Engine5
 
     bool TransformComponent::Load(const Json::Value& data)
     {
-        
         return true;
     }
 
