@@ -26,6 +26,6 @@ namespace Engine5
 
     private:
         explicit CameraComponent(Object* owner);
-        void     Clone(CameraComponent* cloned);
+        void     Clone(CameraComponent* origin);
     };
 }

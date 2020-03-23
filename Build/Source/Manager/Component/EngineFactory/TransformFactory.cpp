@@ -21,7 +21,7 @@ namespace Engine5
     {
         auto source = static_cast<TransformComponent*>(origin);
         auto cloned = static_cast<TransformComponent*>(this->Create(dest));
-        source->Clone(cloned);
+        cloned->Clone(source);
         return cloned;
     }
 }

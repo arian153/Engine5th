@@ -21,7 +21,7 @@ namespace Engine5
     {
         auto source = static_cast<ColliderComponent*>(origin);
         auto cloned = static_cast<ColliderComponent*>(this->Create(dest));
-        source->Clone(cloned);
+        cloned->Clone(source);
         return cloned;
     }
 }

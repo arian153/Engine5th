@@ -60,7 +60,7 @@ namespace Engine5
 
     private:
         explicit TransformComponent(Object* owner);
-        void     Clone(TransformComponent* cloned);
+        void     Clone(TransformComponent* origin);
 
         void UpdateChildrenPositionRecursive(const Vector3& position);
         void UpdateChildrenOrientationRecursive(const Quaternion& orientation);

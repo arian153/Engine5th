@@ -35,7 +35,7 @@ namespace Engine5
         void    SetBox(Real width, Real height, Real depth);
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         Vector3 m_vertices[8];

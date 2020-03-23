@@ -71,7 +71,7 @@ namespace Engine5
     protected:
         virtual void SetMassData(Real density) = 0;
         virtual void SetScaleData(const Vector3& scale) = 0;
-        virtual void Clone(ColliderPrimitive* cloned) = 0;
+        virtual void Clone(ColliderPrimitive* origin) = 0;
 
     private:
         friend class ColliderSet;

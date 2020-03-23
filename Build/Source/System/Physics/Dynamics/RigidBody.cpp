@@ -281,4 +281,28 @@ namespace Engine5
         UpdateGlobalCentroidFromPosition();
         UpdateGlobalInertiaTensor();
     }
+
+    void RigidBody::Clone(RigidBody* origin)
+    {
+        if (origin != this)
+        {
+            //linear data
+            m_position               = origin->m_position;
+            m_linear_velocity        = origin->m_linear_velocity;
+            m_force_accumulator      = origin->m_force_accumulator;
+            m_constraints_positional = origin->m_constraints_positional;
+            //angular data
+            m_orientation            = origin->m_orientation;
+            m_inverse_orientation    = origin->m_inverse_orientation;
+            m_angular_velocity       = origin->m_angular_velocity;
+            m_torque_accumulator     = origin->m_torque_accumulator;
+            m_constraints_rotational = origin->m_constraints_rotational;
+            //mass data
+            m_mass_data                     = origin->m_mass_data;
+            m_global_centroid               = origin->m_global_centroid;
+            m_global_inverse_inertia_tensor = origin->m_global_inverse_inertia_tensor;
+            //others
+            m_motion_mode = origin->m_motion_mode;
+        }
+    }
 }

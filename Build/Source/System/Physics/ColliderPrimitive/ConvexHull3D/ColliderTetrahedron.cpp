@@ -292,7 +292,7 @@ namespace Engine5
         UpdatePrimitive();
     }
 
-    void ColliderTetrahedron::Clone(ColliderPrimitive* cloned)
+    void ColliderTetrahedron::Clone(ColliderPrimitive* origin)
     {
     }
 

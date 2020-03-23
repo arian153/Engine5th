@@ -50,9 +50,9 @@ namespace Engine5
     {
     }
 
-    void CameraComponent::Clone(CameraComponent* cloned)
+    void CameraComponent::Clone(CameraComponent* origin)
     {
-        if (cloned != nullptr && cloned != this)
+        if (origin != nullptr && origin != this)
         {
             //copy data
         }

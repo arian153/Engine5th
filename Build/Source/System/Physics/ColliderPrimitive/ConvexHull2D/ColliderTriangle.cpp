@@ -400,7 +400,7 @@ namespace Engine5
         UpdatePrimitive();
     }
 
-    void ColliderTriangle::Clone(ColliderPrimitive* cloned)
+    void ColliderTriangle::Clone(ColliderPrimitive* origin)
     {
     }
 }

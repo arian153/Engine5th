@@ -34,7 +34,7 @@ namespace Engine5
         Vector2 Radius() const;
         void SetEllipse(const Vector2& radius);
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         Vector2 m_radius;

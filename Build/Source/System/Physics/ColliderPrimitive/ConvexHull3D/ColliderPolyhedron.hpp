@@ -39,7 +39,7 @@ namespace Engine5
         bool SetPolyhedron(const std::vector<Vector3>& vertices);
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         class SubMassData

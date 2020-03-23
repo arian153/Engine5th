@@ -37,7 +37,7 @@ namespace Engine5
         bool SetPolygon(const std::vector<Vector2>& vertices);
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         void CreateSimplex();

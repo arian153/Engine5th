@@ -394,7 +394,7 @@ namespace Engine5
         return true;
     }
 
-    void ColliderPolyhedron::Clone(ColliderPrimitive* cloned)
+    void ColliderPolyhedron::Clone(ColliderPrimitive* origin)
     {
     }
 

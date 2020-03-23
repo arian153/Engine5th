@@ -14,11 +14,19 @@ namespace Engine5
     void ColliderPrimitive::CastRay(RayCastResult& result, Real max_distance)
     {
         result.hit_data.collider = this;
-        RigidBody* body          = m_rigid_body;
-        Ray        body_ray(body->WorldToLocalPoint(result.ray.position), body->WorldToLocalVector(result.ray.direction));
-        Ray        local_ray(this->WorldToLocalPoint(body_ray.position), this->WorldToLocalVector(body_ray.direction));
-        Real       minimum_t = -1.0f;
-        Real       maximum_t = -1.0f;
+        Ray body_ray;
+        if (m_rigid_body != nullptr)
+        {
+            body_ray.position  = m_rigid_body->WorldToLocalPoint(result.ray.position);
+            body_ray.direction = m_rigid_body->WorldToLocalVector(result.ray.direction);
+        }
+        else
+        {
+            body_ray = result.ray;
+        }
+        Ray  local_ray(WorldToLocalPoint(body_ray.position), WorldToLocalVector(body_ray.direction));
+        Real minimum_t = -1.0f;
+        Real maximum_t = -1.0f;
         if (this->TestRayIntersection(local_ray, minimum_t, maximum_t) == true)
         {
             result.hit_data.t   = minimum_t;
@@ -26,7 +34,11 @@ namespace Engine5
             //ray cast done
             Vector3 local_intersection   = local_ray.position + local_ray.direction * result.hit_data.t;
             result.hit_data.intersection = result.ray.position + result.ray.direction * result.hit_data.t;
-            result.hit_data.normal       = LocalToWorldVector(body->LocalToWorldVector(GetNormal(local_intersection)));
+            result.hit_data.normal       = LocalToWorldVector(GetNormal(local_intersection));
+            if (m_rigid_body != nullptr)
+            {
+                result.hit_data.normal = m_rigid_body->LocalToWorldVector(result.hit_data.normal);
+            }
             if (result.hit_data.t > max_distance && max_distance >= 0.0f)
             {
                 result.hit_data.hit = false;
@@ -36,14 +48,21 @@ namespace Engine5
 
     void ColliderPrimitive::IntersectRay(RayIntersectionResult& result, Real max_distance)
     {
-        RigidBody* body      = m_rigid_body;
-        Ray        world_ray = result.ray;
-        Ray        body_ray(body->WorldToLocalPoint(result.ray.position), body->WorldToLocalVector(result.ray.direction));
-        Ray        local_ray(this->WorldToLocalPoint(body_ray.position), this->WorldToLocalVector(body_ray.direction));
-        HitData    hit_data_a;
-        HitData    hit_data_b;
-        Real       minimum_t = -1.0f;
-        Real       maximum_t = -1.0f;
+        Ray body_ray;
+        if (m_rigid_body != nullptr)
+        {
+            body_ray.position  = m_rigid_body->WorldToLocalPoint(result.ray.position);
+            body_ray.direction = m_rigid_body->WorldToLocalVector(result.ray.direction);
+        }
+        else
+        {
+            body_ray = result.ray;
+        }
+        Ray     local_ray(WorldToLocalPoint(body_ray.position), WorldToLocalVector(body_ray.direction));
+        HitData hit_data_a;
+        HitData hit_data_b;
+        Real    minimum_t = -1.0f;
+        Real    maximum_t = -1.0f;
         if (TestRayIntersection(local_ray, minimum_t, maximum_t) == true)
         {
             hit_data_a.t        = minimum_t;
@@ -53,7 +72,11 @@ namespace Engine5
             //ray cast done
             Vector3 local_intersection_a = local_ray.position + local_ray.direction * hit_data_a.t;
             hit_data_a.intersection      = result.ray.position + result.ray.direction * hit_data_a.t;
-            hit_data_a.normal            = LocalToWorldVector(body->LocalToWorldVector(GetNormal(local_intersection_a)));
+            hit_data_a.normal            = LocalToWorldVector(GetNormal(local_intersection_a));
+            if (m_rigid_body != nullptr)
+            {
+                hit_data_a.normal = m_rigid_body->LocalToWorldVector(hit_data_a.normal);
+            }
             if (Utility::IsEqual(hit_data_a.t, hit_data_b.t))
             {
                 if (hit_data_a.t > max_distance || max_distance < 0.0f)
@@ -66,7 +89,11 @@ namespace Engine5
             {
                 Vector3 local_intersection_b = local_ray.position + local_ray.direction * hit_data_b.t;
                 hit_data_b.intersection      = result.ray.position + result.ray.direction * hit_data_b.t;
-                hit_data_b.normal            = LocalToWorldVector(body->LocalToWorldVector(GetNormal(local_intersection_b)));
+                hit_data_b.normal            = LocalToWorldVector(GetNormal(local_intersection_b));
+                if (m_rigid_body != nullptr)
+                {
+                    hit_data_b.normal = m_rigid_body->LocalToWorldVector(hit_data_b.normal);
+                }
                 if (hit_data_b.t < hit_data_a.t)
                 {
                     auto temp  = hit_data_a;

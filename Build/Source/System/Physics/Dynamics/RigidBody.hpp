@@ -70,11 +70,14 @@ namespace Engine5
         void SyncToTransform(Transform* transform) const;
         void SyncFromTransform(Transform* transform);
 
+        void Clone(RigidBody* origin);
+
     private:
         friend class Resolution;
         friend class ColliderPrimitive;
         friend class World;
         friend class ColliderSet;
+        friend class RigidBodyComponent;
 
     private:
         //linear data

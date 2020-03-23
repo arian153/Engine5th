@@ -29,6 +29,7 @@ namespace Engine5
         //setters
         void SetMass(Real density);
         void SetScale(const Vector3& scale);
+        void SetRigidBody(RigidBody* rigid_body);
 
         //getters
         MassData GetMassData() const;
@@ -39,6 +40,8 @@ namespace Engine5
         void SyncToTransform(Transform* transform) const;
         void SyncFromTransform(Transform* transform);
         void UpdateColliderSetBoundingVolume();
+
+        void Clone(ColliderSet* origin, RigidBody* body, World* world);
 
     private:
 

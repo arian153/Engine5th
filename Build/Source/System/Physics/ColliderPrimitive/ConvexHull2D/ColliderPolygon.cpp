@@ -371,7 +371,7 @@ namespace Engine5
     }
 
 
-    void ColliderPolygon::Clone(ColliderPrimitive* cloned)
+    void ColliderPolygon::Clone(ColliderPrimitive* origin)
     {
     }
 

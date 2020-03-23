@@ -40,7 +40,7 @@ namespace Engine5
 
     private:
         explicit ColliderComponent(Object* owner);
-        void     Clone(ColliderComponent* cloned);
+        void     Clone(ColliderComponent* origin);
 
     private:
         ColliderSet* m_collider_set = nullptr;

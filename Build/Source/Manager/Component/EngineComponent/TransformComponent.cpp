@@ -229,9 +229,9 @@ namespace Engine5
     {
     }
 
-    void TransformComponent::Clone(TransformComponent* cloned)
+    void TransformComponent::Clone(TransformComponent* origin)
     {
-        if (cloned != nullptr && cloned != this)
+        if (origin != nullptr && origin != this)
         {
             //copy data
         }

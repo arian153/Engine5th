@@ -50,7 +50,7 @@ namespace Engine5
         friend class ColliderComponent;
     private:
         explicit RigidBodyComponent(Object* owner);
-        void     Clone(RigidBodyComponent* cloned);
+        void     Clone(RigidBodyComponent* origin);
 
     private:
         RigidBody*   m_rigid_body   = nullptr;

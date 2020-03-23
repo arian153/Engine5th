@@ -21,7 +21,7 @@ namespace Engine5
     {
         auto source = static_cast<RigidBodyComponent*>(origin);
         auto cloned = static_cast<RigidBodyComponent*>(this->Create(dest));
-        source->Clone(cloned);
+        cloned->Clone(source);
         return cloned;
     }
 }

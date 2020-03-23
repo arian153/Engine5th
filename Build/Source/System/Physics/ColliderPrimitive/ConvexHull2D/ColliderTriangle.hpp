@@ -34,7 +34,7 @@ namespace Engine5
         Vector2 Vertex(size_t i) const;
         void SetTriangle(const Vector2& v0, const Vector2& v1, const Vector2& v2);
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         Vector2 m_vertices[3];

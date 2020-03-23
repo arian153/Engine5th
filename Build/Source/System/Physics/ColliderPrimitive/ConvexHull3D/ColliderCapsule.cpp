@@ -489,7 +489,7 @@ namespace Engine5
         UpdatePrimitive();
     }
 
-    void ColliderCapsule::Clone(ColliderPrimitive* cloned)
+    void ColliderCapsule::Clone(ColliderPrimitive* origin)
     {
     }
 

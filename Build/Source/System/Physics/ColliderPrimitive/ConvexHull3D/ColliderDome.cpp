@@ -281,7 +281,7 @@ namespace Engine5
         UpdatePrimitive();
     }
 
-    void ColliderDome::Clone(ColliderPrimitive* cloned)
+    void ColliderDome::Clone(ColliderPrimitive* origin)
     {
     }
 }

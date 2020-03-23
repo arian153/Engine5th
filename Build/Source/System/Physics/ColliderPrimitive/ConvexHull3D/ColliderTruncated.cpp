@@ -450,7 +450,7 @@ namespace Engine5
         UpdatePrimitive();
     }
 
-    void ColliderTruncated::Clone(ColliderPrimitive* cloned)
+    void ColliderTruncated::Clone(ColliderPrimitive* origin)
     {
     }
 }

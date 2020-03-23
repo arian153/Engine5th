@@ -36,7 +36,7 @@ namespace Engine5
         void SetEllipsoid(const Vector3& radius);
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         Vector3 m_radius;

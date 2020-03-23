@@ -48,7 +48,7 @@ namespace Engine5
 
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         Vector2 m_radius = Vector2(0.5f, 0.5f);

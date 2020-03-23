@@ -331,7 +331,7 @@ namespace Engine5
         UpdatePrimitive();
     }
 
-    void ColliderBox::Clone(ColliderPrimitive* cloned)
+    void ColliderBox::Clone(ColliderPrimitive* origin)
     {
     }
 }

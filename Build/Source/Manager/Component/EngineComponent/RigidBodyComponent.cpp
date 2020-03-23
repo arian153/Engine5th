@@ -185,11 +185,13 @@ namespace Engine5
     {
     }
 
-    void RigidBodyComponent::Clone(RigidBodyComponent* cloned)
+    void RigidBodyComponent::Clone(RigidBodyComponent* origin)
     {
-        if (cloned != nullptr && cloned != this)
+        if (origin != nullptr && origin != this)
         {
             //copy data
+            origin->Initialize();
+            
         }
     }
 }

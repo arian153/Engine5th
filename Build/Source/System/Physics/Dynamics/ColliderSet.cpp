@@ -89,7 +89,10 @@ namespace Engine5
             return nullptr;
         }
         primitive->m_collider_set = this;
-        primitive->m_rigid_body   = m_rigid_body;
+        if (m_rigid_body != nullptr)
+        {
+            primitive->m_rigid_body = m_rigid_body;
+        }
         if (m_world != nullptr)
         {
             m_world->AddPrimitive(primitive);
@@ -162,6 +165,11 @@ namespace Engine5
             UpdateMassData();
             UpdateColliderSetBoundingVolume();
         }
+    }
+
+    void ColliderSet::SetRigidBody(RigidBody* rigid_body)
+    {
+        m_rigid_body = rigid_body;
     }
 
     MassData ColliderSet::GetMassData() const
@@ -240,6 +248,22 @@ namespace Engine5
                 {
                     m_bounding_volume = collider_data->m_bounding_volume->Union(m_bounding_volume);
                 }
+            }
+        }
+    }
+
+    void ColliderSet::Clone(ColliderSet* origin, RigidBody* body, World* world)
+    {
+        if (origin != this)
+        {
+            m_rigid_body = body;
+            m_world      = world;
+            m_mass_data  = origin->m_mass_data;
+            m_scale      = origin->m_scale;
+            for (auto& collider : *origin->m_colliders)
+            {
+                auto created = AddCollider(collider->m_type);
+                created->Clone(collider);
             }
         }
     }

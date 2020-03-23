@@ -37,7 +37,7 @@ namespace Engine5
         void    SetTetrahedron(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector3& v3);
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         bool IntersectRayFace(const Ray& ray, const ColliderFace& face, Real& t) const;

@@ -39,7 +39,7 @@ namespace Engine5
         void SetDome(const Vector3& radius);
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         Vector3 m_radius = Vector3(0.3f, 0.4f, 0.5f);

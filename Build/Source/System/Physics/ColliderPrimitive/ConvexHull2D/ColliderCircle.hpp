@@ -35,7 +35,7 @@ namespace Engine5
         void SetCircle(Real radius);
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         Real m_radius             = 1.0f;

@@ -119,11 +119,21 @@ namespace Engine5
     {
     }
 
-    void ColliderComponent::Clone(ColliderComponent* cloned)
+    void ColliderComponent::Clone(ColliderComponent* origin)
     {
-        if (cloned != nullptr && cloned != this)
+        if (origin != nullptr && origin != this)
         {
             //copy data
+            Initialize();
+            m_collider_set->m_mass_data= origin->m_collider_set->m_mass_data;
+            origin->m_collider_set->m_scale     = m_collider_set->m_scale;
+
+            //need to copy collider.
+
+            if(m_b_init == true)
+            {
+                
+            }
         }
     }
 }

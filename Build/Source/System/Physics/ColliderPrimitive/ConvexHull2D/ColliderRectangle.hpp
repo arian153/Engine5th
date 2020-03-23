@@ -35,7 +35,7 @@ namespace Engine5
         void    SetRectangle(Real width, Real height);
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         Vector2 m_vertices[4];
