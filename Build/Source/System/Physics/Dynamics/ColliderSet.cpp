@@ -170,6 +170,12 @@ namespace Engine5
     void ColliderSet::SetRigidBody(RigidBody* rigid_body)
     {
         m_rigid_body = rigid_body;
+        for (auto& collider : *m_colliders)
+        {
+            collider->m_rigid_body = rigid_body;
+            collider->UpdateRigidBody();
+        }
+        UpdateColliderSetBoundingVolume();
     }
 
     MassData ColliderSet::GetMassData() const

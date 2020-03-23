@@ -76,6 +76,9 @@ namespace Engine5
         virtual void Clone(ColliderPrimitive* origin) = 0;
 
     private:
+        void UpdateRigidBody();
+
+    private:
         friend class ColliderSet;
         friend class RigidBody;
         friend class NarrowPhase;

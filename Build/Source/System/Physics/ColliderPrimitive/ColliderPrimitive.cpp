@@ -254,4 +254,12 @@ namespace Engine5
             m_collider_set->UpdateColliderSetBoundingVolume();
         }
     }
+
+    void ColliderPrimitive::UpdateRigidBody()
+    {
+        if (m_bounding_volume != nullptr)
+        {
+            UpdateBoundingVolume();
+        }
+    }
 }
