@@ -16,7 +16,7 @@ namespace Engine5
         explicit ColliderSet(World* world);
         ~ColliderSet();
 
-        void Initialize(RigidBody* rigid_body);
+        void Initialize();
         void Shutdown();
 
         //primitives

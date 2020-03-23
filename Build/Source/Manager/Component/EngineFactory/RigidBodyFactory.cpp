@@ -12,15 +12,15 @@ namespace Engine5
     {
     }
 
-    Component* RigidBodyFactory::Create(Object* owner)
+    Component* RigidBodyFactory::Create(Object* owner, Space* space)
     {
         return new RigidBodyComponent(owner);
     }
 
-    Component* RigidBodyFactory::Clone(Component* origin, Object* dest)
+    Component* RigidBodyFactory::Clone(Component* origin, Object* dest, Space* space)
     {
         auto source = static_cast<RigidBodyComponent*>(origin);
-        auto cloned = static_cast<RigidBodyComponent*>(this->Create(dest));
+        auto cloned = static_cast<RigidBodyComponent*>(this->Create(dest, space));
         cloned->Clone(source);
         return cloned;
     }

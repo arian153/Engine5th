@@ -27,6 +27,7 @@ namespace Engine5
         Vector3  GetScale() const;
 
         void SetTransform(Transform* transform);
+        void SetRigidBody(RigidBody* rigid_body);
 
     protected:
         bool Load(const Json::Value& data) override;

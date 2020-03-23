@@ -28,6 +28,7 @@ namespace Engine5
                 m_collider_set         = collider->m_collider_set;
                 collider->m_rigid_body = m_rigid_body;
                 collider->Initialize();
+                m_b_init = true;
             }
         }
     }

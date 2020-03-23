@@ -12,15 +12,15 @@ namespace Engine5
     {
     }
 
-    Component* ColliderFactory::Create(Object* owner)
+    Component* ColliderFactory::Create(Object* owner, Space* space)
     {
         return new ColliderComponent(owner);
     }
 
-    Component* ColliderFactory::Clone(Component* origin, Object* dest)
+    Component* ColliderFactory::Clone(Component* origin, Object* dest, Space* space)
     {
         auto source = static_cast<ColliderComponent*>(origin);
-        auto cloned = static_cast<ColliderComponent*>(this->Create(dest));
+        auto cloned = static_cast<ColliderComponent*>(this->Create(dest, space));
         cloned->Clone(source);
         return cloned;
     }

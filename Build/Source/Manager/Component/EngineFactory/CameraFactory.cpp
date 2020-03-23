@@ -12,15 +12,15 @@ namespace Engine5
     {
     }
 
-    Component* CameraFactory::Create(Object* owner)
+    Component* CameraFactory::Create(Object* owner, Space* space)
     {
         return new CameraComponent(owner);
     }
 
-    Component* CameraFactory::Clone(Component* origin, Object* dest)
+    Component* CameraFactory::Clone(Component* origin, Object* dest, Space* space)
     {
         auto source = static_cast<CameraComponent*>(origin);
-        auto cloned = static_cast<CameraComponent*>(this->Create(dest));
+        auto cloned = static_cast<CameraComponent*>(this->Create(dest, space));
         cloned->Clone(source);
         return cloned;
     }

@@ -5,6 +5,7 @@ namespace Engine5
 {
     class Component;
     class Object;
+    class Space;
 
     class ComponentFactory
     {
@@ -17,8 +18,8 @@ namespace Engine5
         {
         }
 
-        virtual Component* Create(Object* owner) = 0;
-        virtual Component* Clone(Component* origin, Object* dest) = 0;
+        virtual Component* Create(Object* owner, Space* space) = 0;
+        virtual Component* Clone(Component* origin, Object* dest, Space* space) = 0;
 
     protected:
         friend class ComponentRegistry;

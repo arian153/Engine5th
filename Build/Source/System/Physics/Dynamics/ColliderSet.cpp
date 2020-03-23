@@ -22,15 +22,11 @@ namespace Engine5
     {
     }
 
-    void ColliderSet::Initialize(RigidBody* rigid_body)
+    void ColliderSet::Initialize()
     {
         if (m_colliders == nullptr)
         {
             m_colliders = new std::vector<ColliderPrimitive*>;
-        }
-        if (m_rigid_body == nullptr)
-        {
-            m_rigid_body = rigid_body;
         }
     }
 
@@ -268,7 +264,7 @@ namespace Engine5
             m_scale      = origin->m_scale;
             for (auto& collider : *origin->m_colliders)
             {
-                auto created = AddCollider(collider->m_type);
+                auto created = this->AddCollider(collider->m_type);
                 created->Clone(collider);
             }
         }

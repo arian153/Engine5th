@@ -3,6 +3,7 @@
 #include "../../Space/Space.hpp"
 #include "../../Object/Object.hpp"
 #include "RigidBodyComponent.hpp"
+#include "TransformComponent.hpp"
 
 namespace Engine5
 {
@@ -16,11 +17,12 @@ namespace Engine5
         {
             World* world   = m_space != nullptr ? m_space->GetWorld() : nullptr;
             m_collider_set = new ColliderSet(world);
+            m_collider_set->Initialize();
             Subscribe();
         }
         if (m_rigid_body != nullptr)
         {
-            m_collider_set->Initialize(m_rigid_body);
+            m_collider_set->SetRigidBody(m_rigid_body);
             m_b_init = true;
         }
         else
@@ -31,6 +33,8 @@ namespace Engine5
                 m_rigid_body         = body->m_rigid_body;
                 body->m_collider_set = m_collider_set;
                 body->Initialize();
+                m_collider_set->SetRigidBody(m_rigid_body);
+                m_b_init = true;
             }
         }
     }
@@ -89,6 +93,12 @@ namespace Engine5
         m_transform = transform;
     }
 
+    void ColliderComponent::SetRigidBody(RigidBody* rigid_body)
+    {
+        m_rigid_body = rigid_body;
+        m_collider_set->SetRigidBody(m_rigid_body);
+    }
+
     bool ColliderComponent::Load(const Json::Value& data)
     {
         return true;
@@ -123,17 +133,9 @@ namespace Engine5
     {
         if (origin != nullptr && origin != this)
         {
-            //copy data
             Initialize();
-            m_collider_set->m_mass_data= origin->m_collider_set->m_mass_data;
-            origin->m_collider_set->m_scale     = m_collider_set->m_scale;
-
-            //need to copy collider.
-
-            if(m_b_init == true)
-            {
-                
-            }
+            World* world = m_space != nullptr ? m_space->GetWorld() : nullptr;
+            m_collider_set->Clone(origin->m_collider_set, m_rigid_body, world);
         }
     }
 }

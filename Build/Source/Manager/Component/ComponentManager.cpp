@@ -30,8 +30,7 @@ namespace Engine5
         auto found = m_registry->m_factories.find(type);
         if (found != m_registry->m_factories.end())
         {
-            auto created = found->second->Create(owner);
-            created->SetSpace(m_space);
+            auto created = found->second->Create(owner, m_space);
             m_components.emplace(owner, created);
             return created;
         }
@@ -48,8 +47,7 @@ namespace Engine5
         auto found = m_registry->m_factories.find(origin->m_type);
         if (found != m_registry->m_factories.end())
         {
-            auto cloned = found->second->Clone(origin, dest);
-            cloned->SetSpace(m_space);
+            auto cloned = found->second->Clone(origin, dest, m_space);
             m_components.emplace(dest, cloned);
             return cloned;
         }

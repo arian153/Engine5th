@@ -12,15 +12,17 @@ namespace Engine5
     {
     }
 
-    Component* TransformFactory::Create(Object* owner)
+    Component* TransformFactory::Create(Object* owner, Space* space)
     {
-        return new TransformComponent(owner);
+        auto create = new TransformComponent(owner);
+        create->SetSpace(space);
+        return create;
     }
 
-    Component* TransformFactory::Clone(Component* origin, Object* dest)
+    Component* TransformFactory::Clone(Component* origin, Object* dest, Space* space)
     {
         auto source = static_cast<TransformComponent*>(origin);
-        auto cloned = static_cast<TransformComponent*>(this->Create(dest));
+        auto cloned = static_cast<TransformComponent*>(this->Create(dest, space));
         cloned->Clone(source);
         return cloned;
     }
