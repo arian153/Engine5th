@@ -19,8 +19,8 @@ namespace Engine5
 
     public:
         Vector3 global;
-        Vector3 local1;
-        Vector3 local2;
+        Vector3 local_a;
+        Vector3 local_b;
         size_t  index;
     };
 }

@@ -114,13 +114,15 @@ namespace Engine5
 
     SupportPoint NarrowPhase::GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction)
     {
-        RigidBody* body_a      = a->m_rigid_body;
-        RigidBody* body_b      = b->m_rigid_body;
-        Vector3    local_dir_a = body_a->WorldToLocalVector(direction);
-        Vector3    local_dir_b = body_b->WorldToLocalVector(-direction);
-        Vector3    support_a;
-        Vector3    support_b;
-        return SupportPoint(body_a->LocalToWorldPoint(support_a) - body_a->LocalToWorldPoint(support_b), support_a, support_b);
+        RigidBody* body_a     = a->m_rigid_body;
+        RigidBody* body_b     = b->m_rigid_body;
+        Vector3    body_dir_a = body_a != nullptr ? body_a->WorldToLocalVector(direction) : direction;
+        Vector3    body_dir_b = body_b != nullptr ? body_b->WorldToLocalVector(-direction) : -direction;
+        Vector3    local_a    = a->Support(a->WorldToLocalVector(body_dir_a).Unit());
+        Vector3    local_b    = b->Support(b->WorldToLocalVector(body_dir_b).Unit());
+        Vector3    support_a  = body_a != nullptr ? body_a->LocalToWorldPoint(a->LocalToWorldPoint(local_a)) : a->LocalToWorldPoint(local_a);
+        Vector3    support_b  = body_b != nullptr ? body_b->LocalToWorldPoint(b->LocalToWorldPoint(local_b)) : b->LocalToWorldPoint(local_b);
+        return SupportPoint(support_a - support_b, local_a, local_b);
     }
 
     bool NarrowPhase::GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex)
@@ -177,12 +179,12 @@ namespace Engine5
                 }
                 result.collider_a       = a;
                 result.collider_b       = b;
-                result.local_position_a = (u * polytope.vertices[closest_face.a].local1)
-                        + (v * polytope.vertices[closest_face.b].local1) + (w * polytope.vertices[closest_face.c].local1);
-                result.local_position_b = (u * polytope.vertices[closest_face.a].local2)
-                        + (v * polytope.vertices[closest_face.b].local2) + (w * polytope.vertices[closest_face.c].local2);
-                result.global_position_a = a->m_rigid_body->LocalToWorldPoint(result.local_position_a);
-                result.global_position_b = b->m_rigid_body->LocalToWorldPoint(result.local_position_b);
+                result.local_position_a = (u * polytope.vertices[closest_face.a].local_a)
+                        + (v * polytope.vertices[closest_face.b].local_a) + (w * polytope.vertices[closest_face.c].local_a);
+                result.local_position_b = (u * polytope.vertices[closest_face.a].local_b)
+                        + (v * polytope.vertices[closest_face.b].local_b) + (w * polytope.vertices[closest_face.c].local_b);
+                result.global_position_a = a->m_rigid_body->LocalToWorldPoint(a->LocalToWorldPoint(result.local_position_a));
+                result.global_position_b = b->m_rigid_body->LocalToWorldPoint(b->LocalToWorldPoint(result.local_position_b));
                 result.normal            = closest_face.normal.Normalize();
                 result.depth             = closest_face.distance;
                 ComputeBasisQuaternion(result.normal, result.tangent_a, result.tangent_b);
@@ -265,8 +267,8 @@ namespace Engine5
     void NarrowPhase::BlowUpSimplexToTetrahedron(ColliderPrimitive* collider_a, ColliderPrimitive* collider_b, const Simplex& simplex)
     {
         Vector3  simplex_global[ 4 ] = {simplex.simplex_vertex_a.global, simplex.simplex_vertex_b.global, simplex.simplex_vertex_c.global, simplex.simplex_vertex_d.global};
-        Vector3  simplex_local1[ 4 ] = {simplex.simplex_vertex_a.local1, simplex.simplex_vertex_b.local1, simplex.simplex_vertex_c.local1, simplex.simplex_vertex_d.local1};
-        Vector3  simplex_local2[ 4 ] = {simplex.simplex_vertex_a.local2, simplex.simplex_vertex_b.local2, simplex.simplex_vertex_c.local2, simplex.simplex_vertex_d.local2};
+        Vector3  simplex_local1[ 4 ] = {simplex.simplex_vertex_a.local_a, simplex.simplex_vertex_b.local_a, simplex.simplex_vertex_c.local_a, simplex.simplex_vertex_d.local_a};
+        Vector3  simplex_local2[ 4 ] = {simplex.simplex_vertex_a.local_b, simplex.simplex_vertex_b.local_b, simplex.simplex_vertex_c.local_b, simplex.simplex_vertex_d.local_b};
         unsigned num_vertices        = simplex.count;
         // blow up simplex to tetrahedron
         Vector3      line_vec_case2;
@@ -286,8 +288,8 @@ namespace Engine5
             {
                 temp              = GenerateCSOSupport(collider_a, collider_b, search_dir);
                 simplex_global[1] = temp.global;
-                simplex_local1[1] = temp.local1;
-                simplex_local2[1] = temp.local2;
+                simplex_local1[1] = temp.local_a;
+                simplex_local2[1] = temp.local_b;
                 // good search direction used, break
                 if ((simplex_global[1] - simplex_global[0]).LengthSquared() >= Math::EPSILON_SQUARED)
                 {
@@ -310,8 +312,8 @@ namespace Engine5
             {
                 temp              = GenerateCSOSupport(collider_a, collider_b, search_dir_case2);
                 simplex_global[2] = temp.global;
-                simplex_local1[2] = temp.local1;
-                simplex_local2[2] = temp.local2;
+                simplex_local1[2] = temp.local_a;
+                simplex_local2[2] = temp.local_b;
                 // good search direction used, break
                 if (simplex_global[2].LengthSquared() > Math::EPSILON_SQUARED)
                     break;
@@ -325,16 +327,16 @@ namespace Engine5
             search_dir_case3  = v01.CrossProduct(v02);
             temp              = GenerateCSOSupport(collider_a, collider_b, search_dir_case3);
             simplex_global[3] = temp.global;
-            simplex_local1[3] = temp.local1;
-            simplex_local2[3] = temp.local2;
+            simplex_local1[3] = temp.local_a;
+            simplex_local2[3] = temp.local_b;
             // search direction not good, use its opposite direction
             if (simplex_global[3].LengthSquared() < Math::EPSILON_SQUARED)
             {
                 search_dir_case3  = -search_dir_case3;
                 temp              = GenerateCSOSupport(collider_a, collider_b, search_dir_case3);
                 simplex_global[3] = temp.global;
-                simplex_local1[3] = temp.local1;
-                simplex_local2[3] = temp.local2;
+                simplex_local1[3] = temp.local_a;
+                simplex_local2[3] = temp.local_b;
             }
         }
         // fix tetrahedron winding

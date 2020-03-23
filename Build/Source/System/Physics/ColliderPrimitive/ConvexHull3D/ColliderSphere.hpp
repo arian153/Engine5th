@@ -35,7 +35,7 @@ namespace Engine5
         void SetSphere(Real radius);
 
     protected:
-        void Clone(ColliderPrimitive* cloned) override;
+        void Clone(ColliderPrimitive* origin) override;
 
     private:
         Real m_radius             = 1.0f;

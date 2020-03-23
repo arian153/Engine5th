@@ -393,7 +393,7 @@ namespace Engine5
         UpdatePrimitive();
     }
 
-    void ColliderCylinder::Clone(ColliderPrimitive* cloned)
+    void ColliderCylinder::Clone(ColliderPrimitive* origin)
     {
     }
 }

@@ -221,7 +221,7 @@ namespace Engine5
     void Polytope::PushFromSimplex(const SupportPoint& vertex)
     {
         auto index = this->vertices.size();
-        vertices.emplace_back(vertex.global, vertex.local1, vertex.local2, index);
+        vertices.emplace_back(vertex.global, vertex.local_a, vertex.local_b, index);
     }
 
     void Polytope::Expand(const SupportPoint& vertex)

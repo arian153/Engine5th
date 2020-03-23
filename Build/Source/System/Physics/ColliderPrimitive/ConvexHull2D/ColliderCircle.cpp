@@ -23,12 +23,11 @@ namespace Engine5
 
     Vector3 ColliderCircle::Support(const Vector3& direction)
     {
-        Vector3 local_dir          = WorldToLocalVector(direction).Unit();
-        Vector3 subspace_direction = local_dir;
+        Vector3 subspace_direction = direction;
         subspace_direction.z       = 0.0f;
         subspace_direction.SetNormalize();
         Vector3 result = Radius() * subspace_direction;
-        return LocalToWorldPoint(result);
+        return result;
     }
 
     bool ColliderCircle::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -232,7 +231,7 @@ namespace Engine5
         UpdatePrimitive();
     }
 
-    void ColliderCircle::Clone(ColliderPrimitive* cloned)
+    void ColliderCircle::Clone(ColliderPrimitive* origin)
     {
     }
 }

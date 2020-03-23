@@ -23,9 +23,8 @@ namespace Engine5
 
     Vector3 ColliderEllipse::Support(const Vector3& direction)
     {
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
-        Vector2 radius    = Radius();
-        Vector2 sub_space_direction(local_dir);
+        Vector2 radius = Radius();
+        Vector2 sub_space_direction(direction);
         sub_space_direction.SetNormalize();
         Vector2 result = radius.HadamardProduct(radius);
         result         = result.HadamardProduct(sub_space_direction);

@@ -111,7 +111,7 @@ namespace Engine5
         UpdatePrimitive();
     }
 
-    void ColliderRectangle::Clone(ColliderPrimitive* cloned)
+    void ColliderRectangle::Clone(ColliderPrimitive* origin)
     {
     }
 }

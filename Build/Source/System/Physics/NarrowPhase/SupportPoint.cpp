@@ -8,12 +8,12 @@ namespace Engine5
     }
 
     SupportPoint::SupportPoint(const Vector3& global, const Vector3& local1, const Vector3& local2, size_t idx)
-        : global(global), local1(local1), local2(local2), index(idx)
+        : global(global), local_a(local1), local_b(local2), index(idx)
     {
     }
 
     SupportPoint::SupportPoint(const SupportPoint& rhs)
-        : global(rhs.global), local1(rhs.local1), local2(rhs.local2), index(rhs.index)
+        : global(rhs.global), local_a(rhs.local_a), local_b(rhs.local_b), index(rhs.index)
     {
     }
 
@@ -26,8 +26,8 @@ namespace Engine5
         if (this != &rhs)
         {
             global = rhs.global;
-            local1 = rhs.local1;
-            local2 = rhs.local2;
+            local_a = rhs.local_a;
+            local_b = rhs.local_b;
             index  = rhs.index;
         }
         return *this;
