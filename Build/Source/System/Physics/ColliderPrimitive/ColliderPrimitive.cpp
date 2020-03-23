@@ -213,6 +213,11 @@ namespace Engine5
         return m_material;
     }
 
+    eColliderType ColliderPrimitive::Type() const
+    {
+        return m_type;
+    }
+
     void ColliderPrimitive::UpdatePrimitive()
     {
         if (m_collider_set != nullptr)

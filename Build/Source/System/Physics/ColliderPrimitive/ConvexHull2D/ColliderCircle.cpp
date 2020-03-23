@@ -73,7 +73,6 @@ namespace Engine5
             //ray-plane intersect one point.
             Real    plane_t            = pc.DotProduct(normal) / denominator;
             Vector3 plane_intersection = local_ray.position + local_ray.direction * plane_t;
-
             //define circle.
             if ((plane_intersection - m_position).LengthSquared() < radius * radius)
             {
@@ -97,7 +96,7 @@ namespace Engine5
 
     Vector3 ColliderCircle::GetNormal(const Vector3& local_point_on_collider)
     {
-        Real radius = Radius();
+        Real radius       = Radius();
         Real point_radius = local_point_on_collider.x * local_point_on_collider.x + local_point_on_collider.y * local_point_on_collider.y;
         if (Utility::IsEqual(point_radius, radius * radius))
         {
@@ -233,5 +232,22 @@ namespace Engine5
 
     void ColliderCircle::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderCircle* circle = static_cast<ColliderCircle*>(origin);
+            //collider local space data
+            m_orientation  = circle->m_orientation;
+            m_position     = circle->m_position;
+            m_scale_factor = circle->m_scale_factor;
+            //collider mass data
+            m_centroid             = circle->m_centroid;
+            m_mass                 = circle->m_mass;
+            m_local_inertia_tensor = circle->m_local_inertia_tensor;
+            m_density              = circle->m_density;
+            m_material             = circle->m_material;
+            //circle
+            m_radius        = circle->m_radius;
+            m_scaled_radius = circle->m_scaled_radius;
+        }
     }
 }

@@ -278,5 +278,22 @@ namespace Engine5
 
     void ColliderDome::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderDome* dome = static_cast<ColliderDome*>(origin);
+            //collider local space data
+            m_orientation  = dome->m_orientation;
+            m_position     = dome->m_position;
+            m_scale_factor = dome->m_scale_factor;
+            //collider mass data
+            m_centroid             = dome->m_centroid;
+            m_mass                 = dome->m_mass;
+            m_local_inertia_tensor = dome->m_local_inertia_tensor;
+            m_density              = dome->m_density;
+            m_material             = dome->m_material;
+            //dome
+            m_radius = dome->m_radius;
+            m_scaled_radius = dome->m_scaled_radius;
+        }
     }
 }

@@ -248,5 +248,22 @@ namespace Engine5
 
     void ColliderEllipse::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderEllipse* ellipse = static_cast<ColliderEllipse*>(origin);
+            //collider local space data
+            m_orientation  = ellipse->m_orientation;
+            m_position     = ellipse->m_position;
+            m_scale_factor = ellipse->m_scale_factor;
+            //collider mass data
+            m_centroid             = ellipse->m_centroid;
+            m_mass                 = ellipse->m_mass;
+            m_local_inertia_tensor = ellipse->m_local_inertia_tensor;
+            m_density              = ellipse->m_density;
+            m_material             = ellipse->m_material;
+            //ellipse
+            m_radius        = ellipse->m_radius;
+            m_scaled_radius = ellipse->m_scaled_radius;
+        }
     }
 }

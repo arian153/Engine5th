@@ -381,6 +381,27 @@ namespace Engine5
 
     void ColliderPolyhedron::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderPolyhedron* polyhedron = static_cast<ColliderPolyhedron*>(origin);
+            //collider local space data
+            m_orientation  = polyhedron->m_orientation;
+            m_position     = polyhedron->m_position;
+            m_scale_factor = polyhedron->m_scale_factor;
+            //collider mass data
+            m_centroid             = polyhedron->m_centroid;
+            m_mass                 = polyhedron->m_mass;
+            m_local_inertia_tensor = polyhedron->m_local_inertia_tensor;
+            m_density              = polyhedron->m_density;
+            m_material             = polyhedron->m_material;
+            //polyhedron
+            *m_vertices        = *polyhedron->m_vertices;
+            *m_scaled_vertices = *polyhedron->m_scaled_vertices;
+            *m_edges           = *polyhedron->m_edges;
+            *m_faces           = *polyhedron->m_faces;
+            m_min_bound        = polyhedron->m_min_bound;
+            m_max_bound        = polyhedron->m_max_bound;
+        }
     }
 
     bool ColliderPolyhedron::IntersectRayFace(const Ray& ray, const ColliderFace& face, Real& t) const

@@ -365,6 +365,26 @@ namespace Engine5
 
     void ColliderPolygon::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderPolygon* polygon = static_cast<ColliderPolygon*>(origin);
+            //collider local space data
+            m_orientation  = polygon->m_orientation;
+            m_position     = polygon->m_position;
+            m_scale_factor = polygon->m_scale_factor;
+            //collider mass data
+            m_centroid             = polygon->m_centroid;
+            m_mass                 = polygon->m_mass;
+            m_local_inertia_tensor = polygon->m_local_inertia_tensor;
+            m_density              = polygon->m_density;
+            m_material             = polygon->m_material;
+            //polygon
+            *m_vertices        = *polygon->m_vertices;
+            *m_scaled_vertices = *polygon->m_scaled_vertices;
+            *m_edges           = *polygon->m_edges;
+            m_min_bound        = polygon->m_min_bound;
+            m_max_bound        = polygon->m_max_bound;
+        }
     }
 
     void ColliderPolygon::CreateSimplex()

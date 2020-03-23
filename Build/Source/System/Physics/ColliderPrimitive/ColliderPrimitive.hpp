@@ -44,6 +44,8 @@ namespace Engine5
         void               SetMaterial(Physics::eMaterial material);
         Physics::eMaterial GetMaterial() const;
 
+        eColliderType Type() const;
+
     public: //virtual methods
         virtual void Initialize() = 0;
         virtual void Shutdown() = 0;

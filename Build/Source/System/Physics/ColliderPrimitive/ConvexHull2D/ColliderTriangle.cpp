@@ -395,5 +395,24 @@ namespace Engine5
 
     void ColliderTriangle::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderTriangle* triangle = static_cast<ColliderTriangle*>(origin);
+            //collider local space data
+            m_orientation  = triangle->m_orientation;
+            m_position     = triangle->m_position;
+            m_scale_factor = triangle->m_scale_factor;
+            //collider mass data
+            m_centroid             = triangle->m_centroid;
+            m_mass                 = triangle->m_mass;
+            m_local_inertia_tensor = triangle->m_local_inertia_tensor;
+            m_density              = triangle->m_density;
+            m_material             = triangle->m_material;
+
+            //triangle
+            std::memcpy(m_vertices, triangle->m_vertices, sizeof m_vertices);
+            std::memcpy(m_scaled_vertices, triangle->m_scaled_vertices, sizeof m_scaled_vertices);
+
+        }
     }
 }

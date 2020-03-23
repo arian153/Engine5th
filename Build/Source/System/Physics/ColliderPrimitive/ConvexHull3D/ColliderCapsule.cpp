@@ -483,6 +483,25 @@ namespace Engine5
 
     void ColliderCapsule::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderCapsule* capsule = static_cast<ColliderCapsule*>(origin);
+            //collider local space data
+            m_orientation  = capsule->m_orientation;
+            m_position     = capsule->m_position;
+            m_scale_factor = capsule->m_scale_factor;
+            //collider mass data
+            m_centroid             = capsule->m_centroid;
+            m_mass                 = capsule->m_mass;
+            m_local_inertia_tensor = capsule->m_local_inertia_tensor;
+            m_density              = capsule->m_density;
+            m_material             = capsule->m_material;
+            //capsule
+            m_radius        = capsule->m_radius;
+            m_height        = capsule->m_height;
+            m_scaled_radius = capsule->m_scaled_radius;
+            m_scaled_height = capsule->m_scaled_height;
+        }
     }
 
     bool ColliderCapsule::TestRayEllipsoid(const Ray& ray, const Vector3& centroid, Real& min_t, Real& max_t) const

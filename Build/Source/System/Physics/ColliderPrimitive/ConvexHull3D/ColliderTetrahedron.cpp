@@ -288,6 +288,23 @@ namespace Engine5
 
     void ColliderTetrahedron::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderTetrahedron* tetrahedron = static_cast<ColliderTetrahedron*>(origin);
+            //collider local space data
+            m_orientation  = tetrahedron->m_orientation;
+            m_position     = tetrahedron->m_position;
+            m_scale_factor = tetrahedron->m_scale_factor;
+            //collider mass data
+            m_centroid             = tetrahedron->m_centroid;
+            m_mass                 = tetrahedron->m_mass;
+            m_local_inertia_tensor = tetrahedron->m_local_inertia_tensor;
+            m_density              = tetrahedron->m_density;
+            m_material             = tetrahedron->m_material;
+            //tetrahedron
+            std::memcpy(m_vertices, tetrahedron->m_vertices, sizeof m_vertices);
+            std::memcpy(m_scaled_vertices, tetrahedron->m_scaled_vertices, sizeof m_scaled_vertices);
+        }
     }
 
     bool ColliderTetrahedron::IntersectRayFace(const Ray& ray, const ColliderFace& face, Real& t) const

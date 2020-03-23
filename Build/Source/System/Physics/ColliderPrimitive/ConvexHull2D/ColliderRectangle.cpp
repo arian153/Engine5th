@@ -111,5 +111,22 @@ namespace Engine5
 
     void ColliderRectangle::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderRectangle* rectangle = static_cast<ColliderRectangle*>(origin);
+            //collider local space data
+            m_orientation  = rectangle->m_orientation;
+            m_position     = rectangle->m_position;
+            m_scale_factor = rectangle->m_scale_factor;
+            //collider mass data
+            m_centroid             = rectangle->m_centroid;
+            m_mass                 = rectangle->m_mass;
+            m_local_inertia_tensor = rectangle->m_local_inertia_tensor;
+            m_density              = rectangle->m_density;
+            m_material             = rectangle->m_material;
+            //rectangle
+            std::memcpy(m_vertices, rectangle->m_vertices, sizeof m_vertices);
+            std::memcpy(m_scaled_vertices, rectangle->m_scaled_vertices, sizeof m_scaled_vertices);
+        }
     }
 }

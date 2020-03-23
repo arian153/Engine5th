@@ -330,5 +330,22 @@ namespace Engine5
 
     void ColliderBox::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderBox* box = static_cast<ColliderBox*>(origin);
+            //collider local space data
+            m_orientation  = box->m_orientation;
+            m_position     = box->m_position;
+            m_scale_factor = box->m_scale_factor;
+            //collider mass data
+            m_centroid             = box->m_centroid;
+            m_mass                 = box->m_mass;
+            m_local_inertia_tensor = box->m_local_inertia_tensor;
+            m_density              = box->m_density;
+            m_material             = box->m_material;
+            //box data
+            std::memcpy(m_vertices, box->m_vertices, sizeof m_vertices);
+            std::memcpy(m_scaled_vertices, box->m_scaled_vertices, sizeof m_scaled_vertices);
+        }
     }
 }

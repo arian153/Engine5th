@@ -393,5 +393,24 @@ namespace Engine5
 
     void ColliderCylinder::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderCylinder* cylinder = static_cast<ColliderCylinder*>(origin);
+            //collider local space data
+            m_orientation  = cylinder->m_orientation;
+            m_position     = cylinder->m_position;
+            m_scale_factor = cylinder->m_scale_factor;
+            //collider mass data
+            m_centroid             = cylinder->m_centroid;
+            m_mass                 = cylinder->m_mass;
+            m_local_inertia_tensor = cylinder->m_local_inertia_tensor;
+            m_density              = cylinder->m_density;
+            m_material             = cylinder->m_material;
+            //cylinder
+            m_radius = cylinder->m_radius;
+            m_height = cylinder->m_height;
+            m_scaled_radius = cylinder->m_scaled_radius;
+            m_scaled_height = cylinder->m_scaled_height;
+        }
     }
 }

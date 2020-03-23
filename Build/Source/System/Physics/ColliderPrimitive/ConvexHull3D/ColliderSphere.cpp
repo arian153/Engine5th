@@ -232,5 +232,22 @@ namespace Engine5
 
     void ColliderSphere::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderSphere* sphere = static_cast<ColliderSphere*>(origin);
+            //collider local space data
+            m_orientation  = sphere->m_orientation;
+            m_position     = sphere->m_position;
+            m_scale_factor = sphere->m_scale_factor;
+            //collider mass data
+            m_centroid             = sphere->m_centroid;
+            m_mass                 = sphere->m_mass;
+            m_local_inertia_tensor = sphere->m_local_inertia_tensor;
+            m_density              = sphere->m_density;
+            m_material             = sphere->m_material;
+            //sphere
+            m_radius        = sphere->m_radius;
+            m_scaled_radius = sphere->m_scaled_radius;
+        }
     }
 }

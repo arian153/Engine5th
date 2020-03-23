@@ -404,5 +404,24 @@ namespace Engine5
 
     void ColliderCone::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderCone* cone = static_cast<ColliderCone*>(origin);
+            //collider local space data
+            m_orientation  = cone->m_orientation;
+            m_position     = cone->m_position;
+            m_scale_factor = cone->m_scale_factor;
+            //collider mass data
+            m_centroid             = cone->m_centroid;
+            m_mass                 = cone->m_mass;
+            m_local_inertia_tensor = cone->m_local_inertia_tensor;
+            m_density              = cone->m_density;
+            m_material             = cone->m_material;
+            //cone
+            m_radius        = cone->m_radius;
+            m_height        = cone->m_height;
+            m_scaled_radius = cone->m_scaled_radius;
+            m_scaled_height = cone->m_scaled_height;
+        }
     }
 }

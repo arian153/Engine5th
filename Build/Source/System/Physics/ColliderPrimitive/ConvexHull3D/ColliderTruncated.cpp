@@ -450,5 +450,25 @@ namespace Engine5
 
     void ColliderTruncated::Clone(ColliderPrimitive* origin)
     {
+        if (origin != this && origin != nullptr && origin->Type() == m_type)
+        {
+            ColliderTruncated* truncated = static_cast<ColliderTruncated*>(origin);
+            //collider local space data
+            m_orientation  = truncated->m_orientation;
+            m_position     = truncated->m_position;
+            m_scale_factor = truncated->m_scale_factor;
+            //collider mass data
+            m_centroid             = truncated->m_centroid;
+            m_mass                 = truncated->m_mass;
+            m_local_inertia_tensor = truncated->m_local_inertia_tensor;
+            m_density              = truncated->m_density;
+            m_material             = truncated->m_material;
+            //truncated data
+            m_radius        = truncated->m_radius;
+            m_height        = truncated->m_height;
+            m_ratio         = truncated->m_ratio;
+            m_scaled_radius = truncated->m_scaled_radius;
+            m_scaled_height = truncated->m_scaled_height;
+        }
     }
 }
