@@ -25,19 +25,18 @@ namespace Engine5
 
     Vector3 ColliderTetrahedron::Support(const Vector3& direction)
     {
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
-        Real    p         = Math::REAL_NEGATIVE_MAX;
+        Real    p = Math::REAL_NEGATIVE_MAX;
         Vector3 result;
         for (size_t i = 0; i < 4; ++i)
         {
-            Real projection = Vertex(i).DotProduct(local_dir);
+            Real projection = Vertex(i).DotProduct(direction);
             if (projection > p)
             {
                 result = Vertex(i);
                 p      = projection;
             }
         }
-        return LocalToWorldPoint(result);
+        return result;
     }
 
     bool ColliderTetrahedron::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -122,13 +121,10 @@ namespace Engine5
         Matrix33 canonical_matrix(axis, prod, prod, prod, axis, prod, prod, prod, axis);
         Matrix33 transformation_matrix;
         transformation_matrix.SetColumns(v1 - ref, v2 - ref, v3 - ref);
-
         //calculate sub inertia
         m_local_inertia_tensor = transformation_matrix.Determinant() * transformation_matrix * canonical_matrix * transformation_matrix.Transpose();
-
         //volume is 1 / 6 of triple product, that is 1/6 det of transformation matrix.
         m_mass = density * transformation_matrix.Determinant() / 6.0f;
-
         //The center-of-mass is just the mean of the four vertex coordinates. 
         m_centroid = (ref + v1 + v2 + v3) * 0.25f;
         if (ref.IsZero() == false)
@@ -240,14 +236,12 @@ namespace Engine5
             //collider local space to object space(body local)
             vertex = m_orientation.Rotate(vertex);
             vertex += m_position;
-
             //body local space to world space
             vertex = body_orientation.Rotate(vertex);
             vertex += body_position;
             //push to renderer
             renderer->PushVertex(vertex, mode, color);
         }
-
         //add indices
         if (mode == eRenderingMode::Dot)
         {
@@ -320,7 +314,6 @@ namespace Engine5
         {
             return false;
         }
-
         // At this stage we can compute t to find out where the intersection point is on the line.
         t = f * edge2.DotProduct(q);
         if (t > Math::EPSILON) // ray intersection

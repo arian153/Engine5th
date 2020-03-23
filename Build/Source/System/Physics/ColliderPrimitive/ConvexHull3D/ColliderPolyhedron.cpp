@@ -65,8 +65,7 @@ namespace Engine5
 
     Vector3 ColliderPolyhedron::Support(const Vector3& direction)
     {
-        Vector3               local_dir = WorldToLocalVector(direction).Unit();
-        Real                  p         = Math::REAL_NEGATIVE_MAX;
+        Real                  p = Math::REAL_NEGATIVE_MAX;
         Vector3               result;
         std::vector<Vector3>* vertices;
         if (m_collider_set != nullptr)
@@ -80,14 +79,14 @@ namespace Engine5
         size_t size = vertices->size();
         for (size_t i = 0; i < size; ++i)
         {
-            Real projection = vertices->at(i).DotProduct(local_dir);
+            Real projection = vertices->at(i).DotProduct(direction);
             if (projection > p)
             {
                 result = vertices->at(i);
                 p      = projection;
             }
         }
-        return LocalToWorldPoint(result);
+        return result;
     }
 
     bool ColliderPolyhedron::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -260,14 +259,12 @@ namespace Engine5
             //collider local space to object space(body local)
             vertex = m_orientation.Rotate(vertex);
             vertex += m_position;
-
             //body local space to world space
             vertex = body_orientation.Rotate(vertex);
             vertex += body_position;
             //push to renderer
             renderer->PushVertex(vertex, mode, color);
         }
-
         //add indices
         if (mode == eRenderingMode::Dot)
         {
@@ -320,7 +317,6 @@ namespace Engine5
         {
             return false;
         }
-
         //1. Allocate a Polyhedron which will be our return value.
         if (m_vertices == nullptr)
         {
@@ -333,8 +329,6 @@ namespace Engine5
             m_vertices->reserve(size);
         }
         std::vector<Vector3> vertices = input_vertices;
-
-
         //2. Find a maximal simplex of the current dimension.In our case, 
         //find 4 points which define maximal tetrahedron, and create the tetrahedron which will be our seed partial answer.
         //CREATE_SIMPLEX(Polyhedron, listVertices).
@@ -344,7 +338,6 @@ namespace Engine5
         {
             return false;
         }
-
         //3. Divide the points of the cloud into the outside sets of the four faces of the tetrahedron.
         //This is done by calling ADD_TO_OUTSIDE_SET(face, listVertices) on each of the 4 faces in turn.
         //Points that could be put in multiple sets will be randomly placed in one of them, and it does not matter which one.
@@ -357,36 +350,28 @@ namespace Engine5
             AddToOutsideSet(vertices, outside_set);
             outside_set_list.push_back(outside_set);
         }
-
         //4. While(There exists currFace = a face on the current convex hull which has a non - empty outside set of vertices)
         while (!outside_set_list.empty())
         {
             //1. Find the point in currFace's outside set which is farthest away from the plane of the currFace. 
             //This is the eyePoint.
-
             //2. Compute the horizon of the current polyhedron as seen from this eyePoint.
             //CALCULATE_HORIZON(eyePoint, NULL, currFace, listHorizonEdges, listUnclaimedVertices).
             //This will mark all of the visible faces as not on the convex hull and place all of their outside set points on the listUnclaimedVertices.
             //It is creates the listHorizonEdges which is a counterclockwise ordered list of edges around the horizon contour of the polyhedron as viewed from the eyePoint.
-
             //3. Construct a cone from the eye point to all of the edges of the horizon.
             //Before a triangle of this cone is created and added to the polyhedron a test to see if it coplanar to the face on the other side of the horizon edge is applied.
             //If the faces are coplanar then they are merged together and that horizon edge is marked as not on the convex hull.Then a similar check must also be applied to edges which cross the horizon to see if they are collinear.
             //If so then the vertex on the horizon which is on this line must be marked as not on the horizon.
-
             //4. Divide the points of the listUnclaimedVertices into the outside sets of the new cone faces and the faces which were merged with what would be new cone faces.
             //This is done by calling ADD_TO_OUTSIDE_SET(face, listUnclaimedVertices) on each of these faces in turn.
             //Points that could be put in multiple sets will be randomly placed in one of them, and it does not matter which one.
             //Any points which are inside or on all of the planes do not contribute to the convex hull.
             //These points are marked as not on the convex hull.
-
             //5. Remove all faces, edges, and vertices which have been marked as not on the convex hull.
             //These faces, edges, and vertices have all been enclosed by the new cone emanating from the eyePoint.
             //6. Continue the loop
         }
-        
-            
-        
         //5. When all the faces with outside points have been processed we are done.
         //The polyhedron should a clean convex hull where all coplanar faces have been merged.
         //All collinear edges have been merged.
@@ -431,7 +416,6 @@ namespace Engine5
         {
             return false;
         }
-
         // At this stage we can compute t to find out where the intersection point is on the line.
         t = f * edge2.DotProduct(q);
         if (t > Math::EPSILON) // ray intersection
@@ -493,13 +477,10 @@ namespace Engine5
         Matrix33 canonical_matrix(axis, prod, prod, prod, axis, prod, prod, prod, axis);
         Matrix33 transformation_matrix;
         transformation_matrix.SetColumns(v1 - ref, v2 - ref, v3 - ref);
-
         //calculate sub inertia
         result.inertia = transformation_matrix.Determinant() * transformation_matrix * canonical_matrix * transformation_matrix.Transpose();
-
         //volume is 1 / 6 of triple product, that is 1/6 det of transformation matrix.
         result.mass = density * transformation_matrix.Determinant() / 6.0f;
-
         //The center-of-mass is just the mean of the four vertex coordinates. 
         result.centroid = (ref + v1 + v2 + v3) * 0.25f;
         if (ref.IsZero() == false)
@@ -567,7 +548,6 @@ namespace Engine5
         {
             return 0;
         }
-
         //3. Find the point which is furthest distant from the line defined by the first two points.If this maximum distance is zero, then our point cloud is 1D, so report the degeneracy.
         Segment segment(min_vertex, max_vertex);
         Real    max_distance = 0.0f;
@@ -586,7 +566,6 @@ namespace Engine5
         {
             return 1;
         }
-        
         //4. Find the point which has the largest absolute distance from the plane defined by the first three points.If this maximum distance is zero, then our point cloud is 2D, so report the the degeneracy.
         max_distance = 0.0f;
         Vector3 max_tetrahedron;
@@ -603,7 +582,6 @@ namespace Engine5
         {
             return 2;
         }
-        
         //5. Create the tetrahedron polyhedron.Remember that if the distance from the plane of the fourth point was negative, then the order of the first three vertices must be reversed.
         Plane plane;
         plane.Set(min_vertex, max_vertex, max_triangle);
@@ -622,7 +600,6 @@ namespace Engine5
             m_vertices->push_back(min_vertex);
             m_vertices->push_back(max_tetrahedron);
         }
-        
         //6. Return the fact that we created a non - degenerate tetrahedron of dimension 3.
         m_faces->emplace_back(0, 1, 2);
         m_faces->emplace_back(1, 2, 3);
@@ -640,7 +617,6 @@ namespace Engine5
         auto                                      begin = vertices.begin();
         auto                                      end   = vertices.end();
         std::list<std::vector<Vector3>::iterator> erase_list;
-
         //1. For each vertex in the listVertices
         for (auto it = begin; it != end; ++it)
         {
@@ -670,7 +646,6 @@ namespace Engine5
             vertices.erase(it);
         }
     }
-
 
     void ColliderPolyhedron::CalculateHorizon()
     {

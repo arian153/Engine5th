@@ -24,19 +24,18 @@ namespace Engine5
 
     Vector3 ColliderBox::Support(const Vector3& direction)
     {
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
-        Real    p         = Math::REAL_NEGATIVE_MAX;
+        Real    p = Math::REAL_NEGATIVE_MAX;
         Vector3 result;
         for (size_t i = 0; i < 8; ++i)
         {
-            Real projection = Vertex(i).DotProduct(local_dir);
+            Real projection = Vertex(i).DotProduct(direction);
             if (projection > p)
             {
                 result = Vertex(i);
                 p      = projection;
             }
         }
-        return LocalToWorldPoint(result);
+        return result;
     }
 
     bool ColliderBox::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -249,14 +248,12 @@ namespace Engine5
             //collider local space to object space(body local)
             vertex = m_orientation.Rotate(vertex);
             vertex += m_position;
-
             //body local space to world space
             vertex = body_orientation.Rotate(vertex);
             vertex += body_position;
             //push to renderer
             renderer->PushVertex(vertex, mode, color);
         }
-
         //add indices
         if (mode == eRenderingMode::Dot)
         {

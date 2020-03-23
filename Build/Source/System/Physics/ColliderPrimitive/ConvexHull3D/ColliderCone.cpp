@@ -24,29 +24,19 @@ namespace Engine5
 
     Vector3 ColliderCone::Support(const Vector3& direction)
     {
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
-        Vector2 radius    = Radius();
+        Vector2 radius = Radius();
         Vector3 axis_vector;
-        axis_vector.y = HalfHeight();
-        Vector3 result;
-        Vector3 ellipse_dir = local_dir;
+        axis_vector.y       = HalfHeight();
+        Vector3 ellipse_dir = direction;
         ellipse_dir.y       = 0.0f;
         ellipse_dir.SetNormalize();
         Vector3 ellipse_radius(radius.x, 0.0f, radius.y);
         Vector3 ellipse_vector = ellipse_radius.HadamardProduct(ellipse_radius);
         ellipse_vector         = ellipse_vector.HadamardProduct(ellipse_dir);
         ellipse_vector /= ellipse_radius.HadamardProduct(ellipse_dir).Length();
-        Real point_support   = local_dir.DotProduct(axis_vector);
-        Real ellipse_support = local_dir.DotProduct(ellipse_vector);
-        if (point_support > ellipse_support)
-        {
-            result = axis_vector;
-        }
-        else
-        {
-            result = ellipse_vector - axis_vector;
-        }
-        return LocalToWorldPoint(result);
+        Real point_support   = direction.DotProduct(axis_vector);
+        Real ellipse_support = direction.DotProduct(ellipse_vector);
+        return point_support > ellipse_support ? axis_vector : ellipse_vector - axis_vector;
     }
 
     bool ColliderCone::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -59,7 +49,6 @@ namespace Engine5
         Real denominator_x  = 1.0f / (radius.x * radius.x);
         Real denominator_y  = 1.0f / (height * height);
         Real denominator_z  = 1.0f / (radius.y * radius.y);
-
         //make quadratic
         Real a = local_ray.direction.x * local_ray.direction.x * denominator_x
                 + local_ray.direction.z * local_ray.direction.z * denominator_z
@@ -260,7 +249,7 @@ namespace Engine5
     {
         m_scaled_height = m_height * scale.y;
         m_scaled_radius = m_radius.HadamardProduct(Vector2(scale.x, scale.z));
-        m_scale_factor       = scale.Length();
+        m_scale_factor  = scale.Length();
     }
 
     void ColliderCone::SetUnit()
@@ -366,7 +355,6 @@ namespace Engine5
             }
         }
     }
-
 
     Real ColliderCone::HalfHeight() const
     {

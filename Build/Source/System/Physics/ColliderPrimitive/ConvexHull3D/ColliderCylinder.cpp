@@ -24,20 +24,19 @@ namespace Engine5
 
     Vector3 ColliderCylinder::Support(const Vector3& direction)
     {
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
-        Vector2 radius    = Radius();
+        Vector2 radius = Radius();
         Vector3 axis_vector;
         axis_vector.y = HalfHeight();
         Vector3 result;
-        Vector3 ellipse_dir = local_dir;
+        Vector3 ellipse_dir = direction;
         ellipse_dir.y       = 0.0f;
         ellipse_dir.SetNormalize();
         Vector3 ellipse_radius(radius.x, 0.0f, radius.y);
         Vector3 ellipse_vector = ellipse_radius.HadamardProduct(ellipse_radius);
         ellipse_vector         = ellipse_vector.HadamardProduct(ellipse_dir);
         ellipse_vector /= ellipse_radius.HadamardProduct(ellipse_dir).Length();
-        Real top_support = local_dir.DotProduct(ellipse_vector + axis_vector);
-        Real bot_support = local_dir.DotProduct(ellipse_vector - axis_vector);
+        Real top_support = direction.DotProduct(ellipse_vector + axis_vector);
+        Real bot_support = direction.DotProduct(ellipse_vector - axis_vector);
         if (top_support > bot_support)
         {
             result = ellipse_vector + axis_vector;
@@ -46,7 +45,7 @@ namespace Engine5
         {
             result = ellipse_vector - axis_vector;
         }
-        return LocalToWorldPoint(result);
+        return result;
     }
 
     bool ColliderCylinder::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -241,7 +240,7 @@ namespace Engine5
     {
         m_scaled_height = m_height * scale.y;
         m_scaled_radius = m_radius.HadamardProduct(Vector2(scale.x, scale.z));
-        m_scale_factor       = scale.Length();
+        m_scale_factor  = scale.Length();
     }
 
     void ColliderCylinder::SetUnit()
@@ -345,7 +344,6 @@ namespace Engine5
             }
         }
     }
-
 
     Real ColliderCylinder::HalfHeight() const
     {

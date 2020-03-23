@@ -24,15 +24,14 @@ namespace Engine5
 
     Vector3 ColliderDome::Support(const Vector3& direction)
     {
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
-        Vector3 radius    = Radius();
-        Vector3 result    = radius.HadamardProduct(radius);
-        result            = result.HadamardProduct(local_dir);
-        result /= radius.HadamardProduct(local_dir).Length();
+        Vector3 radius = Radius();
+        Vector3 result = radius.HadamardProduct(radius);
+        result         = result.HadamardProduct(direction);
+        result /= radius.HadamardProduct(direction).Length();
         //check hemisphere
         if (result.y <= 0.0f)
         {
-            Vector3 ellipse_dir = local_dir;
+            Vector3 ellipse_dir = direction;
             ellipse_dir.y       = 0.0f;
             ellipse_dir.SetNormalize();
             Vector3 ellipse_radius = radius;
@@ -41,7 +40,7 @@ namespace Engine5
             result                 = result.HadamardProduct(ellipse_dir);
             result /= ellipse_radius.HadamardProduct(ellipse_dir).Length();
         }
-        return LocalToWorldPoint(result);
+        return result;
     }
 
     bool ColliderDome::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -143,7 +142,7 @@ namespace Engine5
     void ColliderDome::SetScaleData(const Vector3& scale)
     {
         m_scaled_radius = m_radius.HadamardProduct(scale);
-        m_scale_factor       = scale.Length();
+        m_scale_factor  = scale.Length();
     }
 
     void ColliderDome::SetUnit()
@@ -181,11 +180,9 @@ namespace Engine5
         Vector3    body_position    = GetBodyPosition();
         Quaternion body_orientation = GetBodyOrientation();
         Vector3    radius           = Radius();
-
         //top vertex
         Vector3 top_vertex_local_pos = axis_vector;
         top_vertex_local_pos         = top_vertex_local_pos.HadamardProduct(radius);
-
         //modify rotation, translation
         top_vertex_local_pos = m_orientation.Rotate(top_vertex_local_pos);
         top_vertex_local_pos += m_position;
@@ -194,7 +191,6 @@ namespace Engine5
         renderer->PushVertex(top_vertex_local_pos, mode, color);
         Real phi_step   = Math::PI / stack_count;
         Real theta_step = Math::TWO_PI / slice_count;
-
         // Compute vertices for each stack ring (do not count the poles as rings).
         for (I32 i = 1; i <= half_stack_count; ++i)
         {
@@ -202,7 +198,6 @@ namespace Engine5
             for (I32 j = 0; j <= slice_count; ++j)
             {
                 Real theta = j * theta_step;
-
                 // spherical to cartesian
                 Vector3 vertex_local_pos;
                 vertex_local_pos.x = sinf(phi) * cosf(theta);

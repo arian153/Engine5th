@@ -177,16 +177,26 @@ namespace Engine5
                     result.b_valid = false;
                     return false;
                 }
-                result.collider_a       = a;
-                result.collider_b       = b;
-                result.local_position_a = (u * polytope.vertices[closest_face.a].local_a)
-                        + (v * polytope.vertices[closest_face.b].local_a) + (w * polytope.vertices[closest_face.c].local_a);
-                result.local_position_b = (u * polytope.vertices[closest_face.a].local_b)
-                        + (v * polytope.vertices[closest_face.b].local_b) + (w * polytope.vertices[closest_face.c].local_b);
-                result.global_position_a = a->m_rigid_body->LocalToWorldPoint(a->LocalToWorldPoint(result.local_position_a));
-                result.global_position_b = b->m_rigid_body->LocalToWorldPoint(b->LocalToWorldPoint(result.local_position_b));
-                result.normal            = closest_face.normal.Normalize();
-                result.depth             = closest_face.distance;
+                result.collider_a = a;
+                result.collider_b = b;
+                result.local_position_a
+                        = u * polytope.vertices[closest_face.a].local_a
+                        + v * polytope.vertices[closest_face.b].local_a
+                        + w * polytope.vertices[closest_face.c].local_a;
+                result.local_position_b
+                        = u * polytope.vertices[closest_face.a].local_b
+                        + v * polytope.vertices[closest_face.b].local_b
+                        + w * polytope.vertices[closest_face.c].local_b;
+                result.global_position_a
+                        = a->m_rigid_body != nullptr
+                              ? a->m_rigid_body->LocalToWorldPoint(a->LocalToWorldPoint(result.local_position_a))
+                              : a->LocalToWorldPoint(result.local_position_a);
+                result.global_position_b
+                        = b->m_rigid_body != nullptr
+                              ? b->m_rigid_body->LocalToWorldPoint(b->LocalToWorldPoint(result.local_position_b))
+                              : b->LocalToWorldPoint(result.local_position_b);
+                result.normal = closest_face.normal.Normalize();
+                result.depth  = closest_face.distance;
                 ComputeBasisQuaternion(result.normal, result.tangent_a, result.tangent_b);
                 return true;
             }

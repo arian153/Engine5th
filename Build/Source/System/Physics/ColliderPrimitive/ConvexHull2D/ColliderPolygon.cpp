@@ -22,8 +22,7 @@ namespace Engine5
 
     Vector3 ColliderPolygon::Support(const Vector3& direction)
     {
-        Vector3               local_dir = WorldToLocalVector(direction).Unit();
-        Real                  p         = Math::REAL_NEGATIVE_MAX;
+        Real                  p = Math::REAL_NEGATIVE_MAX;
         Vector3               result;
         std::vector<Vector2>* vertices;
         if (m_collider_set != nullptr)
@@ -37,14 +36,14 @@ namespace Engine5
         size_t size = vertices->size();
         for (size_t i = 0; i < size; ++i)
         {
-            Real projection = Vector3(vertices->at(i)).DotProduct(local_dir);
+            Real projection = Vector3(vertices->at(i)).DotProduct(direction);
             if (projection > p)
             {
                 result = vertices->at(i);
                 p      = projection;
             }
         }
-        return LocalToWorldPoint(result);
+        return result;
     }
 
     bool ColliderPolygon::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -54,7 +53,6 @@ namespace Engine5
         //Quadratic elements
         Real polygon_min_t = Math::REAL_POSITIVE_MAX;
         Real polygon_max_t = Math::REAL_NEGATIVE_MAX;
-
         //plane elements
         Vector3 normal(0.0f, 0.0f, 1.0f);
         Vector3 pc          = -local_ray.position;
@@ -73,7 +71,6 @@ namespace Engine5
                 {
                     vertices = m_vertices;
                 }
-
                 //ray is on the plane.
                 Vector2 dir(local_ray.direction.x, local_ray.direction.y);
                 Vector2 pos(local_ray.position.x, local_ray.position.y);
@@ -167,7 +164,6 @@ namespace Engine5
                 Real tx = (v.x - p0.x) / edge.x;
                 Real ty = (v.y - p0.y) / edge.y;
                 Real t  = Utility::IsEqual(tx, ty) ? tx : (!Utility::IsZero(tx) ? tx : ty);
-
                 //is point on edge ?
                 if (t <= 1.0f && t >= 0.0f)
                 {
@@ -205,7 +201,6 @@ namespace Engine5
             p2                 = Vector3(vertices->at(j).x, vertices->at(j).y);
             Real triangle_area = 0.5f * p1.CrossProduct(p2).Length();
             area += triangle_area;
-
             // Use area to weight the centroid average, not just vertex position
             m_centroid += (p1 + p2) * triangle_area * inv3;
             Real it_x = p1.x * p1.x + p2.x * p1.x + p2.x * p2.x;
@@ -309,14 +304,12 @@ namespace Engine5
             Vector3 vertex_v3(vertex);
             vertex_v3 = m_orientation.Rotate(vertex_v3);
             vertex_v3 += m_position;
-
             //body local space to world space
             vertex_v3 = body_orientation.Rotate(vertex_v3);
             vertex_v3 += body_position;
             //push to renderer
             renderer->PushVertex(vertex_v3, mode, color);
         }
-
         //add indices
         if (mode == eRenderingMode::Dot)
         {
@@ -370,14 +363,12 @@ namespace Engine5
         return true;
     }
 
-
     void ColliderPolygon::Clone(ColliderPrimitive* origin)
     {
     }
 
     void ColliderPolygon::CreateSimplex()
     {
-
     }
 
     void ColliderPolygon::AddToOutsideSet()

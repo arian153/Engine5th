@@ -22,19 +22,18 @@ namespace Engine5
 
     Vector3 ColliderTriangle::Support(const Vector3& direction)
     {
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
         Real    p = Math::REAL_NEGATIVE_MAX;
         Vector3 result;
         for (size_t i = 0; i < 3; ++i)
         {
-            Real projection = Vector3(Vertex(i)).DotProduct(local_dir);
+            Real projection = Vector3(Vertex(i)).DotProduct(direction);
             if (projection > p)
             {
                 result = Vertex(i);
-                p = projection;
+                p      = projection;
             }
         }
-        return LocalToWorldPoint(result);
+        return result;
     }
 
     bool ColliderTriangle::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -44,10 +43,9 @@ namespace Engine5
         //Quadratic elements
         Real triangle_min_t = Math::REAL_POSITIVE_MAX;
         Real triangle_max_t = Math::REAL_NEGATIVE_MAX;
-
         //plane elements
         Vector3 normal(0.0f, 0.0f, 1.0f);
-        Vector3 pc = -local_ray.position;
+        Vector3 pc          = -local_ray.position;
         Real    denominator = normal.DotProduct(local_ray.direction);
         if (Utility::IsZero(denominator) == true)
         {
@@ -58,12 +56,12 @@ namespace Engine5
                 Vector2 dir(local_ray.direction.x, local_ray.direction.y);
                 Vector2 pos(local_ray.position.x, local_ray.position.y);
                 //last edge
-                Vector2 p0 = Vertex(0);
-                Vector2 p1 = Vertex(1);
-                Vector2 p2 = Vertex(2);
-                Vector2 edge1 = p1 - p0;
-                Vector2 edge2 = p2 - p1;
-                Vector2 edge3 = p0 - p2;
+                Vector2 p0      = Vertex(0);
+                Vector2 p1      = Vertex(1);
+                Vector2 p2      = Vertex(2);
+                Vector2 edge1   = p1 - p0;
+                Vector2 edge2   = p2 - p1;
+                Vector2 edge3   = p0 - p2;
                 Real    inv_dir = 1.0f / dir.DotProduct(dir);
                 if (Utility::IsZero(dir.CrossProduct(edge1)) == true)
                 {
@@ -136,7 +134,7 @@ namespace Engine5
         else
         {
             //ray-plane intersect one point.
-            Real    plane_t = pc.DotProduct(normal) / denominator;
+            Real    plane_t            = pc.DotProduct(normal) / denominator;
             Vector3 plane_intersection = local_ray.position + local_ray.direction * plane_t;
             //define ellipse.
             Vector2 v2edge1 = Vertex(1) - Vertex(0);
@@ -162,7 +160,6 @@ namespace Engine5
             {
                 return false;
             }
-
             // At this stage we can compute t to find out where the intersection point is on the line.
             triangle_min_t = f * edge2.DotProduct(q);
             if (triangle_min_t > Math::EPSILON) // ray intersection
@@ -190,16 +187,15 @@ namespace Engine5
         Vector2 v(local_point_on_collider);
         for (size_t i = 0; i < 3; ++i)
         {
-            size_t  j = i + 1 < 3 ? i + 1 : 0;
-            Vector2 p0 = Vertex(i);
-            Vector2 p1 = Vertex(j);
+            size_t  j    = i + 1 < 3 ? i + 1 : 0;
+            Vector2 p0   = Vertex(i);
+            Vector2 p1   = Vertex(j);
             Vector2 edge = p1 - p0;
             if (p0.IsEqual(p1) == false)
             {
                 Real tx = (v.x - p0.x) / edge.x;
                 Real ty = (v.y - p0.y) / edge.y;
-                Real t = Utility::IsEqual(tx, ty) ? tx : (!Utility::IsZero(tx) ? tx : ty);
-
+                Real t  = Utility::IsEqual(tx, ty) ? tx : (!Utility::IsZero(tx) ? tx : ty);
                 //is point on edge ?
                 if (t <= 1.0f && t >= 0.0f)
                 {
@@ -212,11 +208,11 @@ namespace Engine5
 
     void ColliderTriangle::SetMassData(Real density)
     {
-        Real area = 0.0f;
+        Real area  = 0.0f;
         Real it_xx = 0.0f;
         Real it_yy = 0.0f;
         Real it_zz = 0.0f;
-        Real inv3 = 1.0f / 3.0f;
+        Real inv3  = 1.0f / 3.0f;
         for (size_t i1 = 0; i1 < 3; ++i1)
         {
             // Triangle vertices, third vertex implied as (0, 0)
@@ -234,7 +230,6 @@ namespace Engine5
             }
             Real triangle_area = 0.5f * p1.CrossProduct(p2).Length();
             area += triangle_area;
-
             // Use area to weight the centroid average, not just vertex position
             m_centroid += (p1 + p2) * triangle_area * inv3;
             Real it_x = p1.x * p1.x + p2.x * p1.x + p2.x * p2.x;
@@ -256,15 +251,15 @@ namespace Engine5
         {
             auto v2edge01 = m_scaled_vertices[1] - m_scaled_vertices[0];
             auto v2edge02 = m_scaled_vertices[2] - m_scaled_vertices[0];
-            edge01 = Vector3(v2edge01.x, v2edge01.y, 0.0f);
-            edge02 = Vector3(v2edge02.x, v2edge02.y, 0.0f);
+            edge01        = Vector3(v2edge01.x, v2edge01.y, 0.0f);
+            edge02        = Vector3(v2edge02.x, v2edge02.y, 0.0f);
         }
         else
         {
             auto v2edge01 = m_vertices[1] - m_vertices[0];
             auto v2edge02 = m_vertices[2] - m_vertices[0];
-            edge01 = Vector3(v2edge01.x, v2edge01.y, 0.0f);
-            edge02 = Vector3(v2edge02.x, v2edge02.y, 0.0f);
+            edge01        = Vector3(v2edge01.x, v2edge01.y, 0.0f);
+            edge02        = Vector3(v2edge02.x, v2edge02.y, 0.0f);
         }
         return edge01.CrossProduct(edge02).Length() * 0.5f;
     }
@@ -346,7 +341,7 @@ namespace Engine5
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = 3;
         renderer->ReserveVertices(count, mode);
-        Vector3    body_position = GetBodyPosition();
+        Vector3    body_position    = GetBodyPosition();
         Quaternion body_orientation = GetBodyOrientation();
         for (size_t i = 0; i < 3; ++i)
         {
@@ -354,11 +349,9 @@ namespace Engine5
             Vector3 vertex(Vertex(i));
             vertex = m_orientation.Rotate(vertex);
             vertex += m_position;
-
             //body local space to world space
             vertex = body_orientation.Rotate(vertex);
             vertex += body_position;
-
             //push to renderer
             renderer->PushVertex(vertex, mode, color);
         }
@@ -373,7 +366,7 @@ namespace Engine5
         {
             for (int i = 0; i < count; ++i)
             {
-                I32  j = i + 1 < count ? i + 1 : 0;
+                I32 j = i + 1 < count ? i + 1 : 0;
                 renderer->PushLineIndices(index + i, index + j);
             }
         }

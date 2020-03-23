@@ -24,15 +24,14 @@ namespace Engine5
 
     Vector3 ColliderCapsule::Support(const Vector3& direction)
     {
-        Vector3 local_dir = WorldToLocalVector(direction).Unit();
         Vector3 axis_vector;
         axis_vector.y  = HalfHeight();
         Vector3 radius = Radius();
         Vector3 result = radius.HadamardProduct(radius);
-        result         = result.HadamardProduct(local_dir);
-        result /= radius.HadamardProduct(local_dir).Length();
-        Real top = local_dir.DotProduct(axis_vector);
-        Real bot = local_dir.DotProduct(-axis_vector);
+        result         = result.HadamardProduct(direction);
+        result /= radius.HadamardProduct(direction).Length();
+        Real top = direction.DotProduct(axis_vector);
+        Real bot = direction.DotProduct(-axis_vector);
         if (top > bot)
         {
             result += axis_vector;
@@ -41,7 +40,7 @@ namespace Engine5
         {
             result -= axis_vector;
         }
-        return LocalToWorldPoint(result);
+        return result;
     }
 
     bool ColliderCapsule::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -281,7 +280,7 @@ namespace Engine5
     {
         m_scaled_height = m_height * scale.y;
         m_scaled_radius = m_radius.HadamardProduct(scale);
-        m_scale_factor       = scale.Length();
+        m_scale_factor  = scale.Length();
     }
 
     void ColliderCapsule::SetUnit()
@@ -323,23 +322,19 @@ namespace Engine5
         Quaternion body_orientation = GetBodyOrientation();
         Real       half_height      = HalfHeight();
         Vector3    radius           = Radius();
-
         //top vertex
         Vector3 top_vertex_local_pos = axis_vector;
         top_vertex_local_pos         = top_vertex_local_pos.HadamardProduct(radius);
         top_vertex_local_pos += half_height * axis_vector;
-
         //modify rotation, translation
         top_vertex_local_pos = m_orientation.Rotate(top_vertex_local_pos);
         top_vertex_local_pos += m_position;
         top_vertex_local_pos = body_orientation.Rotate(top_vertex_local_pos);
         top_vertex_local_pos += body_position;
-
         //bottom vertex
         Vector3 bottom_vertex_local_pos = -axis_vector;
         bottom_vertex_local_pos         = bottom_vertex_local_pos.HadamardProduct(radius);
         bottom_vertex_local_pos -= half_height * axis_vector;
-
         //modify rotation, translation
         bottom_vertex_local_pos = m_orientation.Rotate(bottom_vertex_local_pos);
         bottom_vertex_local_pos += m_position;
@@ -348,7 +343,6 @@ namespace Engine5
         renderer->PushVertex(top_vertex_local_pos, mode, color);
         Real phi_step   = Math::PI / stack_count;
         Real theta_step = Math::TWO_PI / slice_count;
-
         // Compute vertices for each stack ring (do not count the poles as rings).
         for (I32 i = 1; i <= stack_count - 1; ++i)
         {
@@ -357,7 +351,6 @@ namespace Engine5
             for (I32 j = 0; j <= slice_count; ++j)
             {
                 Real theta = j * theta_step;
-
                 // spherical to cartesian
                 Vector3 vertex_local_pos;
                 vertex_local_pos.x = sinf(phi) * cosf(theta);
@@ -441,7 +434,6 @@ namespace Engine5
             }
         }
     }
-
 
     Real ColliderCapsule::HalfHeight() const
     {
