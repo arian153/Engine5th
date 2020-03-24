@@ -182,9 +182,11 @@ namespace Engine5
                     if (collider_type != eColliderType::InvalidPrimitive)
                     {
                         auto created = AddCollider(collider_type);
+                        created->Load(collider);
                     }
                 }
             }
+            m_collider_set->UpdateColliderSetBoundingVolume();
         }
         return true;
     }
