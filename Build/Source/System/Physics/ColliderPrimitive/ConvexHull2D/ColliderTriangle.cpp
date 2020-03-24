@@ -410,47 +410,45 @@ namespace Engine5
             m_local_inertia_tensor = triangle->m_local_inertia_tensor;
             m_density              = triangle->m_density;
             m_material             = triangle->m_material;
-
             //triangle
             std::memcpy(m_vertices, triangle->m_vertices, sizeof m_vertices);
             std::memcpy(m_scaled_vertices, triangle->m_scaled_vertices, sizeof m_scaled_vertices);
-
         }
     }
 
     void ColliderTriangle::Load(const Json::Value& data)
     {
-        if (JsonResource::HasMember(data, "Orientation") && JsonResource::IsQuaternion(data[ "Orientation" ]))
+        if (JsonResource::HasMember(data, "Orientation") && JsonResource::IsQuaternion(data["Orientation"]))
         {
-            m_orientation = JsonResource::AsQuaternionRIJK(data[ "Orientation" ]);
+            m_orientation = JsonResource::AsQuaternionRIJK(data["Orientation"]);
         }
-        if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data[ "Position" ]))
+        if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data["Position"]))
         {
-            m_position = JsonResource::AsVector3(data[ "Position" ]);
+            m_position = JsonResource::AsVector3(data["Position"]);
         }
-        if (JsonResource::HasMember(data, "Scale") && data[ "Scale" ].isDouble())
+        if (JsonResource::HasMember(data, "Scale") && data["Scale"].isDouble())
         {
-            m_scale_factor = data[ "Scale" ].asFloat();
+            m_scale_factor = data["Scale"].asFloat();
         }
-        if (JsonResource::HasMember(data, "Centroid") && JsonResource::IsVector3(data[ "Centroid" ]))
+        if (JsonResource::HasMember(data, "Centroid") && JsonResource::IsVector3(data["Centroid"]))
         {
-            m_centroid = JsonResource::AsVector3(data[ "Centroid" ]);
+            m_centroid = JsonResource::AsVector3(data["Centroid"]);
         }
-        if (JsonResource::HasMember(data, "Mass") && data[ "Mass" ].isDouble())
+        if (JsonResource::HasMember(data, "Mass") && data["Mass"].isDouble())
         {
-            m_mass = data[ "Mass" ].asFloat();
+            m_mass = data["Mass"].asFloat();
         }
-        if (JsonResource::HasMember(data, "Inertia") && JsonResource::IsMatrix33(data[ "Inertia" ]))
+        if (JsonResource::HasMember(data, "Inertia") && JsonResource::IsMatrix33(data["Inertia"]))
         {
-            m_local_inertia_tensor = JsonResource::AsMatrix33(data[ "Inertia" ]);
+            m_local_inertia_tensor = JsonResource::AsMatrix33(data["Inertia"]);
         }
-        if (JsonResource::HasMember(data, "Density") && data[ "Density" ].isDouble())
+        if (JsonResource::HasMember(data, "Density") && data["Density"].isDouble())
         {
-            m_density = data[ "Density" ].asFloat();
+            m_density = data["Density"].asFloat();
         }
-        if (JsonResource::HasMember(data, "Material") && data[ "Material" ].isString())
+        if (JsonResource::HasMember(data, "Material") && data["Material"].isString())
         {
-            std::string material = data[ "Material" ].asString();
+            std::string material = data["Material"].asString();
             if (material == "Rock")
             {
                 m_material = Physics::eMaterial::Rock;
@@ -502,6 +500,18 @@ namespace Engine5
             else if (material == "Velcro")
             {
                 m_material = Physics::eMaterial::Velcro;
+            }
+        }
+        //triangle data
+        if (JsonResource::HasMember(data, "Vertices") && data["Vertices"].isArray() && data["Vertices"].size() == 3)
+        {
+            for (int i = 0; i < 3; ++i)
+            {
+                if (JsonResource::IsVector2(data["Vertices"][i]))
+                {
+                    m_vertices[i]        = JsonResource::AsVector2(data["Vertices"][i]);
+                    m_scaled_vertices[i] = m_scale_factor * m_vertices[i];
+                }
             }
         }
     }

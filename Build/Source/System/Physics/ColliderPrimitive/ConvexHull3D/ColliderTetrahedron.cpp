@@ -395,6 +395,18 @@ namespace Engine5
                 m_material = Physics::eMaterial::Velcro;
             }
         }
+        //tetrahedron data
+        if (JsonResource::HasMember(data, "Vertices") && data["Vertices"].isArray() && data["Vertices"].size() == 4)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                if (JsonResource::IsVector3(data["Vertices"][i]))
+                {
+                    m_vertices[i]        = JsonResource::AsVector3(data["Vertices"][i]);
+                    m_scaled_vertices[i] = m_scale_factor * m_vertices[i];
+                }
+            }
+        }
     }
 
     void ColliderTetrahedron::Save(const Json::Value& data)

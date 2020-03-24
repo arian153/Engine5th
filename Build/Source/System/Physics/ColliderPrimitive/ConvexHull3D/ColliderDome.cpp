@@ -385,6 +385,12 @@ namespace Engine5
                 m_material = Physics::eMaterial::Velcro;
             }
         }
+
+        if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector3(data[ "Radius" ]))
+        {
+            m_radius = JsonResource::AsVector3(data[ "Radius" ]);
+            m_scaled_radius = m_scale_factor * m_radius;
+        }
     }
 
     void ColliderDome::Save(const Json::Value& data)

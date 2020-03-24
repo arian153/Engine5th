@@ -218,6 +218,19 @@ namespace Engine5
                 m_material = Physics::eMaterial::Velcro;
             }
         }
+
+        //rectangle data
+        if (JsonResource::HasMember(data, "Vertices") && data[ "Vertices" ].isArray() && data[ "Vertices" ].size() == 4)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                if (JsonResource::IsVector2(data[ "Vertices" ][ i ]))
+                {
+                    m_vertices[ i ] = JsonResource::AsVector2(data[ "Vertices" ][ i ]);
+                    m_scaled_vertices[ i ] = m_scale_factor * m_vertices[ i ];
+                }
+            }
+        }
     }
 
     void ColliderRectangle::Save(const Json::Value& data)

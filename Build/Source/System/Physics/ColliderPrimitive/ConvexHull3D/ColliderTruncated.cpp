@@ -563,12 +563,12 @@ namespace Engine5
         if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector2(data["Radius"]))
         {
             m_radius        = JsonResource::AsVector2(data["Radius"]);
-            m_scaled_radius = m_radius * m_scale_factor;
+            m_scaled_radius = m_scale_factor * m_radius;
         }
         if (JsonResource::HasMember(data, "Height") && data["Height"].isDouble())
         {
             m_height        = data["Height"].asFloat();
-            m_scaled_height = m_height * m_scale_factor;
+            m_scaled_height = m_scale_factor * m_height;
         }
         if (JsonResource::HasMember(data, "Ratio") && data["Ratio"].isDouble())
         {
