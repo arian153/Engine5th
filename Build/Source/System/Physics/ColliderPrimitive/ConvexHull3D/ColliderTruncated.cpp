@@ -1,6 +1,8 @@
 #include "ColliderTruncated.hpp"
 #include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../BroadPhase/BoundingAABB.hpp"
+#include "../../../../Manager/Resource/ResourceType/JsonResource.hpp"
+#include "../../../../External/JSONCPP/json/json.h"
 
 namespace Engine5
 {
@@ -470,5 +472,111 @@ namespace Engine5
             m_scaled_radius = truncated->m_scaled_radius;
             m_scaled_height = truncated->m_scaled_height;
         }
+    }
+
+    void ColliderTruncated::Load(const Json::Value& data)
+    {
+        if (JsonResource::HasMember(data, "Orientation") && JsonResource::IsQuaternion(data["Orientation"]))
+        {
+            m_orientation = JsonResource::AsQuaternionRIJK(data["Orientation"]);
+        }
+        if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data["Position"]))
+        {
+            m_position = JsonResource::AsVector3(data["Position"]);
+        }
+        if (JsonResource::HasMember(data, "Scale") && data["Scale"].isDouble())
+        {
+            m_scale_factor = data["Scale"].asFloat();
+        }
+        if (JsonResource::HasMember(data, "Centroid") && JsonResource::IsVector3(data["Centroid"]))
+        {
+            m_centroid = JsonResource::AsVector3(data["Centroid"]);
+        }
+        if (JsonResource::HasMember(data, "Mass") && data["Mass"].isDouble())
+        {
+            m_mass = data["Mass"].asFloat();
+        }
+        if (JsonResource::HasMember(data, "Inertia") && JsonResource::IsMatrix33(data["Inertia"]))
+        {
+            m_local_inertia_tensor = JsonResource::AsMatrix33(data["Inertia"]);
+        }
+        if (JsonResource::HasMember(data, "Density") && data["Density"].isDouble())
+        {
+            m_density = data["Density"].asFloat();
+        }
+        if (JsonResource::HasMember(data, "Material") && data["Material"].isString())
+        {
+            std::string material = data["Material"].asString();
+            if (material == "Rock")
+            {
+                m_material = Physics::eMaterial::Rock;
+            }
+            else if (material == "Wood")
+            {
+                m_material = Physics::eMaterial::Wood;
+            }
+            else if (material == "Metal")
+            {
+                m_material = Physics::eMaterial::Metal;
+            }
+            else if (material == "BouncyBall")
+            {
+                m_material = Physics::eMaterial::BouncyBall;
+            }
+            else if (material == "SuperBall")
+            {
+                m_material = Physics::eMaterial::SuperBall;
+            }
+            else if (material == "Pillow")
+            {
+                m_material = Physics::eMaterial::Pillow;
+            }
+            else if (material == "Static")
+            {
+                m_material = Physics::eMaterial::Static;
+            }
+            else if (material == "Concrete")
+            {
+                m_material = Physics::eMaterial::Concrete;
+            }
+            else if (material == "Ice")
+            {
+                m_material = Physics::eMaterial::Ice;
+            }
+            else if (material == "Glass")
+            {
+                m_material = Physics::eMaterial::Glass;
+            }
+            else if (material == "Lubricant")
+            {
+                m_material = Physics::eMaterial::Lubricant;
+            }
+            else if (material == "Rubber")
+            {
+                m_material = Physics::eMaterial::Rubber;
+            }
+            else if (material == "Velcro")
+            {
+                m_material = Physics::eMaterial::Velcro;
+            }
+        }
+        if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector2(data["Radius"]))
+        {
+            m_radius        = JsonResource::AsVector2(data["Radius"]);
+            m_scaled_radius = m_radius * m_scale_factor;
+        }
+        if (JsonResource::HasMember(data, "Height") && data["Height"].isDouble())
+        {
+            m_height        = data["Height"].asFloat();
+            m_scaled_height = m_height * m_scale_factor;
+        }
+        if (JsonResource::HasMember(data, "Ratio") && data["Ratio"].isDouble())
+        {
+            m_ratio = data["Ratio"].asFloat();
+        }
+    }
+
+    void ColliderTruncated::Save(const Json::Value& data)
+    {
     }
 }
