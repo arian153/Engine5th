@@ -4,7 +4,12 @@ namespace Engine5
 {
     enum class eColliderType : int
     {
-        Box
+        Circle
+      , Ellipse
+      , Polygon
+      , Rectangle
+      , Triangle
+      , Box
       , Capsule
       , Cone
       , Cylinder
@@ -57,7 +62,5 @@ namespace Engine5
             const Real MAX_LINEAR_CORRECTION        = 0.2f;
             const Real SEPARATION_SLOP              = 0.02f;
         }
-
-       
     }
 }

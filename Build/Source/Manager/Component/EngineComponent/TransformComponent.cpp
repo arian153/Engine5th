@@ -1,5 +1,7 @@
 #include "TransformComponent.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
+#include "../../Resource/ResourceType/JsonResource.hpp"
+#include "../../../External/JSONCPP/json/json.h"
 
 namespace Engine5
 {
@@ -213,6 +215,30 @@ namespace Engine5
 
     bool TransformComponent::Load(const Json::Value& data)
     {
+        if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data["Position"]))
+        {
+            SetPosition(JsonResource::AsVector3(data["Position"]));
+        }
+        if (JsonResource::HasMember(data, "Scale") && JsonResource::IsVector3(data["Scale"]))
+        {
+            SetScale(JsonResource::AsVector3(data["Scale"]));
+        }
+        if (JsonResource::HasMember(data, "Orientation"))
+        {
+            if (JsonResource::IsVector3(data["Orientation"]))
+            {
+                auto rotation = JsonResource::AsVector3(data["Orientation"]);
+                SetOrientation(EulerAngle(rotation.x, rotation.y, rotation.z));
+            }
+            if (JsonResource::IsMatrix33(data["Orientation"]))
+            {
+                SetOrientation(JsonResource::AsMatrix33(data["Orientation"]));
+            }
+            if (JsonResource::IsQuaternion(data["Orientation"]))
+            {
+                SetOrientation(JsonResource::AsQuaternionRIJK(data["Orientation"]));
+            }
+        }
         return true;
     }
 
@@ -238,6 +264,8 @@ namespace Engine5
         if (origin != nullptr && origin != this)
         {
             //copy data
+            m_transform   = origin->m_transform;
+            m_axis_holder = origin->m_axis_holder;
         }
     }
 

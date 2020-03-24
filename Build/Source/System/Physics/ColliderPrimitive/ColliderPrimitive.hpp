@@ -5,6 +5,10 @@
 #include "../Dynamics/ColliderSet.hpp"
 #include "../Utility/MaterialDef.hpp"
 
+namespace Json {
+    class Value;
+}
+
 namespace Engine5
 {
     class Color;
@@ -65,6 +69,7 @@ namespace Engine5
         virtual void UpdateBoundingVolume() = 0;
         virtual void Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const = 0;
 
+
     protected:
         void UpdatePrimitive();
         void UpdateMassData() const;
@@ -74,6 +79,9 @@ namespace Engine5
         virtual void SetMassData(Real density) = 0;
         virtual void SetScaleData(const Vector3& scale) = 0;
         virtual void Clone(ColliderPrimitive* origin) = 0;
+
+        virtual void Load(const Json::Value& data) = 0;
+        virtual void Save(const Json::Value& data) = 0;
 
     private:
         void UpdateRigidBody();
@@ -85,6 +93,7 @@ namespace Engine5
         friend class BoundingAABB;
         friend class World;
         friend class ManifoldTable;
+        friend class ColliderComponent;
 
     protected:
         //collider local space data

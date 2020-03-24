@@ -10,6 +10,9 @@ namespace Engine5
     public:
         Transform();
         ~Transform();
+
+        Transform& operator=(const Transform& rhs);
+
         Matrix44 LocalToWorldMatrix() const;
 
         Vector3 LocalToWorldPoint(const Vector3& local_point) const;

@@ -4,6 +4,8 @@
 #include "../../Object/Object.hpp"
 #include "RigidBodyComponent.hpp"
 #include "TransformComponent.hpp"
+#include "../../Resource/ResourceType/JsonResource.hpp"
+#include "../../../External/JSONCPP/json/json.h"
 
 namespace Engine5
 {
@@ -108,6 +110,82 @@ namespace Engine5
 
     bool ColliderComponent::Load(const Json::Value& data)
     {
+        if (JsonResource::HasMember(data, "Colliders") && data["Colliders"].isArray())
+        {
+            for (auto it = data["Colliders"].begin(); it != data["Colliders"].end(); ++it)
+            {
+                auto collider = *it;
+                if (JsonResource::HasMember(collider, "Type") && collider["Type"].isString())
+                {
+                    std::string   type          = collider["Type"].asString();
+                    eColliderType collider_type = eColliderType::InvalidPrimitive;
+                    if (type == "Circle")
+                    {
+                        collider_type = eColliderType::Circle;
+                    }
+                    else if (type == "Ellipse")
+                    {
+                        collider_type = eColliderType::Ellipse;
+                    }
+                    else if (type == "Polygon")
+                    {
+                        collider_type = eColliderType::Polygon;
+                    }
+                    else if (type == "Rectangle")
+                    {
+                        collider_type = eColliderType::Rectangle;
+                    }
+                    else if (type == "Triangle")
+                    {
+                        collider_type = eColliderType::Triangle;
+                    }
+                    else if (type == "Box")
+                    {
+                        collider_type = eColliderType::Box;
+                    }
+                    else if (type == "Capsule")
+                    {
+                        collider_type = eColliderType::Capsule;
+                    }
+                    else if (type == "Cone")
+                    {
+                        collider_type = eColliderType::Cone;
+                    }
+                    else if (type == "Cylinder")
+                    {
+                        collider_type = eColliderType::Cylinder;
+                    }
+                    else if (type == "Dome")
+                    {
+                        collider_type = eColliderType::Dome;
+                    }
+                    else if (type == "Ellipsoid")
+                    {
+                        collider_type = eColliderType::Ellipsoid;
+                    }
+                    else if (type == "Polyhedron")
+                    {
+                        collider_type = eColliderType::Polyhedron;
+                    }
+                    else if (type == "Sphere")
+                    {
+                        collider_type = eColliderType::Sphere;
+                    }
+                    else if (type == "Tetrahedron")
+                    {
+                        collider_type = eColliderType::Tetrahedron;
+                    }
+                    else if (type == "Truncated")
+                    {
+                        collider_type = eColliderType::Truncated;
+                    }
+                    if (collider_type != eColliderType::InvalidPrimitive)
+                    {
+                        auto created = AddCollider(collider_type);
+                    }
+                }
+            }
+        }
         return true;
     }
 

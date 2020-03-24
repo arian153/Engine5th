@@ -3,6 +3,8 @@
 #include "../../Object/Object.hpp"
 #include "ColliderComponent.hpp"
 #include "TransformComponent.hpp"
+#include "../../Resource/ResourceType/JsonResource.hpp"
+#include "../../../External/JSONCPP/json/json.h"
 
 namespace Engine5
 {
@@ -166,6 +168,92 @@ namespace Engine5
 
     bool RigidBodyComponent::Load(const Json::Value& data)
     {
+        if (JsonResource::HasMember(data, "Motion") && (data["Motion"].isString()))
+        {
+            std::string motion = data["Motion"].asString();
+            if (motion == "Dynamic")
+            {
+                m_rigid_body->m_motion_mode = eMotionMode::Dynamic;
+            }
+            else if (motion == "Kinematic")
+            {
+                m_rigid_body->m_motion_mode = eMotionMode::Kinematic;
+            }
+            else if (motion == "Static")
+            {
+                m_rigid_body->m_motion_mode = eMotionMode::Static;
+            }
+            else
+            {
+                m_rigid_body->m_motion_mode = eMotionMode::Dynamic;
+            }
+        }
+        //linear data
+        if (JsonResource::HasMember(data, "Linear"))
+        {
+            auto linear = data["Linear"];
+            if (JsonResource::HasMember(linear, "Position") && JsonResource::IsVector3(linear["Position"]))
+            {
+                m_rigid_body->m_position = JsonResource::AsVector3(linear["Position"]);
+            }
+            if (JsonResource::HasMember(linear, "Velocity") && JsonResource::IsVector3(linear["Velocity"]))
+            {
+                m_rigid_body->m_linear_velocity = JsonResource::AsVector3(linear["Velocity"]);
+            }
+            if (JsonResource::HasMember(linear, "Force") && JsonResource::IsVector3(linear["Force"]))
+            {
+                m_rigid_body->m_force_accumulator = JsonResource::AsVector3(linear["Force"]);
+            }
+            if (JsonResource::HasMember(linear, "Constraints") && JsonResource::IsVector3(linear["Constraints"]))
+            {
+                m_rigid_body->m_constraints_positional = JsonResource::AsVector3(linear["Constraints"]);
+            }
+        }
+        //angular data
+        if (JsonResource::HasMember(data, "Angular"))
+        {
+            auto angular = data["Angular"];
+            if (JsonResource::HasMember(angular, "Orientation") && JsonResource::IsQuaternion(angular["Orientation"]))
+            {
+                m_rigid_body->SetOrientation(JsonResource::AsQuaternionRIJK(angular["Orientation"]));
+            }
+            if (JsonResource::HasMember(angular, "Velocity") && JsonResource::IsVector3(angular["Velocity"]))
+            {
+                m_rigid_body->m_angular_velocity = JsonResource::AsVector3(angular["Velocity"]);
+            }
+            if (JsonResource::HasMember(angular, "Torque") && JsonResource::IsVector3(angular["Torque"]))
+            {
+                m_rigid_body->m_torque_accumulator = JsonResource::AsVector3(angular["Torque"]);
+            }
+            if (JsonResource::HasMember(angular, "Constraints") && JsonResource::IsVector3(angular["Constraints"]))
+            {
+                m_rigid_body->m_constraints_rotational = JsonResource::AsVector3(angular["Constraints"]);
+            }
+        }
+        //mass data
+        if (JsonResource::HasMember(data, "Mass"))
+        {
+            auto mass_data = data["Mass"];
+            if (JsonResource::HasMember(mass_data, "Mass") && mass_data["Mass"].isDouble())
+            {
+                Real mass = mass_data["Mass"].asFloat();
+                Utility::IsZero(mass)
+                    ? m_rigid_body->SetMassInfinite()
+                    : m_rigid_body->SetMass(mass);
+            }
+            if (JsonResource::HasMember(mass_data, "Inertia") && JsonResource::IsMatrix33(mass_data["Inertia"]))
+            {
+                Matrix33 inertia_tensor = JsonResource::AsMatrix33(mass_data["Inertia"]);
+                inertia_tensor.IsZero()
+                    ? m_rigid_body->SetInertiaInfinite()
+                    : m_rigid_body->SetLocalInertia(inertia_tensor);
+            }
+            if (JsonResource::HasMember(mass_data, "Centroid") && JsonResource::IsVector3(mass_data["Centroid"]))
+            {
+                m_rigid_body->m_mass_data.local_centroid = JsonResource::AsVector3(mass_data["Centroid"]);
+                m_rigid_body->UpdateGlobalCentroidFromPosition();
+            }
+        }
         return true;
     }
 
@@ -199,8 +287,8 @@ namespace Engine5
         if (origin != nullptr && origin != this)
         {
             //copy data
-            origin->Initialize();
-            
+            Initialize();
+            m_rigid_body->Clone(origin->m_rigid_body);
         }
     }
 }

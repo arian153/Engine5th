@@ -40,6 +40,8 @@ namespace Engine5
 
     protected:
         void Clone(ColliderPrimitive* origin) override;
+        void Load(const Json::Value& data) override;
+        void Save(const Json::Value& data) override;
 
     private:
         Vector3 m_radius = Vector3(0.3f, 0.4f, 0.5f);

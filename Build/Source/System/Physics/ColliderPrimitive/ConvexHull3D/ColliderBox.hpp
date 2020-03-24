@@ -36,6 +36,8 @@ namespace Engine5
 
     protected:
         void Clone(ColliderPrimitive* origin) override;
+        void Load(const Json::Value& data) override;
+        void Save(const Json::Value& data) override;
 
     private:
         Vector3 m_vertices[8];

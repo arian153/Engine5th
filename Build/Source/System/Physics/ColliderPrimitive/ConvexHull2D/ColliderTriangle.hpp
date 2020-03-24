@@ -35,6 +35,8 @@ namespace Engine5
         void SetTriangle(const Vector2& v0, const Vector2& v1, const Vector2& v2);
     protected:
         void Clone(ColliderPrimitive* origin) override;
+        void Load(const Json::Value& data) override;
+        void Save(const Json::Value& data) override;
 
     private:
         Vector2 m_vertices[3];

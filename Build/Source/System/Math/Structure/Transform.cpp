@@ -10,6 +10,17 @@ namespace Engine5
     {
     }
 
+    Transform& Transform::operator=(const Transform& rhs)
+    {
+        if (this != &rhs)
+        {
+            position    = rhs.position;
+            scale       = rhs.scale;
+            orientation = rhs.orientation;
+        }
+        return *this;
+    }
+
     Matrix44 Transform::LocalToWorldMatrix() const
     {
         Matrix44 scaling;

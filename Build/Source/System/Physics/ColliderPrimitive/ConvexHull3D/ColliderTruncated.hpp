@@ -46,15 +46,16 @@ namespace Engine5
         void SetRadius(const Vector2& radius);
         void SetRatio(Real ratio);
 
-
     protected:
         void Clone(ColliderPrimitive* origin) override;
+        void Load(const Json::Value& data) override;
+        void Save(const Json::Value& data) override;
 
     private:
         Vector2 m_radius = Vector2(0.5f, 0.5f);
         Vector2 m_scaled_radius;
-        Real    m_height             = 1.0f;
+        Real    m_height        = 1.0f;
         Real    m_scaled_height = 1.0f;
-        Real    m_ratio              = 0.5f;
+        Real    m_ratio         = 0.5f;
     };
 }

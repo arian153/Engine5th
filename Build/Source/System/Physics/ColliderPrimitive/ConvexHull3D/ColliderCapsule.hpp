@@ -45,6 +45,8 @@ namespace Engine5
 
     protected:
         void Clone(ColliderPrimitive* origin) override;
+        void Load(const Json::Value& data) override;
+        void Save(const Json::Value& data) override;
 
     private:
         bool TestRayEllipsoid(const Ray& ray, const Vector3& centroid, Real& min_t, Real& max_t) const;
