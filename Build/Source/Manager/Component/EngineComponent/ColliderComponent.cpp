@@ -55,7 +55,10 @@ namespace Engine5
 
     void ColliderComponent::Shutdown()
     {
-        m_collider_set->Shutdown();
+        if (m_collider_set != nullptr)
+        {
+            m_collider_set->Shutdown();
+        }
     }
 
     ColliderPrimitive* ColliderComponent::AddCollider(eColliderType type) const

@@ -10,10 +10,27 @@
             "Name": "HelloWorld",
             "Components": [
                 {
-                    "Type" : "TransformComponent"                    ,
-                    "Value" : 
-                    {
-                        "Position" : [1, 1, 1]
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Position": [1, 1, 1],
+                        "Scale": [1, 1, 1],
+                        "Orientation": [1, 0, 0, 0]
+                    }
+                },
+                {
+                    "Type": "RigidBodyComponent",
+                    "Value": {
+                        "Position": [1, 1, 1],
+                        "Scale": [1, 1, 1],
+                        "Orientation": [1, 0, 0, 0]
+                    }
+                },
+                {
+                    "Type": "ColliderComponent",
+                    "Value": {
+                        "Position": [1, 1, 1],
+                        "Scale": [1, 1, 1],
+                        "Orientation": [1, 0, 0, 0]
                     }
                 }
             ]
