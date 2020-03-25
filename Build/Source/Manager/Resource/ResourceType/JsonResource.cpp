@@ -356,7 +356,7 @@ namespace Engine5
                         }
                         if (space->m_object_manager->m_object_factory->ValidateID(archetype_id))
                         {
-                            created_object = space->m_object_manager->AddObject(name, archetype_id, space->m_component_manager);
+                            created_object = space->m_object_manager->AddObject(name, archetype_id);
                         }
                         else
                         {

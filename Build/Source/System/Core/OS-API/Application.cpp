@@ -63,8 +63,7 @@ namespace Engine5
         m_space_manager->Initialize();
         m_level_manager = new LevelManager();
         m_level_manager->Initialize(this);
-        m_level_manager->AddLevel("Test2");
-        m_level_manager->SetInitialLevel("Test2");
+        m_level_manager->SetInitialLevel("Test");
         //setup missing system parameters
         m_operating_system->SetLevelManager(m_level_manager);
         m_operating_system->SetInput(m_input);

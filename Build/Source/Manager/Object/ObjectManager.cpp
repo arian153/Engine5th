@@ -1,7 +1,7 @@
 #include "ObjectManager.hpp"
 #include "Object.hpp"
 #include "ObjectFactory.hpp"
-#include "../Component/ComponentManager.hpp"
+#include "../Space/Space.hpp"
 
 namespace Engine5
 {
@@ -13,9 +13,10 @@ namespace Engine5
     {
     }
 
-    void ObjectManager::Initialize(ObjectFactory* object_factory)
+    void ObjectManager::Initialize(ObjectFactory* object_factory, Space* space)
     {
         m_object_factory = object_factory;
+        m_space          = space;
     }
 
     void ObjectManager::Shutdown()
@@ -36,23 +37,22 @@ namespace Engine5
         Object* object = m_object_factory->CreateRawObject(name);
         object->m_id   = m_objects.size();
         object->SetManager(this);
+        object->SetManager(m_space->GetComponentManager());
         m_objects.push_back(object);
         m_object_map.emplace(name, object);
         return object;
     }
 
-   
-    Object* ObjectManager::AddObject(const std::string& name, size_t archetype_id, ComponentManager* cmp_m)
+    Object* ObjectManager::AddObject(const std::string& name, size_t archetype_id) const
     {
-        return m_object_factory->CreateArchetypeObject(name, archetype_id, this, cmp_m);
+        return m_object_factory->CreateArchetypeObject(name, archetype_id, m_space);
     }
 
-    Object* ObjectManager::CloneObject(const std::string& name, Object* origin, ComponentManager* cmp_m)
+    Object* ObjectManager::CloneObject(const std::string& name, Object* origin)
     {
-        Object*           cloned_object = AddObject(name);
-        ComponentManager* cmp           = cmp_m == nullptr ? origin->m_component_manager : cmp_m;
-        origin->CloneComponents(cloned_object, cmp);
-        origin->CloneHierarchy(cloned_object, this, cmp);
+        Object* cloned_object = AddObject(name);
+        origin->CloneComponents(cloned_object, m_space->GetComponentManager());
+        origin->CloneHierarchy(cloned_object, this, m_space->GetComponentManager());
         return cloned_object;
     }
 
@@ -243,7 +243,6 @@ namespace Engine5
         return false;
     }
 
-    
     void ObjectManager::ChangeName(Object* object, const std::string& new_name)
     {
         auto ret = m_object_map.equal_range(object->m_name);

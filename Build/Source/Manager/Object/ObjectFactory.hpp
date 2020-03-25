@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class Space;
     class JsonResource;
     class ComponentRegistry;
     class ComponentManager;
@@ -22,7 +23,7 @@ namespace Engine5
 
         Object* CreateRawObject(const std::string& name);
         Object* CreateRawObject(const std::string& name, ObjectManager* object_manager);
-        Object* CreateArchetypeObject(const std::string& name, size_t archetype_id, ObjectManager* object_manager, ComponentManager* component_manager);
+        Object* CreateArchetypeObject(const std::string& name, size_t archetype_id, Space* space);
 
         void AddArchetype(Object* object);
         void AddArchetype(JsonResource* resource);

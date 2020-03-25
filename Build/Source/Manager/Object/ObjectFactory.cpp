@@ -48,11 +48,11 @@ namespace Engine5
         return nullptr;
     }
 
-    Object* ObjectFactory::CreateArchetypeObject(const std::string& name, size_t archetype_id, ObjectManager* object_manager, ComponentManager* component_manager)
+    Object* ObjectFactory::CreateArchetypeObject(const std::string& name, size_t archetype_id, Space* space)
     {
         if (m_archetypes.size() > archetype_id)
         {
-            auto archetype = m_archetypes.at(archetype_id)->Clone(name, object_manager, component_manager);
+            auto archetype = m_archetypes.at(archetype_id)->Clone(name, space);
             return archetype;
         }
         return nullptr;

@@ -29,7 +29,7 @@ namespace Engine5
         if (m_object_manager == nullptr && HasFlag(flag, eSubsystemFlag::ObjectManager))
         {
             m_object_manager = new ObjectManager();
-            m_object_manager->Initialize(obj_factory);
+            m_object_manager->Initialize(obj_factory, this);
         }
         //create scene
         if (m_scene == nullptr && HasFlag(flag, eSubsystemFlag::Scene))
@@ -59,7 +59,7 @@ namespace Engine5
         if (m_object_manager == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::ObjectManager))
         {
             m_object_manager = new ObjectManager();
-            m_object_manager->Initialize(obj_factory);
+            m_object_manager->Initialize(obj_factory, this);
         }
         //create scene
         if (m_scene == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Scene))

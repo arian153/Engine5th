@@ -10,6 +10,7 @@ namespace Json {
 
 namespace Engine5
 {
+    class Space;
     class ComponentManager;
     class ObjectFactory;
     class ObjectManager;
@@ -26,7 +27,7 @@ namespace Engine5
         std::string GetName() const;
         void        SetName(const std::string& name);
 
-        Object* Clone(const std::string& name = "", ObjectManager* obj_m = nullptr, ComponentManager* cmp_m = nullptr);
+        Object* Clone(const std::string& name = "", Space* space = nullptr);
 
         Object* GetChildAt(size_t index) const;
         Object* GetSiblingAt(size_t index) const;

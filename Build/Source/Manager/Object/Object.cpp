@@ -6,6 +6,7 @@
 #include "../../System/Core/Utility/CoreUtility.hpp"
 #include "../Resource/ResourceType/JsonResource.hpp"
 #include "../../External/JSONCPP/json/json.h"
+#include "../Space/Space.hpp"
 
 namespace Engine5
 {
@@ -42,12 +43,11 @@ namespace Engine5
         }
     }
 
-    Object* Object::Clone(const std::string& name, ObjectManager* obj_m, ComponentManager* cmp_m)
+    Object* Object::Clone(const std::string& name, Space* space)
     {
-        ObjectManager*    obj         = obj_m == nullptr ? m_object_manager : obj_m;
-        ComponentManager* cmp         = cmp_m == nullptr ? m_component_manager : cmp_m;
+        ObjectManager*    obj         = space == nullptr ? m_object_manager : space->GetObjectManager();
         std::string       cloned_name = name == "" ? m_name : name;
-        return obj->CloneObject(cloned_name, this, cmp);
+        return obj->CloneObject(cloned_name, this);
     }
 
     Object* Object::GetChildAt(size_t index) const

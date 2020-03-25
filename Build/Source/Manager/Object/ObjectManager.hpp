@@ -14,12 +14,12 @@ namespace Engine5
         ObjectManager();
         ~ObjectManager();
 
-        void Initialize(ObjectFactory* object_factory);
+        void Initialize(ObjectFactory* object_factory, Space* space);
         void Shutdown();
 
         Object* AddObject(const std::string& name);
-        Object* AddObject(const std::string& name, size_t archetype_id, ComponentManager* cmp_m);
-        Object* CloneObject(const std::string& name, Object* origin, ComponentManager* cmp_m = nullptr);
+        Object* AddObject(const std::string& name, size_t archetype_id) const;
+        Object* CloneObject(const std::string& name, Object* origin);
 
         void    FindObjects(const std::string& name, std::vector<Object*>& objects);
         Object* FindObjectBegin(const std::string& name);
@@ -51,6 +51,7 @@ namespace Engine5
         std::unordered_multimap<std::string, Object*> m_object_map;
         std::vector<Object*>                          m_objects;
 
-        ObjectFactory* m_object_factory = nullptr;
+        ObjectFactory*    m_object_factory    = nullptr;
+        Space* m_space = nullptr;
     };
 }
