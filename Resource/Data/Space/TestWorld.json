@@ -8,7 +8,15 @@
     "Objects": [
         {
             "Name": "HelloWorld",
-            "Components": []
+            "Components": [
+                {
+                    "Type" : "TransformComponent"                    ,
+                    "Value" : 
+                    {
+                        "Position" : [1, 1, 1]
+                    }
+                }
+            ]
         }
     ],
     "Settings": {

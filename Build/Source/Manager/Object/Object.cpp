@@ -45,8 +45,8 @@ namespace Engine5
 
     Object* Object::Clone(const std::string& name, Space* space)
     {
-        ObjectManager*    obj         = space == nullptr ? m_object_manager : space->GetObjectManager();
-        std::string       cloned_name = name == "" ? m_name : name;
+        ObjectManager* obj         = space == nullptr ? m_object_manager : space->GetObjectManager();
+        std::string    cloned_name = name == "" ? m_name : name;
         return obj->CloneObject(cloned_name, this);
     }
 
@@ -199,7 +199,8 @@ namespace Engine5
                 //Load Components
                 if (JsonResource::HasMember(*it, "Type") && (*it)["Type"].isString())
                 {
-                    auto created = m_component_manager->Create((*it)["Type"].asString(), this);
+                    std::string type    = "class Engine5::" + (*it)["Type"].asString();
+                    Component*  created = AddComponent(type);
                     if (created != nullptr)
                     {
                         created->Load((*it)["Value"]);
