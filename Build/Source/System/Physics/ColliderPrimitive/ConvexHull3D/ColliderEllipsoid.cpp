@@ -304,6 +304,16 @@ namespace Engine5
         {
             m_scale_factor = data["Scale"].asFloat();
         }
+        if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector3(data[ "Radius" ]))
+        {
+            m_radius = JsonResource::AsVector3(data[ "Radius" ]);
+            m_scaled_radius = m_scale_factor * m_radius;
+        }
+        if (JsonResource::HasMember(data, "Density") && data["Density"].isDouble())
+        {
+            m_density = data["Density"].asFloat();
+            SetMassData(m_density);
+        }
         if (JsonResource::HasMember(data, "Centroid") && JsonResource::IsVector3(data["Centroid"]))
         {
             m_centroid = JsonResource::AsVector3(data["Centroid"]);
@@ -315,10 +325,6 @@ namespace Engine5
         if (JsonResource::HasMember(data, "Inertia") && JsonResource::IsMatrix33(data["Inertia"]))
         {
             m_local_inertia_tensor = JsonResource::AsMatrix33(data["Inertia"]);
-        }
-        if (JsonResource::HasMember(data, "Density") && data["Density"].isDouble())
-        {
-            m_density = data["Density"].asFloat();
         }
         if (JsonResource::HasMember(data, "Material") && data["Material"].isString())
         {
@@ -375,11 +381,6 @@ namespace Engine5
             {
                 m_material = Physics::eMaterial::Velcro;
             }
-        }
-        if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector3(data["Radius"]))
-        {
-            m_radius        = JsonResource::AsVector3(data["Radius"]);
-            m_scaled_radius = m_scale_factor * m_radius;
         }
     }
 

@@ -164,7 +164,7 @@ namespace Engine5
                 collider_data->SetMassData(collider_data->m_density);
             }
             UpdateMassData();
-            UpdateColliderSetBoundingVolume();
+            UpdateBoundingVolume();
         }
     }
 
@@ -176,7 +176,7 @@ namespace Engine5
             collider->m_rigid_body = rigid_body;
             collider->UpdateRigidBody();
         }
-        UpdateColliderSetBoundingVolume();
+        UpdateBoundingVolume();
     }
 
     MassData ColliderSet::GetMassData() const
@@ -246,7 +246,7 @@ namespace Engine5
         SetScale(transform->scale);
     }
 
-    void ColliderSet::UpdateColliderSetBoundingVolume()
+    void ColliderSet::UpdateBoundingVolume()
     {
         if (m_colliders != nullptr)
         {

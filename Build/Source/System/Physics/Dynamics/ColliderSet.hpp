@@ -39,7 +39,7 @@ namespace Engine5
         void UpdateMassData();
         void SyncToTransform(Transform* transform) const;
         void SyncFromTransform(Transform* transform);
-        void UpdateColliderSetBoundingVolume();
+        void UpdateBoundingVolume();
 
         void Clone(ColliderSet* origin, RigidBody* body, World* world);
 

@@ -229,7 +229,7 @@ namespace Engine5
             }
             SetMassData(m_density);
             m_collider_set->UpdateMassData();
-            m_collider_set->UpdateColliderSetBoundingVolume();
+            m_collider_set->UpdateBoundingVolume();
         }
     }
 
@@ -251,7 +251,7 @@ namespace Engine5
             }
             SetMassData(m_density);
             m_collider_set->UpdateMassData();
-            m_collider_set->UpdateColliderSetBoundingVolume();
+            m_collider_set->UpdateBoundingVolume();
         }
     }
 

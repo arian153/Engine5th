@@ -193,7 +193,8 @@ namespace Engine5
                     }
                 }
             }
-            m_collider_set->UpdateColliderSetBoundingVolume();
+            m_collider_set->UpdateMassData();
+            m_collider_set->UpdateBoundingVolume();
         }
         return true;
     }
