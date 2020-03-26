@@ -216,7 +216,9 @@ namespace Engine5
             // compute final local centroid
             m_mass_data.local_centroid *= m_mass_data.inverse_mass;
             // compute local inertia tensor
-            m_mass_data.local_inertia_tensor.SetZero();
+            m_colliders->empty()
+                ? m_mass_data.local_inertia_tensor.SetIdentity()
+                : m_mass_data.local_inertia_tensor.SetZero();
             for (auto& collider_data : *m_colliders)
             {
                 Vector3  r       = m_mass_data.local_centroid - collider_data->WorldCentroid();
