@@ -1,8 +1,13 @@
 {
-    "Flag": [
+    "Create Flag": [
         "ComponentManager",
         "ObjectManager",
         "Scene"
+    ],
+    "Update Flag": [
+        "Scene"
+    ],
+    "FixedUpdate Flag": [
     ],
     "Objects": [
 

@@ -376,9 +376,9 @@ namespace Engine5
 
     bool JsonResource::LoadSpaceFlag(Space* space) const
     {
-        if (HasMember(*m_root_data, "Flag") && (*m_root_data)["Flag"].isArray())
+        if (HasMember(*m_root_data, "Create Flag") && (*m_root_data)["Create Flag"].isArray())
         {
-            for (auto it = (*m_root_data)["Flag"].begin(); it != (*m_root_data)["Flag"].end(); ++it)
+            for (auto it = (*m_root_data)["Create Flag"].begin(); it != (*m_root_data)["Create Flag"].end(); ++it)
             {
                 if (it->isString())
                 {
@@ -398,6 +398,60 @@ namespace Engine5
                     else if (flag == "World")
                     {
                         space->m_creation_flag |= eSubsystemFlag::World;
+                    }
+                }
+            }
+        }
+
+        if (HasMember(*m_root_data, "Update Flag") && (*m_root_data)[ "Update Flag" ].isArray())
+        {
+            for (auto it = (*m_root_data)[ "Update Flag" ].begin(); it != (*m_root_data)[ "Update Flag" ].end(); ++it)
+            {
+                if (it->isString())
+                {
+                    std::string flag = it->asString();
+                    if (flag == "ComponentManager")
+                    {
+                        space->m_update_flag |= eSubsystemFlag::ComponentManager;
+                    }
+                    else if (flag == "ObjectManager")
+                    {
+                        space->m_update_flag |= eSubsystemFlag::ObjectManager;
+                    }
+                    else if (flag == "Scene")
+                    {
+                        space->m_update_flag |= eSubsystemFlag::Scene;
+                    }
+                    else if (flag == "World")
+                    {
+                        space->m_update_flag |= eSubsystemFlag::World;
+                    }
+                }
+            }
+        }
+
+        if (HasMember(*m_root_data, "FixedUpdate Flag") && (*m_root_data)[ "FixedUpdate Flag" ].isArray())
+        {
+            for (auto it = (*m_root_data)[ "FixedUpdate Flag" ].begin(); it != (*m_root_data)[ "FixedUpdate Flag" ].end(); ++it)
+            {
+                if (it->isString())
+                {
+                    std::string flag = it->asString();
+                    if (flag == "ComponentManager")
+                    {
+                        space->m_fixed_update_flag |= eSubsystemFlag::ComponentManager;
+                    }
+                    else if (flag == "ObjectManager")
+                    {
+                        space->m_fixed_update_flag |= eSubsystemFlag::ObjectManager;
+                    }
+                    else if (flag == "Scene")
+                    {
+                        space->m_fixed_update_flag |= eSubsystemFlag::Scene;
+                    }
+                    else if (flag == "World")
+                    {
+                        space->m_fixed_update_flag |= eSubsystemFlag::World;
                     }
                 }
             }

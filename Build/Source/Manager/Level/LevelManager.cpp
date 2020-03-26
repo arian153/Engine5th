@@ -11,6 +11,7 @@
 #include "../../System/Core/Utility/FrameUtility.hpp"
 #include "../../System/Core/Input/InputCommon.hpp"
 #include "../Resource/ResourceManager.hpp"
+#include "../../System/Core/Utility/ConsoleUtility.hpp"
 
 namespace Engine5
 {
@@ -99,11 +100,15 @@ namespace Engine5
             Real time_step = m_application_timer->DeltaTime();
             UpdateLevel(m_level, time_step);
             m_elapsed_time += time_step;
+            
+
             if (m_elapsed_time >= m_fixed_time_step)
             {
+                //Console::ConsoleOut(time_step, m_elapsed_time, m_frame_utility->GetFramePerSecond(), "\n");
                 FixedUpdateLevel(m_level, m_fixed_time_step);
                 m_elapsed_time   = 0.0f;
                 m_b_fixed_update = true;
+                
             }
             RenderLevel(m_level, time_step);
         }

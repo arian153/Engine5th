@@ -71,7 +71,7 @@ namespace Engine5
         UINT   m_back_buffer_count = 2;
         bool   m_enable_msaa       = false;
         UINT   m_msaa_quality      = 0;
-        bool   m_vsync_enabled     = true;
+        bool   m_vsync_enabled     = false;
         UINT   m_numerator;
         UINT   m_denominator;
         size_t m_video_card_memory;

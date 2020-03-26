@@ -64,7 +64,7 @@ namespace Engine5
         void UnloadLevel(Level* level) const;
 
     private:
-        Real m_fixed_time_step = 0.0f;
+        Real m_fixed_time_step = 0.02f;
         Real m_elapsed_time    = 0.0f;
         bool m_b_fixed_update  = false;
 

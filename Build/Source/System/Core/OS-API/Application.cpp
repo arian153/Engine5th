@@ -17,6 +17,7 @@
 #include "../Utility/FileUtility.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
+#include "../Utility/ConsoleUtility.hpp"
 
 namespace Engine5
 {
@@ -67,6 +68,8 @@ namespace Engine5
         //setup missing system parameters
         m_operating_system->SetLevelManager(m_level_manager);
         m_operating_system->SetInput(m_input);
+
+        Console::CreateConsole();
     }
 
     void Application::Update() const
@@ -148,6 +151,7 @@ namespace Engine5
             delete m_operating_system;
             m_operating_system = nullptr;
         }
+        Console::DestroyConsole();
     }
 
     Application* Application::GetApplication()
