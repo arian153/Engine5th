@@ -10,6 +10,7 @@ namespace Engine5
         {
             auto created = m_component_manager->Create(type, this);
             m_components.emplace(type, created);
+            created->Initialize();
 
             return static_cast<T*>(created);
         }

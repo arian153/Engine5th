@@ -13,6 +13,7 @@ namespace Engine5
 
     void RigidBody::Integrate(Real dt)
     {
+        SyncFromTransform(m_transform);
         // integrate linear velocity
         m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * dt;
         // integrate angular velocity
@@ -36,6 +37,7 @@ namespace Engine5
         // update physical properties
         UpdateOrientation();
         UpdatePositionFromGlobalCentroid();
+        SyncToTransform(m_transform);
     }
 
     void RigidBody::UpdateGlobalCentroidFromPosition()
@@ -270,16 +272,30 @@ namespace Engine5
 
     void RigidBody::SyncToTransform(Transform* transform) const
     {
-        transform->orientation = m_orientation;
-        transform->position    = m_position;
+        if (transform != nullptr)
+        {
+            transform->orientation = m_orientation;
+            transform->position    = m_position;
+        }
     }
 
     void RigidBody::SyncFromTransform(Transform* transform)
     {
-        m_position    = transform->position;
-        m_orientation = transform->orientation;
-        UpdateGlobalCentroidFromPosition();
-        UpdateGlobalInertiaTensor();
+        if (transform != nullptr)
+        {
+            if (m_position != transform->position || m_orientation != transform->orientation)
+            {
+                m_position    = transform->position;
+                m_orientation = transform->orientation;
+                UpdateGlobalCentroidFromPosition();
+                UpdateGlobalInertiaTensor();
+            }
+        }
+    }
+
+    void RigidBody::SetTransform(Transform* transform)
+    {
+        m_transform = transform;
     }
 
     void RigidBody::Clone(RigidBody* origin)

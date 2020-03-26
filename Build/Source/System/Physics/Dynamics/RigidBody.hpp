@@ -69,7 +69,7 @@ namespace Engine5
 
         void SyncToTransform(Transform* transform) const;
         void SyncFromTransform(Transform* transform);
-
+        void SetTransform(Transform* transform);
         void Clone(RigidBody* origin);
 
     private:
@@ -100,5 +100,6 @@ namespace Engine5
 
         //others
         eMotionMode m_motion_mode = eMotionMode::Dynamic;
+        Transform*  m_transform   = nullptr;
     };
 }

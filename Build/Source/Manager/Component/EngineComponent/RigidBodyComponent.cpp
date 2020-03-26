@@ -5,6 +5,7 @@
 #include "TransformComponent.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
+#include "../../../System/Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -39,21 +40,15 @@ namespace Engine5
             if (m_owner->HasComponent<TransformComponent>())
             {
                 m_transform = m_owner->GetComponent<TransformComponent>()->GetTransform();
+                m_rigid_body->SetTransform(m_transform);
+                m_rigid_body->SyncFromTransform(m_transform);
             }
         }
     }
 
     void RigidBodyComponent::Update(Real dt)
     {
-        if (m_transform != nullptr)
-        {
-            m_rigid_body->SyncFromTransform(m_transform);
-        }
-        m_rigid_body->Integrate(dt);
-        if (m_transform != nullptr)
-        {
-            m_rigid_body->SyncToTransform(m_transform);
-        }
+        E5_UNUSED_PARAM(dt);
     }
 
     void RigidBodyComponent::Shutdown()

@@ -252,6 +252,7 @@ namespace Engine5
         if (found == m_components.end())
         {
             m_components.emplace(type, component);
+            component->Initialize();
             return component;
         }
         return nullptr;
@@ -264,6 +265,7 @@ namespace Engine5
         {
             auto created = m_component_manager->Create(type, this);
             m_components.emplace(type, created);
+            created->Initialize();
             return created;
         }
         return nullptr;

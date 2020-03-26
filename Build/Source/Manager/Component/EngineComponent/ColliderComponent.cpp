@@ -55,9 +55,12 @@ namespace Engine5
 
     void ColliderComponent::Shutdown()
     {
+        Unsubscribe();
         if (m_collider_set != nullptr)
         {
             m_collider_set->Shutdown();
+            delete m_collider_set;
+            m_collider_set = nullptr;
         }
     }
 
