@@ -11,6 +11,8 @@ namespace Engine5
         RigidBody();
         ~RigidBody();
 
+        void Shutdown() const;
+
         void Integrate(Real dt);
 
         void UpdateGlobalCentroidFromPosition();
@@ -99,7 +101,8 @@ namespace Engine5
         Matrix33 m_global_inverse_inertia_tensor;
 
         //others
-        eMotionMode m_motion_mode = eMotionMode::Dynamic;
-        Transform*  m_transform   = nullptr;
+        eMotionMode         m_motion_mode = eMotionMode::Dynamic;
+        Transform*          m_transform   = nullptr;
+        RigidBodyComponent* m_component   = nullptr;
     };
 }

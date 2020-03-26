@@ -10,6 +10,7 @@
 #include "../ColliderPrimitive/ConvexHull3D/ColliderSphere.hpp"
 #include "../ColliderPrimitive/ConvexHull3D/ColliderTetrahedron.hpp"
 #include "../ColliderPrimitive/ConvexHull3D/ColliderTruncated.hpp"
+#include "../../../Manager/Component/EngineComponent/ColliderComponent.hpp"
 
 namespace Engine5
 {
@@ -43,6 +44,10 @@ namespace Engine5
             m_colliders->clear();
             delete m_colliders;
             m_colliders = nullptr;
+        }
+        if (m_component != nullptr)
+        {
+            m_component->m_collider_set = nullptr;
         }
     }
 

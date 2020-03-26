@@ -83,6 +83,7 @@ namespace Engine5
         m_pairs.clear();
         for (auto& body : m_rigid_bodies)
         {
+            body->Shutdown();
             delete body;
             body = nullptr;
         }

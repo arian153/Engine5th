@@ -38,6 +38,7 @@ namespace Engine5
     private:
         friend class ColliderFactory;
         friend class RigidBodyComponent;
+        friend class ColliderSet;
 
     private:
         explicit ColliderComponent(Object* owner);

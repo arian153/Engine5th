@@ -20,6 +20,7 @@ namespace Engine5
             World* world   = m_space != nullptr ? m_space->GetWorld() : nullptr;
             m_collider_set = new ColliderSet(world);
             m_collider_set->Initialize();
+            m_collider_set->m_component = this;
             Subscribe();
         }
         if (m_rigid_body != nullptr)
@@ -211,7 +212,7 @@ namespace Engine5
 
     void ColliderComponent::Unsubscribe()
     {
-        if (m_space != nullptr)
+        if (m_space != nullptr && m_collider_set != nullptr)
         {
             m_space->GetWorld()->RemoveColliderSet(m_collider_set);
         }

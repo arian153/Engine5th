@@ -1,5 +1,6 @@
 #include "RigidBody.hpp"
 #include "World.hpp"
+#include "../../../Manager/Component/EngineComponent/RigidBodyComponent.hpp"
 
 namespace Engine5
 {
@@ -9,6 +10,15 @@ namespace Engine5
 
     RigidBody::~RigidBody()
     {
+    }
+
+    void RigidBody::Shutdown() const
+    {
+        //disconnect rigid body
+        if (m_component != nullptr)
+        {
+            m_component->m_rigid_body = nullptr;
+        }
     }
 
     void RigidBody::Integrate(Real dt)

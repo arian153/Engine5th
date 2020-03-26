@@ -14,7 +14,9 @@ namespace Engine5
 
     Component* CameraFactory::Create(Object* owner, Space* space)
     {
-        return new CameraComponent(owner);
+        auto create = new CameraComponent(owner);
+        create->SetSpace(space);
+        return create;
     }
 
     Component* CameraFactory::Clone(Component* origin, Object* dest, Space* space)

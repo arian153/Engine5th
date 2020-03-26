@@ -18,6 +18,7 @@ namespace Engine5
         if (m_rigid_body == nullptr)
         {
             m_rigid_body = new RigidBody();
+            m_rigid_body->m_component = this;
             Subscribe();
         }
         if (m_collider_set != nullptr)
@@ -56,6 +57,7 @@ namespace Engine5
         Unsubscribe();
         if (m_rigid_body != nullptr)
         {
+            m_rigid_body->Shutdown();
             delete m_rigid_body;
             m_rigid_body = nullptr;
         }
@@ -266,7 +268,7 @@ namespace Engine5
 
     void RigidBodyComponent::Unsubscribe()
     {
-        if (m_space != nullptr)
+        if (m_space != nullptr && m_rigid_body != nullptr)
         {
             m_space->GetWorld()->RemoveRigidBody(m_rigid_body);
         }

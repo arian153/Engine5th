@@ -14,7 +14,9 @@ namespace Engine5
 
     Component* ColliderFactory::Create(Object* owner, Space* space)
     {
-        return new ColliderComponent(owner);
+        auto create = new ColliderComponent(owner);
+        create->SetSpace(space);
+        return create;
     }
 
     Component* ColliderFactory::Clone(Component* origin, Object* dest, Space* space)

@@ -100,7 +100,6 @@ namespace Engine5
             Real time_step = m_application_timer->DeltaTime();
             UpdateLevel(m_level, time_step);
             m_elapsed_time += time_step;
-            
 
             if (m_elapsed_time >= m_fixed_time_step)
             {

@@ -48,6 +48,8 @@ namespace Engine5
     private:
         friend class RigidBodyFactory;
         friend class ColliderComponent;
+        friend class RigidBody;
+
     private:
         explicit RigidBodyComponent(Object* owner);
         void     Clone(RigidBodyComponent* origin);

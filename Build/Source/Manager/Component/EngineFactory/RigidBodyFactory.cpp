@@ -14,7 +14,9 @@ namespace Engine5
 
     Component* RigidBodyFactory::Create(Object* owner, Space* space)
     {
-        return new RigidBodyComponent(owner);
+        auto create = new RigidBodyComponent(owner);
+        create->SetSpace(space);
+        return create;
     }
 
     Component* RigidBodyFactory::Clone(Component* origin, Object* dest, Space* space)

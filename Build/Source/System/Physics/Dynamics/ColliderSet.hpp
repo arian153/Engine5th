@@ -53,11 +53,12 @@ namespace Engine5
         friend class ContactManifold;
 
     private:
-        RigidBody*   m_rigid_body = nullptr;
-        World*       m_world      = nullptr;
-        MassData     m_mass_data;
-        Vector3      m_scale;
-        BoundingAABB m_bounding_volume;
+        RigidBody*         m_rigid_body = nullptr;
+        World*             m_world      = nullptr;
+        MassData           m_mass_data;
+        Vector3            m_scale;
+        BoundingAABB       m_bounding_volume;
+        ColliderComponent* m_component = nullptr;
 
         //primitives
         std::vector<ColliderPrimitive*>* m_colliders = nullptr;
