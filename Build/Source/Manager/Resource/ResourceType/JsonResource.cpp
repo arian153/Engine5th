@@ -10,6 +10,7 @@
 #include "../../Object/Object.hpp"
 #include "../../Object/ObjectManager.hpp"
 #include "../../Object/ObjectFactory.hpp"
+#include "../../../System/Graphics/DataType/Color.hpp"
 
 namespace Engine5
 {
@@ -199,6 +200,16 @@ namespace Engine5
                 data[3].isNumeric();
     }
 
+    bool JsonResource::IsColor(const Json::Value& data)
+    {
+        return data.isArray() &&
+                data.size() == 4 &&
+                data[0].isNumeric() &&
+                data[1].isNumeric() &&
+                data[2].isNumeric() &&
+                data[3].isNumeric();
+    }
+
     Vector2 JsonResource::AsVector2(const Json::Value& data)
     {
         return Vector2(data[0].asFloat(), data[1].asFloat());
@@ -243,6 +254,11 @@ namespace Engine5
     Quaternion JsonResource::AsQuaternionXYZW(const Json::Value& data)
     {
         return Quaternion(data[3].asFloat(), data[0].asFloat(), data[1].asFloat(), data[2].asFloat());
+    }
+
+    Color JsonResource::AsColor(const Json::Value& data)
+    {
+        return Color(data[0].asFloat(), data[1].asFloat(), data[2].asFloat(), data[3].asFloat());
     }
 
     bool JsonResource::LoadSetting(ApplicationSetting& app_setting) const
@@ -330,6 +346,71 @@ namespace Engine5
                     space->GetScene()->SetProjectionType(eProjectionType::OrthoGraphic);
                 }
             }
+            if (HasMember(setting, "Draw Broad Phase"))
+            {
+                ColorFlag flag;
+                Json::Value value = setting[ "Draw Broad Phase" ];
+                if (HasMember(value, "Color") && IsColor(value["Color"]))
+                {
+                    flag.color = AsColor(value["Color"]);
+                }
+                if (HasMember(value, "Flag") && value["Flag"].isBool())
+                {
+                    flag.b_flag = value["Flag"].asBool();
+                }
+            }
+            if (HasMember(setting, "Draw Contact"))
+            {
+                ColorFlag flag;
+                Json::Value value = setting[ "Draw Contact" ];
+                if (HasMember(value, "Color") && IsColor(value[ "Color" ]))
+                {
+                    flag.color = AsColor(value[ "Color" ]);
+                }
+                if (HasMember(value, "Flag") && value[ "Flag" ].isBool())
+                {
+                    flag.b_flag = value[ "Flag" ].asBool();
+                }
+            }
+            if (HasMember(setting, "Draw EPA"))
+            {
+                ColorFlag flag;
+                Json::Value value = setting[ "Draw EPA" ];
+                if (HasMember(value, "Color") && IsColor(value[ "Color" ]))
+                {
+                    flag.color = AsColor(value[ "Color" ]);
+                }
+                if (HasMember(value, "Flag") && value[ "Flag" ].isBool())
+                {
+                    flag.b_flag = value[ "Flag" ].asBool();
+                }
+            }
+            if (HasMember(setting, "Draw GJK"))
+            {
+                ColorFlag flag;
+                Json::Value value = setting[ "Draw GJK" ];
+                if (HasMember(value, "Color") && IsColor(value[ "Color" ]))
+                {
+                    flag.color = AsColor(value[ "Color" ]);
+                }
+                if (HasMember(value, "Flag") && value[ "Flag" ].isBool())
+                {
+                    flag.b_flag = value[ "Flag" ].asBool();
+                }
+            }
+            if (HasMember(setting, "Draw Primitive"))
+            {
+                ColorFlag flag;
+                Json::Value value = setting[ "Draw Primitive" ];
+                if (HasMember(value, "Color") && IsColor(value[ "Color" ]))
+                {
+                    flag.color = AsColor(value[ "Color" ]);
+                }
+                if (HasMember(value, "Flag") && value[ "Flag" ].isBool())
+                {
+                    flag.b_flag = value[ "Flag" ].asBool();
+                }
+            }
         }
         if (HasMember(*m_root_data, "Objects") && (*m_root_data)["Objects"].isArray())
         {
@@ -402,10 +483,9 @@ namespace Engine5
                 }
             }
         }
-
-        if (HasMember(*m_root_data, "Update Flag") && (*m_root_data)[ "Update Flag" ].isArray())
+        if (HasMember(*m_root_data, "Update Flag") && (*m_root_data)["Update Flag"].isArray())
         {
-            for (auto it = (*m_root_data)[ "Update Flag" ].begin(); it != (*m_root_data)[ "Update Flag" ].end(); ++it)
+            for (auto it = (*m_root_data)["Update Flag"].begin(); it != (*m_root_data)["Update Flag"].end(); ++it)
             {
                 if (it->isString())
                 {
@@ -429,10 +509,9 @@ namespace Engine5
                 }
             }
         }
-
-        if (HasMember(*m_root_data, "FixedUpdate Flag") && (*m_root_data)[ "FixedUpdate Flag" ].isArray())
+        if (HasMember(*m_root_data, "FixedUpdate Flag") && (*m_root_data)["FixedUpdate Flag"].isArray())
         {
-            for (auto it = (*m_root_data)[ "FixedUpdate Flag" ].begin(); it != (*m_root_data)[ "FixedUpdate Flag" ].end(); ++it)
+            for (auto it = (*m_root_data)["FixedUpdate Flag"].begin(); it != (*m_root_data)["FixedUpdate Flag"].end(); ++it)
             {
                 if (it->isString())
                 {

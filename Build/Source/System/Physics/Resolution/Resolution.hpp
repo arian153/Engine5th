@@ -8,6 +8,7 @@
 
 namespace Engine5
 {
+    class ColorFlag;
     class Constraints;
     class ContactPoint;
     class ContactManifold;
@@ -20,16 +21,16 @@ namespace Engine5
         void Initialize();
         void Shutdown();
 
-        void Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt);
-
+        void Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt, const ColorFlag& draw_contact);
+        void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
     private:
         bool m_b_warm_starting = true;
 
         size_t m_velocity_iteration = 8;
         size_t m_position_iteration = 3;
 
-        Physics::FrictionUtility m_friction;
+        Physics::FrictionUtility        m_friction;
         std::vector<ContactConstraints> m_contacts;
-
+        PrimitiveRenderer*              m_primitive_renderer = nullptr;
     };
 }

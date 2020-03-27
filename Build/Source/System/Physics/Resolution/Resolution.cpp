@@ -25,7 +25,7 @@ namespace Engine5
         m_friction.Shutdown();
     }
 
-    void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
+    void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt, const ColorFlag& draw_contact)
     {
         //resolution phase
         //solve contact manifold
@@ -52,6 +52,7 @@ namespace Engine5
         for (auto& contact : m_contacts)
         {
             contact.Apply();
+            contact.Draw(m_primitive_renderer, draw_contact);
         }
         //integration phase
         for (auto& body : *rigid_bodies)
@@ -66,5 +67,11 @@ namespace Engine5
                 contact.SolvePositionConstraints();
             }
         }
+        m_contacts.clear();
+    }
+
+    void Resolution::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
+    {
+        m_primitive_renderer = primitive_renderer;
     }
 }

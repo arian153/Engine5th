@@ -57,7 +57,7 @@ namespace Engine5
         ColorFlag m_draw_gjk;
         ColorFlag m_draw_epa;
         ColorFlag m_draw_contact;
-        ColorFlag m_draw_collider;
-        ColorFlag m_draw_bounding_volume;
+        ColorFlag m_draw_primitive;
+        ColorFlag m_draw_broad_phase;
     };
 }

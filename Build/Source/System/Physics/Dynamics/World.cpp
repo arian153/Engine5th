@@ -54,14 +54,14 @@ namespace Engine5
         //broad phase
         m_broad_phase->Update(dt);
         m_broad_phase->ComputePairs(m_pairs);
-        if(m_draw_collider.b_flag || m_draw_bounding_volume.b_flag)
+        if (m_draw_primitive.b_flag || m_draw_broad_phase.b_flag)
         {
-            m_broad_phase->Draw();
+            m_broad_phase->Draw(m_primitive_renderer, m_draw_broad_phase, m_draw_primitive);
         }
         //narrow phase
         m_narrow_phase->GenerateContact(m_pairs, m_manifold_table, m_draw_gjk, m_draw_epa);
         //resolution
-        m_resolution_phase->Solve(m_manifold_table, &m_rigid_bodies, dt);
+        m_resolution_phase->Solve(m_manifold_table, &m_rigid_bodies, dt, m_draw_contact);
     }
 
     void World::Shutdown()
@@ -137,26 +137,42 @@ namespace Engine5
 
     void World::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
     {
+        if (primitive_renderer != nullptr)
+        {
+            m_primitive_renderer = primitive_renderer;
+            m_narrow_phase->SetPrimitiveRenderer(primitive_renderer);
+            m_resolution_phase->SetPrimitiveRenderer(primitive_renderer);
+        }
     }
 
     void World::SetDrawFlagGJK(bool b_draw, const Color& color)
     {
+        m_draw_gjk.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
+        m_draw_gjk.color  = color;
     }
 
     void World::SetDrawFlagEPA(bool b_draw, const Color& color)
     {
+        m_draw_epa.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
+        m_draw_epa.color  = color;
     }
 
     void World::SetDrawFlagContact(bool b_draw, const Color& color)
     {
+        m_draw_contact.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
+        m_draw_contact.color  = color;
     }
 
     void World::SetDrawFlagCollider(bool b_draw, const Color& color)
     {
+        m_draw_primitive.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
+        m_draw_primitive.color  = color;
     }
 
     void World::SetDrawFlagBP(bool b_draw, const Color& color)
     {
+        m_draw_broad_phase.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
+        m_draw_broad_phase.color  = color;
     }
 
     ColliderPrimitive* World::CreateCollider(ColliderSet* collider_set, eColliderType type) const

@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class ColorFlag;
     class ColliderPrimitive;
     class ContactPoint;
     class ContactManifold;
@@ -74,6 +75,7 @@ namespace Engine5
         void Initialize() override;
         void Solve(Real dt) override;
         void Apply() override;
+        void Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& draw_contact) const;
 
         void InitializeContactPoint(ContactPoint& contact_point) const;
         void SolveContactPoint(ContactPoint& contact_point);
@@ -87,6 +89,7 @@ namespace Engine5
         static void SolvePositionConstraints(const ContactManifold& manifold);
 
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
+
 
     private:
         Physics::FrictionUtility* m_friction_utility = nullptr;

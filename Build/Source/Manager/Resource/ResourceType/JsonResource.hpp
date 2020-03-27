@@ -54,6 +54,7 @@ namespace Engine5
         static bool IsMatrix33(const Json::Value& data);
         static bool IsMatrix44(const Json::Value& data);
         static bool IsQuaternion(const Json::Value& data);
+        static bool IsColor(const Json::Value& data);
 
         static Vector2    AsVector2(const Json::Value& data);
         static Vector3    AsVector3(const Json::Value& data);
@@ -63,6 +64,7 @@ namespace Engine5
         static Matrix44   AsMatrix44(const Json::Value& data);
         static Quaternion AsQuaternionRIJK(const Json::Value& data);
         static Quaternion AsQuaternionXYZW(const Json::Value& data);
+        static Color      AsColor(const Json::Value& data);
 
     private:
         bool LoadSetting(ApplicationSetting& app_setting) const;

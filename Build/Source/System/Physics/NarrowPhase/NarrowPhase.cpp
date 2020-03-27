@@ -82,13 +82,7 @@ namespace Engine5
                     ////draw contact result.
                     //if (contact_flag.b_flag)
                     //{
-                    //    Vector3    pos_a = new_contact_data.global_position_a;
-                    //    Vector3    pos_b = new_contact_data.global_position_b;
-                    //    Quaternion no_rotation;
-                    //    m_primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), eRenderingMode::Face, contact_flag.color);
-                    //    m_primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), eRenderingMode::Face, contact_flag.color);
-                    //    m_primitive_renderer->DrawSegment(pos_a, pos_a + new_contact_data.normal, contact_flag.color);
-                    //    m_primitive_renderer->DrawSegment(pos_b, pos_b + new_contact_data.normal, contact_flag.color);
+                   
                     //}
                 }
                 else

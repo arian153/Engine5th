@@ -51,6 +51,26 @@
         }
     ],
     "Settings": {
+        "Draw Broad Phase": {
+            "Color": [ 1, 1, 1, 1 ],
+            "Flag": true
+        },
+        "Draw Contact": {
+            "Color": [ 1, 1, 1, 1 ],
+            "Flag": true
+        },
+        "Draw EPA": {
+            "Color": [ 1, 1, 1, 1 ],
+            "Flag": false
+        },
+        "Draw GJK": {
+            "Color": [ 1, 1, 1, 1 ],
+            "Flag": false
+        },
+        "Draw Primitive": {
+            "Color": [ 1, 1, 1, 1 ],
+            "Flag": true
+        },
         "ProjectionMatrix": "Perspective"
     },
     "Type": "Space"
