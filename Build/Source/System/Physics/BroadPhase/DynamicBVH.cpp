@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 #include <queue>
+#include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
@@ -86,8 +87,7 @@ namespace Engine5
             {
                 // grab all invalid nodes
                 m_invalid_nodes.clear();
-                UpdateNodeHelper(m_root, m_invalid_nodes);
-
+                UpdateNodeRecursive(m_root, m_invalid_nodes);
                 // re-insert all invalid nodes
                 for (DynamicBVHNode* node : m_invalid_nodes)
                 {
@@ -100,16 +100,14 @@ namespace Engine5
                                                               ? &parent->parent->children[0]
                                                               : &parent->parent->children[1])
                                                        : &m_root;
-
                     // replace parent with sibling
                     // root has null parent
                     sibling->parent = parent->parent ? parent->parent : nullptr;
                     *parent_link    = sibling;
                     delete parent;
-
                     // re-insert node
                     node->UpdateAABB(m_margin);
-                    InsertNode(node, &m_root);
+                    InsertNodeRecursive(node, &m_root);
                 }
                 m_invalid_nodes.clear();
             }
@@ -118,12 +116,12 @@ namespace Engine5
 
     void DynamicBVH::Shutdown()
     {
-        ShutdownNode(m_root);
+        ShutdownNodeRecursive(m_root);
     }
 
     void DynamicBVH::Copy(BroadPhase* other)
     {
-        CopyNode(m_root, other);
+        CopyNodeRecursive(m_root, other);
     }
 
     void DynamicBVH::Add(BoundingAABB* aabb)
@@ -134,7 +132,7 @@ namespace Engine5
             DynamicBVHNode* node = new DynamicBVHNode();
             node->SetLeaf(aabb);
             node->UpdateAABB(m_margin);
-            InsertNode(node, &m_root);
+            InsertNodeRecursive(node, &m_root);
         }
         else
         {
@@ -151,22 +149,22 @@ namespace Engine5
         // remove two-way link
         node->data       = nullptr;
         aabb->m_userdata = nullptr;
-        RemoveNode(node);
+        RemoveNodeRecursive(node);
     }
 
     void DynamicBVH::Clear()
     {
-        ClearNode(m_root);
+        ClearNodeRecursive(m_root);
     }
 
     void DynamicBVH::Release()
     {
-        ReleaseNode(m_root);
+        ReleaseNodeRecursive(m_root);
     }
 
-    void DynamicBVH::Draw(PrimitiveRenderer* primitive_renderer, const Color& broad_phase_color, const Color& primitive_color)
+    void DynamicBVH::Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
     {
-        DrawNode(m_root, primitive_renderer, broad_phase_color, primitive_color);
+        DrawNodeRecursive(m_root, primitive_renderer, broad_phase_color, primitive_color);
     }
 
     void DynamicBVH::ComputePairs(std::list<ColliderPair>& result)
@@ -175,9 +173,9 @@ namespace Engine5
         if (m_root == nullptr || m_root->IsLeaf())
             return;
         // clear Node::childrenCrossed flags
-        ClearChildrenCrossFlagHelper(m_root);
+        ClearChildrenCrossFlagRecursive(m_root);
         // base recursive call
-        ComputePairsHelper(m_root->children[0], m_root->children[1], result);
+        ComputePairsRecursive(m_root->children[0], m_root->children[1], result);
     }
 
     ColliderPrimitive* DynamicBVH::Pick(const Vector3& point) const
@@ -382,7 +380,7 @@ namespace Engine5
         }
     }
 
-    void DynamicBVH::UpdateNodeHelper(DynamicBVHNode* node, std::vector<DynamicBVHNode*>& invalid_nodes)
+    void DynamicBVH::UpdateNodeRecursive(DynamicBVHNode* node, std::vector<DynamicBVHNode*>& invalid_nodes)
     {
         if (node->IsLeaf())
         {
@@ -401,12 +399,12 @@ namespace Engine5
         }
         else
         {
-            UpdateNodeHelper(node->children[0], invalid_nodes);
-            UpdateNodeHelper(node->children[1], invalid_nodes);
+            UpdateNodeRecursive(node->children[0], invalid_nodes);
+            UpdateNodeRecursive(node->children[1], invalid_nodes);
         }
     }
 
-    void DynamicBVH::InsertNode(DynamicBVHNode* node, DynamicBVHNode** parent) const
+    void DynamicBVH::InsertNodeRecursive(DynamicBVHNode* node, DynamicBVHNode** parent) const
     {
         DynamicBVHNode* p = *parent;
         if (p->IsLeaf() == true)
@@ -424,23 +422,21 @@ namespace Engine5
             BoundingAABB* aabb1        = &p->children[1]->aabb;
             Real          volume_diff0 = aabb0->Union(node->aabb).Volume() - aabb0->Volume();
             Real          volume_diff1 = aabb1->Union(node->aabb).Volume() - aabb1->Volume();
-
             // insert to the child that gives less volume increase
             if (volume_diff0 < volume_diff1)
             {
-                InsertNode(node, &p->children[0]);
+                InsertNodeRecursive(node, &p->children[0]);
             }
             else
             {
-                InsertNode(node, &p->children[1]);
+                InsertNodeRecursive(node, &p->children[1]);
             }
         }
-
         // update parent AABB (propagates back up the recursion stack)
         (*parent)->UpdateAABB(m_margin);
     }
 
-    void DynamicBVH::RemoveNode(DynamicBVHNode* node)
+    void DynamicBVH::RemoveNodeRecursive(DynamicBVHNode* node)
     {
         // replace parent with sibling, remove parent node
         DynamicBVHNode* parent = node->parent;
@@ -472,34 +468,34 @@ namespace Engine5
         }
     }
 
-    void DynamicBVH::ClearNode(DynamicBVHNode* node)
+    void DynamicBVH::ClearNodeRecursive(DynamicBVHNode* node)
     {
         if (node != nullptr)
         {
             if (node->children[0] != nullptr)
             {
-                ClearNode(node->children[0]);
+                ClearNodeRecursive(node->children[0]);
             }
             if (node->children[1] != nullptr)
             {
-                ClearNode(node->children[1]);
+                ClearNodeRecursive(node->children[1]);
             }
             delete node;
             node = nullptr;
         }
     }
 
-    void DynamicBVH::ReleaseNode(DynamicBVHNode* node)
+    void DynamicBVH::ReleaseNodeRecursive(DynamicBVHNode* node)
     {
         if (node != nullptr)
         {
             if (node->children[0] != nullptr)
             {
-                ReleaseNode(node->children[0]);
+                ReleaseNodeRecursive(node->children[0]);
             }
             if (node->children[1] != nullptr)
             {
-                ReleaseNode(node->children[1]);
+                ReleaseNodeRecursive(node->children[1]);
             }
             if (node->data != nullptr)
             {
@@ -510,17 +506,17 @@ namespace Engine5
         }
     }
 
-    void DynamicBVH::ShutdownNode(DynamicBVHNode* node)
+    void DynamicBVH::ShutdownNodeRecursive(DynamicBVHNode* node)
     {
         if (node != nullptr)
         {
             if (node->children[0] != nullptr)
             {
-                ShutdownNode(node->children[0]);
+                ShutdownNodeRecursive(node->children[0]);
             }
             if (node->children[1] != nullptr)
             {
-                ShutdownNode(node->children[1]);
+                ShutdownNodeRecursive(node->children[1]);
             }
             if (node->data != nullptr)
             {
@@ -533,17 +529,17 @@ namespace Engine5
         }
     }
 
-    void DynamicBVH::CopyNode(DynamicBVHNode* node, BroadPhase* other)
+    void DynamicBVH::CopyNodeRecursive(DynamicBVHNode* node, BroadPhase* other)
     {
         if (node != nullptr)
         {
             if (node->children[0] != nullptr)
             {
-                CopyNode(node->children[0], other);
+                CopyNodeRecursive(node->children[0], other);
             }
             if (node->children[1] != nullptr)
             {
-                CopyNode(node->children[1], other);
+                CopyNodeRecursive(node->children[1], other);
             }
             if (node->data != nullptr)
             {
@@ -552,39 +548,36 @@ namespace Engine5
         }
     }
 
-    void DynamicBVH::DrawNode(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const Color& broad_phase_color, const Color& primitive_color)
+    void DynamicBVH::DrawNodeRecursive(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
     {
         if (node != nullptr)
         {
             if (node->IsLeaf() == true)
             {
-                if (node->data != nullptr)
+                if (node->data != nullptr && primitive_color.b_flag)
                 {
                     if (node->data->GetCollider() != nullptr)
                     {
-                        //node->data->GetCollider()->DrawWireframe(primitive_renderer, primitive_color);
-                        //node->data->GetCollider()->GetRigidBody()->GetTransform()->DrawOrientation(primitive_renderer, Color(1.0f, 0.7f, 0.0f));
-                        //node->data->GetCollider()->GetRigidBody()->GetTransform()->DrawBasis(primitive_renderer);
+                        node->data->GetCollider()->Draw(primitive_renderer, eRenderingMode::Line, primitive_color.color);
                     }
                 }
-                //primitive_renderer->DrawBoxWireFrame(node->aabb.Center(), node->aabb.Size(), Quaternion(), broad_phase_color);
             }
-            else
-            {
-                //primitive_renderer->DrawBoxWireFrame(node->aabb.Center(), node->aabb.Size(), Quaternion(), broad_phase_color);
-            }
+
+            if (broad_phase_color.b_flag)
+                primitive_renderer->DrawBox(node->aabb.Center(), Quaternion(), node->aabb.Size(), eRenderingMode::Line, broad_phase_color.color);
+
             if (node->children[0] != nullptr)
             {
-                DrawNode(node->children[0], primitive_renderer, broad_phase_color, primitive_color);
+                DrawNodeRecursive(node->children[0], primitive_renderer, broad_phase_color, primitive_color);
             }
             if (node->children[1] != nullptr)
             {
-                DrawNode(node->children[1], primitive_renderer, broad_phase_color, primitive_color);
+                DrawNodeRecursive(node->children[1], primitive_renderer, broad_phase_color, primitive_color);
             }
         }
     }
 
-    void DynamicBVH::ComputePairsHelper(DynamicBVHNode* n0, DynamicBVHNode* n1, std::list<ColliderPair>& result)
+    void DynamicBVH::ComputePairsRecursive(DynamicBVHNode* n0, DynamicBVHNode* n1, std::list<ColliderPair>& result)
     {
         if (n0->IsLeaf() == true)
         {
@@ -599,8 +592,8 @@ namespace Engine5
             else // 1 branch / 1 leaf, 2 cross checks
             {
                 CrossChildren(n1, result);
-                ComputePairsHelper(n0, n1->children[0], result);
-                ComputePairsHelper(n0, n1->children[1], result);
+                ComputePairsRecursive(n0, n1->children[0], result);
+                ComputePairsRecursive(n0, n1->children[1], result);
             }
         }
         else
@@ -609,28 +602,28 @@ namespace Engine5
             if (n1->IsLeaf() == true)
             {
                 CrossChildren(n0, result);
-                ComputePairsHelper(n0->children[0], n1, result);
-                ComputePairsHelper(n0->children[1], n1, result);
+                ComputePairsRecursive(n0->children[0], n1, result);
+                ComputePairsRecursive(n0->children[1], n1, result);
             }
             else // 2 branches, 4 cross checks
             {
                 CrossChildren(n0, result);
                 CrossChildren(n1, result);
-                ComputePairsHelper(n0->children[0], n1->children[0], result);
-                ComputePairsHelper(n0->children[0], n1->children[1], result);
-                ComputePairsHelper(n0->children[1], n1->children[0], result);
-                ComputePairsHelper(n0->children[1], n1->children[1], result);
+                ComputePairsRecursive(n0->children[0], n1->children[0], result);
+                ComputePairsRecursive(n0->children[0], n1->children[1], result);
+                ComputePairsRecursive(n0->children[1], n1->children[0], result);
+                ComputePairsRecursive(n0->children[1], n1->children[1], result);
             }
         } // end of if (n0->IsLeaf())
     }
 
-    void DynamicBVH::ClearChildrenCrossFlagHelper(DynamicBVHNode* node)
+    void DynamicBVH::ClearChildrenCrossFlagRecursive(DynamicBVHNode* node)
     {
         node->children_crossed = false;
         if (node->IsLeaf() == false)
         {
-            ClearChildrenCrossFlagHelper(node->children[0]);
-            ClearChildrenCrossFlagHelper(node->children[1]);
+            ClearChildrenCrossFlagRecursive(node->children[0]);
+            ClearChildrenCrossFlagRecursive(node->children[1]);
         }
     }
 
@@ -638,7 +631,7 @@ namespace Engine5
     {
         if (node->children_crossed == false)
         {
-            ComputePairsHelper(node->children[0], node->children[1], result);
+            ComputePairsRecursive(node->children[0], node->children[1], result);
             node->children_crossed = true;
         }
     }

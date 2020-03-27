@@ -37,7 +37,7 @@ namespace Engine5
         void Remove(BoundingAABB* aabb) override;
         void Clear() override;
         void Release() override;
-        void Draw(PrimitiveRenderer* primitive_renderer, const Color& broad_phase_color, const Color& primitive_color) override;
+        void Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color) override;
         void ComputePairs(std::list<ColliderPair>& result) override;
 
         //Query
@@ -48,16 +48,16 @@ namespace Engine5
         void               TraceRay(RayTraceResult& result, Real max_distance = -1.0f, size_t reflect_count = 1) const override;
 
     private:
-        void UpdateNodeHelper(DynamicBVHNode* node, std::vector<DynamicBVHNode*>& invalid_nodes);
-        void InsertNode(DynamicBVHNode* node, DynamicBVHNode** parent) const;
-        void RemoveNode(DynamicBVHNode* node);
-        void ClearNode(DynamicBVHNode* node);
-        void ReleaseNode(DynamicBVHNode* node);
-        void ShutdownNode(DynamicBVHNode* node);
-        void CopyNode(DynamicBVHNode* node, BroadPhase* other);
-        void DrawNode(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const Color& broad_phase_color, const Color& primitive_color);
-        void ComputePairsHelper(DynamicBVHNode* n0, DynamicBVHNode* n1, std::list<ColliderPair>& result);
-        void ClearChildrenCrossFlagHelper(DynamicBVHNode* node);
+        void UpdateNodeRecursive(DynamicBVHNode* node, std::vector<DynamicBVHNode*>& invalid_nodes);
+        void InsertNodeRecursive(DynamicBVHNode* node, DynamicBVHNode** parent) const;
+        void RemoveNodeRecursive(DynamicBVHNode* node);
+        void ClearNodeRecursive(DynamicBVHNode* node);
+        void ReleaseNodeRecursive(DynamicBVHNode* node);
+        void ShutdownNodeRecursive(DynamicBVHNode* node);
+        void CopyNodeRecursive(DynamicBVHNode* node, BroadPhase* other);
+        void DrawNodeRecursive(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color);
+        void ComputePairsRecursive(DynamicBVHNode* n0, DynamicBVHNode* n1, std::list<ColliderPair>& result);
+        void ClearChildrenCrossFlagRecursive(DynamicBVHNode* node);
         void CrossChildren(DynamicBVHNode* node, std::list<ColliderPair>& result);
 
     private:

@@ -54,6 +54,10 @@ namespace Engine5
         //broad phase
         m_broad_phase->Update(dt);
         m_broad_phase->ComputePairs(m_pairs);
+        if(m_draw_collider.b_flag || m_draw_bounding_volume.b_flag)
+        {
+            m_broad_phase->Draw();
+        }
         //narrow phase
         m_narrow_phase->GenerateContact(m_pairs, m_manifold_table, m_draw_gjk, m_draw_epa);
         //resolution
@@ -129,6 +133,30 @@ namespace Engine5
             m_broad_phase = broad_phase;
             m_mode        = mode;
         }
+    }
+
+    void World::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
+    {
+    }
+
+    void World::SetDrawFlagGJK(bool b_draw, const Color& color)
+    {
+    }
+
+    void World::SetDrawFlagEPA(bool b_draw, const Color& color)
+    {
+    }
+
+    void World::SetDrawFlagContact(bool b_draw, const Color& color)
+    {
+    }
+
+    void World::SetDrawFlagCollider(bool b_draw, const Color& color)
+    {
+    }
+
+    void World::SetDrawFlagBP(bool b_draw, const Color& color)
+    {
     }
 
     ColliderPrimitive* World::CreateCollider(ColliderSet* collider_set, eColliderType type) const

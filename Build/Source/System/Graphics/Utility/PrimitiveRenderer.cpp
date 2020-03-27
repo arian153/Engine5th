@@ -108,6 +108,75 @@ namespace Engine5
         }
     }
 
+    void PrimitiveRenderer::DrawBox(const Vector3& position, const Quaternion& orientation, const Vector3& scale, eRenderingMode mode, Color color)
+    {
+        I32 index = static_cast<I32>(VerticesSize(mode));
+        I32 count = 8;
+        ReserveVertices(count, mode);
+        Vector3 dim = scale.Half();
+        Vector3 vertices[ 8 ];
+        vertices[0].Set(+dim.x, +dim.y, +dim.z);
+        vertices[1].Set(+dim.x, +dim.y, -dim.z);
+        vertices[2].Set(+dim.x, -dim.y, +dim.z);
+        vertices[3].Set(+dim.x, -dim.y, -dim.z);
+        vertices[4].Set(-dim.x, +dim.y, +dim.z);
+        vertices[5].Set(-dim.x, +dim.y, -dim.z);
+        vertices[6].Set(-dim.x, -dim.y, +dim.z);
+        vertices[7].Set(-dim.x, -dim.y, -dim.z);
+        for (size_t i = 0; i < 8; ++i)
+        {
+            vertices[i] = orientation.Rotate(vertices[i]);
+            vertices[i] += position;
+            PushVertex(vertices[i], mode, color);
+        }
+        if (mode == eRenderingMode::Dot)
+        {
+            for (I32 i = 0; i < count; ++i)
+            {
+                PushIndex(index + i, mode);
+            }
+        }
+        else if (mode == eRenderingMode::Line)
+        {
+            //front
+            PushLineIndices(index + 0, index + 2);
+            PushLineIndices(index + 2, index + 6);
+            PushLineIndices(index + 6, index + 4);
+            PushLineIndices(index + 4, index + 0);
+            //back
+            PushLineIndices(index + 1, index + 3);
+            PushLineIndices(index + 3, index + 7);
+            PushLineIndices(index + 7, index + 5);
+            PushLineIndices(index + 5, index + 1);
+            //side
+            PushLineIndices(index + 0, index + 1);
+            PushLineIndices(index + 2, index + 3);
+            PushLineIndices(index + 6, index + 7);
+            PushLineIndices(index + 4, index + 5);
+        }
+        else if (mode == eRenderingMode::Face)
+        {
+            //front
+            PushFaceIndices(index + 0, index + 2, index + 4);
+            PushFaceIndices(index + 2, index + 6, index + 4);
+            //back
+            PushFaceIndices(index + 1, index + 3, index + 5);
+            PushFaceIndices(index + 3, index + 7, index + 5);
+            //right
+            PushFaceIndices(index + 0, index + 1, index + 3);
+            PushFaceIndices(index + 2, index + 3, index + 0);
+            //left
+            PushFaceIndices(index + 6, index + 7, index + 5);
+            PushFaceIndices(index + 4, index + 5, index + 6);
+            //top
+            PushFaceIndices(index + 1, index + 0, index + 4);
+            PushFaceIndices(index + 1, index + 4, index + 5);
+            //bottom
+            PushFaceIndices(index + 3, index + 2, index + 6);
+            PushFaceIndices(index + 3, index + 6, index + 7);
+        }
+    }
+
     void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader, MatrixManager* matrix_generator)
     {
         m_color_shader     = color_shader;

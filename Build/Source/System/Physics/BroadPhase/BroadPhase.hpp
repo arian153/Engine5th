@@ -6,6 +6,7 @@
 
 namespace Engine5
 {
+    class ColorFlag;
     class ColliderPrimitive;
     class BoundingAABB;
     class PrimitiveRenderer;
@@ -23,7 +24,7 @@ namespace Engine5
         virtual void Remove(BoundingAABB* aabb) = 0;
         virtual void Clear() = 0;
         virtual void Release() = 0;
-        virtual void Draw(PrimitiveRenderer* primitive_renderer, const Color& broad_phase_color, const Color& primitive_color) = 0;
+        virtual void Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color) = 0;
         virtual void ComputePairs(std::list<ColliderPair>& result) = 0;
 
         //Query

@@ -162,7 +162,7 @@ namespace Engine5
         }
     }
 
-    void GridPartition::Draw(PrimitiveRenderer* primitive_renderer, const Color& broad_phase_color, const Color& primitive_color)
+    void GridPartition::Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
     {
     }
 

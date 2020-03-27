@@ -195,7 +195,7 @@ namespace Engine5
         ReleaseNode(m_root);
     }
 
-    void Octree::Draw(PrimitiveRenderer* primitive_renderer, const Color& broad_phase_color, const Color& primitive_color)
+    void Octree::Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
     {
     }
 
