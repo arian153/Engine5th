@@ -52,7 +52,7 @@ namespace Engine5
         m_input = new InputCommon();
         m_input->Initialize();
         m_render_system = new RenderSystem(m_operating_system);
-        m_render_system->Initialize(1280, 720, m_resource_manager);
+        m_render_system->Initialize(m_initial_setting.screen_width, m_initial_setting.screen_height, m_resource_manager);
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
         //create managers
