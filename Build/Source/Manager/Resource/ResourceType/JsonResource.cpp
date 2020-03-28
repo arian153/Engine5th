@@ -346,6 +346,7 @@ namespace Engine5
                     space->GetScene()->SetProjectionType(eProjectionType::OrthoGraphic);
                 }
             }
+
             if (HasMember(setting, "Draw Broad Phase"))
             {
                 ColorFlag flag;

@@ -2,7 +2,6 @@
 #include "Element/Scene.hpp"
 #include <vector>
 #include "../Math/Utility/MathDef.hpp"
-#include "Utility/PrimitiveRenderer.hpp"
 #include "Utility/MatrixManager.hpp"
 #include "DataType/Color.hpp"
 
@@ -41,7 +40,6 @@ namespace Engine5
         OSCommon*          m_operating_system   = nullptr;
         RendererCommon*    m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;
-        PrimitiveRenderer* m_primitive_renderer = nullptr;
         MatrixManager*     m_matrix_manager     = nullptr;
         ResourceManager*   m_resource_manager   = nullptr;
 

@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class PrimitiveRenderer;
     class MatrixManager;
     class ShaderManager;
     class RendererCommon;
@@ -30,11 +31,12 @@ namespace Engine5
         void SetProjectionType(eProjectionType projection_type);
         void UpdateProjection();
     private:
-        RendererCommon* m_renderer        = nullptr;
-        ShaderManager*  m_shader_manager  = nullptr;
-        MatrixManager*  m_matrix_manager  = nullptr;
-        Camera*         m_camera          = nullptr;
-        eProjectionType m_projection_type = eProjectionType::Perspective;
-        Matrix44        m_projection_matrix;
+        RendererCommon*    m_renderer           = nullptr;
+        ShaderManager*     m_shader_manager     = nullptr;
+        MatrixManager*     m_matrix_manager     = nullptr;
+        Camera*            m_camera             = nullptr;
+        PrimitiveRenderer* m_primitive_renderer = nullptr;
+        eProjectionType    m_projection_type    = eProjectionType::Perspective;
+        Matrix44           m_projection_matrix;
     };
 }

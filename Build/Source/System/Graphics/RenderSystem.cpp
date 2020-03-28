@@ -27,11 +27,7 @@ namespace Engine5
         //matrix generator
         m_matrix_manager = new MatrixManager();
         m_matrix_manager->SetClientRect(rendering_width, rendering_height);
-        //primitive renderer
-        m_primitive_renderer = new PrimitiveRenderer(m_renderer);
-        m_primitive_renderer->Initialize(m_shader_manager->GetColorShader(), m_matrix_manager);
-        m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
-        m_primitive_renderer->UpdateProjectionMatrix();
+        
         if (m_operating_system->WindowMode() == eWindowMode::Fullscreen)
         {
             m_operating_system->SetWindowMode(eWindowMode::Fullscreen);
@@ -47,12 +43,7 @@ namespace Engine5
             scene = nullptr;
         }
         m_scenes.clear();
-        if (m_primitive_renderer != nullptr)
-        {
-            m_primitive_renderer->Shutdown();
-            delete m_primitive_renderer;
-            m_primitive_renderer = nullptr;
-        }
+       
         if (m_matrix_manager != nullptr)
         {
             delete m_matrix_manager;
@@ -75,7 +66,6 @@ namespace Engine5
     void RenderSystem::BeginUpdate() const
     {
         m_renderer->BeginScene(m_background_color);
-        m_primitive_renderer->Update();
     }
 
     void RenderSystem::EndUpdate() const
@@ -89,7 +79,6 @@ namespace Engine5
         {
             m_renderer->OnResize(width, height, m_operating_system->IsFullscreen());
             m_matrix_manager->SetClientRect(static_cast<size_t>(width), static_cast<size_t>(height));
-            m_primitive_renderer->UpdateProjectionMatrix();
         }
     }
 
@@ -116,13 +105,11 @@ namespace Engine5
     {
         m_matrix_manager->SetFarPlane(far_plane);
         m_matrix_manager->SetNearPlane(near_plane);
-        m_primitive_renderer->UpdateProjectionMatrix();
     }
 
     void RenderSystem::SetFieldOfView(Real field_of_view) const
     {
         m_matrix_manager->SetFieldOfView(field_of_view);
-        m_primitive_renderer->UpdateProjectionMatrix();
     }
 
     void RenderSystem::SetBackgroundColor(const Color& color)

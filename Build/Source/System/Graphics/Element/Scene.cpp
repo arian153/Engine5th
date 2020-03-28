@@ -3,6 +3,7 @@
 #include "../Shader/ShaderManager.hpp"
 #include "../Shader/ColorShaderCommon.hpp"
 #include "../Utility/MatrixManager.hpp"
+#include "../Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
@@ -19,15 +20,16 @@ namespace Engine5
         m_camera = new Camera();
         m_camera->SetPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_camera->Initialize();
-        //m_mesh = new Mesh();
-        //m_mesh->Initialize();
+        //primitive renderer
+        m_primitive_renderer = new PrimitiveRenderer(m_renderer);
+        m_primitive_renderer->Initialize(m_shader_manager->GetColorShader(), m_matrix_manager);
+        m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
+        m_primitive_renderer->UpdateProjectionMatrix();
     }
 
     void Scene::Update(Real dt) const
     {
         m_camera->Update(dt);
-
-        
         //auto world = DirectX::XMMatrixIdentity();
         //auto view  = m_camera->GetViewMatrix();
         //auto proj  = m_renderer->GetPerspectiveMatrix();
@@ -36,6 +38,12 @@ namespace Engine5
 
     void Scene::Shutdown()
     {
+        if (m_primitive_renderer != nullptr)
+        {
+            m_primitive_renderer->Shutdown();
+            delete m_primitive_renderer;
+            m_primitive_renderer = nullptr;
+        }
         if (m_camera != nullptr)
         {
             m_camera->Shutdown();
