@@ -23,7 +23,7 @@ namespace Engine5
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader(), m_matrix_manager);
-        m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -5.0f));
+        m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -60.0f));
         m_primitive_renderer->UpdateProjectionMatrix();
     }
 

@@ -68,7 +68,7 @@ namespace Engine5
         D3D_FEATURE_LEVEL        m_d3d_feature_level;
         DXGI_FORMAT              m_dxgi_color_format;
 
-        UINT   m_back_buffer_count = 2;
+        UINT   m_back_buffer_count = 1;
         bool   m_enable_msaa       = false;
         UINT   m_msaa_quality      = 0;
         bool   m_vsync_enabled     = false;

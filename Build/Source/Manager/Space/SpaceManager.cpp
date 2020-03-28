@@ -58,6 +58,7 @@ namespace Engine5
     Space* SpaceManager::CreateSpace(JsonResource* resource)
     {
         Space* space = new Space();
+        space->m_space_manager = this;
         m_spaces.push_back(space);
         space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry);
         return space;

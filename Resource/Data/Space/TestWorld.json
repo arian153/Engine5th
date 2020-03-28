@@ -6,10 +6,11 @@
         "World"
     ],
     "Update Flag": [
-        "Scene"
+        "Scene",
+        "World"
     ],
     "FixedUpdate Flag": [
-        "World"
+
     ],
     "Objects": [
         {

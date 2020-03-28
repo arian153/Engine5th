@@ -7,6 +7,7 @@
 #include "ColliderSet.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "../Resolution/Resolution.hpp"
+#include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {

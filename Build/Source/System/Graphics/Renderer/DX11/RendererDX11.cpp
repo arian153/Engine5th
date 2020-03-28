@@ -217,7 +217,7 @@ namespace Engine5
         swap_chain_desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
         swap_chain_desc.BufferDesc.Scaling          = DXGI_MODE_SCALING_UNSPECIFIED;
         // Discard the back buffer contents after presenting.
-        swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+        swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
         // Don't set the advanced flags.
         swap_chain_desc.Flags    = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
         IDXGIDevice* dxgi_device = nullptr;

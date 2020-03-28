@@ -2,6 +2,7 @@
 #include "Renderer/RendererCommon.hpp"
 #include "Shader/ShaderManager.hpp"
 #include "../Core/OS-API/OSCommon.hpp"
+#include "Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
@@ -27,7 +28,6 @@ namespace Engine5
         //matrix generator
         m_matrix_manager = new MatrixManager();
         m_matrix_manager->SetClientRect(rendering_width, rendering_height);
-        
         if (m_operating_system->WindowMode() == eWindowMode::Fullscreen)
         {
             m_operating_system->SetWindowMode(eWindowMode::Fullscreen);
@@ -43,7 +43,6 @@ namespace Engine5
             scene = nullptr;
         }
         m_scenes.clear();
-       
         if (m_matrix_manager != nullptr)
         {
             delete m_matrix_manager;

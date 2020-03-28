@@ -5,6 +5,7 @@
 #include "../Object/ObjectManager.hpp"
 #include "../Component/ComponentManager.hpp"
 #include "../Resource/ResourceType/JsonResource.hpp"
+#include "SpaceManager.hpp"
 
 namespace Engine5
 {
