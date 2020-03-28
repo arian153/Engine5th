@@ -30,6 +30,9 @@ namespace Engine5
         void DrawShader(eShaderType shader_type);
         void SetProjectionType(eProjectionType projection_type);
         void UpdateProjection();
+
+        PrimitiveRenderer* GetPrimitiveRenderer() const;
+
     private:
         RendererCommon*    m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;

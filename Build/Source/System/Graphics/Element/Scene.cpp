@@ -30,10 +30,7 @@ namespace Engine5
     void Scene::Update(Real dt) const
     {
         m_camera->Update(dt);
-        //auto world = DirectX::XMMatrixIdentity();
-        //auto view  = m_camera->GetViewMatrix();
-        //auto proj  = m_renderer->GetPerspectiveMatrix();
-        //m_shader_manager->GetColorShader()->Update(dt, m_renderer->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, proj);
+        m_primitive_renderer->Update();
     }
 
     void Scene::Shutdown()
@@ -98,5 +95,10 @@ namespace Engine5
         default:
             break;
         }
+    }
+
+    PrimitiveRenderer* Scene::GetPrimitiveRenderer() const
+    {
+        return m_primitive_renderer;
     }
 }

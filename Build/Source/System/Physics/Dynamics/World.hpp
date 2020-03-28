@@ -27,7 +27,7 @@ namespace Engine5
         void SetDrawFlagGJK(bool b_draw, const Color& color = ColorDef::Pure::White);
         void SetDrawFlagEPA(bool b_draw, const Color& color = ColorDef::Pure::White);
         void SetDrawFlagContact(bool b_draw, const Color& color = ColorDef::Pure::White);
-        void SetDrawFlagCollider(bool b_draw, const Color& color = ColorDef::Pure::White);
+        void SetDrawFlagPrimitive(bool b_draw, const Color& color = ColorDef::Pure::White);
         void SetDrawFlagBP(bool b_draw, const Color& color = ColorDef::Pure::White);
 
         ColliderPrimitive* CreateCollider(ColliderSet* collider_set, eColliderType type) const;

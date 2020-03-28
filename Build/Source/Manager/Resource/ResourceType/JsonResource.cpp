@@ -11,6 +11,7 @@
 #include "../../Object/ObjectManager.hpp"
 #include "../../Object/ObjectFactory.hpp"
 #include "../../../System/Graphics/DataType/Color.hpp"
+#include "../../../System/Physics/Dynamics/World.hpp"
 
 namespace Engine5
 {
@@ -359,6 +360,7 @@ namespace Engine5
                 {
                     flag.b_flag = value["Flag"].asBool();
                 }
+                space->GetWorld()->SetDrawFlagBP(flag.b_flag, flag.color);
             }
             if (HasMember(setting, "Draw Contact"))
             {
@@ -372,6 +374,7 @@ namespace Engine5
                 {
                     flag.b_flag = value[ "Flag" ].asBool();
                 }
+                space->GetWorld()->SetDrawFlagContact(flag.b_flag, flag.color);
             }
             if (HasMember(setting, "Draw EPA"))
             {
@@ -385,6 +388,7 @@ namespace Engine5
                 {
                     flag.b_flag = value[ "Flag" ].asBool();
                 }
+                space->GetWorld()->SetDrawFlagEPA(flag.b_flag, flag.color);
             }
             if (HasMember(setting, "Draw GJK"))
             {
@@ -398,6 +402,7 @@ namespace Engine5
                 {
                     flag.b_flag = value[ "Flag" ].asBool();
                 }
+                space->GetWorld()->SetDrawFlagGJK(flag.b_flag, flag.color);
             }
             if (HasMember(setting, "Draw Primitive"))
             {
@@ -411,6 +416,7 @@ namespace Engine5
                 {
                     flag.b_flag = value[ "Flag" ].asBool();
                 }
+                space->GetWorld()->SetDrawFlagPrimitive(flag.b_flag, flag.color);
             }
         }
         if (HasMember(*m_root_data, "Objects") && (*m_root_data)["Objects"].isArray())

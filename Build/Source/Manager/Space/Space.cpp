@@ -72,8 +72,13 @@ namespace Engine5
         {
             m_world = physics_system->CreateWorld();
             m_world->Initialize();
+            if (m_scene != nullptr)
+            {
+                m_world->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
+            }
         }
-        m_space_resource->LoadData(this);
+
+        space_resource->LoadData(this);
     }
 
     void Space::Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system)

@@ -163,7 +163,7 @@ namespace Engine5
         m_draw_contact.color  = color;
     }
 
-    void World::SetDrawFlagCollider(bool b_draw, const Color& color)
+    void World::SetDrawFlagPrimitive(bool b_draw, const Color& color)
     {
         m_draw_primitive.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
         m_draw_primitive.color  = color;
