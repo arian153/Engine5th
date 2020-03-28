@@ -255,6 +255,7 @@ namespace Engine5
             {
                 if (collider_data->m_bounding_volume != nullptr)
                 {
+                    collider_data->UpdateBoundingVolume();
                     m_bounding_volume = collider_data->m_bounding_volume->Union(m_bounding_volume);
                 }
             }
