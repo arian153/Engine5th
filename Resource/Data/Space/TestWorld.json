@@ -37,11 +37,11 @@
                         "Colliders": [
                             {
                                 "Density": 1.0,
-                                "Material": "Metal",
+                                "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [ 2, 12, 2 ],
-                                "Scale": 0.5,
+                                "Radius": [ 4, 2, 2 ],
+                                "Scale": 2.5,
                                 "Type": "Ellipsoid"
                             }
                         ]
@@ -49,6 +49,83 @@
                 }
             ],
             "Name": "HelloWorld"
+        },
+
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -10, 10, 3 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "RigidBodyComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -10, 10, 3 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 4, 2, 2 ],
+                                "Scale": 2.5,
+                                "Type": "Ellipsoid"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "HelloWorld2"
+        },
+
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, -18, 3 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "RigidBodyComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -10, 10, 3 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 2, 2 ],
+                                "Height" :  5,
+                                "Scale": 2.5,
+                                "Type": "Cone"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "HelloWorld3"
         }
     ],
     "Settings": {

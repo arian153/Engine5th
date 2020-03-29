@@ -82,7 +82,6 @@ namespace Engine5
                     ////draw contact result.
                     //if (contact_flag.b_flag)
                     //{
-                   
                     //}
                 }
                 else
@@ -128,17 +127,18 @@ namespace Engine5
         //avoid infinite loop
         while (exit_iteration < 50)
         {
+            if (direction.IsValid() == false)
+            {
+                return false;
+            }
             simplex.simplex_vertex_a = GenerateCSOSupport(a, b, direction);
             if (simplex.simplex_vertex_a.global.DotProduct(direction) < 0.0f)
             {
                 return false;
             }
-            else
+            if (simplex.IsContainOrigin(direction) == true)
             {
-                if (simplex.IsContainOrigin(direction) == true)
-                {
-                    return true;
-                }
+                return true;
             }
             exit_iteration++;
         }
