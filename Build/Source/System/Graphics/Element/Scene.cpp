@@ -4,7 +4,6 @@
 #include "../Shader/ColorShaderCommon.hpp"
 #include "../Utility/MatrixManager.hpp"
 #include "../Utility/PrimitiveRenderer.hpp"
-#include "../../Math/Utility/MatrixUtility.hpp"
 
 namespace Engine5
 {
@@ -19,10 +18,10 @@ namespace Engine5
     void Scene::Initialize()
     {
         m_matrix_manager->AddScene(this);
-        m_camera = new Camera();
-        m_camera->SetPosition(Vector3(0.0f, 0.0f, -60.0f));
-        m_camera->Initialize();
-        m_camera->SetScene(this);
+        m_main_camera = new Camera();
+        m_main_camera->SetPosition(Vector3(0.0f, 0.0f, -60.0f));
+        m_main_camera->Initialize();
+        m_main_camera->SetScene(this);
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
@@ -44,11 +43,11 @@ namespace Engine5
             delete m_primitive_renderer;
             m_primitive_renderer = nullptr;
         }
-        if (m_camera != nullptr)
+        if (m_main_camera != nullptr)
         {
-            m_camera->Shutdown();
-            delete m_camera;
-            m_camera = nullptr;
+            m_main_camera->Shutdown();
+            delete m_main_camera;
+            m_main_camera = nullptr;
         }
     }
 
@@ -65,6 +64,14 @@ namespace Engine5
     void Scene::SetMatrixManager(MatrixManager* matrix_manager)
     {
         m_matrix_manager = matrix_manager;
+    }
+
+    void Scene::SetMainCamera(Camera* camera)
+    {
+        if (camera != nullptr)
+        {
+            m_main_camera = camera;
+        }
     }
 
     void Scene::DrawShader(eShaderType shader_type)
@@ -87,9 +94,9 @@ namespace Engine5
 
     void Scene::UpdateView()
     {
-        if (m_camera != nullptr)
+        if (m_main_camera != nullptr)
         {
-            m_view_matrix = m_camera->GetViewMatrix();
+            m_view_matrix = m_main_camera->GetViewMatrix();
         }
         if (m_primitive_renderer != nullptr)
         {
@@ -119,5 +126,20 @@ namespace Engine5
     PrimitiveRenderer* Scene::GetPrimitiveRenderer() const
     {
         return m_primitive_renderer;
+    }
+
+    Camera* Scene::AddCamera(Camera* camera)
+    {
+        if (m_cameras.empty())
+        {
+            m_main_camera = camera;
+        }
+        m_cameras.push_back(camera);
+        return camera;
+    }
+
+    void Scene::RemoveCamera(Camera* camera)
+    {
+        m_cameras.erase(std::find(m_cameras.begin(), m_cameras.end(), camera));
     }
 }
