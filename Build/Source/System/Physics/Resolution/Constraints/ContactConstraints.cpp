@@ -130,6 +130,12 @@ namespace Engine5
 
     void ContactConstraints::SolveContactPoint(ContactPoint& contact_point)
     {
+        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
+        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
+        m_mass.m_a        = body_a->Mass();
+        m_mass.i_a        = body_a->Inertia();
+        m_mass.m_b        = body_b->Mass();
+        m_mass.i_b        = body_b->Inertia();
         // Solve tangent constraints first because non-penetration is more important than friction.
         SolveTangentConstraints(m_mass, m_tangent_speed, m_velocity, contact_point);
         // Solve normal constraints
@@ -188,9 +194,15 @@ namespace Engine5
     {
         Basis normal_basis;
         normal_basis.CalculateBasisApprox(m_manifold->manifold_normal);
-        Vector3 normal    = normal_basis.i;
-        Vector3 tangent_a = normal_basis.j;
-        Vector3 tangent_b = normal_basis.k;
+        Vector3    normal    = normal_basis.i;
+        Vector3    tangent_a = normal_basis.j;
+        Vector3    tangent_b = normal_basis.k;
+        RigidBody* body_a    = m_manifold->m_set_a->GetRigidBody();
+        RigidBody* body_b    = m_manifold->m_set_b->GetRigidBody();
+        m_mass.m_a           = body_a->Mass();
+        m_mass.i_a           = body_a->Inertia();
+        m_mass.m_b           = body_b->Mass();
+        m_mass.i_b           = body_b->Inertia();
         for (auto& contact : m_manifold->contacts)
         {
             Vector3 p = contact.normal_impulse_sum * normal
@@ -211,12 +223,10 @@ namespace Engine5
         m_position.p_b    = body_b->GetCentroid();
         m_position.o_a    = body_a->GetOrientation();
         m_position.o_b    = body_b->GetOrientation();
-
-        m_mass.m_a = body_a->Mass();
-        m_mass.i_a = body_a->Inertia();
-        m_mass.m_b = body_b->Mass();
-        m_mass.i_b = body_b->Inertia();
-
+        m_mass.m_a        = body_a->Mass();
+        m_mass.i_a        = body_a->Inertia();
+        m_mass.m_b        = body_b->Mass();
+        m_mass.i_b        = body_b->Inertia();
         for (auto& contact : m_manifold->contacts)
         {
             Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
