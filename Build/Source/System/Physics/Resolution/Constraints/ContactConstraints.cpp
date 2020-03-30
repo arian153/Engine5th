@@ -211,6 +211,12 @@ namespace Engine5
         m_position.p_b    = body_b->GetCentroid();
         m_position.o_a    = body_a->GetOrientation();
         m_position.o_b    = body_b->GetOrientation();
+
+        m_mass.m_a = body_a->Mass();
+        m_mass.i_a = body_a->Inertia();
+        m_mass.m_b = body_b->Mass();
+        m_mass.i_b = body_b->Inertia();
+
         for (auto& contact : m_manifold->contacts)
         {
             Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
