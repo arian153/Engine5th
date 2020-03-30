@@ -58,7 +58,7 @@ namespace Engine5
             // WM_SIZE is sent when the user resizes the window.  
         case WM_SIZE:
             // Save the new client area dimensions.
-            if (m_os_common->IsFullscreen())
+            if (!m_os_common->IsFullscreen())
             {
                 m_os_common->m_prev_client_width  = m_os_common->m_curr_client_width;
                 m_os_common->m_prev_client_height = m_os_common->m_curr_client_height;

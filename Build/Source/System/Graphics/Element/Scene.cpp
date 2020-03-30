@@ -17,11 +17,10 @@ namespace Engine5
 
     void Scene::Initialize()
     {
+        m_matrix_manager->AddScene(this);
         m_camera = new Camera();
         m_camera->SetPosition(Vector3(0.0f, 0.0f, -5.0f));
         m_camera->Initialize();
-
-        
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader(), m_matrix_manager);
@@ -37,6 +36,7 @@ namespace Engine5
 
     void Scene::Shutdown()
     {
+        m_matrix_manager->RemoveScene(this);
         if (m_primitive_renderer != nullptr)
         {
             m_primitive_renderer->Shutdown();
@@ -96,6 +96,10 @@ namespace Engine5
             break;
         default:
             break;
+        }
+        if (m_primitive_renderer != nullptr)
+        {
+            m_primitive_renderer->UpdateProjectionMatrix();
         }
     }
 

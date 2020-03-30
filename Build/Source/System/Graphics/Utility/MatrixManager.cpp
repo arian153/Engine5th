@@ -22,6 +22,7 @@ namespace Engine5
         Real   half_x        = static_cast<Real>(client_width >> 1);
         m_right              = half_x;
         m_left               = -half_x;
+        Update();
     }
 
     void MatrixManager::SetScreenAspect(size_t client_width, size_t client_height)
@@ -33,21 +34,25 @@ namespace Engine5
         m_left          = -half_x;
         m_top           = half_y;
         m_bottom        = -half_y;
+        Update();
     }
 
     void MatrixManager::SetFieldOfView(Real field_of_view)
     {
         m_field_of_view = field_of_view;
+        Update();
     }
 
     void MatrixManager::SetFarPlane(Real far_plane)
     {
         m_far_plane = far_plane;
+        Update();
     }
 
     void MatrixManager::SetNearPlane(Real near_plane)
     {
         m_near_plane = near_plane;
+        Update();
     }
 
     void MatrixManager::SetClientWidth(size_t client_width)
@@ -56,6 +61,7 @@ namespace Engine5
         m_right         = half_x;
         m_left          = -half_x;
         m_screen_aspect = (Real)client_width / (m_top - m_bottom);
+        Update();
     }
 
     void MatrixManager::SetClientHeight(size_t client_height)
@@ -64,6 +70,7 @@ namespace Engine5
         m_top           = half_y;
         m_bottom        = -half_y;
         m_screen_aspect = (m_right - m_left) / (Real)client_height;
+        Update();
     }
 
     void MatrixManager::SetClientRect(size_t client_width, size_t client_height)
@@ -75,6 +82,7 @@ namespace Engine5
         m_top           = half_y;
         m_bottom        = -half_y;
         m_screen_aspect = (Real)client_width / (Real)client_height;
+        Update();
     }
 
     void MatrixManager::SetClientRect(Real right, Real left, Real top, Real bottom)
@@ -84,6 +92,7 @@ namespace Engine5
         m_top           = top;
         m_bottom        = bottom;
         m_screen_aspect = (m_right - m_left) / (m_top - m_bottom);
+        Update();
     }
 
     Matrix44 MatrixManager::GetPerspectiveMatrix() const
