@@ -3,7 +3,6 @@
 #include "../Shader/ColorShaderCommon.hpp"
 #include "MatrixManager.hpp"
 #include "../DataType/BufferCommon.hpp"
-#include "../../Math/Utility/MatrixUtility.hpp"
 
 namespace Engine5
 {
@@ -177,16 +176,12 @@ namespace Engine5
         }
     }
 
-    void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader, MatrixManager* matrix_generator)
+    void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader)
     {
-        m_color_shader     = color_shader;
-        m_matrix_generator = matrix_generator;
-        m_position         = Vector3(0.0f, 0.0f, -60.0f);
-        UpdateViewMatrix();
-        UpdateProjectionMatrix();
-        m_dot_buffer  = new BufferCommon();
-        m_line_buffer = new BufferCommon();
-        m_face_buffer = new BufferCommon();
+        m_color_shader = color_shader;
+        m_dot_buffer   = new BufferCommon();
+        m_line_buffer  = new BufferCommon();
+        m_face_buffer  = new BufferCommon();
     }
 
     void PrimitiveRenderer::Update()
@@ -245,28 +240,14 @@ namespace Engine5
         m_face_indices.clear();
     }
 
-    void PrimitiveRenderer::UpdateViewMatrix()
+    void PrimitiveRenderer::UpdateViewMatrix(const Matrix44& view_matrix)
     {
-        Vector3 up    = m_rotation.Rotate(Math::Vector3::Y_AXIS);
-        Vector3 look  = m_rotation.Rotate(Math::Vector3::Z_AXIS) + m_position;
-        m_view_matrix = Math::Matrix44::LookAt(m_position, look, up);
+        m_view_matrix = view_matrix;
     }
 
-    void PrimitiveRenderer::UpdateProjectionMatrix()
+    void PrimitiveRenderer::UpdateProjectionMatrix(const Matrix44& projection_matrix)
     {
-        m_proj_matrix = m_matrix_generator->GetPerspectiveMatrix();
-    }
-
-    void PrimitiveRenderer::SetRendererCameraPosition(const Vector3& pos)
-    {
-        m_position = pos;
-        UpdateViewMatrix();
-    }
-
-    void PrimitiveRenderer::SetRendererCameraRotation(const Quaternion& rot)
-    {
-        m_rotation = rot;
-        UpdateViewMatrix();
+        m_proj_matrix = projection_matrix;
     }
 
     void PrimitiveRenderer::PushVertex(const Vector3& pos, eRenderingMode mode, const Color& color)

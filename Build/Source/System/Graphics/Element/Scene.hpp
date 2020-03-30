@@ -29,6 +29,7 @@ namespace Engine5
 
         void DrawShader(eShaderType shader_type);
         void SetProjectionType(eProjectionType projection_type);
+        void UpdateView() const;
         void UpdateProjection();
 
         PrimitiveRenderer* GetPrimitiveRenderer() const;

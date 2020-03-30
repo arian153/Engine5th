@@ -34,15 +34,13 @@ namespace Engine5
         void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
         void DrawBox(const Vector3& position, const Quaternion& orientation, const Vector3& scale, eRenderingMode mode, Color color = Color());
 
-        void Initialize(ColorShaderCommon* color_shader, MatrixManager* matrix_generator);
+        void Initialize(ColorShaderCommon* color_shader);
         void Update();
         void Shutdown();
         void Clear();
 
-        void UpdateViewMatrix();
-        void UpdateProjectionMatrix();
-        void SetRendererCameraPosition(const Vector3& pos);
-        void SetRendererCameraRotation(const Quaternion& rot);
+        void UpdateViewMatrix(const Matrix44& view_matrix);
+        void UpdateProjectionMatrix(const Matrix44& projection_matrix);
 
         void   PushVertex(const Vector3& pos, eRenderingMode mode, const Color& color = Color());
         void   PushIndex(I32 index, eRenderingMode mode);
@@ -53,14 +51,11 @@ namespace Engine5
         size_t VerticesSize(eRenderingMode mode) const;
         size_t IndicesSize(eRenderingMode mode) const;
     private:
-        Vector3            m_position = Vector3(0.0f, 0.0f, -10.0f);
-        Quaternion         m_rotation = Quaternion();
         Matrix44           m_view_matrix;
         Matrix44           m_world_matrix;
         Matrix44           m_proj_matrix;
-        ColorShaderCommon* m_color_shader     = nullptr;
-        RendererCommon*    m_renderer         = nullptr;
-        MatrixManager*   m_matrix_generator = nullptr;
+        ColorShaderCommon* m_color_shader = nullptr;
+        RendererCommon*    m_renderer     = nullptr;
 
         std::vector<ColorVertex> m_dot_vertices;
         std::vector<U32>         m_dot_indices;

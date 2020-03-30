@@ -19,13 +19,14 @@ namespace Engine5
     {
         m_matrix_manager->AddScene(this);
         m_camera = new Camera();
-        m_camera->SetPosition(Vector3(0.0f, 0.0f, -5.0f));
+        m_camera->SetPosition(Vector3(0.0f, 0.0f, -60.0f));
         m_camera->Initialize();
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
-        m_primitive_renderer->Initialize(m_shader_manager->GetColorShader(), m_matrix_manager);
-        m_primitive_renderer->SetRendererCameraPosition(Vector3(0.0f, 0.0f, -60.0f));
-        m_primitive_renderer->UpdateProjectionMatrix();
+        m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
+
+        UpdateView();
+        UpdateProjection();
     }
 
     void Scene::Update(Real dt) const
@@ -84,6 +85,14 @@ namespace Engine5
         UpdateProjection();
     }
 
+    void Scene::UpdateView() const
+    {
+        if (m_primitive_renderer != nullptr)
+        {
+            m_primitive_renderer->UpdateViewMatrix(m_camera->GetViewMatrix());
+        }
+    }
+
     void Scene::UpdateProjection()
     {
         switch (m_projection_type)
@@ -99,7 +108,7 @@ namespace Engine5
         }
         if (m_primitive_renderer != nullptr)
         {
-            m_primitive_renderer->UpdateProjectionMatrix();
+            m_primitive_renderer->UpdateProjectionMatrix(m_projection_matrix);
         }
     }
 
