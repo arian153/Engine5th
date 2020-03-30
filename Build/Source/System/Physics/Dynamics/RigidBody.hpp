@@ -98,6 +98,7 @@ namespace Engine5
         //mass data
         MassData m_mass_data;
         Vector3  m_global_centroid; //center of mass
+        Matrix33 m_global_inertia_tensor;
         Matrix33 m_global_inverse_inertia_tensor;
 
         //others

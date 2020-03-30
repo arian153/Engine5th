@@ -63,6 +63,7 @@ namespace Engine5
     void RigidBody::UpdateGlobalInertiaTensor()
     {
         m_global_inverse_inertia_tensor = m_orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
+        m_global_inertia_tensor = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
     }
 
     void RigidBody::UpdateOrientation()
@@ -225,7 +226,7 @@ namespace Engine5
 
     Matrix33 RigidBody::Inertia() const
     {
-        return m_global_inverse_inertia_tensor.Inverse();
+        return m_global_inertia_tensor;
     }
 
     Matrix33 RigidBody::InverseInertia() const
