@@ -1,6 +1,7 @@
 #include "MatrixManager.hpp"
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../../Math/Utility/MatrixUtility.hpp"
+#include "../Element/Scene.hpp"
 
 namespace Engine5
 {
@@ -93,5 +94,23 @@ namespace Engine5
     Matrix44 MatrixManager::GetOrthoGraphicMatrix() const
     {
         return Math::Matrix44::OrthoGraphicCenterMatrix(m_right, m_left, m_top, m_bottom, m_far_plane, m_near_plane);
+    }
+
+    void MatrixManager::AddScene(Scene* scene)
+    {
+        m_scenes.push_back(scene);
+    }
+
+    void MatrixManager::RemoveScene(Scene* scene)
+    {
+        m_scenes.erase(std::find(m_scenes.begin(), m_scenes.end(), scene));
+    }
+
+    void MatrixManager::Update()
+    {
+        for (auto& scene : m_scenes)
+        {
+            scene->UpdateProjection();
+        }
     }
 }

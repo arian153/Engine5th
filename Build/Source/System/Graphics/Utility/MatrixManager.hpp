@@ -1,8 +1,11 @@
 #pragma once
 #include "../../Math/Algebra/Matrix44.hpp"
+#include <vector>
 
 namespace Engine5
 {
+    class Scene;
+
     class MatrixManager
     {
     public:
@@ -24,6 +27,9 @@ namespace Engine5
         Matrix44 GetPerspectiveMatrix() const;
         Matrix44 GetOrthoGraphicMatrix() const;
 
+        void AddScene(Scene* scene);
+        void RemoveScene(Scene* scene);
+        void Update();
     private:
         Real m_right  = 0.0f;
         Real m_left   = 0.0f;
@@ -35,5 +41,7 @@ namespace Engine5
 
         Real m_far_plane     = 1000.f;
         Real m_near_plane    = 0.001f;
+
+        std::vector<Scene*> m_scenes;
     };
 }
