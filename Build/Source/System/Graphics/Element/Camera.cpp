@@ -1,8 +1,7 @@
 #include "Camera.hpp"
-#include "../../Core/Utility/CoreUtility.hpp"
 #include "../../Math/Math.hpp"
-#include "../Renderer/DX11/ConverterDX11.hpp"
 #include "../../Math/Utility/MatrixUtility.hpp"
+#include "Scene.hpp"
 
 namespace Engine5
 {
@@ -18,10 +17,16 @@ namespace Engine5
     {
     }
 
-    void Camera::Update(Real dt)
+    void Camera::Update()
     {
-        E5_UNUSED_PARAM(dt);
-        SyncFromTransform();
+        Vector3 up    = m_orientation.Rotate(Math::Vector3::Y_AXIS);
+        Vector3 look  = m_orientation.Rotate(Math::Vector3::Z_AXIS) + m_position;
+        m_view_matrix = Math::Matrix44::LookAt(m_position, look, up);
+        m_view_matrix *= m_zoom;
+        if (m_scene != nullptr)
+        {
+            m_scene->UpdateView();
+        }
     }
 
     void Camera::Shutdown()
@@ -31,15 +36,21 @@ namespace Engine5
     void Camera::SetPosition(const Vector3& position)
     {
         m_position = position;
-        UpdateCamera();
-        SyncToTransform();
+        Update();
     }
 
     void Camera::SetOrientation(const Quaternion& orientation)
     {
         m_orientation = orientation;
-        UpdateCamera();
-        SyncToTransform();
+        Update();
+    }
+
+    void Camera::SetScene(Scene* scene)
+    {
+        if (scene != nullptr)
+        {
+            m_scene = scene;
+        }
     }
 
     Vector3 Camera::GetPosition() const
@@ -68,27 +79,10 @@ namespace Engine5
         m_basis                  = Basis();
         m_basis.Rotate(m_orientation);
         m_view_matrix *= m_zoom;
-        SyncToTransform();
     }
 
     Basis Camera::GetBasis() const
     {
         return m_basis;
-    }
-
-    void Camera::UpdateCamera()
-    {
-        Vector3 up    = m_orientation.Rotate(Math::Vector3::Y_AXIS);
-        Vector3 look  = m_orientation.Rotate(Math::Vector3::Z_AXIS) + m_position;
-        m_view_matrix = Math::Matrix44::LookAt(m_position, look, up);
-        m_view_matrix *= m_zoom;
-    }
-
-    void Camera::SyncFromTransform()
-    {
-    }
-
-    void Camera::SyncToTransform()
-    {
     }
 }

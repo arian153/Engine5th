@@ -6,6 +6,8 @@
 
 namespace Engine5
 {
+    class Scene;
+
     class Camera
     {
     public:
@@ -13,10 +15,11 @@ namespace Engine5
         ~Camera();
 
         void Initialize();
-        void Update(Real dt);
+        void Update();
         void Shutdown();
         void SetPosition(const Vector3& position);
         void SetOrientation(const Quaternion& orientation);
+        void SetScene(Scene* scene);
         void LookAt(const Vector3& position, const Vector3& target, const Vector3& up = Math::Vector3::Y_AXIS);
 
         Vector3    GetPosition() const;
@@ -24,10 +27,6 @@ namespace Engine5
         Matrix44   GetViewMatrix() const;
         Basis      GetBasis() const;
 
-    private:
-        void UpdateCamera();
-        void SyncFromTransform();
-        void SyncToTransform();
 
     private:
         Matrix44   m_view_matrix;
@@ -35,5 +34,6 @@ namespace Engine5
         Quaternion m_orientation;
         Real       m_zoom = 1.0f;
         Basis      m_basis;
+        Scene*     m_scene = nullptr;
     };
 }

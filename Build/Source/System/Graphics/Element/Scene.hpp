@@ -29,7 +29,7 @@ namespace Engine5
 
         void DrawShader(eShaderType shader_type);
         void SetProjectionType(eProjectionType projection_type);
-        void UpdateView() const;
+        void UpdateView();
         void UpdateProjection();
 
         PrimitiveRenderer* GetPrimitiveRenderer() const;
@@ -40,7 +40,9 @@ namespace Engine5
         MatrixManager*     m_matrix_manager     = nullptr;
         Camera*            m_camera             = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;
-        eProjectionType    m_projection_type    = eProjectionType::Perspective;
-        Matrix44           m_projection_matrix;
+
+        eProjectionType m_projection_type = eProjectionType::Perspective;
+        Matrix44        m_view_matrix;
+        Matrix44        m_projection_matrix;
     };
 }

@@ -4,6 +4,7 @@
 #include "../Shader/ColorShaderCommon.hpp"
 #include "../Utility/MatrixManager.hpp"
 #include "../Utility/PrimitiveRenderer.hpp"
+#include "../../Math/Utility/MatrixUtility.hpp"
 
 namespace Engine5
 {
@@ -21,18 +22,16 @@ namespace Engine5
         m_camera = new Camera();
         m_camera->SetPosition(Vector3(0.0f, 0.0f, -60.0f));
         m_camera->Initialize();
-
+        m_camera->SetScene(this);
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
-
         UpdateView();
         UpdateProjection();
     }
 
     void Scene::Update(Real dt) const
     {
-        m_camera->Update(dt);
         m_primitive_renderer->Update();
     }
 
@@ -86,11 +85,15 @@ namespace Engine5
         UpdateProjection();
     }
 
-    void Scene::UpdateView() const
+    void Scene::UpdateView()
     {
+        if (m_camera != nullptr)
+        {
+            m_view_matrix = m_camera->GetViewMatrix();
+        }
         if (m_primitive_renderer != nullptr)
         {
-            m_primitive_renderer->UpdateViewMatrix(m_camera->GetViewMatrix());
+            m_primitive_renderer->UpdateViewMatrix(m_view_matrix);
         }
     }
 
