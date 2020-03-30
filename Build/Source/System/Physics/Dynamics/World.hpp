@@ -21,6 +21,7 @@ namespace Engine5
         void Initialize();
         void Update(Real dt);
         void Shutdown();
+        void Draw() const;
 
         void SetBroadPhaseMode(eBroadPhaseMode mode);
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);

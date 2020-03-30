@@ -8,6 +8,7 @@
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "../Resolution/Resolution.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
+#include "../../Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -50,19 +51,31 @@ namespace Engine5
         m_resolution_phase->Initialize();
     }
 
+    void World::Draw() const
+    {
+        if (m_draw_primitive.b_flag || m_draw_broad_phase.b_flag)
+        {
+            m_broad_phase->Draw(m_primitive_renderer, m_draw_broad_phase, m_draw_primitive);
+        }
+        if (m_draw_gjk.b_flag || m_draw_epa.b_flag)
+        {
+            m_narrow_phase->Draw(m_draw_gjk, m_draw_epa);
+        }
+        if (m_draw_contact.b_flag)
+        {
+            m_resolution_phase->Draw(m_draw_contact);
+        }
+    }
+
     void World::Update(Real dt)
     {
         //broad phase
         m_broad_phase->Update(dt);
         m_broad_phase->ComputePairs(m_pairs);
-        if (m_draw_primitive.b_flag || m_draw_broad_phase.b_flag)
-        {
-            m_broad_phase->Draw(m_primitive_renderer, m_draw_broad_phase, m_draw_primitive);
-        }
         //narrow phase
-        m_narrow_phase->GenerateContact(m_pairs, m_manifold_table, m_draw_gjk, m_draw_epa);
+        m_narrow_phase->GenerateContact(m_pairs, m_manifold_table);
         //resolution
-        m_resolution_phase->Solve(m_manifold_table, &m_rigid_bodies, dt, m_draw_contact);
+        m_resolution_phase->Solve(m_manifold_table, &m_rigid_bodies, dt);
     }
 
     void World::Shutdown()

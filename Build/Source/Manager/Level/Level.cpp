@@ -68,9 +68,24 @@ namespace Engine5
         }
     }
 
+    void Level::DrawSubsystem(eSubsystemFlag flag)
+    {
+        if (m_global_space->IsSubsystemUpdate(flag) || m_global_space->IsSubsystemFixedUpdate(flag))
+        {
+            DrawSpace(m_global_space, flag);
+        }
+        for (auto& space : m_spaces)
+        {
+            if (space->IsSubsystemUpdate(flag) || space->IsSubsystemFixedUpdate(flag))
+            {
+                DrawSpace(space, flag);
+            }
+        }
+    }
+
     void Level::FixedUpdateSubsystem(Real dt, eSubsystemFlag flag) const
     {
-        if (m_global_space->IsSubsystemUpdate(flag))
+        if (m_global_space->IsSubsystemFixedUpdate(flag))
         {
             UpdateSpace(dt, m_global_space, flag);
         }
@@ -107,6 +122,18 @@ namespace Engine5
             if (world != nullptr)
             {
                 world->Update(dt);
+            }
+        }
+    }
+
+    void Level::DrawSpace(Space* space, eSubsystemFlag flag)
+    {
+        if (flag == eSubsystemFlag::World)
+        {
+            auto world = space->GetWorld();
+            if (world != nullptr)
+            {
+                world->Draw();
             }
         }
     }

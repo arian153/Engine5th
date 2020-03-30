@@ -59,31 +59,28 @@ namespace Engine5
         body_b->SetAngularVelocity(m_velocity.w_b);
     }
 
-    void ContactConstraints::Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& draw_contact) const
+    void ContactConstraints::Draw(PrimitiveRenderer* primitive_renderer, const Color& color) const
     {
-        if (draw_contact.b_flag)
+        Quaternion no_rotation;
+        Vector3    avg_a, avg_b;
+        for (auto& contact_point : m_manifold->contacts)
         {
-            Quaternion no_rotation;
-            Vector3    avg_a, avg_b;
-            for (auto& contact_point : m_manifold->contacts)
-            {
-                Vector3 pos_a = contact_point.global_position_a;
-                Vector3 pos_b = contact_point.global_position_b;
-                primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), eRenderingMode::Face, draw_contact.color);
-                primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), eRenderingMode::Face, draw_contact.color);
-                primitive_renderer->DrawSegment(pos_a, pos_a + contact_point.normal, draw_contact.color);
-                primitive_renderer->DrawSegment(pos_b, pos_b + contact_point.normal, draw_contact.color);
-                avg_a += pos_a;
-                avg_b += pos_b;
-            }
-            Real size = static_cast<Real>(m_manifold->contacts.size());
-            avg_a /= size;
-            avg_b /= size;
-            primitive_renderer->DrawPrimitive(Sphere(avg_a, no_rotation, 0.1f), eRenderingMode::Face, draw_contact.color);
-            primitive_renderer->DrawPrimitive(Sphere(avg_b, no_rotation, 0.1f), eRenderingMode::Face, draw_contact.color);
-            primitive_renderer->DrawSegment(avg_a, avg_a + m_manifold->manifold_normal, draw_contact.color);
-            primitive_renderer->DrawSegment(avg_b, avg_b + m_manifold->manifold_normal, draw_contact.color);
+            Vector3 pos_a = contact_point.global_position_a;
+            Vector3 pos_b = contact_point.global_position_b;
+            primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.1f), eRenderingMode::Face, color);
+            primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.1f), eRenderingMode::Face, color);
+            primitive_renderer->DrawSegment(pos_a, pos_a + contact_point.normal, color);
+            primitive_renderer->DrawSegment(pos_b, pos_b + contact_point.normal, color);
+            avg_a += pos_a;
+            avg_b += pos_b;
         }
+        Real size = static_cast<Real>(m_manifold->contacts.size());
+        avg_a /= size;
+        avg_b /= size;
+        primitive_renderer->DrawPrimitive(Sphere(avg_a, no_rotation, 0.1f), eRenderingMode::Face, color);
+        primitive_renderer->DrawPrimitive(Sphere(avg_b, no_rotation, 0.1f), eRenderingMode::Face, color);
+        primitive_renderer->DrawSegment(avg_a, avg_a + m_manifold->manifold_normal, color);
+        primitive_renderer->DrawSegment(avg_b, avg_b + m_manifold->manifold_normal, color);
     }
 
     void ContactConstraints::InitializeContactPoint(ContactPoint& contact_point) const

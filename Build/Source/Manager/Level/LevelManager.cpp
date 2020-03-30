@@ -300,6 +300,7 @@ namespace Engine5
         //update logic
         //update physics
         level->UpdateSubsystem(dt, eSubsystemFlag::World);
+        level->DrawSubsystem(eSubsystemFlag::World);
         //update animation
         //update sound
         level->Update(dt);

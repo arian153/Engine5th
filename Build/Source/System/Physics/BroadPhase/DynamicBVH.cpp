@@ -554,7 +554,7 @@ namespace Engine5
         {
             if (node->IsLeaf() == true)
             {
-                if (node->data != nullptr && primitive_color.b_flag)
+                if (node->data != nullptr)
                 {
                     if (node->data->GetCollider() != nullptr)
                     {
@@ -562,10 +562,7 @@ namespace Engine5
                     }
                 }
             }
-
-            if (broad_phase_color.b_flag)
-                primitive_renderer->DrawBox(node->aabb.Center(), Quaternion(), node->aabb.Size(), eRenderingMode::Line, broad_phase_color.color);
-
+            primitive_renderer->DrawBox(node->aabb.Center(), Quaternion(), node->aabb.Size(), eRenderingMode::Line, broad_phase_color.color);
             if (node->children[0] != nullptr)
             {
                 DrawNodeRecursive(node->children[0], primitive_renderer, broad_phase_color, primitive_color);

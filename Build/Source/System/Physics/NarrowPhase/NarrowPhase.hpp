@@ -24,7 +24,8 @@ namespace Engine5
 
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
 
-        void GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table, const ColorFlag& gjk, const ColorFlag& epa);
+        void GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table);
+        void Draw(const ColorFlag& draw_gjk_flag, const ColorFlag& draw_epa_flag);
 
         SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction);
         bool         GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex);
@@ -38,8 +39,13 @@ namespace Engine5
         void   BlowUpSimplexToTetrahedron(ColliderPrimitive* collider_a, ColliderPrimitive* collider_b, const Simplex& simplex);
 
     private:
-        PrimitiveRenderer* m_primitive_renderer = nullptr;
-        Vector3            m_search_dirs[6];
-        Vector3            m_axes[3];
+        PrimitiveRenderer*    m_primitive_renderer = nullptr;
+        std::vector<Simplex>  m_simplexes;
+        std::vector<Polytope> m_polytopes;
+
+        Vector3 m_search_dirs[6];
+        Vector3 m_axes[3];
     };
+
+    
 }

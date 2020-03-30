@@ -75,7 +75,7 @@ namespace Engine5
         void Initialize() override;
         void Solve(Real dt) override;
         void Apply() override;
-        void Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& draw_contact) const;
+        void Draw(PrimitiveRenderer* primitive_renderer, const Color& color) const;
 
         void InitializeContactPoint(ContactPoint& contact_point) const;
         void SolveContactPoint(ContactPoint& contact_point);

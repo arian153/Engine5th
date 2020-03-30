@@ -21,6 +21,8 @@ namespace Engine5
 
     void NarrowPhase::Shutdown()
     {
+        m_simplexes.clear();
+        m_polytopes.clear();
     }
 
     void NarrowPhase::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
@@ -28,9 +30,14 @@ namespace Engine5
         m_primitive_renderer = primitive_renderer;
     }
 
-    void NarrowPhase::GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table, const ColorFlag& gjk_flag, const ColorFlag& epa_flag)
+    void NarrowPhase::GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table)
     {
         data_table->FilteringManifolds();
+        size_t count = potential_list.size();
+        m_simplexes.clear();
+        m_simplexes.reserve(count);
+        m_polytopes.clear();
+        m_polytopes.reserve(count);
         for (auto& pair : potential_list)
         {
             Simplex      simplex;
@@ -43,32 +50,14 @@ namespace Engine5
                 {
                     BlowUpSimplexToTetrahedron(pair.first, pair.second, simplex);
                 }
-                if (gjk_flag.b_flag)
-                {
-                    m_primitive_renderer->DrawTetrahedron(
-                                                          simplex.simplex_vertex_a.global,
-                                                          simplex.simplex_vertex_b.global,
-                                                          simplex.simplex_vertex_c.global,
-                                                          simplex.simplex_vertex_d.global,
-                                                          eRenderingMode::Line, gjk_flag.color);
-                }
+                m_simplexes.push_back(simplex);
                 Polytope polytope = Polytope(simplex);
                 //draw gjk result simplex
                 ContactPoint new_contact_data;
                 if (EPAContactGeneration(pair.first, pair.second, polytope, new_contact_data) == true)
                 {
                     //draw EPA result
-                    if (epa_flag.b_flag)
-                    {
-                        for (auto& face : polytope.faces)
-                        {
-                            m_primitive_renderer->DrawTriangle(
-                                                               polytope.vertices[face.a].global,
-                                                               polytope.vertices[face.b].global,
-                                                               polytope.vertices[face.c].global,
-                                                               eRenderingMode::Line, epa_flag.color);
-                        }
-                    }
+                    m_polytopes.push_back(polytope);
                     //send a event about start and persist.
                     ContactManifold* found = data_table->FindManifold(set_a, set_b);
                     if (found == nullptr)
@@ -79,10 +68,6 @@ namespace Engine5
                     found->UpdateCurrentManifold(new_contact_data);
                     found->CutDownManifold();
                     found->is_collide = true;
-                    ////draw contact result.
-                    //if (contact_flag.b_flag)
-                    //{
-                    //}
                 }
                 else
                 {
@@ -100,6 +85,36 @@ namespace Engine5
                 {
                     data_table->SendNotCollision(set_a, set_b, found->is_collide);
                     found->is_collide = false;
+                }
+            }
+        }
+    }
+
+    void NarrowPhase::Draw(const ColorFlag& draw_gjk_flag, const ColorFlag& draw_epa_flag)
+    {
+        if (draw_gjk_flag.b_flag)
+        {
+            for (auto& simplex : m_simplexes)
+            {
+                m_primitive_renderer->DrawTetrahedron(
+                                                      simplex.simplex_vertex_a.global,
+                                                      simplex.simplex_vertex_b.global,
+                                                      simplex.simplex_vertex_c.global,
+                                                      simplex.simplex_vertex_d.global,
+                                                      eRenderingMode::Line, draw_gjk_flag.color);
+            }
+        }
+        if (draw_epa_flag.b_flag)
+        {
+            for (auto polytope : m_polytopes)
+            {
+                for (auto& face : polytope.faces)
+                {
+                    m_primitive_renderer->DrawTriangle(
+                                                       polytope.vertices[face.a].global,
+                                                       polytope.vertices[face.b].global,
+                                                       polytope.vertices[face.c].global,
+                                                       eRenderingMode::Line, draw_epa_flag.color);
                 }
             }
         }

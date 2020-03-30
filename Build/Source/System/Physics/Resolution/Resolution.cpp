@@ -4,6 +4,7 @@
 #include <vector>
 // ReSharper disable once CppUnusedIncludeDirective
 #include "ContactManifold.hpp"
+#include "../../Graphics/DataType/Color.hpp"
 
 namespace Engine5
 {
@@ -25,9 +26,10 @@ namespace Engine5
         m_friction.Shutdown();
     }
 
-    void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt, const ColorFlag& draw_contact)
+    void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
     {
         //resolution phase
+        m_contacts.clear();
         //solve contact manifold
         for (auto& manifold : manifold_table->m_manifold_table)
         {
@@ -52,7 +54,6 @@ namespace Engine5
         for (auto& contact : m_contacts)
         {
             contact.Apply();
-            contact.Draw(m_primitive_renderer, draw_contact);
         }
         //integration phase
         for (auto& body : *rigid_bodies)
@@ -67,11 +68,22 @@ namespace Engine5
                 contact.SolvePositionConstraints();
             }
         }
-        m_contacts.clear();
+       
     }
 
     void Resolution::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
     {
         m_primitive_renderer = primitive_renderer;
+    }
+
+    void Resolution::Draw(const ColorFlag& draw_contact_flag)
+    {
+        if (draw_contact_flag.b_flag)
+        {
+            for (auto& contact : m_contacts)
+            {
+                contact.Draw(m_primitive_renderer, draw_contact_flag.color);
+            }
+        }
     }
 }

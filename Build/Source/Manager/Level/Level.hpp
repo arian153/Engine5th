@@ -28,6 +28,7 @@ namespace Engine5
 
         void UpdateSpace(Real dt, size_t index, eSubsystemFlag flag) const;
         void UpdateSubsystem(Real dt, eSubsystemFlag flag) const;
+        void DrawSubsystem(eSubsystemFlag flag);
         void FixedUpdateSubsystem(Real dt, eSubsystemFlag flag) const;
 
         void AddSpaceResource(JsonResource* resource);
@@ -37,7 +38,8 @@ namespace Engine5
 
     private:
         void UpdateSpace(Real dt, Space* space, eSubsystemFlag flag) const;
-
+        void DrawSpace(Space* space, eSubsystemFlag flag);
+        
     private:
         Space* m_global_space = nullptr;
 
