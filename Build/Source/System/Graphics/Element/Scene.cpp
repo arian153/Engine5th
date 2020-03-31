@@ -18,10 +18,6 @@ namespace Engine5
     void Scene::Initialize()
     {
         m_matrix_manager->AddScene(this);
-        m_main_camera = new Camera();
-        m_main_camera->SetPosition(Vector3(0.0f, 0.0f, -60.0f));
-        m_main_camera->Initialize();
-        m_main_camera->SetScene(this);
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
@@ -43,12 +39,13 @@ namespace Engine5
             delete m_primitive_renderer;
             m_primitive_renderer = nullptr;
         }
-        if (m_main_camera != nullptr)
+        for (auto& camera : m_cameras)
         {
-            m_main_camera->Shutdown();
-            delete m_main_camera;
-            m_main_camera = nullptr;
+            camera->Shutdown();
+            delete camera;
+            camera = nullptr;
         }
+        m_cameras.clear();
     }
 
     void Scene::SetRenderer(RendererCommon* renderer)
@@ -140,6 +137,7 @@ namespace Engine5
 
     void Scene::RemoveCamera(Camera* camera)
     {
-        m_cameras.erase(std::find(m_cameras.begin(), m_cameras.end(), camera));
+        auto found = std::find(m_cameras.begin(), m_cameras.end(), camera);
+        m_cameras.erase(found);
     }
 }

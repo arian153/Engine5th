@@ -6,6 +6,8 @@
 
 namespace Engine5
 {
+    class Transform;
+    class CameraComponent;
     class Scene;
 
     class Camera
@@ -16,7 +18,7 @@ namespace Engine5
 
         void Initialize();
         void Update();
-        void Shutdown();
+        void Shutdown() const;
         void SetPosition(const Vector3& position);
         void SetOrientation(const Quaternion& orientation);
         void SetScene(Scene* scene);
@@ -27,6 +29,11 @@ namespace Engine5
         Matrix44   GetViewMatrix() const;
         Basis      GetBasis() const;
 
+        void SyncToTransform(Transform* transform) const;
+        void SyncFromTransform(Transform* transform);
+
+    private:
+        friend class CameraComponent;
 
     private:
         Matrix44   m_view_matrix;
@@ -35,5 +42,6 @@ namespace Engine5
         Real       m_zoom = 1.0f;
         Basis      m_basis;
         Scene*     m_scene = nullptr;
+        CameraComponent* m_component = nullptr;
     };
 }

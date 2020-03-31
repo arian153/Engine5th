@@ -2,6 +2,7 @@
 #include "../../Math/Math.hpp"
 #include "../../Math/Utility/MatrixUtility.hpp"
 #include "Scene.hpp"
+#include "../../../Manager/Component/EngineComponent/CameraComponent.hpp"
 
 namespace Engine5
 {
@@ -29,8 +30,13 @@ namespace Engine5
         }
     }
 
-    void Camera::Shutdown()
+    void Camera::Shutdown() const
     {
+        //disconnect rigid body
+        if (m_component != nullptr)
+        {
+            m_component->m_camera = nullptr;
+        }
     }
 
     void Camera::SetPosition(const Vector3& position)
@@ -42,6 +48,8 @@ namespace Engine5
     void Camera::SetOrientation(const Quaternion& orientation)
     {
         m_orientation = orientation;
+        m_basis       = Basis();
+        m_basis.Rotate(m_orientation);
         Update();
     }
 
@@ -84,5 +92,28 @@ namespace Engine5
     Basis Camera::GetBasis() const
     {
         return m_basis;
+    }
+
+    void Camera::SyncToTransform(Transform* transform) const
+    {
+        if (transform != nullptr)
+        {
+            transform->position    = m_position;
+            transform->orientation = m_orientation;
+            transform->scale       = Vector3(m_zoom, m_zoom, m_zoom);
+        }
+    }
+
+    void Camera::SyncFromTransform(Transform* transform)
+    {
+        if (transform != nullptr)
+        {
+            m_position    = transform->position;
+            m_orientation = transform->orientation;
+            m_zoom        = transform->scale.x;
+            m_basis = Basis();
+            m_basis.Rotate(m_orientation);
+            Update();
+        }
     }
 }
