@@ -693,7 +693,7 @@ namespace Engine5
             resource = new TextureResource(path);
             m_texture_resource_map.emplace(path, (TextureResource*)resource);
         }
-        else if (type == L".jsonmdl" || type == L".txtmdl")
+        else if (type == L".obj")
         {
             resource = new MeshResource(path);
             m_mesh_resource_map.emplace(path, (MeshResource*)resource);

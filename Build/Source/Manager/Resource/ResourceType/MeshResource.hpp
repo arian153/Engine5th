@@ -20,11 +20,11 @@ namespace Engine5
         void Initialize() override;
         void Shutdown() override;
 
-        void Load();
-
-        void LoadWaveFrontOBJ();
+        void LoadWaveFrontOBJ(std::ifstream& file);
         void LoadCustomTXT();
         void CheckMeshType();
+
+        MeshData* GetMeshData() ;
 
     private:
         eMeshType m_mesh_type = eMeshType::Invalid;
