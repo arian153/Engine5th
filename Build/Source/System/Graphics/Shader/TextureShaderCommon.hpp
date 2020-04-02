@@ -1,24 +1,26 @@
 #pragma once
 #include "../Renderer/RendererAPI.hpp"
-#include IncludeColorShaderAPI
+#include IncludeTextureShaderAPI
 #include "../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
+    class TextureCommon;
+    class Color;
     class ShaderManager;
     class ShaderResource;
     class Matrix44;
 
-    class ColorShaderCommon : public ColorShaderAPI
+    class TextureShaderCommon : public TextureShaderAPI
     {
     public:
-        explicit ColorShaderCommon(ShaderManager* shader_manager);
-        ~ColorShaderCommon();
+        explicit TextureShaderCommon(ShaderManager* shader_manager);
+        ~TextureShaderCommon();
 
         void SetShader(ShaderResource* shader);
 
         bool Initialize();
-        void Render(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj) const;
+        void Render(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj, TextureCommon* texture, const Color& color) const;
         void Shutdown();
 
     private:

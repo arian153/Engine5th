@@ -1,5 +1,6 @@
 #pragma once
 #include <d3d11.h>
+#include <string>
 
 namespace Engine5
 {
@@ -12,6 +13,8 @@ namespace Engine5
         void SetHWnd(HWND hwnd);
         void SetDevice(ID3D11Device* device);
         void SetDeviceContext(ID3D11DeviceContext* device_context);
+
+        void OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const std::wstring& shader_name);
 
     protected:
         ID3D11DeviceContext* m_device_context = nullptr;

@@ -1,24 +1,25 @@
 #pragma once
 #include "../Renderer/RendererAPI.hpp"
-#include IncludeColorShaderAPI
+#include IncludeLightShaderAPI
 #include "../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
+    class Camera;
     class ShaderManager;
     class ShaderResource;
     class Matrix44;
 
-    class ColorShaderCommon : public ColorShaderAPI
+    class LightShaderCommon : public LightShaderAPI
     {
     public:
-        explicit ColorShaderCommon(ShaderManager* shader_manager);
-        ~ColorShaderCommon();
+        explicit LightShaderCommon(ShaderManager* shader_manager);
+        ~LightShaderCommon();
 
         void SetShader(ShaderResource* shader);
 
         bool Initialize();
-        void Render(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj) const;
+        void Render(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj, Camera* camera) const;
         void Shutdown();
 
     private:

@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class RendererCommon;
     enum class eJsonType : unsigned long long;
     class LevelManager;
     class JsonResource;
@@ -45,6 +46,7 @@ namespace Engine5
         TextureResource* GetTextureResource(const std::wstring& path);
         TextureResource* GetTextureResourceFileName(const std::wstring& file_name);
         void             GetTextureResources(const std::wstring& file_name, std::vector<TextureResource*>& resources);
+        void             InitializeTextureResources(RendererCommon* renderer);
 
         //mesh
         MeshResource* GetMeshResource(const std::wstring& path);
@@ -63,8 +65,6 @@ namespace Engine5
         void          GetJsonResources(std::vector<JsonResource*>& resources);
         void          GetJsonResources(eJsonType type, std::vector<JsonResource*>& resources);
         JsonResource* CreateJsonResource(const std::wstring& path);
-        
-       
 
         //undefined
         UndefinedResource* GetUndefinedResource(const std::wstring& path);

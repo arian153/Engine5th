@@ -3,6 +3,7 @@
 #include "../../../Shader/ColorShaderCommon.hpp"
 #include "../../RendererCommon.hpp"
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
+#include <fstream>
 
 namespace Engine5
 {
@@ -29,6 +30,29 @@ namespace Engine5
         m_device_context = device_context;
     }
 
+    void ShaderManagerDX11::OutputShaderErrorMessage(ID3D10Blob* error, HWND hwnd, const std::wstring& shader_name)
+    {
+        std::ofstream file_out;
+        // Get a pointer to the error message text buffer.
+        char* compile_errors = (char*)(error->GetBufferPointer());
+        // Get the length of the message.
+        unsigned long long buffer_size = error->GetBufferSize();
+        // Open a file to write the error message to.
+        file_out.open("shader-error.txt");
+        // Write out the error message.
+        for (unsigned long long i = 0; i < buffer_size; i++)
+        {
+            file_out << compile_errors[i];
+        }
+        // Close the file.
+        file_out.close();
+        // Release the error message.
+        error->Release();
+        error = nullptr;
+        // Pop a message up on the screen to notify the user to check the text file for compile errors.
+        MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shader_name.c_str(), MB_OK);
+    }
+
     ShaderManager::ShaderManager()
     {
     }
@@ -43,7 +67,7 @@ namespace Engine5
         SetDevice(renderer->GetDevice());
         SetDeviceContext(renderer->GetDeviceContext());
         m_resource_manager = resource_manager;
-        m_color_shader     = new ColorShaderCommon();
+        m_color_shader     = new ColorShaderCommon(this);
         m_color_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Color.fx"));
         m_color_shader->SetHWnd(m_hwnd);
         m_color_shader->SetDevice(m_device);

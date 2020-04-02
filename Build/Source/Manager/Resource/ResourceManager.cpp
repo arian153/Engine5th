@@ -467,6 +467,15 @@ namespace Engine5
         }
     }
 
+    void ResourceManager::InitializeTextureResources(RendererCommon* renderer)
+    {
+        for (auto& texture : m_texture_resource_map)
+        {
+            auto resource = texture.second;
+            resource->SetRenderer(renderer);
+        }
+    }
+
     MeshResource* ResourceManager::GetMeshResource(const std::wstring& path)
     {
         auto found = m_mesh_resource_map.find(path);

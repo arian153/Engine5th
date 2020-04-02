@@ -9,6 +9,8 @@
 #define TextureVertexAPI TextureVertexDX11
 #define ShaderManagerAPI ShaderManagerDX11
 #define ColorShaderAPI ColorShaderDX11
+#define TextureShaderAPI TextureShaderDX11
+#define LightShaderAPI LightShaderDX11
 
 //includes
 #define IncludeRendererAPI "DX11/RendererDX11.hpp"
@@ -18,6 +20,8 @@
 #define IncludeTextureVertexAPI "../../Renderer/DX11/Vertex/TextureVertexDX11.hpp"
 #define IncludeShaderManagerAPI "../Renderer/DX11/Shader/ShaderManagerDX11.hpp"
 #define IncludeColorShaderAPI "../Renderer/DX11/Shader/ColorShaderDX11.hpp"
+#define IncludeTextureShaderAPI "../Renderer/DX11/Shader/TextureShaderDX11.hpp"
+#define IncludeLightShaderAPI "../Renderer/DX11/Shader/LightShaderDX11.hpp"
 
 #elif defined(E5_DIRECTX12)
 //classes

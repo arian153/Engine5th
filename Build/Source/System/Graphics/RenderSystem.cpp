@@ -3,6 +3,7 @@
 #include "Shader/ShaderManager.hpp"
 #include "../Core/OS-API/OSCommon.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
+#include "../../Manager/Resource/ResourceManager.hpp"
 
 namespace Engine5
 {
@@ -21,9 +22,11 @@ namespace Engine5
         m_renderer = new RendererCommon();
         m_renderer->SetHwnd(m_operating_system->AppHWnd());
         m_renderer->Initialize(rendering_width, rendering_height, m_operating_system->IsFullscreen());
-        //shader
+        //texture
         m_resource_manager = resource_manager;
-        m_shader_manager   = new ShaderManager();
+        m_resource_manager->InitializeTextureResources(m_renderer);
+        //shader
+        m_shader_manager = new ShaderManager();
         m_shader_manager->Initialize(m_renderer, resource_manager);
         //matrix generator
         m_matrix_manager = new MatrixManager();
