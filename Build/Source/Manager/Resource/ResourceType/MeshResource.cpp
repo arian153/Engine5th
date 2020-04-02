@@ -34,7 +34,7 @@ namespace Engine5
         case eMeshType::Invalid:
             break;
         case eMeshType::CustomTXT:
-            LoadCustomTXT();
+            LoadCustomTXT(file_stream);
             break;
         case eMeshType::WaveFrontOBJ:
             LoadWaveFrontOBJ(file_stream);
@@ -49,7 +49,6 @@ namespace Engine5
     {
     }
 
-   
     void MeshResource::LoadWaveFrontOBJ(std::ifstream& file)
     {
         // Read in the vertices, texture coordinates, and normals into the data structures.
@@ -172,9 +171,12 @@ namespace Engine5
             // Start reading the beginning of the next line.
             file.get(input);
         }
-        bool b_uv     = !uvs.empty();
-        bool b_normal = !normals.empty();
-        U32  index    = 0;
+        bool   b_uv     = !uvs.empty();
+        bool   b_normal = !normals.empty();
+        U32    index    = 0;
+        size_t count    = faces.size() * 3;
+        m_mesh_data.vertices.reserve(count);
+        m_mesh_data.indices.reserve(count);
         for (auto& face : faces)
         {
             TextureVertex vertex_a, vertex_b, vertex_c;
@@ -213,8 +215,43 @@ namespace Engine5
         }
     }
 
-    void MeshResource::LoadCustomTXT()
+    void MeshResource::LoadCustomTXT(std::ifstream& file)
     {
+        char input;
+        // Read up to the value of vertex count.
+        file.get(input);
+        while (input != ':')
+        {
+            file.get(input);
+        }
+        // Read in the vertex count.
+        U32 count = 0;
+        file >> count;
+        if (count == 0)
+        {
+            return;
+        }
+        // Create the model using the vertex count that was read in.
+        m_mesh_data.vertices.reserve(count);
+        m_mesh_data.indices.reserve(count);
+        // Read up to the beginning of the data.
+        file.get(input);
+        while (input != ':')
+        {
+            file.get(input);
+        }
+        file.get(input);
+        file.get(input);
+        // Read in the vertex data.
+        for (U32 i = 0; i < count; i++)
+        {
+            TextureVertex vertex;
+            file >> vertex.position.x >> vertex.position.y >> vertex.position.z;
+            file >> vertex.uv.x >> vertex.uv.y;
+            file >> vertex.normal.x >> vertex.normal.y >> vertex.normal.z;
+            m_mesh_data.vertices.push_back(vertex);
+            m_mesh_data.indices.push_back(i);
+        }
     }
 
     void MeshResource::CheckMeshType()
@@ -222,6 +259,10 @@ namespace Engine5
         if (m_file_type == L".obj")
         {
             m_mesh_type = eMeshType::WaveFrontOBJ;
+        }
+        else if(m_file_type == L".txtmdl")
+        {
+            m_mesh_type = eMeshType::CustomTXT;
         }
     }
 

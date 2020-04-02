@@ -21,7 +21,7 @@ namespace Engine5
         void Shutdown() override;
 
         void LoadWaveFrontOBJ(std::ifstream& file);
-        void LoadCustomTXT();
+        void LoadCustomTXT(std::ifstream& file);
         void CheckMeshType();
 
         MeshData* GetMeshData() ;
