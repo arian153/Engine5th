@@ -16,8 +16,6 @@ namespace Engine5
 
         void SetShader(ShaderResource* shader);
 
-       
-
         bool Initialize();
         void Render(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj) const;
         void Shutdown();
