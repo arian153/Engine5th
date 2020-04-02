@@ -3,6 +3,7 @@
 #include <vector>
 #include "../DataType/Color.hpp"
 #include "../DataType/Vertex/ColorVertex.hpp"
+#include "../DataType/MatrixData.hpp"
 
 namespace Engine5
 {
@@ -51,9 +52,7 @@ namespace Engine5
         size_t VerticesSize(eRenderingMode mode) const;
         size_t IndicesSize(eRenderingMode mode) const;
     private:
-        Matrix44           m_view_matrix;
-        Matrix44           m_world_matrix;
-        Matrix44           m_proj_matrix;
+        MatrixData         m_mvp_data;
         ColorShaderCommon* m_color_shader = nullptr;
         RendererCommon*    m_renderer     = nullptr;
 

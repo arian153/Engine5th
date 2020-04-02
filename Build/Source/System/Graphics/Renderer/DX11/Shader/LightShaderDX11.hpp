@@ -10,7 +10,7 @@ namespace Engine5
     protected:
         struct MatrixBufferType
         {
-            DirectX::XMMATRIX world;
+            DirectX::XMMATRIX model;
             DirectX::XMMATRIX view;
             DirectX::XMMATRIX projection;
         };

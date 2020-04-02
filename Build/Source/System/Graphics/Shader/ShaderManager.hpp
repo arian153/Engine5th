@@ -5,10 +5,10 @@
 
 namespace Engine5
 {
+    class MatrixData;
     class ResourceManager;
     class RendererCommon;
     class ColorShaderCommon;
-    class Matrix44;
 
     class ShaderManager : public ShaderManagerAPI
     {
@@ -18,7 +18,7 @@ namespace Engine5
         void Initialize(RendererCommon* renderer, ResourceManager* resource_manager);
         void Shutdown();
 
-        void RenderColorShader(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj) const;
+        void RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const;
 
         ColorShaderCommon* GetColorShader() const;
     private:

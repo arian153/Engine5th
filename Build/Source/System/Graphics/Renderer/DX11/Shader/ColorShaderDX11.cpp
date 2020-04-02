@@ -5,6 +5,7 @@
 #include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 #include "../../../Shader/ShaderManager.hpp"
 #include <d3dcompiler.h>
+#include "../../../DataType/MatrixData.hpp"
 
 namespace Engine5
 {
@@ -144,7 +145,7 @@ namespace Engine5
         return true;
     }
 
-    void ColorShaderCommon::Render(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj) const
+    void ColorShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data) const
     {
         D3D11_MAPPED_SUBRESOURCE mapped_resource;
         // Lock the constant buffer so it can be written to.
@@ -155,9 +156,9 @@ namespace Engine5
         MatrixBufferType* data_ptr = (MatrixBufferType*)mapped_resource.pData;
         // Transpose the matrices to prepare them for the shader.
         // Copy the matrices into the constant buffer.
-        data_ptr->world      = XMMatrixTranspose(ConverterDX11::ToXMMatrix(world));
-        data_ptr->view       = XMMatrixTranspose(ConverterDX11::ToXMMatrix(view));
-        data_ptr->projection = XMMatrixTranspose(ConverterDX11::ToXMMatrix(proj));
+        data_ptr->model      = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.model));
+        data_ptr->view       = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.view));
+        data_ptr->projection = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.projection));
         // Unlock the constant buffer.
         m_device_context->Unmap(m_matrix_buffer, 0);
         // Set the position of the constant buffer in the vertex shader.

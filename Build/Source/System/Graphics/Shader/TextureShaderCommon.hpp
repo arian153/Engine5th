@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class MatrixData;
     class TextureCommon;
     class Color;
     class ShaderManager;
@@ -20,7 +21,7 @@ namespace Engine5
         void SetShader(ShaderResource* shader);
 
         bool Initialize();
-        void Render(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj, TextureCommon* texture, const Color& color) const;
+        void Render(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
         void Shutdown();
 
     private:

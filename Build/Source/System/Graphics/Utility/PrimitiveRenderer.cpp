@@ -3,6 +3,7 @@
 #include "../Shader/ColorShaderCommon.hpp"
 #include "MatrixManager.hpp"
 #include "../DataType/BufferCommon.hpp"
+#include "../DataType/MatrixData.hpp"
 
 namespace Engine5
 {
@@ -190,19 +191,19 @@ namespace Engine5
         {
             m_dot_buffer->BuildBuffer(m_renderer, m_dot_vertices, m_dot_indices);
             m_dot_buffer->Render(sizeof(ColorVertex), 0, eTopologyType::PointList);
-            m_color_shader->Render(static_cast<U32>(m_dot_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
+            m_color_shader->Render(static_cast<U32>(m_dot_indices.size()), m_mvp_data);
         }
         if (m_line_vertices.empty() == false)
         {
             m_line_buffer->BuildBuffer(m_renderer, m_line_vertices, m_line_indices);
             m_line_buffer->Render(sizeof(ColorVertex), 0, eTopologyType::LineList);
-            m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
+            m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_mvp_data);
         }
         if (m_face_vertices.empty() == false)
         {
             m_face_buffer->BuildBuffer(m_renderer, m_face_vertices, m_face_indices);
             m_face_buffer->Render(sizeof(ColorVertex), 0);
-            m_color_shader->Render(static_cast<U32>(m_face_indices.size()), m_world_matrix, m_view_matrix, m_proj_matrix);
+            m_color_shader->Render(static_cast<U32>(m_face_indices.size()), m_mvp_data);
         }
         Clear();
     }
@@ -242,12 +243,12 @@ namespace Engine5
 
     void PrimitiveRenderer::UpdateViewMatrix(const Matrix44& view_matrix)
     {
-        m_view_matrix = view_matrix;
+        m_mvp_data.view = view_matrix;
     }
 
     void PrimitiveRenderer::UpdateProjectionMatrix(const Matrix44& projection_matrix)
     {
-        m_proj_matrix = projection_matrix;
+        m_mvp_data.projection = projection_matrix;
     }
 
     void PrimitiveRenderer::PushVertex(const Vector3& pos, eRenderingMode mode, const Color& color)

@@ -85,9 +85,9 @@ namespace Engine5
         }
     }
 
-    void ShaderManager::RenderColorShader(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj) const
+    void ShaderManager::RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const
     {
-        m_color_shader->Render(indices_count, world, view, proj);
+        m_color_shader->Render(indices_count, mvp_data);
     }
 
     ColorShaderCommon* ShaderManager::GetColorShader() const
