@@ -7,6 +7,7 @@
 #include <d3dcompiler.h>
 #include "../../../Element/Camera.hpp"
 #include "../../../DataType/MatrixData.hpp"
+#include "../../../DataType/TextureCommon.hpp"
 
 namespace Engine5
 {
@@ -216,8 +217,8 @@ namespace Engine5
         MatrixBufferType* matrix_data_ptr = (MatrixBufferType*)mapped_resource.pData;
         // Transpose the matrices to prepare them for the shader.
         // Copy the matrices into the constant buffer.
-        matrix_data_ptr->model = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.model));
-        matrix_data_ptr->view = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.view));
+        matrix_data_ptr->model      = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.model));
+        matrix_data_ptr->view       = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.view));
         matrix_data_ptr->projection = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.projection));
         // Unlock the constant buffer.
         m_device_context->Unmap(m_matrix_buffer, 0);
@@ -242,8 +243,8 @@ namespace Engine5
         // Now set the camera constant buffer in the vertex shader with the updated values.
         m_device_context->VSSetConstantBuffers(buffer_number, 1, &m_camera_buffer);
         // Set shader texture resource in the pixel shader.
-        //todo
-        //m_device_context->PSSetShaderResources(0, 1, &texture);
+        auto texture_view = texture->GetTexture();
+        m_device_context->PSSetShaderResources(0, 1, &texture_view);
         // Lock the light constant buffer so it can be written to.
         result = m_device_context->Map(m_light_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
         if (FAILED(result))
