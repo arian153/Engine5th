@@ -61,16 +61,10 @@ namespace Engine5
     {
     }
 
-    void ColorShaderCommon::SetVertexShader(ShaderResource* shader)
+    void ColorShaderCommon::SetShader(ShaderResource* shader)
     {
-        m_vertex_shader_resource = shader;
+        m_shader_resource = shader;
     }
-
-    void ColorShaderCommon::SetPixelShader(ShaderResource* shader)
-    {
-        m_pixel_shader_resource = shader;
-    }
-
  
     bool ColorShaderCommon::Initialize()
     {
@@ -78,8 +72,8 @@ namespace Engine5
         ID3D10Blob* vertex_shader_buffer = nullptr;
         ID3D10Blob* pixel_shader_buffer  = nullptr;
 
-        auto vertex_shader_path = m_vertex_shader_resource->FilePath();
-        auto pixel_shader_path = m_pixel_shader_resource->FilePath();
+        auto vertex_shader_path = m_shader_resource->FilePath();
+        auto pixel_shader_path = m_shader_resource->FilePath();
 
         // Compile the vertex shader code.
         HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);

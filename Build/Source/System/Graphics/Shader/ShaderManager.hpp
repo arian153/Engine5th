@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Math/Utility/MathDef.hpp"
+#include "../../Core/Utility/CoreDef.hpp"
 #include "../Renderer/RendererAPI.hpp"
 #include IncludeShaderManagerAPI
 
@@ -8,6 +8,7 @@ namespace Engine5
     class ResourceManager;
     class RendererCommon;
     class ColorShaderCommon;
+    class Matrix44;
 
     class ShaderManager : public ShaderManagerAPI
     {
@@ -15,11 +16,11 @@ namespace Engine5
         ShaderManager();
         ~ShaderManager();
         void Initialize(RendererCommon* renderer, ResourceManager* resource_manager);
-        void Update(Real dt);
         void Shutdown();
 
-        ColorShaderCommon* GetColorShader() const;
+        void RenderColorShader(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj) const;
 
+        ColorShaderCommon* GetColorShader() const;
     private:
         //shader list
         ColorShaderCommon* m_color_shader     = nullptr;

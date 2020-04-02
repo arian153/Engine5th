@@ -35,9 +35,11 @@ namespace Engine5
             break;
         case eMeshType::CustomTXT:
             LoadCustomTXT(file_stream);
+            m_b_loaded = true;
             break;
         case eMeshType::WaveFrontOBJ:
             LoadWaveFrontOBJ(file_stream);
+            m_b_loaded = true;
             break;
         default:
             break;
@@ -47,6 +49,7 @@ namespace Engine5
 
     void MeshResource::Shutdown()
     {
+        m_b_unloaded = true;
     }
 
     void MeshResource::LoadWaveFrontOBJ(std::ifstream& file)

@@ -44,16 +44,11 @@ namespace Engine5
         SetDeviceContext(renderer->GetDeviceContext());
         m_resource_manager = resource_manager;
         m_color_shader     = new ColorShaderCommon();
-        m_color_shader->SetVertexShader(m_resource_manager->GetShaderResourceFileName(L"Color.vs"));
-        m_color_shader->SetPixelShader(m_resource_manager->GetShaderResourceFileName(L"Color.ps"));
+        m_color_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Color.fx"));
         m_color_shader->SetHWnd(m_hwnd);
         m_color_shader->SetDevice(m_device);
         m_color_shader->SetDeviceContext(m_device_context);
         m_color_shader->Initialize();
-    }
-
-    void ShaderManager::Update(Real dt)
-    {
     }
 
     void ShaderManager::Shutdown()
@@ -64,6 +59,11 @@ namespace Engine5
             delete m_color_shader;
             m_color_shader = nullptr;
         }
+    }
+
+    void ShaderManager::RenderColorShader(U32 indices_count, const Matrix44& world, const Matrix44& view, const Matrix44& proj) const
+    {
+        m_color_shader->Render(indices_count, world, view, proj);
     }
 
     ColorShaderCommon* ShaderManager::GetColorShader() const

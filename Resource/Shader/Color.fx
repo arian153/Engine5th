@@ -19,7 +19,6 @@ struct PixelInputType
     float4 color : COLOR;
 };
 
-
 //vertex shader
 PixelInputType ColorVertexShader(VertexInputType input)
 {
@@ -37,4 +36,10 @@ PixelInputType ColorVertexShader(VertexInputType input)
     output.color = input.color;
 
     return output;
+}
+
+//pixel shader
+float4 ColorPixelShader(PixelInputType input) : SV_TARGET
+{
+    return input.color;
 }

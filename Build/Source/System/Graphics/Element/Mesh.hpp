@@ -16,6 +16,9 @@ namespace Engine5
         void Render() const;
         void Shutdown();
 
+        void Build();
+        void SetMeshData(MeshData* mesh_data);
+
     private:
         RendererCommon* m_renderer  = nullptr;
         BufferCommon*   m_buffer    = nullptr;
