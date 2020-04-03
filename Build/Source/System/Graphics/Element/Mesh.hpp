@@ -4,6 +4,7 @@
 
 namespace Engine5
 {
+    class Transform;
     class TextureCommon;
     class ShaderManager;
     class RendererCommon;
@@ -16,15 +17,17 @@ namespace Engine5
         Mesh();
         ~Mesh();
         void Initialize();
-        void Render() const;
         void Shutdown();
 
+        void RenderBuffer() const;
         void BuildBuffer();
         void SetMeshData(MeshData* mesh_data);
         void SetTexture(TextureCommon* texture);
+        void SetTransform(Transform* transform);
 
-        Matrix44 GetModelMatrix();
-        TextureCommon* GetTexture();
+        
+        Matrix44       GetModelMatrix() const;
+        TextureCommon* GetTexture() const;
 
     private:
         ShaderManager*  m_shader_manager = nullptr;
@@ -32,5 +35,6 @@ namespace Engine5
         BufferCommon*   m_buffer         = nullptr;
         MeshData*       m_mesh_data      = nullptr;
         TextureCommon*  m_texture        = nullptr;
+        Transform*      m_transform      = nullptr;
     };
 }

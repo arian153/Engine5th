@@ -2,6 +2,7 @@
 #include "../DataType/BufferCommon.hpp"
 #include "../DataType/MeshData.hpp"
 #include "../Shader/ShaderManager.hpp"
+#include "../../Math/Structure/Transform.hpp"
 
 namespace Engine5
 {
@@ -15,14 +16,6 @@ namespace Engine5
 
     void Mesh::Initialize()
     {
-    }
-
-    void Mesh::Render() const
-    {
-        if (m_buffer != nullptr)
-        {
-            m_buffer->Render(sizeof(TextureVertex), 0);
-        }
     }
 
     void Mesh::Shutdown()
@@ -39,6 +32,14 @@ namespace Engine5
             m_mesh_data->vertices.clear();
             delete m_mesh_data;
             m_mesh_data = nullptr;
+        }
+    }
+
+    void Mesh::RenderBuffer() const
+    {
+        if (m_buffer != nullptr)
+        {
+            m_buffer->Render(sizeof(TextureVertex), 0);
         }
     }
 
@@ -59,5 +60,24 @@ namespace Engine5
     void Mesh::SetTexture(TextureCommon* texture)
     {
         m_texture = texture;
+    }
+
+    void Mesh::SetTransform(Transform* transform)
+    {
+        m_transform = transform;
+    }
+
+    Matrix44 Mesh::GetModelMatrix() const
+    {
+        if (m_transform != nullptr)
+        {
+            return m_transform->LocalToWorldMatrix();
+        }
+        return Matrix44();
+    }
+
+    TextureCommon* Mesh::GetTexture() const
+    {
+        return m_texture;
     }
 }
