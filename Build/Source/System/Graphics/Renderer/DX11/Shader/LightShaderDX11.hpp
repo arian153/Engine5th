@@ -21,9 +21,13 @@ namespace Engine5
             Real              padding;
         };
 
+        struct ColorBufferType
+        {
+            DirectX::XMFLOAT4 color;
+        };
+
         struct LightBufferType
         {
-            DirectX::XMFLOAT4 mesh_color;
             DirectX::XMFLOAT4 ambient_color;
             DirectX::XMFLOAT4 diffuse_color;
             DirectX::XMFLOAT3 light_direction;

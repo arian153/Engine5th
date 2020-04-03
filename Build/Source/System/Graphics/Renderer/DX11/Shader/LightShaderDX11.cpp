@@ -204,7 +204,7 @@ namespace Engine5
         return true;
     }
 
-    void LightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera) const
+    void LightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color) const
     {
         D3D11_MAPPED_SUBRESOURCE mapped_resource;
         // Lock the constant buffer so it can be written to.
@@ -245,17 +245,33 @@ namespace Engine5
         // Set shader texture resource in the pixel shader.
         auto texture_view = texture->GetTexture();
         m_device_context->PSSetShaderResources(0, 1, &texture_view);
-        // Lock the light constant buffer so it can be written to.
-        result = m_device_context->Map(m_light_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
-        if (FAILED(result))
-        {
-            return;
-        }
-        // Get a pointer to the data in the constant buffer.
+
+        //result = m_device_context->Map(m_color_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+        //if (FAILED(result))
+        //{
+        //    return;
+        //}
+        //// Get a pointer to the data in the constant buffer.
+        //ColorBufferType* light_data_ptr = (ColorBufferType*)mapped_resource.pData;
+        //// Copy the lighting variables into the constant buffer.
+        //light_data_ptr->color = ConverterDX11::ToXMFloat4(color);
+        //// Unlock the constant buffer.
+        //m_device_context->Unmap(m_color_buffer, 0);
+        //// Set the position of the light constant buffer in the pixel shader.
+        //buffer_number = 0;
+        //// Finally set the light constant buffer in the pixel shader with the updated values.
+        //m_device_context->PSSetConstantBuffers(buffer_number, 1, &m_color_buffer);
+
+        //// Lock the light constant buffer so it can be written to.
+        //result = m_device_context->Map(m_light_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+        //if (FAILED(result))
+        //{
+        //    return;
+        //}
+        //// Get a pointer to the data in the constant buffer.
         //LightBufferType* light_data_ptr = (LightBufferType*)mapped_resource.pData;
-        // Copy the lighting variables into the constant buffer.
-        //todo
-        //light_data_ptr->mesh_color      = mesh_clr;
+        //// Copy the lighting variables into the constant buffer.
+        ////todo
         //light_data_ptr->ambient_color   = ambient_clr;
         //light_data_ptr->diffuse_color   = diffuse_clr;
         //light_data_ptr->light_direction = light_dir;
@@ -264,7 +280,7 @@ namespace Engine5
         // Unlock the constant buffer.
         m_device_context->Unmap(m_light_buffer, 0);
         // Set the position of the light constant buffer in the pixel shader.
-        buffer_number = 0;
+        buffer_number = 1;
         // Finally set the light constant buffer in the pixel shader with the updated values.
         m_device_context->PSSetConstantBuffers(buffer_number, 1, &m_light_buffer);
         // Set the vertex input layout.

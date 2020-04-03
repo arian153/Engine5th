@@ -5,10 +5,13 @@
 
 namespace Engine5
 {
+    class TextureCommon;
+    class TextureShaderCommon;
     class MatrixData;
     class ResourceManager;
     class RendererCommon;
     class ColorShaderCommon;
+    class Color;
 
     class ShaderManager : public ShaderManagerAPI
     {
@@ -19,11 +22,14 @@ namespace Engine5
         void Shutdown();
 
         void RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const;
+        void RenderTextureShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
 
         ColorShaderCommon* GetColorShader() const;
+        TextureShaderCommon* GetTextureShader() const;
     private:
         //shader list
-        ColorShaderCommon* m_color_shader     = nullptr;
-        ResourceManager*   m_resource_manager = nullptr;
+        ColorShaderCommon*   m_color_shader     = nullptr;
+        TextureShaderCommon* m_texture_shader   = nullptr;
+        ResourceManager*     m_resource_manager = nullptr;
     };
 }

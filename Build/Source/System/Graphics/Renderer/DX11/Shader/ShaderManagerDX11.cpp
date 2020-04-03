@@ -4,6 +4,7 @@
 #include "../../RendererCommon.hpp"
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
 #include <fstream>
+#include "../../../Shader/TextureShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -67,12 +68,22 @@ namespace Engine5
         SetDevice(renderer->GetDevice());
         SetDeviceContext(renderer->GetDeviceContext());
         m_resource_manager = resource_manager;
+
+        //color shader
         m_color_shader     = new ColorShaderCommon(this);
         m_color_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Color.fx"));
         m_color_shader->SetHWnd(m_hwnd);
         m_color_shader->SetDevice(m_device);
         m_color_shader->SetDeviceContext(m_device_context);
         m_color_shader->Initialize();
+
+        //texture shader
+        m_texture_shader = new TextureShaderCommon(this);
+        m_texture_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Texture.fx"));
+        m_texture_shader->SetHWnd(m_hwnd);
+        m_texture_shader->SetDevice(m_device);
+        m_texture_shader->SetDeviceContext(m_device_context);
+        m_texture_shader->Initialize();
     }
 
     void ShaderManager::Shutdown()
@@ -83,6 +94,13 @@ namespace Engine5
             delete m_color_shader;
             m_color_shader = nullptr;
         }
+
+        if (m_texture_shader != nullptr)
+        {
+            m_texture_shader->Shutdown();
+            delete m_texture_shader;
+            m_texture_shader = nullptr;
+        }
     }
 
     void ShaderManager::RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const
@@ -90,8 +108,18 @@ namespace Engine5
         m_color_shader->Render(indices_count, mvp_data);
     }
 
+    void ShaderManager::RenderTextureShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    {
+        m_texture_shader->Render(indices_count, mvp_data, texture, color);
+    }
+
     ColorShaderCommon* ShaderManager::GetColorShader() const
     {
         return m_color_shader;
+    }
+
+    TextureShaderCommon* ShaderManager::GetTextureShader() const
+    {
+        return m_texture_shader;
     }
 }

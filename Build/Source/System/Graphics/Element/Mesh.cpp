@@ -1,6 +1,7 @@
 #include "Mesh.hpp"
 #include "../DataType/BufferCommon.hpp"
 #include "../DataType/MeshData.hpp"
+#include "../Shader/ShaderManager.hpp"
 
 namespace Engine5
 {
@@ -41,7 +42,7 @@ namespace Engine5
         }
     }
 
-    void Mesh::Build()
+    void Mesh::BuildBuffer()
     {
         if (m_buffer == nullptr)
         {
@@ -53,5 +54,10 @@ namespace Engine5
     void Mesh::SetMeshData(MeshData* mesh_data)
     {
         m_mesh_data = mesh_data;
+    }
+
+    void Mesh::SetTexture(TextureCommon* texture)
+    {
+        m_texture = texture;
     }
 }
