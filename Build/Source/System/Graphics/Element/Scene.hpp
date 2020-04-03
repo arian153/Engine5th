@@ -30,16 +30,19 @@ namespace Engine5
         void SetMatrixManager(MatrixManager* matrix_manager);
         void SetMainCamera(Camera* camera);
 
-        void DrawShader(eShaderType shader_type);
         void SetProjectionType(eProjectionType projection_type);
         void UpdateView();
         void UpdateProjection();
 
         PrimitiveRenderer* GetPrimitiveRenderer() const;
 
+        //add
         Camera* AddCamera(Camera* camera);
-        void RemoveCamera(Camera* camera);
+        Mesh*   AddMesh(Mesh* mesh);
 
+        //remove
+        void    RemoveCamera(Camera* camera);
+        void    RemoveMesh(Mesh* mesh);
     private:
         RendererCommon*    m_renderer           = nullptr;
         ShaderManager*     m_shader_manager     = nullptr;
@@ -48,6 +51,7 @@ namespace Engine5
         PrimitiveRenderer* m_primitive_renderer = nullptr;
 
         std::vector<Camera*> m_cameras;
+        std::vector<Mesh*>   m_meshes;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;

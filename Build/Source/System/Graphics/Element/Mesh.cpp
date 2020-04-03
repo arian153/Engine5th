@@ -67,6 +67,11 @@ namespace Engine5
         m_transform = transform;
     }
 
+    void Mesh::SetShaderType(eShaderType type)
+    {
+        m_type = type;
+    }
+
     Matrix44 Mesh::GetModelMatrix() const
     {
         if (m_transform != nullptr)
@@ -79,5 +84,24 @@ namespace Engine5
     TextureCommon* Mesh::GetTexture() const
     {
         return m_texture;
+    }
+
+    eShaderType Mesh::GetShaderType() const
+    {
+        return m_type;
+    }
+
+    U32 Mesh::GetIndexCount() const
+    {
+        if (m_mesh_data != nullptr)
+        {
+            return static_cast<U32>(m_mesh_data->indices.size());
+        }
+        return 0;
+    }
+
+    Color Mesh::GetColor() const
+    {
+        return m_color;
     }
 }

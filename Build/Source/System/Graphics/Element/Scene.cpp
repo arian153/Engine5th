@@ -1,7 +1,6 @@
 #include "Scene.hpp"
 #include "../Renderer/RendererCommon.hpp"
 #include "../Shader/ShaderManager.hpp"
-#include "../Shader/ColorShaderCommon.hpp"
 #include "../Utility/MatrixManager.hpp"
 #include "../Utility/PrimitiveRenderer.hpp"
 
@@ -28,6 +27,31 @@ namespace Engine5
     void Scene::Update(Real dt) const
     {
         m_primitive_renderer->Update();
+        MatrixData mvp_data;
+        mvp_data.projection = m_projection_matrix;
+        for (auto& camera : m_cameras)
+        {
+            mvp_data.view = camera->GetViewMatrix();
+            for (auto& mesh : m_meshes)
+            {
+                Matrix44 model = mesh->GetModelMatrix();
+                auto     type  = mesh->GetShaderType();
+                switch (type)
+                {
+                case eShaderType::Color:
+                    // skip draw
+                    break;
+                case eShaderType::Texture:
+                    mesh->RenderBuffer();
+                    m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
+                    break;
+                case eShaderType::Light:
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
     }
 
     void Scene::Shutdown()
@@ -68,18 +92,6 @@ namespace Engine5
         if (camera != nullptr)
         {
             m_main_camera = camera;
-        }
-    }
-
-    void Scene::DrawShader(eShaderType shader_type)
-    {
-        switch (shader_type)
-        {
-        case eShaderType::Color:
-            //m_shader_manager->GetColorShader()->Render();
-            break;
-        default:
-            break;
         }
     }
 
@@ -135,9 +147,21 @@ namespace Engine5
         return camera;
     }
 
+    Mesh* Scene::AddMesh(Mesh* mesh)
+    {
+        m_meshes.push_back(mesh);
+        return mesh;
+    }
+
     void Scene::RemoveCamera(Camera* camera)
     {
         auto found = std::find(m_cameras.begin(), m_cameras.end(), camera);
         m_cameras.erase(found);
+    }
+
+    void Scene::RemoveMesh(Mesh* mesh)
+    {
+        auto found = std::find(m_meshes.begin(), m_meshes.end(), mesh);
+        m_meshes.erase(found);
     }
 }
