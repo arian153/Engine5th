@@ -50,7 +50,7 @@
                         "Color": [ 1, 1, 1, 1 ],
                         "Mesh": "../../Resource/Mesh/deer.obj",
                         "Shader Type": "Texture",
-                        "Texture": "../../Resource/Texture/stone01.dds"
+                        "Texture": "../../Resource/Texture/white.dds"
                     }
                 }
                 
