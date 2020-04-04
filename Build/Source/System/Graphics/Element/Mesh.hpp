@@ -35,12 +35,16 @@ namespace Engine5
         Color          GetColor() const;
 
     private:
+        friend class MeshComponent;
+
+    private:
         ShaderManager*  m_shader_manager = nullptr;
         RendererCommon* m_renderer       = nullptr;
         BufferCommon*   m_buffer         = nullptr;
         MeshData*       m_mesh_data      = nullptr;
         TextureCommon*  m_texture        = nullptr;
         Transform*      m_transform      = nullptr;
+        MeshComponent*  m_component      = nullptr;
         Color           m_color;
         eShaderType     m_type = eShaderType::Texture;
     };

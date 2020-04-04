@@ -3,6 +3,7 @@
 #include "../DataType/MeshData.hpp"
 #include "../Shader/ShaderManager.hpp"
 #include "../../Math/Structure/Transform.hpp"
+#include "../../../Manager/Component/EngineComponent/MeshComponent.hpp"
 
 namespace Engine5
 {
@@ -20,6 +21,10 @@ namespace Engine5
 
     void Mesh::Shutdown()
     {
+        if (m_component != nullptr)
+        {
+            m_component->m_mesh = nullptr;
+        }
         if (m_buffer != nullptr)
         {
             m_buffer->Shutdown();
@@ -39,7 +44,9 @@ namespace Engine5
     {
         if (m_buffer != nullptr)
         {
-            m_buffer->Render(sizeof(TextureVertex), 0);
+            m_type == eShaderType::Color
+                ? m_buffer->Render(sizeof(ColorVertex), 0)
+                : m_buffer->Render(sizeof(TextureVertex), 0);
         }
     }
 
@@ -49,7 +56,21 @@ namespace Engine5
         {
             m_buffer = new BufferCommon();
         }
-        m_buffer->BuildBuffer(m_renderer, m_mesh_data->vertices, m_mesh_data->indices);
+        if (m_type == eShaderType::Color)
+        {
+            std::vector<ColorVertex> vertices;
+            vertices.reserve(m_mesh_data->vertices.size());
+            for (auto& vertex : m_mesh_data->vertices)
+            {
+                vertices.emplace_back(vertex.GetPosition(), m_color);
+            }
+            m_buffer->BuildBuffer(m_renderer, vertices, m_mesh_data->indices);
+            vertices.clear();
+        }
+        else
+        {
+            m_buffer->BuildBuffer(m_renderer, m_mesh_data->vertices, m_mesh_data->indices);
+        }
     }
 
     void Mesh::SetMeshData(MeshData* mesh_data)
@@ -69,7 +90,14 @@ namespace Engine5
 
     void Mesh::SetShaderType(eShaderType type)
     {
-        m_type = type;
+        if (m_type != type)
+        {
+            m_type = type;
+            if (type == eShaderType::Color)
+            {
+                BuildBuffer();
+            }
+        }
     }
 
     Matrix44 Mesh::GetModelMatrix() const

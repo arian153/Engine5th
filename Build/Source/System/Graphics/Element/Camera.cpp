@@ -32,7 +32,6 @@ namespace Engine5
 
     void Camera::Shutdown() const
     {
-        //disconnect rigid body
         if (m_component != nullptr)
         {
             m_component->m_camera = nullptr;
