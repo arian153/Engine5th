@@ -153,6 +153,11 @@ namespace Engine5
         return m_component_manager;
     }
 
+    ResourceManager* Space::GetResourceManager() const
+    {
+        return m_resource_manager;
+    }
+
     Scene* Space::GetScene() const
     {
         return m_scene;

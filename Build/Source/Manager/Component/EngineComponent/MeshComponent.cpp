@@ -5,6 +5,11 @@
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../Space/Space.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
+#include "../../Resource/ResourceType/JsonResource.hpp"
+#include "../../../External/JSONCPP/json/json.h"
+#include "../../Resource/ResourceManager.hpp"
+#include "../../Resource/ResourceType/TextureResource.hpp"
+#include "../../Resource/ResourceType/MeshResource.hpp"
 
 namespace Engine5
 {
@@ -49,6 +54,34 @@ namespace Engine5
 
     bool MeshComponent::Load(const Json::Value& data)
     {
+        if (JsonResource::HasMember(data, "Texture") && data["Texture"].isString())
+        {
+            std::string texture  = data["Texture"].asString();
+            auto        resource = m_space->GetResourceManager()->GetTextureResource(StringToWString(texture));
+            m_mesh->SetTexture(resource->GetTexture());
+        }
+        if (JsonResource::HasMember(data, "Shader") && data["Shader"].isString())
+        {
+            std::string shader = data["Shader"].asString();
+            if (shader == "Color")
+            {
+                m_mesh->SetShaderType(eShaderType::Color);
+            }
+            else if (shader == "Texture")
+            {
+                m_mesh->SetShaderType(eShaderType::Texture);
+            }
+            else if (shader == "Light")
+            {
+                m_mesh->SetShaderType(eShaderType::Light);
+            }
+        }
+        if (JsonResource::HasMember(data, "Mesh") && data["Mesh"].isString())
+        {
+            std::string mesh = data[ "Mesh" ].asString();
+            auto        resource = m_space->GetResourceManager()->GetMeshResource(StringToWString(mesh));
+            m_mesh->SetMeshData(resource->GetMeshData());
+        }
         return true;
     }
 
@@ -69,7 +102,6 @@ namespace Engine5
         if (m_space != nullptr && m_mesh != nullptr)
         {
             m_space->GetScene()->RemoveMesh(m_mesh);
-
         }
     }
 
@@ -85,6 +117,4 @@ namespace Engine5
             //copy data
         }
     }
-
-    
 }

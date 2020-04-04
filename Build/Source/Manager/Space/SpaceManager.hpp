@@ -1,10 +1,10 @@
 #pragma once
 #include "SubsystemFlag.hpp"
 #include <vector>
-#include "../../System/Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
+    class ResourceManager;
     class JsonResource;
     class Space;
     class ObjectFactory;
@@ -16,7 +16,7 @@ namespace Engine5
     {
     public:
         SpaceManager() = delete;
-        explicit SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentRegistry* cmp);
+        explicit SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentRegistry* cmp, ResourceManager* resource);
         ~SpaceManager();
 
         void Initialize();
@@ -37,8 +37,9 @@ namespace Engine5
         std::vector<Space*> m_spaces;
         std::vector<Space*> m_active_spaces;
 
-        PhysicsSystem* m_physics_system = nullptr;
-        RenderSystem*  m_render_system  = nullptr;
+        PhysicsSystem*   m_physics_system   = nullptr;
+        RenderSystem*    m_render_system    = nullptr;
+        ResourceManager* m_resource_manager = nullptr;
 
         //factory
         ObjectFactory*     m_object_factory     = nullptr;

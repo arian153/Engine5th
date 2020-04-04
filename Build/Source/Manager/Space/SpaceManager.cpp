@@ -5,8 +5,8 @@
 
 namespace Engine5
 {
-    SpaceManager::SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentRegistry* cmp)
-        : m_physics_system(physics), m_render_system(renderer), m_object_factory(obj), m_component_registry(cmp)
+    SpaceManager::SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentRegistry* cmp, ResourceManager* resource)
+        : m_physics_system(physics), m_render_system(renderer), m_resource_manager(resource), m_object_factory(obj), m_component_registry(cmp)
     {
     }
 
@@ -51,6 +51,7 @@ namespace Engine5
         Space* space = new Space();
         m_spaces.push_back(space);
         space->m_creation_flag = flag;
+        space->m_resource_manager = m_resource_manager;
         space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry);
         return space;
     }
@@ -60,6 +61,7 @@ namespace Engine5
         Space* space = new Space();
         space->m_space_manager = this;
         m_spaces.push_back(space);
+        space->m_resource_manager = m_resource_manager;
         space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry);
         return space;
     }

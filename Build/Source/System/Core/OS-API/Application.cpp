@@ -60,7 +60,7 @@ namespace Engine5
         m_component_registry->Initialize();
         m_object_factory = new ObjectFactory();
         m_object_factory->Initialize(m_component_registry);
-        m_space_manager = new SpaceManager(m_physics_system, m_render_system, m_object_factory, m_component_registry);
+        m_space_manager = new SpaceManager(m_physics_system, m_render_system, m_object_factory, m_component_registry, m_resource_manager);
         m_space_manager->Initialize();
         m_level_manager = new LevelManager();
         m_level_manager->Initialize(this);

@@ -46,6 +46,6 @@ namespace Engine5
         Transform*      m_transform      = nullptr;
         MeshComponent*  m_component      = nullptr;
         Color           m_color;
-        eShaderType     m_type = eShaderType::Texture;
+        eShaderType     m_type = eShaderType::Invalid;
     };
 }

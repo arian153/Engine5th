@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class ResourceManager;
     class JsonResource;
     class ComponentRegistry;
     class ObjectFactory;
@@ -31,6 +32,7 @@ namespace Engine5
 
         ObjectManager*    GetObjectManager() const;
         ComponentManager* GetComponentManager() const;
+        ResourceManager*  GetResourceManager() const;
         Scene*            GetScene() const;
         World*            GetWorld() const;
 
@@ -53,6 +55,7 @@ namespace Engine5
         SpaceManager*     m_space_manager     = nullptr;
         ComponentManager* m_component_manager = nullptr;
         ObjectManager*    m_object_manager    = nullptr;
+        ResourceManager*  m_resource_manager  = nullptr;
         Scene*            m_scene             = nullptr;
         World*            m_world             = nullptr;
     };

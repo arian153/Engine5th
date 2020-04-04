@@ -4,7 +4,8 @@ namespace Engine5
 {
     enum class eShaderType
     {
-        Color
+        Invalid
+      , Color
       , Texture
       , Light
     };

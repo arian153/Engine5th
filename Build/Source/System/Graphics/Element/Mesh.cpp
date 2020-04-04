@@ -42,7 +42,7 @@ namespace Engine5
 
     void Mesh::RenderBuffer() const
     {
-        if (m_buffer != nullptr)
+        if (m_buffer != nullptr && m_type != eShaderType::Invalid)
         {
             m_type == eShaderType::Color
                 ? m_buffer->Render(sizeof(ColorVertex), 0)
@@ -56,26 +56,34 @@ namespace Engine5
         {
             m_buffer = new BufferCommon();
         }
-        if (m_type == eShaderType::Color)
+        if (m_mesh_data != nullptr)
         {
-            std::vector<ColorVertex> vertices;
-            vertices.reserve(m_mesh_data->vertices.size());
-            for (auto& vertex : m_mesh_data->vertices)
+            if (m_type == eShaderType::Invalid)
             {
-                vertices.emplace_back(vertex.GetPosition(), m_color);
+                //skip build buffer
             }
-            m_buffer->BuildBuffer(m_renderer, vertices, m_mesh_data->indices);
-            vertices.clear();
-        }
-        else
-        {
-            m_buffer->BuildBuffer(m_renderer, m_mesh_data->vertices, m_mesh_data->indices);
+            else if (m_type == eShaderType::Color)
+            {
+                std::vector<ColorVertex> vertices;
+                vertices.reserve(m_mesh_data->vertices.size());
+                for (auto& vertex : m_mesh_data->vertices)
+                {
+                    vertices.emplace_back(vertex.GetPosition(), m_color);
+                }
+                m_buffer->BuildBuffer(m_renderer, vertices, m_mesh_data->indices);
+                vertices.clear();
+            }
+            else
+            {
+                m_buffer->BuildBuffer(m_renderer, m_mesh_data->vertices, m_mesh_data->indices);
+            }
         }
     }
 
     void Mesh::SetMeshData(MeshData* mesh_data)
     {
         m_mesh_data = mesh_data;
+        BuildBuffer();
     }
 
     void Mesh::SetTexture(TextureCommon* texture)
@@ -93,10 +101,7 @@ namespace Engine5
         if (m_type != type)
         {
             m_type = type;
-            if (type == eShaderType::Color)
-            {
-                BuildBuffer();
-            }
+            BuildBuffer();
         }
     }
 
