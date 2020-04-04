@@ -6,6 +6,7 @@
 #include "EngineFactory/ColliderFactory.hpp"
 #include "EngineFactory/RigidBodyFactory.hpp"
 #include "EngineFactory/TransformFactory.hpp"
+#include "EngineFactory/MeshFactory.hpp"
 
 namespace Engine5
 {
@@ -23,6 +24,7 @@ namespace Engine5
         AddFactory(new RigidBodyFactory());
         AddFactory(new ColliderFactory());
         AddFactory(new CameraFactory());
+        AddFactory(new MeshFactory());
         return true;
     }
 

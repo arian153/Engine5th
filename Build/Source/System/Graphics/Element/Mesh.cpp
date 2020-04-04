@@ -105,6 +105,16 @@ namespace Engine5
         }
     }
 
+    void Mesh::SetColor(const Color& color)
+    {
+        m_color = color;
+    }
+
+    void Mesh::SetRenderer(RendererCommon* renderer)
+    {
+        m_renderer = renderer;
+    }
+
     Matrix44 Mesh::GetModelMatrix() const
     {
         if (m_transform != nullptr)

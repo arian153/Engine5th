@@ -17,38 +17,63 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
+                        "Orientation": [ 1, 0, 0, 0 ],
                         "Position": [ 0, 0, -60 ],
-                        "Scale": [1, 1, 1]
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
                     "Type": "CameraComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, -60],
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, -60 ],
                         "Zoom": 1.0
                     }
                 }
             ],
             "Name": "Camera"
         },
+
         {
             "Components": [
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [6, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 0, -1.7, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 0.01, 0.01, 0.01 ]
+                    }
+                },
+                {
+                    "Type": "MeshComponent",
+                    "Value": {
+                        "Color": [ 1, 1, 1, 1 ],
+                        "Mesh": "../../Resource/Mesh/deer.obj",
+                        "Shader Type": "Texture",
+                        "Texture": "../../Resource/Texture/stone01.dds"
+                    }
+                }
+                
+            ],
+            "Name": "Mesh"
+        },
+
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 6, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
                     "Type": "RigidBodyComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
@@ -58,9 +83,9 @@
                             {
                                 "Density": 1.0,
                                 "Material": "Rubber",
-                                "Orientation": [1, 0, 0, 0],
-                                "Position": [0, 0, 0],
-                                "Radius": [4, 2, 2],
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 4, 2, 2 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }
@@ -75,17 +100,17 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [-6, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -6, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
                     "Type": "RigidBodyComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
@@ -95,9 +120,9 @@
                             {
                                 "Density": 1.0,
                                 "Material": "Rubber",
-                                "Orientation": [1, 0, 0, 0],
-                                "Position": [0, 0, 0],
-                                "Radius": [4, 2, 2],
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 4, 2, 2 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }
@@ -112,17 +137,17 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
                     "Type": "RigidBodyComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
@@ -132,9 +157,9 @@
                             {
                                 "Density": 1.0,
                                 "Material": "Rubber",
-                                "Orientation": [1, 0, 0, 0],
-                                "Position": [0, 0, 0],
-                                "Radius": [2, 4, 2],
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 2, 4, 2 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }
@@ -147,24 +172,24 @@
     ],
     "Settings": {
         "Draw Broad Phase": {
-            "Color": [1, 1, 1, 1],
-            "Flag": true
+            "Color": [ 1, 1, 1, 1 ],
+            "Flag": false
         },
         "Draw Contact": {
-            "Color": [1, 1, 1, 1],
-            "Flag": true
+            "Color": [ 1, 1, 1, 1 ],
+            "Flag": false
         },
         "Draw EPA": {
-            "Color": [1, 1, 1, 1],
+            "Color": [ 1, 1, 1, 1 ],
             "Flag": false
         },
         "Draw GJK": {
-            "Color": [1, 1, 1, 1],
+            "Color": [ 1, 1, 1, 1 ],
             "Flag": false
         },
         "Draw Primitive": {
-            "Color": [1, 1, 1, 1],
-            "Flag": true
+            "Color": [ 1, 1, 1, 1 ],
+            "Flag": false
         },
         "ProjectionMatrix": "Perspective"
     },

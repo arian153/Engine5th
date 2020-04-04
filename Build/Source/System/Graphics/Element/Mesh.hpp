@@ -27,6 +27,8 @@ namespace Engine5
         void SetTexture(TextureCommon* texture);
         void SetTransform(Transform* transform);
         void SetShaderType(eShaderType type);
+        void SetColor(const Color& color);
+        void SetRenderer(RendererCommon* renderer);
 
         Matrix44       GetModelMatrix() const;
         TextureCommon* GetTexture() const;

@@ -34,8 +34,8 @@ namespace Engine5
             mvp_data.view = camera->GetViewMatrix();
             for (auto& mesh : m_meshes)
             {
-                Matrix44 model = mesh->GetModelMatrix();
-                auto     type  = mesh->GetShaderType();
+                mvp_data.model = mesh->GetModelMatrix();
+                auto type      = mesh->GetShaderType();
                 switch (type)
                 {
                 case eShaderType::Color:
@@ -70,6 +70,13 @@ namespace Engine5
             camera = nullptr;
         }
         m_cameras.clear();
+        for (auto& mesh : m_meshes)
+        {
+            mesh->Shutdown();
+            delete mesh;
+            mesh = nullptr;
+        }
+        m_meshes.clear();
     }
 
     void Scene::SetRenderer(RendererCommon* renderer)
@@ -150,6 +157,7 @@ namespace Engine5
     Mesh* Scene::AddMesh(Mesh* mesh)
     {
         m_meshes.push_back(mesh);
+        mesh->SetRenderer(m_renderer);
         return mesh;
     }
 

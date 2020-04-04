@@ -60,9 +60,9 @@ namespace Engine5
             auto        resource = m_space->GetResourceManager()->GetTextureResource(StringToWString(texture));
             m_mesh->SetTexture(resource->GetTexture());
         }
-        if (JsonResource::HasMember(data, "Shader") && data["Shader"].isString())
+        if (JsonResource::HasMember(data, "Shader Type") && data["Shader Type"].isString())
         {
-            std::string shader = data["Shader"].asString();
+            std::string shader = data["Shader Type"].asString();
             if (shader == "Color")
             {
                 m_mesh->SetShaderType(eShaderType::Color);
@@ -76,11 +76,22 @@ namespace Engine5
                 m_mesh->SetShaderType(eShaderType::Light);
             }
         }
-        if (JsonResource::HasMember(data, "Mesh") && data["Mesh"].isString())
+        if (JsonResource::HasMember(data, "Mesh"))
         {
-            std::string mesh = data[ "Mesh" ].asString();
-            auto        resource = m_space->GetResourceManager()->GetMeshResource(StringToWString(mesh));
-            m_mesh->SetMeshData(resource->GetMeshData());
+            if (data["Mesh"].isString())
+            {
+                std::string mesh     = data["Mesh"].asString();
+                auto        resource = m_space->GetResourceManager()->GetMeshResource(StringToWString(mesh));
+                m_mesh->SetMeshData(resource->GetMeshData());
+            }
+            else
+            {
+                //create mesh data from mesh generator
+            }
+        }
+        if (JsonResource::HasMember(data, "Color") && JsonResource::IsColor(data["Color"]))
+        {
+            m_mesh->SetColor(JsonResource::AsColor(data["Color"]));
         }
         return true;
     }
