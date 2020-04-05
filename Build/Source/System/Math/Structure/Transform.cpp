@@ -1,4 +1,5 @@
 ﻿#include "Transform.hpp"
+#include "../Utility/MatrixUtility.hpp"
 
 namespace Engine5
 {
@@ -23,15 +24,10 @@ namespace Engine5
 
     Matrix44 Transform::LocalToWorldMatrix() const
     {
-        Matrix44 scaling;
-        scaling.SetScale(scale, 1.0f);
-        Matrix44 rotation;
-        rotation.SetRotation(orientation);
-        Matrix44 translation;
-        translation.SetTranslation(position);
-        Matrix44 result(scaling);
-        result *= rotation;
-        result *= translation;
+        Matrix44 result = Math::Matrix44::Scale(scale, 1.0f);
+        result          = Math::Matrix44::Rotation(orientation) * result;
+        result.AddVectorColumn(3, position);
+        result.SetTranspose();
         return result;
     }
 

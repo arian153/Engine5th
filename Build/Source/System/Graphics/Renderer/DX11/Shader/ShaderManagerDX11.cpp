@@ -5,6 +5,7 @@
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
 #include <fstream>
 #include "../../../Shader/TextureShaderCommon.hpp"
+#include "../../../Shader/LightShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -68,15 +69,13 @@ namespace Engine5
         SetDevice(renderer->GetDevice());
         SetDeviceContext(renderer->GetDeviceContext());
         m_resource_manager = resource_manager;
-
         //color shader
-        m_color_shader     = new ColorShaderCommon(this);
+        m_color_shader = new ColorShaderCommon(this);
         m_color_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Color.fx"));
         m_color_shader->SetHWnd(m_hwnd);
         m_color_shader->SetDevice(m_device);
         m_color_shader->SetDeviceContext(m_device_context);
         m_color_shader->Initialize();
-
         //texture shader
         m_texture_shader = new TextureShaderCommon(this);
         m_texture_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Texture.fx"));
@@ -84,6 +83,13 @@ namespace Engine5
         m_texture_shader->SetDevice(m_device);
         m_texture_shader->SetDeviceContext(m_device_context);
         m_texture_shader->Initialize();
+        //texture shader
+        m_light_shader = new LightShaderCommon(this);
+        m_light_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Light.fx"));
+        m_light_shader->SetHWnd(m_hwnd);
+        m_light_shader->SetDevice(m_device);
+        m_light_shader->SetDeviceContext(m_device_context);
+        m_light_shader->Initialize();
     }
 
     void ShaderManager::Shutdown()
@@ -94,12 +100,17 @@ namespace Engine5
             delete m_color_shader;
             m_color_shader = nullptr;
         }
-
         if (m_texture_shader != nullptr)
         {
             m_texture_shader->Shutdown();
             delete m_texture_shader;
             m_texture_shader = nullptr;
+        }
+        if (m_light_shader != nullptr)
+        {
+            m_light_shader->Shutdown();
+            delete m_light_shader;
+            m_light_shader = nullptr;
         }
     }
 
@@ -113,6 +124,11 @@ namespace Engine5
         m_texture_shader->Render(indices_count, mvp_data, texture, color);
     }
 
+    void ShaderManager::RenderLightShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, const DirectionalLight& light) const
+    {
+        m_light_shader->Render(indices_count, mvp_data, texture, camera, color, light);
+    }
+
     ColorShaderCommon* ShaderManager::GetColorShader() const
     {
         return m_color_shader;
@@ -121,5 +137,10 @@ namespace Engine5
     TextureShaderCommon* ShaderManager::GetTextureShader() const
     {
         return m_texture_shader;
+    }
+
+    LightShaderCommon* ShaderManager::GetLightShader() const
+    {
+        return m_light_shader;
     }
 }

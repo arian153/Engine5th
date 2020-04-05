@@ -2,7 +2,6 @@
 #include "../../Math/Utility/MathDef.hpp"
 #include "Camera.hpp"
 #include "Mesh.hpp"
-#include "../Shader/ShaderType.hpp"
 #include "../DataType/ProjectionType.hpp"
 #include <vector>
 

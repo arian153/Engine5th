@@ -214,9 +214,9 @@ namespace Engine5
             return;
         }
         // Get a pointer to the data in the constant buffer.
-        ColorBufferType* light_data_ptr = (ColorBufferType*)mapped_resource.pData;
+        ColorBufferType* color_data_ptr = (ColorBufferType*)mapped_resource.pData;
         // Copy the lighting variables into the constant buffer.
-        light_data_ptr->color = ConverterDX11::ToXMFloat4(color);
+        color_data_ptr->color = ConverterDX11::ToXMFloat4(color);
         // Unlock the constant buffer.
         m_device_context->Unmap(m_color_buffer, 0);
         // Set the position of the light constant buffer in the pixel shader.

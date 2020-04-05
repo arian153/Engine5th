@@ -3,6 +3,7 @@
 #include "../Shader/ShaderManager.hpp"
 #include "../Utility/MatrixManager.hpp"
 #include "../Utility/PrimitiveRenderer.hpp"
+#include "../Light/DirectionalLight.hpp"
 
 namespace Engine5
 {
@@ -29,6 +30,12 @@ namespace Engine5
         m_primitive_renderer->Update();
         MatrixData mvp_data;
         mvp_data.projection = m_projection_matrix;
+        DirectionalLight light;
+
+        light.m_ambient = Color(0.15f, 0.15f, 0.15f);
+        light.m_direction = Vector3(0.0f, 0.0f, 1.0f);
+        light.m_specular_power = 32.0f;
+
         for (auto& camera : m_cameras)
         {
             mvp_data.view = camera->GetViewMatrix();
@@ -39,13 +46,16 @@ namespace Engine5
                 switch (type)
                 {
                 case eShaderType::Color:
-                    // skip draw
+                    mesh->RenderColorBuffer();
+                    m_shader_manager->RenderColorShader(mesh->GetIndexCount(), mvp_data);
                     break;
                 case eShaderType::Texture:
                     mesh->RenderBuffer();
                     m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
                     break;
                 case eShaderType::Light:
+                    mesh->RenderBuffer();
+                    m_shader_manager->RenderLightShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), camera, mesh->GetColor(), light);
                     break;
                 default:
                     break;

@@ -49,6 +49,7 @@ namespace Engine5
         ID3D11InputLayout*   m_layout         = nullptr;
         ID3D11Buffer*        m_matrix_buffer  = nullptr;
         ID3D11Buffer*        m_camera_buffer  = nullptr;
+        ID3D11Buffer*        m_color_buffer   = nullptr;
         ID3D11Buffer*        m_light_buffer   = nullptr;
         ID3D11SamplerState*  m_sampler_state  = nullptr;
         ID3D11DeviceContext* m_device_context = nullptr;

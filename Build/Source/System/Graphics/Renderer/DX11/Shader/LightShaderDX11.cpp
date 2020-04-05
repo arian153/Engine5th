@@ -8,6 +8,7 @@
 #include "../../../Element/Camera.hpp"
 #include "../../../DataType/MatrixData.hpp"
 #include "../../../DataType/TextureCommon.hpp"
+#include "../../../Light/DirectionalLight.hpp"
 
 namespace Engine5
 {
@@ -56,7 +57,7 @@ namespace Engine5
         auto        vertex_shader_path   = m_shader_resource->FilePath();
         auto        pixel_shader_path    = m_shader_resource->FilePath();
         // Compile the vertex shader code.
-        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
+        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "LightVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
         if (FAILED(result))
         {
             // If the shader failed to compile it should have written something to the error message.
@@ -72,7 +73,7 @@ namespace Engine5
             return false;
         }
         // Compile the pixel shader code.
-        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
+        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "LightPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
         if (FAILED(result))
         {
             // If the shader failed to compile it should have written something to the error message.
@@ -189,6 +190,18 @@ namespace Engine5
         {
             return false;
         }
+        D3D11_BUFFER_DESC color_buffer_desc;
+        color_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
+        color_buffer_desc.ByteWidth           = sizeof(ColorBufferType);
+        color_buffer_desc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
+        color_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
+        color_buffer_desc.MiscFlags           = 0;
+        color_buffer_desc.StructureByteStride = 0;
+        result                                = m_device->CreateBuffer(&color_buffer_desc, nullptr, &m_color_buffer);
+        if (FAILED(result))
+        {
+            return false;
+        }
         D3D11_BUFFER_DESC light_buffer_desc;
         light_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
         light_buffer_desc.ByteWidth           = sizeof(LightBufferType);
@@ -204,7 +217,7 @@ namespace Engine5
         return true;
     }
 
-    void LightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color) const
+    void LightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, const DirectionalLight& light) const
     {
         D3D11_MAPPED_SUBRESOURCE mapped_resource;
         // Lock the constant buffer so it can be written to.
@@ -245,38 +258,35 @@ namespace Engine5
         // Set shader texture resource in the pixel shader.
         auto texture_view = texture->GetTexture();
         m_device_context->PSSetShaderResources(0, 1, &texture_view);
-
-        //result = m_device_context->Map(m_color_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
-        //if (FAILED(result))
-        //{
-        //    return;
-        //}
-        //// Get a pointer to the data in the constant buffer.
-        //ColorBufferType* light_data_ptr = (ColorBufferType*)mapped_resource.pData;
-        //// Copy the lighting variables into the constant buffer.
-        //light_data_ptr->color = ConverterDX11::ToXMFloat4(color);
-        //// Unlock the constant buffer.
-        //m_device_context->Unmap(m_color_buffer, 0);
-        //// Set the position of the light constant buffer in the pixel shader.
-        //buffer_number = 0;
-        //// Finally set the light constant buffer in the pixel shader with the updated values.
-        //m_device_context->PSSetConstantBuffers(buffer_number, 1, &m_color_buffer);
-
-        //// Lock the light constant buffer so it can be written to.
-        //result = m_device_context->Map(m_light_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
-        //if (FAILED(result))
-        //{
-        //    return;
-        //}
-        //// Get a pointer to the data in the constant buffer.
-        //LightBufferType* light_data_ptr = (LightBufferType*)mapped_resource.pData;
-        //// Copy the lighting variables into the constant buffer.
-        ////todo
-        //light_data_ptr->ambient_color   = ambient_clr;
-        //light_data_ptr->diffuse_color   = diffuse_clr;
-        //light_data_ptr->light_direction = light_dir;
-        //light_data_ptr->specular_color  = specular_color;
-        //light_data_ptr->specular_power  = specular_power;
+        result = m_device_context->Map(m_color_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+        if (FAILED(result))
+        {
+            return;
+        }
+        // Get a pointer to the data in the constant buffer.
+        ColorBufferType* color_data_ptr = (ColorBufferType*)mapped_resource.pData;
+        // Copy the lighting variables into the constant buffer.
+        color_data_ptr->color = ConverterDX11::ToXMFloat4(color);
+        // Unlock the constant buffer.
+        m_device_context->Unmap(m_color_buffer, 0);
+        // Set the position of the light constant buffer in the pixel shader.
+        buffer_number = 0;
+        // Finally set the light constant buffer in the pixel shader with the updated values.
+        m_device_context->PSSetConstantBuffers(buffer_number, 1, &m_color_buffer);
+        // Lock the light constant buffer so it can be written to.
+        result = m_device_context->Map(m_light_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+        if (FAILED(result))
+        {
+            return;
+        }
+        // Get a pointer to the data in the constant buffer.
+        LightBufferType* light_data_ptr = (LightBufferType*)mapped_resource.pData;
+        // Copy the lighting variables into the constant buffer.
+        light_data_ptr->ambient_color   = ConverterDX11::ToXMFloat4(light.m_ambient);
+        light_data_ptr->diffuse_color   = ConverterDX11::ToXMFloat4(light.m_diffuse);
+        light_data_ptr->light_direction = ConverterDX11::ToXMFloat3(light.m_direction);
+        light_data_ptr->specular_color  = ConverterDX11::ToXMFloat4(light.m_specular);
+        light_data_ptr->specular_power  = light.m_specular_power;
         // Unlock the constant buffer.
         m_device_context->Unmap(m_light_buffer, 0);
         // Set the position of the light constant buffer in the pixel shader.
@@ -312,6 +322,11 @@ namespace Engine5
         {
             m_camera_buffer->Release();
             m_camera_buffer = nullptr;
+        }
+        if (m_color_buffer != nullptr)
+        {
+            m_color_buffer->Release();
+            m_color_buffer = nullptr;
         }
         if (m_light_buffer != nullptr)
         {

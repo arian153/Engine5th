@@ -42,11 +42,17 @@ namespace Engine5
 
     void Mesh::RenderBuffer() const
     {
-        if (m_buffer != nullptr && m_type != eShaderType::Invalid)
+        if (m_buffer != nullptr)
         {
-            m_type == eShaderType::Color
-                ? m_buffer->Render(sizeof(ColorVertex), 0)
-                : m_buffer->Render(sizeof(TextureVertex), 0);
+            m_buffer->Render(sizeof(TextureVertex), 0);
+        }
+    }
+
+    void Mesh::RenderColorBuffer() const
+    {
+        if (m_buffer != nullptr)
+        {
+            m_buffer->Render(sizeof(ColorVertex), 0);
         }
     }
 

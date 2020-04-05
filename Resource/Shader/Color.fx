@@ -1,9 +1,9 @@
 //global
 cbuffer MatrixBuffer
 {
-    matrix world_matrix;
-    matrix view_matrix;
-    matrix proj_matrix;
+    matrix model;
+    matrix view;
+    matrix projection;
 };
 
 //defs
@@ -28,9 +28,9 @@ PixelInputType ColorVertexShader(VertexInputType input)
     input.position.w = 1.0f;
 
     // Calculate the position of the vertex against the world, view, and projection matrices.
-    output.position = mul(input.position, world_matrix);
-    output.position = mul(output.position, view_matrix);
-    output.position = mul(output.position, proj_matrix);
+    output.position = mul(input.position, model);
+    output.position = mul(output.position, view);
+    output.position = mul(output.position, projection);
 
     // Store the input color for the pixel shader to use.
     output.color = input.color;

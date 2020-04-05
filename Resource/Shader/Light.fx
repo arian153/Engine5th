@@ -3,9 +3,9 @@ SamplerState sample_type;
 
 cbuffer MatrixBuffer
 {
-    matrix world_matrix;
-    matrix view_matrix;
-    matrix proj_matrix;
+    matrix model;
+    matrix view;
+    matrix projection;
 };
 
 cbuffer CameraBuffer
@@ -14,9 +14,13 @@ cbuffer CameraBuffer
     float padding;
 };
 
-cbuffer LightBuffer
+cbuffer ColorBuffer
 {
     float4 mesh_color;
+};
+
+cbuffer LightBuffer
+{
     float4 ambient_color;
     float4 diffuse_color;
     float3 light_direction;
@@ -51,21 +55,21 @@ PixelInputType LightVertexShader(VertexInputType input)
     input.position.w = 1.0f;
 
     // Calculate the position of the vertex against the world, view, and projection matrices.
-    output.position = mul(input.position, world_matrix);
-    output.position = mul(output.position, view_matrix);
-    output.position = mul(output.position, proj_matrix);
+    output.position = mul(input.position, model);
+    output.position = mul(output.position, view);
+    output.position = mul(output.position, projection);
 
     // Store the texture coordinates for the pixel shader.
     output.uv = input.uv;
 
     // Calculate the normal vector against the world matrix only.
-    output.normal = mul(input.normal, (float3x3)world_matrix);
+    output.normal = mul(input.normal, (float3x3)model);
 
     // Normalize the normal vector.
     output.normal = normalize(output.normal);
 
     // Calculate the position of the vertex in the world.
-    world_position = mul(input.position, world_matrix);
+    world_position = mul(input.position, model);
 
     // Determine the viewing direction based on the position of the camera and the position of the vertex in the world.
     output.view_direction = camera_position.xyz - world_position.xyz;
@@ -82,7 +86,7 @@ float4 LightPixelShader(PixelInputType input) : SV_TARGET
 {
     float4 texture_color;
     float3 light_dir;
-    float light_intensity;
+    float  light_intensity;
     float4 color;
     float3 reflection;
     float4 specular;
@@ -107,19 +111,17 @@ float4 LightPixelShader(PixelInputType input) : SV_TARGET
         color += (diffuse_color * light_intensity);
 
         // Saturate the ambient and diffuse color.
-       color = saturate(color);
+        color = saturate(color);
 
-       // Calculate the reflection vector based on the light intensity, normal vector, and light direction.
-      reflection = normalize(2 * light_intensity * input.normal - light_dir);
+        // Calculate the reflection vector based on the light intensity, normal vector, and light direction.
+        reflection = normalize(2 * light_intensity * input.normal - light_dir);
 
-      // Determine the amount of specular light based on the reflection vector, viewing direction, and specular power.
-      specular = pow(saturate(dot(reflection, input.view_direction)), specular_power);
-  }
+        // Determine the amount of specular light based on the reflection vector, viewing direction, and specular power.
+        specular = pow(saturate(dot(reflection, input.view_direction)), specular_power);
+    }
 
     // Multiply the texture pixel and the final diffuse color to get the final pixel color result.
     color = color * texture_color;
-
     color = saturate(color + specular);
-
     return color;
 }

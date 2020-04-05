@@ -54,6 +54,10 @@ namespace Engine5
 
     bool MeshComponent::Load(const Json::Value& data)
     {
+        if (JsonResource::HasMember(data, "Color") && JsonResource::IsColor(data["Color"]))
+        {
+            m_mesh->SetColor(JsonResource::AsColor(data["Color"]));
+        }
         if (JsonResource::HasMember(data, "Texture") && data["Texture"].isString())
         {
             std::string texture  = data["Texture"].asString();
@@ -88,10 +92,6 @@ namespace Engine5
             {
                 //create mesh data from mesh generator
             }
-        }
-        if (JsonResource::HasMember(data, "Color") && JsonResource::IsColor(data["Color"]))
-        {
-            m_mesh->SetColor(JsonResource::AsColor(data["Color"]));
         }
         return true;
     }

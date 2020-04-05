@@ -22,6 +22,7 @@ namespace Engine5
         void Shutdown();
 
         void RenderBuffer() const;
+        void RenderColorBuffer() const;
         void BuildBuffer();
         void SetMeshData(MeshData* mesh_data);
         void SetTexture(TextureCommon* texture);

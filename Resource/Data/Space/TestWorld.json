@@ -39,9 +39,9 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [ 0, -1.7, 0 ],
-                        "Position": [ 0, 0, 0 ],
-                        "Scale": [ 0.01, 0.01, 0.01 ]
+                        "Orientation": [ 0, 1.7, 0 ],
+                        "Position": [ 0, -15, 0 ],
+                        "Scale": [ 0.02, 0.02, 0.02 ]
                     }
                 },
                 {
@@ -49,15 +49,16 @@
                     "Value": {
                         "Color": [ 1, 1, 1, 1 ],
                         "Mesh": "../../Resource/Mesh/deer.obj",
-                        "Shader Type": "Texture",
+                        "Shader Type": "Light",
                         "Texture": "../../Resource/Texture/white.dds"
                     }
                 }
-                
+
             ],
-            "Name": "Mesh"
+            "Name": "Dear1"
         },
 
+       
         {
             "Components": [
                 {
