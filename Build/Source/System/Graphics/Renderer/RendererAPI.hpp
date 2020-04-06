@@ -4,6 +4,7 @@
 //classes
 #define RendererAPI RendererDX11
 #define BufferAPI BufferDX11
+#define DeferredBufferAPI DeferredBufferDX11
 #define TextureAPI TextureDX11
 #define ColorVertexAPI ColorVertexDX11
 #define TextureVertexAPI TextureVertexDX11
@@ -15,6 +16,7 @@
 //includes
 #define IncludeRendererAPI "DX11/RendererDX11.hpp"
 #define IncludeBufferAPI "../Renderer/DX11/BufferDX11.hpp"
+#define IncludeDeferredBufferAPI "../../Renderer/DX11/Buffer/DeferredBufferDX11.hpp"
 #define IncludeTextureAPI "../Renderer/DX11/TextureDX11.hpp"
 #define IncludeColorVertexAPI "../../Renderer/DX11/Vertex/ColorVertexDX11.hpp"
 #define IncludeTextureVertexAPI "../../Renderer/DX11/Vertex/TextureVertexDX11.hpp"
