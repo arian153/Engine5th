@@ -1,8 +1,8 @@
 #include "DeferredBufferDX11.hpp"
 #include "../../../../Core/Utility/CoreDef.hpp"
 #include "../../../../Math/Utility/MathDef.hpp"
-#include "../../../DataType/Buffer/DeferredBufferCommon.hpp"
 #include "../../../DataType/Color.hpp"
+#include "../../../Buffer/DeferredBufferCommon.hpp"
 
 namespace Engine5
 {

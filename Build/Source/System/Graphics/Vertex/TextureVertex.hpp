@@ -1,7 +1,7 @@
 #pragma once
-#include "../../../Math/Utility/MathDef.hpp"
-#include "../../Renderer/RendererAPI.hpp"
+#include "../API/GraphicsAPI.hpp"
 #include IncludeTextureVertexAPI
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {

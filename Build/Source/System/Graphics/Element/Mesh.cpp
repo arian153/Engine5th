@@ -1,9 +1,9 @@
 #include "Mesh.hpp"
-#include "../DataType/Buffer/MeshBufferCommon.hpp"
 #include "../DataType/MeshData.hpp"
 #include "../Shader/ShaderManager.hpp"
 #include "../../Math/Structure/Transform.hpp"
 #include "../../../Manager/Component/EngineComponent/MeshComponent.hpp"
+#include "../Buffer/MeshBufferCommon.hpp"
 
 namespace Engine5
 {

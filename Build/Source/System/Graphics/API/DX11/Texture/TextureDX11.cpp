@@ -1,8 +1,8 @@
 #include "TextureDX11.hpp"
-#include "../../DataType/TextureCommon.hpp"
-#include "../../../../External/DirectXTextureLoader/DDSTextureLoader.h"
-#include "../../../../External/DirectXTextureLoader/WICTextureLoader.h"
-#include "../RendererCommon.hpp"
+#include "../../../Texture/TextureCommon.hpp"
+#include "../../../../../External/DirectXTextureLoader/DDSTextureLoader.h"
+#include "../../../../../External/DirectXTextureLoader/WICTextureLoader.h"
+#include "../../../Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {

@@ -1,11 +1,11 @@
 #include "ShaderManagerDX11.hpp"
 #include "../../../Shader/ShaderManager.hpp"
 #include "../../../Shader/ColorShaderCommon.hpp"
-#include "../../RendererCommon.hpp"
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
 #include <fstream>
 #include "../../../Shader/TextureShaderCommon.hpp"
 #include "../../../Shader/LightShaderCommon.hpp"
+#include "../../../Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {

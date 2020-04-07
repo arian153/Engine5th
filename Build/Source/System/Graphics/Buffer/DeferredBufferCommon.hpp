@@ -1,7 +1,7 @@
 #pragma once
-#include "../../../Math/Utility/MathDef.hpp"
-#include "../../../Core/Utility/CoreDef.hpp"
-#include "../../Renderer/RendererAPI.hpp"
+#include "../../Math/Utility/MathDef.hpp"
+#include "../../Core/Utility/CoreDef.hpp"
+#include "../API/GraphicsAPI.hpp"
 #include IncludeDeferredBufferAPI
 
 namespace Engine5

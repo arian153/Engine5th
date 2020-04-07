@@ -1,8 +1,8 @@
 #include "MeshBufferDX11.hpp"
 #include "../../../../Core/Utility/CoreDef.hpp"
-#include "../../RendererCommon.hpp"
 #include "../../../DataType/TopologyDef.hpp"
-#include "../../../DataType/Buffer/MeshBufferCommon.hpp"
+#include "../../../Buffer/MeshBufferCommon.hpp"
+#include "../../../Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {

@@ -1,12 +1,12 @@
 #pragma once
-#include "../../../Core/Utility/CoreDef.hpp"
-
-#include <vector>
-#include "../../DataType/Vertex/ColorVertex.hpp"
-#include "../../DataType/Vertex/TextureVertex.hpp"
-#include "../../DataType/TopologyDef.hpp"
-#include "../../Renderer/RendererAPI.hpp"
+#include "../API/GraphicsAPI.hpp"
 #include IncludeMeshBufferAPI
+#include "../../Core/Utility/CoreDef.hpp"
+#include "../Vertex/ColorVertex.hpp"
+#include "../Vertex/TextureVertex.hpp"
+#include "../DataType/TopologyDef.hpp"
+#include <vector>
+
 
 namespace Engine5
 {

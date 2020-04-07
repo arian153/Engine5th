@@ -2,8 +2,8 @@
 #include "../../Math/Math.hpp"
 #include <vector>
 #include "../DataType/Color.hpp"
-#include "../DataType/Vertex/ColorVertex.hpp"
 #include "../DataType/MatrixData.hpp"
+#include "../Vertex/ColorVertex.hpp"
 
 namespace Engine5
 {

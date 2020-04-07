@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Core/Utility/CoreDef.hpp"
 #include <vector>
-#include "Vertex/TextureVertex.hpp"
+#include "../Vertex/TextureVertex.hpp"
 
 namespace Engine5
 {

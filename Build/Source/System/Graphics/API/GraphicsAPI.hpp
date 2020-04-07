@@ -14,16 +14,16 @@
 #define LightShaderAPI LightShaderDX11
 
 //includes
-#define IncludeRendererAPI "DX11/RendererDX11.hpp"
-#define IncludeMeshBufferAPI "../../Renderer/DX11/Buffer/MeshBufferDX11.hpp"
-#define IncludeDeferredBufferAPI "../../Renderer/DX11/Buffer/DeferredBufferDX11.hpp"
-#define IncludeTextureAPI "../Renderer/DX11/TextureDX11.hpp"
-#define IncludeColorVertexAPI "../../Renderer/DX11/Vertex/ColorVertexDX11.hpp"
-#define IncludeTextureVertexAPI "../../Renderer/DX11/Vertex/TextureVertexDX11.hpp"
-#define IncludeShaderManagerAPI "../Renderer/DX11/Shader/ShaderManagerDX11.hpp"
-#define IncludeColorShaderAPI "../Renderer/DX11/Shader/ColorShaderDX11.hpp"
-#define IncludeTextureShaderAPI "../Renderer/DX11/Shader/TextureShaderDX11.hpp"
-#define IncludeLightShaderAPI "../Renderer/DX11/Shader/LightShaderDX11.hpp"
+#define IncludeRendererAPI "../API/DX11/RendererDX11.hpp"
+#define IncludeMeshBufferAPI "../API/DX11/Buffer/MeshBufferDX11.hpp"
+#define IncludeDeferredBufferAPI "../API/DX11/Buffer/DeferredBufferDX11.hpp"
+#define IncludeTextureAPI "../API/DX11/Texture/TextureDX11.hpp"
+#define IncludeColorVertexAPI "../API/DX11/Vertex/ColorVertexDX11.hpp"
+#define IncludeTextureVertexAPI "../API/DX11/Vertex/TextureVertexDX11.hpp"
+#define IncludeShaderManagerAPI "../API/DX11/Shader/ShaderManagerDX11.hpp"
+#define IncludeColorShaderAPI "../API/DX11/Shader/ColorShaderDX11.hpp"
+#define IncludeTextureShaderAPI "../API/DX11/Shader/TextureShaderDX11.hpp"
+#define IncludeLightShaderAPI "../API/DX11/Shader/LightShaderDX11.hpp"
 
 #elif defined(E5_DIRECTX12)
 //classes

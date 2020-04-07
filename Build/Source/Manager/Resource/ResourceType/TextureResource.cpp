@@ -1,5 +1,5 @@
 #include "TextureResource.hpp"
-#include "../../../System/Graphics/DataType/TextureCommon.hpp"
+#include "../../../System/Graphics/Texture/TextureCommon.hpp"
 
 namespace Engine5
 {
