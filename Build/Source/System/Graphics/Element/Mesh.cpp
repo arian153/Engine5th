@@ -1,5 +1,5 @@
 #include "Mesh.hpp"
-#include "../DataType/BufferCommon.hpp"
+#include "../DataType/Buffer/MeshBufferCommon.hpp"
 #include "../DataType/MeshData.hpp"
 #include "../Shader/ShaderManager.hpp"
 #include "../../Math/Structure/Transform.hpp"
@@ -60,7 +60,7 @@ namespace Engine5
     {
         if (m_buffer == nullptr)
         {
-            m_buffer = new BufferCommon();
+            m_buffer = new MeshBufferCommon();
         }
         if (m_mesh_data != nullptr)
         {

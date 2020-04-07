@@ -1,28 +1,28 @@
-#include "BufferDX11.hpp"
-#include "../../../Core/Utility/CoreDef.hpp"
-#include "../RendererCommon.hpp"
-#include "../../DataType/TopologyDef.hpp"
-#include "../../DataType/BufferCommon.hpp"
+#include "MeshBufferDX11.hpp"
+#include "../../../../Core/Utility/CoreDef.hpp"
+#include "../../RendererCommon.hpp"
+#include "../../../DataType/TopologyDef.hpp"
+#include "../../../DataType/Buffer/MeshBufferCommon.hpp"
 
 namespace Engine5
 {
-    BufferDX11::BufferDX11()
+    MeshBufferDX11::MeshBufferDX11()
     {
     }
 
-    BufferDX11::~BufferDX11()
+    MeshBufferDX11::~MeshBufferDX11()
     {
     }
 
-    BufferCommon::BufferCommon()
+    MeshBufferCommon::MeshBufferCommon()
     {
     }
 
-    BufferCommon::~BufferCommon()
+    MeshBufferCommon::~MeshBufferCommon()
     {
     }
 
-    void BufferCommon::Render(U32 stride, U32 offset, eTopologyType topology) const
+    void MeshBufferCommon::Render(U32 stride, U32 offset, eTopologyType topology) const
     {
         // Set the vertex buffer to active in the input assembler so it can be rendered.
         m_device_context->IASetVertexBuffers(0, 1, &m_vertex_buffer, &stride, &offset);
@@ -46,7 +46,7 @@ namespace Engine5
         }
     }
 
-    void BufferCommon::Render(U32 stride, U32 offset) const
+    void MeshBufferCommon::Render(U32 stride, U32 offset) const
     {
         // Set the vertex buffer to active in the input assembler so it can be rendered.
         m_device_context->IASetVertexBuffers(0, 1, &m_vertex_buffer, &stride, &offset);
@@ -56,7 +56,7 @@ namespace Engine5
         m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     }
 
-    void BufferCommon::Shutdown()
+    void MeshBufferCommon::Shutdown()
     {
         if (m_vertex_buffer != nullptr)
         {
@@ -70,7 +70,7 @@ namespace Engine5
         }
     }
 
-    bool BufferCommon::BuildBuffer(RendererCommon* renderer, const std::vector<ColorVertex>& vertices, const std::vector<U32>& indices)
+    bool MeshBufferCommon::BuildBuffer(RendererCommon* renderer, const std::vector<ColorVertex>& vertices, const std::vector<U32>& indices)
     {
         if (m_vertex_buffer != nullptr)
         {
@@ -120,7 +120,7 @@ namespace Engine5
         return true;
     }
 
-    bool BufferCommon::BuildBuffer(RendererCommon* renderer, const std::vector<TextureVertex>& vertices, const std::vector<U32>& indices)
+    bool MeshBufferCommon::BuildBuffer(RendererCommon* renderer, const std::vector<TextureVertex>& vertices, const std::vector<U32>& indices)
     {
         if (m_vertex_buffer != nullptr)
         {

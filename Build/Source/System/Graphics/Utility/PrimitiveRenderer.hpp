@@ -8,7 +8,7 @@
 namespace Engine5
 {
     class MatrixManager;
-    class BufferCommon;
+    class MeshBufferCommon;
     class RendererCommon;
     class Camera;
     class ColorShaderCommon;
@@ -58,15 +58,15 @@ namespace Engine5
 
         std::vector<ColorVertex> m_dot_vertices;
         std::vector<U32>         m_dot_indices;
-        BufferCommon*            m_dot_buffer = nullptr;
+        MeshBufferCommon*            m_dot_buffer = nullptr;
 
         std::vector<ColorVertex> m_line_vertices;
         std::vector<U32>         m_line_indices;
-        BufferCommon*            m_line_buffer = nullptr;
+        MeshBufferCommon*            m_line_buffer = nullptr;
 
         std::vector<ColorVertex> m_face_vertices;
         std::vector<U32>         m_face_indices;
-        BufferCommon*            m_face_buffer = nullptr;
+        MeshBufferCommon*            m_face_buffer = nullptr;
 
     public:
         const int CIRCULAR_VERTICES_COUNT    = 100;

@@ -2,7 +2,7 @@
 #include "../Renderer/RendererCommon.hpp"
 #include "../Shader/ColorShaderCommon.hpp"
 #include "MatrixManager.hpp"
-#include "../DataType/BufferCommon.hpp"
+#include "../DataType/Buffer/MeshBufferCommon.hpp"
 #include "../DataType/MatrixData.hpp"
 
 namespace Engine5
@@ -180,9 +180,9 @@ namespace Engine5
     void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader)
     {
         m_color_shader = color_shader;
-        m_dot_buffer   = new BufferCommon();
-        m_line_buffer  = new BufferCommon();
-        m_face_buffer  = new BufferCommon();
+        m_dot_buffer   = new MeshBufferCommon();
+        m_line_buffer  = new MeshBufferCommon();
+        m_face_buffer  = new MeshBufferCommon();
     }
 
     void PrimitiveRenderer::Update()

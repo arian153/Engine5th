@@ -1,22 +1,22 @@
 #pragma once
-#include "../../Core/Utility/CoreDef.hpp"
+#include "../../../Core/Utility/CoreDef.hpp"
 
 #include <vector>
-#include "../DataType/Vertex/ColorVertex.hpp"
-#include "../DataType/Vertex/TextureVertex.hpp"
-#include "../DataType/TopologyDef.hpp"
-#include "../Renderer/RendererAPI.hpp"
-#include IncludeBufferAPI
+#include "../../DataType/Vertex/ColorVertex.hpp"
+#include "../../DataType/Vertex/TextureVertex.hpp"
+#include "../../DataType/TopologyDef.hpp"
+#include "../../Renderer/RendererAPI.hpp"
+#include IncludeMeshBufferAPI
 
 namespace Engine5
 {
     class RendererCommon;
 
-    class BufferCommon : public BufferAPI
+    class MeshBufferCommon : public MeshBufferAPI
     {
     public:
-        BufferCommon();
-        ~BufferCommon();
+        MeshBufferCommon();
+        ~MeshBufferCommon();
 
         void Render(U32 stride, U32 offset, eTopologyType topology) const;
         void Render(U32 stride, U32 offset) const;

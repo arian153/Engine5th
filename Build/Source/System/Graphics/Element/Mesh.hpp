@@ -11,7 +11,7 @@ namespace Engine5
     class ShaderManager;
     class RendererCommon;
     class MeshData;
-    class BufferCommon;
+    class MeshBufferCommon;
 
     class Mesh
     {
@@ -43,7 +43,7 @@ namespace Engine5
     private:
         ShaderManager*  m_shader_manager = nullptr;
         RendererCommon* m_renderer       = nullptr;
-        BufferCommon*   m_buffer         = nullptr;
+        MeshBufferCommon*   m_buffer         = nullptr;
         MeshData*       m_mesh_data      = nullptr;
         TextureCommon*  m_texture        = nullptr;
         Transform*      m_transform      = nullptr;

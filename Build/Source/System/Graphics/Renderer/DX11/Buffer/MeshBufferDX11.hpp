@@ -3,11 +3,11 @@
 
 namespace Engine5
 {
-    class BufferDX11
+    class MeshBufferDX11
     {
     public:
-        BufferDX11();
-        ~BufferDX11();
+        MeshBufferDX11();
+        ~MeshBufferDX11();
 
     public:
         ID3D11Buffer*        m_vertex_buffer  = nullptr;

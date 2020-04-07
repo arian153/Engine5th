@@ -4,7 +4,7 @@
 
 namespace Engine5
 {
-    class BufferCommon;
+    class MeshBufferCommon;
     class ColorShaderCommon;
 
     class RendererCommon : public RendererAPI
