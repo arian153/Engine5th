@@ -14,6 +14,11 @@ namespace Engine5
             DirectX::XMMATRIX projection;
         };
 
+        struct ColorBufferType
+        {
+            DirectX::XMFLOAT4 color;
+        };
+
     public:
         DeferredShaderDX11();
         ~DeferredShaderDX11();
@@ -27,6 +32,7 @@ namespace Engine5
         ID3D11PixelShader*   m_pixel_shader      = nullptr;
         ID3D11InputLayout*   m_layout            = nullptr;
         ID3D11Buffer*        m_matrix_buffer     = nullptr;
+        ID3D11Buffer*        m_color_buffer      = nullptr;
         ID3D11SamplerState*  m_sample_state_wrap = nullptr;
         ID3D11DeviceContext* m_device_context    = nullptr;
         ID3D11Device*        m_device            = nullptr;
