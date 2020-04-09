@@ -28,40 +28,5 @@
 #define IncludeDeferredShaderAPI "../API/DX11/Shader/DeferredShaderDX11.hpp"
 
 #elif defined(E5_DIRECTX12)
-//classes
-#define RendererAPI RendererDX12
-#define BufferAPI BufferDX12
-#define TextureAPI TextureDX12
-#define ColorVertexAPI ColorVertexDX12
-#define TextureVertexAPI TextureVertexDX12
-#define ShaderManagerAPI ShaderManagerDX12
-#define ColorShaderAPI ColorShaderDX12
-
-//includes
-#define IncludeRendererAPI "DX12/RendererDX12.hpp"
-#define IncludeBufferAPI "../Renderer/DX12/BufferDX12.hpp"
-#define IncludeTextureAPI "../Renderer/DX12/TextureDX12.hpp"
-#define IncludeColorVertexAPI "../../Renderer/DX12/Vertex/ColorVertexDX12.hpp"
-#define IncludeTextureVertexAPI "../../Renderer/DX12/Vertex/TextureVertexDX12.hpp"
-#define IncludeShaderManagerAPI "../Renderer/DX12/Shader/ShaderManagerDX12.hpp"
-#define IncludeColorShaderAPI "../Renderer/DX12/Shader/ColorShaderDX12.hpp"
-
 #elif defined(E5_OPENGL4)
-//classes
-#define RendererAPI RendererOpenGL4
-#define BufferAPI BufferOpenGL4
-#define TextureAPI TextureOpenGL4
-#define ColorVertexAPI ColorVertexOpenGL4
-#define TextureVertexAPI TextureVertexOpenGL4
-#define ShaderManagerAPI ShaderManagerOpenGL4
-#define ColorShaderAPI ColorShaderOpenGL4
-
-//includes
-#define IncludeRendererAPI "OpenGL4/RendererOpenGL4.hpp"
-#define IncludeBufferAPI "../Renderer/OpenGL4/BufferOpenGL4.hpp"
-#define IncludeTextureAPI "../Renderer/OpenGL4/TextureOpenGL4.hpp"
-#define IncludeColorVertexAPI "../../Renderer/OpenGL4/Vertex/ColorVertexOpenGL4.hpp"
-#define IncludeTextureVertexAPI "../../Renderer/OpenGL4/Vertex/TextureVertexOpenGL4.hpp"
-#define IncludeShaderManagerAPI "../Renderer/OpenGL4/Shader/ShaderManagerOpenGL4.hpp"
-#define IncludeColorShaderAPI "../Renderer/OpenGL4/Shader/ColorShaderOpenGL4.hpp"
 #endif
