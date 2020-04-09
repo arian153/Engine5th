@@ -6,6 +6,7 @@
 #include "../../../Shader/TextureShaderCommon.hpp"
 #include "../../../Shader/LightShaderCommon.hpp"
 #include "../../../Renderer/RendererCommon.hpp"
+#include "../../../Shader/DeferredShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -83,13 +84,20 @@ namespace Engine5
         m_texture_shader->SetDevice(m_device);
         m_texture_shader->SetDeviceContext(m_device_context);
         m_texture_shader->Initialize();
-        //texture shader
+        //Light shader
         m_light_shader = new LightShaderCommon(this);
         m_light_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Light.fx"));
         m_light_shader->SetHWnd(m_hwnd);
         m_light_shader->SetDevice(m_device);
         m_light_shader->SetDeviceContext(m_device_context);
         m_light_shader->Initialize();
+        //Light shader
+        m_deferred_shader = new DeferredShaderCommon(this);
+        m_deferred_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Deferred.fx"));
+        m_deferred_shader->SetHWnd(m_hwnd);
+        m_deferred_shader->SetDevice(m_device);
+        m_deferred_shader->SetDeviceContext(m_device_context);
+        m_deferred_shader->Initialize();
     }
 
     void ShaderManager::Shutdown()
@@ -112,6 +120,12 @@ namespace Engine5
             delete m_light_shader;
             m_light_shader = nullptr;
         }
+        if (m_deferred_shader != nullptr)
+        {
+            m_deferred_shader->Shutdown();
+            delete m_deferred_shader;
+            m_deferred_shader = nullptr;
+        }
     }
 
     void ShaderManager::RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const
@@ -129,6 +143,11 @@ namespace Engine5
         m_light_shader->Render(indices_count, mvp_data, texture, camera, color, light);
     }
 
+    void ShaderManager::RenderDeferredShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    {
+        m_deferred_shader->Render(indices_count, mvp_data, texture, color);
+    }
+
     ColorShaderCommon* ShaderManager::GetColorShader() const
     {
         return m_color_shader;
@@ -142,5 +161,10 @@ namespace Engine5
     LightShaderCommon* ShaderManager::GetLightShader() const
     {
         return m_light_shader;
+    }
+
+    DeferredShaderCommon* ShaderManager::GetDeferredShader() const
+    {
+        return m_deferred_shader;
     }
 }

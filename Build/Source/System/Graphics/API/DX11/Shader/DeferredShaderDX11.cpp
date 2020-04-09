@@ -34,6 +34,7 @@ namespace Engine5
     }
 
     DeferredShaderCommon::DeferredShaderCommon(ShaderManager* shader_manager)
+        : m_shader_manager(shader_manager)
     {
     }
 
@@ -43,6 +44,7 @@ namespace Engine5
 
     void DeferredShaderCommon::SetShader(ShaderResource* shader)
     {
+        m_shader_resource = shader;
     }
 
     bool DeferredShaderCommon::Initialize()
@@ -53,7 +55,7 @@ namespace Engine5
         auto        vertex_shader_path   = m_shader_resource->FilePath();
         auto        pixel_shader_path    = m_shader_resource->FilePath();
         // Compile the vertex shader code.
-        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "LightVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
+        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "DeferredVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
         if (FAILED(result))
         {
             // If the shader failed to compile it should have written something to the error message.
@@ -69,7 +71,7 @@ namespace Engine5
             return false;
         }
         // Compile the pixel shader code.
-        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "LightPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
+        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "DeferredPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
         if (FAILED(result))
         {
             // If the shader failed to compile it should have written something to the error message.
