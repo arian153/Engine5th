@@ -8,6 +8,11 @@ cbuffer MatrixBuffer
     matrix projection;
 };
 
+cbuffer ColorBuffer
+{
+    float4 mesh_color;
+};
+
 struct VertexInputType
 {
     float4 position : POSITION;
@@ -58,7 +63,7 @@ PixelOutputType DeferredPixelShader(PixelInputType input) : SV_TARGET
     PixelOutputType output;
 
     // Sample the color from the texture and store it for output to the render target.
-    output.color = shader_texture.Sample(sample_type_wrap, input.uv);
+    output.color = mesh_color * shader_texture.Sample(sample_type_wrap, input.uv);
 
     // Store the normal for output to the render target.
     output.normal = float4(input.normal, 1.0f);
