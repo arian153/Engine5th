@@ -47,9 +47,9 @@
                 {
                     "Type": "MeshComponent",
                     "Value": {
-                        "Color": [ 1, 1, 1, 1 ],
+                        "Color": [ 0.6, 0.6, 0.6, 1 ],
                         "Mesh": "../../Resource/Mesh/deer.obj",
-                        "Shader Type": "Light",
+                        "Shader Type": "Texture",
                         "Texture": "../../Resource/Texture/white.dds"
                     }
                 }
