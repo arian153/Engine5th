@@ -2,11 +2,11 @@
 
 namespace Engine5
 {
-    class RenderTextureBufferDX1
+    class RenderTextureBufferDX11
     {
     public:
-        RenderTextureBufferDX1();
-        ~RenderTextureBufferDX1();
+        RenderTextureBufferDX11();
+        ~RenderTextureBufferDX11();
 
     private:
     };
