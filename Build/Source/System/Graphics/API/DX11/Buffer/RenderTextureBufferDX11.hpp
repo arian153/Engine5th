@@ -1,4 +1,6 @@
 #pragma once
+#include <d3d11.h>
+#include "../../../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
@@ -8,6 +10,16 @@ namespace Engine5
         RenderTextureBufferDX11();
         ~RenderTextureBufferDX11();
 
-    private:
+        void SetDevice(ID3D11Device* device);
+        void SetDeviceContext(ID3D11DeviceContext* device_context);
+
+    protected:
+        ID3D11Buffer*        m_vertex_buffer  = nullptr;
+        ID3D11Buffer*        m_index_buffer   = nullptr;
+        ID3D11Device*        m_device         = nullptr;
+        ID3D11DeviceContext* m_device_context = nullptr;
+
+        U32 m_vertex_count = 0;
+        U32 m_index_count  = 0;
     };
 }
