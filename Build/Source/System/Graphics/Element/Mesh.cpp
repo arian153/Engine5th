@@ -1,6 +1,6 @@
 #include "Mesh.hpp"
 #include "../DataType/MeshData.hpp"
-#include "../Shader/ShaderManager.hpp"
+#include "../Shader/ShaderManagerCommon.hpp"
 #include "../../Math/Structure/Transform.hpp"
 #include "../../../Manager/Component/EngineComponent/MeshComponent.hpp"
 #include "../Buffer/MeshBufferCommon.hpp"
@@ -44,7 +44,7 @@ namespace Engine5
     {
         if (m_buffer != nullptr)
         {
-            m_buffer->Render(sizeof(NormalVertex), 0);
+            m_buffer->Render(sizeof(NormalVertexCommon), 0);
         }
     }
 
@@ -52,7 +52,7 @@ namespace Engine5
     {
         if (m_buffer != nullptr)
         {
-            m_buffer->Render(sizeof(ColorVertex), 0);
+            m_buffer->Render(sizeof(ColorVertexCommon), 0);
         }
     }
 
@@ -70,7 +70,7 @@ namespace Engine5
             }
             else if (m_type == eShaderType::Color)
             {
-                std::vector<ColorVertex> vertices;
+                std::vector<ColorVertexCommon> vertices;
                 vertices.reserve(m_mesh_data->vertices.size());
                 for (auto& vertex : m_mesh_data->vertices)
                 {

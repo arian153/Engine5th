@@ -10,7 +10,7 @@ namespace Engine5
     class ColliderSet;
     class PrimitiveRenderer;
     class MatrixManager;
-    class ShaderManager;
+    class ShaderManagerCommon;
     class RendererCommon;
     class RendererDX11;
 
@@ -25,7 +25,7 @@ namespace Engine5
         void Shutdown();
 
         void SetRenderer(RendererCommon* renderer);
-        void SetShaderManager(ShaderManager* shader_manager);
+        void SetShaderManager(ShaderManagerCommon* shader_manager);
         void SetMatrixManager(MatrixManager* matrix_manager);
         void SetMainCamera(Camera* camera);
 
@@ -44,7 +44,7 @@ namespace Engine5
         void    RemoveMesh(Mesh* mesh);
     private:
         RendererCommon*    m_renderer           = nullptr;
-        ShaderManager*     m_shader_manager     = nullptr;
+        ShaderManagerCommon*     m_shader_manager     = nullptr;
         MatrixManager*     m_matrix_manager     = nullptr;
         Camera*            m_main_camera        = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;

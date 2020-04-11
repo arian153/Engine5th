@@ -40,7 +40,7 @@ namespace Engine5
     private:
         OSCommon*        m_operating_system = nullptr;
         RendererCommon*  m_renderer         = nullptr;
-        ShaderManager*   m_shader_manager   = nullptr;
+        ShaderManagerCommon*   m_shader_manager   = nullptr;
         MatrixManager*   m_matrix_manager   = nullptr;
         ResourceManager* m_resource_manager = nullptr;
 

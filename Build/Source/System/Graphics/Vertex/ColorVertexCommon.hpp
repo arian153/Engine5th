@@ -8,11 +8,11 @@ namespace Engine5
     class Vector3;
     class Color;
 
-    class ColorVertex : public ColorVertexAPI
+    class ColorVertexCommon : public ColorVertexAPI
     {
     public:
-        ColorVertex();
-        ColorVertex(const Vector3& position, const Color& color);
+        ColorVertexCommon();
+        ColorVertexCommon(const Vector3& position, const Color& color);
 
         Vector3 GetPosition() const;
         Color   GetColor() const;

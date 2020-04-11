@@ -2,7 +2,7 @@
 #include "../../../../Math/Math.hpp"
 #include "../../../DataType/Color.hpp"
 #include "../ConverterDX11.hpp"
-#include "../../../Vertex/ColorVertex.hpp"
+#include "../../../Vertex/ColorVertexCommon.hpp"
 
 namespace Engine5
 {
@@ -15,7 +15,7 @@ namespace Engine5
     {
     }
 
-    ColorVertex::ColorVertex()
+    ColorVertexCommon::ColorVertexCommon()
     {
         position.x = 0.0f;
         position.y = 0.0f;
@@ -26,18 +26,18 @@ namespace Engine5
         color.z    = 1.0f;
     }
 
-    ColorVertex::ColorVertex(const Vector3& _position, const Color& _color)
+    ColorVertexCommon::ColorVertexCommon(const Vector3& _position, const Color& _color)
     {
         position = ConverterDX11::ToXMFloat3(_position);
         color    = ConverterDX11::ToXMFloat4(_color);
     }
 
-    Vector3 ColorVertex::GetPosition() const
+    Vector3 ColorVertexCommon::GetPosition() const
     {
         return ConverterDX11::ToVector3(position);
     }
 
-    Color ColorVertex::GetColor() const
+    Color ColorVertexCommon::GetColor() const
     {
         return ConverterDX11::ToColor(color);
     }

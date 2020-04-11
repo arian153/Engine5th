@@ -8,14 +8,14 @@ namespace Engine5
     class TextureCommon;
     class Color;
     class MatrixData;
-    class ShaderManager;
+    class ShaderManagerCommon;
     class ShaderResource;
     class Matrix44;
 
     class DeferredShaderCommon : public DeferredShaderAPI
     {
     public:
-        explicit DeferredShaderCommon(ShaderManager* shader_manager);
+        explicit DeferredShaderCommon(ShaderManagerCommon* shader_manager);
         ~DeferredShaderCommon();
 
         void SetShader(ShaderResource* shader);
@@ -25,7 +25,7 @@ namespace Engine5
         void Shutdown();
 
     private:
-        ShaderManager* m_shader_manager = nullptr;
+        ShaderManagerCommon* m_shader_manager = nullptr;
         ShaderResource* m_shader_resource = nullptr;
     };
 

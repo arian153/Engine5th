@@ -1,7 +1,7 @@
 #include "NormalVertexDX11.hpp"
 #include "../../../../Math/Math.hpp"
 #include "../ConverterDX11.hpp"
-#include "../../../Vertex/NormalVertex.hpp"
+#include "../../../Vertex/NormalVertexCommon.hpp"
 
 namespace Engine5
 {
@@ -14,11 +14,11 @@ namespace Engine5
     {
     }
 
-    NormalVertex::NormalVertex()
+    NormalVertexCommon::NormalVertexCommon()
     {
     }
 
-    NormalVertex::NormalVertex(Real px, Real py, Real pz, Real u, Real v)
+    NormalVertexCommon::NormalVertexCommon(Real px, Real py, Real pz, Real u, Real v)
     {
         position.x = px;
         position.y = py;
@@ -27,7 +27,7 @@ namespace Engine5
         uv.y       = v;
     }
 
-    NormalVertex::NormalVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz)
+    NormalVertexCommon::NormalVertexCommon(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz)
     {
         position.x = px;
         position.y = py;
@@ -39,7 +39,7 @@ namespace Engine5
         normal.z   = nz;
     }
 
-    NormalVertex::NormalVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz, Real tx, Real ty, Real tz)
+    NormalVertexCommon::NormalVertexCommon(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz, Real tx, Real ty, Real tz)
     {
         position.x = px;
         position.y = py;
@@ -55,20 +55,20 @@ namespace Engine5
         binormal   = ConverterDX11::ToXMFloat3(CrossProduct(Vector3(tx, ty, tz), Vector3(nx, ny, nz)).Normalize());
     }
 
-    NormalVertex::NormalVertex(const Vector3& p, const Vector2& _uv)
+    NormalVertexCommon::NormalVertexCommon(const Vector3& p, const Vector2& _uv)
     {
         position = ConverterDX11::ToXMFloat3(p);
         uv       = ConverterDX11::ToXMFloat2(_uv);
     }
 
-    NormalVertex::NormalVertex(const Vector3& p, const Vector2& _uv, const Vector3& n)
+    NormalVertexCommon::NormalVertexCommon(const Vector3& p, const Vector2& _uv, const Vector3& n)
     {
         position = ConverterDX11::ToXMFloat3(p);
         uv       = ConverterDX11::ToXMFloat2(_uv);
         normal   = ConverterDX11::ToXMFloat3(n);
     }
 
-    NormalVertex::NormalVertex(const Vector3& p, const Vector2& _uv, const Vector3& n, const Vector3& t)
+    NormalVertexCommon::NormalVertexCommon(const Vector3& p, const Vector2& _uv, const Vector3& n, const Vector3& t)
     {
         position = ConverterDX11::ToXMFloat3(p);
         uv       = ConverterDX11::ToXMFloat2(_uv);
@@ -77,7 +77,7 @@ namespace Engine5
         binormal = ConverterDX11::ToXMFloat3(CrossProduct(t, n).Normalize());
     }
 
-    NormalVertex::NormalVertex(const Vector3& p, const Vector2& _uv, const Vector3& n, const Vector3& t, const Vector3& b)
+    NormalVertexCommon::NormalVertexCommon(const Vector3& p, const Vector2& _uv, const Vector3& n, const Vector3& t, const Vector3& b)
     {
         position = ConverterDX11::ToXMFloat3(p);
         uv       = ConverterDX11::ToXMFloat2(_uv);
@@ -86,7 +86,7 @@ namespace Engine5
         binormal = ConverterDX11::ToXMFloat3(b);
     }
 
-    void NormalVertex::CalculateBinormal()
+    void NormalVertexCommon::CalculateBinormal()
     {
         Vector3 n  = ConverterDX11::ToVector3(normal);
         Vector3 t  = ConverterDX11::ToVector3(tangent);
@@ -96,7 +96,7 @@ namespace Engine5
         binormal.z = b.z;
     }
 
-    void NormalVertex::CalculateTangentAndBinormal()
+    void NormalVertexCommon::CalculateTangentAndBinormal()
     {
         Vector3 n = ConverterDX11::ToVector3(normal);
         Basis   basis;
@@ -106,52 +106,52 @@ namespace Engine5
         binormal = ConverterDX11::ToXMFloat3(basis.k);
     }
 
-    Vector3 NormalVertex::GetPosition() const
+    Vector3 NormalVertexCommon::GetPosition() const
     {
         return ConverterDX11::ToVector3(position);
     }
 
-    Vector2 NormalVertex::GetUV() const
+    Vector2 NormalVertexCommon::GetUV() const
     {
         return Vector2(uv.x, uv.y);
     }
 
-    Vector3 NormalVertex::GetNormal() const
+    Vector3 NormalVertexCommon::GetNormal() const
     {
         return ConverterDX11::ToVector3(normal);
     }
 
-    Vector3 NormalVertex::GetTangent() const
+    Vector3 NormalVertexCommon::GetTangent() const
     {
         return ConverterDX11::ToVector3(tangent);
     }
 
-    Vector3 NormalVertex::GetBinormal() const
+    Vector3 NormalVertexCommon::GetBinormal() const
     {
         return ConverterDX11::ToVector3(binormal);
     }
 
-    void NormalVertex::SetPosition(const Vector3& p)
+    void NormalVertexCommon::SetPosition(const Vector3& p)
     {
         position = ConverterDX11::ToXMFloat3(p);
     }
 
-    void NormalVertex::SetUV(const Vector2& _uv)
+    void NormalVertexCommon::SetUV(const Vector2& _uv)
     {
         uv = ConverterDX11::ToXMFloat2(_uv);
     }
 
-    void NormalVertex::SetNormal(const Vector3& n)
+    void NormalVertexCommon::SetNormal(const Vector3& n)
     {
         normal = ConverterDX11::ToXMFloat3(n);
     }
 
-    void NormalVertex::SetTangent(const Vector3& t)
+    void NormalVertexCommon::SetTangent(const Vector3& t)
     {
         tangent = ConverterDX11::ToXMFloat3(t);
     }
 
-    void NormalVertex::SetBinormal(const Vector3& b)
+    void NormalVertexCommon::SetBinormal(const Vector3& b)
     {
         binormal = ConverterDX11::ToXMFloat3(b);
     }

@@ -1,5 +1,5 @@
 #include "ShaderManagerDX11.hpp"
-#include "../../../Shader/ShaderManager.hpp"
+#include "../../../Shader/ShaderManagerCommon.hpp"
 #include "../../../Shader/ColorShaderCommon.hpp"
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
 #include <fstream>
@@ -56,15 +56,15 @@ namespace Engine5
         MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shader_name.c_str(), MB_OK);
     }
 
-    ShaderManager::ShaderManager()
+    ShaderManagerCommon::ShaderManagerCommon()
     {
     }
 
-    ShaderManager::~ShaderManager()
+    ShaderManagerCommon::~ShaderManagerCommon()
     {
     }
 
-    void ShaderManager::Initialize(RendererCommon* renderer, ResourceManager* resource_manager)
+    void ShaderManagerCommon::Initialize(RendererCommon* renderer, ResourceManager* resource_manager)
     {
         SetHWnd(renderer->GetHwnd());
         SetDevice(renderer->GetDevice());
@@ -100,7 +100,7 @@ namespace Engine5
         m_deferred_shader->Initialize();
     }
 
-    void ShaderManager::Shutdown()
+    void ShaderManagerCommon::Shutdown()
     {
         if (m_color_shader != nullptr)
         {
@@ -128,42 +128,42 @@ namespace Engine5
         }
     }
 
-    void ShaderManager::RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const
+    void ShaderManagerCommon::RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const
     {
         m_color_shader->Render(indices_count, mvp_data);
     }
 
-    void ShaderManager::RenderTextureShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    void ShaderManagerCommon::RenderTextureShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
     {
         m_texture_shader->Render(indices_count, mvp_data, texture, color);
     }
 
-    void ShaderManager::RenderLightShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, const DirectionalLight& light) const
+    void ShaderManagerCommon::RenderLightShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, const DirectionalLight& light) const
     {
         m_light_shader->Render(indices_count, mvp_data, texture, camera, color, light);
     }
 
-    void ShaderManager::RenderDeferredShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    void ShaderManagerCommon::RenderDeferredShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
     {
         m_deferred_shader->Render(indices_count, mvp_data, texture, color);
     }
 
-    ColorShaderCommon* ShaderManager::GetColorShader() const
+    ColorShaderCommon* ShaderManagerCommon::GetColorShader() const
     {
         return m_color_shader;
     }
 
-    TextureShaderCommon* ShaderManager::GetTextureShader() const
+    TextureShaderCommon* ShaderManagerCommon::GetTextureShader() const
     {
         return m_texture_shader;
     }
 
-    LightShaderCommon* ShaderManager::GetLightShader() const
+    LightShaderCommon* ShaderManagerCommon::GetLightShader() const
     {
         return m_light_shader;
     }
 
-    DeferredShaderCommon* ShaderManager::GetDeferredShader() const
+    DeferredShaderCommon* ShaderManagerCommon::GetDeferredShader() const
     {
         return m_deferred_shader;
     }

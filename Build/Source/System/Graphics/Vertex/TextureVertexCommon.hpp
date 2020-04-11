@@ -8,12 +8,12 @@ namespace Engine5
     class Vector2;
     class Vector3;
 
-    class TextureVertex : public TextureVertexAPI
+    class TextureVertexCommon : public TextureVertexAPI
     {
     public:
-        TextureVertex();
-        TextureVertex(Real px, Real py, Real pz, Real u, Real v);
-        TextureVertex(const Vector3& p, const Vector2& _uv);
+        TextureVertexCommon();
+        TextureVertexCommon(Real px, Real py, Real pz, Real u, Real v);
+        TextureVertexCommon(const Vector3& p, const Vector2& _uv);
 
         Vector3 GetPosition() const;
         Vector2 GetUV() const;

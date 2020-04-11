@@ -1,6 +1,6 @@
 #include "RenderSystem.hpp"
 #include "Renderer/RendererCommon.hpp"
-#include "Shader/ShaderManager.hpp"
+#include "Shader/ShaderManagerCommon.hpp"
 #include "../Core/OS-API/OSCommon.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
 #include "../../Manager/Resource/ResourceManager.hpp"
@@ -26,7 +26,7 @@ namespace Engine5
         m_resource_manager = resource_manager;
         m_resource_manager->InitializeTextureResources(m_renderer);
         //shader
-        m_shader_manager = new ShaderManager();
+        m_shader_manager = new ShaderManagerCommon();
         m_shader_manager->Initialize(m_renderer, resource_manager);
         //matrix generator
         m_matrix_manager = new MatrixManager();

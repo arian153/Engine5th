@@ -8,7 +8,7 @@ namespace Engine5
 {
     class Transform;
     class TextureCommon;
-    class ShaderManager;
+    class ShaderManagerCommon;
     class RendererCommon;
     class MeshData;
     class MeshBufferCommon;
@@ -41,7 +41,7 @@ namespace Engine5
         friend class MeshComponent;
 
     private:
-        ShaderManager*  m_shader_manager = nullptr;
+        ShaderManagerCommon*  m_shader_manager = nullptr;
         RendererCommon* m_renderer       = nullptr;
         MeshBufferCommon*   m_buffer         = nullptr;
         MeshData*       m_mesh_data      = nullptr;

@@ -3,7 +3,7 @@
 #include <vector>
 #include "../DataType/Color.hpp"
 #include "../DataType/MatrixData.hpp"
-#include "../Vertex/ColorVertex.hpp"
+#include "../Vertex/ColorVertexCommon.hpp"
 
 namespace Engine5
 {
@@ -56,15 +56,15 @@ namespace Engine5
         ColorShaderCommon* m_color_shader = nullptr;
         RendererCommon*    m_renderer     = nullptr;
 
-        std::vector<ColorVertex> m_dot_vertices;
+        std::vector<ColorVertexCommon> m_dot_vertices;
         std::vector<U32>         m_dot_indices;
         MeshBufferCommon*            m_dot_buffer = nullptr;
 
-        std::vector<ColorVertex> m_line_vertices;
+        std::vector<ColorVertexCommon> m_line_vertices;
         std::vector<U32>         m_line_indices;
         MeshBufferCommon*            m_line_buffer = nullptr;
 
-        std::vector<ColorVertex> m_face_vertices;
+        std::vector<ColorVertexCommon> m_face_vertices;
         std::vector<U32>         m_face_indices;
         MeshBufferCommon*            m_face_buffer = nullptr;
 

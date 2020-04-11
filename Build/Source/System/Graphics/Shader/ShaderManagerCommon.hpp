@@ -17,11 +17,11 @@ namespace Engine5
     class DeferredShaderCommon;
     class Color;
 
-    class ShaderManager : public ShaderManagerAPI
+    class ShaderManagerCommon : public ShaderManagerAPI
     {
     public:
-        ShaderManager();
-        ~ShaderManager();
+        ShaderManagerCommon();
+        ~ShaderManagerCommon();
         void Initialize(RendererCommon* renderer, ResourceManager* resource_manager);
         void Shutdown();
 

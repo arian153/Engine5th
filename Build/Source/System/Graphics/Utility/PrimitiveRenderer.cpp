@@ -191,19 +191,19 @@ namespace Engine5
         if (m_dot_vertices.empty() == false)
         {
             m_dot_buffer->BuildBuffer(m_renderer, m_dot_vertices, m_dot_indices);
-            m_dot_buffer->Render(sizeof(ColorVertex), 0, eTopologyType::PointList);
+            m_dot_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::PointList);
             m_color_shader->Render(static_cast<U32>(m_dot_indices.size()), m_mvp_data);
         }
         if (m_line_vertices.empty() == false)
         {
             m_line_buffer->BuildBuffer(m_renderer, m_line_vertices, m_line_indices);
-            m_line_buffer->Render(sizeof(ColorVertex), 0, eTopologyType::LineList);
+            m_line_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::LineList);
             m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_mvp_data);
         }
         if (m_face_vertices.empty() == false)
         {
             m_face_buffer->BuildBuffer(m_renderer, m_face_vertices, m_face_indices);
-            m_face_buffer->Render(sizeof(ColorVertex), 0);
+            m_face_buffer->Render(sizeof(ColorVertexCommon), 0);
             m_color_shader->Render(static_cast<U32>(m_face_indices.size()), m_mvp_data);
         }
         Clear();

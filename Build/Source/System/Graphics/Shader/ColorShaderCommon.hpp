@@ -6,14 +6,14 @@
 namespace Engine5
 {
     class MatrixData;
-    class ShaderManager;
+    class ShaderManagerCommon;
     class ShaderResource;
     class Matrix44;
 
     class ColorShaderCommon : public ColorShaderAPI
     {
     public:
-        explicit ColorShaderCommon(ShaderManager* shader_manager);
+        explicit ColorShaderCommon(ShaderManagerCommon* shader_manager);
         ~ColorShaderCommon();
 
         void SetShader(ShaderResource* shader);
@@ -23,7 +23,7 @@ namespace Engine5
         void Shutdown();
 
     private:
-        ShaderManager*  m_shader_manager  = nullptr;
+        ShaderManagerCommon*  m_shader_manager  = nullptr;
         ShaderResource* m_shader_resource = nullptr;
     };
 }

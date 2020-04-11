@@ -1,6 +1,6 @@
 #include "Scene.hpp"
 #include "../Renderer/RendererCommon.hpp"
-#include "../Shader/ShaderManager.hpp"
+#include "../Shader/ShaderManagerCommon.hpp"
 #include "../Utility/MatrixManager.hpp"
 #include "../Utility/PrimitiveRenderer.hpp"
 #include "../Light/DirectionalLight.hpp"
@@ -94,7 +94,7 @@ namespace Engine5
         m_renderer = renderer;
     }
 
-    void Scene::SetShaderManager(ShaderManager* shader_manager)
+    void Scene::SetShaderManager(ShaderManagerCommon* shader_manager)
     {
         m_shader_manager = shader_manager;
     }

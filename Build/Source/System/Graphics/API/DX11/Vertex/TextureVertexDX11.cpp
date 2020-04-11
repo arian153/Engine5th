@@ -1,5 +1,5 @@
 #include "TextureVertexDX11.hpp"
-#include "../../../Vertex/TextureVertex.hpp"
+#include "../../../Vertex/TextureVertexCommon.hpp"
 #include "../../../../Math/Algebra/Vector2.hpp"
 #include "../../../../Math/Algebra/Vector3.hpp"
 #include "../ConverterDX11.hpp"
@@ -15,11 +15,11 @@ namespace Engine5
     {
     }
 
-    TextureVertex::TextureVertex()
+    TextureVertexCommon::TextureVertexCommon()
     {
     }
 
-    TextureVertex::TextureVertex(Real px, Real py, Real pz, Real u, Real v)
+    TextureVertexCommon::TextureVertexCommon(Real px, Real py, Real pz, Real u, Real v)
     {
         position.x = px;
         position.y = py;
@@ -28,28 +28,28 @@ namespace Engine5
         uv.y = v;
     }
 
-    TextureVertex::TextureVertex(const Vector3& p, const Vector2& _uv)
+    TextureVertexCommon::TextureVertexCommon(const Vector3& p, const Vector2& _uv)
     {
         position = ConverterDX11::ToXMFloat3(p);
         uv = ConverterDX11::ToXMFloat2(_uv);
     }
 
-    Vector3 TextureVertex::GetPosition() const
+    Vector3 TextureVertexCommon::GetPosition() const
     {
         return ConverterDX11::ToVector3(position);
     }
 
-    Vector2 TextureVertex::GetUV() const
+    Vector2 TextureVertexCommon::GetUV() const
     {
         return Vector2(uv.x, uv.y);
     }
 
-    void TextureVertex::SetPosition(const Vector3& p)
+    void TextureVertexCommon::SetPosition(const Vector3& p)
     {
         position = ConverterDX11::ToXMFloat3(p);
     }
 
-    void TextureVertex::SetUV(const Vector2& _uv)
+    void TextureVertexCommon::SetUV(const Vector2& _uv)
     {
         uv = ConverterDX11::ToXMFloat2(_uv);
     }

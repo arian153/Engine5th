@@ -3,7 +3,7 @@
 #include "../../../../Core/Utility/CoreUtility.hpp"
 #include "../ConverterDX11.hpp"
 #include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
-#include "../../../Shader/ShaderManager.hpp"
+#include "../../../Shader/ShaderManagerCommon.hpp"
 #include <d3dcompiler.h>
 #include "../../../DataType/MatrixData.hpp"
 #include "../../../Texture/TextureCommon.hpp"
@@ -33,7 +33,7 @@ namespace Engine5
         m_device_context = device_context;
     }
 
-    TextureShaderCommon::TextureShaderCommon(ShaderManager* shader_manager)
+    TextureShaderCommon::TextureShaderCommon(ShaderManagerCommon* shader_manager)
         : m_shader_manager(shader_manager)
     {
     }
