@@ -3,7 +3,7 @@
 #include IncludeMeshBufferAPI
 #include "../../Core/Utility/CoreDef.hpp"
 #include "../Vertex/ColorVertex.hpp"
-#include "../Vertex/TextureVertex.hpp"
+#include "../Vertex/NormalVertex.hpp"
 #include "../DataType/TopologyDef.hpp"
 #include <vector>
 

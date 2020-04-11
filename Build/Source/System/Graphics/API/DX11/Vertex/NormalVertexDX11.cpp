@@ -1,7 +1,7 @@
 #include "NormalVertexDX11.hpp"
 #include "../../../../Math/Math.hpp"
 #include "../ConverterDX11.hpp"
-#include "../../../Vertex/TextureVertex.hpp"
+#include "../../../Vertex/NormalVertex.hpp"
 
 namespace Engine5
 {

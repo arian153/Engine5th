@@ -12,6 +12,7 @@
 #define TextureAPI TextureDX11
 #define ColorVertexAPI ColorVertexDX11
 #define NormalVertexAPI NormalVertexDX11
+#define TextureVertexAPI TextureVertexDX11
 
 //shader
 #define ShaderManagerAPI ShaderManagerDX11
@@ -28,6 +29,7 @@
 #define IncludeTextureAPI "../API/DX11/Texture/TextureDX11.hpp"
 #define IncludeColorVertexAPI "../API/DX11/Vertex/ColorVertexDX11.hpp"
 #define IncludeNormalVertexAPI "../API/DX11/Vertex/NormalVertexDX11.hpp"
+#define IncludeTextureVertexAPI "../API/DX11/Vertex/TextureVertexDX11.hpp"
 #define IncludeShaderManagerAPI "../API/DX11/Shader/ShaderManagerDX11.hpp"
 #define IncludeColorShaderAPI "../API/DX11/Shader/ColorShaderDX11.hpp"
 #define IncludeTextureShaderAPI "../API/DX11/Shader/TextureShaderDX11.hpp"
