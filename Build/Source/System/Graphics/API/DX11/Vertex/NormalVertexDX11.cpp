@@ -1,24 +1,24 @@
-#include "TextureVertexDX11.hpp"
+#include "NormalVertexDX11.hpp"
 #include "../../../../Math/Math.hpp"
 #include "../ConverterDX11.hpp"
 #include "../../../Vertex/TextureVertex.hpp"
 
 namespace Engine5
 {
-    TextureVertexDX11::TextureVertexDX11()
+    NormalVertexDX11::NormalVertexDX11()
         : position(), uv(), normal(), tangent(), binormal()
     {
     }
 
-    TextureVertexDX11::~TextureVertexDX11()
+    NormalVertexDX11::~NormalVertexDX11()
     {
     }
 
-    TextureVertex::TextureVertex()
+    NormalVertex::NormalVertex()
     {
     }
 
-    TextureVertex::TextureVertex(Real px, Real py, Real pz, Real u, Real v)
+    NormalVertex::NormalVertex(Real px, Real py, Real pz, Real u, Real v)
     {
         position.x = px;
         position.y = py;
@@ -27,7 +27,7 @@ namespace Engine5
         uv.y       = v;
     }
 
-    TextureVertex::TextureVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz)
+    NormalVertex::NormalVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz)
     {
         position.x = px;
         position.y = py;
@@ -39,7 +39,7 @@ namespace Engine5
         normal.z   = nz;
     }
 
-    TextureVertex::TextureVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz, Real tx, Real ty, Real tz)
+    NormalVertex::NormalVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz, Real tx, Real ty, Real tz)
     {
         position.x = px;
         position.y = py;
@@ -55,20 +55,20 @@ namespace Engine5
         binormal   = ConverterDX11::ToXMFloat3(CrossProduct(Vector3(tx, ty, tz), Vector3(nx, ny, nz)).Normalize());
     }
 
-    TextureVertex::TextureVertex(const Vector3& p, const Vector2& _uv)
+    NormalVertex::NormalVertex(const Vector3& p, const Vector2& _uv)
     {
         position = ConverterDX11::ToXMFloat3(p);
         uv       = ConverterDX11::ToXMFloat2(_uv);
     }
 
-    TextureVertex::TextureVertex(const Vector3& p, const Vector2& _uv, const Vector3& n)
+    NormalVertex::NormalVertex(const Vector3& p, const Vector2& _uv, const Vector3& n)
     {
         position = ConverterDX11::ToXMFloat3(p);
         uv       = ConverterDX11::ToXMFloat2(_uv);
         normal   = ConverterDX11::ToXMFloat3(n);
     }
 
-    TextureVertex::TextureVertex(const Vector3& p, const Vector2& _uv, const Vector3& n, const Vector3& t)
+    NormalVertex::NormalVertex(const Vector3& p, const Vector2& _uv, const Vector3& n, const Vector3& t)
     {
         position = ConverterDX11::ToXMFloat3(p);
         uv       = ConverterDX11::ToXMFloat2(_uv);
@@ -77,7 +77,7 @@ namespace Engine5
         binormal = ConverterDX11::ToXMFloat3(CrossProduct(t, n).Normalize());
     }
 
-    TextureVertex::TextureVertex(const Vector3& p, const Vector2& _uv, const Vector3& n, const Vector3& t, const Vector3& b)
+    NormalVertex::NormalVertex(const Vector3& p, const Vector2& _uv, const Vector3& n, const Vector3& t, const Vector3& b)
     {
         position = ConverterDX11::ToXMFloat3(p);
         uv       = ConverterDX11::ToXMFloat2(_uv);
@@ -86,7 +86,7 @@ namespace Engine5
         binormal = ConverterDX11::ToXMFloat3(b);
     }
 
-    void TextureVertex::CalculateBinormal()
+    void NormalVertex::CalculateBinormal()
     {
         Vector3 n  = ConverterDX11::ToVector3(normal);
         Vector3 t  = ConverterDX11::ToVector3(tangent);
@@ -96,7 +96,7 @@ namespace Engine5
         binormal.z = b.z;
     }
 
-    void TextureVertex::CalculateTangentAndBinormal()
+    void NormalVertex::CalculateTangentAndBinormal()
     {
         Vector3 n = ConverterDX11::ToVector3(normal);
         Basis   basis;
@@ -106,52 +106,52 @@ namespace Engine5
         binormal = ConverterDX11::ToXMFloat3(basis.k);
     }
 
-    Vector3 TextureVertex::GetPosition() const
+    Vector3 NormalVertex::GetPosition() const
     {
         return ConverterDX11::ToVector3(position);
     }
 
-    Vector2 TextureVertex::GetUV() const
+    Vector2 NormalVertex::GetUV() const
     {
         return Vector2(uv.x, uv.y);
     }
 
-    Vector3 TextureVertex::GetNormal() const
+    Vector3 NormalVertex::GetNormal() const
     {
         return ConverterDX11::ToVector3(normal);
     }
 
-    Vector3 TextureVertex::GetTangent() const
+    Vector3 NormalVertex::GetTangent() const
     {
         return ConverterDX11::ToVector3(tangent);
     }
 
-    Vector3 TextureVertex::GetBinormal() const
+    Vector3 NormalVertex::GetBinormal() const
     {
         return ConverterDX11::ToVector3(binormal);
     }
 
-    void TextureVertex::SetPosition(const Vector3& p)
+    void NormalVertex::SetPosition(const Vector3& p)
     {
         position = ConverterDX11::ToXMFloat3(p);
     }
 
-    void TextureVertex::SetUV(const Vector2& _uv)
+    void NormalVertex::SetUV(const Vector2& _uv)
     {
         uv = ConverterDX11::ToXMFloat2(_uv);
     }
 
-    void TextureVertex::SetNormal(const Vector3& n)
+    void NormalVertex::SetNormal(const Vector3& n)
     {
         normal = ConverterDX11::ToXMFloat3(n);
     }
 
-    void TextureVertex::SetTangent(const Vector3& t)
+    void NormalVertex::SetTangent(const Vector3& t)
     {
         tangent = ConverterDX11::ToXMFloat3(t);
     }
 
-    void TextureVertex::SetBinormal(const Vector3& b)
+    void NormalVertex::SetBinormal(const Vector3& b)
     {
         binormal = ConverterDX11::ToXMFloat3(b);
     }

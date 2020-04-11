@@ -44,7 +44,7 @@ namespace Engine5
     {
         if (m_buffer != nullptr)
         {
-            m_buffer->Render(sizeof(TextureVertex), 0);
+            m_buffer->Render(sizeof(NormalVertex), 0);
         }
     }
 

@@ -23,7 +23,7 @@ namespace Engine5
         void Shutdown();
 
         bool BuildBuffer(RendererCommon* renderer, const std::vector<ColorVertex>& vertices, const std::vector<U32>& indices);
-        bool BuildBuffer(RendererCommon* renderer, const std::vector<TextureVertex>& vertices, const std::vector<U32>& indices);
+        bool BuildBuffer(RendererCommon* renderer, const std::vector<NormalVertex>& vertices, const std::vector<U32>& indices);
     private:
     };
 }

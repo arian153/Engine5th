@@ -120,7 +120,7 @@ namespace Engine5
         return true;
     }
 
-    bool MeshBufferCommon::BuildBuffer(RendererCommon* renderer, const std::vector<TextureVertex>& vertices, const std::vector<U32>& indices)
+    bool MeshBufferCommon::BuildBuffer(RendererCommon* renderer, const std::vector<NormalVertex>& vertices, const std::vector<U32>& indices)
     {
         if (m_vertex_buffer != nullptr)
         {
@@ -135,7 +135,7 @@ namespace Engine5
         // Set up the description of the static vertex buffer.
         D3D11_BUFFER_DESC vertex_buffer_desc;
         vertex_buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
-        vertex_buffer_desc.ByteWidth           = sizeof(TextureVertex) * static_cast<U32>(vertices.size());
+        vertex_buffer_desc.ByteWidth           = sizeof(NormalVertex) * static_cast<U32>(vertices.size());
         vertex_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
         vertex_buffer_desc.CPUAccessFlags      = 0;
         vertex_buffer_desc.MiscFlags           = 0;

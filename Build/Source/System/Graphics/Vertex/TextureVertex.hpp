@@ -1,6 +1,6 @@
 #pragma once
 #include "../API/GraphicsAPI.hpp"
-#include IncludeTextureVertexAPI
+#include IncludeNormalVertexAPI
 #include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
@@ -8,17 +8,17 @@ namespace Engine5
     class Vector2;
     class Vector3;
 
-    class TextureVertex : public TextureVertexAPI
+    class NormalVertex : public NormalVertexAPI
     {
     public:
-        TextureVertex();
-        TextureVertex(Real px, Real py, Real pz, Real u, Real v);
-        TextureVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz);
-        TextureVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz, Real tx, Real ty, Real tz);
-        TextureVertex(const Vector3& p, const Vector2& uv);
-        TextureVertex(const Vector3& p, const Vector2& uv, const Vector3& n);
-        TextureVertex(const Vector3& p, const Vector2& uv, const Vector3& n, const Vector3& t);
-        TextureVertex(const Vector3& p, const Vector2& uv, const Vector3& n, const Vector3& t, const Vector3& b);
+        NormalVertex();
+        NormalVertex(Real px, Real py, Real pz, Real u, Real v);
+        NormalVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz);
+        NormalVertex(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz, Real tx, Real ty, Real tz);
+        NormalVertex(const Vector3& p, const Vector2& uv);
+        NormalVertex(const Vector3& p, const Vector2& uv, const Vector3& n);
+        NormalVertex(const Vector3& p, const Vector2& uv, const Vector3& n, const Vector3& t);
+        NormalVertex(const Vector3& p, const Vector2& uv, const Vector3& n, const Vector3& t, const Vector3& b);
 
         void CalculateBinormal();
         void CalculateTangentAndBinormal();

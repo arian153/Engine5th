@@ -3,11 +3,11 @@
 
 namespace Engine5
 {
-    class TextureVertexDX11
+    class NormalVertexDX11
     {
     public:
-        TextureVertexDX11();
-        ~TextureVertexDX11();
+        NormalVertexDX11();
+        ~NormalVertexDX11();
 
     public:
         DirectX::XMFLOAT3 position;

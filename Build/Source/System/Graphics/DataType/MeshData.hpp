@@ -17,7 +17,7 @@ namespace Engine5
         }
 
     public:
-        std::vector<TextureVertex> vertices;
+        std::vector<NormalVertex> vertices;
         std::vector<U32>           indices;
         bool                       b_resource = false;
     };
