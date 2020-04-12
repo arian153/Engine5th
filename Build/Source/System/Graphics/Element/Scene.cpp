@@ -4,6 +4,8 @@
 #include "../Utility/MatrixManager.hpp"
 #include "../Utility/PrimitiveRenderer.hpp"
 #include "../Light/DirectionalLight.hpp"
+#include "../Buffer/RenderTextureBufferCommon.hpp"
+#include "../Buffer/DeferredBufferCommon.hpp"
 
 namespace Engine5
 {
@@ -21,13 +23,28 @@ namespace Engine5
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
+        //render texture buffer
+        m_render_texture_buffer = new RenderTextureBufferCommon();
+        m_render_texture_buffer->Initialize(
+                                            m_renderer,
+                                            m_matrix_manager->GetScreenLeft(),
+                                            m_matrix_manager->GetScreenRight(),
+                                            m_matrix_manager->GetScreenTop(),
+                                            m_matrix_manager->GetScreenBottom());
+        //deferred buffer
+        m_deferred_buffer = new DeferredBufferCommon();
+        m_deferred_buffer->Initialize(
+                                      m_renderer,
+                                      m_matrix_manager->GetScreenWidth(),
+                                      m_matrix_manager->GetScreenHeight(),
+                                      m_matrix_manager->GetFarPlane(),
+                                      m_matrix_manager->GetNearPlane());
         UpdateView();
         UpdateProjection();
     }
 
     void Scene::Update(Real dt) const
     {
-       
     }
 
     void Scene::Render() const
@@ -36,18 +53,16 @@ namespace Engine5
         MatrixData mvp_data;
         mvp_data.projection = m_projection_matrix;
         DirectionalLight light;
-
-        light.m_ambient = Color(0.15f, 0.15f, 0.15f);
-        light.m_direction = Vector3(0.0f, 0.0f, 1.0f);
+        light.m_ambient        = Color(0.15f, 0.15f, 0.15f);
+        light.m_direction      = Vector3(0.0f, 0.0f, 1.0f);
         light.m_specular_power = 32.0f;
-
         for (auto& camera : m_cameras)
         {
             mvp_data.view = camera->GetViewMatrix();
             for (auto& mesh : m_meshes)
             {
                 mvp_data.model = mesh->GetModelMatrix();
-                auto type = mesh->GetShaderType();
+                auto type      = mesh->GetShaderType();
                 switch (type)
                 {
                 case eShaderType::Color:
@@ -66,8 +81,6 @@ namespace Engine5
                     break;
                 }
             }
-
-
         }
     }
 
@@ -79,6 +92,18 @@ namespace Engine5
             m_primitive_renderer->Shutdown();
             delete m_primitive_renderer;
             m_primitive_renderer = nullptr;
+        }
+        if (m_deferred_buffer != nullptr)
+        {
+            m_deferred_buffer->Shutdown();
+            delete m_deferred_buffer;
+            m_deferred_buffer = nullptr;
+        }
+        if (m_render_texture_buffer != nullptr)
+        {
+            m_render_texture_buffer->Shutdown();
+            delete m_render_texture_buffer;
+            m_render_texture_buffer = nullptr;
         }
         for (auto& camera : m_cameras)
         {
@@ -153,6 +178,22 @@ namespace Engine5
         if (m_primitive_renderer != nullptr)
         {
             m_primitive_renderer->UpdateProjectionMatrix(m_projection_matrix);
+        }
+        if (m_render_texture_buffer != nullptr)
+        {
+            m_render_texture_buffer->OnResize(
+                                              m_matrix_manager->GetScreenLeft(),
+                                              m_matrix_manager->GetScreenRight(),
+                                              m_matrix_manager->GetScreenTop(),
+                                              m_matrix_manager->GetScreenBottom());
+        }
+        if (m_deferred_buffer != nullptr)
+        {
+            m_deferred_buffer->OnResize(
+                                        m_matrix_manager->GetScreenWidth(),
+                                        m_matrix_manager->GetScreenHeight(),
+                                        m_matrix_manager->GetFarPlane(),
+                                        m_matrix_manager->GetNearPlane());
         }
     }
 

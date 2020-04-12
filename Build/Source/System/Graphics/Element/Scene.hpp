@@ -7,6 +7,8 @@
 
 namespace Engine5
 {
+    class RenderTextureBufferCommon;
+    class DeferredBufferCommon;
     class ColliderSet;
     class PrimitiveRenderer;
     class MatrixManager;
@@ -41,14 +43,17 @@ namespace Engine5
         Mesh*   AddMesh(Mesh* mesh);
 
         //remove
-        void    RemoveCamera(Camera* camera);
-        void    RemoveMesh(Mesh* mesh);
+        void RemoveCamera(Camera* camera);
+        void RemoveMesh(Mesh* mesh);
     private:
-        RendererCommon*    m_renderer           = nullptr;
-        ShaderManagerCommon*     m_shader_manager     = nullptr;
-        MatrixManager*     m_matrix_manager     = nullptr;
-        Camera*            m_main_camera        = nullptr;
-        PrimitiveRenderer* m_primitive_renderer = nullptr;
+        RendererCommon*      m_renderer           = nullptr;
+        ShaderManagerCommon* m_shader_manager     = nullptr;
+        MatrixManager*       m_matrix_manager     = nullptr;
+        Camera*              m_main_camera        = nullptr;
+        PrimitiveRenderer*   m_primitive_renderer = nullptr;
+
+        DeferredBufferCommon*      m_deferred_buffer       = nullptr;
+        RenderTextureBufferCommon* m_render_texture_buffer = nullptr;
 
         std::vector<Camera*> m_cameras;
         std::vector<Mesh*>   m_meshes;

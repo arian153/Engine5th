@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include "../../../../Core/Utility/CoreDef.hpp"
+#include "../../../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -12,6 +13,7 @@ namespace Engine5
 
         void SetDevice(ID3D11Device* device);
         void SetDeviceContext(ID3D11DeviceContext* device_context);
+        bool BuildBuffer(Real left, Real right, Real top, Real bottom);
 
     protected:
         ID3D11Buffer*        m_vertex_buffer  = nullptr;

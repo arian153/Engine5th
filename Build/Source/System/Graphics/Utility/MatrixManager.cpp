@@ -105,6 +105,46 @@ namespace Engine5
         return Math::Matrix44::OrthoGraphicCenterMatrix(m_right, m_left, m_top, m_bottom, m_far_plane, m_near_plane);
     }
 
+    Real MatrixManager::GetScreenRight() const
+    {
+        return m_right;
+    }
+
+    Real MatrixManager::GetScreenLeft() const
+    {
+        return m_left;
+    }
+
+    Real MatrixManager::GetScreenTop() const
+    {
+        return m_top;
+    }
+
+    Real MatrixManager::GetScreenBottom() const
+    {
+        return m_bottom;
+    }
+
+    Real MatrixManager::GetFarPlane() const
+    {
+        return m_far_plane;
+    }
+
+    Real MatrixManager::GetNearPlane() const
+    {
+        return m_near_plane;
+    }
+
+    U32 MatrixManager::GetScreenWidth() const
+    {
+        return static_cast<U32>(m_right - m_left);
+    }
+
+    U32 MatrixManager::GetScreenHeight() const
+    {
+        return static_cast<U32>(m_top - m_bottom);
+    }
+
     void MatrixManager::AddScene(Scene* scene)
     {
         m_scenes.push_back(scene);

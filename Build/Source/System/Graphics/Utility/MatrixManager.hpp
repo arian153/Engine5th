@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Math/Algebra/Matrix44.hpp"
 #include <vector>
+#include "../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
@@ -26,6 +27,18 @@ namespace Engine5
         //Getter
         Matrix44 GetPerspectiveMatrix() const;
         Matrix44 GetOrthoGraphicMatrix() const;
+
+        Real GetScreenRight() const;
+        Real GetScreenLeft() const;
+        Real GetScreenTop() const;
+        Real GetScreenBottom() const;
+
+        Real GetFarPlane() const;
+        Real GetNearPlane() const;
+
+        U32 GetScreenWidth() const;
+        U32 GetScreenHeight() const;
+
 
         void AddScene(Scene* scene);
         void RemoveScene(Scene* scene);
