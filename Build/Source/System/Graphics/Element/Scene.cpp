@@ -27,7 +27,12 @@ namespace Engine5
 
     void Scene::Update(Real dt) const
     {
-        m_primitive_renderer->Update();
+       
+    }
+
+    void Scene::Render() const
+    {
+        m_primitive_renderer->Render();
         MatrixData mvp_data;
         mvp_data.projection = m_projection_matrix;
         DirectionalLight light;
@@ -42,7 +47,7 @@ namespace Engine5
             for (auto& mesh : m_meshes)
             {
                 mvp_data.model = mesh->GetModelMatrix();
-                auto type      = mesh->GetShaderType();
+                auto type = mesh->GetShaderType();
                 switch (type)
                 {
                 case eShaderType::Color:
@@ -61,6 +66,8 @@ namespace Engine5
                     break;
                 }
             }
+
+
         }
     }
 

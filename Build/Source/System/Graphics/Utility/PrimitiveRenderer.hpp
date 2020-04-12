@@ -36,7 +36,7 @@ namespace Engine5
         void DrawBox(const Vector3& position, const Quaternion& orientation, const Vector3& scale, eRenderingMode mode, Color color = Color());
 
         void Initialize(ColorShaderCommon* color_shader);
-        void Update();
+        void Render();
         void Shutdown();
         void Clear();
 

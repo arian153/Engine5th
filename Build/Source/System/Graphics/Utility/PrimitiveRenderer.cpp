@@ -186,7 +186,7 @@ namespace Engine5
         m_face_buffer  = new MeshBufferCommon();
     }
 
-    void PrimitiveRenderer::Update()
+    void PrimitiveRenderer::Render()
     {
         if (m_dot_vertices.empty() == false)
         {

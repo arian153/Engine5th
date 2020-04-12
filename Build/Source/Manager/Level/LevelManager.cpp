@@ -100,14 +100,12 @@ namespace Engine5
             Real time_step = m_application_timer->DeltaTime();
             UpdateLevel(m_level, time_step);
             m_elapsed_time += time_step;
-
             if (m_elapsed_time >= m_fixed_time_step)
             {
                 //Console::ConsoleOut(time_step, m_elapsed_time, m_frame_utility->GetFramePerSecond(), "\n");
                 FixedUpdateLevel(m_level, m_fixed_time_step);
                 m_elapsed_time   = 0.0f;
                 m_b_fixed_update = true;
-                
             }
             RenderLevel(m_level, time_step);
         }
@@ -300,9 +298,10 @@ namespace Engine5
         //update logic
         //update physics
         level->UpdateSubsystem(dt, eSubsystemFlag::World);
-        level->DrawSubsystem(eSubsystemFlag::World);
         //update animation
         //update sound
+        //update scene
+        level->UpdateSubsystem(m_fixed_time_step, eSubsystemFlag::Scene);
         level->Update(dt);
     }
 
@@ -313,19 +312,19 @@ namespace Engine5
         level->FixedUpdateSubsystem(dt, eSubsystemFlag::World);
         //update animation
         //update sound
+        //update scene
+        level->FixedUpdateSubsystem(m_fixed_time_step, eSubsystemFlag::Scene);
         level->FixedUpdate(dt);
     }
 
-    void LevelManager::RenderLevel(Level* level, Real dt)
+    void LevelManager::RenderLevel(Level* level, Real dt) const
     {
-        //update scene
+        //draw world
+        level->DrawSubsystem(eSubsystemFlag::World);
+
+        //render scene
         m_render_system->BeginUpdate();
-        level->UpdateSubsystem(dt, eSubsystemFlag::Scene);
-        if (m_b_fixed_update == true)
-        {
-            level->FixedUpdateSubsystem(m_fixed_time_step, eSubsystemFlag::Scene);
-            m_b_fixed_update = false;
-        }
+        level->DrawSubsystem(eSubsystemFlag::Scene);
         m_render_system->EndUpdate();
     }
 

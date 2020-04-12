@@ -22,6 +22,7 @@ namespace Engine5
 
         void Initialize();
         void Update(Real dt) const;
+        void Render() const;
         void Shutdown();
 
         void SetRenderer(RendererCommon* renderer);

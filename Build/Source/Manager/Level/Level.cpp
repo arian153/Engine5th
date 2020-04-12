@@ -136,5 +136,14 @@ namespace Engine5
                 world->Draw();
             }
         }
+
+        if (flag == eSubsystemFlag::Scene)
+        {
+            auto scene = space->GetScene();
+            if (scene != nullptr)
+            {
+                scene->Render();
+            }
+        }
     }
 }

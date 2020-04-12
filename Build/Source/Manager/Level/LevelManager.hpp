@@ -58,7 +58,7 @@ namespace Engine5
         void InitializeLevel(Level* level) const;
         void UpdateLevel(Level* level, Real dt) const;
         void FixedUpdateLevel(Level* level, Real dt) const;
-        void RenderLevel(Level* level, Real dt);
+        void RenderLevel(Level* level, Real dt) const;
         void ShutdownLevel(Level* level) const;
         void LoadLevel(Level* level) const;
         void UnloadLevel(Level* level) const;

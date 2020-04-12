@@ -174,7 +174,7 @@
     "Settings": {
         "Draw Broad Phase": {
             "Color": [ 1, 1, 1, 1 ],
-            "Flag": false
+            "Flag": true
         },
         "Draw Contact": {
             "Color": [ 1, 1, 1, 1 ],
@@ -190,7 +190,7 @@
         },
         "Draw Primitive": {
             "Color": [ 1, 1, 1, 1 ],
-            "Flag": false
+            "Flag": true
         },
         "ProjectionMatrix": "Perspective"
     },
