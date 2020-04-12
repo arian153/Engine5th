@@ -15,6 +15,7 @@ namespace Engine5
     class RendererCommon;
     class ColorShaderCommon;
     class DeferredShaderCommon;
+    class DeferredBufferCommon;
     class Color;
 
     class ShaderManagerCommon : public ShaderManagerAPI
@@ -27,7 +28,7 @@ namespace Engine5
 
         void RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const;
         void RenderTextureShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
-        void RenderLightShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, const DirectionalLight& light) const;
+        void RenderLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, const DirectionalLight& light) const;
         void RenderDeferredShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
 
         ColorShaderCommon*    GetColorShader() const;

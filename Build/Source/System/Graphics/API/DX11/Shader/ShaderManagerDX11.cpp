@@ -138,9 +138,9 @@ namespace Engine5
         m_texture_shader->Render(indices_count, mvp_data, texture, color);
     }
 
-    void ShaderManagerCommon::RenderLightShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, const DirectionalLight& light) const
+    void ShaderManagerCommon::RenderLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, const DirectionalLight& light) const
     {
-        m_light_shader->Render(indices_count, mvp_data, texture, camera, color, light);
+        m_light_shader->Render(indices_count, mvp_data, deferred_buffer, camera, light);
     }
 
     void ShaderManagerCommon::RenderDeferredShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const

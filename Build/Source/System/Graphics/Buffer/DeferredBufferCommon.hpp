@@ -8,7 +8,7 @@ namespace Engine5
 {
     class Color;
 
-    class DeferredBufferCommon : DeferredBufferAPI
+    class DeferredBufferCommon : public DeferredBufferAPI
     {
     public:
         DeferredBufferCommon();

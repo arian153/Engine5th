@@ -21,18 +21,13 @@ namespace Engine5
             Real              padding;
         };
 
-        struct ColorBufferType
-        {
-            DirectX::XMFLOAT4 color;
-        };
-
         struct LightBufferType
         {
             DirectX::XMFLOAT4 ambient_color;
             DirectX::XMFLOAT4 diffuse_color;
+            DirectX::XMFLOAT4 specular_color;
             DirectX::XMFLOAT3 light_direction;
             Real              specular_power;
-            DirectX::XMFLOAT4 specular_color;
         };
 
     public:
@@ -49,7 +44,6 @@ namespace Engine5
         ID3D11InputLayout*   m_layout         = nullptr;
         ID3D11Buffer*        m_matrix_buffer  = nullptr;
         ID3D11Buffer*        m_camera_buffer  = nullptr;
-        ID3D11Buffer*        m_color_buffer   = nullptr;
         ID3D11Buffer*        m_light_buffer   = nullptr;
         ID3D11SamplerState*  m_sampler_state  = nullptr;
         ID3D11DeviceContext* m_device_context = nullptr;

@@ -135,6 +135,12 @@ namespace Engine5
         }
     }
 
+    bool RenderTextureBufferCommon::OnResize(Real width, Real height)
+    {
+        Shutdown();
+        return Initialize(width, height);
+    }
+
     U32 RenderTextureBufferCommon::GetIndexCount() const
     {
         return m_index_count;

@@ -9,6 +9,7 @@
 #include "../../../DataType/MatrixData.hpp"
 #include "../../../Light/DirectionalLight.hpp"
 #include "../../../Texture/TextureCommon.hpp"
+#include "../../../Buffer/DeferredBufferCommon.hpp"
 
 namespace Engine5
 {
@@ -100,7 +101,7 @@ namespace Engine5
         {
             return false;
         }
-        D3D11_INPUT_ELEMENT_DESC polygon_layout[ 3 ];
+        D3D11_INPUT_ELEMENT_DESC polygon_layout[ 2 ];
         // Create the vertex input layout description.
         //pos
         polygon_layout[0].SemanticName         = "POSITION";
@@ -118,14 +119,6 @@ namespace Engine5
         polygon_layout[1].AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
         polygon_layout[1].InputSlotClass       = D3D11_INPUT_PER_VERTEX_DATA;
         polygon_layout[1].InstanceDataStepRate = 0;
-        //normal
-        polygon_layout[2].SemanticName         = "NORMAL";
-        polygon_layout[2].SemanticIndex        = 0;
-        polygon_layout[2].Format               = DXGI_FORMAT_R32G32B32_FLOAT;
-        polygon_layout[2].InputSlot            = 0;
-        polygon_layout[2].AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
-        polygon_layout[2].InputSlotClass       = D3D11_INPUT_PER_VERTEX_DATA;
-        polygon_layout[2].InstanceDataStepRate = 0;
         // Get a count of the elements in the layout.
         unsigned int num_elements = sizeof(polygon_layout) / sizeof(polygon_layout[0]);
         // Create the vertex input layout.
@@ -190,18 +183,6 @@ namespace Engine5
         {
             return false;
         }
-        D3D11_BUFFER_DESC color_buffer_desc;
-        color_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
-        color_buffer_desc.ByteWidth           = sizeof(ColorBufferType);
-        color_buffer_desc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
-        color_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
-        color_buffer_desc.MiscFlags           = 0;
-        color_buffer_desc.StructureByteStride = 0;
-        result                                = m_device->CreateBuffer(&color_buffer_desc, nullptr, &m_color_buffer);
-        if (FAILED(result))
-        {
-            return false;
-        }
         D3D11_BUFFER_DESC light_buffer_desc;
         light_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
         light_buffer_desc.ByteWidth           = sizeof(LightBufferType);
@@ -217,8 +198,10 @@ namespace Engine5
         return true;
     }
 
-    void LightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, const DirectionalLight& light) const
+    void LightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, const DirectionalLight& light) const
     {
+        //
+        // Set Vertex Shader constant buffer
         D3D11_MAPPED_SUBRESOURCE mapped_resource;
         // Lock the constant buffer so it can be written to.
         HRESULT result = m_device_context->Map(m_matrix_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
@@ -255,24 +238,14 @@ namespace Engine5
         buffer_number = 1;
         // Now set the camera constant buffer in the vertex shader with the updated values.
         m_device_context->VSSetConstantBuffers(buffer_number, 1, &m_camera_buffer);
+        //
         // Set shader texture resource in the pixel shader.
-        auto texture_view = texture->GetTexture();
-        m_device_context->PSSetShaderResources(0, 1, &texture_view);
-        result = m_device_context->Map(m_color_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
-        if (FAILED(result))
-        {
-            return;
-        }
-        // Get a pointer to the data in the constant buffer.
-        ColorBufferType* color_data_ptr = (ColorBufferType*)mapped_resource.pData;
-        // Copy the lighting variables into the constant buffer.
-        color_data_ptr->color = ConverterDX11::ToXMFloat4(color);
-        // Unlock the constant buffer.
-        m_device_context->Unmap(m_color_buffer, 0);
-        // Set the position of the light constant buffer in the pixel shader.
-        buffer_number = 0;
-        // Finally set the light constant buffer in the pixel shader with the updated values.
-        m_device_context->PSSetConstantBuffers(buffer_number, 1, &m_color_buffer);
+        auto color_texture  = deferred_buffer->GetShaderResourceView(0);
+        auto normal_texture = deferred_buffer->GetShaderResourceView(1);
+        m_device_context->PSSetShaderResources(0, 1, &color_texture);
+        m_device_context->PSSetShaderResources(1, 1, &normal_texture);
+        //
+        // Set Pixel Shader constant buffer
         // Lock the light constant buffer so it can be written to.
         result = m_device_context->Map(m_light_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
         if (FAILED(result))
@@ -284,15 +257,16 @@ namespace Engine5
         // Copy the lighting variables into the constant buffer.
         light_data_ptr->ambient_color   = ConverterDX11::ToXMFloat4(light.m_ambient);
         light_data_ptr->diffuse_color   = ConverterDX11::ToXMFloat4(light.m_diffuse);
-        light_data_ptr->light_direction = ConverterDX11::ToXMFloat3(light.m_direction);
         light_data_ptr->specular_color  = ConverterDX11::ToXMFloat4(light.m_specular);
+        light_data_ptr->light_direction = ConverterDX11::ToXMFloat3(light.m_direction);
         light_data_ptr->specular_power  = light.m_specular_power;
         // Unlock the constant buffer.
         m_device_context->Unmap(m_light_buffer, 0);
         // Set the position of the light constant buffer in the pixel shader.
-        buffer_number = 1;
+        buffer_number = 0;
         // Finally set the light constant buffer in the pixel shader with the updated values.
         m_device_context->PSSetConstantBuffers(buffer_number, 1, &m_light_buffer);
+        // Render Shader
         // Set the vertex input layout.
         m_device_context->IASetInputLayout(m_layout);
         // Set the vertex shader and pixel shader that will be used to render this triangle.
@@ -322,11 +296,6 @@ namespace Engine5
         {
             m_camera_buffer->Release();
             m_camera_buffer = nullptr;
-        }
-        if (m_color_buffer != nullptr)
-        {
-            m_color_buffer->Release();
-            m_color_buffer = nullptr;
         }
         if (m_light_buffer != nullptr)
         {

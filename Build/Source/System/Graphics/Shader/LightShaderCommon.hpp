@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class DeferredBufferCommon;
     class DirectionalLight;
     class Color;
     class MatrixData;
@@ -23,7 +24,7 @@ namespace Engine5
         void SetShader(ShaderResource* shader);
 
         bool Initialize();
-        void Render(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, const DirectionalLight& light) const;
+        void Render(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, const DirectionalLight& light) const;
         void Shutdown();
 
     private:

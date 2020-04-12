@@ -54,8 +54,8 @@ namespace Engine5
                     m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
                     break;
                 case eShaderType::Light:
-                    mesh->RenderBuffer();
-                    m_shader_manager->RenderLightShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), camera, mesh->GetColor(), light);
+                    //mesh->RenderBuffer();
+                    //m_shader_manager->RenderLightShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), camera, mesh->GetColor(), light);
                     break;
                 default:
                     break;
