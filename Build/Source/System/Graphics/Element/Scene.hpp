@@ -56,7 +56,8 @@ namespace Engine5
         RenderTextureBufferCommon* m_render_texture_buffer = nullptr;
 
         std::vector<Camera*> m_cameras;
-        std::vector<Mesh*>   m_meshes;
+        std::vector<Mesh*>   m_forward_meshes;
+        std::vector<Mesh*>   m_deferred_meshes;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;

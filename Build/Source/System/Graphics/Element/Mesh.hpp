@@ -22,7 +22,6 @@ namespace Engine5
         void Shutdown();
 
         void RenderBuffer() const;
-        void RenderColorBuffer() const;
         void BuildBuffer();
         void SetMeshData(MeshData* mesh_data);
         void SetTexture(TextureCommon* texture);
@@ -36,19 +35,22 @@ namespace Engine5
         eShaderType    GetShaderType() const;
         U32            GetIndexCount() const;
         Color          GetColor() const;
+        bool           IsDeferred() const;
+        bool           IsForward() const;
 
     private:
         friend class MeshComponent;
 
     private:
-        ShaderManagerCommon*  m_shader_manager = nullptr;
-        RendererCommon* m_renderer       = nullptr;
-        MeshBufferCommon*   m_buffer         = nullptr;
-        MeshData*       m_mesh_data      = nullptr;
-        TextureCommon*  m_texture        = nullptr;
-        Transform*      m_transform      = nullptr;
-        MeshComponent*  m_component      = nullptr;
-        Color           m_color;
-        eShaderType     m_type = eShaderType::Invalid;
+        ShaderManagerCommon* m_shader_manager = nullptr;
+        RendererCommon*      m_renderer       = nullptr;
+        MeshBufferCommon*    m_buffer         = nullptr;
+        MeshData*            m_mesh_data      = nullptr;
+        TextureCommon*       m_texture        = nullptr;
+        Transform*           m_transform      = nullptr;
+        MeshComponent*       m_component      = nullptr;
+        Color                m_color;
+        eShaderType          m_type   = eShaderType::Invalid;
+        U32                  m_stride = 0;
     };
 }

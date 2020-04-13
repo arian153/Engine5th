@@ -59,28 +59,24 @@ namespace Engine5
         for (auto& camera : m_cameras)
         {
             mvp_data.view = camera->GetViewMatrix();
-            for (auto& mesh : m_meshes)
+            for (auto& mesh : m_forward_meshes)
             {
                 mvp_data.model = mesh->GetModelMatrix();
                 auto type      = mesh->GetShaderType();
+                mesh->RenderBuffer();
                 switch (type)
                 {
                 case eShaderType::Color:
-                    mesh->RenderColorBuffer();
                     m_shader_manager->RenderColorShader(mesh->GetIndexCount(), mvp_data);
                     break;
                 case eShaderType::Texture:
-                    mesh->RenderBuffer();
                     m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
-                    break;
-                case eShaderType::Light:
-                    //mesh->RenderBuffer();
-                    //m_shader_manager->RenderLightShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), camera, mesh->GetColor(), light);
                     break;
                 default:
                     break;
                 }
             }
+            //draw per lighting.
         }
     }
 
@@ -112,13 +108,20 @@ namespace Engine5
             camera = nullptr;
         }
         m_cameras.clear();
-        for (auto& mesh : m_meshes)
+        for (auto& mesh : m_forward_meshes)
         {
             mesh->Shutdown();
             delete mesh;
             mesh = nullptr;
         }
-        m_meshes.clear();
+        m_forward_meshes.clear();
+        for (auto& mesh : m_deferred_meshes)
+        {
+            mesh->Shutdown();
+            delete mesh;
+            mesh = nullptr;
+        }
+        m_deferred_meshes.clear();
     }
 
     void Scene::SetRenderer(RendererCommon* renderer)
@@ -214,7 +217,14 @@ namespace Engine5
 
     Mesh* Scene::AddMesh(Mesh* mesh)
     {
-        m_meshes.push_back(mesh);
+        if (mesh->IsDeferred())
+        {
+            m_deferred_meshes.push_back(mesh);
+        }
+        else
+        {
+            m_forward_meshes.push_back(mesh);
+        }
         mesh->SetRenderer(m_renderer);
         return mesh;
     }
@@ -227,7 +237,15 @@ namespace Engine5
 
     void Scene::RemoveMesh(Mesh* mesh)
     {
-        auto found = std::find(m_meshes.begin(), m_meshes.end(), mesh);
-        m_meshes.erase(found);
+        if (mesh->IsDeferred() && mesh != nullptr)
+        {
+            auto found = std::find(m_deferred_meshes.begin(), m_deferred_meshes.end(), mesh);
+            m_deferred_meshes.erase(found);
+        }
+        else
+        {
+            auto found = std::find(m_forward_meshes.begin(), m_forward_meshes.end(), mesh);
+            m_forward_meshes.erase(found);
+        }
     }
 }

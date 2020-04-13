@@ -44,18 +44,11 @@ namespace Engine5
     {
         if (m_buffer != nullptr)
         {
-            m_buffer->Render(sizeof(NormalVertexCommon), 0);
+            m_buffer->Render(m_stride, 0);
         }
     }
 
-    void Mesh::RenderColorBuffer() const
-    {
-        if (m_buffer != nullptr)
-        {
-            m_buffer->Render(sizeof(ColorVertexCommon), 0);
-        }
-    }
-
+   
     void Mesh::BuildBuffer()
     {
         if (m_buffer == nullptr)
@@ -78,10 +71,12 @@ namespace Engine5
                 }
                 m_buffer->BuildBuffer(m_renderer, vertices, m_mesh_data->indices);
                 vertices.clear();
+                m_stride = sizeof(ColorVertexCommon);
             }
             else
             {
                 m_buffer->BuildBuffer(m_renderer, m_mesh_data->vertices, m_mesh_data->indices);
+                m_stride = sizeof(NormalVertexCommon);
             }
         }
     }
@@ -152,5 +147,15 @@ namespace Engine5
     Color Mesh::GetColor() const
     {
         return m_color;
+    }
+
+    bool Mesh::IsDeferred() const
+    {
+        return !(m_type == eShaderType::Color || m_type == eShaderType::Light || m_type == eShaderType::Invalid);
+    }
+
+    bool Mesh::IsForward() const
+    {
+        return m_type == eShaderType::Color || m_type == eShaderType::Light || m_type == eShaderType::Invalid;
     }
 }
