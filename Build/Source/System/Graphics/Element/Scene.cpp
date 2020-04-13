@@ -45,17 +45,13 @@ namespace Engine5
     {
         if (m_deferred_meshes.empty() == false)
         {
-           
             MatrixData mvp_data;
             mvp_data.projection  = m_projection_matrix;
             m_b_deferred_shading = true;
             // Set the render buffers to be the render target.
             m_deferred_buffer->SetRenderTargets();
             // Clear the render buffers.
-            m_deferred_buffer->ClearRenderTargets(Color(1.0f, 1.0f, 1.0f, 1.0f));
-
-            
-
+            m_deferred_buffer->ClearRenderTargets(Color(0.0f, 0.0f, 0.0f, 0.0f));
             for (auto& camera : m_cameras)
             {
                 mvp_data.view = camera->GetViewMatrix();
@@ -84,21 +80,18 @@ namespace Engine5
 
     void Scene::Render() const
     {
-        m_primitive_renderer->Render();
-        MatrixData mvp_data;
-       
+        MatrixData       mvp_data;
         DirectionalLight light;
         light.m_ambient        = Color(0.15f, 0.15f, 0.15f);
         light.m_direction      = Vector3(0.0f, 0.0f, 1.0f);
         light.m_specular_power = 32.0f;
+        mvp_data.projection    = m_orthogonal_matrix;
         for (auto& camera : m_cameras)
         {
             mvp_data.view = camera->GetViewMatrix();
-
             //draw per lighting.
             if (m_b_deferred_shading)
             {
-                mvp_data.projection = m_orthogonal_matrix;
                 mvp_data.model.SetIdentity();
                 // Turn off the Z buffer to begin all 2D rendering.
                 m_renderer->SetZBuffering(false);
@@ -109,8 +102,15 @@ namespace Engine5
                 // Turn the Z buffer back on now that all 2D rendering has completed.
                 m_renderer->SetZBuffering(true);
             }
+        }
 
-            mvp_data.projection = m_projection_matrix;
+       
+
+        m_primitive_renderer->Render();
+        mvp_data.projection = m_projection_matrix;
+        for (auto& camera : m_cameras)
+        {
+            mvp_data.view = camera->GetViewMatrix();
             for (auto& mesh : m_forward_meshes)
             {
                 mvp_data.model = mesh->GetModelMatrix();
@@ -129,7 +129,6 @@ namespace Engine5
                     break;
                 }
             }
-            
         }
     }
 

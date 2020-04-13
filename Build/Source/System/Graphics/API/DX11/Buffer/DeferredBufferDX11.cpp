@@ -198,8 +198,6 @@ namespace Engine5
         m_device_context->OMSetRenderTargets(BUFFER_COUNT, m_render_target_view_array, m_depth_stencil_view);
         // Set the viewport.
         m_device_context->RSSetViewports(1, &m_viewport);
-
-        
     }
 
     void DeferredBufferCommon::ClearRenderTargets(const Color& color)
@@ -219,8 +217,8 @@ namespace Engine5
         m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
     }
 
-     void DeferredBufferCommon::ReleaseRenderTarget() const
+    void DeferredBufferCommon::ReleaseRenderTarget() const
     {
-         m_device_context->OMSetRenderTargets(1, nullptr, nullptr);
+        m_device_context->OMSetRenderTargets(1, nullptr, nullptr);
     }
 }
