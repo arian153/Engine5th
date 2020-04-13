@@ -79,6 +79,11 @@ namespace Engine5
             {
                 m_mesh->SetShaderType(eShaderType::Light);
             }
+
+            if (m_space != nullptr && m_mesh != nullptr)
+            {
+                m_space->GetScene()->ChangeShaderType(m_mesh);
+            }
         }
         if (JsonResource::HasMember(data, "Mesh"))
         {

@@ -1,17 +1,18 @@
 #pragma warning( disable : 26812)
 
 #include "RendererDX11.hpp"
-#include "../RendererCommon.hpp"
 #include "../../../Core/Utility/CoreUtility.hpp"
 #include "../../../Math/Math.hpp"
 #include "../../DataType/Color.hpp"
 #include <cassert>
+#include "../../Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {
     RendererDX11::RendererDX11()
         : m_d3d_feature_level(),
           m_dxgi_color_format(DXGI_FORMAT_B8G8R8A8_UNORM),
+          m_viewport(),
           m_numerator(0),
           m_denominator(0),
           m_video_card_memory(0),
@@ -70,6 +71,11 @@ namespace Engine5
         {
             m_device_context->RSSetState(m_raster_state);
         }
+    }
+
+    void RendererDX11::ResetViewport() const
+    {
+        m_device_context->RSSetViewports(1, &m_viewport);
     }
 
     void RendererDX11::SetUpAdapterDescription(int client_width, int client_height)
@@ -409,18 +415,17 @@ namespace Engine5
         m_device_context->RSSetState(m_raster_state);
     }
 
-    void RendererDX11::SetUpViewport(int client_width, int client_height) const
+    void RendererDX11::SetUpViewport(int client_width, int client_height)
     {
-        D3D11_VIEWPORT viewport;
         // Setup the viewport for rendering.
-        viewport.Width    = (Real)client_width;
-        viewport.Height   = (Real)client_height;
-        viewport.MinDepth = 0.0f;
-        viewport.MaxDepth = 1.0f;
-        viewport.TopLeftX = 0.0f;
-        viewport.TopLeftY = 0.0f;
+        m_viewport.Width    = (Real)client_width;
+        m_viewport.Height   = (Real)client_height;
+        m_viewport.MinDepth = 0.0f;
+        m_viewport.MaxDepth = 1.0f;
+        m_viewport.TopLeftX = 0.0f;
+        m_viewport.TopLeftY = 0.0f;
         // Create the viewport.
-        m_device_context->RSSetViewports(1, &viewport);
+        m_device_context->RSSetViewports(1, &m_viewport);
     }
 
     void RendererDX11::SetUpMultiSamplingLevel()
@@ -443,13 +448,15 @@ namespace Engine5
         blend_state_description.RenderTarget[0].DestBlendAlpha        = D3D11_BLEND_ZERO;
         blend_state_description.RenderTarget[0].BlendOpAlpha          = D3D11_BLEND_OP_ADD;
         blend_state_description.RenderTarget[0].RenderTargetWriteMask = 0x0f;
-        HRESULT result                                                = m_device->CreateBlendState(&blend_state_description, &m_alpha_enabled_blending_state);
+        //create blend state
+        HRESULT result = m_device->CreateBlendState(&blend_state_description, &m_alpha_enabled_blending_state);
         if (FAILED(result))
             return;
         D3D11_BLEND_DESC blend_state_disable_description;
         ZeroMemory(&blend_state_disable_description, sizeof(D3D11_BLEND_DESC));
         blend_state_disable_description.RenderTarget[0].BlendEnable = FALSE;
-        result                                                      = m_device->CreateBlendState(&blend_state_disable_description, &m_alpha_disabled_blending_state);
+        //create blend state
+        result = m_device->CreateBlendState(&blend_state_disable_description, &m_alpha_disabled_blending_state);
         if (FAILED(result))
         {
         }
@@ -542,6 +549,7 @@ namespace Engine5
         SetUpBlendState();
         SetUpDWDevice();
         SetUpDWRenderTarget();
+        SetAlphaBlending(true);
         m_b_init = true;
     }
 
@@ -707,6 +715,7 @@ namespace Engine5
             // Present as fast as possible.
             m_swap_chain->Present(0, 0);
         }
+        m_device_context->ClearState();
     }
 
     void RendererCommon::SetVSync(bool flag)

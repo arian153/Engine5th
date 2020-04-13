@@ -36,22 +36,57 @@ namespace Engine5
         m_deferred_buffer->Initialize(
                                       m_renderer,
                                       m_matrix_manager->GetScreenWidth(),
-                                      m_matrix_manager->GetScreenHeight(),
-                                      m_matrix_manager->GetFarPlane(),
-                                      m_matrix_manager->GetNearPlane());
+                                      m_matrix_manager->GetScreenHeight());
         UpdateView();
         UpdateProjection();
     }
 
-    void Scene::Update(Real dt) const
+    void Scene::Update(Real dt)
     {
+        if (m_deferred_meshes.empty() == false)
+        {
+           
+            MatrixData mvp_data;
+            mvp_data.projection  = m_projection_matrix;
+            m_b_deferred_shading = true;
+            // Set the render buffers to be the render target.
+            m_deferred_buffer->SetRenderTargets();
+            // Clear the render buffers.
+            m_deferred_buffer->ClearRenderTargets(Color(1.0f, 1.0f, 1.0f, 1.0f));
+
+            
+
+            for (auto& camera : m_cameras)
+            {
+                mvp_data.view = camera->GetViewMatrix();
+                for (auto& mesh : m_deferred_meshes)
+                {
+                    mvp_data.model = mesh->GetModelMatrix();
+                    auto type      = mesh->GetShaderType();
+                    mesh->RenderBuffer();
+                    switch (type)
+                    {
+                    case eShaderType::Light:
+                        m_shader_manager->RenderDeferredShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
+            //m_deferred_buffer->ReleaseRenderTarget();
+            // Reset the render target back to the original back buffer and not the render buffers anymore.
+            m_renderer->SetBackBufferRenderTarget();
+            // Reset the viewport back to the original.
+            m_renderer->ResetViewport();
+        }
     }
 
     void Scene::Render() const
     {
         m_primitive_renderer->Render();
         MatrixData mvp_data;
-        mvp_data.projection = m_projection_matrix;
+       
         DirectionalLight light;
         light.m_ambient        = Color(0.15f, 0.15f, 0.15f);
         light.m_direction      = Vector3(0.0f, 0.0f, 1.0f);
@@ -59,24 +94,42 @@ namespace Engine5
         for (auto& camera : m_cameras)
         {
             mvp_data.view = camera->GetViewMatrix();
+
+            //draw per lighting.
+            if (m_b_deferred_shading)
+            {
+                mvp_data.projection = m_orthogonal_matrix;
+                mvp_data.model.SetIdentity();
+                // Turn off the Z buffer to begin all 2D rendering.
+                m_renderer->SetZBuffering(false);
+                // Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
+                m_render_texture_buffer->Render();
+                // Render the full screen ortho window using the deferred light shader and the render buffers.
+                m_shader_manager->RenderLightShader(m_render_texture_buffer->GetIndexCount(), mvp_data, m_deferred_buffer, camera, light);
+                // Turn the Z buffer back on now that all 2D rendering has completed.
+                m_renderer->SetZBuffering(true);
+            }
+
+            mvp_data.projection = m_projection_matrix;
             for (auto& mesh : m_forward_meshes)
             {
                 mvp_data.model = mesh->GetModelMatrix();
                 auto type      = mesh->GetShaderType();
-                mesh->RenderBuffer();
                 switch (type)
                 {
                 case eShaderType::Color:
+                    mesh->RenderBuffer();
                     m_shader_manager->RenderColorShader(mesh->GetIndexCount(), mvp_data);
                     break;
                 case eShaderType::Texture:
+                    mesh->RenderBuffer();
                     m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
                     break;
                 default:
                     break;
                 }
             }
-            //draw per lighting.
+            
         }
     }
 
@@ -171,6 +224,7 @@ namespace Engine5
         {
         case eProjectionType::Perspective:
             m_projection_matrix = m_matrix_manager->GetPerspectiveMatrix();
+            m_orthogonal_matrix = m_matrix_manager->GetOrthoGraphicMatrix();
             break;
         case eProjectionType::OrthoGraphic:
             m_projection_matrix = m_matrix_manager->GetOrthoGraphicMatrix();
@@ -182,6 +236,10 @@ namespace Engine5
         {
             m_primitive_renderer->UpdateProjectionMatrix(m_projection_matrix);
         }
+    }
+
+    void Scene::OnResize() const
+    {
         if (m_render_texture_buffer != nullptr)
         {
             m_render_texture_buffer->OnResize(
@@ -194,9 +252,7 @@ namespace Engine5
         {
             m_deferred_buffer->OnResize(
                                         m_matrix_manager->GetScreenWidth(),
-                                        m_matrix_manager->GetScreenHeight(),
-                                        m_matrix_manager->GetFarPlane(),
-                                        m_matrix_manager->GetNearPlane());
+                                        m_matrix_manager->GetScreenHeight());
         }
     }
 
@@ -246,6 +302,33 @@ namespace Engine5
         {
             auto found = std::find(m_forward_meshes.begin(), m_forward_meshes.end(), mesh);
             m_forward_meshes.erase(found);
+        }
+    }
+
+    void Scene::ChangeShaderType(Mesh* mesh)
+    {
+        //remove
+        auto found_forward = std::find(m_forward_meshes.begin(), m_forward_meshes.end(), mesh);
+        if (found_forward != m_forward_meshes.end())
+        {
+            m_forward_meshes.erase(found_forward);
+        }
+        else
+        {
+            auto found_deferred = std::find(m_deferred_meshes.begin(), m_deferred_meshes.end(), mesh);
+            if (found_deferred != m_deferred_meshes.end())
+            {
+                m_deferred_meshes.erase(found_deferred);
+            }
+        }
+        //add
+        if (mesh->IsDeferred())
+        {
+            m_deferred_meshes.push_back(mesh);
+        }
+        else
+        {
+            m_forward_meshes.push_back(mesh);
         }
     }
 }

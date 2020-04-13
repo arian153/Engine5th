@@ -32,13 +32,11 @@ namespace Engine5
         m_device_context = device_context;
     }
 
-    bool DeferredBufferDX11::BuildBuffer(U32 texture_width, U32 texture_height, Real far_plane, Real near_plane)
+    bool DeferredBufferDX11::BuildBuffer(U32 texture_width, U32 texture_height)
     {
         // Store the width and height of the render texture.
         m_texture_width  = texture_width;
         m_texture_height = texture_height;
-        m_far_plane      = far_plane;
-        m_near_plane     = near_plane;
         // Initialize the render target texture description.
         D3D11_TEXTURE2D_DESC texture_desc;
         ZeroMemory(&texture_desc, sizeof(texture_desc));
@@ -129,8 +127,8 @@ namespace Engine5
         // Setup the viewport for rendering.
         m_viewport.Width    = (Real)texture_width;
         m_viewport.Height   = (Real)texture_height;
-        m_viewport.MinDepth = near_plane;
-        m_viewport.MaxDepth = far_plane;
+        m_viewport.MinDepth = 0.0f;
+        m_viewport.MaxDepth = 1.0f;
         m_viewport.TopLeftX = 0.0f;
         m_viewport.TopLeftY = 0.0f;
         return true;
@@ -149,11 +147,11 @@ namespace Engine5
     {
     }
 
-    bool DeferredBufferCommon::Initialize(RendererCommon* renderer, U32 texture_width, U32 texture_height, Real far_plane, Real near_plane)
+    bool DeferredBufferCommon::Initialize(RendererCommon* renderer, U32 texture_width, U32 texture_height)
     {
         SetDevice(renderer->GetDevice());
         SetDeviceContext(renderer->GetDeviceContext());
-        return BuildBuffer(texture_width, texture_height, far_plane, near_plane);
+        return BuildBuffer(texture_width, texture_height);
     }
 
     void DeferredBufferCommon::Shutdown()
@@ -188,10 +186,10 @@ namespace Engine5
         }
     }
 
-    bool DeferredBufferCommon::OnResize(U32 texture_width, U32 texture_height, Real far_plane, Real near_plane)
+    bool DeferredBufferCommon::OnResize(U32 texture_width, U32 texture_height)
     {
         Shutdown();
-        return BuildBuffer(texture_width, texture_height, far_plane, near_plane);
+        return BuildBuffer(texture_width, texture_height);
     }
 
     void DeferredBufferCommon::SetRenderTargets() const
@@ -200,6 +198,8 @@ namespace Engine5
         m_device_context->OMSetRenderTargets(BUFFER_COUNT, m_render_target_view_array, m_depth_stencil_view);
         // Set the viewport.
         m_device_context->RSSetViewports(1, &m_viewport);
+
+        
     }
 
     void DeferredBufferCommon::ClearRenderTargets(const Color& color)
@@ -217,5 +217,10 @@ namespace Engine5
         }
         // Clear the depth buffer.
         m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+    }
+
+     void DeferredBufferCommon::ReleaseRenderTarget() const
+    {
+         m_device_context->OMSetRenderTargets(1, nullptr, nullptr);
     }
 }

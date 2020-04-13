@@ -81,6 +81,11 @@ namespace Engine5
         {
             m_renderer->OnResize(width, height, m_operating_system->IsFullscreen());
             m_matrix_manager->SetClientRect(static_cast<size_t>(width), static_cast<size_t>(height));
+
+            for (auto& scene : m_scenes)
+            {
+                scene->OnResize();
+            }
         }
     }
 

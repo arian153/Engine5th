@@ -74,7 +74,7 @@ namespace Engine5
         // Set up the description of the index buffer.
         D3D11_BUFFER_DESC index_buffer_desc;
         index_buffer_desc.Usage = D3D11_USAGE_DEFAULT;
-        index_buffer_desc.ByteWidth = sizeof(unsigned long) * m_index_count;
+        index_buffer_desc.ByteWidth = sizeof(U32) * m_index_count;
         index_buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
         index_buffer_desc.CPUAccessFlags = 0;
         index_buffer_desc.MiscFlags = 0;

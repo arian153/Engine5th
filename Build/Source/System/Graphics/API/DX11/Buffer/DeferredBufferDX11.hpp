@@ -16,14 +16,12 @@ namespace Engine5
 
         void                      SetDevice(ID3D11Device* device);
         void                      SetDeviceContext(ID3D11DeviceContext* device_context);
-        bool                      BuildBuffer(U32 texture_width, U32 texture_height, Real far_plane, Real near_plane);
+        bool                      BuildBuffer(U32 texture_width, U32 texture_height);
         ID3D11ShaderResourceView* GetShaderResourceView(U32 view);
 
     protected:
         U32  m_texture_width  = 512;
         U32  m_texture_height = 512;
-        Real m_far_plane      = 1.0f;
-        Real m_near_plane     = 0.0f;
 
         ID3D11Device*             m_device         = nullptr;
         ID3D11DeviceContext*      m_device_context = nullptr;

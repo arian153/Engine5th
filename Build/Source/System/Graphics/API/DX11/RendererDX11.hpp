@@ -29,6 +29,7 @@ namespace Engine5
         void SetHwnd(HWND hwnd);
         void SetBackBufferRenderTarget() const;
         void SetRasterStateWireFrame(bool flag) const;
+        void ResetViewport() const;
 
     protected:
         void SetUpAdapterDescription(int client_width, int client_height);
@@ -39,7 +40,7 @@ namespace Engine5
         void SetUpStencilStateDescription();
         void SetUpDepthStencilViewDescription();
         void SetUpRasterDescription();
-        void SetUpViewport(int client_width, int client_height) const;
+        void SetUpViewport(int client_width, int client_height);
         void SetUpMultiSamplingLevel();
         void SetUpBlendState();
         void SetUpDWDevice();
@@ -64,9 +65,10 @@ namespace Engine5
         IDWriteFactory2*         m_write_factory                 = nullptr;
         ID2D1Bitmap1*            m_target_bitmap                 = nullptr;
         HWND                     m_hwnd                          = nullptr;
-        MatrixManager*         m_matrix_generator              = nullptr;
+        MatrixManager*           m_matrix_generator              = nullptr;
         D3D_FEATURE_LEVEL        m_d3d_feature_level;
         DXGI_FORMAT              m_dxgi_color_format;
+        D3D11_VIEWPORT           m_viewport;
 
         UINT   m_back_buffer_count = 1;
         bool   m_enable_msaa       = false;

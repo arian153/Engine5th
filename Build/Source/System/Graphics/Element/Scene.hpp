@@ -23,7 +23,7 @@ namespace Engine5
         ~Scene();
 
         void Initialize();
-        void Update(Real dt) const;
+        void Update(Real dt);
         void Render() const;
         void Shutdown();
 
@@ -35,6 +35,7 @@ namespace Engine5
         void SetProjectionType(eProjectionType projection_type);
         void UpdateView();
         void UpdateProjection();
+        void OnResize() const;
 
         PrimitiveRenderer* GetPrimitiveRenderer() const;
 
@@ -45,6 +46,8 @@ namespace Engine5
         //remove
         void RemoveCamera(Camera* camera);
         void RemoveMesh(Mesh* mesh);
+
+        void ChangeShaderType(Mesh* mesh);
     private:
         RendererCommon*      m_renderer           = nullptr;
         ShaderManagerCommon* m_shader_manager     = nullptr;
@@ -62,5 +65,8 @@ namespace Engine5
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;
         Matrix44        m_projection_matrix;
+        Matrix44        m_orthogonal_matrix;
+
+        bool m_b_deferred_shading = false;
     };
 }

@@ -49,7 +49,7 @@
                     "Value": {
                         "Color": [ 0.6, 0.6, 0.6, 1 ],
                         "Mesh": "../../Resource/Mesh/deer.obj",
-                        "Shader Type": "Texture",
+                        "Shader Type": "Light",
                         "Texture": "../../Resource/Texture/white.dds"
                     }
                 }

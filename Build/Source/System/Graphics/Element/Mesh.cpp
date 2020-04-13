@@ -48,7 +48,6 @@ namespace Engine5
         }
     }
 
-   
     void Mesh::BuildBuffer()
     {
         if (m_buffer == nullptr)
@@ -151,11 +150,11 @@ namespace Engine5
 
     bool Mesh::IsDeferred() const
     {
-        return !(m_type == eShaderType::Color || m_type == eShaderType::Light || m_type == eShaderType::Invalid);
+        return !(m_type == eShaderType::Color || m_type == eShaderType::Texture || m_type == eShaderType::Invalid);
     }
 
     bool Mesh::IsForward() const
     {
-        return m_type == eShaderType::Color || m_type == eShaderType::Light || m_type == eShaderType::Invalid;
+        return m_type == eShaderType::Color || m_type == eShaderType::Texture || m_type == eShaderType::Invalid;
     }
 }

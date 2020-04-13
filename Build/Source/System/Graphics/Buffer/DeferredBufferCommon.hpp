@@ -15,15 +15,16 @@ namespace Engine5
         DeferredBufferCommon();
         ~DeferredBufferCommon();
 
-        bool Initialize(RendererCommon* renderer, U32 texture_width, U32 texture_height, Real far_plane, Real near_plane);
+        bool Initialize(RendererCommon* renderer, U32 texture_width, U32 texture_height);
         void Shutdown();
 
-        bool OnResize(U32 texture_width, U32 texture_height, Real far_plane, Real near_plane);
+        bool OnResize(U32 texture_width, U32 texture_height);
 
         void SetRenderTargets() const;
         void ClearRenderTargets(const Color& color);
-
+        void ReleaseRenderTarget() const;
     private:
-       
     };
+
+    
 }
