@@ -70,6 +70,8 @@ namespace Engine5
                     }
                 }
             }
+
+            m_primitive_renderer->Render();
             //m_deferred_buffer->ReleaseRenderTarget();
             // Reset the render target back to the original back buffer and not the render buffers anymore.
             m_renderer->SetBackBufferRenderTarget();
@@ -80,6 +82,7 @@ namespace Engine5
 
     void Scene::Render() const
     {
+       
         MatrixData       mvp_data;
         DirectionalLight light;
         light.m_ambient        = Color(0.15f, 0.15f, 0.15f);
@@ -103,10 +106,6 @@ namespace Engine5
                 m_renderer->SetZBuffering(true);
             }
         }
-
-       
-
-        m_primitive_renderer->Render();
         mvp_data.projection = m_projection_matrix;
         for (auto& camera : m_cameras)
         {
