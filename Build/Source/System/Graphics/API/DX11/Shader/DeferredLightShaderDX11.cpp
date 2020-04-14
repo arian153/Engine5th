@@ -1,5 +1,5 @@
-#include "LightShaderDX11.hpp"
-#include "../../../Shader/LightShaderCommon.hpp"
+#include "DeferredLightShaderDX11.hpp"
+#include "../../../Shader/DeferredLightShaderCommon.hpp"
 #include "../../../../Core/Utility/CoreUtility.hpp"
 #include "../ConverterDX11.hpp"
 #include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
@@ -13,44 +13,44 @@
 
 namespace Engine5
 {
-    LightShaderDX11::LightShaderDX11()
+    DeferredLightShaderDX11::DeferredLightShaderDX11()
     {
     }
 
-    LightShaderDX11::~LightShaderDX11()
+    DeferredLightShaderDX11::~DeferredLightShaderDX11()
     {
     }
 
-    void LightShaderDX11::SetHWnd(HWND hwnd)
+    void DeferredLightShaderDX11::SetHWnd(HWND hwnd)
     {
         m_hwnd = hwnd;
     }
 
-    void LightShaderDX11::SetDevice(ID3D11Device* device)
+    void DeferredLightShaderDX11::SetDevice(ID3D11Device* device)
     {
         m_device = device;
     }
 
-    void LightShaderDX11::SetDeviceContext(ID3D11DeviceContext* device_context)
+    void DeferredLightShaderDX11::SetDeviceContext(ID3D11DeviceContext* device_context)
     {
         m_device_context = device_context;
     }
 
-    LightShaderCommon::LightShaderCommon(ShaderManagerCommon* shader_manager)
+    DeferredLightShaderCommon::DeferredLightShaderCommon(ShaderManagerCommon* shader_manager)
         : m_shader_manager(shader_manager)
     {
     }
 
-    LightShaderCommon::~LightShaderCommon()
+    DeferredLightShaderCommon::~DeferredLightShaderCommon()
     {
     }
 
-    void LightShaderCommon::SetShader(ShaderResource* shader)
+    void DeferredLightShaderCommon::SetShader(ShaderResource* shader)
     {
         m_shader_resource = shader;
     }
 
-    bool LightShaderCommon::Initialize()
+    bool DeferredLightShaderCommon::Initialize()
     {
         ID3D10Blob* error_message        = nullptr;
         ID3D10Blob* vertex_shader_buffer = nullptr;
@@ -58,7 +58,7 @@ namespace Engine5
         auto        vertex_shader_path   = m_shader_resource->FilePath();
         auto        pixel_shader_path    = m_shader_resource->FilePath();
         // Compile the vertex shader code.
-        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "LightVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
+        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "DeferredLightVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
         if (FAILED(result))
         {
             // If the shader failed to compile it should have written something to the error message.
@@ -74,7 +74,7 @@ namespace Engine5
             return false;
         }
         // Compile the pixel shader code.
-        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "LightPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
+        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "DeferredLightPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
         if (FAILED(result))
         {
             // If the shader failed to compile it should have written something to the error message.
@@ -198,7 +198,7 @@ namespace Engine5
         return true;
     }
 
-    void LightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, const DirectionalLight& light) const
+    void DeferredLightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, const DirectionalLight& light) const
     {
         //
         // Set Vertex Shader constant buffer
@@ -278,7 +278,7 @@ namespace Engine5
         m_device_context->DrawIndexed(indices_count, 0, 0);
     }
 
-    void LightShaderCommon::Shutdown()
+    void DeferredLightShaderCommon::Shutdown()
     {
         // Release the sampler state.
         if (m_sampler_state != nullptr)

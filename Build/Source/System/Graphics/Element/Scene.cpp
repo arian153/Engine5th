@@ -62,7 +62,7 @@ namespace Engine5
                     mesh->RenderBuffer();
                     switch (type)
                     {
-                    case eShaderType::Light:
+                    case eShaderType::DeferredLight:
                         m_shader_manager->RenderDeferredShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
                         break;
                     default:
@@ -70,9 +70,6 @@ namespace Engine5
                     }
                 }
             }
-
-            m_primitive_renderer->Render();
-            //m_deferred_buffer->ReleaseRenderTarget();
             // Reset the render target back to the original back buffer and not the render buffers anymore.
             m_renderer->SetBackBufferRenderTarget();
             // Reset the viewport back to the original.
@@ -82,26 +79,26 @@ namespace Engine5
 
     void Scene::Render() const
     {
-       
+        m_primitive_renderer->Render();
         MatrixData       mvp_data;
         DirectionalLight light;
         light.m_ambient        = Color(0.15f, 0.15f, 0.15f);
         light.m_direction      = Vector3(0.0f, 0.0f, 1.0f);
         light.m_specular_power = 32.0f;
-        mvp_data.projection    = m_orthogonal_matrix;
-        for (auto& camera : m_cameras)
+        if (m_b_deferred_shading)
         {
-            mvp_data.view = camera->GetViewMatrix();
-            //draw per lighting.
-            if (m_b_deferred_shading)
+            mvp_data.projection = m_orthogonal_matrix;
+            for (auto& camera : m_cameras)
             {
+                mvp_data.view = camera->GetViewMatrix();
+                //draw per lighting.
                 mvp_data.model.SetIdentity();
                 // Turn off the Z buffer to begin all 2D rendering.
                 m_renderer->SetZBuffering(false);
                 // Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
                 m_render_texture_buffer->Render();
                 // Render the full screen ortho window using the deferred light shader and the render buffers.
-                m_shader_manager->RenderLightShader(m_render_texture_buffer->GetIndexCount(), mvp_data, m_deferred_buffer, camera, light);
+                m_shader_manager->RenderDeferredLightShader(m_render_texture_buffer->GetIndexCount(), mvp_data, m_deferred_buffer, camera, light);
                 // Turn the Z buffer back on now that all 2D rendering has completed.
                 m_renderer->SetZBuffering(true);
             }

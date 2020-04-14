@@ -4,7 +4,7 @@
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
 #include <fstream>
 #include "../../../Shader/TextureShaderCommon.hpp"
-#include "../../../Shader/LightShaderCommon.hpp"
+#include "../../../Shader/DeferredLightShaderCommon.hpp"
 #include "../../../Renderer/RendererCommon.hpp"
 #include "../../../Shader/DeferredShaderCommon.hpp"
 
@@ -85,8 +85,8 @@ namespace Engine5
         m_texture_shader->SetDeviceContext(m_device_context);
         m_texture_shader->Initialize();
         //Light shader
-        m_light_shader = new LightShaderCommon(this);
-        m_light_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Light.fx"));
+        m_light_shader = new DeferredLightShaderCommon(this);
+        m_light_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"DeferredLight.fx"));
         m_light_shader->SetHWnd(m_hwnd);
         m_light_shader->SetDevice(m_device);
         m_light_shader->SetDeviceContext(m_device_context);
@@ -138,7 +138,7 @@ namespace Engine5
         m_texture_shader->Render(indices_count, mvp_data, texture, color);
     }
 
-    void ShaderManagerCommon::RenderLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, const DirectionalLight& light) const
+    void ShaderManagerCommon::RenderDeferredLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, const DirectionalLight& light) const
     {
         m_light_shader->Render(indices_count, mvp_data, deferred_buffer, camera, light);
     }
@@ -158,7 +158,7 @@ namespace Engine5
         return m_texture_shader;
     }
 
-    LightShaderCommon* ShaderManagerCommon::GetLightShader() const
+    DeferredLightShaderCommon* ShaderManagerCommon::GetDeferredLightShader() const
     {
         return m_light_shader;
     }

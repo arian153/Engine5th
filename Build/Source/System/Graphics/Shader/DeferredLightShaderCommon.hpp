@@ -1,6 +1,6 @@
 #pragma once
 #include "../API/GraphicsAPI.hpp"
-#include IncludeLightShaderAPI
+#include IncludeDeferredLightShaderAPI
 #include "../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
@@ -15,11 +15,11 @@ namespace Engine5
     class ShaderResource;
     class Matrix44;
 
-    class LightShaderCommon : public LightShaderAPI
+    class DeferredLightShaderCommon : public DeferredLightShaderAPI
     {
     public:
-        explicit LightShaderCommon(ShaderManagerCommon* shader_manager);
-        ~LightShaderCommon();
+        explicit DeferredLightShaderCommon(ShaderManagerCommon* shader_manager);
+        ~DeferredLightShaderCommon();
 
         void SetShader(ShaderResource* shader);
 

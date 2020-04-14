@@ -42,7 +42,7 @@ struct PixelInputType
 
 
 //vertex shader
-PixelInputType LightVertexShader(VertexInputType input)
+PixelInputType DeferredLightVertexShader(VertexInputType input)
 {
     // Change the position vector to be 4 units for proper matrix calculations.
     input.position.w = 1.0f;
@@ -70,7 +70,7 @@ PixelInputType LightVertexShader(VertexInputType input)
 
 
 //pixel shader
-float4 LightPixelShader(PixelInputType input) : SV_TARGET
+float4 DeferredLightPixelShader(PixelInputType input) : SV_TARGET
 {
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
     float4 colors = color_texture.Sample(sample_type, input.uv);

@@ -18,7 +18,7 @@
 #define ShaderManagerAPI ShaderManagerDX11
 #define ColorShaderAPI ColorShaderDX11
 #define TextureShaderAPI TextureShaderDX11
-#define LightShaderAPI LightShaderDX11
+#define DeferredLightShaderAPI DeferredLightShaderDX11
 #define DeferredShaderAPI DeferredShaderDX11
 
 //includes
@@ -33,7 +33,7 @@
 #define IncludeShaderManagerAPI "../API/DX11/Shader/ShaderManagerDX11.hpp"
 #define IncludeColorShaderAPI "../API/DX11/Shader/ColorShaderDX11.hpp"
 #define IncludeTextureShaderAPI "../API/DX11/Shader/TextureShaderDX11.hpp"
-#define IncludeLightShaderAPI "../API/DX11/Shader/LightShaderDX11.hpp"
+#define IncludeDeferredLightShaderAPI "../API/DX11/Shader/DeferredLightShaderDX11.hpp"
 #define IncludeDeferredShaderAPI "../API/DX11/Shader/DeferredShaderDX11.hpp"
 
 #elif defined(E5_DIRECTX12)

@@ -75,9 +75,9 @@ namespace Engine5
             {
                 m_mesh->SetShaderType(eShaderType::Texture);
             }
-            else if (shader == "Light")
+            else if (shader == "DeferredLight")
             {
-                m_mesh->SetShaderType(eShaderType::Light);
+                m_mesh->SetShaderType(eShaderType::DeferredLight);
             }
 
             if (m_space != nullptr && m_mesh != nullptr)
