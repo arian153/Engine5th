@@ -715,7 +715,7 @@ namespace Engine5
             // Present as fast as possible.
             m_swap_chain->Present(0, 0);
         }
-        m_device_context->ClearState();
+       // m_device_context->ClearState();
     }
 
     void RendererCommon::SetVSync(bool flag)

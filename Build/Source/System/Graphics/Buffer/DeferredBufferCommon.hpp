@@ -22,7 +22,6 @@ namespace Engine5
 
         void SetRenderTargets() const;
         void ClearRenderTargets(const Color& color);
-        void ReleaseRenderTarget() const;
     private:
     };
 

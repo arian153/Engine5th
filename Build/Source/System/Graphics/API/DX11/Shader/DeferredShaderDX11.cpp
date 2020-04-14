@@ -230,6 +230,9 @@ namespace Engine5
         buffer_number = 0;
         // Finally set the light constant buffer in the pixel shader with the updated values.
         m_device_context->PSSetConstantBuffers(buffer_number, 1, &m_color_buffer);
+
+
+        //
         // Set the vertex input layout.
         m_device_context->IASetInputLayout(m_layout);
         // Set the vertex shader and pixel shader that will be used to render this triangle.

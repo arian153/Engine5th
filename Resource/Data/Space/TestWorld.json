@@ -73,7 +73,7 @@
                     "Value": {
                         "Color": [ 1, 1, 1, 1 ],
                         "Mesh": "../../Resource/Mesh/deer.obj",
-                        "Shader Type": "DeferredLight",
+                        "Shader Type": "Texture",
                         "Texture": "../../Resource/Texture/white.dds"
                     }
                 }

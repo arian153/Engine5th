@@ -59,10 +59,10 @@ namespace Engine5
                 {
                     mvp_data.model = mesh->GetModelMatrix();
                     auto type      = mesh->GetShaderType();
-                    mesh->RenderBuffer();
                     switch (type)
                     {
                     case eShaderType::DeferredLight:
+                        mesh->RenderBuffer();
                         m_shader_manager->RenderDeferredShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
                         break;
                     default:
