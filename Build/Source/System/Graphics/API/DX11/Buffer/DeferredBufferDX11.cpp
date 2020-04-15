@@ -188,6 +188,8 @@ namespace Engine5
 
     bool DeferredBufferCommon::OnResize(U32 texture_width, U32 texture_height)
     {
+        ID3D11ShaderResourceView* null[ BUFFER_COUNT ] = { nullptr };
+        m_device_context->PSSetShaderResources(0, BUFFER_COUNT, null);
         Shutdown();
         return BuildBuffer(texture_width, texture_height);
     }
