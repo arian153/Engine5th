@@ -88,18 +88,18 @@ namespace Engine5
         if (m_b_deferred_shading)
         {
             mvp_data.projection = m_orthogonal_matrix;
+            mvp_data.model.SetIdentity();
+
             for (auto& camera : m_cameras)
             {
                 mvp_data.view = camera->GetViewMatrix();
-                //draw per lighting.
-                mvp_data.model.SetIdentity();
-                // Turn off the Z buffer to begin all 2D rendering.
                 m_renderer->SetZBuffering(false);
-                // Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
+
+                //draw per lighting.
                 m_render_texture_buffer->Render();
-                // Render the full screen ortho window using the deferred light shader and the render buffers.
                 m_shader_manager->RenderDeferredLightShader(m_render_texture_buffer->GetIndexCount(), mvp_data, m_deferred_buffer, camera, light);
-                // Turn the Z buffer back on now that all 2D rendering has completed.
+
+
                 m_renderer->SetZBuffering(true);
             }
         }
