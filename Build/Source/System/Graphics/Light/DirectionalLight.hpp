@@ -1,20 +1,22 @@
 #pragma once
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../DataType/Color.hpp"
+#include "Light.hpp"
 
 namespace Engine5
 {
-    class DirectionalLight
+    class DirectionalLight final : public Light
     {
     public:
         DirectionalLight();
         ~DirectionalLight();
 
+        void Initialize() override;
     public:
-        Color   m_ambient;
-        Color   m_diffuse;
-        Color   m_specular;
-        Vector3 m_direction;
-        Real    m_specular_power = 1.0f;
+        Color   ambient_color;
+        Color   diffuse_color;
+        Color   specular_color;
+        Vector3 direction;
+        Real    specular_power = 1.0f;
     };
 }

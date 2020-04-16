@@ -10,8 +10,7 @@ namespace Engine5
     {
     }
 
-    void PointLight::Set()
+    void PointLight::Initialize()
     {
-
     }
 }

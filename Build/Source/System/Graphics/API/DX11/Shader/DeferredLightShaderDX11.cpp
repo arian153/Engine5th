@@ -255,11 +255,11 @@ namespace Engine5
         // Get a pointer to the data in the constant buffer.
         LightBufferType* light_data_ptr = (LightBufferType*)mapped_resource.pData;
         // Copy the lighting variables into the constant buffer.
-        light_data_ptr->ambient_color   = ConverterDX11::ToXMFloat4(light.m_ambient);
-        light_data_ptr->diffuse_color   = ConverterDX11::ToXMFloat4(light.m_diffuse);
-        light_data_ptr->specular_color  = ConverterDX11::ToXMFloat4(light.m_specular);
-        light_data_ptr->light_direction = ConverterDX11::ToXMFloat3(light.m_direction);
-        light_data_ptr->specular_power  = light.m_specular_power;
+        light_data_ptr->ambient_color   = ConverterDX11::ToXMFloat4(light.ambient_color);
+        light_data_ptr->diffuse_color   = ConverterDX11::ToXMFloat4(light.diffuse_color);
+        light_data_ptr->specular_color  = ConverterDX11::ToXMFloat4(light.specular_color);
+        light_data_ptr->light_direction = ConverterDX11::ToXMFloat3(light.direction);
+        light_data_ptr->specular_power  = light.specular_power;
         // Unlock the constant buffer.
         m_device_context->Unmap(m_light_buffer, 0);
         // Set the position of the light constant buffer in the pixel shader.

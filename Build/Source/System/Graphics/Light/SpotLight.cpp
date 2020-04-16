@@ -9,4 +9,8 @@ namespace Engine5
     SpotLight::~SpotLight()
     {
     }
+
+    void SpotLight::Initialize()
+    {
+    }
 }

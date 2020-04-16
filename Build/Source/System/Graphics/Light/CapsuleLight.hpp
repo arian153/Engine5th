@@ -5,24 +5,22 @@
 
 namespace Engine5
 {
-    class SpotLight final : public Light
+    class CapsuleLight final : public Light
     {
     public:
-        SpotLight();
-        ~SpotLight();
+        CapsuleLight();
+        ~CapsuleLight();
 
         void Initialize() override;
-
     public:
-
         Color   ambient_color;
         Color   diffuse_color;
         Color   specular_color;
+        Vector3 direction;
+        Real    specular_power = 1.0f;
         Vector3 position;
         Real    range = 1.0f;
-        Vector3 direction;
-        Real    spot = 0.0f;
         Vector3 attenuation;
-        Real    padding = 0.0f;
+        Real    length = 0.0f;
     };
 }

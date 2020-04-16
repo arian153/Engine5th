@@ -82,24 +82,18 @@ namespace Engine5
         m_primitive_renderer->Render();
         MatrixData       mvp_data;
         DirectionalLight light;
-        light.m_ambient        = Color(0.15f, 0.15f, 0.15f);
-        light.m_direction      = Vector3(0.0f, 0.0f, 1.0f);
-        light.m_specular_power = 32.0f;
+        light.Initialize();
         if (m_b_deferred_shading)
         {
             mvp_data.projection = m_orthogonal_matrix;
             mvp_data.model.SetIdentity();
-
             for (auto& camera : m_cameras)
             {
                 mvp_data.view = camera->GetViewMatrix();
                 m_renderer->SetZBuffering(false);
-
                 //draw per lighting.
                 m_render_texture_buffer->Render();
                 m_shader_manager->RenderDeferredLightShader(m_render_texture_buffer->GetIndexCount(), mvp_data, m_deferred_buffer, camera, light);
-
-
                 m_renderer->SetZBuffering(true);
             }
         }
