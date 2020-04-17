@@ -28,7 +28,7 @@ namespace Engine5
 
         void RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const;
         void RenderTextureShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
-        void RenderDeferredLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, const DirectionalLight& light) const;
+        void RenderDeferredLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, DirectionalLight* light) const;
         void RenderDeferredShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
 
         ColorShaderCommon*    GetColorShader() const;

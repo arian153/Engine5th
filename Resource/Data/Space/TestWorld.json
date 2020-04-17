@@ -87,6 +87,29 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
+                        "Orientation": [ 0, 1.7, 0 ],
+                        "Position": [ 10, -15, 0 ],
+                        "Scale": [ 0.02, 0.02, 0.02 ]
+                    }
+                },
+                {
+                    "Type": "LightComponent",
+                    "Value": {
+
+                        "Type": "DirectionalLight"
+                    }
+                }
+
+            ],
+            "Name": "Light"
+        },
+
+
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
                         "Position": [ 6, 0, 0 ],
                         "Scale": [ 1, 1, 1 ]

@@ -5,6 +5,7 @@ namespace Engine5
 {
     LightFactory::LightFactory()
     {
+        type = typeid(LightComponent).name();
     }
 
     LightFactory::~LightFactory()

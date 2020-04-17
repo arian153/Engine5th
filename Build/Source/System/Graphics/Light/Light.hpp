@@ -11,7 +11,7 @@ namespace Engine5
     {
     public:
         Light();
-        virtual      ~Light();
+        virtual ~Light();
 
         virtual void Initialize() = 0;
         void         Shutdown() const;
@@ -26,6 +26,10 @@ namespace Engine5
         virtual void SetLength(Real len) = 0;
         virtual void SetRange(Real rng) = 0;
         virtual void SetSpot(Real s) = 0;
+
+    private:
+        friend class LightComponent;
+
     private:
         LightComponent* m_component = nullptr;
     };

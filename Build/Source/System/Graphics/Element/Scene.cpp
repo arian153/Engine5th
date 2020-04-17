@@ -83,9 +83,7 @@ namespace Engine5
     void Scene::Render() const
     {
         m_primitive_renderer->Render();
-        MatrixData       mvp_data;
-        DirectionalLight light;
-        light.Initialize();
+        MatrixData mvp_data;
         if (m_b_deferred_shading)
         {
             mvp_data.projection = m_orthogonal_matrix;
@@ -94,9 +92,48 @@ namespace Engine5
             {
                 mvp_data.view = camera->GetViewMatrix();
                 m_renderer->SetZBuffering(false);
-                //draw per lighting.
-                m_render_texture_buffer->Render();
-                m_shader_manager->RenderDeferredLightShader(m_render_texture_buffer->GetIndexCount(), mvp_data, m_deferred_buffer, camera, light);
+                for (DirectionalLight* directional_light : m_directional_lights)
+                {
+                    m_render_texture_buffer->Render();
+                    m_shader_manager->RenderDeferredLightShader(
+                                                                m_render_texture_buffer->GetIndexCount(),
+                                                                mvp_data,
+                                                                m_deferred_buffer,
+                                                                camera,
+                                                                directional_light
+                                                               );
+                }
+                /*for (PointLight* point_light : m_point_lights)
+                {
+                    m_render_texture_buffer->Render();
+                    m_shader_manager->RenderDeferredLightShader(
+                                                                m_render_texture_buffer->GetIndexCount(),
+                                                                mvp_data,
+                                                                m_deferred_buffer,
+                                                                camera,
+                                                                point_light
+                                                               );
+                }
+                for (SpotLight* spot_light : m_spot_lights)
+                {
+                    m_render_texture_buffer->Render();
+                    m_shader_manager->RenderDeferredLightShader(
+                                                                m_render_texture_buffer->GetIndexCount(),
+                                                                mvp_data,
+                                                                m_deferred_buffer,
+                                                                camera,
+                                                                spot_light);
+                }
+                for (CapsuleLight* capsule_light : m_capsule_lights)
+                {
+                    m_render_texture_buffer->Render();
+                    m_shader_manager->RenderDeferredLightShader(
+                                                                m_render_texture_buffer->GetIndexCount(),
+                                                                mvp_data,
+                                                                m_deferred_buffer,
+                                                                camera,
+                                                                capsule_light);
+                }*/
                 m_renderer->SetZBuffering(true);
             }
         }
