@@ -15,6 +15,10 @@ namespace Engine5
     class ShaderManagerCommon;
     class RendererCommon;
     class RendererDX11;
+    class DirectionalLight;
+    class PointLight;
+    class SpotLight;
+    class CapsuleLight;
 
     class Scene
     {
@@ -42,10 +46,18 @@ namespace Engine5
         //add
         Camera* AddCamera(Camera* camera);
         Mesh*   AddMesh(Mesh* mesh);
+        void    AddLight(DirectionalLight* light);
+        void    AddLight(PointLight* light);
+        void    AddLight(SpotLight* light);
+        void    AddLight(CapsuleLight* light);
 
         //remove
         void RemoveCamera(Camera* camera);
         void RemoveMesh(Mesh* mesh);
+        void RemoveLight(DirectionalLight* light);
+        void RemoveLight(PointLight* light);
+        void RemoveLight(SpotLight* light);
+        void RemoveLight(CapsuleLight* light);
 
         void ChangeShaderType(Mesh* mesh);
     private:
@@ -58,9 +70,13 @@ namespace Engine5
         DeferredBufferCommon*      m_deferred_buffer       = nullptr;
         RenderTextureBufferCommon* m_render_texture_buffer = nullptr;
 
-        std::vector<Camera*> m_cameras;
-        std::vector<Mesh*>   m_forward_meshes;
-        std::vector<Mesh*>   m_deferred_meshes;
+        std::vector<Camera*>           m_cameras;
+        std::vector<Mesh*>             m_forward_meshes;
+        std::vector<Mesh*>             m_deferred_meshes;
+        std::vector<DirectionalLight*> m_directional_lights;
+        std::vector<PointLight*>       m_point_lights;
+        std::vector<SpotLight*>        m_spot_lights;
+        std::vector<CapsuleLight*>     m_capsule_lights;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;

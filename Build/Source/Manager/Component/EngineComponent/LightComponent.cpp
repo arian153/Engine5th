@@ -6,6 +6,10 @@
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
+#include "../../Space/Space.hpp"
+#include "../../../System/Graphics/Element/Scene.hpp"
+#include "TransformComponent.hpp"
+#include "../../Object/Object.hpp"
 
 namespace Engine5
 {
@@ -16,6 +20,14 @@ namespace Engine5
     void LightComponent::Initialize()
     {
         BuildLight();
+
+        if (m_transform == nullptr)
+        {
+            if (m_owner->HasComponent<TransformComponent>())
+            {
+                m_transform = m_owner->GetComponent<TransformComponent>()->GetTransform();
+            }
+        }
     }
 
     void LightComponent::Update(Real dt)
@@ -25,8 +37,11 @@ namespace Engine5
 
     void LightComponent::Shutdown()
     {
+        Unsubscribe();
+       
         if (m_light != nullptr)
         {
+            m_light->Shutdown();
             delete m_light;
             m_light = nullptr;
         }
@@ -45,8 +60,8 @@ namespace Engine5
     {
         if (m_light != nullptr)
         {
+            Unsubscribe();
             delete m_light;
-            m_light = nullptr;
         }
         switch (m_light_type)
         {
@@ -67,6 +82,7 @@ namespace Engine5
             break;
         }
         m_light->Initialize();
+        Subscribe();
     }
 
     DirectionalLight* LightComponent::GetDirectionalLight() const
@@ -181,10 +197,52 @@ namespace Engine5
 
     void LightComponent::Subscribe()
     {
+        if (m_space != nullptr && m_light != nullptr)
+        {
+            switch (m_light_type)
+            {
+            case Engine5::eLightType::DirectionalLight:
+                m_space->GetScene()->AddLight(GetDirectionalLight());
+                break;
+            case Engine5::eLightType::PointLight:
+                m_space->GetScene()->AddLight(GetPointLight());
+                break;
+            case Engine5::eLightType::SpotLight:
+                m_space->GetScene()->AddLight(GetSpotLight());
+                break;
+            case Engine5::eLightType::CapsuleLight:
+                m_space->GetScene()->AddLight(GetCapsuleLight());
+                break;
+            default:
+                m_space->GetScene()->AddLight(GetDirectionalLight());
+                break;
+            }
+        }
     }
 
     void LightComponent::Unsubscribe()
     {
+        if (m_space != nullptr && m_light != nullptr)
+        {
+            switch (m_light_type)
+            {
+            case Engine5::eLightType::DirectionalLight:
+                m_space->GetScene()->RemoveLight(GetDirectionalLight());
+                break;
+            case Engine5::eLightType::PointLight:
+                m_space->GetScene()->RemoveLight(GetPointLight());
+                break;
+            case Engine5::eLightType::SpotLight:
+                m_space->GetScene()->RemoveLight(GetSpotLight());
+                break;
+            case Engine5::eLightType::CapsuleLight:
+                m_space->GetScene()->RemoveLight(GetCapsuleLight());
+                break;
+            default:
+                m_space->GetScene()->RemoveLight(GetDirectionalLight());
+                break;
+            }
+        }
     }
 
     LightComponent::LightComponent(Object* owner)

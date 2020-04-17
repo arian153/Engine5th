@@ -42,6 +42,7 @@ namespace Engine5
 
     private:
         friend class LightFactory;
+        friend class Light;
 
     private:
         explicit LightComponent(Object* owner);

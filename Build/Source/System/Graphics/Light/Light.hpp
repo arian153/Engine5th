@@ -1,24 +1,20 @@
 #pragma once
-#include "../../Math/Algebra/Vector3.hpp"
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
+    class LightComponent;
     class Color;
     class Vector3;
-
 
     class Light
     {
     public:
-        Light()
-        {
-        }
-
-        virtual ~Light()
-        {
-        }
+        Light();
+        virtual      ~Light();
 
         virtual void Initialize() = 0;
+        void         Shutdown() const;
 
         virtual void SetAmbientColor(const Color& color) = 0;
         virtual void SetDiffuseColor(const Color& color) = 0;
@@ -31,6 +27,7 @@ namespace Engine5
         virtual void SetRange(Real rng) = 0;
         virtual void SetSpot(Real s) = 0;
     private:
+        LightComponent* m_component = nullptr;
     };
 
     enum class eLightType

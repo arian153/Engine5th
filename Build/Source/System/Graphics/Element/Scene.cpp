@@ -6,6 +6,9 @@
 #include "../Light/DirectionalLight.hpp"
 #include "../Buffer/RenderTextureBufferCommon.hpp"
 #include "../Buffer/DeferredBufferCommon.hpp"
+#include "../Light/PointLight.hpp"
+#include "../Light/SpotLight.hpp"
+#include "../Light/CapsuleLight.hpp"
 
 namespace Engine5
 {
@@ -164,6 +167,34 @@ namespace Engine5
             mesh = nullptr;
         }
         m_deferred_meshes.clear();
+        for (auto& light : m_directional_lights)
+        {
+            light->Shutdown();
+            delete light;
+            light = nullptr;
+        }
+        m_directional_lights.clear();
+        for (auto& light : m_point_lights)
+        {
+            light->Shutdown();
+            delete light;
+            light = nullptr;
+        }
+        m_point_lights.clear();
+        for (auto& light : m_spot_lights)
+        {
+            light->Shutdown();
+            delete light;
+            light = nullptr;
+        }
+        m_spot_lights.clear();
+        for (auto& light : m_capsule_lights)
+        {
+            light->Shutdown();
+            delete light;
+            light = nullptr;
+        }
+        m_capsule_lights.clear();
     }
 
     void Scene::SetRenderer(RendererCommon* renderer)
@@ -274,6 +305,26 @@ namespace Engine5
         return mesh;
     }
 
+    void Scene::AddLight(DirectionalLight* light)
+    {
+        m_directional_lights.push_back(light);
+    }
+
+    void Scene::AddLight(PointLight* light)
+    {
+        m_point_lights.push_back(light);
+    }
+
+    void Scene::AddLight(SpotLight* light)
+    {
+        m_spot_lights.push_back(light);
+    }
+
+    void Scene::AddLight(CapsuleLight* light)
+    {
+        m_capsule_lights.push_back(light);
+    }
+
     void Scene::RemoveCamera(Camera* camera)
     {
         auto found = std::find(m_cameras.begin(), m_cameras.end(), camera);
@@ -292,6 +343,30 @@ namespace Engine5
             auto found = std::find(m_forward_meshes.begin(), m_forward_meshes.end(), mesh);
             m_forward_meshes.erase(found);
         }
+    }
+
+    void Scene::RemoveLight(DirectionalLight* light)
+    {
+        auto found = std::find(m_directional_lights.begin(), m_directional_lights.end(), light);
+        m_directional_lights.erase(found);
+    }
+
+    void Scene::RemoveLight(PointLight* light)
+    {
+        auto found = std::find(m_point_lights.begin(), m_point_lights.end(), light);
+        m_point_lights.erase(found);
+    }
+
+    void Scene::RemoveLight(SpotLight* light)
+    {
+        auto found = std::find(m_spot_lights.begin(), m_spot_lights.end(), light);
+        m_spot_lights.erase(found);
+    }
+
+    void Scene::RemoveLight(CapsuleLight* light)
+    {
+        auto found = std::find(m_capsule_lights.begin(), m_capsule_lights.end(), light);
+        m_capsule_lights.erase(found);
     }
 
     void Scene::ChangeShaderType(Mesh* mesh)
