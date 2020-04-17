@@ -12,6 +12,17 @@ namespace Engine5
         ~DirectionalLight();
 
         void Initialize() override;
+        void SetAmbientColor(const Color& color) override;
+        void SetDiffuseColor(const Color& color) override;
+        void SetSpecularColor(const Color& color) override;
+        void SetSpecularPower(Real power) override;
+        void SetDirection(const Vector3& dir) override;
+        void SetPosition(const Vector3& pos) override;
+        void SetAttenuation(const Vector3& att) override;
+        void SetLength(Real len) override;
+        void SetRange(Real rng) override;
+        void SetSpot(Real s) override;
+
     public:
         Color   ambient_color;
         Color   diffuse_color;
