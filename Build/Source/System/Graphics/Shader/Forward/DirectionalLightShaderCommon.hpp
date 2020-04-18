@@ -1,22 +1,22 @@
 #pragma once
 #include "../../API/GraphicsAPI.hpp"
-#include IncludeDeferredShaderAPI
+#include IncludeForwardDirectionalLightShaderAPI
 #include "../../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
+    class MatrixData;
     class TextureCommon;
     class Color;
-    class MatrixData;
     class ShaderManagerCommon;
     class ShaderResource;
     class Matrix44;
 
-    class DeferredShaderCommon : public DeferredShaderAPI
+    class ForwardDirectionalLightShaderCommon : public ForwardDirectionalLightShaderAPI
     {
     public:
-        explicit DeferredShaderCommon(ShaderManagerCommon* shader_manager);
-        ~DeferredShaderCommon();
+        explicit ForwardDirectionalLightShaderCommon(ShaderManagerCommon* shader_manager);
+        ~ForwardDirectionalLightShaderCommon();
 
         void SetShader(ShaderResource* shader);
 
@@ -29,4 +29,5 @@ namespace Engine5
         ShaderResource* m_shader_resource = nullptr;
     };
 
+    
 }

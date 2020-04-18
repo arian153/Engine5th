@@ -4,9 +4,9 @@
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
 #include <fstream>
 #include "../../../Shader/Forward/TextureShaderCommon.hpp"
-#include "../../../Shader/Deferred/DeferredDirectionalLightShaderCommon.hpp"
+#include "../../../Shader/Deferred/DirectionalLightShaderCommon.hpp"
 #include "../../../Renderer/RendererCommon.hpp"
-#include "../../../Shader/Deferred/DeferredShaderCommon.hpp"
+#include "../../../Shader/Deferred/DeferredBufferShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -92,7 +92,7 @@ namespace Engine5
         m_light_shader->SetDeviceContext(m_device_context);
         m_light_shader->Initialize();
         //Light shader
-        m_deferred_shader = new DeferredShaderCommon(this);
+        m_deferred_shader = new DeferredBufferShaderCommon(this);
         m_deferred_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Deferred.fx"));
         m_deferred_shader->SetHWnd(m_hwnd);
         m_deferred_shader->SetDevice(m_device);
@@ -163,7 +163,7 @@ namespace Engine5
         return m_light_shader;
     }
 
-    DeferredShaderCommon* ShaderManagerCommon::GetDeferredShader() const
+    DeferredBufferShaderCommon* ShaderManagerCommon::GetDeferredShader() const
     {
         return m_deferred_shader;
     }

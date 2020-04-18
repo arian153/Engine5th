@@ -14,7 +14,7 @@ namespace Engine5
     class ResourceManager;
     class RendererCommon;
     class ColorShaderCommon;
-    class DeferredShaderCommon;
+    class DeferredBufferShaderCommon;
     class DeferredBufferCommon;
     class Color;
 
@@ -34,14 +34,14 @@ namespace Engine5
         ColorShaderCommon*    GetColorShader() const;
         TextureShaderCommon*  GetTextureShader() const;
         DeferredDirectionalLightShaderCommon*    GetDeferredLightShader() const;
-        DeferredShaderCommon* GetDeferredShader() const;
+        DeferredBufferShaderCommon* GetDeferredShader() const;
 
     private:
         //shader list
         ColorShaderCommon*    m_color_shader     = nullptr;
         TextureShaderCommon*  m_texture_shader   = nullptr;
         DeferredDirectionalLightShaderCommon*    m_light_shader     = nullptr;
-        DeferredShaderCommon* m_deferred_shader  = nullptr;
+        DeferredBufferShaderCommon* m_deferred_shader  = nullptr;
         ResourceManager*      m_resource_manager = nullptr;
     };
 }

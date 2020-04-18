@@ -1,5 +1,5 @@
-#include "DeferredShaderDX11.hpp"
-#include "../../../../Shader/Deferred/DeferredShaderCommon.hpp"
+#include "DeferredBufferShaderDX11.hpp"
+#include "../../../../Shader/Deferred/DeferredBufferShaderCommon.hpp"
 #include "../../../../../Core/Utility/CoreUtility.hpp"
 #include "../../ConverterDX11.hpp"
 #include "../../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
@@ -10,44 +10,44 @@
 
 namespace Engine5
 {
-    DeferredShaderDX11::DeferredShaderDX11()
+    DeferredBufferShaderDX11::DeferredBufferShaderDX11()
     {
     }
 
-    DeferredShaderDX11::~DeferredShaderDX11()
+    DeferredBufferShaderDX11::~DeferredBufferShaderDX11()
     {
     }
 
-    void DeferredShaderDX11::SetHWnd(HWND hwnd)
+    void DeferredBufferShaderDX11::SetHWnd(HWND hwnd)
     {
         m_hwnd = hwnd;
     }
 
-    void DeferredShaderDX11::SetDevice(ID3D11Device* device)
+    void DeferredBufferShaderDX11::SetDevice(ID3D11Device* device)
     {
         m_device = device;
     }
 
-    void DeferredShaderDX11::SetDeviceContext(ID3D11DeviceContext* device_context)
+    void DeferredBufferShaderDX11::SetDeviceContext(ID3D11DeviceContext* device_context)
     {
         m_device_context = device_context;
     }
 
-    DeferredShaderCommon::DeferredShaderCommon(ShaderManagerCommon* shader_manager)
+    DeferredBufferShaderCommon::DeferredBufferShaderCommon(ShaderManagerCommon* shader_manager)
         : m_shader_manager(shader_manager)
     {
     }
 
-    DeferredShaderCommon::~DeferredShaderCommon()
+    DeferredBufferShaderCommon::~DeferredBufferShaderCommon()
     {
     }
 
-    void DeferredShaderCommon::SetShader(ShaderResource* shader)
+    void DeferredBufferShaderCommon::SetShader(ShaderResource* shader)
     {
         m_shader_resource = shader;
     }
 
-    bool DeferredShaderCommon::Initialize()
+    bool DeferredBufferShaderCommon::Initialize()
     {
         ID3D10Blob* error_message        = nullptr;
         ID3D10Blob* vertex_shader_buffer = nullptr;
@@ -189,7 +189,7 @@ namespace Engine5
         return true;
     }
 
-    void DeferredShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    void DeferredBufferShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
     {
         D3D11_MAPPED_SUBRESOURCE mapped_resource;
         // Lock the constant buffer so it can be written to.
@@ -244,7 +244,7 @@ namespace Engine5
         m_device_context->DrawIndexed(indices_count, 0, 0);
     }
 
-    void DeferredShaderCommon::Shutdown()
+    void DeferredBufferShaderCommon::Shutdown()
     {
         // Release the sampler state.
         if (m_sample_state_wrap != nullptr)

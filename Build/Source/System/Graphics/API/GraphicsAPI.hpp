@@ -14,12 +14,15 @@
 #define NormalVertexAPI NormalVertexDX11
 #define TextureVertexAPI TextureVertexDX11
 
-//shader
+//forward shader
 #define ShaderManagerAPI ShaderManagerDX11
 #define ColorShaderAPI ColorShaderDX11
 #define TextureShaderAPI TextureShaderDX11
+#define ForwardDirectionalLightShaderAPI ForwardDirectionalLightShaderDX11
+
+//deferred shader
 #define DeferredDirectionalLightShaderAPI DeferredDirectionalLightShaderDX11
-#define DeferredShaderAPI DeferredShaderDX11
+#define DeferredBufferShaderAPI DeferredBufferShaderDX11
 
 //includes
 #define IncludeRendererAPI "../API/DX11/RendererDX11.hpp"
@@ -35,10 +38,11 @@
 //forward
 #define IncludeColorShaderAPI "../../API/DX11/Shader/Forward/ColorShaderDX11.hpp"
 #define IncludeTextureShaderAPI "../../API/DX11/Shader/Forward/TextureShaderDX11.hpp"
+#define IncludeForwardDirectionalLightShaderAPI "../../API/DX11/Shader/Forward/DirectionalLightShaderDX11.hpp"
 
 //deferred
-#define IncludeDeferredShaderAPI "../../API/DX11/Shader/Deferred/DeferredShaderDX11.hpp"
-#define IncludeDeferredDirectionalLightShaderAPI "../../API/DX11/Shader/Deferred/DeferredDirectionalLightShaderDX11.hpp"
+#define IncludeDeferredBufferShaderAPI "../../API/DX11/Shader/Deferred/DeferredBufferShaderDX11.hpp"
+#define IncludeDeferredDirectionalLightShaderAPI "../../API/DX11/Shader/Deferred/DirectionalLightShaderDX11.hpp"
 
 
 #elif defined(E5_DIRECTX12)
