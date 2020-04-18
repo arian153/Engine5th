@@ -5,7 +5,7 @@
 
 namespace Engine5
 {
-    class DeferredLightShaderDX11
+    class DeferredDirectionalLightShaderDX11
     {
     protected:
         struct MatrixBufferType
@@ -31,8 +31,8 @@ namespace Engine5
         };
 
     public:
-        DeferredLightShaderDX11();
-        ~DeferredLightShaderDX11();
+        DeferredDirectionalLightShaderDX11();
+        ~DeferredDirectionalLightShaderDX11();
 
         void SetHWnd(HWND hwnd);
         void SetDevice(ID3D11Device* device);

@@ -18,7 +18,7 @@
 #define ShaderManagerAPI ShaderManagerDX11
 #define ColorShaderAPI ColorShaderDX11
 #define TextureShaderAPI TextureShaderDX11
-#define DeferredLightShaderAPI DeferredLightShaderDX11
+#define DeferredDirectionalLightShaderAPI DeferredDirectionalLightShaderDX11
 #define DeferredShaderAPI DeferredShaderDX11
 
 //includes

@@ -95,7 +95,7 @@ namespace Engine5
                 for (DirectionalLight* directional_light : m_directional_lights)
                 {
                     m_render_texture_buffer->Render();
-                    m_shader_manager->RenderDeferredLightShader(
+                    m_shader_manager->RenderDeferredDirectionalLightShader(
                                                                 m_render_texture_buffer->GetIndexCount(),
                                                                 mvp_data,
                                                                 m_deferred_buffer,

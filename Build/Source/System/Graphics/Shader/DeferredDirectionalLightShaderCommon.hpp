@@ -15,11 +15,11 @@ namespace Engine5
     class ShaderResource;
     class Matrix44;
 
-    class DeferredLightShaderCommon : public DeferredLightShaderAPI
+    class DeferredDirectionalLightShaderCommon : public DeferredDirectionalLightShaderAPI
     {
     public:
-        explicit DeferredLightShaderCommon(ShaderManagerCommon* shader_manager);
-        ~DeferredLightShaderCommon();
+        explicit DeferredDirectionalLightShaderCommon(ShaderManagerCommon* shader_manager);
+        ~DeferredDirectionalLightShaderCommon();
 
         void SetShader(ShaderResource* shader);
 

@@ -13,44 +13,44 @@
 
 namespace Engine5
 {
-    DeferredLightShaderDX11::DeferredLightShaderDX11()
+    DeferredDirectionalLightShaderDX11::DeferredDirectionalLightShaderDX11()
     {
     }
 
-    DeferredLightShaderDX11::~DeferredLightShaderDX11()
+    DeferredDirectionalLightShaderDX11::~DeferredDirectionalLightShaderDX11()
     {
     }
 
-    void DeferredLightShaderDX11::SetHWnd(HWND hwnd)
+    void DeferredDirectionalLightShaderDX11::SetHWnd(HWND hwnd)
     {
         m_hwnd = hwnd;
     }
 
-    void DeferredLightShaderDX11::SetDevice(ID3D11Device* device)
+    void DeferredDirectionalLightShaderDX11::SetDevice(ID3D11Device* device)
     {
         m_device = device;
     }
 
-    void DeferredLightShaderDX11::SetDeviceContext(ID3D11DeviceContext* device_context)
+    void DeferredDirectionalLightShaderDX11::SetDeviceContext(ID3D11DeviceContext* device_context)
     {
         m_device_context = device_context;
     }
 
-    DeferredLightShaderCommon::DeferredLightShaderCommon(ShaderManagerCommon* shader_manager)
+    DeferredDirectionalLightShaderCommon::DeferredDirectionalLightShaderCommon(ShaderManagerCommon* shader_manager)
         : m_shader_manager(shader_manager)
     {
     }
 
-    DeferredLightShaderCommon::~DeferredLightShaderCommon()
+    DeferredDirectionalLightShaderCommon::~DeferredDirectionalLightShaderCommon()
     {
     }
 
-    void DeferredLightShaderCommon::SetShader(ShaderResource* shader)
+    void DeferredDirectionalLightShaderCommon::SetShader(ShaderResource* shader)
     {
         m_shader_resource = shader;
     }
 
-    bool DeferredLightShaderCommon::Initialize()
+    bool DeferredDirectionalLightShaderCommon::Initialize()
     {
         ID3D10Blob* error_message        = nullptr;
         ID3D10Blob* vertex_shader_buffer = nullptr;
@@ -198,7 +198,7 @@ namespace Engine5
         return true;
     }
 
-    void DeferredLightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, DirectionalLight* light) const
+    void DeferredDirectionalLightShaderCommon::Render(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, DirectionalLight* light) const
     {
         //
         // Set Vertex Shader constant buffer
@@ -278,7 +278,7 @@ namespace Engine5
         m_device_context->DrawIndexed(indices_count, 0, 0);
     }
 
-    void DeferredLightShaderCommon::Shutdown()
+    void DeferredDirectionalLightShaderCommon::Shutdown()
     {
         // Release the sampler state.
         if (m_sampler_state != nullptr)

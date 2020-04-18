@@ -85,7 +85,7 @@ namespace Engine5
         m_texture_shader->SetDeviceContext(m_device_context);
         m_texture_shader->Initialize();
         //Light shader
-        m_light_shader = new DeferredLightShaderCommon(this);
+        m_light_shader = new DeferredDirectionalLightShaderCommon(this);
         m_light_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"DeferredLight.fx"));
         m_light_shader->SetHWnd(m_hwnd);
         m_light_shader->SetDevice(m_device);
@@ -138,7 +138,7 @@ namespace Engine5
         m_texture_shader->Render(indices_count, mvp_data, texture, color);
     }
 
-    void ShaderManagerCommon::RenderDeferredLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera,  DirectionalLight* light) const
+    void ShaderManagerCommon::RenderDeferredDirectionalLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera,  DirectionalLight* light) const
     {
         m_light_shader->Render(indices_count, mvp_data, deferred_buffer, camera, light);
     }
@@ -158,7 +158,7 @@ namespace Engine5
         return m_texture_shader;
     }
 
-    DeferredLightShaderCommon* ShaderManagerCommon::GetDeferredLightShader() const
+    DeferredDirectionalLightShaderCommon* ShaderManagerCommon::GetDeferredLightShader() const
     {
         return m_light_shader;
     }
