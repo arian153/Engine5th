@@ -96,7 +96,10 @@
                     "Type": "LightComponent",
                     "Value": {
 
-                        "Type": "DirectionalLight"
+                        "Type": "DirectionalLight",
+                        "Ambient Color": [ 0.1, 0.1, 0.11, 1],
+                        "Diffuse Color": [ 0.51, 0.71, 0.51, 1 ],
+                        "Direction": [ 1, 1, 1 ]
                     }
                 }
 
@@ -104,6 +107,30 @@
             "Name": "Light"
         },
 
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 0, 1.7, 0 ],
+                        "Position": [ 10, -15, 0 ],
+                        "Scale": [ 0.02, 0.02, 0.02 ]
+                    }
+                },
+                {
+                    "Type": "LightComponent",
+                    "Value": {
+
+                        "Type": "DirectionalLight",
+                        "Ambient Color": [ 0.1, 0.1, 0.11, 0.15 ],
+                        "Diffuse Color": [ 0.71, 0.51, 0.51, 1 ],
+                        "Direction": [ 0, 0, 1 ]
+                    }
+                }
+
+            ],
+            "Name": "Light"
+        },
 
         {
             "Components": [

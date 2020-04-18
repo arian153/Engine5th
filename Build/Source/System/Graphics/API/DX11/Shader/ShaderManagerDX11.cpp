@@ -4,7 +4,7 @@
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
 #include <fstream>
 #include "../../../Shader/TextureShaderCommon.hpp"
-#include "../../../Shader/DeferredLightShaderCommon.hpp"
+#include "../../../Shader/DeferredDirectionalLightShaderCommon.hpp"
 #include "../../../Renderer/RendererCommon.hpp"
 #include "../../../Shader/DeferredShaderCommon.hpp"
 
