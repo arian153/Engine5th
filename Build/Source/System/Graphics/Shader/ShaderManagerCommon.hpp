@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class ForwardDirectionalLightShaderCommon;
     class DeferredDirectionalLightShaderCommon;
     class DirectionalLight;
     class Camera;
@@ -28,20 +29,31 @@ namespace Engine5
 
         void RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const;
         void RenderTextureShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
-        void RenderDeferredDirectionalLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, DirectionalLight* light) const;
-        void RenderDeferredShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
+        void RenderForwardDirectionalLightShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, DirectionalLight* light) const;
 
-        ColorShaderCommon*    GetColorShader() const;
-        TextureShaderCommon*  GetTextureShader() const;
-        DeferredDirectionalLightShaderCommon*    GetDeferredLightShader() const;
-        DeferredBufferShaderCommon* GetDeferredShader() const;
+        void RenderDeferredDirectionalLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, DirectionalLight* light) const;
+        void RenderDeferredBufferShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
+
+        ColorShaderCommon*                    GetColorShader() const;
+        TextureShaderCommon*                  GetTextureShader() const;
+        ForwardDirectionalLightShaderCommon*  GetForwardDirectionalLightShader() const;
+        DeferredDirectionalLightShaderCommon* GetDeferredDirectionalShaderLightShader() const;
+        DeferredBufferShaderCommon*           GetDeferredBufferShader() const;
 
     private:
         //shader list
-        ColorShaderCommon*    m_color_shader     = nullptr;
-        TextureShaderCommon*  m_texture_shader   = nullptr;
-        DeferredDirectionalLightShaderCommon*    m_light_shader     = nullptr;
-        DeferredBufferShaderCommon* m_deferred_shader  = nullptr;
-        ResourceManager*      m_resource_manager = nullptr;
+
+        ColorShaderCommon*   m_color_shader   = nullptr;
+        TextureShaderCommon* m_texture_shader = nullptr;
+
+        //forward
+        ForwardDirectionalLightShaderCommon* m_forward_directional_light_shader = nullptr;
+
+        //deferred
+        DeferredBufferShaderCommon*           m_deferred_buffer_shader            = nullptr;
+        DeferredDirectionalLightShaderCommon* m_deferred_directional_light_shader = nullptr;
+
+        //resource manager
+        ResourceManager* m_resource_manager = nullptr;
     };
 }

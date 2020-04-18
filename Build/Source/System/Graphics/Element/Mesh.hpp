@@ -36,7 +36,6 @@ namespace Engine5
         U32            GetIndexCount() const;
         Color          GetColor() const;
         bool           IsDeferred() const;
-        bool           IsForward() const;
 
     private:
         friend class MeshComponent;

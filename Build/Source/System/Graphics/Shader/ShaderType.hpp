@@ -7,6 +7,7 @@ namespace Engine5
         Invalid
       , Color
       , Texture
-      , DeferredLight
+      , ForwardDirectionalLight
+      , DeferredDirectionalLight
     };
 }

@@ -75,9 +75,13 @@ namespace Engine5
             {
                 m_mesh->SetShaderType(eShaderType::Texture);
             }
-            else if (shader == "DeferredLight")
+            else if (shader == "Forward Directional Light")
             {
-                m_mesh->SetShaderType(eShaderType::DeferredLight);
+                m_mesh->SetShaderType(eShaderType::ForwardDirectionalLight);
+            }
+            else if (shader == "Deferred Directional Light")
+            {
+                m_mesh->SetShaderType(eShaderType::DeferredDirectionalLight);
             }
 
             if (m_space != nullptr && m_mesh != nullptr)

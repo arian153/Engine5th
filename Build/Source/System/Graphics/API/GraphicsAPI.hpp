@@ -38,11 +38,11 @@
 //forward
 #define IncludeColorShaderAPI "../../API/DX11/Shader/Forward/ColorShaderDX11.hpp"
 #define IncludeTextureShaderAPI "../../API/DX11/Shader/Forward/TextureShaderDX11.hpp"
-#define IncludeForwardDirectionalLightShaderAPI "../../API/DX11/Shader/Forward/DirectionalLightShaderDX11.hpp"
+#define IncludeForwardDirectionalLightShaderAPI "../../API/DX11/Shader/Forward/ForwardDirectionalLightShaderDX11.hpp"
 
 //deferred
 #define IncludeDeferredBufferShaderAPI "../../API/DX11/Shader/Deferred/DeferredBufferShaderDX11.hpp"
-#define IncludeDeferredDirectionalLightShaderAPI "../../API/DX11/Shader/Deferred/DirectionalLightShaderDX11.hpp"
+#define IncludeDeferredDirectionalLightShaderAPI "../../API/DX11/Shader/Deferred/DeferredDirectionalLightShaderDX11.hpp"
 
 
 #elif defined(E5_DIRECTX12)

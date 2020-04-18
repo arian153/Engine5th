@@ -1,5 +1,5 @@
-#include "DirectionalLightShaderDX11.hpp"
-#include "../../../../Shader/Deferred/DirectionalLightShaderCommon.hpp"
+#include "DeferredDirectionalLightShaderDX11.hpp"
+#include "../../../../Shader/Deferred/DeferredDirectionalLightShaderCommon.hpp"
 #include "../../../../../Core/Utility/CoreUtility.hpp"
 #include "../../ConverterDX11.hpp"
 #include "../../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"

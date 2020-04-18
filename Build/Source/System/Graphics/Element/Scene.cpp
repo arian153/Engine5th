@@ -64,9 +64,9 @@ namespace Engine5
                     auto type      = mesh->GetShaderType();
                     switch (type)
                     {
-                    case eShaderType::DeferredLight:
+                    case eShaderType::DeferredDirectionalLight:
                         mesh->RenderBuffer();
-                        m_shader_manager->RenderDeferredShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
+                        m_shader_manager->RenderDeferredBufferShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
                         break;
                     default:
                         break;
@@ -96,12 +96,12 @@ namespace Engine5
                 {
                     m_render_texture_buffer->Render();
                     m_shader_manager->RenderDeferredDirectionalLightShader(
-                                                                m_render_texture_buffer->GetIndexCount(),
-                                                                mvp_data,
-                                                                m_deferred_buffer,
-                                                                camera,
-                                                                directional_light
-                                                               );
+                                                                           m_render_texture_buffer->GetIndexCount(),
+                                                                           mvp_data,
+                                                                           m_deferred_buffer,
+                                                                           camera,
+                                                                           directional_light
+                                                                          );
                 }
                 /*for (PointLight* point_light : m_point_lights)
                 {
@@ -145,18 +145,30 @@ namespace Engine5
             {
                 mvp_data.model = mesh->GetModelMatrix();
                 auto type      = mesh->GetShaderType();
-                switch (type)
+                if (type == eShaderType::Color)
                 {
-                case eShaderType::Color:
                     mesh->RenderBuffer();
                     m_shader_manager->RenderColorShader(mesh->GetIndexCount(), mvp_data);
-                    break;
-                case eShaderType::Texture:
+                }
+                else if (type == eShaderType::Texture)
+                {
                     mesh->RenderBuffer();
                     m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
-                    break;
-                default:
-                    break;
+                }
+                else if (type == eShaderType::ForwardDirectionalLight)
+                {
+                    for (DirectionalLight* directional_light : m_directional_lights)
+                    {
+                        mesh->RenderBuffer();
+                        m_shader_manager->RenderForwardDirectionalLightShader(
+                                                                              m_render_texture_buffer->GetIndexCount(),
+                                                                              mvp_data,
+                                                                              mesh->GetTexture(),
+                                                                              camera,
+                                                                              mesh->GetColor(),
+                                                                              directional_light
+                                                                             );
+                    }
                 }
             }
         }

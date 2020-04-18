@@ -4,9 +4,10 @@
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
 #include <fstream>
 #include "../../../Shader/Forward/TextureShaderCommon.hpp"
-#include "../../../Shader/Deferred/DirectionalLightShaderCommon.hpp"
+#include "../../../Shader/Deferred/DeferredDirectionalLightShaderCommon.hpp"
 #include "../../../Renderer/RendererCommon.hpp"
 #include "../../../Shader/Deferred/DeferredBufferShaderCommon.hpp"
+#include "../../../Shader/Forward/ForwardDirectionalLightShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -84,20 +85,27 @@ namespace Engine5
         m_texture_shader->SetDevice(m_device);
         m_texture_shader->SetDeviceContext(m_device_context);
         m_texture_shader->Initialize();
-        //Light shader
-        m_light_shader = new DeferredDirectionalLightShaderCommon(this);
-        m_light_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"DeferredLight.fx"));
-        m_light_shader->SetHWnd(m_hwnd);
-        m_light_shader->SetDevice(m_device);
-        m_light_shader->SetDeviceContext(m_device_context);
-        m_light_shader->Initialize();
-        //Light shader
-        m_deferred_shader = new DeferredBufferShaderCommon(this);
-        m_deferred_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Deferred.fx"));
-        m_deferred_shader->SetHWnd(m_hwnd);
-        m_deferred_shader->SetDevice(m_device);
-        m_deferred_shader->SetDeviceContext(m_device_context);
-        m_deferred_shader->Initialize();
+        //Deferred Directional Light shader
+        m_forward_directional_light_shader = new ForwardDirectionalLightShaderCommon(this);
+        m_forward_directional_light_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"ForwardDirectionalLight.fx"));
+        m_forward_directional_light_shader->SetHWnd(m_hwnd);
+        m_forward_directional_light_shader->SetDevice(m_device);
+        m_forward_directional_light_shader->SetDeviceContext(m_device_context);
+        m_forward_directional_light_shader->Initialize();
+        //Deferred Directional Light shader
+        m_deferred_directional_light_shader = new DeferredDirectionalLightShaderCommon(this);
+        m_deferred_directional_light_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"DeferredDirectionalLight.fx"));
+        m_deferred_directional_light_shader->SetHWnd(m_hwnd);
+        m_deferred_directional_light_shader->SetDevice(m_device);
+        m_deferred_directional_light_shader->SetDeviceContext(m_device_context);
+        m_deferred_directional_light_shader->Initialize();
+        //Deferred Buffer shader
+        m_deferred_buffer_shader = new DeferredBufferShaderCommon(this);
+        m_deferred_buffer_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"DeferredBuffer.fx"));
+        m_deferred_buffer_shader->SetHWnd(m_hwnd);
+        m_deferred_buffer_shader->SetDevice(m_device);
+        m_deferred_buffer_shader->SetDeviceContext(m_device_context);
+        m_deferred_buffer_shader->Initialize();
     }
 
     void ShaderManagerCommon::Shutdown()
@@ -114,17 +122,23 @@ namespace Engine5
             delete m_texture_shader;
             m_texture_shader = nullptr;
         }
-        if (m_light_shader != nullptr)
+        if (m_forward_directional_light_shader != nullptr)
         {
-            m_light_shader->Shutdown();
-            delete m_light_shader;
-            m_light_shader = nullptr;
+            m_forward_directional_light_shader->Shutdown();
+            delete m_forward_directional_light_shader;
+            m_forward_directional_light_shader = nullptr;
         }
-        if (m_deferred_shader != nullptr)
+        if (m_deferred_directional_light_shader != nullptr)
         {
-            m_deferred_shader->Shutdown();
-            delete m_deferred_shader;
-            m_deferred_shader = nullptr;
+            m_deferred_directional_light_shader->Shutdown();
+            delete m_deferred_directional_light_shader;
+            m_deferred_directional_light_shader = nullptr;
+        }
+        if (m_deferred_buffer_shader != nullptr)
+        {
+            m_deferred_buffer_shader->Shutdown();
+            delete m_deferred_buffer_shader;
+            m_deferred_buffer_shader = nullptr;
         }
     }
 
@@ -138,14 +152,19 @@ namespace Engine5
         m_texture_shader->Render(indices_count, mvp_data, texture, color);
     }
 
-    void ShaderManagerCommon::RenderDeferredDirectionalLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera,  DirectionalLight* light) const
+    void ShaderManagerCommon::RenderForwardDirectionalLightShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, Camera* camera, const Color& color, DirectionalLight* light) const
     {
-        m_light_shader->Render(indices_count, mvp_data, deferred_buffer, camera, light);
+        m_forward_directional_light_shader->Render(indices_count, mvp_data, texture, camera, color, light);
     }
 
-    void ShaderManagerCommon::RenderDeferredShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    void ShaderManagerCommon::RenderDeferredDirectionalLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, DirectionalLight* light) const
     {
-        m_deferred_shader->Render(indices_count, mvp_data, texture, color);
+        m_deferred_directional_light_shader->Render(indices_count, mvp_data, deferred_buffer, camera, light);
+    }
+
+    void ShaderManagerCommon::RenderDeferredBufferShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    {
+        m_deferred_buffer_shader->Render(indices_count, mvp_data, texture, color);
     }
 
     ColorShaderCommon* ShaderManagerCommon::GetColorShader() const
@@ -158,13 +177,18 @@ namespace Engine5
         return m_texture_shader;
     }
 
-    DeferredDirectionalLightShaderCommon* ShaderManagerCommon::GetDeferredLightShader() const
+    ForwardDirectionalLightShaderCommon* ShaderManagerCommon::GetForwardDirectionalLightShader() const
     {
-        return m_light_shader;
+        return m_forward_directional_light_shader;
     }
 
-    DeferredBufferShaderCommon* ShaderManagerCommon::GetDeferredShader() const
+    DeferredDirectionalLightShaderCommon* ShaderManagerCommon::GetDeferredDirectionalShaderLightShader() const
     {
-        return m_deferred_shader;
+        return m_deferred_directional_light_shader;
+    }
+
+    DeferredBufferShaderCommon* ShaderManagerCommon::GetDeferredBufferShader() const
+    {
+        return m_deferred_buffer_shader;
     }
 }
