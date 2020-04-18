@@ -23,9 +23,9 @@ cbuffer LightBuffer
 {
     float4 ambient_color;
     float4 diffuse_color;
-    float4 specular_color;
     float3 light_direction;
     float specular_power;
+    float4 specular_color;
 };
 
 //defs
