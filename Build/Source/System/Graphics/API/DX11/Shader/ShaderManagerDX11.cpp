@@ -1,12 +1,12 @@
 #include "ShaderManagerDX11.hpp"
 #include "../../../Shader/ShaderManagerCommon.hpp"
-#include "../../../Shader/ColorShaderCommon.hpp"
+#include "../../../Shader/Forward/ColorShaderCommon.hpp"
 #include "../../../../../Manager/Resource/ResourceManager.hpp"
 #include <fstream>
-#include "../../../Shader/TextureShaderCommon.hpp"
-#include "../../../Shader/DeferredDirectionalLightShaderCommon.hpp"
+#include "../../../Shader/Forward/TextureShaderCommon.hpp"
+#include "../../../Shader/Deferred/DeferredDirectionalLightShaderCommon.hpp"
 #include "../../../Renderer/RendererCommon.hpp"
-#include "../../../Shader/DeferredShaderCommon.hpp"
+#include "../../../Shader/Deferred/DeferredShaderCommon.hpp"
 
 namespace Engine5
 {

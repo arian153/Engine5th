@@ -1,7 +1,7 @@
 #pragma once
-#include "../API/GraphicsAPI.hpp"
+#include "../../API/GraphicsAPI.hpp"
 #include IncludeColorShaderAPI
-#include "../../Core/Utility/CoreDef.hpp"
+#include "../../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {

@@ -1,6 +1,6 @@
 #include "PrimitiveRenderer.hpp"
 #include "../Renderer/RendererCommon.hpp"
-#include "../Shader/ColorShaderCommon.hpp"
+#include "../Shader/Forward/ColorShaderCommon.hpp"
 #include "MatrixManager.hpp"
 #include "../DataType/MatrixData.hpp"
 #include "../DataType/TopologyDef.hpp"

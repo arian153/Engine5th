@@ -31,10 +31,15 @@
 #define IncludeNormalVertexAPI "../API/DX11/Vertex/NormalVertexDX11.hpp"
 #define IncludeTextureVertexAPI "../API/DX11/Vertex/TextureVertexDX11.hpp"
 #define IncludeShaderManagerAPI "../API/DX11/Shader/ShaderManagerDX11.hpp"
-#define IncludeColorShaderAPI "../API/DX11/Shader/ColorShaderDX11.hpp"
-#define IncludeTextureShaderAPI "../API/DX11/Shader/TextureShaderDX11.hpp"
-#define IncludeDeferredDirectionalLightShaderAPI "../API/DX11/Shader/DeferredDirectionalLightShaderDX11.hpp"
-#define IncludeDeferredShaderAPI "../API/DX11/Shader/DeferredShaderDX11.hpp"
+
+//forward
+#define IncludeColorShaderAPI "../../API/DX11/Shader/Forward/ColorShaderDX11.hpp"
+#define IncludeTextureShaderAPI "../../API/DX11/Shader/Forward/TextureShaderDX11.hpp"
+
+//deferred
+#define IncludeDeferredShaderAPI "../../API/DX11/Shader/Deferred/DeferredShaderDX11.hpp"
+#define IncludeDeferredDirectionalLightShaderAPI "../../API/DX11/Shader/Deferred/DeferredDirectionalLightShaderDX11.hpp"
+
 
 #elif defined(E5_DIRECTX12)
 #elif defined(E5_OPENGL4)
