@@ -161,7 +161,7 @@ namespace Engine5
                     {
                         mesh->RenderBuffer();
                         m_shader_manager->RenderForwardDirectionalLightShader(
-                                                                              m_render_texture_buffer->GetIndexCount(),
+                                                                              mesh->GetIndexCount(),
                                                                               mvp_data,
                                                                               mesh->GetTexture(),
                                                                               camera,
