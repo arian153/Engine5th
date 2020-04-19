@@ -73,7 +73,7 @@
                     "Value": {
                         "Color": [ 1, 1, 1, 1 ],
                         "Mesh": "../../Resource/Mesh/deer.obj",
-                        "Shader Type": "Deferred Directional Light",
+                        "Shader Type": "Forward Directional Light",
                         "Texture": "../../Resource/Texture/white.dds"
                     }
                 }

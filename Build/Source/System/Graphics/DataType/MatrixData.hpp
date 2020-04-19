@@ -25,6 +25,11 @@ namespace Engine5
         {
         }
 
+        Matrix44 GetMVPMatrix() const
+        {
+            return model * view * projection;
+        }
+
     public:
         Matrix44 model;
         Matrix44 view;

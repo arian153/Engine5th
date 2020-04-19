@@ -1,9 +1,7 @@
 //global
 cbuffer MatrixBuffer
 {
-    matrix model;
-    matrix view;
-    matrix projection;
+    matrix mvp;
 };
 
 //defs
@@ -22,17 +20,10 @@ struct PixelInputType
 //vertex shader
 PixelInputType ColorVertexShader(VertexInputType input)
 {
-    PixelInputType output;
-
-    // Change the position vector to be 4 units for proper matrix calculations.
     input.position.w = 1.0f;
 
-    // Calculate the position of the vertex against the world, view, and projection matrices.
-    output.position = mul(input.position, model);
-    output.position = mul(output.position, view);
-    output.position = mul(output.position, projection);
-
-    // Store the input color for the pixel shader to use.
+    PixelInputType output;
+    output.position = mul(input.position, mvp);
     output.color = input.color;
 
     return output;

@@ -9,9 +9,8 @@ namespace Engine5
     protected:
         struct MatrixBufferType
         {
+            DirectX::XMMATRIX mvp;
             DirectX::XMMATRIX model;
-            DirectX::XMMATRIX view;
-            DirectX::XMMATRIX projection;
         };
 
         struct ColorBufferType
