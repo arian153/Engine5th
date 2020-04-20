@@ -8,13 +8,15 @@
 
 namespace Engine5
 {
+    class TextureCommon;
+
     class TextBufferDX11
     {
     public:
         TextBufferDX11();
         ~TextBufferDX11();
 
-        ID3D11ShaderResourceView* GetTexture() const;
+        ID3D11ShaderResourceView* GetTextResource() const;
 
         bool SetUpBrush();
         bool SetUpSpriteText();
@@ -60,5 +62,7 @@ namespace Engine5
 
         ID3D11Buffer* m_vertex_buffer = nullptr;
         ID3D11Buffer* m_index_buffer  = nullptr;
+
+        TextureCommon* m_texture = nullptr;
     };
 }

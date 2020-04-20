@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class TextBufferCommon;
     class RenderTextureBufferCommon;
     class DeferredBufferCommon;
     class ColliderSet;
@@ -69,6 +70,9 @@ namespace Engine5
 
         DeferredBufferCommon*      m_deferred_buffer       = nullptr;
         RenderTextureBufferCommon* m_render_texture_buffer = nullptr;
+
+        //instant
+        TextBufferCommon* m_text = nullptr;
 
         std::vector<Camera*>           m_cameras;
         std::vector<Mesh*>             m_forward_meshes;

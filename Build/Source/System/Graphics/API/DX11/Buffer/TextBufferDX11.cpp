@@ -5,6 +5,7 @@
 #include "../../../Buffer/TextBufferCommon.hpp"
 #include "../../../Vertex/TextureVertexCommon.hpp"
 #include "../../../../Core/Utility/CoreUtility.hpp"
+#include "../../../Texture/TextureCommon.hpp"
 
 namespace Engine5
 {
@@ -17,7 +18,7 @@ namespace Engine5
     {
     }
 
-    ID3D11ShaderResourceView* TextBufferDX11::GetTexture() const
+    ID3D11ShaderResourceView* TextBufferDX11::GetTextResource() const
     {
         return m_font_resource;
     }
@@ -271,6 +272,11 @@ namespace Engine5
         m_d3d_device_context = renderer->GetDeviceContext();
         m_d2d_device_context = renderer->GetD2DDeviceContext();
         m_write_factory      = renderer->GetDWWriteFactory();
+        m_texture            = new TextureCommon();
+
+        m_font = new std::wstring(L"courier new");
+        m_text = new std::wstring(L"");
+
         bool result          = SetUpBrush();
         if (result == false)
         {
@@ -396,23 +402,28 @@ namespace Engine5
             delete m_font;
             m_font = nullptr;
         }
+        if (m_texture != nullptr)
+        {
+            delete m_texture;
+            m_texture = nullptr;
+        }
     }
 
-    void TextBufferCommon::SetText(const std::string& string) 
+    void TextBufferCommon::SetText(const std::string& string)
     {
         m_text->reserve(string.size());
         m_text->assign(StringToWString(string));
         Update();
     }
 
-    void TextBufferCommon::SetText(const std::wstring& string) 
+    void TextBufferCommon::SetText(const std::wstring& string)
     {
         m_text->reserve(string.size());
         m_text->assign(string);
         Update();
     }
 
-    void TextBufferCommon::SetFont(const std::wstring& font) 
+    void TextBufferCommon::SetFont(const std::wstring& font)
     {
         m_font->assign(font);
         Update();
@@ -436,5 +447,11 @@ namespace Engine5
     Color TextBufferCommon::GetColor() const
     {
         return m_color;
+    }
+
+    TextureCommon* TextBufferCommon::GetTexture()
+    {
+        m_texture->Initialize(this);
+        return m_texture;
     }
 }

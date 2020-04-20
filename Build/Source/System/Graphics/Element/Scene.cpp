@@ -9,6 +9,7 @@
 #include "../Light/PointLight.hpp"
 #include "../Light/SpotLight.hpp"
 #include "../Light/CapsuleLight.hpp"
+#include "../Buffer/TextBufferCommon.hpp"
 
 namespace Engine5
 {
@@ -42,6 +43,10 @@ namespace Engine5
                                       m_matrix_manager->GetScreenHeight());
         UpdateView();
         UpdateProjection();
+
+        m_text = new TextBufferCommon();
+        m_text->Initialize(m_renderer);
+        m_text->SetText("Hello World");
     }
 
     void Scene::Update(Real dt)
@@ -171,6 +176,10 @@ namespace Engine5
                     }
                 }
             }
+
+            mvp_data.model.SetIdentity();
+            m_text->Render();
+            m_shader_manager->RenderTextureShader(m_text->GetIndexCount(), mvp_data, m_text->GetTexture(), m_text->GetColor());
         }
     }
 
@@ -195,6 +204,14 @@ namespace Engine5
             delete m_render_texture_buffer;
             m_render_texture_buffer = nullptr;
         }
+
+        if (m_text != nullptr)
+        {
+            m_text->Shutdown();
+            delete m_text;
+            m_text = nullptr;
+        }
+
         for (auto& camera : m_cameras)
         {
             camera->Shutdown();
