@@ -45,6 +45,16 @@ namespace Engine5
         return m_hwnd;
     }
 
+    ID2D1DeviceContext1* RendererDX11::GetD2DDeviceContext() const
+    {
+        return m_d2d_device_context;
+    }
+
+    IDWriteFactory2* RendererDX11::GetDWWriteFactory() const
+    {
+        return m_write_factory;
+    }
+
     String RendererDX11::GetVideoCardInfo(size_t& memory) const
     {
         memory = m_video_card_memory;
@@ -549,7 +559,6 @@ namespace Engine5
         SetUpBlendState();
         SetUpDWDevice();
         SetUpDWRenderTarget();
-        SetAlphaBlending(true);
         m_b_init = true;
     }
 

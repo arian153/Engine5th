@@ -23,6 +23,8 @@ namespace Engine5
         ID3D11DeviceContext*    GetDeviceContext() const;
         ID3D11DepthStencilView* GetDepthStencilView() const;
         HWND                    GetHwnd() const;
+        ID2D1DeviceContext1* GetD2DDeviceContext() const;
+        IDWriteFactory2* GetDWWriteFactory() const;
 
         std::string GetVideoCardInfo(size_t& memory) const;
 

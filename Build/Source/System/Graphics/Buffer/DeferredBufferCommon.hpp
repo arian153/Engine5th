@@ -1,5 +1,4 @@
 #pragma once
-#include "../../Math/Utility/MathDef.hpp"
 #include "../../Core/Utility/CoreDef.hpp"
 #include "../API/GraphicsAPI.hpp"
 #include IncludeDeferredBufferAPI
