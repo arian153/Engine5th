@@ -10,6 +10,7 @@
 #include "../Light/SpotLight.hpp"
 #include "../Light/CapsuleLight.hpp"
 #include "../Buffer/TextBufferCommon.hpp"
+#include "../../Math/Utility/MatrixUtility.hpp"
 
 namespace Engine5
 {
@@ -177,7 +178,7 @@ namespace Engine5
                 }
             }
 
-            mvp_data.model.SetIdentity();
+            mvp_data.model = Math::Matrix44::AffineTransformation(Vector3(10.0f, 10.0f, 10.0f), Vector3(), Quaternion(), Vector3(-20));
             m_text->Render();
             m_shader_manager->RenderTextureShader(m_text->GetIndexCount(), mvp_data, m_text->GetTexture(), m_text->GetColor());
         }
