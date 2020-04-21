@@ -143,7 +143,7 @@ namespace Engine5
     bool TextBufferDX11::SetUpTextureSize()
     {
         U32 length          = static_cast<U32>(m_text->length());
-        m_texture_width     = length * static_cast<U32>(m_font_size);
+        m_texture_width     = (length + 1) * static_cast<U32>(m_font_size);
         U32 number_of_lines = static_cast<U32>(std::count(m_text->begin(), m_text->end(), '\n'));
         m_texture_height    = (number_of_lines + 1) * static_cast<U32>(m_font_size + (m_font_size * 0.5f));
         return true;
@@ -275,7 +275,7 @@ namespace Engine5
         m_texture            = new TextureCommon();
 
         m_font = new std::wstring(L"courier new");
-        m_text = new std::wstring(L"");
+        m_text = new std::wstring(L"Hi");
 
         bool result          = SetUpBrush();
         if (result == false)
