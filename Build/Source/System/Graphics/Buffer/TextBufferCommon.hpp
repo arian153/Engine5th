@@ -18,9 +18,9 @@ namespace Engine5
         void Render();
         void Shutdown();
 
-        void SetText(const std::string& string);
-        void SetText(const std::wstring& string);
-        void SetFont(const std::wstring& font);
+        void SetText(const std::string& string) const;
+        void SetText(const std::wstring& string) const;
+        void SetFont(const std::wstring& font) const;
         void SetColor(Color color);
 
         U32   GetIndexCount() const;
