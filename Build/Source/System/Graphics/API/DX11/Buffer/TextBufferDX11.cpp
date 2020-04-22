@@ -274,7 +274,7 @@ namespace Engine5
         m_write_factory      = renderer->GetDWWriteFactory();
         m_texture            = new TextureCommon();
         m_font               = new std::wstring(L"courier new");
-        m_text               = new std::wstring(L"Hi");
+        m_text               = new std::wstring(L"");
         bool result          = SetUpBrush();
         if (result == false)
         {

@@ -15,14 +15,14 @@ namespace Engine5
         TextSprite();
         ~TextSprite();
 
-        void Initialize();
-        void Render();
+        void Initialize(RendererCommon* renderer);
+        void Render() const;
         void Shutdown();
 
-        void SetText(const std::string& text);
-        void SetText(const std::wstring& text);
-        void SetFont(const std::wstring& font);
-        void SetColor(const Color& color);
+        void SetText(const std::string& text) const;
+        void SetText(const std::wstring& text) const;
+        void SetFont(const std::wstring& font) const;
+        void SetColor(const Color& color) const;
 
         Matrix44       GetModelMatrix() const;
         TextureCommon* GetTexture() const;
