@@ -15,10 +15,16 @@ namespace Engine5
 
     void TextSprite::Initialize(RendererCommon* renderer)
     {
+        if(m_texture == nullptr)
+        {
+            m_texture = new TextureCommon();
+        }
+
         if (m_text == nullptr)
         {
             m_text = new TextBufferCommon();
             m_text->Initialize(renderer);
+            m_texture->Initialize(m_text);
         }
     }
 
@@ -29,6 +35,12 @@ namespace Engine5
 
     void TextSprite::Shutdown()
     {
+        if (m_texture != nullptr)
+        {
+            delete m_texture;
+            m_texture = nullptr;
+        }
+
         if (m_text != nullptr)
         {
             m_text->Shutdown();
@@ -44,6 +56,7 @@ namespace Engine5
         m_text->SetUpVertexBuffer();
         m_text->SetUpFontTexture();
         m_text->SetUpTextLayout();
+        m_texture->Initialize(m_text);
     }
 
     void TextSprite::SetText(const std::wstring& text) const
@@ -53,6 +66,7 @@ namespace Engine5
         m_text->SetUpVertexBuffer();
         m_text->SetUpFontTexture();
         m_text->SetUpTextLayout();
+        m_texture->Initialize(m_text);
     }
 
     void TextSprite::SetFont(const std::wstring& font) const
@@ -60,6 +74,7 @@ namespace Engine5
         m_text->SetFont(font);
         m_text->SetUpTextFormats();
         m_text->SetUpTextLayout();
+        m_texture->Initialize(m_text);
     }
 
     void TextSprite::SetColor(const Color& color) const
@@ -67,13 +82,32 @@ namespace Engine5
         m_text->SetColor(color);
     }
 
+    void TextSprite::SetTransform(Transform* transform)
+    {
+        m_transform = transform;
+    }
+
     Matrix44 TextSprite::GetModelMatrix() const
     {
-        return m_transform->LocalToWorldMatrix();
+        if (m_transform != nullptr)
+        {
+            return m_transform->LocalToWorldMatrix();
+        }
+        return Matrix44();
     }
 
     TextureCommon* TextSprite::GetTexture() const
     {
-        return m_text->GetTexture();
+        return m_texture;
+    }
+
+    Color TextSprite::GetColor() const
+    {
+        return m_text->GetColor();
+    }
+
+    U32 TextSprite::GetIndexCount() const
+    {
+        return m_text->GetIndexCount();
     }
 }

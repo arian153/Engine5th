@@ -272,7 +272,6 @@ namespace Engine5
         m_d3d_device_context = renderer->GetDeviceContext();
         m_d2d_device_context = renderer->GetD2DDeviceContext();
         m_write_factory      = renderer->GetDWWriteFactory();
-        m_texture            = new TextureCommon();
         m_font               = new std::wstring(L"courier new");
         m_text               = new std::wstring(L"");
         bool result          = SetUpBrush();
@@ -400,11 +399,6 @@ namespace Engine5
             delete m_font;
             m_font = nullptr;
         }
-        if (m_texture != nullptr)
-        {
-            delete m_texture;
-            m_texture = nullptr;
-        }
     }
 
     void TextBufferCommon::SetText(const std::string& string) const
@@ -442,11 +436,5 @@ namespace Engine5
     Color TextBufferCommon::GetColor() const
     {
         return m_color;
-    }
-
-    TextureCommon* TextBufferCommon::GetTexture()
-    {
-        m_texture->Initialize(this);
-        return m_texture;
     }
 }

@@ -26,7 +26,6 @@ namespace Engine5
         U32   GetIndexCount() const;
         U32   GetVertexCount() const;
         Color GetColor() const;
-        TextureCommon* GetTexture();
 
     private:
     };

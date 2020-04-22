@@ -62,7 +62,5 @@ namespace Engine5
 
         ID3D11Buffer* m_vertex_buffer = nullptr;
         ID3D11Buffer* m_index_buffer  = nullptr;
-
-        TextureCommon* m_texture = nullptr;
     };
 }
