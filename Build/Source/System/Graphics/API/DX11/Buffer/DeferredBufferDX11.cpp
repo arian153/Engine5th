@@ -166,10 +166,10 @@ namespace Engine5
         indices[5] = 1;
         // Set up the description of the vertex buffer.
         D3D11_BUFFER_DESC vertex_buffer_desc;
-        vertex_buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
+        vertex_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
         vertex_buffer_desc.ByteWidth           = sizeof(TextureVertexCommon) * m_vertex_count;
         vertex_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-        vertex_buffer_desc.CPUAccessFlags      = 0;
+        vertex_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
         vertex_buffer_desc.MiscFlags           = 0;
         vertex_buffer_desc.StructureByteStride = 0;
         // Give the sub resource structure a pointer to the vertex data.
@@ -206,6 +206,35 @@ namespace Engine5
         vertices = nullptr;
         delete[] indices;
         indices = nullptr;
+        return true;
+    }
+
+    bool DeferredBufferDX11::ResizeVertexBuffer(Real left, Real right, Real top, Real bottom) const
+    {
+        // Create the vertex array.
+        TextureVertexCommon* vertices = new TextureVertexCommon[ m_vertex_count ];
+        // Load the vertex array with data.
+        vertices[0] = TextureVertexCommon(left, top, 0.0f, 0.0f, 0.0f);
+        vertices[1] = TextureVertexCommon(right, bottom, 0.0f, 1.0f, 1.0f);
+        vertices[2] = TextureVertexCommon(left, bottom, 0.0f, 0.0f, 1.0f);
+        vertices[3] = TextureVertexCommon(right, top, 0.0f, 1.0f, 0.0f);
+        // Lock the vertex buffer so it can be written to.
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        // mapping
+        HRESULT result = m_device_context->Map(m_vertex_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+        if (FAILED(result))
+        {
+            return false;
+        }
+        // Get a pointer to the data in the vertex buffer.
+        TextureVertexCommon* vertices_ptr = (TextureVertexCommon*)mapped_resource.pData;
+        // Copy the data into the vertex buffer.
+        memcpy(vertices_ptr, (void*)vertices, (sizeof(TextureVertexCommon) * m_vertex_count));
+        // Unlock the vertex buffer.
+        m_device_context->Unmap(m_vertex_buffer, 0);
+        // Release the vertex array as it is no longer needed.
+        delete[] vertices;
+        vertices = nullptr;
         return true;
     }
 
@@ -304,7 +333,34 @@ namespace Engine5
     {
         ID3D11ShaderResourceView* null[ BUFFER_COUNT ] = {nullptr};
         m_device_context->PSSetShaderResources(0, BUFFER_COUNT, null);
-        Shutdown();
+        if (m_depth_stencil_view)
+        {
+            m_depth_stencil_view->Release();
+            m_depth_stencil_view = nullptr;
+        }
+        if (m_depth_stencil_buffer)
+        {
+            m_depth_stencil_buffer->Release();
+            m_depth_stencil_buffer = nullptr;
+        }
+        for (U32 i = 0; i < BUFFER_COUNT; i++)
+        {
+            if (m_shader_resource_view_array[i])
+            {
+                m_shader_resource_view_array[i]->Release();
+                m_shader_resource_view_array[i] = nullptr;
+            }
+            if (m_render_target_view_array[i])
+            {
+                m_render_target_view_array[i]->Release();
+                m_render_target_view_array[i] = nullptr;
+            }
+            if (m_render_target_texture_array[i])
+            {
+                m_render_target_texture_array[i]->Release();
+                m_render_target_texture_array[i] = nullptr;
+            }
+        }
         bool result = BuildBuffer(texture_width, texture_height);
         if (result == false)
         {
@@ -316,7 +372,7 @@ namespace Engine5
         Real right  = half_x;
         Real top    = half_y;
         Real bottom = -half_y;
-        return BuildVertexBuffer(left, right, top, bottom);
+        return ResizeVertexBuffer(left, right, top, bottom);
     }
 
     void DeferredBufferCommon::SetRenderTargets() const

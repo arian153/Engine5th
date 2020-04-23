@@ -14,11 +14,13 @@ namespace Engine5
         DeferredBufferDX11();
         ~DeferredBufferDX11();
 
-        void                      SetDevice(ID3D11Device* device);
-        void                      SetDeviceContext(ID3D11DeviceContext* device_context);
-        bool                      BuildBuffer(U32 texture_width, U32 texture_height);
-        bool                      BuildVertexBuffer(Real left, Real right, Real top, Real bottom);
-        U32                       GetIndexCount() const;
+        void SetDevice(ID3D11Device* device);
+        void SetDeviceContext(ID3D11DeviceContext* device_context);
+        bool BuildBuffer(U32 texture_width, U32 texture_height);
+        bool BuildVertexBuffer(Real left, Real right, Real top, Real bottom);
+        bool ResizeVertexBuffer(Real left, Real right, Real top, Real bottom) const;
+        U32  GetIndexCount() const;
+
         ID3D11ShaderResourceView* GetShaderResourceView(U32 view);
 
     protected:
