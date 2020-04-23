@@ -15,6 +15,7 @@ namespace Engine5
         ~DeferredBufferCommon();
 
         bool Initialize(RendererCommon* renderer, U32 texture_width, U32 texture_height);
+        void Render() const;
         void Shutdown();
 
         bool OnResize(U32 texture_width, U32 texture_height);

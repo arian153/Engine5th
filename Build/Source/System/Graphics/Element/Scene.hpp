@@ -67,10 +67,7 @@ namespace Engine5
         MatrixManager*       m_matrix_manager     = nullptr;
         Camera*              m_main_camera        = nullptr;
         PrimitiveRenderer*   m_primitive_renderer = nullptr;
-
         DeferredBufferCommon*      m_deferred_buffer       = nullptr;
-        RenderTextureBufferCommon* m_render_texture_buffer = nullptr;
-
 
         std::vector<Camera*>           m_cameras;
         std::vector<Mesh*>             m_forward_meshes;

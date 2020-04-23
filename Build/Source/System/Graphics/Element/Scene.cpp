@@ -26,14 +26,6 @@ namespace Engine5
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
-        //render texture buffer
-        m_render_texture_buffer = new RenderTextureBufferCommon();
-        m_render_texture_buffer->Initialize(
-                                            m_renderer,
-                                            m_matrix_manager->GetScreenLeft(),
-                                            m_matrix_manager->GetScreenRight(),
-                                            m_matrix_manager->GetScreenTop(),
-                                            m_matrix_manager->GetScreenBottom());
         //deferred buffer
         m_deferred_buffer = new DeferredBufferCommon();
         m_deferred_buffer->Initialize(
@@ -42,8 +34,7 @@ namespace Engine5
                                       m_matrix_manager->GetScreenHeight());
         UpdateView();
         UpdateProjection();
-
-           }
+    }
 
     void Scene::Update(Real dt)
     {
@@ -95,9 +86,9 @@ namespace Engine5
                 m_renderer->SetZBuffering(false);
                 for (DirectionalLight* directional_light : m_directional_lights)
                 {
-                    m_render_texture_buffer->Render();
+                    m_deferred_buffer->Render();
                     m_shader_manager->RenderDeferredDirectionalLightShader(
-                                                                           m_render_texture_buffer->GetIndexCount(),
+                                                                           m_deferred_buffer->GetIndexCount(),
                                                                            mvp_data,
                                                                            m_deferred_buffer,
                                                                            camera,
@@ -172,7 +163,6 @@ namespace Engine5
                     }
                 }
             }
-
         }
     }
 
@@ -191,14 +181,6 @@ namespace Engine5
             delete m_deferred_buffer;
             m_deferred_buffer = nullptr;
         }
-        if (m_render_texture_buffer != nullptr)
-        {
-            m_render_texture_buffer->Shutdown();
-            delete m_render_texture_buffer;
-            m_render_texture_buffer = nullptr;
-        }
-
-      
         for (auto& camera : m_cameras)
         {
             camera->Shutdown();
@@ -313,14 +295,6 @@ namespace Engine5
 
     void Scene::OnResize() const
     {
-        if (m_render_texture_buffer != nullptr)
-        {
-            m_render_texture_buffer->OnResize(
-                                              m_matrix_manager->GetScreenLeft(),
-                                              m_matrix_manager->GetScreenRight(),
-                                              m_matrix_manager->GetScreenTop(),
-                                              m_matrix_manager->GetScreenBottom());
-        }
         if (m_deferred_buffer != nullptr)
         {
             m_deferred_buffer->OnResize(
