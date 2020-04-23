@@ -32,8 +32,12 @@ namespace Engine5
         U32            GetIndexCount() const;
 
     private:
-        TextBufferCommon* m_text      = nullptr;
-        TextureCommon*    m_texture   = nullptr;
-        Transform*        m_transform = nullptr;
+        friend class TextSpriteComponent;
+
+    private:
+        TextBufferCommon*    m_text      = nullptr;
+        TextureCommon*       m_texture   = nullptr;
+        Transform*           m_transform = nullptr;
+        TextSpriteComponent* m_component = nullptr;
     };
 }

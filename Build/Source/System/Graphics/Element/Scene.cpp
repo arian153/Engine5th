@@ -9,6 +9,8 @@
 #include "../Light/PointLight.hpp"
 #include "../Light/SpotLight.hpp"
 #include "../Light/CapsuleLight.hpp"
+#include "TextSprite.hpp"
+#include "../../Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -38,6 +40,7 @@ namespace Engine5
 
     void Scene::Update(Real dt)
     {
+        E5_UNUSED_PARAM(dt);
         if (m_deferred_meshes.empty() == false)
         {
             MatrixData mvp_data;
@@ -230,6 +233,13 @@ namespace Engine5
             light = nullptr;
         }
         m_capsule_lights.clear();
+        for (auto& text_sprite : m_text_sprites)
+        {
+            text_sprite->Shutdown();
+            delete text_sprite;
+            text_sprite = nullptr;
+        }
+        m_text_sprites.clear();
     }
 
     void Scene::SetRenderer(RendererCommon* renderer)
@@ -352,6 +362,11 @@ namespace Engine5
         m_capsule_lights.push_back(light);
     }
 
+    void Scene::AddTextSprite(TextSprite* text_sprite)
+    {
+        m_text_sprites.push_back(text_sprite);
+    }
+
     void Scene::RemoveCamera(Camera* camera)
     {
         auto found = std::find(m_cameras.begin(), m_cameras.end(), camera);
@@ -396,6 +411,12 @@ namespace Engine5
         m_capsule_lights.erase(found);
     }
 
+    void Scene::RemoveTextSprite(TextSprite* text_sprite)
+    {
+        auto found = std::find(m_text_sprites.begin(), m_text_sprites.end(), text_sprite);
+        m_text_sprites.erase(found);
+    }
+
     void Scene::ChangeShaderType(Mesh* mesh)
     {
         //remove
@@ -421,5 +442,10 @@ namespace Engine5
         {
             m_forward_meshes.push_back(mesh);
         }
+    }
+
+    void Scene::InitializeTextSprite(TextSprite* text_sprite) const
+    {
+        text_sprite->Initialize(m_renderer);
     }
 }

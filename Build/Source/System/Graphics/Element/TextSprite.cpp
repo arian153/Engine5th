@@ -2,6 +2,7 @@
 #include "TextSprite.hpp"
 #include "../Buffer/TextBufferCommon.hpp"
 #include "../../Math/Structure/Transform.hpp"
+#include "../../../Manager/Component/EngineComponent/TextSpriteComponent.hpp"
 
 namespace Engine5
 {
@@ -35,6 +36,11 @@ namespace Engine5
 
     void TextSprite::Shutdown()
     {
+        if (m_component != nullptr)
+        {
+            m_component->m_text_sprite = nullptr;
+        }
+
         if (m_texture != nullptr)
         {
             delete m_texture;

@@ -1,6 +1,5 @@
 #pragma once
 #include "..//Component.hpp"
-#include "../../../System/Math/Utility/VectorDef.hpp"
 
 namespace Engine5
 {

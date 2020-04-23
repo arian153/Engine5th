@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class TextSprite;
     class TextBufferCommon;
     class RenderTextureBufferCommon;
     class DeferredBufferCommon;
@@ -51,6 +52,7 @@ namespace Engine5
         void    AddLight(PointLight* light);
         void    AddLight(SpotLight* light);
         void    AddLight(CapsuleLight* light);
+        void    AddTextSprite(TextSprite* text_sprite);
 
         //remove
         void RemoveCamera(Camera* camera);
@@ -59,15 +61,17 @@ namespace Engine5
         void RemoveLight(PointLight* light);
         void RemoveLight(SpotLight* light);
         void RemoveLight(CapsuleLight* light);
+        void RemoveTextSprite(TextSprite* text_sprite);
 
         void ChangeShaderType(Mesh* mesh);
+        void InitializeTextSprite(TextSprite* text_sprite) const;
     private:
-        RendererCommon*      m_renderer           = nullptr;
-        ShaderManagerCommon* m_shader_manager     = nullptr;
-        MatrixManager*       m_matrix_manager     = nullptr;
-        Camera*              m_main_camera        = nullptr;
-        PrimitiveRenderer*   m_primitive_renderer = nullptr;
-        DeferredBufferCommon*      m_deferred_buffer       = nullptr;
+        RendererCommon*       m_renderer           = nullptr;
+        ShaderManagerCommon*  m_shader_manager     = nullptr;
+        MatrixManager*        m_matrix_manager     = nullptr;
+        Camera*               m_main_camera        = nullptr;
+        PrimitiveRenderer*    m_primitive_renderer = nullptr;
+        DeferredBufferCommon* m_deferred_buffer    = nullptr;
 
         std::vector<Camera*>           m_cameras;
         std::vector<Mesh*>             m_forward_meshes;
@@ -76,6 +80,7 @@ namespace Engine5
         std::vector<PointLight*>       m_point_lights;
         std::vector<SpotLight*>        m_spot_lights;
         std::vector<CapsuleLight*>     m_capsule_lights;
+        std::vector<TextSprite*>       m_text_sprites;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;
