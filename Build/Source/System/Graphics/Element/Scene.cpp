@@ -166,6 +166,16 @@ namespace Engine5
                     }
                 }
             }
+            for (auto& text_sprite : m_text_sprites)
+            {
+                mvp_data.model = text_sprite->GetModelMatrix();
+                text_sprite->Render();
+                m_shader_manager->RenderTextureShader(
+                                                      text_sprite->GetIndexCount(),
+                                                      mvp_data,
+                                                      text_sprite->GetTexture(),
+                                                      text_sprite->GetColor());
+            }
         }
     }
 

@@ -128,6 +128,28 @@
             "Name": "Light2"
         },
 
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 0, 0, 0 ],
+                        "Position": [ -10, 5, 0 ],
+                        "Scale": [ 10.0, 10.0, 10.0 ]
+                    }
+                },
+                {
+                    "Type": "TextSpriteComponent",
+                    "Value": {
+                        "Color": [ 1, 1, 1, 1 ],
+                        "Text": "Hello Engine5th!",
+                        "Font": "consolas"
+                    }
+                }
+
+            ],
+            "Name": "Deer2"
+        },
 
         {
             "Components": [

@@ -5,6 +5,8 @@
 #include "../../Space/Space.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
+#include "../../../External/JSONCPP/json/json.h"
+#include "../../Resource/ResourceType/JsonResource.hpp"
 
 namespace Engine5
 {
@@ -50,6 +52,21 @@ namespace Engine5
   
     bool TextSpriteComponent::Load(const Json::Value& data)
     {
+        if (JsonResource::HasMember(data, "Color") && JsonResource::IsColor(data[ "Color" ]))
+        {
+            m_text_sprite->SetColor(JsonResource::AsColor(data[ "Color" ]));
+        }
+
+        if (JsonResource::HasMember(data, "Font") && data[ "Font" ].isString())
+        {
+            m_text_sprite->SetFont(StringToWString(data[ "Font" ].asString()));
+        }
+
+        if (JsonResource::HasMember(data, "Text") && data[ "Text" ].isString())
+        {
+            m_text_sprite->SetText(StringToWString(data[ "Text" ].asString()));
+        }
+
         return true;
     }
 
