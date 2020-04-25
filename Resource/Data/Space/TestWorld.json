@@ -142,7 +142,7 @@
                     "Type": "TextSpriteComponent",
                     "Value": {
                         "Color": [ 1, 1, 1, 1 ],
-                        "Text": "Hello Engine5th!",
+                        "Text": "Hello World",
                         "Font": "consolas"
                     }
                 }
