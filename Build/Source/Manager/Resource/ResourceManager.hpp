@@ -13,6 +13,7 @@ namespace Engine5
     class TextureResource;
     class MeshResource;
     class AudioResource;
+    class TextResource;
     class UndefinedResource;
     class Resource;
     class FileUtility;
@@ -66,6 +67,11 @@ namespace Engine5
         void          GetJsonResources(eJsonType type, std::vector<JsonResource*>& resources);
         JsonResource* CreateJsonResource(const std::wstring& path);
 
+        //text
+        TextResource* GetTextResource(const std::wstring& path);
+        TextResource* GetTextResourceFileName(const std::wstring& file_name);
+        void          GetTextResources(const std::wstring& file_name, std::vector<TextResource*>& resources);
+
         //undefined
         UndefinedResource* GetUndefinedResource(const std::wstring& path);
         UndefinedResource* GetUndefinedResourceFileName(const std::wstring& file_name);
@@ -89,6 +95,7 @@ namespace Engine5
         std::unordered_map<std::wstring, MeshResource*>      m_mesh_resource_map;
         std::unordered_map<std::wstring, AudioResource*>     m_audio_resource_map;
         std::unordered_map<std::wstring, JsonResource*>      m_json_resource_map;
+        std::unordered_map<std::wstring, TextResource*>      m_text_resource_map;
 
         FileUtility* m_file_utility = nullptr;
     private:

@@ -1,4 +1,5 @@
 #include "TextResource.hpp"
+#include <fstream>
 
 namespace Engine5
 {
@@ -13,24 +14,42 @@ namespace Engine5
 
     void TextResource::Initialize()
     {
-        if (m_text == nullptr)
-        {
-            m_text     = new std::wstring();
-            m_b_loaded = true;
-        }
+        m_b_loaded = LoadText();
     }
 
     void TextResource::Shutdown()
     {
-        if (m_text != nullptr)
-        {
-            delete m_text;
-            m_text       = nullptr;
-            m_b_unloaded = true;
-        }
+        m_b_unloaded = true;
     }
 
-    std::wstring* TextResource::GetText() const
+  
+
+    bool TextResource::LoadText()
+    {
+        std::wifstream file;
+        file.open(m_file_path);
+        if (file)
+        {
+            m_text.clear();
+            file.seekg(0, file.end);
+            size_t length = file.tellg();
+            file.seekg(0, file.beg);
+            m_text.reserve(length);
+
+            //read
+            while (file.eof() == false)
+            {
+                std::wstring line;
+                std::getline(file, line);
+                m_text.append(line + L"\n");
+            }
+            file.close();
+            return true;
+        }
+        return false;
+    }
+
+    std::wstring TextResource::GetText() const
     {
         return m_text;
     }

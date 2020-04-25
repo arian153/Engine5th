@@ -8,6 +8,7 @@
 #include "ResourceType/ShaderResource.hpp"
 #include "ResourceType/JsonResource.hpp"
 #include "ResourceType/UndefinedResource.hpp"
+#include "ResourceType/TextResource.hpp"
 
 namespace Engine5
 {
@@ -42,6 +43,7 @@ namespace Engine5
         resource = resource != nullptr ? resource : GetMeshResource(path);
         resource = resource != nullptr ? resource : GetShaderResource(path);
         resource = resource != nullptr ? resource : GetTextureResource(path);
+        resource = resource != nullptr ? resource : GetTextResource(path);
         resource = resource != nullptr ? resource : GetUndefinedResource(path);
         resource = resource != nullptr ? resource : AddResource(path);
         return resource;
@@ -56,6 +58,7 @@ namespace Engine5
         resource = resource != nullptr ? resource : GetMeshResourceFileName(file_name);
         resource = resource != nullptr ? resource : GetShaderResourceFileName(file_name);
         resource = resource != nullptr ? resource : GetTextureResourceFileName(file_name);
+        resource = resource != nullptr ? resource : GetTextResourceFileName(file_name);
         resource = resource != nullptr ? resource : GetUndefinedResourceFileName(file_name);
         return resource;
     }
@@ -111,6 +114,18 @@ namespace Engine5
             }
         }
         for (auto& resource : m_texture_resource_map)
+        {
+            auto found = resource.second;
+            if (found->FileName() == file_name)
+            {
+                resources.push_back(found);
+            }
+            else if (found->FileName() + found->FileType() == file_name)
+            {
+                resources.push_back(found);
+            }
+        }
+        for (auto& resource : m_text_resource_map)
         {
             auto found = resource.second;
             if (found->FileName() == file_name)
@@ -192,6 +207,21 @@ namespace Engine5
                     found_in_texture->second = nullptr;
                 }
                 m_texture_resource_map.erase(found_in_texture);
+            }
+        }
+
+        auto found_in_text = m_text_resource_map.find(path);
+        if (found_in_text != m_text_resource_map.end())
+        {
+            if (found_in_text->second->IsLoaded() == true &&
+                found_in_text->second->IsUnloaded() == true)
+            {
+                if (found_in_text->second != nullptr)
+                {
+                    delete found_in_text->second;
+                    found_in_text->second = nullptr;
+                }
+                m_text_resource_map.erase(found_in_text);
             }
         }
         auto found_in_mesh = m_mesh_resource_map.find(path);
@@ -347,6 +377,31 @@ namespace Engine5
             }
         }
         m_json_resource_map.clear();
+        //remove text
+        for (auto& resource : m_text_resource_map)
+        {
+            auto found = resource.second;
+            if (found != nullptr)
+            {
+                found->Shutdown();
+                if (found->IsLoaded() == false)
+                {
+                    std::wstring result = found->FileName() + found->FileType();
+                    result += L" file didn't loaded. this file may not used in engine. \n";
+                    m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
+                }
+                if (found->IsUnloaded() == false)
+                {
+                    std::wstring result = found->FileName() + found->FileType();
+                    result += L" file didn't unloaded. this file may not released in engine. \n";
+                    m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
+                }
+                delete found;
+                found = nullptr;
+            }
+        }
+        m_text_resource_map.clear();
+
         //remove remains
         for (auto& resource : m_undefined_resource_map)
         {
@@ -623,6 +678,45 @@ namespace Engine5
         return resource;
     }
 
+    TextResource* ResourceManager::GetTextResource(const std::wstring& path)
+    {
+        auto found = m_text_resource_map.find(path);
+        if (found != m_text_resource_map.end())
+        {
+            return found->second;
+        }
+        return nullptr;
+    }
+
+    TextResource* ResourceManager::GetTextResourceFileName(const std::wstring& file_name)
+    {
+        for (auto& json : m_text_resource_map)
+        {
+            auto resource = json.second;
+            if (resource->FileName() + resource->FileType() == file_name)
+            {
+                return resource;
+            }
+        }
+        return nullptr;
+    }
+
+    void ResourceManager::GetTextResources(const std::wstring& file_name, std::vector<TextResource*>& resources)
+    {
+        for (auto& json : m_text_resource_map)
+        {
+            auto resource = json.second;
+            if (resource->FileName() == file_name)
+            {
+                resources.push_back(resource);
+            }
+            else if (resource->FileName() + resource->FileType() == file_name)
+            {
+                resources.push_back(resource);
+            }
+        }
+    }
+
     UndefinedResource* ResourceManager::GetUndefinedResource(const std::wstring& path)
     {
         auto found = m_undefined_resource_map.find(path);
@@ -716,6 +810,11 @@ namespace Engine5
         {
             resource = new JsonResource(path);
             m_json_resource_map.emplace(path, (JsonResource*)resource);
+        }
+        else if (type == L".txt")
+        {
+            resource = new TextResource(path);
+            m_text_resource_map.emplace(path, (TextResource*)resource);
         }
         else
         {

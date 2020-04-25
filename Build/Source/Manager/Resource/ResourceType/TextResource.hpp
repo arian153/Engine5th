@@ -11,10 +11,11 @@ namespace Engine5
 
         void Initialize() override;
         void Shutdown() override;
+        bool LoadText();
 
-        std::wstring* GetText() const;
+        std::wstring GetText() const;
 
     private:
-        std::wstring* m_text = nullptr;
+        std::wstring m_text = L"";
     };
 }

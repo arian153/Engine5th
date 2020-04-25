@@ -134,15 +134,15 @@
                     "Type": "TransformComponent",
                     "Value": {
                         "Orientation": [ 0, 0, 0 ],
-                        "Position": [ -10, 5, 0 ],
-                        "Scale": [ 10.0, 10.0, 10.0 ]
+                        "Position": [ 20, 5, 0 ],
+                        "Scale": [ 5.0, 5.0, 10.0 ]
                     }
                 },
                 {
                     "Type": "TextSpriteComponent",
                     "Value": {
                         "Color": [ 1, 1, 1, 1 ],
-                        "Text": "Hello World",
+                        "Text File": "../../Resource/ENGINE5.txt",
                         "Font": "consolas"
                     }
                 }

@@ -142,7 +142,16 @@ namespace Engine5
 
     bool TextBufferDX11::SetUpTextureSize()
     {
-        U32 length          = static_cast<U32>(m_text->length());
+        U32         length = 1;
+        std::size_t found  = m_text->find_first_of(L"\n");
+        if (found != std::string::npos)
+        {
+            length = static_cast<U32>(found);
+        }
+        else
+        {
+            length = static_cast<U32>(m_text->length());
+        }
         m_texture_width     = (length + 1) * static_cast<U32>(m_font_size);
         U32 number_of_lines = static_cast<U32>(std::count(m_text->begin(), m_text->end(), '\n'));
         m_texture_height    = (number_of_lines + 1) * static_cast<U32>(m_font_size + (m_font_size * 0.5f));
