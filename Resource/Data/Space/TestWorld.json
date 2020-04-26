@@ -142,7 +142,7 @@
                     "Type": "TextSpriteComponent",
                     "Value": {
                         "Color": [ 1, 1, 1, 1 ],
-                        "Text File": "../../Resource/ENGINE5.txt",
+                        "Text": "Hello World",
                         "Font": "consolas"
                     }
                 }

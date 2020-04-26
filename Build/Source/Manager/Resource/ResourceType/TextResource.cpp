@@ -22,8 +22,6 @@ namespace Engine5
         m_b_unloaded = true;
     }
 
-  
-
     bool TextResource::LoadText()
     {
         std::wifstream file;
@@ -35,7 +33,6 @@ namespace Engine5
             size_t length = file.tellg();
             file.seekg(0, file.beg);
             m_text.reserve(length);
-
             //read
             while (file.eof() == false)
             {
