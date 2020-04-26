@@ -1,7 +1,6 @@
 #pragma once
 #include <d3d11.h>
 #include "../../../../Core/Utility/CoreDef.hpp"
-#include "../../../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -15,7 +14,6 @@ namespace Engine5
         ~RenderTextureBufferDX11();
 
         bool BuildTextureBuffer(size_t width, size_t height);
-        void ShutdownTextureBuffer();
         bool BuildVertexBuffer(size_t width, size_t height);
         bool ResizeVertexBuffer(size_t width, size_t height) const;
         void SetRenderTarget() const;

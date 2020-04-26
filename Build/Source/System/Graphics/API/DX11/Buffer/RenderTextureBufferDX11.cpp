@@ -16,6 +16,21 @@ namespace Engine5
 
     bool RenderTextureBufferDX11::BuildTextureBuffer(size_t width, size_t height)
     {
+        if (m_shader_resource_view != nullptr)
+        {
+            m_shader_resource_view->Release();
+            m_shader_resource_view = nullptr;
+        }
+        if (m_render_target_view != nullptr)
+        {
+            m_render_target_view->Release();
+            m_render_target_view = nullptr;
+        }
+        if (m_render_target_texture != nullptr)
+        {
+            m_render_target_texture->Release();
+            m_render_target_texture = nullptr;
+        }
         // Initialize the render target texture description.
         D3D11_TEXTURE2D_DESC texture_desc;
         ZeroMemory(&texture_desc, sizeof(texture_desc));
@@ -60,25 +75,6 @@ namespace Engine5
             return false;
         }
         return true;
-    }
-
-    void RenderTextureBufferDX11::ShutdownTextureBuffer()
-    {
-        if (m_shader_resource_view != nullptr)
-        {
-            m_shader_resource_view->Release();
-            m_shader_resource_view = nullptr;
-        }
-        if (m_render_target_view != nullptr)
-        {
-            m_render_target_view->Release();
-            m_render_target_view = nullptr;
-        }
-        if (m_render_target_texture != nullptr)
-        {
-            m_render_target_texture->Release();
-            m_render_target_texture = nullptr;
-        }
     }
 
     bool RenderTextureBufferDX11::BuildVertexBuffer(size_t width, size_t height)
@@ -243,6 +239,21 @@ namespace Engine5
 
     void RenderTextureBufferCommon::Shutdown()
     {
+        if (m_shader_resource_view != nullptr)
+        {
+            m_shader_resource_view->Release();
+            m_shader_resource_view = nullptr;
+        }
+        if (m_render_target_view != nullptr)
+        {
+            m_render_target_view->Release();
+            m_render_target_view = nullptr;
+        }
+        if (m_render_target_texture != nullptr)
+        {
+            m_render_target_texture->Release();
+            m_render_target_texture = nullptr;
+        }
         if (m_vertex_buffer != nullptr)
         {
             m_vertex_buffer->Release();
@@ -257,7 +268,6 @@ namespace Engine5
 
     bool RenderTextureBufferCommon::OnResize(size_t width, size_t height)
     {
-        ShutdownTextureBuffer();
         if (BuildTextureBuffer(width, height) == false)
         {
             return false;
