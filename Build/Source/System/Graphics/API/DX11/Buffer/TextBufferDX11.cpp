@@ -5,7 +5,6 @@
 #include "../../../Buffer/TextBufferCommon.hpp"
 #include "../../../Vertex/TextureVertexCommon.hpp"
 #include "../../../../Core/Utility/CoreUtility.hpp"
-#include "../../../Texture/TextureCommon.hpp"
 
 namespace Engine5
 {
@@ -142,7 +141,7 @@ namespace Engine5
 
     bool TextBufferDX11::SetUpTextureSize()
     {
-        U32         length = 1;
+        U32         length;
         std::size_t found  = m_text->find_first_of(L"\n");
         if (found != std::string::npos)
         {

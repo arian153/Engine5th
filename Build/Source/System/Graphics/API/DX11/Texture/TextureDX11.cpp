@@ -4,6 +4,7 @@
 #include "../../../../../External/DirectXTextureLoader/WICTextureLoader.h"
 #include "../../../Renderer/RendererCommon.hpp"
 #include "../../../Buffer/TextBufferCommon.hpp"
+#include "../../../Buffer/RenderTextureBufferCommon.hpp"
 
 namespace Engine5
 {
@@ -72,21 +73,32 @@ namespace Engine5
 
     bool TextureCommon::Initialize(TextBufferCommon* text_buffer)
     {
-        m_texture = text_buffer->GetTextResource();
+        m_texture  = text_buffer->GetTextResource();
+        m_b_buffer = true;
+        return true;
+    }
+
+    bool TextureCommon::Initialize(RenderTextureBufferCommon* render_texture_buffer)
+    {
+        m_texture  = render_texture_buffer->GetTextureResource();
+        m_b_buffer = true;
         return true;
     }
 
     bool TextureCommon::Shutdown()
     {
-        if (m_texture != nullptr)
+        if (m_b_buffer == false)
         {
-            m_texture->Release();
-            m_texture = nullptr;
-        }
-        if (m_texture_resource != nullptr)
-        {
-            m_texture_resource->Release();
-            m_texture_resource = nullptr;
+            if (m_texture != nullptr)
+            {
+                m_texture->Release();
+                m_texture = nullptr;
+            }
+            if (m_texture_resource != nullptr)
+            {
+                m_texture_resource->Release();
+                m_texture_resource = nullptr;
+            }
         }
         return true;
     }

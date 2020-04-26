@@ -208,6 +208,11 @@ namespace Engine5
         m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
     }
 
+    ID3D11ShaderResourceView* RenderTextureBufferDX11::GetTextureResource() const
+    {
+        return m_shader_resource_view;
+    }
+
     RenderTextureBufferCommon::RenderTextureBufferCommon()
     {
     }

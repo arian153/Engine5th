@@ -19,6 +19,8 @@ namespace Engine5
         void SetRenderTarget() const;
         void ClearRenderTarget(const Color& color) const;
 
+        ID3D11ShaderResourceView* GetTextureResource() const;
+
     protected:
         ID3D11Texture2D*          m_render_target_texture = nullptr;
         ID3D11RenderTargetView*   m_render_target_view    = nullptr;
