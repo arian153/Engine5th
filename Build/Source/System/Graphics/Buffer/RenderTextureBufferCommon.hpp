@@ -14,11 +14,9 @@ namespace Engine5
         ~RenderTextureBufferCommon();
 
         bool Initialize(RendererCommon* renderer, size_t width, size_t height);
-        bool Initialize(RendererCommon* renderer, Real left, Real right, Real top, Real bottom);
         void Render() const;
         void Shutdown();
-        bool OnResize(size_t width, size_t height);
-        bool OnResize(Real left, Real right, Real top, Real bottom);
+        bool OnResize(size_t width, size_t height) ;
         U32  GetIndexCount() const;
     private:
     };
