@@ -2,6 +2,8 @@
 
 namespace Engine5
 {
+    class ShaderManagerCommon;
+    class Camera;
     class MatrixManager;
     class RenderTextureBufferCommon;
     class Color;
@@ -22,16 +24,15 @@ namespace Engine5
         RenderTextureGenerator();
         ~RenderTextureGenerator();
 
-        void Initialize(RendererCommon* renderer, MatrixManager* matrix_manager);
+        void Initialize(RendererCommon* renderer, MatrixManager* matrix_manager, ShaderManagerCommon* shader_manager);
         void Shutdown();
 
         //render elements 
         void Render(Scene* scene);
-        void Render(Mesh* mesh);
-        void Render(Light* light);
-        void Render(Sprite* sprite);
-        void Render(ParticleEmitter* particle_emitter);
-        void Render(TextSprite* text_sprite);
+        void Render(Mesh* mesh, Camera* camera, Light* light) const;
+        void Render(Sprite* sprite, Camera* camera);
+        void Render(ParticleEmitter* particle_emitter, Camera* camera);
+        void Render(TextSprite* text_sprite, Camera* camera) const;
 
         void BeginRenderToTexture(const Color& color) const;
         void EndRenderToTexture() const;
@@ -49,6 +50,7 @@ namespace Engine5
         TextureCommon*             m_texture        = nullptr;
         RendererCommon*            m_renderer       = nullptr;
         MatrixManager*             m_matrix_manager = nullptr;
+        ShaderManagerCommon*       m_shader_manager = nullptr;
         size_t                     m_width          = 0;
         size_t                     m_height         = 0;
         bool                       m_b_sync_screen  = false;

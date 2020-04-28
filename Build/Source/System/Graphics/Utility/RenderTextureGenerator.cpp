@@ -3,6 +3,10 @@
 #include "MatrixManager.hpp"
 #include "../Texture/TextureCommon.hpp"
 #include "../Renderer/RendererCommon.hpp"
+#include "../Element/Scene.hpp"
+#include "../DataType/MatrixData.hpp"
+#include "../Shader/ShaderManagerCommon.hpp"
+#include "../Element/TextSprite.hpp"
 
 namespace Engine5
 {
@@ -14,10 +18,11 @@ namespace Engine5
     {
     }
 
-    void RenderTextureGenerator::Initialize(RendererCommon* renderer, MatrixManager* matrix_manager)
+    void RenderTextureGenerator::Initialize(RendererCommon* renderer, MatrixManager* matrix_manager, ShaderManagerCommon* shader_manager)
     {
         m_renderer       = renderer;
         m_matrix_manager = matrix_manager;
+        m_shader_manager = shader_manager;
         m_width          = m_matrix_manager->GetScreenWidth();
         m_height         = m_matrix_manager->GetScreenHeight();
         m_render_texture = new RenderTextureBufferCommon();
@@ -42,26 +47,65 @@ namespace Engine5
 
     void RenderTextureGenerator::Render(Scene* scene)
     {
+        scene->Update(0.0f);
+        scene->Render();
     }
 
-    void RenderTextureGenerator::Render(Mesh* mesh)
+    void RenderTextureGenerator::Render(Mesh* mesh, Camera* camera, Light* light) const
     {
+        MatrixData mvp_data(
+                            mesh->GetModelMatrix(),
+                            camera->GetViewMatrix(),
+                            m_matrix_manager->GetPerspectiveMatrix()
+                           );
+        auto type = mesh->GetShaderType();
+        if (type == eShaderType::Color)
+        {
+            mesh->RenderBuffer();
+            m_shader_manager->RenderColorShader(mesh->GetIndexCount(), mvp_data);
+        }
+        else if (type == eShaderType::Texture)
+        {
+            mesh->RenderBuffer();
+            m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
+        }
+        else if (type == eShaderType::ForwardDirectionalLight)
+        {
+            mesh->RenderBuffer();
+            m_shader_manager->RenderForwardDirectionalLightShader(
+                                                                  mesh->GetIndexCount(),
+                                                                  mvp_data,
+                                                                  mesh->GetTexture(),
+                                                                  camera,
+                                                                  mesh->GetColor(),
+                                                                  (DirectionalLight*)light
+                                                                 );
+        }
     }
 
-    void RenderTextureGenerator::Render(Light* light)
+    void RenderTextureGenerator::Render(Sprite* sprite, Camera* camera)
     {
+        //todo : Sprite has not been implemented yet
     }
 
-    void RenderTextureGenerator::Render(Sprite* sprite)
+    void RenderTextureGenerator::Render(ParticleEmitter* particle_emitter, Camera* camera)
     {
+        //todo : ParticleEmitter has not been implemented yet
     }
 
-    void RenderTextureGenerator::Render(ParticleEmitter* particle_emitter)
+    void RenderTextureGenerator::Render(TextSprite* text_sprite, Camera* camera) const
     {
-    }
-
-    void RenderTextureGenerator::Render(TextSprite* text_sprite)
-    {
+        MatrixData mvp_data(
+                            text_sprite->GetModelMatrix(),
+                            camera->GetViewMatrix(),
+                            m_matrix_manager->GetPerspectiveMatrix()
+                           );
+        text_sprite->Render();
+        m_shader_manager->RenderTextureShader(
+                                              text_sprite->GetIndexCount(),
+                                              mvp_data,
+                                              text_sprite->GetTexture(),
+                                              text_sprite->GetColor());
     }
 
     void RenderTextureGenerator::BeginRenderToTexture(const Color& color) const
