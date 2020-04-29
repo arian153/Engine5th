@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class RenderTextureGenerator;
     class PrimitiveRenderer;
     class ResourceManager;
     class OSCommon;
@@ -38,11 +39,12 @@ namespace Engine5
         void   RemoveScene(Scene* scene);
 
     private:
-        OSCommon*        m_operating_system = nullptr;
-        RendererCommon*  m_renderer         = nullptr;
-        ShaderManagerCommon*   m_shader_manager   = nullptr;
-        MatrixManager*   m_matrix_manager   = nullptr;
-        ResourceManager* m_resource_manager = nullptr;
+        OSCommon*               m_operating_system         = nullptr;
+        RendererCommon*         m_renderer                 = nullptr;
+        ShaderManagerCommon*    m_shader_manager           = nullptr;
+        MatrixManager*          m_matrix_manager           = nullptr;
+        ResourceManager*        m_resource_manager         = nullptr;
+        RenderTextureGenerator* m_render_texture_generator = nullptr;
 
         std::vector<Scene*> m_scenes;
         bool                m_b_vsync          = true;

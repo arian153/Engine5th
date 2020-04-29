@@ -4,6 +4,7 @@
 #include "../Core/OS-API/OSCommon.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
 #include "../../Manager/Resource/ResourceManager.hpp"
+#include "Utility/RenderTextureGenerator.hpp"
 
 namespace Engine5
 {
@@ -32,6 +33,8 @@ namespace Engine5
         //matrix generator
         m_matrix_manager = new MatrixManager();
         m_matrix_manager->SetClientRect(rendering_width, rendering_height);
+        m_render_texture_generator = new RenderTextureGenerator();
+        m_render_texture_generator->Initialize(m_renderer, m_matrix_manager, m_shader_manager);
         if (m_operating_system->WindowMode() == eWindowMode::Fullscreen)
         {
             m_operating_system->SetWindowMode(eWindowMode::Fullscreen);
@@ -47,6 +50,12 @@ namespace Engine5
             scene = nullptr;
         }
         m_scenes.clear();
+        if (m_render_texture_generator != nullptr)
+        {
+            m_render_texture_generator->Shutdown();
+            delete m_render_texture_generator;
+            m_render_texture_generator = nullptr;
+        }
         if (m_matrix_manager != nullptr)
         {
             delete m_matrix_manager;
@@ -83,7 +92,6 @@ namespace Engine5
             m_renderer->OnResize(width, height, m_operating_system->IsFullscreen());
             m_renderer->SetAlphaBlending(true);
             m_matrix_manager->SetClientRect(static_cast<size_t>(width), static_cast<size_t>(height));
-
             for (auto& scene : m_scenes)
             {
                 scene->OnResize();
