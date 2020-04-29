@@ -3,5 +3,12 @@
 
 namespace Engine5
 {
+    class TextRenderer
+    {
+    public:
+        TextRenderer();
+        ~TextRenderer();
 
+    private:
+    };
 }
