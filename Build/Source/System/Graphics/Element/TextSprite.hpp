@@ -8,7 +8,7 @@ namespace Engine5
 {
     class Transform;
     class Color;
-    class TextBufferCommon;
+    class TextTextureBufferCommon;
 
     class TextSprite
     {
@@ -35,7 +35,7 @@ namespace Engine5
         friend class TextSpriteComponent;
 
     private:
-        TextBufferCommon*    m_text      = nullptr;
+        TextTextureBufferCommon*    m_text      = nullptr;
         TextureCommon*       m_texture   = nullptr;
         Transform*           m_transform = nullptr;
         TextSpriteComponent* m_component = nullptr;

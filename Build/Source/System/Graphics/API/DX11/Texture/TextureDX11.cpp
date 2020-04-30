@@ -3,7 +3,7 @@
 #include "../../../../../External/DirectXTextureLoader/DDSTextureLoader.h"
 #include "../../../../../External/DirectXTextureLoader/WICTextureLoader.h"
 #include "../../../Renderer/RendererCommon.hpp"
-#include "../../../Buffer/TextBufferCommon.hpp"
+#include "../../../Buffer/TextTextureBufferCommon.hpp"
 #include "../../../Buffer/RenderTextureBufferCommon.hpp"
 
 namespace Engine5
@@ -71,7 +71,7 @@ namespace Engine5
         return true;
     }
 
-    bool TextureCommon::Initialize(TextBufferCommon* text_buffer)
+    bool TextureCommon::Initialize(TextTextureBufferCommon* text_buffer)
     {
         m_texture  = text_buffer->GetTextResource();
         m_b_buffer = true;

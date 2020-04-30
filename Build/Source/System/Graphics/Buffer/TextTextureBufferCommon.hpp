@@ -1,17 +1,17 @@
 #pragma once
 #include "../API/GraphicsAPI.hpp"
-#include IncludeTextBufferAPI
+#include IncludeTextTextureBufferAPI
 
 namespace Engine5
 {
     class RendererCommon;
     class Color;
 
-    class TextBufferCommon : public TextBufferAPI
+    class TextTextureBufferCommon : public TextTextureBufferAPI
     {
     public:
-        TextBufferCommon();
-        ~TextBufferCommon();
+        TextTextureBufferCommon();
+        ~TextTextureBufferCommon();
 
         bool Initialize(RendererCommon* renderer);
         bool Update();

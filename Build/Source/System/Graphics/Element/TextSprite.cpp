@@ -1,6 +1,6 @@
 // ReSharper disable CppExpressionWithoutSideEffects
 #include "TextSprite.hpp"
-#include "../Buffer/TextBufferCommon.hpp"
+#include "../Buffer/TextTextureBufferCommon.hpp"
 #include "../../Math/Structure/Transform.hpp"
 #include "../../../Manager/Component/EngineComponent/TextSpriteComponent.hpp"
 
@@ -23,7 +23,7 @@ namespace Engine5
 
         if (m_text == nullptr)
         {
-            m_text = new TextBufferCommon();
+            m_text = new TextTextureBufferCommon();
             m_text->Initialize(renderer);
             m_texture->Initialize(m_text);
         }

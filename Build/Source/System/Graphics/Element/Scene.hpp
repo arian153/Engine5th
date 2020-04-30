@@ -8,7 +8,7 @@
 namespace Engine5
 {
     class TextSprite;
-    class TextBufferCommon;
+    class TextTextureBufferCommon;
     class RenderTextureBufferCommon;
     class DeferredBufferCommon;
     class ColliderSet;

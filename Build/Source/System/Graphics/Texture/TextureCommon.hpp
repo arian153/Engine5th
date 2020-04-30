@@ -6,7 +6,7 @@
 namespace Engine5
 {
     class RenderTextureBufferCommon;
-    class TextBufferCommon;
+    class TextTextureBufferCommon;
     class RendererCommon;
 
     class TextureCommon : public TextureAPI
@@ -16,7 +16,7 @@ namespace Engine5
         ~TextureCommon();
 
         bool Initialize(RendererCommon* renderer, const std::wstring& file_path, const std::wstring& file_type);
-        bool Initialize(TextBufferCommon* text_buffer);
+        bool Initialize(TextTextureBufferCommon* text_buffer);
         bool Initialize(RenderTextureBufferCommon* render_texture_buffer);
         bool Shutdown();
     private:

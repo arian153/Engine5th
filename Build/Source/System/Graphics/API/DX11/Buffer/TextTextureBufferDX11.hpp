@@ -10,11 +10,11 @@ namespace Engine5
 {
     class TextureCommon;
 
-    class TextBufferDX11
+    class TextTextureBufferDX11
     {
     public:
-        TextBufferDX11();
-        ~TextBufferDX11();
+        TextTextureBufferDX11();
+        ~TextTextureBufferDX11();
 
         ID3D11ShaderResourceView* GetTextResource() const;
 

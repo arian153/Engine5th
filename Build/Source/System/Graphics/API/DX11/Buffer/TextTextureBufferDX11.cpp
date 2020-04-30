@@ -1,28 +1,28 @@
 #pragma warning( disable : 6387)
 
-#include "TextBufferDX11.hpp"
+#include "TextTextureBufferDX11.hpp"
 #include "../../../Renderer/RendererCommon.hpp"
-#include "../../../Buffer/TextBufferCommon.hpp"
+#include "../../../Buffer/TextTextureBufferCommon.hpp"
 #include "../../../Vertex/TextureVertexCommon.hpp"
 #include "../../../../Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
-    TextBufferDX11::TextBufferDX11()
+    TextTextureBufferDX11::TextTextureBufferDX11()
         : m_render_target_size()
     {
     }
 
-    TextBufferDX11::~TextBufferDX11()
+    TextTextureBufferDX11::~TextTextureBufferDX11()
     {
     }
 
-    ID3D11ShaderResourceView* TextBufferDX11::GetTextResource() const
+    ID3D11ShaderResourceView* TextTextureBufferDX11::GetTextResource() const
     {
         return m_font_resource;
     }
 
-    bool TextBufferDX11::SetUpBrush()
+    bool TextTextureBufferDX11::SetUpBrush()
     {
         HRESULT result = m_d2d_device_context->CreateSolidColorBrush(D2D1::ColorF(1.0f, 1.0f, 1.0f, 1.0f), &m_brush);
         if (FAILED(result))
@@ -32,7 +32,7 @@ namespace Engine5
         return true;
     }
 
-    bool TextBufferDX11::SetUpSpriteText()
+    bool TextTextureBufferDX11::SetUpSpriteText()
     {
         m_vertex_count                = 4;
         m_index_count                 = 12;
@@ -105,7 +105,7 @@ namespace Engine5
         return true;
     }
 
-    bool TextBufferDX11::SetUpTextFormats()
+    bool TextTextureBufferDX11::SetUpTextFormats()
     {
         if (m_text_format != nullptr)
         {
@@ -139,7 +139,7 @@ namespace Engine5
         return true;
     }
 
-    bool TextBufferDX11::SetUpTextureSize()
+    bool TextTextureBufferDX11::SetUpTextureSize()
     {
         U32         length;
         std::size_t found  = m_text->find_first_of(L"\n");
@@ -157,7 +157,7 @@ namespace Engine5
         return true;
     }
 
-    bool TextBufferDX11::SetUpVertexBuffer() const
+    bool TextTextureBufferDX11::SetUpVertexBuffer() const
     {
         Real width_scale  = static_cast<Real>(m_texture_width) / TEX_RATIO;
         Real height_scale = static_cast<Real>(m_texture_height) / TEX_RATIO;
@@ -192,7 +192,7 @@ namespace Engine5
         return true;
     }
 
-    bool TextBufferDX11::SetUpFontTexture()
+    bool TextTextureBufferDX11::SetUpFontTexture()
     {
         if (m_font_texture != nullptr)
         {
@@ -244,7 +244,7 @@ namespace Engine5
         return true;
     }
 
-    bool TextBufferDX11::SetUpTextLayout()
+    bool TextTextureBufferDX11::SetUpTextLayout()
     {
         if (m_text_layout != nullptr)
         {
@@ -266,15 +266,15 @@ namespace Engine5
         return true;
     }
 
-    TextBufferCommon::TextBufferCommon()
+    TextTextureBufferCommon::TextTextureBufferCommon()
     {
     }
 
-    TextBufferCommon::~TextBufferCommon()
+    TextTextureBufferCommon::~TextTextureBufferCommon()
     {
     }
 
-    bool TextBufferCommon::Initialize(RendererCommon* renderer)
+    bool TextTextureBufferCommon::Initialize(RendererCommon* renderer)
     {
         m_d3d_device         = renderer->GetDevice();
         m_d3d_device_context = renderer->GetDeviceContext();
@@ -300,7 +300,7 @@ namespace Engine5
         return true;
     }
 
-    bool TextBufferCommon::Update()
+    bool TextTextureBufferCommon::Update()
     {
         bool result = SetUpTextFormats();
         if (result == false)
@@ -330,7 +330,7 @@ namespace Engine5
         return true;
     }
 
-    void TextBufferCommon::Render()
+    void TextTextureBufferCommon::Render()
     {
         m_d2d_device_context->SetTarget(m_texture_target);
         m_render_target_size = m_d2d_device_context->GetSize();
@@ -348,7 +348,7 @@ namespace Engine5
         m_d3d_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     }
 
-    void TextBufferCommon::Shutdown()
+    void TextTextureBufferCommon::Shutdown()
     {
         if (m_brush != nullptr)
         {
@@ -409,39 +409,39 @@ namespace Engine5
         }
     }
 
-    void TextBufferCommon::SetText(const std::string& string) const
+    void TextTextureBufferCommon::SetText(const std::string& string) const
     {
         m_text->reserve(string.size());
         m_text->assign(StringToWString(string));
     }
 
-    void TextBufferCommon::SetText(const std::wstring& string) const
+    void TextTextureBufferCommon::SetText(const std::wstring& string) const
     {
         m_text->reserve(string.size());
         m_text->assign(string);
     }
 
-    void TextBufferCommon::SetFont(const std::wstring& font) const
+    void TextTextureBufferCommon::SetFont(const std::wstring& font) const
     {
         m_font->assign(font);
     }
 
-    void TextBufferCommon::SetColor(Color color)
+    void TextTextureBufferCommon::SetColor(Color color)
     {
         m_color = color;
     }
 
-    U32 TextBufferCommon::GetIndexCount() const
+    U32 TextTextureBufferCommon::GetIndexCount() const
     {
         return m_index_count;
     }
 
-    U32 TextBufferCommon::GetVertexCount() const
+    U32 TextTextureBufferCommon::GetVertexCount() const
     {
         return m_vertex_count;
     }
 
-    Color TextBufferCommon::GetColor() const
+    Color TextTextureBufferCommon::GetColor() const
     {
         return m_color;
     }
