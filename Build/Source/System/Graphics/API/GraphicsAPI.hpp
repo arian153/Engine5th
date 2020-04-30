@@ -8,6 +8,7 @@
 #define DeferredBufferAPI DeferredBufferDX11
 #define RenderTextureBufferAPI RenderTextureBufferDX11
 #define TextTextureBufferAPI TextTextureBufferDX11
+#define TextObjectBufferAPI TextObjectBufferDX11
 
 //others
 #define TextureAPI TextureDX11
@@ -31,6 +32,7 @@
 #define IncludeDeferredBufferAPI "../API/DX11/Buffer/DeferredBufferDX11.hpp"
 #define IncludeRenderTextureBufferAPI "../API/DX11/Buffer/RenderTextureBufferDX11.hpp"
 #define IncludeTextTextureBufferAPI "../API/DX11/Buffer/TextTextureBufferDX11.hpp"
+#define IncludeTextObjectBufferAPI "../API/DX11/Buffer/TextObjectBufferDX11.hpp"
 #define IncludeTextureAPI "../API/DX11/Texture/TextureDX11.hpp"
 #define IncludeColorVertexAPI "../API/DX11/Vertex/ColorVertexDX11.hpp"
 #define IncludeNormalVertexAPI "../API/DX11/Vertex/NormalVertexDX11.hpp"
