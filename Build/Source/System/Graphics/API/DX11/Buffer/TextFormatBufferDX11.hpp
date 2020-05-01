@@ -2,6 +2,7 @@
 #include <dwrite_2.h>
 #include <d2d1_2.h>
 #include <string>
+#include "../../../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -11,7 +12,7 @@ namespace Engine5
         TextFormatBufferDX11();
         ~TextFormatBufferDX11();
 
-        bool BuildTextFormats(const std::wstring& font);
+        bool BuildTextFormats(const std::wstring& font, Real font_size);
 
         IDWriteTextFormat* GetTextFormat() const;
 

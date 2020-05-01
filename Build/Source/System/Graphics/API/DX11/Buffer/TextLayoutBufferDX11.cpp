@@ -13,15 +13,15 @@ namespace Engine5
     {
     }
 
-    bool TextLayoutBufferDX11::SetTextLayout(const std::wstring& text, const Vector2& size)
+    bool TextLayoutBufferDX11::SetTextLayout(const std::wstring& text, U32 width, U32 height)
     {
         HRESULT result = m_write_factory->CreateTextLayout(
-                                                           text.c_str(),      // The string to be laid out and formatted.
-                                                           (UINT32)text.length(),  // The length of the string.
-                                                           m_text_format,  // The text format to apply to the string (contains font information, etc).
-                                                           size.x,         // The width of the layout box.
-                                                           size.y,        // The height of the layout box.
-                                                           &m_text_layout  // The IDWriteTextLayout interface pointer.
+                                                           text.c_str(),
+                                                           (U32)text.length(),
+                                                           m_text_format,
+                                                           (Real)width,
+                                                           (Real)height,
+                                                           &m_text_layout
                                                           );
         if (FAILED(result))
         {

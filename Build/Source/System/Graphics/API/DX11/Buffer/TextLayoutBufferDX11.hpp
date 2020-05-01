@@ -15,7 +15,7 @@ namespace Engine5
         TextLayoutBufferDX11();
         ~TextLayoutBufferDX11();
 
-        bool SetTextLayout(const std::wstring& text, const Vector2& size);
+        bool SetTextLayout(const std::wstring& text, U32 width, U32 height);
         void SetTextFormat(TextFormatBufferCommon* text_format);
 
     protected:

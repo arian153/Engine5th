@@ -32,6 +32,7 @@ namespace Engine5
         void SetBackBufferRenderTarget() const;
         void SetRasterStateWireFrame(bool flag) const;
         void ResetViewport() const;
+        void SetUpDWRenderTarget();
 
     protected:
         void SetUpAdapterDescription(int client_width, int client_height);
@@ -46,7 +47,6 @@ namespace Engine5
         void SetUpMultiSamplingLevel();
         void SetUpBlendState();
         void SetUpDWDevice();
-        void SetUpDWRenderTarget();
 
     protected:
         IDXGISwapChain*          m_swap_chain                    = nullptr;

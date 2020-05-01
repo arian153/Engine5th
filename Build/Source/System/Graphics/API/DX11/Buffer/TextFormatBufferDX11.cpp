@@ -12,7 +12,7 @@ namespace Engine5
     {
     }
 
-    bool TextFormatBufferDX11::BuildTextFormats(const std::wstring& font)
+    bool TextFormatBufferDX11::BuildTextFormats(const std::wstring& font, Real font_size)
     {
         HRESULT result = m_write_factory->CreateTextFormat(
                                                            font.c_str(),
@@ -20,7 +20,7 @@ namespace Engine5
                                                            DWRITE_FONT_WEIGHT_NORMAL,
                                                            DWRITE_FONT_STYLE_NORMAL,
                                                            DWRITE_FONT_STRETCH_NORMAL,
-                                                           14.0f,
+                                                           font_size,
                                                            L"en-GB",
                                                            &m_text_format
                                                           );
