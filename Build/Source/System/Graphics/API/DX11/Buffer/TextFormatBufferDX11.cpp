@@ -1,20 +1,21 @@
-#include "TextObjectBufferDX11.hpp"
-#include "../../../Buffer/TextObjectBufferCommon.hpp"
+#include "TextFormatBufferDX11.hpp"
+#include "../../../Buffer/TextFormatBufferCommon.hpp"
+#include "../../../Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {
-    TextObjectBufferDX11::TextObjectBufferDX11()
+    TextFormatBufferDX11::TextFormatBufferDX11()
     {
     }
 
-    TextObjectBufferDX11::~TextObjectBufferDX11()
+    TextFormatBufferDX11::~TextFormatBufferDX11()
     {
     }
 
-    bool TextObjectBufferDX11::SetUpTextFormats()
+    bool TextFormatBufferDX11::BuildTextFormats(const std::wstring& font)
     {
         HRESULT result = m_write_factory->CreateTextFormat(
-                                                           L"courier new",
+                                                           font.c_str(),
                                                            nullptr,
                                                            DWRITE_FONT_WEIGHT_NORMAL,
                                                            DWRITE_FONT_STYLE_NORMAL,
@@ -40,30 +41,30 @@ namespace Engine5
         return true;
     }
 
-    bool TextObjectBufferDX11::SetUpTextLayout()
+    IDWriteTextFormat* TextFormatBufferDX11::GetTextFormat() const
     {
+        return m_text_format;
+    }
 
-        HRESULT result = m_write_factory->CreateTextLayout(
-            text.c_str(),      // The string to be laid out and formatted.
-            (UINT32)text.length(),  // The length of the string.
-            m_text_format,  // The text format to apply to the string (contains font information, etc).
-            (Real)width,         // The width of the layout box.
-            (Real)height,        // The height of the layout box.
-            &m_text_layout  // The IDWriteTextLayout interface pointer.
-        );
+    TextFormatBufferCommon::TextFormatBufferCommon()
+    {
+    }
 
-        if (FAILED(result))
+    TextFormatBufferCommon::~TextFormatBufferCommon()
+    {
+    }
+
+    void TextFormatBufferCommon::Initialize(RendererCommon* renderer)
+    {
+        m_write_factory = renderer->GetDWWriteFactory();
+    }
+
+    void TextFormatBufferCommon::Shutdown()
+    {
+        if (m_text_format != nullptr)
         {
-            return false;
+            m_text_format->Release();
+            m_text_format = nullptr;
         }
-        return true;
-    }
-
-    TextObjectBufferCommon::TextObjectBufferCommon()
-    {
-    }
-
-    TextObjectBufferCommon::~TextObjectBufferCommon()
-    {
     }
 }
