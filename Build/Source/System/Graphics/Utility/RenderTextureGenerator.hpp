@@ -39,6 +39,7 @@ namespace Engine5
         void SetTextureSize(size_t width, size_t height);
         void SetTextureScreenSize();
         void OnResize();
+        void DrawRenderToTextureBuffer(const Color& color) const;
 
         TextureCommon* GetTexture() const;
 

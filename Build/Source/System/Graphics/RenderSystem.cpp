@@ -5,6 +5,7 @@
 #include "Utility/PrimitiveRenderer.hpp"
 #include "../../Manager/Resource/ResourceManager.hpp"
 #include "Utility/RenderTextureGenerator.hpp"
+#include "Utility/TextRenderer.hpp"
 
 namespace Engine5
 {
@@ -33,8 +34,13 @@ namespace Engine5
         //matrix generator
         m_matrix_manager = new MatrixManager();
         m_matrix_manager->SetClientRect(rendering_width, rendering_height);
+        //render to texture generator
         m_render_texture_generator = new RenderTextureGenerator();
         m_render_texture_generator->Initialize(m_renderer, m_matrix_manager, m_shader_manager);
+        //text renderer
+        m_text_renderer = new TextRenderer();
+        m_text_renderer->Initialize(m_renderer, m_matrix_manager);
+
         if (m_operating_system->WindowMode() == eWindowMode::Fullscreen)
         {
             m_operating_system->SetWindowMode(eWindowMode::Fullscreen);
@@ -50,6 +56,13 @@ namespace Engine5
             scene = nullptr;
         }
         m_scenes.clear();
+        if (m_text_renderer != nullptr)
+        {
+            m_text_renderer->Shutdown();
+            delete m_text_renderer;
+            m_text_renderer = nullptr;
+        }
+
         if (m_render_texture_generator != nullptr)
         {
             m_render_texture_generator->Shutdown();
@@ -78,6 +91,7 @@ namespace Engine5
     void RenderSystem::BeginUpdate() const
     {
         m_renderer->BeginScene(m_background_color);
+        m_text_renderer->Render();
     }
 
     void RenderSystem::EndUpdate() const

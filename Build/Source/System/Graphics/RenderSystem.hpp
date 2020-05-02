@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class TextRenderer;
     class RenderTextureGenerator;
     class PrimitiveRenderer;
     class ResourceManager;
@@ -45,6 +46,7 @@ namespace Engine5
         MatrixManager*          m_matrix_manager           = nullptr;
         ResourceManager*        m_resource_manager         = nullptr;
         RenderTextureGenerator* m_render_texture_generator = nullptr;
+        TextRenderer*           m_text_renderer            = nullptr;
 
         std::vector<Scene*> m_scenes;
         bool                m_b_vsync          = true;

@@ -15,11 +15,11 @@ namespace Engine5
 
     void TextRenderer::Initialize(RendererCommon* renderer, MatrixManager* matrix_manager)
     {
-        m_renderer           = renderer;
-        m_matrix_manager     = matrix_manager;
-        m_text_format = new TextFormatBufferCommon();
+        m_renderer       = renderer;
+        m_matrix_manager = matrix_manager;
+        m_text_format    = new TextFormatBufferCommon();
         m_text_format->Initialize(renderer);
-        m_text_format->BuildTextFormats(L"courier new", 14.0f);
+        m_text_format->BuildTextFormats(L"courier new", 36.0f);
     }
 
     void TextRenderer::Render()
@@ -57,11 +57,12 @@ namespace Engine5
 
     void TextRenderer::Print(const Vector2& position, const Color& color, const std::wstring& text)
     {
-        auto text_layout = m_text_layouts.emplace_back();
-        text_layout.Initialize(m_renderer);
-        text_layout.SetTextFormat(m_text_format);
-        text_layout.SetPosition(position);
-        text_layout.SetColor(color);
-        text_layout.SetTextLayout(text, m_matrix_manager->GetScreenWidth(), m_matrix_manager->GetScreenHeight());
+        TextLayoutBufferCommon text_buffer;
+        text_buffer.Initialize(m_renderer);
+        text_buffer.SetTextFormat(m_text_format);
+        text_buffer.SetPosition(position);
+        text_buffer.SetColor(color);
+        text_buffer.SetTextLayout(text, m_matrix_manager->GetScreenWidth(), m_matrix_manager->GetScreenHeight());
+        m_text_layouts.push_back(text_buffer);
     }
 }

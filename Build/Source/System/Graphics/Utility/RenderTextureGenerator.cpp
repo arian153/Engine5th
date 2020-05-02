@@ -117,7 +117,6 @@ namespace Engine5
     void RenderTextureGenerator::EndRenderToTexture() const
     {
         m_renderer->SetBackBufferRenderTarget();
-        m_render_texture->Render();
     }
 
     void RenderTextureGenerator::SetTextureSize(size_t width, size_t height)
@@ -143,6 +142,19 @@ namespace Engine5
             m_height = m_matrix_manager->GetScreenHeight();
             ResizeTexture();
         }
+    }
+
+    void RenderTextureGenerator::DrawRenderToTextureBuffer(const Color& color) const
+    {
+        MatrixData mvp_data;
+        mvp_data.projection = m_matrix_manager->GetOrthoGraphicMatrix();
+        m_render_texture->Render();
+        m_shader_manager->RenderTextureShader(
+                                              m_render_texture->GetIndexCount(),
+                                              mvp_data,
+                                              GetTexture(),
+                                              color
+                                             );
     }
 
     TextureCommon* RenderTextureGenerator::GetTexture() const
