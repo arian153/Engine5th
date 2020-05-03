@@ -37,10 +37,10 @@ namespace Engine5
         //render to texture generator
         m_render_texture_generator = new RenderTextureGenerator();
         m_render_texture_generator->Initialize(m_renderer, m_matrix_manager, m_shader_manager);
+        m_render_texture_generator->SetTextureScreenSize();
         //text renderer
         m_text_renderer = new TextRenderer();
         m_text_renderer->Initialize(m_renderer, m_matrix_manager);
-
         if (m_operating_system->WindowMode() == eWindowMode::Fullscreen)
         {
             m_operating_system->SetWindowMode(eWindowMode::Fullscreen);
@@ -62,7 +62,6 @@ namespace Engine5
             delete m_text_renderer;
             m_text_renderer = nullptr;
         }
-
         if (m_render_texture_generator != nullptr)
         {
             m_render_texture_generator->Shutdown();
@@ -110,6 +109,7 @@ namespace Engine5
             {
                 scene->OnResize();
             }
+            m_render_texture_generator->OnResize();
         }
     }
 

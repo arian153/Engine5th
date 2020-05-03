@@ -226,6 +226,10 @@ namespace Engine5
         m_device             = renderer->GetDevice();
         m_device_context     = renderer->GetDeviceContext();
         m_depth_stencil_view = renderer->GetDepthStencilView();
+        if (BuildTextureBuffer(width, height) == false)
+        {
+            return false;
+        }
         return BuildVertexBuffer(width, height);
     }
 
