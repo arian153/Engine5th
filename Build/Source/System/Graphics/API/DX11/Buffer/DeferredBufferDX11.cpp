@@ -377,6 +377,10 @@ namespace Engine5
 
     void DeferredBufferCommon::SetRenderTargets() const
     {
+        if (m_render_target_texture_array[0] == nullptr)
+        {
+            return;
+        }
         //release texture
         ID3D11ShaderResourceView* null[ BUFFER_COUNT ] = {nullptr};
         m_device_context->PSSetShaderResources(0, BUFFER_COUNT, null);
@@ -388,6 +392,10 @@ namespace Engine5
 
     void DeferredBufferCommon::ClearRenderTargets(const Color& color)
     {
+        if (m_render_target_texture_array[0] == nullptr)
+        {
+            return;
+        }
         Real color_array[ 4 ];
         // Setup the color to clear the buffer to.
         color_array[0] = color.r;

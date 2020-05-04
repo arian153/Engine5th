@@ -194,18 +194,24 @@ namespace Engine5
 
     void RenderTextureBufferDX11::SetRenderTarget() const
     {
-        // Bind the render target view and depth stencil buffer to the output render pipeline.
-        m_device_context->OMSetRenderTargets(1, &m_render_target_view, m_depth_stencil_view);
+        if (m_render_target_view != nullptr)
+        {
+            // Bind the render target view and depth stencil buffer to the output render pipeline.
+            m_device_context->OMSetRenderTargets(1, &m_render_target_view, m_depth_stencil_view);
+        }
     }
 
     void RenderTextureBufferDX11::ClearRenderTarget(const Color& color) const
     {
-        // Setup the color to clear the buffer to.
-        Real color_array[ 4 ] = {color.r, color.g, color.b, color.a};
-        // Clear the back buffer.
-        m_device_context->ClearRenderTargetView(m_render_target_view, color_array);
-        // Clear the depth buffer.
-        m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+        if (m_render_target_view != nullptr)
+        {
+            // Setup the color to clear the buffer to.
+            Real color_array[ 4 ] = {color.r, color.g, color.b, color.a};
+            // Clear the back buffer.
+            m_device_context->ClearRenderTargetView(m_render_target_view, color_array);
+            // Clear the depth buffer.
+            m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+        }
     }
 
     ID3D11ShaderResourceView* RenderTextureBufferDX11::GetTextureResource() const

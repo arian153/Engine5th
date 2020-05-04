@@ -65,6 +65,7 @@ namespace Engine5
 
         void ChangeShaderType(Mesh* mesh);
         void InitializeTextSprite(TextSprite* text_sprite) const;
+
     private:
         RendererCommon*       m_renderer           = nullptr;
         ShaderManagerCommon*  m_shader_manager     = nullptr;
