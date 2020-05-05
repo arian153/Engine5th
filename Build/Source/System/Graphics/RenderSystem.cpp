@@ -91,6 +91,11 @@ namespace Engine5
     {
         m_renderer->BeginScene(m_background_color);
         m_text_renderer->Render();
+
+        /*m_render_texture_generator->BeginRenderToTexture(m_background_color);
+        m_render_texture_generator->EndRenderToTexture();
+
+        m_render_texture_generator->DrawRenderToTextureBuffer(ColorDef::Pure::White);*/
     }
 
     void RenderSystem::EndUpdate() const

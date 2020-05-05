@@ -197,7 +197,7 @@ namespace Engine5
         if (m_render_target_view != nullptr)
         {
             // Bind the render target view and depth stencil buffer to the output render pipeline.
-            m_device_context->OMSetRenderTargets(1, &m_render_target_view, m_depth_stencil_view);
+            m_device_context->OMSetRenderTargets(1, &m_render_target_view, m_renderer->GetDepthStencilView());
         }
     }
 
@@ -210,7 +210,7 @@ namespace Engine5
             // Clear the back buffer.
             m_device_context->ClearRenderTargetView(m_render_target_view, color_array);
             // Clear the depth buffer.
-            m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+            m_device_context->ClearDepthStencilView(m_renderer->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
         }
     }
 
@@ -232,6 +232,7 @@ namespace Engine5
         m_device             = renderer->GetDevice();
         m_device_context     = renderer->GetDeviceContext();
         m_depth_stencil_view = renderer->GetDepthStencilView();
+        m_renderer           = renderer;
         if (BuildTextureBuffer(width, height) == false)
         {
             return false;
