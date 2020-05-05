@@ -702,7 +702,10 @@ namespace Engine5
         color_arr[2] = color.b;
         color_arr[3] = color.a;
         // Clear the back buffer.
-        m_device_context->ClearRenderTargetView(m_render_target_view, color_arr);
+        if (m_render_target_view != nullptr)
+        {
+            m_device_context->ClearRenderTargetView(m_render_target_view, color_arr);
+        }
         // Clear the depth buffer.
         if (m_depth_stencil_view != nullptr)
         {
@@ -724,7 +727,7 @@ namespace Engine5
             // Present as fast as possible.
             m_swap_chain->Present(0, 0);
         }
-       // m_device_context->ClearState();
+        // m_device_context->ClearState();
     }
 
     void RendererCommon::SetVSync(bool flag)
