@@ -93,17 +93,24 @@ namespace Engine5
         m_text_renderer->Render();
     }
 
-    void RenderSystem::EndUpdate() 
+    void RenderSystem::EndUpdate() const
     {
         m_renderer->EndScene();
-        ResizeSystem();
     }
 
-    void RenderSystem::OnResize(int width, int height) 
+    void RenderSystem::OnResize(int width, int height)
     {
-        m_width    = width;
-        m_height   = height;
-        m_b_resize = true;
+        if (m_renderer != nullptr && m_renderer->IsInit())
+        {
+            m_renderer->OnResize(width, height, m_operating_system->IsFullscreen());
+            m_renderer->SetAlphaBlending(true);
+            m_matrix_manager->SetClientRect(static_cast<size_t>(width), static_cast<size_t>(height));
+            for (auto& scene : m_scenes)
+            {
+                scene->OnResize();
+            }
+            m_render_texture_generator->OnResize();
+        }
     }
 
     void RenderSystem::OnFullscreen() const
@@ -165,22 +172,6 @@ namespace Engine5
             scene->Shutdown();
             delete scene;
             scene = nullptr;
-        }
-    }
-
-    void RenderSystem::ResizeSystem()
-    {
-        if (m_renderer != nullptr && m_renderer->IsInit() && m_b_resize == true)
-        {
-            m_renderer->OnResize(m_width, m_height, m_operating_system->IsFullscreen());
-            m_renderer->SetAlphaBlending(true);
-            m_matrix_manager->SetClientRect(static_cast<size_t>(m_width), static_cast<size_t>(m_height));
-            for (auto& scene : m_scenes)
-            {
-                scene->OnResize();
-            }
-            m_render_texture_generator->OnResize();
-            m_b_resize = false;
         }
     }
 }

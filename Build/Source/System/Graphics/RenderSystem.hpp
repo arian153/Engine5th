@@ -24,7 +24,7 @@ namespace Engine5
         void Shutdown();
 
         void BeginUpdate() const;
-        void EndUpdate();
+        void EndUpdate() const;
 
         void OnResize(int width, int height);
         void OnFullscreen() const;
@@ -39,8 +39,6 @@ namespace Engine5
         Scene* CreateScene();
         void   RemoveScene(Scene* scene);
     private:
-        void ResizeSystem();
-    private:
         OSCommon*               m_operating_system         = nullptr;
         RendererCommon*         m_renderer                 = nullptr;
         ShaderManagerCommon*    m_shader_manager           = nullptr;
@@ -51,9 +49,6 @@ namespace Engine5
 
         std::vector<Scene*> m_scenes;
         bool                m_b_vsync          = true;
-        bool                m_b_resize         = false;
-        int                 m_width            = 0;
-        int                 m_height           = 0;
         Color               m_background_color = ColorDef::Pure::Gray;
     };
 }
