@@ -25,7 +25,6 @@ namespace Engine5
         ID3D11Texture2D*          m_render_target_texture = nullptr;
         ID3D11RenderTargetView*   m_render_target_view    = nullptr;
         ID3D11ShaderResourceView* m_shader_resource_view  = nullptr;
-        ID3D11DepthStencilView*   m_depth_stencil_view    = nullptr;
         ID3D11Buffer*             m_vertex_buffer         = nullptr;
         ID3D11Buffer*             m_index_buffer          = nullptr;
         ID3D11Device*             m_device                = nullptr;
