@@ -15,10 +15,16 @@ namespace Engine5
         {
         }
 
-    private:
+        bool IsActive() const
+        {
+            return life > 0.0f && scale > 0.0f;
+        }
+
+    public:
         Vector3 position;
         Vector3 velocity;
         Color   color;
-        bool    b_active = false;
+        Real    life  = 0.0f;
+        Real    scale = 1.0f;
     };
 }

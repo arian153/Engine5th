@@ -9,8 +9,6 @@ namespace Engine5
         ~ParticleSystem();
 
     private:
-
+        
     };
-
-    
 }
