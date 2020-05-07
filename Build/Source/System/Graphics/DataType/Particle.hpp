@@ -20,6 +20,19 @@ namespace Engine5
             return life > 0.0f && scale > 0.0f;
         }
 
+        Particle& Merge(const Particle& particle)
+        {
+            position += particle.position;
+            velocity += particle.velocity;
+            color.r += particle.color.r;
+            color.g += particle.color.g;
+            color.b += particle.color.b;
+            color.a += particle.color.a;
+            life += particle.life;
+            scale += particle.scale;
+            return *this;
+        }
+
     public:
         Vector3 position;
         Vector3 velocity;

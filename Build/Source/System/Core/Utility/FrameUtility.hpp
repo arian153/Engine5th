@@ -16,7 +16,7 @@ namespace Engine5
 
     private:
         size_t m_frame_count  = 0;
-        Real   m_time_elapsed = 0.0f;
+        Real   m_elapsed_time = 0.0f;
         Real   m_curr_fps     = 0.0f;
         Real   m_curr_mspf    = 0.0f;
     };
