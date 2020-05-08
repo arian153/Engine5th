@@ -33,6 +33,19 @@ namespace Engine5
             return *this;
         }
 
+        Particle& operator=(const Particle& rhs)
+        {
+            if (&rhs != this)
+            {
+                position = rhs.position;
+                velocity = rhs.velocity;
+                color    = rhs.color;
+                life     = rhs.life;
+                scale    = rhs.scale;
+            }
+            return *this;
+        }
+
     public:
         Vector3 position;
         Vector3 velocity;
