@@ -10,12 +10,14 @@
 #define TextTextureBufferAPI TextTextureBufferDX11
 #define TextLayoutBufferAPI TextLayoutBufferDX11
 #define TextFormatBufferAPI TextFormatBufferDX11
+#define InstanceBufferAPI InstanceBufferDX11
 
 //others
 #define TextureAPI TextureDX11
 #define ColorVertexAPI ColorVertexDX11
 #define NormalVertexAPI NormalVertexDX11
 #define TextureVertexAPI TextureVertexDX11
+#define InstanceDataAPI InstanceDataDX11
 
 //forward shader
 #define ShaderManagerAPI ShaderManagerDX11
@@ -35,12 +37,14 @@
 #define IncludeTextTextureBufferAPI "../API/DX11/Buffer/TextTextureBufferDX11.hpp"
 #define IncludeTextLayoutBufferAPI "../API/DX11/Buffer/TextLayoutBufferDX11.hpp"
 #define IncludeTextFormatBufferAPI "../API/DX11/Buffer/TextFormatBufferDX11.hpp"
+#define IncludeInstanceBufferAPI "../API/DX11/Buffer/InstanceBufferDX11.hpp"
 
 #define IncludeTextureAPI "../API/DX11/Texture/TextureDX11.hpp"
 #define IncludeColorVertexAPI "../API/DX11/Vertex/ColorVertexDX11.hpp"
 #define IncludeNormalVertexAPI "../API/DX11/Vertex/NormalVertexDX11.hpp"
 #define IncludeTextureVertexAPI "../API/DX11/Vertex/TextureVertexDX11.hpp"
 #define IncludeShaderManagerAPI "../API/DX11/Shader/ShaderManagerDX11.hpp"
+#define IncludeInstanceDataAPI "../API/DX11/Vertex/InstanceDataDX11.hpp"
 
 //forward
 #define IncludeColorShaderAPI "../../API/DX11/Shader/Forward/ColorShaderDX11.hpp"
