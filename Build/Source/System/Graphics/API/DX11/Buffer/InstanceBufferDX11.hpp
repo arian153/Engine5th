@@ -11,6 +11,7 @@ namespace Engine5
 
     protected:
         ID3D11Buffer*        m_vertex_buffer   = nullptr;
+        ID3D11Buffer*        m_index_buffer    = nullptr;
         ID3D11Buffer*        m_instance_buffer = nullptr;
         ID3D11DeviceContext* m_device_context  = nullptr;
     };
