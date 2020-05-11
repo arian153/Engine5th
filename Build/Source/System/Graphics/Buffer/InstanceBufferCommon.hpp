@@ -25,7 +25,7 @@ namespace Engine5
         bool BuildBuffer(RendererCommon* renderer, const std::vector<TextureVertexCommon>& vertices, const std::vector<U32>& indices, const std::vector<InstanceDataCommon>& instances);
         bool BuildBuffer(RendererCommon* renderer, const std::vector<NormalVertexCommon>& vertices, const std::vector<U32>& indices, const std::vector<InstanceDataCommon>& instances);
 
-        bool UpdateInstanceBuffer(const std::vector<InstanceDataCommon>& instances);
+        bool UpdateInstanceBuffer(const std::vector<InstanceDataCommon>& instances) const;
     private:
         
     };

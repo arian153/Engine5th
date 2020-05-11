@@ -22,6 +22,24 @@ namespace Engine5
 
     void InstanceBufferCommon::Render(U32 stride, U32 offset) const
     {
+        // Set the buffer strides.
+        U32 strides[ 2 ];
+        strides[0] = stride;
+        strides[1] = sizeof(InstanceDataCommon);
+        // Set the buffer offsets.
+        U32 offsets[ 2 ];
+        offsets[0] = offset;
+        offsets[1] = 0;
+        // Set the array of pointers to the vertex and instance buffers.
+        ID3D11Buffer* buffers[ 2 ];
+        buffers[0] = m_vertex_buffer;
+        buffers[1] = m_instance_buffer;
+        // Set the vertex buffer to active in the input assembler so it can be rendered.
+        m_device_context->IASetVertexBuffers(0, 2, buffers, strides, offsets);
+        // Set the index buffer to active in the input assembler so it can be rendered.
+        m_device_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
+        // Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
+        m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     }
 
     void InstanceBufferCommon::Shutdown()
