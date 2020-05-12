@@ -4,7 +4,7 @@
 namespace Engine5
 {
     InstanceDataDX11::InstanceDataDX11()
-        : position(), scale(), orientation(), color()
+        : world(), color()
     {
     }
 

@@ -10,9 +10,7 @@ namespace Engine5
         ~InstanceDataDX11();
 
     public:
-        DirectX::XMFLOAT3 position;
-        DirectX::XMFLOAT3 scale;
-        DirectX::XMFLOAT4 orientation;
-        DirectX::XMFLOAT4 color;
+        DirectX::XMFLOAT4X4 world;
+        DirectX::XMFLOAT4   color;
     };
 }
