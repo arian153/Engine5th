@@ -8,6 +8,7 @@
 #include "../../../Renderer/RendererCommon.hpp"
 #include "../../../Shader/Deferred/DeferredBufferShaderCommon.hpp"
 #include "../../../Shader/Forward/ForwardDirectionalLightShaderCommon.hpp"
+#include "../../../Shader/Forward/InstanceTextureShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -106,6 +107,14 @@ namespace Engine5
         m_deferred_buffer_shader->SetDevice(m_device);
         m_deferred_buffer_shader->SetDeviceContext(m_device_context);
         m_deferred_buffer_shader->Initialize();
+
+        //Instance Texture Shader
+        m_instance_texture_shader = new InstanceTextureShaderCommon(this);
+        m_instance_texture_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"InstanceTexture.fx"));
+        m_instance_texture_shader->SetHWnd(m_hwnd);
+        m_instance_texture_shader->SetDevice(m_device);
+        m_instance_texture_shader->SetDeviceContext(m_device_context);
+        m_instance_texture_shader->Initialize();
     }
 
     void ShaderManagerCommon::Shutdown()
@@ -139,6 +148,12 @@ namespace Engine5
             m_deferred_buffer_shader->Shutdown();
             delete m_deferred_buffer_shader;
             m_deferred_buffer_shader = nullptr;
+        }
+        if (m_instance_texture_shader != nullptr)
+        {
+            m_instance_texture_shader->Shutdown();
+            delete m_instance_texture_shader;
+            m_instance_texture_shader = nullptr;
         }
     }
 
@@ -190,5 +205,10 @@ namespace Engine5
     DeferredBufferShaderCommon* ShaderManagerCommon::GetDeferredBufferShader() const
     {
         return m_deferred_buffer_shader;
+    }
+
+    InstanceTextureShaderCommon* ShaderManagerCommon::GetInstanceTextureShader() const
+    {
+        return m_instance_texture_shader;
     }
 }

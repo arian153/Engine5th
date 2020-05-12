@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class InstanceTextureShaderCommon;
     class ForwardDirectionalLightShaderCommon;
     class DeferredDirectionalLightShaderCommon;
     class DirectionalLight;
@@ -34,17 +35,20 @@ namespace Engine5
         void RenderDeferredDirectionalLightShader(U32 indices_count, const MatrixData& mvp_data, DeferredBufferCommon* deferred_buffer, Camera* camera, DirectionalLight* light) const;
         void RenderDeferredBufferShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
 
+
         ColorShaderCommon*                    GetColorShader() const;
         TextureShaderCommon*                  GetTextureShader() const;
         ForwardDirectionalLightShaderCommon*  GetForwardDirectionalLightShader() const;
         DeferredDirectionalLightShaderCommon* GetDeferredDirectionalShaderLightShader() const;
         DeferredBufferShaderCommon*           GetDeferredBufferShader() const;
+        InstanceTextureShaderCommon* GetInstanceTextureShader() const;
 
     private:
         //shader list
 
         ColorShaderCommon*   m_color_shader   = nullptr;
         TextureShaderCommon* m_texture_shader = nullptr;
+        InstanceTextureShaderCommon* m_instance_texture_shader = nullptr;
 
         //forward
         ForwardDirectionalLightShaderCommon* m_forward_directional_light_shader = nullptr;
