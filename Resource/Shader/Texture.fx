@@ -24,6 +24,21 @@ struct PixelInputType
     float2 uv : TEXCOORD0;
 };
 
+//struct InstanceVertexInputType
+//{
+//    float4 position : POSITION;
+//    float2 uv : TEXCOORD0;
+//    float4x4 world : WORLD;
+//    float4 color : COLOR;
+//};
+//
+//struct InstancePixelInputType
+//{
+//    float4 position : SV_POSITION;
+//    float2 uv : TEXCOORD0;
+//    float4 color : COLOR;
+//};
+
 //Vertex Shader
 PixelInputType TextureVertexShader(VertexInputType input)
 {
@@ -35,6 +50,21 @@ PixelInputType TextureVertexShader(VertexInputType input)
 
     return output;
 }
+
+//instanced Vertex Shader
+//InstancePixelInputType InstanceTextureVertexShader(InstanceVertexInputType input)
+//{
+//    input.position.w = 1.0f;
+//
+//    PixelInputType output;
+//    output.position = mul(input.position, input.world);
+//    output.position = mul(output.position, mvp);
+//    output.uv = input.uv;
+//    output.color = input.color;
+//
+//    return output;
+//}
+
 
 // Pixel Shader
 float4 TexturePixelShader(PixelInputType input) : SV_TARGET
