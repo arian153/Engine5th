@@ -34,54 +34,7 @@
             "Name": "Camera"
         },
 
-        {
-            "Components": [
-                {
-                    "Type": "TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 1.7, 0 ],
-                        "Position": [ 0, -15, 0 ],
-                        "Scale": [ 0.02, 0.02, 0.02 ]
-                    }
-                },
-                {
-                    "Type": "MeshComponent",
-                    "Value": {
-                        "Color": [ 1, 1, 1, 1 ],
-                        "Mesh": "../../Resource/Mesh/deer.obj",
-                        "Shader Type": "Forward Directional Light",
-                        "Texture": "../../Resource/Texture/white.dds"
-                    }
-                }
-
-            ],
-            "Name": "Deer1"
-        },
-
-        {
-            "Components": [
-                {
-                    "Type": "TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 1.7, 0 ],
-                        "Position": [ 10, -15, 0 ],
-                        "Scale": [ 0.02, 0.02, 0.02 ]
-                    }
-                },
-                {
-                    "Type": "MeshComponent",
-                    "Value": {
-                        "Color": [ 1, 1, 1, 1 ],
-                        "Mesh": "../../Resource/Mesh/deer.obj",
-                        "Shader Type": "Forward Directional Light",
-                        "Texture": "../../Resource/Texture/white.dds"
-                    }
-                }
-
-            ],
-            "Name": "Deer2"
-        },
-
+   
         {
             "Components": [
                 {

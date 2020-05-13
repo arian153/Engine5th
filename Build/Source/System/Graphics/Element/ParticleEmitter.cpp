@@ -17,11 +17,12 @@ namespace Engine5
     void ParticleEmitter::Initialize()
     {
         m_base_particle.life = 10.0f;
-        m_base_particle.position = Vector3();
-        m_base_particle.velocity = Vector3(0.0f, 1.0f, 0.0f);
-        m_base_particle.scale = 3.0f;
+        m_base_particle.position = Vector3(0.0f, 10.0f, 0.0f);
+        m_base_particle.velocity = Vector3(0.0f, -15.0f, 0.0f);
+        m_base_particle.scale = 0.25f;
 
         m_direction_variance = Vector3(1.0f, 0.0f, 1.0f);
+        m_speed_variance = 1.0f;
         
     }
 
@@ -43,7 +44,8 @@ namespace Engine5
                 m_particles[i].position += m_particles[i].velocity * dt;
                 m_particles[i].life -= m_life_decay_rate * dt;
                 m_particles[i].scale -= m_scale_decay_rate * dt;
-                m_instances.emplace_back(ParticleToWorld(m_particles[i]), m_particles[i].color);
+                auto world = ParticleToWorld(m_particles[ i ]);
+                m_instances.emplace_back(world, m_particles[i].color);
                 m_active_amount++;
             }
         }

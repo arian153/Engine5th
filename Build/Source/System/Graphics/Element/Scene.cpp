@@ -41,7 +41,7 @@ namespace Engine5
         UpdateProjection();
         m_particle = new ParticleEmitter();
         m_particle->SetColor(ColorDef::Pure::White);
-        m_particle->SetLifeDecayRate(0.01f);
+        m_particle->SetLifeDecayRate(0.1f);
         m_particle->SetParticleAmount(100);
         m_particle->SetScaleDecayRate(0.0f);
         m_particle->SetRenderer(m_renderer);
@@ -194,8 +194,8 @@ namespace Engine5
                 mvp_data.model.SetIdentity();
                 m_particle->Render();
                 m_shader_manager->RenderInstanceTextureShader(
-                                                              m_particle->GetIndexCount(),
-                                                              m_particle->GetInstanceCount(),
+                                                              (U32)m_particle->GetIndexCount(),
+                                                              (U32)m_particle->GetInstanceCount(),
                                                               mvp_data,
                                                               m_particle->GetTexture(),
                                                               m_particle->GetColor());
