@@ -11,6 +11,9 @@
 #include "../Light/CapsuleLight.hpp"
 #include "TextSprite.hpp"
 #include "../../Core/Utility/CoreUtility.hpp"
+#include "ParticleEmitter.hpp"
+#include "../../../Manager/Resource/ResourceManager.hpp"
+#include "../../../Manager/Resource/ResourceType/TextureResource.hpp"
 
 namespace Engine5
 {
@@ -36,6 +39,15 @@ namespace Engine5
                                       m_matrix_manager->GetScreenHeight());
         UpdateView();
         UpdateProjection();
+        m_particle = new ParticleEmitter();
+        m_particle->SetColor(ColorDef::Pure::White);
+        m_particle->SetLifeDecayRate(0.01f);
+        m_particle->SetParticleAmount(100);
+        m_particle->SetScaleDecayRate(0.0f);
+        m_particle->SetRenderer(m_renderer);
+        m_particle->SetTexture(m_resource_manager->GetTextureResourceFileName(L"white.dds")->GetTexture());
+        m_particle->BuildBuffer();
+        m_particle->Initialize();
     }
 
     void Scene::Update(Real dt)
@@ -73,6 +85,7 @@ namespace Engine5
             // Reset the viewport back to the original.
             m_renderer->ResetViewport();
         }
+        m_particle->Update(dt);
     }
 
     void Scene::Render() const
@@ -176,11 +189,28 @@ namespace Engine5
                                                       text_sprite->GetTexture(),
                                                       text_sprite->GetColor());
             }
+            if (m_particle != nullptr)
+            {
+                mvp_data.model.SetIdentity();
+                m_particle->Render();
+                m_shader_manager->RenderInstanceTextureShader(
+                                                              m_particle->GetIndexCount(),
+                                                              m_particle->GetInstanceCount(),
+                                                              mvp_data,
+                                                              m_particle->GetTexture(),
+                                                              m_particle->GetColor());
+            }
         }
     }
 
     void Scene::Shutdown()
     {
+        if (m_particle != nullptr)
+        {
+            m_particle->ShutDown();
+            delete m_particle;
+            m_particle = nullptr;
+        }
         m_matrix_manager->RemoveScene(this);
         if (m_primitive_renderer != nullptr)
         {
@@ -273,6 +303,11 @@ namespace Engine5
         {
             m_main_camera = camera;
         }
+    }
+
+    void Scene::SetResourceManager(ResourceManager* resource_manager)
+    {
+        m_resource_manager = resource_manager;
     }
 
     void Scene::SetProjectionType(eProjectionType projection_type)

@@ -16,6 +16,13 @@ namespace Engine5
 
     void ParticleEmitter::Initialize()
     {
+        m_base_particle.life = 10.0f;
+        m_base_particle.position = Vector3();
+        m_base_particle.velocity = Vector3(0.0f, 1.0f, 0.0f);
+        m_base_particle.scale = 3.0f;
+
+        m_direction_variance = Vector3(1.0f, 0.0f, 1.0f);
+        
     }
 
     void ParticleEmitter::Update(Real dt)
@@ -28,6 +35,7 @@ namespace Engine5
         }
         m_instances.clear();
         m_instances.reserve(m_max_amount);
+        m_active_amount = 0;
         for (size_t i = 0; i < m_max_amount; ++i)
         {
             if (m_particles[i].IsActive())
@@ -129,6 +137,26 @@ namespace Engine5
         m_renderer = renderer;
     }
 
+    size_t ParticleEmitter::GetIndexCount() const
+    {
+        return m_index_count;
+    }
+
+    size_t ParticleEmitter::GetInstanceCount() const
+    {
+        return m_active_amount;
+    }
+
+    TextureCommon* ParticleEmitter::GetTexture() const
+    {
+        return m_texture;
+    }
+
+    Color ParticleEmitter::GetColor() const
+    {
+        return m_emitter_color;
+    }
+
     size_t ParticleEmitter::GetFreeIndex()
     {
         for (size_t i = m_free_index; i < m_max_amount; ++i)
@@ -207,6 +235,7 @@ namespace Engine5
             indices.push_back(3);
             indices.push_back(1);
             m_buffer->BuildBuffer(m_renderer, vertices, indices, m_instances);
+            m_index_count = 6;
             vertices.clear();
             indices.clear();
         }

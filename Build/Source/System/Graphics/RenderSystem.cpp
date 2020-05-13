@@ -165,6 +165,7 @@ namespace Engine5
         scene->SetShaderManager(m_shader_manager);
         scene->SetRenderer(m_renderer);
         scene->SetMatrixManager(m_matrix_manager);
+        scene->SetResourceManager(m_resource_manager);
         scene->UpdateProjection();
         return scene;
     }

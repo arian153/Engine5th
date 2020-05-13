@@ -18,7 +18,7 @@ namespace Engine5
         ParticleEmitter();
         ~ParticleEmitter();
 
-        void Init();
+        void Initialize();
         void Update(Real dt);
         void Render() const;
         void ShutDown();
@@ -33,11 +33,15 @@ namespace Engine5
         void SetTransform(Transform* transform);
         void SetColor(const Color& color);
         void SetRenderer(RendererCommon* renderer);
+        void BuildBuffer();
 
+        size_t GetIndexCount() const;
+        size_t GetInstanceCount() const;
+        TextureCommon* GetTexture() const;
+        Color GetColor() const;
     private:
-        size_t   GetFreeIndex();
-        void     EmitParticles();
-        void     BuildBuffer();
+        size_t GetFreeIndex();
+        void   EmitParticles();
         Matrix44 ParticleToWorld(const Particle& particle) const;
     private:
         Particle                        m_base_particle;
@@ -57,7 +61,9 @@ namespace Engine5
         size_t m_free_index       = 0;
         size_t m_emission_amount  = 1;
         size_t m_active_amount    = 0;
+        size_t m_index_count      = 0;
         Color  m_emitter_color;
+
         //variance
         Vector3 m_position_variance;
         Vector3 m_direction_variance;
