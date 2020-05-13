@@ -1,9 +1,14 @@
 #pragma once
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../DataType/Particle.hpp"
+#include <vector>
+#include "../Vertex/InstanceDataCommon.hpp"
 
 namespace Engine5
 {
+    class RendererCommon;
+    class Transform;
+    class InstanceBufferCommon;
     class Color;
     class TextureCommon;
 
@@ -27,19 +32,26 @@ namespace Engine5
     private:
         size_t GetFreeIndex();
         void   EmitParticles();
-
+        void   BuildBuffer();
+        Matrix44 ParticleToWorld(const Particle& particle) const;
     private:
-        Particle       m_base_particle;
-        Particle*      m_particles        = nullptr;
-        TextureCommon* m_texture          = nullptr;
-        Real           m_life_decay_rate  = 0.0f;
-        Real           m_scale_decay_rate = 0.0f;
-        Real           m_emission_rate    = 0.0f;
-        Real           m_elapsed_time     = 0.0f;
-        size_t         m_max_amount       = 100;
-        size_t         m_free_index       = 0;
-        size_t         m_emission_amount  = 1;
-        size_t         m_active_amount    = 0;
+        Particle              m_base_particle;
+        Particle*             m_particles = nullptr;
+        RendererCommon*       m_renderer  = nullptr;
+        TextureCommon*        m_texture   = nullptr;
+        InstanceBufferCommon* m_buffer    = nullptr;
+        Transform*            m_transform = nullptr;
+        std::vector<InstanceDataCommon> m_instances;
+
+        //other data
+        Real   m_life_decay_rate  = 0.0f;
+        Real   m_scale_decay_rate = 0.0f;
+        Real   m_emission_rate    = 0.0f;
+        Real   m_elapsed_time     = 0.0f;
+        size_t m_max_amount       = 100;
+        size_t m_free_index       = 0;
+        size_t m_emission_amount  = 1;
+        size_t m_active_amount    = 0;
         //variance
         Vector3 m_position_variance;
         Vector3 m_direction_variance;

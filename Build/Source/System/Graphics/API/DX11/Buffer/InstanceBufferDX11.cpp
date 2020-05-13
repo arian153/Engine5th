@@ -253,7 +253,7 @@ namespace Engine5
         return true;
     }
 
-    bool InstanceBufferCommon::UpdateInstanceBuffer(const std::vector<InstanceDataCommon>& instances) const
+    void InstanceBufferCommon::UpdateInstanceBuffer(const std::vector<InstanceDataCommon>& instances) const
     {
         // Lock the instance buffer so it can be written to.
         D3D11_MAPPED_SUBRESOURCE mapped_resource;
@@ -261,7 +261,7 @@ namespace Engine5
         HRESULT result = m_device_context->Map(m_instance_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
         if (FAILED(result))
         {
-            return false;
+            return;
         }
         // Get a pointer to the data in the instance buffer.
         InstanceDataCommon* instances_ptr = (InstanceDataCommon*)mapped_resource.pData;
@@ -269,6 +269,5 @@ namespace Engine5
         memcpy(instances_ptr, (void*)instances.data(), sizeof(InstanceDataCommon) * (U32)instances.size());
         // Unlock the instance buffer.
         m_device_context->Unmap(m_instance_buffer, 0);
-        return true;
     }
 }

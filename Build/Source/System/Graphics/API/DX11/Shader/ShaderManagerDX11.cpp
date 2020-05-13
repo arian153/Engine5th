@@ -107,7 +107,6 @@ namespace Engine5
         m_deferred_buffer_shader->SetDevice(m_device);
         m_deferred_buffer_shader->SetDeviceContext(m_device_context);
         m_deferred_buffer_shader->Initialize();
-
         //Instance Texture Shader
         m_instance_texture_shader = new InstanceTextureShaderCommon(this);
         m_instance_texture_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"InstanceTexture.fx"));
@@ -180,6 +179,11 @@ namespace Engine5
     void ShaderManagerCommon::RenderDeferredBufferShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
     {
         m_deferred_buffer_shader->Render(indices_count, mvp_data, texture, color);
+    }
+
+    void ShaderManagerCommon::RenderInstanceTextureShader(U32 index_count, U32 instance_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    {
+        m_instance_texture_shader->Render(index_count, instance_count, mvp_data, texture, color);
     }
 
     ColorShaderCommon* ShaderManagerCommon::GetColorShader() const

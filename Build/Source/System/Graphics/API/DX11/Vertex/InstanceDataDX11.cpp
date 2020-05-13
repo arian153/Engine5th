@@ -1,5 +1,6 @@
 #include "InstanceDataDX11.hpp"
 #include "../../../Vertex/InstanceDataCommon.hpp"
+#include "../ConverterDX11.hpp"
 
 namespace Engine5
 {
@@ -18,5 +19,11 @@ namespace Engine5
 
     InstanceDataCommon::~InstanceDataCommon()
     {
+    }
+
+    InstanceDataCommon::InstanceDataCommon(const Matrix44& w, const Color& c)
+    {
+        world = ConverterDX11::ToXMFloat4X4(w);
+        color = ConverterDX11::ToXMFloat4(c);
     }
 }

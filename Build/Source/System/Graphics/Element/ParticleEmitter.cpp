@@ -1,6 +1,8 @@
 #include "ParticleEmitter.hpp"
 #include "../DataType/Particle.hpp"
 #include "../../Math/Utility/Random.hpp"
+#include "../Buffer/InstanceBufferCommon.hpp"
+#include "../../Math/Algebra/Matrix44.hpp"
 
 namespace Engine5
 {
@@ -29,6 +31,8 @@ namespace Engine5
             m_elapsed_time = 0.0f;
             EmitParticles();
         }
+        m_instances.clear();
+        m_instances.reserve(m_max_amount);
         for (size_t i = 0; i < m_max_amount; ++i)
         {
             if (m_particles[i].IsActive())
@@ -36,9 +40,11 @@ namespace Engine5
                 m_particles[i].position += m_particles[i].velocity * dt;
                 m_particles[i].life -= m_life_decay_rate * dt;
                 m_particles[i].scale -= m_scale_decay_rate * dt;
+                m_instances.emplace_back(ParticleToWorld(m_particles[i]), m_particles[i].color);
                 m_active_amount++;
             }
         }
+        m_buffer->UpdateInstanceBuffer(m_instances);
     }
 
     void ParticleEmitter::ShutDown()
@@ -143,5 +149,41 @@ namespace Engine5
             particle.Merge(m_base_particle);
             AddParticle(particle);
         }
+    }
+
+    void ParticleEmitter::BuildBuffer()
+    {
+        if (m_buffer == nullptr)
+        {
+            m_buffer = new InstanceBufferCommon();
+            //set
+            Real right  = 0.5f;
+            Real left   = -0.5f;
+            Real top    = 0.5f;
+            Real bottom = -0.5f;
+            //vertices
+            std::vector<TextureVertexCommon> vertices;
+            vertices.emplace_back(left, top, 0.0f, 0.0f, 0.0f);
+            vertices.emplace_back(right, bottom, 0.0f, 1.0f, 1.0f);
+            vertices.emplace_back(left, bottom, 0.0f, 0.0f, 1.0f);
+            vertices.emplace_back(right, top, 0.0f, 1.0f, 0.0f);
+            //indices
+            std::vector<U32> indices;
+            indices.push_back(0);
+            indices.push_back(1);
+            indices.push_back(2);
+            indices.push_back(0);
+            indices.push_back(3);
+            indices.push_back(1);
+            m_buffer->BuildBuffer(m_renderer, vertices, indices, m_instances);
+        }
+    }
+
+    Matrix44 ParticleEmitter::ParticleToWorld(const Particle& particle) const
+    {
+        Matrix44 result;
+        result.SetDiagonal(particle.scale, particle.scale, particle.scale, 1.0f);
+        result.AddVectorColumn(3, particle.position);
+        return result;
     }
 }
