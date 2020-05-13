@@ -18,8 +18,9 @@ namespace Engine5
         ParticleEmitter();
         ~ParticleEmitter();
 
-        void Init(size_t initial_amount, Real life_decay_rate, Real scale_decay_rate, TextureCommon* texture);
+        void Init();
         void Update(Real dt);
+        void Render() const;
         void ShutDown();
 
         void AddParticle(const Particle& particle);
@@ -27,20 +28,24 @@ namespace Engine5
 
         void SetLifeDecayRate(Real rate);
         void SetScaleDecayRate(Real rate);
-        void Resize(size_t amount);
+        void SetParticleAmount(size_t amount);
+        void SetTexture(TextureCommon* texture);
+        void SetTransform(Transform* transform);
+        void SetColor(const Color& color);
+        void SetRenderer(RendererCommon* renderer);
 
     private:
-        size_t GetFreeIndex();
-        void   EmitParticles();
-        void   BuildBuffer();
+        size_t   GetFreeIndex();
+        void     EmitParticles();
+        void     BuildBuffer();
         Matrix44 ParticleToWorld(const Particle& particle) const;
     private:
-        Particle              m_base_particle;
-        Particle*             m_particles = nullptr;
-        RendererCommon*       m_renderer  = nullptr;
-        TextureCommon*        m_texture   = nullptr;
-        InstanceBufferCommon* m_buffer    = nullptr;
-        Transform*            m_transform = nullptr;
+        Particle                        m_base_particle;
+        Particle*                       m_particles = nullptr;
+        RendererCommon*                 m_renderer  = nullptr;
+        TextureCommon*                  m_texture   = nullptr;
+        InstanceBufferCommon*           m_buffer    = nullptr;
+        Transform*                      m_transform = nullptr;
         std::vector<InstanceDataCommon> m_instances;
 
         //other data
@@ -52,6 +57,7 @@ namespace Engine5
         size_t m_free_index       = 0;
         size_t m_emission_amount  = 1;
         size_t m_active_amount    = 0;
+        Color  m_emitter_color;
         //variance
         Vector3 m_position_variance;
         Vector3 m_direction_variance;
