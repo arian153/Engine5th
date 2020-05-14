@@ -16,14 +16,15 @@ namespace Engine5
 
     void ParticleEmitter::Initialize()
     {
-        m_base_particle.life = 10.0f;
+        m_base_particle.life     = 10.0f;
         m_base_particle.position = Vector3(0.0f, 10.0f, 0.0f);
         m_base_particle.velocity = Vector3(0.0f, -15.0f, 0.0f);
-        m_base_particle.scale = 0.25f;
-
-        m_direction_variance = Vector3(1.0f, 0.0f, 1.0f);
-        m_speed_variance = 1.0f;
-        
+        m_base_particle.scale    = 0.25f;
+        m_base_particle.color    = ColorDef::Pure::Black;
+        m_direction_variance     = Vector3(1.0f, 1.0f, 1.0f);
+        m_speed_variance         = 100.0f;
+        m_color_variance         = Color(0.7f, 0.0f, 0.0f, 1.0f);
+        m_emission_amount = 30;
     }
 
     void ParticleEmitter::Update(Real dt)
@@ -44,7 +45,7 @@ namespace Engine5
                 m_particles[i].position += m_particles[i].velocity * dt;
                 m_particles[i].life -= m_life_decay_rate * dt;
                 m_particles[i].scale -= m_scale_decay_rate * dt;
-                auto world = ParticleToWorld(m_particles[ i ]);
+                auto world = ParticleToWorld(m_particles[i]);
                 m_instances.emplace_back(world, m_particles[i].color);
                 m_active_amount++;
             }
@@ -117,6 +118,8 @@ namespace Engine5
         }
         m_max_amount = amount;
         m_particles  = new Particle[ m_max_amount ];
+        m_instances.resize(m_max_amount);
+        m_buffer->BuildInstanceBuffer(m_instances);
     }
 
     void ParticleEmitter::SetTexture(TextureCommon* texture)
@@ -236,7 +239,7 @@ namespace Engine5
             indices.push_back(0);
             indices.push_back(3);
             indices.push_back(1);
-            m_buffer->BuildBuffer(m_renderer, vertices, indices, m_instances);
+            m_buffer->BuildBuffer(m_renderer, vertices, indices);
             m_index_count = 6;
             vertices.clear();
             indices.clear();
