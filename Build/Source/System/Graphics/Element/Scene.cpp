@@ -41,11 +41,8 @@ namespace Engine5
         UpdateProjection();
         m_particle = new ParticleEmitter();
         m_particle->SetRenderer(m_renderer);
-        m_particle->BuildBuffer();
-        m_particle->SetColor(ColorDef::Pure::White);
-        m_particle->SetLifeDecayRate(0.1f);
-        m_particle->SetParticleAmount(10000);
-        m_particle->SetScaleDecayRate(0.0f);
+        m_particle->SetBuffer();
+        m_particle->SetParticleAmount(5000);
         m_particle->SetTexture(m_resource_manager->GetTextureResourceFileName(L"white.dds")->GetTexture());
         m_particle->Initialize();
     }
@@ -198,7 +195,7 @@ namespace Engine5
                                                               (U32)m_particle->GetInstanceCount(),
                                                               mvp_data,
                                                               m_particle->GetTexture(),
-                                                              m_particle->GetColor());
+                                                              ColorDef::Pure::White);
             }
         }
     }

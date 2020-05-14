@@ -16,15 +16,21 @@ namespace Engine5
 
     void ParticleEmitter::Initialize()
     {
-        m_base_particle.life     = 10.0f;
+        m_base_particle.life     = 100.0f;
         m_base_particle.position = Vector3(0.0f, 10.0f, 0.0f);
-        m_base_particle.velocity = Vector3(0.0f, -15.0f, 0.0f);
+        m_base_particle.velocity = Vector3(0.0f, 0.0f, 0.0f);
         m_base_particle.scale    = 0.25f;
         m_base_particle.color    = ColorDef::Pure::Black;
         m_direction_variance     = Vector3(1.0f, 1.0f, 1.0f);
-        m_speed_variance         = 100.0f;
+        m_speed_variance         = 0.20f;
         m_color_variance         = Color(0.7f, 0.0f, 0.0f, 1.0f);
-        m_emission_amount = 30;
+        //m_position_variance = Vector3(1.0f, 1.0f, 1.0f);
+
+        m_emission_amount = 1;
+
+        m_scale_decay_rate = 0.01f;
+        m_emission_rate = 0.05f;
+        m_life_decay_rate = 0.0f;
     }
 
     void ParticleEmitter::Update(Real dt)
@@ -43,9 +49,9 @@ namespace Engine5
             if (m_particles[i].IsActive())
             {
                 m_particles[i].position += m_particles[i].velocity * dt;
-                m_particles[i].life -= m_life_decay_rate * dt;
-                m_particles[i].scale -= m_scale_decay_rate * dt;
-                auto world = ParticleToWorld(m_particles[i]);
+                m_particles[i].life -= m_base_particle.life * m_life_decay_rate * dt;
+                m_particles[i].scale -= m_base_particle.scale * m_scale_decay_rate * dt;
+                auto world = ParticleToWorldMatrix(m_particles[i]);
                 m_instances.emplace_back(world, m_particles[i].color);
                 m_active_amount++;
             }
@@ -94,6 +100,69 @@ namespace Engine5
         created.scale     = scale;
     }
 
+    void ParticleEmitter::SetRenderer(RendererCommon* renderer)
+    {
+        m_renderer = renderer;
+    }
+
+    void ParticleEmitter::SetBuffer()
+    {
+        if (m_buffer == nullptr)
+        {
+            m_buffer = new InstanceBufferCommon();
+            //vertices
+            std::vector<TextureVertexCommon> vertices;
+            vertices.emplace_back(-0.5f, 0.5f, 0.0f, 0.0f, 0.0f);
+            vertices.emplace_back(0.5f, -0.5f, 0.0f, 1.0f, 1.0f);
+            vertices.emplace_back(-0.5f, -0.5f, 0.0f, 0.0f, 1.0f);
+            vertices.emplace_back(0.5f, 0.5f, 0.0f, 1.0f, 0.0f);
+            //indices
+            std::vector<U32> indices;
+            indices.push_back(0);
+            indices.push_back(1);
+            indices.push_back(2);
+            indices.push_back(0);
+            indices.push_back(3);
+            indices.push_back(1);
+            m_buffer->BuildBuffer(m_renderer, vertices, indices);
+            m_index_count = 6;
+            vertices.clear();
+            indices.clear();
+        }
+    }
+
+    void ParticleEmitter::SetTexture(TextureCommon* texture)
+    {
+        m_texture = texture;
+    }
+
+    void ParticleEmitter::SetTransform(Transform* transform)
+    {
+        m_transform = transform;
+    }
+
+    void ParticleEmitter::SetParticleAmount(size_t amount)
+    {
+        if (m_particles != nullptr)
+        {
+            delete[] m_particles;
+        }
+        m_max_amount = amount;
+        m_particles  = new Particle[ m_max_amount ];
+        m_instances.resize(m_max_amount);
+        m_buffer->BuildInstanceBuffer(m_instances);
+    }
+
+    void ParticleEmitter::SetEmissionAmount(size_t amount)
+    {
+        m_emission_amount = amount;
+    }
+
+    void ParticleEmitter::SetEmissionRate(Real rate)
+    {
+        m_emission_rate = rate;
+    }
+
     void ParticleEmitter::SetLifeDecayRate(Real rate)
     {
         if (rate >= 0.0f)
@@ -110,36 +179,64 @@ namespace Engine5
         }
     }
 
-    void ParticleEmitter::SetParticleAmount(size_t amount)
+    void ParticleEmitter::SetBaseParticle(const Particle& particle)
     {
-        if (m_particles != nullptr)
-        {
-            delete[] m_particles;
-        }
-        m_max_amount = amount;
-        m_particles  = new Particle[ m_max_amount ];
-        m_instances.resize(m_max_amount);
-        m_buffer->BuildInstanceBuffer(m_instances);
+        m_base_particle = particle;
     }
 
-    void ParticleEmitter::SetTexture(TextureCommon* texture)
+    void ParticleEmitter::SetBasePosition(const Vector3& position)
     {
-        m_texture = texture;
+        m_base_particle.position = position;
     }
 
-    void ParticleEmitter::SetTransform(Transform* transform)
+    void ParticleEmitter::SetBaseVelocity(const Vector3& velocity)
     {
-        m_transform = transform;
+        m_base_particle.velocity = velocity;
     }
 
-    void ParticleEmitter::SetColor(const Color& color)
+    void ParticleEmitter::SetBaseColor(const Color& color)
     {
-        m_emitter_color = color;
+        m_base_particle.color = color;
     }
 
-    void ParticleEmitter::SetRenderer(RendererCommon* renderer)
+    void ParticleEmitter::SetBaseLife(Real life_time)
     {
-        m_renderer = renderer;
+        m_base_particle.life = life_time;
+    }
+
+    void ParticleEmitter::SetBaseScale(Real scale)
+    {
+        m_base_particle.scale = scale;
+    }
+
+    void ParticleEmitter::SetPositionVariance(const Vector3& variance)
+    {
+        m_position_variance = variance;
+    }
+
+    void ParticleEmitter::SetDirectionVariance(const Vector3& variance)
+    {
+        m_direction_variance = variance;
+    }
+
+    void ParticleEmitter::SetColorVariance(const Color& variance)
+    {
+        m_color_variance = variance;
+    }
+
+    void ParticleEmitter::SetSpeedVariance(Real variance)
+    {
+        m_speed_variance = variance;
+    }
+
+    void ParticleEmitter::SetScaleVariance(Real variance)
+    {
+        m_scale_variance = variance;
+    }
+
+    void ParticleEmitter::SetLifeVariance(Real variance)
+    {
+        m_life_variance = variance;
     }
 
     size_t ParticleEmitter::GetIndexCount() const
@@ -157,35 +254,30 @@ namespace Engine5
         return m_texture;
     }
 
-    Color ParticleEmitter::GetColor() const
-    {
-        return m_emitter_color;
-    }
-
     size_t ParticleEmitter::GetFreeIndex()
     {
-        for (size_t i = m_free_index; i < m_max_amount; ++i)
+        for (size_t i = m_free_particle; i < m_max_amount; ++i)
         {
             if (m_particles[i].IsActive() == false)
             {
-                m_free_index = i;
-                return m_free_index;
+                m_free_particle = i;
+                return m_free_particle;
             }
         }
-        for (size_t i = 0; i < m_free_index; ++i)
+        for (size_t i = 0; i < m_free_particle; ++i)
         {
             if (m_particles[i].IsActive() == false)
             {
-                m_free_index = i;
-                return m_free_index;
+                m_free_particle = i;
+                return m_free_particle;
             }
         }
-        m_free_index++;
-        if (m_free_index >= m_max_amount)
+        m_free_particle++;
+        if (m_free_particle >= m_max_amount)
         {
-            m_free_index = 0;
+            m_free_particle = 0;
         }
-        return m_free_index;
+        return m_free_particle;
     }
 
     void ParticleEmitter::EmitParticles()
@@ -220,33 +312,7 @@ namespace Engine5
         }
     }
 
-    void ParticleEmitter::BuildBuffer()
-    {
-        if (m_buffer == nullptr)
-        {
-            m_buffer = new InstanceBufferCommon();
-            //vertices
-            std::vector<TextureVertexCommon> vertices;
-            vertices.emplace_back(-0.5f, 0.5f, 0.0f, 0.0f, 0.0f);
-            vertices.emplace_back(0.5f, -0.5f, 0.0f, 1.0f, 1.0f);
-            vertices.emplace_back(-0.5f, -0.5f, 0.0f, 0.0f, 1.0f);
-            vertices.emplace_back(0.5f, 0.5f, 0.0f, 1.0f, 0.0f);
-            //indices
-            std::vector<U32> indices;
-            indices.push_back(0);
-            indices.push_back(1);
-            indices.push_back(2);
-            indices.push_back(0);
-            indices.push_back(3);
-            indices.push_back(1);
-            m_buffer->BuildBuffer(m_renderer, vertices, indices);
-            m_index_count = 6;
-            vertices.clear();
-            indices.clear();
-        }
-    }
-
-    Matrix44 ParticleEmitter::ParticleToWorld(const Particle& particle) const
+    Matrix44 ParticleEmitter::ParticleToWorldMatrix(const Particle& particle) const
     {
         Matrix44 result;
         result.SetDiagonal(particle.scale, particle.scale, particle.scale, 1.0f);

@@ -26,50 +26,63 @@ namespace Engine5
         void AddParticle(const Particle& particle);
         void AddParticle(const Vector3& pos, const Vector3& vel, const Color& color, Real life = 1.0f, Real scale = 1.0f);
 
-        void SetLifeDecayRate(Real rate);
-        void SetScaleDecayRate(Real rate);
-        void SetParticleAmount(size_t amount);
+        //setter
+        void SetRenderer(RendererCommon* renderer);
+        void SetBuffer();
         void SetTexture(TextureCommon* texture);
         void SetTransform(Transform* transform);
-        void SetColor(const Color& color);
-        void SetRenderer(RendererCommon* renderer);
-        void BuildBuffer();
+        void SetParticleAmount(size_t amount);
+        void SetEmissionAmount(size_t amount);
+        void SetEmissionRate(Real rate);
+        void SetLifeDecayRate(Real rate);
+        void SetScaleDecayRate(Real rate);
+        void SetBaseParticle(const Particle& particle);
+        void SetBasePosition(const Vector3& position);
+        void SetBaseVelocity(const Vector3& velocity);
+        void SetBaseColor(const Color& color);
+        void SetBaseLife(Real life_time);
+        void SetBaseScale(Real scale);
+        void SetPositionVariance(const Vector3& variance);
+        void SetDirectionVariance(const Vector3& variance);
+        void SetColorVariance(const Color& variance);
+        void SetSpeedVariance(Real variance);
+        void SetScaleVariance(Real variance);
+        void SetLifeVariance(Real variance);
 
-        size_t GetIndexCount() const;
-        size_t GetInstanceCount() const;
+        //getter
+        size_t         GetIndexCount() const;
+        size_t         GetInstanceCount() const;
         TextureCommon* GetTexture() const;
-        Color GetColor() const;
     private:
-        size_t GetFreeIndex();
-        void   EmitParticles();
-        Matrix44 ParticleToWorld(const Particle& particle) const;
+        size_t   GetFreeIndex();
+        void     EmitParticles();
+        Matrix44 ParticleToWorldMatrix(const Particle& particle) const;
     private:
-        Particle                        m_base_particle;
         Particle*                       m_particles = nullptr;
         RendererCommon*                 m_renderer  = nullptr;
         TextureCommon*                  m_texture   = nullptr;
         InstanceBufferCommon*           m_buffer    = nullptr;
         Transform*                      m_transform = nullptr;
         std::vector<InstanceDataCommon> m_instances;
+        size_t                          m_index_count = 0;
 
-        //other data
-        Real   m_life_decay_rate  = 0.0f;
-        Real   m_scale_decay_rate = 0.0f;
-        Real   m_emission_rate    = 0.0f;
-        Real   m_elapsed_time     = 0.0f;
-        size_t m_max_amount       = 100;
-        size_t m_free_index       = 0;
-        size_t m_emission_amount  = 1;
-        size_t m_active_amount    = 0;
-        size_t m_index_count      = 0;
-        Color  m_emitter_color;
+        //particle data
+        size_t   m_max_amount       = 100;
+        size_t   m_free_particle    = 0;
+        size_t   m_active_amount    = 0;
+        size_t   m_emission_amount  = 1;
+        Real     m_emission_rate    = 0.0f;
+        Real     m_elapsed_time     = 0.0f;
+        Real     m_life_decay_rate  = 0.0f;
+        Real     m_scale_decay_rate = 0.0f;
+        Particle m_base_particle;
 
-        //variance
+        //particle variance
         Vector3 m_position_variance;
         Vector3 m_direction_variance;
         Color   m_color_variance;
         Real    m_speed_variance = 0.0f;
-        Real    m_scale_variance = 0.0f;
         Real    m_life_variance  = 0.0f;
+        Real    m_scale_variance = 0.0f;
     };
 }
