@@ -103,24 +103,27 @@ namespace Engine5
         {
             return false;
         }
-        // Set up the description of the instance buffer.
-        D3D11_BUFFER_DESC instance_buffer_desc;
-        instance_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
-        instance_buffer_desc.ByteWidth           = sizeof(InstanceDataCommon) * static_cast<U32>(instances.size());
-        instance_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-        instance_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
-        instance_buffer_desc.MiscFlags           = 0;
-        instance_buffer_desc.StructureByteStride = 0;
-        // Give the sub resource structure a pointer to the instance data.
-        D3D11_SUBRESOURCE_DATA instance_data;
-        instance_data.pSysMem          = instances.data();
-        instance_data.SysMemPitch      = 0;
-        instance_data.SysMemSlicePitch = 0;
-        // Create the instance buffer.
-        result = m_device->CreateBuffer(&instance_buffer_desc, &instance_data, &m_instance_buffer);
-        if (FAILED(result))
+        if (instances.empty() == false)
         {
-            return false;
+            // Set up the description of the instance buffer.
+            D3D11_BUFFER_DESC instance_buffer_desc;
+            instance_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
+            instance_buffer_desc.ByteWidth           = sizeof(InstanceDataCommon) * static_cast<U32>(instances.size());
+            instance_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
+            instance_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
+            instance_buffer_desc.MiscFlags           = 0;
+            instance_buffer_desc.StructureByteStride = 0;
+            // Give the sub resource structure a pointer to the instance data.
+            D3D11_SUBRESOURCE_DATA instance_data;
+            instance_data.pSysMem          = instances.data();
+            instance_data.SysMemPitch      = 0;
+            instance_data.SysMemSlicePitch = 0;
+            // Create the instance buffer.
+            result = m_device->CreateBuffer(&instance_buffer_desc, &instance_data, &m_instance_buffer);
+            if (FAILED(result))
+            {
+                return false;
+            }
         }
         return true;
     }
@@ -167,24 +170,27 @@ namespace Engine5
         {
             return false;
         }
-        // Set up the description of the instance buffer.
-        D3D11_BUFFER_DESC instance_buffer_desc;
-        instance_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
-        instance_buffer_desc.ByteWidth           = sizeof(InstanceDataCommon) * static_cast<U32>(instances.size());
-        instance_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-        instance_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
-        instance_buffer_desc.MiscFlags           = 0;
-        instance_buffer_desc.StructureByteStride = 0;
-        // Give the sub resource structure a pointer to the instance data.
-        D3D11_SUBRESOURCE_DATA instance_data;
-        instance_data.pSysMem          = instances.data();
-        instance_data.SysMemPitch      = 0;
-        instance_data.SysMemSlicePitch = 0;
-        // Create the instance buffer.
-        result = m_device->CreateBuffer(&instance_buffer_desc, &instance_data, &m_instance_buffer);
-        if (FAILED(result))
+        if (instances.empty() == false)
         {
-            return false;
+            // Set up the description of the instance buffer.
+            D3D11_BUFFER_DESC instance_buffer_desc;
+            instance_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
+            instance_buffer_desc.ByteWidth           = sizeof(InstanceDataCommon) * static_cast<U32>(instances.size());
+            instance_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
+            instance_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
+            instance_buffer_desc.MiscFlags           = 0;
+            instance_buffer_desc.StructureByteStride = 0;
+            // Give the sub resource structure a pointer to the instance data.
+            D3D11_SUBRESOURCE_DATA instance_data;
+            instance_data.pSysMem          = instances.data();
+            instance_data.SysMemPitch      = 0;
+            instance_data.SysMemSlicePitch = 0;
+            // Create the instance buffer.
+            result = m_device->CreateBuffer(&instance_buffer_desc, &instance_data, &m_instance_buffer);
+            if (FAILED(result))
+            {
+                return false;
+            }
         }
         return true;
     }
@@ -231,21 +237,20 @@ namespace Engine5
         {
             return false;
         }
-
         if (instances.empty() == false)
         {
             // Set up the description of the instance buffer.
             D3D11_BUFFER_DESC instance_buffer_desc;
-            instance_buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
-            instance_buffer_desc.ByteWidth = sizeof(InstanceDataCommon) * static_cast<U32>(instances.size());
-            instance_buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-            instance_buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-            instance_buffer_desc.MiscFlags = 0;
+            instance_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
+            instance_buffer_desc.ByteWidth           = sizeof(InstanceDataCommon) * static_cast<U32>(instances.size());
+            instance_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
+            instance_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
+            instance_buffer_desc.MiscFlags           = 0;
             instance_buffer_desc.StructureByteStride = 0;
             // Give the sub resource structure a pointer to the instance data.
             D3D11_SUBRESOURCE_DATA instance_data;
-            instance_data.pSysMem = instances.data();
-            instance_data.SysMemPitch = 0;
+            instance_data.pSysMem          = instances.data();
+            instance_data.SysMemPitch      = 0;
             instance_data.SysMemSlicePitch = 0;
             // Create the instance buffer.
             result = m_device->CreateBuffer(&instance_buffer_desc, &instance_data, &m_instance_buffer);
@@ -254,8 +259,6 @@ namespace Engine5
                 return false;
             }
         }
-
-        
         return true;
     }
 
@@ -263,33 +266,30 @@ namespace Engine5
     {
         if (instances.empty() == false)
         {
-            if(m_instance_buffer != nullptr)
+            if (m_instance_buffer != nullptr)
             {
                 m_instance_buffer->Release();
                 m_instance_buffer = nullptr;
             }
-
             // Set up the description of the instance buffer.
             D3D11_BUFFER_DESC instance_buffer_desc;
-            instance_buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
-            instance_buffer_desc.ByteWidth = sizeof(InstanceDataCommon) * static_cast<U32>(instances.size());
-            instance_buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-            instance_buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-            instance_buffer_desc.MiscFlags = 0;
+            instance_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
+            instance_buffer_desc.ByteWidth           = sizeof(InstanceDataCommon) * static_cast<U32>(instances.size());
+            instance_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
+            instance_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
+            instance_buffer_desc.MiscFlags           = 0;
             instance_buffer_desc.StructureByteStride = 0;
             // Give the sub resource structure a pointer to the instance data.
             D3D11_SUBRESOURCE_DATA instance_data;
-            instance_data.pSysMem = instances.data();
-            instance_data.SysMemPitch = 0;
+            instance_data.pSysMem          = instances.data();
+            instance_data.SysMemPitch      = 0;
             instance_data.SysMemSlicePitch = 0;
             // Create the instance buffer.
             HRESULT result = m_device->CreateBuffer(&instance_buffer_desc, &instance_data, &m_instance_buffer);
-
             if (FAILED(result))
             {
                 return;
             }
-
             //if (m_instance_buffer == nullptr)
             //{
             //    // Set up the description of the instance buffer.
