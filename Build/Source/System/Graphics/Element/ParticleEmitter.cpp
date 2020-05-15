@@ -18,44 +18,27 @@ namespace Engine5
 
     void ParticleEmitter::Initialize()
     {
-        m_base_particle.life     = 100.0f;
-        m_base_particle.position = Vector3(0.0f, 10.0f, 0.0f);
-        m_base_particle.velocity = Vector3(0.0f, 0.0f, 0.0f);
-        m_base_particle.scale    = 0.25f;
-        m_base_particle.color    = ColorDef::Pure::Black;
-        m_direction_variance     = Vector3(1.0f, 1.0f, 1.0f);
-        m_speed_variance         = 0.20f;
-        m_color_variance         = Color(0.7f, 0.0f, 0.0f, 1.0f);
-        //m_position_variance = Vector3(1.0f, 1.0f, 1.0f);
-        m_emission_amount  = 1;
-        m_scale_decay_rate = 0.01f;
-        m_emission_rate    = 0.05f;
-        m_life_decay_rate  = 0.0f;
+        m_active_amount = 0;
     }
 
     void ParticleEmitter::Update(Real dt)
     {
+        KillParticles();
         m_elapsed_time += dt;
         if (m_elapsed_time > m_emission_rate)
         {
             m_elapsed_time = 0.0f;
             EmitParticles();
         }
-        
         m_instances.clear();
-        m_instances.reserve(m_max_amount);
-        m_active_amount = 0;
-        for (size_t i = 0; i < m_max_amount; ++i)
+        m_instances.reserve(m_active_amount);
+        for (size_t i = 0; i < m_active_amount; ++i)
         {
-            if (m_particles[i].IsActive())
-            {
-                m_particles[i].position += m_particles[i].velocity * dt;
-                m_particles[i].life -= m_base_particle.life * m_life_decay_rate * dt;
-                m_particles[i].scale -= m_base_particle.scale * m_scale_decay_rate * dt;
-                auto world = ParticleToWorldMatrix(m_particles[i]);
-                m_instances.emplace_back(world, m_particles[i].color);
-                m_active_amount++;
-            }
+            m_particles[i].position += m_particles[i].velocity * dt;
+            m_particles[i].life -= m_base_particle.life * m_life_decay_rate * dt;
+            m_particles[i].scale -= m_base_particle.scale * m_scale_decay_rate * dt;
+            auto world = ParticleToWorldMatrix(m_particles[i]);
+            m_instances.emplace_back(world, m_particles[i].color);
         }
         m_buffer->UpdateInstanceBuffer(m_instances);
     }
@@ -74,18 +57,14 @@ namespace Engine5
         {
             m_component->m_emitter = nullptr;
         }
-        m_instances.clear();
-        if (m_particles != nullptr)
-        {
-            delete[] m_particles;
-            m_particles = nullptr;
-        }
         if (m_buffer != nullptr)
         {
             m_buffer->Shutdown();
             delete m_buffer;
             m_buffer = nullptr;
         }
+        m_instances.clear();
+        m_particles.clear();
     }
 
     void ParticleEmitter::AddParticle(const Particle& particle)
@@ -148,12 +127,9 @@ namespace Engine5
 
     void ParticleEmitter::SetParticleAmount(size_t amount)
     {
-        if (m_particles != nullptr)
-        {
-            delete[] m_particles;
-        }
         m_max_amount = amount;
-        m_particles  = new Particle[ m_max_amount ];
+        m_particles.clear();
+        m_particles.resize(m_max_amount);
         m_instances.resize(m_max_amount);
         m_buffer->BuildInstanceBuffer(m_instances);
     }
@@ -272,7 +248,7 @@ namespace Engine5
     {
         for (size_t i = m_free_particle; i < m_max_amount; ++i)
         {
-            if (m_particles[i].IsActive() == false)
+            if (m_particles[i].b_active == false)
             {
                 m_free_particle = i;
                 return m_free_particle;
@@ -280,7 +256,7 @@ namespace Engine5
         }
         for (size_t i = 0; i < m_free_particle; ++i)
         {
-            if (m_particles[i].IsActive() == false)
+            if (m_particles[i].b_active == false)
             {
                 m_free_particle = i;
                 return m_free_particle;
@@ -322,7 +298,26 @@ namespace Engine5
             particle.scale = random.GetRangedRandomReal(0.0f, m_scale_variance);
             //apply default data
             particle.Merge(m_base_particle);
+            particle.b_active = true;
             AddParticle(particle);
+            m_active_amount++;
+        }
+    }
+
+    void ParticleEmitter::KillParticles()
+    {
+        for (size_t i = 0; i < m_max_amount; ++i)
+        {
+            if (m_particles[i].b_active == true && m_particles[i].IsAlive() == false)
+            {
+                m_particles[i].b_active = false;
+                m_active_amount--;
+                m_free_particle = m_active_amount;
+                for (size_t j = i; j < m_max_amount - 1; j++)
+                {
+                    m_particles[j] = m_particles[j + 1];
+                }
+            }
         }
     }
 

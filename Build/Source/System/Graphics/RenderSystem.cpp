@@ -166,6 +166,7 @@ namespace Engine5
         scene->SetRenderer(m_renderer);
         scene->SetMatrixManager(m_matrix_manager);
         scene->SetResourceManager(m_resource_manager);
+        scene->SetTextRenderer(m_text_renderer);
         scene->UpdateProjection();
         return scene;
     }

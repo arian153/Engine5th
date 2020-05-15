@@ -301,7 +301,7 @@ namespace Engine5
         //update animation
         //update sound
         //update scene
-        level->UpdateSubsystem(m_fixed_time_step, eSubsystemFlag::Scene);
+        level->UpdateSubsystem(dt, eSubsystemFlag::Scene);
         level->Update(dt);
     }
 
@@ -313,7 +313,7 @@ namespace Engine5
         //update animation
         //update sound
         //update scene
-        level->FixedUpdateSubsystem(m_fixed_time_step, eSubsystemFlag::Scene);
+        level->FixedUpdateSubsystem(dt, eSubsystemFlag::Scene);
         level->FixedUpdate(dt);
     }
 

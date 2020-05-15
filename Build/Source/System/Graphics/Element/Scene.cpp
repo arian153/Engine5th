@@ -13,6 +13,7 @@
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "ParticleEmitter.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
+#include "../Utility/TextRenderer.hpp"
 
 namespace Engine5
 {
@@ -42,7 +43,6 @@ namespace Engine5
 
     void Scene::Update(Real dt)
     {
-        E5_UNUSED_PARAM(dt);
         if (m_deferred_meshes.empty() == false)
         {
             MatrixData mvp_data;
@@ -79,6 +79,8 @@ namespace Engine5
         {
             particle->Update(dt);
         }
+        m_time += dt;
+        m_text_renderer->Output(Vector2(), ColorDef::Pure::Red, "passed : ", m_time, ", mspf : ", dt);
     }
 
     void Scene::Render() const
@@ -302,6 +304,11 @@ namespace Engine5
     void Scene::SetResourceManager(ResourceManager* resource_manager)
     {
         m_resource_manager = resource_manager;
+    }
+
+    void Scene::SetTextRenderer(TextRenderer* text_renderer)
+    {
+        m_text_renderer = text_renderer;
     }
 
     void Scene::SetProjectionType(eProjectionType projection_type)

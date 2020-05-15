@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class TextRenderer;
     class ResourceManager;
     class ParticleEmitter;
     class TextSprite;
@@ -40,6 +41,7 @@ namespace Engine5
         void SetMatrixManager(MatrixManager* matrix_manager);
         void SetMainCamera(Camera* camera);
         void SetResourceManager(ResourceManager* resource_manager);
+        void SetTextRenderer(TextRenderer* text_renderer);
 
         void SetProjectionType(eProjectionType projection_type);
         void UpdateView();
@@ -72,7 +74,6 @@ namespace Engine5
         void InitializeTextSprite(TextSprite* text_sprite) const;
         void InitializeParticleEmitter(ParticleEmitter* particle_emitter) const;
 
-
     private:
         RendererCommon*       m_renderer           = nullptr;
         ShaderManagerCommon*  m_shader_manager     = nullptr;
@@ -81,6 +82,7 @@ namespace Engine5
         Camera*               m_main_camera        = nullptr;
         PrimitiveRenderer*    m_primitive_renderer = nullptr;
         DeferredBufferCommon* m_deferred_buffer    = nullptr;
+        TextRenderer*         m_text_renderer      = nullptr;
 
         std::vector<Camera*>           m_cameras;
         std::vector<Mesh*>             m_forward_meshes;
@@ -90,13 +92,14 @@ namespace Engine5
         std::vector<SpotLight*>        m_spot_lights;
         std::vector<CapsuleLight*>     m_capsule_lights;
         std::vector<TextSprite*>       m_text_sprites;
-        std::vector<ParticleEmitter*> m_particle_emitters;
+        std::vector<ParticleEmitter*>  m_particle_emitters;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;
         Matrix44        m_projection_matrix;
         Matrix44        m_orthogonal_matrix;
 
+        Real m_time = 0.0f;
         bool m_b_deferred_shading = false;
     };
 }

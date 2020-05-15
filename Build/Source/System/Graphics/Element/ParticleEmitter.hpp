@@ -58,18 +58,20 @@ namespace Engine5
     private:
         size_t   GetFreeIndex();
         void     EmitParticles();
+        void     KillParticles();
         Matrix44 ParticleToWorldMatrix(const Particle& particle) const;
 
     private:
         friend class ParticleEmitterComponent;
 
     private:
-        Particle*                       m_particles = nullptr;
+        //Particle*                       m_particles = nullptr;
         RendererCommon*                 m_renderer  = nullptr;
         TextureCommon*                  m_texture   = nullptr;
         InstanceBufferCommon*           m_buffer    = nullptr;
         Transform*                      m_transform = nullptr;
         ParticleEmitterComponent*       m_component = nullptr;
+        std::vector<Particle>           m_particles;
         std::vector<InstanceDataCommon> m_instances;
         size_t                          m_index_count = 0;
 

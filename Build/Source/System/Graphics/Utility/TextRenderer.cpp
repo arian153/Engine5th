@@ -65,4 +65,8 @@ namespace Engine5
         text_buffer.SetTextLayout(text, m_matrix_manager->GetScreenWidth(), m_matrix_manager->GetScreenHeight());
         m_text_layouts.push_back(text_buffer);
     }
+
+    void TextRenderer::Output()
+    {
+    }
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Math/Math.hpp"
 #include "../Buffer/TextLayoutBufferCommon.hpp"
+#include <sstream>
 
 namespace Engine5
 {
@@ -20,6 +21,30 @@ namespace Engine5
         void ClearTextLayouts();
 
         void Print(const Vector2& position, const Color& color, const std::wstring& text);
+
+        template <typename... Rest>
+        void Output(const Vector2& position, const Color&  color, const Rest&... rest)
+        {
+            std::wstringstream stream;
+            Output(position, color, stream, rest...);
+        }
+
+        template <typename First, typename... Rest>
+        void Output(const Vector2& position, const Color&  color, std::wstringstream& stream, const First& first, const Rest&... rest)
+        {
+            stream << first;
+            Output(position, color, stream, rest...);
+        }
+
+        template <typename T>
+        void Output(const Vector2& position, const Color&  color, std::wstringstream& stream, const T& t)
+        {
+            stream << t;
+            auto text = stream.str();
+            Print(position, color, text);
+        }
+
+        void Output();
 
     private:
         RendererCommon* m_renderer = nullptr;

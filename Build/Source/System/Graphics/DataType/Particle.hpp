@@ -15,7 +15,7 @@ namespace Engine5
         {
         }
 
-        bool IsActive() const
+        bool IsAlive() const
         {
             return life > 0.0f && scale > 0.0f;
         }
@@ -42,6 +42,7 @@ namespace Engine5
                 color    = rhs.color;
                 life     = rhs.life;
                 scale    = rhs.scale;
+                b_active = rhs.b_active;
             }
             return *this;
         }
@@ -50,7 +51,8 @@ namespace Engine5
         Vector3 position;
         Vector3 velocity;
         Color   color;
-        Real    life  = 0.0f;
-        Real    scale = 1.0f;
+        Real    life     = 0.0f;
+        Real    scale    = 1.0f;
+        bool    b_active = false;
     };
 }
