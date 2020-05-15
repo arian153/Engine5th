@@ -3,6 +3,8 @@
 #include "../../Math/Utility/Random.hpp"
 #include "../Buffer/InstanceBufferCommon.hpp"
 #include "../../Math/Algebra/Matrix44.hpp"
+#include "../../../Manager/Component/EngineComponent/ParticleEmitterComponent.hpp"
+#include "../../Math/Structure/Transform.hpp"
 
 namespace Engine5
 {
@@ -25,12 +27,10 @@ namespace Engine5
         m_speed_variance         = 0.20f;
         m_color_variance         = Color(0.7f, 0.0f, 0.0f, 1.0f);
         //m_position_variance = Vector3(1.0f, 1.0f, 1.0f);
-
-        m_emission_amount = 1;
-
+        m_emission_amount  = 1;
         m_scale_decay_rate = 0.01f;
-        m_emission_rate = 0.05f;
-        m_life_decay_rate = 0.0f;
+        m_emission_rate    = 0.05f;
+        m_life_decay_rate  = 0.0f;
     }
 
     void ParticleEmitter::Update(Real dt)
@@ -41,6 +41,7 @@ namespace Engine5
             m_elapsed_time = 0.0f;
             EmitParticles();
         }
+        
         m_instances.clear();
         m_instances.reserve(m_max_amount);
         m_active_amount = 0;
@@ -67,8 +68,12 @@ namespace Engine5
         }
     }
 
-    void ParticleEmitter::ShutDown()
+    void ParticleEmitter::Shutdown()
     {
+        if (m_component != nullptr)
+        {
+            m_component->m_emitter = nullptr;
+        }
         m_instances.clear();
         if (m_particles != nullptr)
         {
@@ -252,6 +257,15 @@ namespace Engine5
     TextureCommon* ParticleEmitter::GetTexture() const
     {
         return m_texture;
+    }
+
+    Matrix44 ParticleEmitter::GetModelMatrix() const
+    {
+        if (m_transform != nullptr)
+        {
+            return m_transform->LocalToWorldMatrix();
+        }
+        return Matrix44();
     }
 
     size_t ParticleEmitter::GetFreeIndex()

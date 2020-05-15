@@ -56,6 +56,7 @@ namespace Engine5
         void    AddLight(SpotLight* light);
         void    AddLight(CapsuleLight* light);
         void    AddTextSprite(TextSprite* text_sprite);
+        void    AddParticleEmitter(ParticleEmitter* particle_emitter);
 
         //remove
         void RemoveCamera(Camera* camera);
@@ -65,9 +66,12 @@ namespace Engine5
         void RemoveLight(SpotLight* light);
         void RemoveLight(CapsuleLight* light);
         void RemoveTextSprite(TextSprite* text_sprite);
+        void RemoveParticleEmitter(ParticleEmitter* particle_emitter);
 
         void ChangeShaderType(Mesh* mesh);
         void InitializeTextSprite(TextSprite* text_sprite) const;
+        void InitializeParticleEmitter(ParticleEmitter* particle_emitter) const;
+
 
     private:
         RendererCommon*       m_renderer           = nullptr;
@@ -86,9 +90,7 @@ namespace Engine5
         std::vector<SpotLight*>        m_spot_lights;
         std::vector<CapsuleLight*>     m_capsule_lights;
         std::vector<TextSprite*>       m_text_sprites;
-        //std::vector<ParticleEmitter*> m_particle_emitters;
-
-        ParticleEmitter* m_particle = nullptr;
+        std::vector<ParticleEmitter*> m_particle_emitters;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;

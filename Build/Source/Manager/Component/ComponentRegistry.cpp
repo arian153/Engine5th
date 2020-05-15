@@ -9,6 +9,7 @@
 #include "EngineFactory/MeshFactory.hpp"
 #include "EngineFactory/LightFactory.hpp"
 #include "EngineFactory/TextSpriteFactory.hpp"
+#include "EngineFactory/ParticleEmitterFactory.hpp"
 
 namespace Engine5
 {
@@ -29,6 +30,7 @@ namespace Engine5
         AddFactory(new MeshFactory());
         AddFactory(new LightFactory());
         AddFactory(new TextSpriteFactory());
+        AddFactory(new ParticleEmitterFactory());
         return true;
     }
 

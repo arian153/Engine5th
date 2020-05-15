@@ -33,8 +33,121 @@
             ],
             "Name": "Camera"
         },
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "ParticleEmitterComponent",
+                    "Value": {
+                        "Texture": "../../Resource/Texture/white.dds",
+                        "Particle Amount": 100,
+                        "Emission Amount": 1,
+                        "Emission Rate": 0.5,
+                        "Life Decay Rate": 0.1,
+                        "Scale Decay Rate": 0.1,
+                        "Base Position": [ 0, 0, 0 ],
+                        "Base Velocity": [ 0, 0, 0 ],
+                        "Base Color": [ 1, 1, 0.5, 1.0 ],
+                        "Base Life": 3.0,
+                        "Base Scale": 1,
+                        "Position Variance": [ 0, 0, 0 ],
+                        "Direction Variance": [ 0.5, 1, 1 ],
+                        "Color Variance": [ 0.1, 0.1, 0, 0 ],
+                        "Speed Variance": 5.0,
+                        "Life Variance": 0.1,
+                        "Scale Variance": 0.0
+                    }
+                }
+            ],
+            "Name": "Particle"
+        },
 
-   
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 0, 0, 0 ],
+                        "Position": [ -10, 5, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "ParticleEmitterComponent",
+                    "Value": {
+                        "Texture": "../../Resource/Texture/white.dds",
+                        "Particle Amount": 1000,
+                        "Emission Amount": 500,
+                        "Emission Rate": 12,
+                        "Life Decay Rate": 0.1,
+                        "Scale Decay Rate": 0.1,
+                        "Base Position": [ 0, 0, 0 ],
+                        "Base Velocity": [ 0, -1, 0 ],
+                        "Base Color": [ 0.5, 0.5, 1, 1.0 ],
+                        "Base Life": 3.0,
+                        "Base Scale": 1,
+                        "Position Variance": [ 0, 0, 0 ],
+                        "Direction Variance": [ 0.5, 1, 0 ],
+                        "Color Variance": [ 0.1, 0.1, 0, 0 ],
+                        "Speed Variance": 5.0,
+                        "Life Variance": 0.1,
+                        "Scale Variance": 0.0
+                    }
+                }
+            ],
+            "Name": "Particle"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 0, 1.7, 0 ],
+                        "Position": [ 0, -15, 0 ],
+                        "Scale": [ 0.02, 0.02, 0.02 ]
+                    }
+                },
+                {
+                    "Type": "MeshComponent",
+                    "Value": {
+                        "Color": [ 1, 1, 1, 1 ],
+                        "Mesh": "../../Resource/Mesh/deer.obj",
+                        "Shader Type": "Forward Directional Light",
+                        "Texture": "../../Resource/Texture/white.dds"
+                    }
+                }
+            ],
+            "Name": "Deer1"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 0, 1.7, 0 ],
+                        "Position": [ 10, -15, 0 ],
+                        "Scale": [ 0.02, 0.02, 0.02 ]
+                    }
+                },
+                {
+                    "Type": "MeshComponent",
+                    "Value": {
+                        "Color": [ 1, 1, 1, 1 ],
+                        "Mesh": "../../Resource/Mesh/deer.obj",
+                        "Shader Type": "Forward Directional Light",
+                        "Texture": "../../Resource/Texture/white.dds"
+                    }
+                }
+            ],
+            "Name": "Deer2"
+        },
         {
             "Components": [
                 {
@@ -48,16 +161,13 @@
                 {
                     "Type": "LightComponent",
                     "Value": {
-
                         "Type": "DirectionalLight",
                         "Ambient Color": [ 0.5, 0.1, 0.1, 1 ]
                     }
                 }
-
             ],
             "Name": "Light"
         },
-
         {
             "Components": [
                 {
@@ -71,16 +181,13 @@
                 {
                     "Type": "LightComponent",
                     "Value": {
-
                         "Type": "DirectionalLight",
                         "Ambient Color": [ 0.5, 0.1, 0.1, 1 ]
                     }
                 }
-
             ],
             "Name": "Light2"
         },
-
         {
             "Components": [
                 {
@@ -99,11 +206,9 @@
                         "Font": "consolas"
                     }
                 }
-
             ],
-            "Name": "Deer2"
+            "Name": "Text Object"
         },
-
         {
             "Components": [
                 {
@@ -218,23 +323,23 @@
     ],
     "Settings": {
         "Draw Broad Phase": {
-            "Color": [ 1, 1, 1, 1 ],
+            "Color": [1, 1, 1, 1],
             "Flag": true
         },
         "Draw Contact": {
-            "Color": [ 1, 1, 1, 1 ],
+            "Color": [1, 1, 1, 1],
             "Flag": false
         },
         "Draw EPA": {
-            "Color": [ 1, 1, 1, 1 ],
+            "Color": [1, 1, 1, 1],
             "Flag": false
         },
         "Draw GJK": {
-            "Color": [ 1, 1, 1, 1 ],
+            "Color": [1, 1, 1, 1],
             "Flag": false
         },
         "Draw Primitive": {
-            "Color": [ 1, 1, 1, 1 ],
+            "Color": [1, 1, 1, 1],
             "Flag": true
         },
         "ProjectionMatrix": "Perspective"

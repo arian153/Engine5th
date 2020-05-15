@@ -13,7 +13,6 @@
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "ParticleEmitter.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
-#include "../../../Manager/Resource/ResourceType/TextureResource.hpp"
 
 namespace Engine5
 {
@@ -39,12 +38,6 @@ namespace Engine5
                                       m_matrix_manager->GetScreenHeight());
         UpdateView();
         UpdateProjection();
-        m_particle = new ParticleEmitter();
-        m_particle->SetRenderer(m_renderer);
-        m_particle->SetBuffer();
-        m_particle->SetParticleAmount(5000);
-        m_particle->SetTexture(m_resource_manager->GetTextureResourceFileName(L"white.dds")->GetTexture());
-        m_particle->Initialize();
     }
 
     void Scene::Update(Real dt)
@@ -82,7 +75,10 @@ namespace Engine5
             // Reset the viewport back to the original.
             m_renderer->ResetViewport();
         }
-        m_particle->Update(dt);
+        for (auto& particle : m_particle_emitters)
+        {
+            particle->Update(dt);
+        }
     }
 
     void Scene::Render() const
@@ -186,15 +182,15 @@ namespace Engine5
                                                       text_sprite->GetTexture(),
                                                       text_sprite->GetColor());
             }
-            if (m_particle != nullptr)
+            for (auto& particle : m_particle_emitters)
             {
-                mvp_data.model.SetIdentity();
-                m_particle->Render();
+                mvp_data.model = particle->GetModelMatrix();
+                particle->Render();
                 m_shader_manager->RenderInstanceTextureShader(
-                                                              (U32)m_particle->GetIndexCount(),
-                                                              (U32)m_particle->GetInstanceCount(),
+                                                              (U32)particle->GetIndexCount(),
+                                                              (U32)particle->GetInstanceCount(),
                                                               mvp_data,
-                                                              m_particle->GetTexture(),
+                                                              particle->GetTexture(),
                                                               ColorDef::Pure::White);
             }
         }
@@ -202,12 +198,6 @@ namespace Engine5
 
     void Scene::Shutdown()
     {
-        if (m_particle != nullptr)
-        {
-            m_particle->ShutDown();
-            delete m_particle;
-            m_particle = nullptr;
-        }
         m_matrix_manager->RemoveScene(this);
         if (m_primitive_renderer != nullptr)
         {
@@ -277,6 +267,13 @@ namespace Engine5
             text_sprite = nullptr;
         }
         m_text_sprites.clear();
+        for (auto& particle : m_particle_emitters)
+        {
+            particle->Shutdown();
+            delete particle;
+            particle = nullptr;
+        }
+        m_particle_emitters.clear();
     }
 
     void Scene::SetRenderer(RendererCommon* renderer)
@@ -409,6 +406,11 @@ namespace Engine5
         m_text_sprites.push_back(text_sprite);
     }
 
+    void Scene::AddParticleEmitter(ParticleEmitter* particle_emitter)
+    {
+        m_particle_emitters.push_back(particle_emitter);
+    }
+
     void Scene::RemoveCamera(Camera* camera)
     {
         auto found = std::find(m_cameras.begin(), m_cameras.end(), camera);
@@ -459,6 +461,12 @@ namespace Engine5
         m_text_sprites.erase(found);
     }
 
+    void Scene::RemoveParticleEmitter(ParticleEmitter* particle_emitter)
+    {
+        auto found = std::find(m_particle_emitters.begin(), m_particle_emitters.end(), particle_emitter);
+        m_particle_emitters.erase(found);
+    }
+
     void Scene::ChangeShaderType(Mesh* mesh)
     {
         //remove
@@ -489,5 +497,11 @@ namespace Engine5
     void Scene::InitializeTextSprite(TextSprite* text_sprite) const
     {
         text_sprite->Initialize(m_renderer);
+    }
+
+    void Scene::InitializeParticleEmitter(ParticleEmitter* particle_emitter) const
+    {
+        particle_emitter->SetRenderer(m_renderer);
+        particle_emitter->SetBuffer();
     }
 }

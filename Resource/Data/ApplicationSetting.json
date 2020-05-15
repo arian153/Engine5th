@@ -1,7 +1,7 @@
 {
     "Settings": {
         "Confine Cursor": false,
-        "Screen Resolution": [ 2880, 1800 ],
+        "Screen Resolution": [ 1280, 800 ],
         "Show Cursor": true,
         "V-Sync": false,
         "Window Caption": "Engine 5th Testbed",

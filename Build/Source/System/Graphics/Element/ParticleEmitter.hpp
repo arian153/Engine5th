@@ -11,6 +11,7 @@ namespace Engine5
     class InstanceBufferCommon;
     class Color;
     class TextureCommon;
+    class ParticleEmitterComponent;
 
     class ParticleEmitter
     {
@@ -21,7 +22,7 @@ namespace Engine5
         void Initialize();
         void Update(Real dt);
         void Render() const;
-        void ShutDown();
+        void Shutdown();
 
         void AddParticle(const Particle& particle);
         void AddParticle(const Vector3& pos, const Vector3& vel, const Color& color, Real life = 1.0f, Real scale = 1.0f);
@@ -53,16 +54,22 @@ namespace Engine5
         size_t         GetIndexCount() const;
         size_t         GetInstanceCount() const;
         TextureCommon* GetTexture() const;
+        Matrix44       GetModelMatrix() const;
     private:
         size_t   GetFreeIndex();
         void     EmitParticles();
         Matrix44 ParticleToWorldMatrix(const Particle& particle) const;
+
+    private:
+        friend class ParticleEmitterComponent;
+
     private:
         Particle*                       m_particles = nullptr;
         RendererCommon*                 m_renderer  = nullptr;
         TextureCommon*                  m_texture   = nullptr;
         InstanceBufferCommon*           m_buffer    = nullptr;
         Transform*                      m_transform = nullptr;
+        ParticleEmitterComponent*       m_component = nullptr;
         std::vector<InstanceDataCommon> m_instances;
         size_t                          m_index_count = 0;
 
