@@ -301,22 +301,28 @@ namespace Engine5
             particle.b_active = true;
             AddParticle(particle);
             m_active_amount++;
+            if (m_active_amount >= m_max_amount)
+            {
+                m_active_amount = m_max_amount;
+            }
         }
     }
 
     void ParticleEmitter::KillParticles()
     {
-        for (size_t i = 0; i < m_max_amount; ++i)
+        for (size_t i = 0; i < m_max_amount;)
         {
             if (m_particles[i].b_active == true && m_particles[i].IsAlive() == false)
             {
                 m_particles[i].b_active = false;
                 m_active_amount--;
                 m_free_particle = m_active_amount;
-                for (size_t j = i; j < m_max_amount - 1; j++)
-                {
-                    m_particles[j] = m_particles[j + 1];
-                }
+                size_t count    = m_max_amount - 1 - i;
+                memcpy(&m_particles[i], &m_particles[i + 1], sizeof(Particle) * count);
+            }
+            else
+            {
+                ++i;
             }
         }
     }

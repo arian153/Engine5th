@@ -81,7 +81,7 @@ namespace Engine5
         size_t   m_active_amount    = 0;
         size_t   m_emission_amount  = 1;
         Real     m_emission_rate    = 0.0f;
-        Real     m_elapsed_time     = 0.0f;
+        Real     m_elapsed_time     = Math::REAL_POSITIVE_MAX;
         Real     m_life_decay_rate  = 0.0f;
         Real     m_scale_decay_rate = 0.0f;
         Particle m_base_particle;
