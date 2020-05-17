@@ -91,7 +91,6 @@ namespace Engine5
     {
         m_renderer->BeginScene(m_background_color);
         m_text_renderer->Render();
-
         /*m_render_texture_generator->BeginRenderToTexture(m_background_color);
         m_render_texture_generator->EndRenderToTexture();
 
@@ -180,5 +179,10 @@ namespace Engine5
             delete scene;
             scene = nullptr;
         }
+    }
+
+    TextRenderer* RenderSystem::GetTextRenderer() const
+    {
+        return m_text_renderer;
     }
 }

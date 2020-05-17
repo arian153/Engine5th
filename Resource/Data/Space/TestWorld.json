@@ -49,7 +49,7 @@
                         "Texture": "../../Resource/Texture/white.dds",
                         "Particle Amount": 10000,
                         "Emission Amount": 1,
-                        "Emission Rate": 0.0,
+                        "Emission Rate": 320.0,
                         "Life Decay Rate": 0.1,
                         "Scale Decay Rate": 0.1,
                         "Base Position": [ 0, 0, 0 ],

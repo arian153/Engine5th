@@ -310,7 +310,7 @@ namespace Engine5
 
     void ParticleEmitter::KillParticles()
     {
-        for (size_t i = 0; i < m_max_amount;)
+        for (size_t i = 0; i < m_active_amount;)
         {
             if (m_particles[i].b_active == true && m_particles[i].IsAlive() == false)
             {

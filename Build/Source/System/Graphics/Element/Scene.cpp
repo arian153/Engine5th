@@ -10,7 +10,6 @@
 #include "../Light/SpotLight.hpp"
 #include "../Light/CapsuleLight.hpp"
 #include "TextSprite.hpp"
-#include "../../Core/Utility/CoreUtility.hpp"
 #include "ParticleEmitter.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
 #include "../Utility/TextRenderer.hpp"
@@ -79,8 +78,6 @@ namespace Engine5
         {
             particle->Update(dt);
         }
-        m_time += dt;
-        m_text_renderer->Output(Vector2(), ColorDef::Pure::Red, "passed : ", m_time, ", mspf : ", dt);
     }
 
     void Scene::Render() const
