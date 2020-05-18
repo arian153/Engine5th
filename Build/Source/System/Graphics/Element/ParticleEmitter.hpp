@@ -32,6 +32,7 @@ namespace Engine5
         void SetBuffer();
         void SetTexture(TextureCommon* texture);
         void SetTransform(Transform* transform);
+        void SetBillboardPosition(const Vector3& position);
         void SetParticleAmount(size_t amount);
         void SetEmissionAmount(size_t amount);
         void SetEmissionRate(Real rate);
@@ -74,6 +75,7 @@ namespace Engine5
         std::vector<Particle>           m_particles;
         std::vector<InstanceDataCommon> m_instances;
         size_t                          m_index_count = 0;
+        Vector3                         m_billboard_position;
 
         //particle data
         size_t   m_max_amount       = 100;

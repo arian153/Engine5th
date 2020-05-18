@@ -184,6 +184,7 @@ namespace Engine5
             for (auto& particle : m_particle_emitters)
             {
                 mvp_data.model = particle->GetModelMatrix();
+                particle->SetBillboardPosition(camera->GetPosition());
                 particle->Render();
                 m_shader_manager->RenderInstanceTextureShader(
                                                               (U32)particle->GetIndexCount(),

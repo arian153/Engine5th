@@ -5,6 +5,8 @@
 #include "../../Math/Algebra/Matrix44.hpp"
 #include "../../../Manager/Component/EngineComponent/ParticleEmitterComponent.hpp"
 #include "../../Math/Structure/Transform.hpp"
+#include "../../Math/Utility/Utility.hpp"
+#include "../../Math/Utility/MatrixUtility.hpp"
 
 namespace Engine5
 {
@@ -123,6 +125,11 @@ namespace Engine5
     void ParticleEmitter::SetTransform(Transform* transform)
     {
         m_transform = transform;
+    }
+
+    void ParticleEmitter::SetBillboardPosition(const Vector3& position)
+    {
+        m_billboard_position = position;
     }
 
     void ParticleEmitter::SetParticleAmount(size_t amount)
@@ -331,6 +338,9 @@ namespace Engine5
     {
         Matrix44 result;
         result.SetDiagonal(particle.scale, particle.scale, particle.scale, 1.0f);
+        Real angle    = atan2f(particle.position.x - m_billboard_position.x, particle.position.z - m_billboard_position.z) * (180.0f / Math::PI);
+        Real rotation = Utility::DegreesToRadians(angle);
+        result        = Math::Matrix44::RotationY(rotation) * result;
         result.AddVectorColumn(3, particle.position);
         return result;
     }

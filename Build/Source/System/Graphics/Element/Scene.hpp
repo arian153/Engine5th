@@ -99,7 +99,6 @@ namespace Engine5
         Matrix44        m_projection_matrix;
         Matrix44        m_orthogonal_matrix;
 
-        Real m_time = 0.0f;
         bool m_b_deferred_shading = false;
     };
 }
