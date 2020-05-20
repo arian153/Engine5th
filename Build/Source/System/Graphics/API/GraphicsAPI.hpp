@@ -11,6 +11,7 @@
 #define TextLayoutBufferAPI TextLayoutBufferDX11
 #define TextFormatBufferAPI TextFormatBufferDX11
 #define InstanceBufferAPI InstanceBufferDX11
+#define DynamicMeshBufferAPI DynamicMeshBufferDX11
 
 //others
 #define TextureAPI TextureDX11
@@ -39,6 +40,7 @@
 #define IncludeTextLayoutBufferAPI "../API/DX11/Buffer/TextLayoutBufferDX11.hpp"
 #define IncludeTextFormatBufferAPI "../API/DX11/Buffer/TextFormatBufferDX11.hpp"
 #define IncludeInstanceBufferAPI "../API/DX11/Buffer/InstanceBufferDX11.hpp"
+#define IncludeDynamicMeshBufferAPI "../API/DX11/Buffer/DynamicMeshBufferDX11.hpp"
 
 #define IncludeTextureAPI "../API/DX11/Texture/TextureDX11.hpp"
 #define IncludeColorVertexAPI "../API/DX11/Vertex/ColorVertexDX11.hpp"
