@@ -230,22 +230,20 @@ namespace Engine5
     {
         if (instances.empty() == false)
         {
+            // Lock the instance buffer so it can be written to.
+            D3D11_MAPPED_SUBRESOURCE mapped_resource;
+            // mapping
+            HRESULT result = m_device_context->Map(m_instance_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+            if (FAILED(result))
             {
-                // Lock the instance buffer so it can be written to.
-                D3D11_MAPPED_SUBRESOURCE mapped_resource;
-                // mapping
-                HRESULT result = m_device_context->Map(m_instance_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
-                if (FAILED(result))
-                {
-                    return;
-                }
-                // Get a pointer to the data in the instance buffer.
-                InstanceDataCommon* instances_ptr = (InstanceDataCommon*)mapped_resource.pData;
-                // Copy the data into the vertex buffer.
-                memcpy(instances_ptr, (void*)instances.data(), sizeof(InstanceDataCommon) * static_cast<U32>(instances.size()));
-                // Unlock the instance buffer.
-                m_device_context->Unmap(m_instance_buffer, 0);
+                return;
             }
+            // Get a pointer to the data in the instance buffer.
+            InstanceDataCommon* instances_ptr = (InstanceDataCommon*)mapped_resource.pData;
+            // Copy the data into the vertex buffer.
+            memcpy(instances_ptr, (void*)instances.data(), sizeof(InstanceDataCommon) * static_cast<U32>(instances.size()));
+            // Unlock the instance buffer.
+            m_device_context->Unmap(m_instance_buffer, 0);
         }
     }
 }
