@@ -74,20 +74,20 @@ namespace Engine5
     bool TextureCommon::Initialize(TextTextureBufferCommon* text_buffer)
     {
         m_texture  = text_buffer->GetTextResource();
-        m_b_buffer = true;
+        m_b_created = true;
         return true;
     }
 
     bool TextureCommon::Initialize(RenderTextureBufferCommon* render_texture_buffer)
     {
         m_texture  = render_texture_buffer->GetTextureResource();
-        m_b_buffer = true;
+        m_b_created = true;
         return true;
     }
 
     bool TextureCommon::Shutdown()
     {
-        if (m_b_buffer == false)
+        if (m_b_created == false)
         {
             if (m_texture != nullptr)
             {
