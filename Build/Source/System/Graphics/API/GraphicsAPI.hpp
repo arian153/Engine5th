@@ -15,6 +15,8 @@
 
 //others
 #define TextureAPI TextureDX11
+#define TextureArrayAPI TextureArrayDX11
+#define TextureAtlasAPI TextureAtlasDX11
 #define ColorVertexAPI ColorVertexDX11
 #define NormalVertexAPI NormalVertexDX11
 #define TextureVertexAPI TextureVertexDX11
@@ -43,6 +45,8 @@
 #define IncludeDynamicMeshBufferAPI "../API/DX11/Buffer/DynamicMeshBufferDX11.hpp"
 
 #define IncludeTextureAPI "../API/DX11/Texture/TextureDX11.hpp"
+#define IncludeTextureArrayAPI "../API/DX11/Texture/TextureArrayDX11.hpp"
+#define IncludeTextureAtlasAPI "../API/DX11/Texture/TextureAtlasDX11.hpp"
 #define IncludeColorVertexAPI "../API/DX11/Vertex/ColorVertexDX11.hpp"
 #define IncludeNormalVertexAPI "../API/DX11/Vertex/NormalVertexDX11.hpp"
 #define IncludeTextureVertexAPI "../API/DX11/Vertex/TextureVertexDX11.hpp"
