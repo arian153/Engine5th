@@ -8,6 +8,6 @@ namespace Engine5
         TextureAtlasDX11();
         ~TextureAtlasDX11();
 
-    private:
+    protected:
     };
 }
