@@ -1,4 +1,4 @@
-Texture2D shader_texture;
+Texture2D shader_texture[2];
 SamplerState sample_type;
 
 cbuffer MatrixBuffer
@@ -9,6 +9,12 @@ cbuffer MatrixBuffer
 cbuffer ColorBuffer
 {
     float4 color;
+};
+
+cbuffer GammaBuffer
+{
+    float gamma_correction;
+    float3 padding;
 };
 
 //defs
@@ -39,5 +45,9 @@ PixelInputType TextureVertexShader(VertexInputType input)
 // Pixel Shader
 float4 TexturePixelShader(PixelInputType input) : SV_TARGET
 {
-    return shader_texture.Sample(sample_type, input.uv) * color;
+    float4 color1 = shader_texture[ 0 ].Sample(sample_type, input.uv);
+    float4 color2 = shader_texture[ 1 ].Sample(sample_type, input.uv);
+    float4 blend_color = color1 * color2 * gamma_correction;
+    blend_color = saturate(blend_color);
+    return blend_color * color;
 }
