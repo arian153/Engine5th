@@ -28,6 +28,7 @@
 #define TextureShaderAPI TextureShaderDX11
 #define InstanceTextureShaderAPI InstanceTextureShaderDX11
 #define ForwardDirectionalLightShaderAPI ForwardDirectionalLightShaderDX11
+#define MultiTextureShaderAPI MultiTextureShaderDX11
 
 //deferred shader
 #define DeferredDirectionalLightShaderAPI DeferredDirectionalLightShaderDX11
@@ -58,6 +59,7 @@
 #define IncludeTextureShaderAPI "../../API/DX11/Shader/Forward/TextureShaderDX11.hpp"
 #define IncludeInstanceTextureShaderAPI "../../API/DX11/Shader/Forward/InstanceTextureShaderDX11.hpp"
 #define IncludeForwardDirectionalLightShaderAPI "../../API/DX11/Shader/Forward/ForwardDirectionalLightShaderDX11.hpp"
+#define IncludeMultiTextureShaderAPI "../../API/DX11/Shader/Forward/MultiTextureShaderDX11.hpp"
 
 //deferred
 #define IncludeDeferredBufferShaderAPI "../../API/DX11/Shader/Deferred/DeferredBufferShaderDX11.hpp"

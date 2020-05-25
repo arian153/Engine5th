@@ -19,9 +19,8 @@ namespace Engine5
         bool Initialize(TextTextureBufferCommon* text_buffer);
         bool Initialize(RenderTextureBufferCommon* render_texture_buffer);
         bool Shutdown();
+
     private:
         bool m_b_created = false;
     };
-
-   
 }
