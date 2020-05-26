@@ -2,9 +2,11 @@
 #include "../../Core/Utility/CoreDef.hpp"
 #include "../API/GraphicsAPI.hpp"
 #include IncludeShaderManagerAPI
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
+    class MultiTextureShaderCommon;
     class InstanceTextureShaderCommon;
     class ForwardDirectionalLightShaderCommon;
     class DeferredDirectionalLightShaderCommon;
@@ -19,6 +21,7 @@ namespace Engine5
     class DeferredBufferShaderCommon;
     class DeferredBufferCommon;
     class Color;
+    class TextureArrayCommon;
 
     class ShaderManagerCommon : public ShaderManagerAPI
     {
@@ -36,20 +39,23 @@ namespace Engine5
         void RenderDeferredBufferShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
 
         void RenderInstanceTextureShader(U32 index_count, U32 instance_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
+        void RenderMultiTextureShader(U32 index_count, const MatrixData& mvp_data, TextureArrayCommon* texture, const Color& color, Real gamma = 2.2f) const;
 
         ColorShaderCommon*                    GetColorShader() const;
         TextureShaderCommon*                  GetTextureShader() const;
         ForwardDirectionalLightShaderCommon*  GetForwardDirectionalLightShader() const;
         DeferredDirectionalLightShaderCommon* GetDeferredDirectionalShaderLightShader() const;
         DeferredBufferShaderCommon*           GetDeferredBufferShader() const;
-        InstanceTextureShaderCommon* GetInstanceTextureShader() const;
+        InstanceTextureShaderCommon*          GetInstanceTextureShader() const;
+        MultiTextureShaderCommon*             GetMultiTextureShader() const;
 
     private:
         //shader list
 
-        ColorShaderCommon*   m_color_shader   = nullptr;
-        TextureShaderCommon* m_texture_shader = nullptr;
+        ColorShaderCommon*           m_color_shader            = nullptr;
+        TextureShaderCommon*         m_texture_shader          = nullptr;
         InstanceTextureShaderCommon* m_instance_texture_shader = nullptr;
+        MultiTextureShaderCommon*    m_multi_texture_shader    = nullptr;
 
         //forward
         ForwardDirectionalLightShaderCommon* m_forward_directional_light_shader = nullptr;

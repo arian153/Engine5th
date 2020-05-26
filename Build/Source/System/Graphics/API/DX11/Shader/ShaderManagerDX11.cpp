@@ -9,6 +9,7 @@
 #include "../../../Shader/Deferred/DeferredBufferShaderCommon.hpp"
 #include "../../../Shader/Forward/ForwardDirectionalLightShaderCommon.hpp"
 #include "../../../Shader/Forward/InstanceTextureShaderCommon.hpp"
+#include "../../../Shader/Forward/MultiTextureShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -114,6 +115,13 @@ namespace Engine5
         m_instance_texture_shader->SetDevice(m_device);
         m_instance_texture_shader->SetDeviceContext(m_device_context);
         m_instance_texture_shader->Initialize();
+        //multi texture shader
+        m_multi_texture_shader = new MultiTextureShaderCommon(this);
+        m_multi_texture_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"MultiTexture.fx"));
+        m_multi_texture_shader->SetHWnd(m_hwnd);
+        m_multi_texture_shader->SetDevice(m_device);
+        m_multi_texture_shader->SetDeviceContext(m_device_context);
+        m_multi_texture_shader->Initialize();
     }
 
     void ShaderManagerCommon::Shutdown()
@@ -154,6 +162,12 @@ namespace Engine5
             delete m_instance_texture_shader;
             m_instance_texture_shader = nullptr;
         }
+        if (m_multi_texture_shader != nullptr)
+        {
+            m_multi_texture_shader->Shutdown();
+            delete m_multi_texture_shader;
+            m_multi_texture_shader = nullptr;
+        }
     }
 
     void ShaderManagerCommon::RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const
@@ -186,6 +200,11 @@ namespace Engine5
         m_instance_texture_shader->Render(index_count, instance_count, mvp_data, texture, color);
     }
 
+    void ShaderManagerCommon::RenderMultiTextureShader(U32 index_count, const MatrixData& mvp_data, TextureArrayCommon* texture, const Color& color, Real gamma) const
+    {
+        m_multi_texture_shader->Render(index_count, mvp_data, texture, color, gamma);
+    }
+
     ColorShaderCommon* ShaderManagerCommon::GetColorShader() const
     {
         return m_color_shader;
@@ -214,5 +233,10 @@ namespace Engine5
     InstanceTextureShaderCommon* ShaderManagerCommon::GetInstanceTextureShader() const
     {
         return m_instance_texture_shader;
+    }
+
+    MultiTextureShaderCommon* ShaderManagerCommon::GetMultiTextureShader() const
+    {
+        return m_multi_texture_shader;
     }
 }
