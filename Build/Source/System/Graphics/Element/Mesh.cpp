@@ -4,6 +4,7 @@
 #include "../../Math/Structure/Transform.hpp"
 #include "../../../Manager/Component/EngineComponent/MeshComponent.hpp"
 #include "../Buffer/MeshBufferCommon.hpp"
+#include "../Texture/TextureArrayCommon.hpp"
 
 namespace Engine5
 {
@@ -38,6 +39,7 @@ namespace Engine5
             delete m_mesh_data;
             m_mesh_data = nullptr;
         }
+        m_texture_array.Clear();
     }
 
     void Mesh::RenderBuffer() const
@@ -88,7 +90,23 @@ namespace Engine5
 
     void Mesh::SetTexture(TextureCommon* texture)
     {
-        m_texture = texture;
+        m_texture_array.Clear();
+        m_texture_array.PushFront(texture);
+    }
+
+    void Mesh::AddTexture(TextureCommon* texture)
+    {
+        m_texture_array.PushBack(texture);
+    }
+
+    void Mesh::ClearTexture()
+    {
+        m_texture_array.Clear();
+    }
+
+    void Mesh::RemoveTexture(TextureCommon* texture)
+    {
+        m_texture_array.Erase(texture);
     }
 
     void Mesh::SetTransform(Transform* transform)
@@ -126,7 +144,12 @@ namespace Engine5
 
     TextureCommon* Mesh::GetTexture() const
     {
-        return m_texture;
+        return m_texture_array.Front();
+    }
+
+    TextureArrayCommon* Mesh::GetTextureArray()
+    {
+        return &m_texture_array;
     }
 
     eShaderType Mesh::GetShaderType() const

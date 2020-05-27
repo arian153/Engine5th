@@ -51,7 +51,6 @@ namespace Engine5
 
     private:
         //shader list
-
         ColorShaderCommon*           m_color_shader            = nullptr;
         TextureShaderCommon*         m_texture_shader          = nullptr;
         InstanceTextureShaderCommon* m_instance_texture_shader = nullptr;
