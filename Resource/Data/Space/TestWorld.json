@@ -17,16 +17,16 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, -60],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, -60 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
                     "Type": "CameraComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, -60],
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, -60 ],
                         "Zoom": 1.0
                     }
                 }
@@ -38,9 +38,9 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [0, 0, 0],
-                        "Position": [0, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
@@ -52,14 +52,14 @@
                         "Emission Rate": 0.0,
                         "Life Decay Rate": 0.1,
                         "Scale Decay Rate": 0.1,
-                        "Base Position": [0, 0, 0],
-                        "Base Velocity": [0, 0, 0],
-                        "Base Color": [1, 1, 0.5, 1.0],
+                        "Base Position": [ 0, 0, 0 ],
+                        "Base Velocity": [ 0, 0, 0 ],
+                        "Base Color": [ 1, 1, 0.5, 1.0 ],
                         "Base Life": 3.0,
                         "Base Scale": 1,
-                        "Position Variance": [0, 0, 0],
-                        "Direction Variance": [0.5, 1, 1],
-                        "Color Variance": [0.1, 0.1, 0, 0],
+                        "Position Variance": [ 0, 0, 0 ],
+                        "Direction Variance": [ 0.5, 1, 1 ],
+                        "Color Variance": [ 0.1, 0.1, 0, 0 ],
                         "Speed Variance": 5.0,
                         "Life Variance": 0.1,
                         "Scale Variance": 0.0
@@ -73,9 +73,9 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [0, 0, 0],
-                        "Position": [-10, 5, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 0, 0, 0 ],
+                        "Position": [ -10, 5, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
@@ -87,14 +87,14 @@
                         "Emission Rate": 12,
                         "Life Decay Rate": 0.0,
                         "Scale Decay Rate": 0.15,
-                        "Base Position": [0, 0, 0],
-                        "Base Velocity": [0, -1, 0],
-                        "Base Color": [0.5, 0.5, 1, 1.0],
+                        "Base Position": [ 0, 0, 0 ],
+                        "Base Velocity": [ 0, -1, 0 ],
+                        "Base Color": [ 0.5, 0.5, 1, 1.0 ],
                         "Base Life": 3.0,
                         "Base Scale": 0.5,
-                        "Position Variance": [0, 0, 0],
-                        "Direction Variance": [0.5, 0.5, 0.5],
-                        "Color Variance": [0.1, 0.1, 0, 0],
+                        "Position Variance": [ 0, 0, 0 ],
+                        "Direction Variance": [ 0.5, 0.5, 0.5 ],
+                        "Color Variance": [ 0.1, 0.1, 0, 0 ],
                         "Speed Variance": 5.0,
                         "Life Variance": 0.1,
                         "Scale Variance": 0.0
@@ -103,20 +103,47 @@
             ],
             "Name": "Particle"
         },
+
         {
             "Components": [
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [0, 1.7, 0],
-                        "Position": [0, -15, 0],
-                        "Scale": [0.02, 0.02, 0.02]
+                        "Orientation": [ 0, 0, 0 ],
+                        "Position": [ 20, 15, 0 ],
+                        "Scale": [ 10, 10, 10 ]
                     }
                 },
                 {
                     "Type": "MeshComponent",
                     "Value": {
-                        "Color": [1, 1, 1, 1],
+                        "Color": [ 1, 1, 1, 1 ],
+                        "Mesh": "../../Resource/Mesh/cube.obj",
+                        "Shader Type": "Multi Texture",
+                        "Texture Array": [
+                            "../../Resource/Texture/doodle01.png",
+                            "../../Resource/Texture/doodle02.png"
+                        ]
+                    }
+                }
+            ],
+            "Name": "CubeMesh"
+        },
+
+        {
+            "Components": [
+                {
+                    "Type": "TransformComponent",
+                    "Value": {
+                        "Orientation": [ 0, 1.7, 0 ],
+                        "Position": [ 0, -35, 0 ],
+                        "Scale": [ 0.02, 0.02, 0.02 ]
+                    }
+                },
+                {
+                    "Type": "MeshComponent",
+                    "Value": {
+                        "Color": [ 1, 1, 1, 1 ],
                         "Mesh": "../../Resource/Mesh/deer.obj",
                         "Shader Type": "Forward Directional Light",
                         "Texture": "../../Resource/Texture/white.dds"
@@ -130,15 +157,15 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [0, 1.7, 0],
-                        "Position": [10, -15, 0],
-                        "Scale": [0.02, 0.02, 0.02]
+                        "Orientation": [ 0, 1.7, 0 ],
+                        "Position": [ 10, -35, 0 ],
+                        "Scale": [ 0.02, 0.02, 0.02 ]
                     }
                 },
                 {
                     "Type": "MeshComponent",
                     "Value": {
-                        "Color": [1, 1, 1, 1],
+                        "Color": [ 1, 1, 1, 1 ],
                         "Mesh": "../../Resource/Mesh/deer.obj",
                         "Shader Type": "Forward Directional Light",
                         "Texture": "../../Resource/Texture/white.dds"
@@ -152,16 +179,16 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [0, 1.7, 0],
-                        "Position": [10, -15, 0],
-                        "Scale": [0.02, 0.02, 0.02]
+                        "Orientation": [ 0, 1.7, 0 ],
+                        "Position": [ 10, -15, 0 ],
+                        "Scale": [ 0.02, 0.02, 0.02 ]
                     }
                 },
                 {
                     "Type": "LightComponent",
                     "Value": {
                         "Type": "DirectionalLight",
-                        "Ambient Color": [0.5, 0.1, 0.1, 1]
+                        "Ambient Color": [ 0.5, 0.1, 0.1, 1 ]
                     }
                 }
             ],
@@ -172,16 +199,16 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [0, 1.7, 0],
-                        "Position": [10, -15, 0],
-                        "Scale": [0.02, 0.02, 0.02]
+                        "Orientation": [ 0, 1.7, 0 ],
+                        "Position": [ 10, -15, 0 ],
+                        "Scale": [ 0.02, 0.02, 0.02 ]
                     }
                 },
                 {
                     "Type": "LightComponent",
                     "Value": {
                         "Type": "DirectionalLight",
-                        "Ambient Color": [0.5, 0.1, 0.1, 1]
+                        "Ambient Color": [ 0.5, 0.1, 0.1, 1 ]
                     }
                 }
             ],
@@ -192,15 +219,15 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [0, 0, 0],
-                        "Position": [20, 5, 0],
-                        "Scale": [5.0, 5.0, 10.0]
+                        "Orientation": [ 0, 0, 0 ],
+                        "Position": [ 20, 5, 0 ],
+                        "Scale": [ 5.0, 5.0, 10.0 ]
                     }
                 },
                 {
                     "Type": "TextSpriteComponent",
                     "Value": {
-                        "Color": [1, 1, 1, 1],
+                        "Color": [ 1, 1, 1, 1 ],
                         "Text": "Hello World",
                         "Font": "consolas"
                     }
@@ -213,17 +240,17 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [6, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 6, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
                     "Type": "RigidBodyComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
@@ -233,9 +260,9 @@
                             {
                                 "Density": 1.0,
                                 "Material": "Rubber",
-                                "Orientation": [1, 0, 0, 0],
-                                "Position": [0, 0, 0],
-                                "Radius": [4, 2, 2],
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 4, 2, 2 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }
@@ -250,9 +277,9 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [-6, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -6, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
@@ -269,9 +296,9 @@
                             {
                                 "Density": 1.0,
                                 "Material": "Rubber",
-                                "Orientation": [1, 0, 0, 0],
-                                "Position": [0, 0, 0],
-                                "Radius": [4, 2, 2],
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 4, 2, 2 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }
@@ -286,17 +313,17 @@
                 {
                     "Type": "TransformComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
                     "Type": "RigidBodyComponent",
                     "Value": {
-                        "Orientation": [1, 0, 0, 0],
-                        "Position": [0, 0, 0],
-                        "Scale": [1, 1, 1]
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
                     }
                 },
                 {
@@ -306,9 +333,9 @@
                             {
                                 "Density": 1.0,
                                 "Material": "Rubber",
-                                "Orientation": [1, 0, 0, 0],
-                                "Position": [0, 0, 0],
-                                "Radius": [2, 4, 2],
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 2, 4, 2 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }

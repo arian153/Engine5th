@@ -64,6 +64,18 @@ namespace Engine5
             auto        resource = m_space->GetResourceManager()->GetTextureResource(StringToWString(texture));
             m_mesh->SetTexture(resource->GetTexture());
         }
+        if (JsonResource::HasMember(data, "Texture Array") && data["Texture Array"].isArray())
+        {
+            for (auto it = data["Texture Array"].begin(); it != data["Texture Array"].end(); ++it)
+            {
+                if ((*it).isString())
+                {
+                    std::string texture  = (*it).asString();
+                    auto        resource = m_space->GetResourceManager()->GetTextureResource(StringToWString(texture));
+                    m_mesh->AddTexture(resource->GetTexture());
+                }
+            }
+        }
         if (JsonResource::HasMember(data, "Shader Type") && data["Shader Type"].isString())
         {
             std::string shader = data["Shader Type"].asString();
@@ -83,7 +95,10 @@ namespace Engine5
             {
                 m_mesh->SetShaderType(eShaderType::DeferredDirectionalLight);
             }
-
+            else if (shader == "Multi Texture")
+            {
+                m_mesh->SetShaderType(eShaderType::MultiTexture);
+            }
             if (m_space != nullptr && m_mesh != nullptr)
             {
                 m_space->GetScene()->ChangeShaderType(m_mesh);

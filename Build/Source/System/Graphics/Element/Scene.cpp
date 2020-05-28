@@ -4,7 +4,6 @@
 #include "../Utility/MatrixManager.hpp"
 #include "../Utility/PrimitiveRenderer.hpp"
 #include "../Light/DirectionalLight.hpp"
-#include "../Buffer/RenderTextureBufferCommon.hpp"
 #include "../Buffer/DeferredBufferCommon.hpp"
 #include "../Light/PointLight.hpp"
 #include "../Light/SpotLight.hpp"
@@ -169,6 +168,11 @@ namespace Engine5
                                                                               directional_light
                                                                              );
                     }
+                }
+                else if(type == eShaderType::MultiTexture)
+                {
+                    mesh->RenderBuffer();
+                    m_shader_manager->RenderMultiTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor(), 1.7f);
                 }
             }
             for (auto& text_sprite : m_text_sprites)

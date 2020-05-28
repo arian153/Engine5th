@@ -9,5 +9,6 @@ namespace Engine5
       , Texture
       , ForwardDirectionalLight
       , DeferredDirectionalLight
+      , MultiTexture
     };
 }
