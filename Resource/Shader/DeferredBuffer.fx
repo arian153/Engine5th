@@ -32,7 +32,7 @@ struct PixelOutputType
     float4 normal : SV_Target1;
 };
 
-PixelInputType DeferredVertexShader(VertexInputType input)
+PixelInputType VertexShaderEntry(VertexInputType input)
 {
     input.position.w = 1.0f;
     PixelInputType output;
@@ -44,7 +44,7 @@ PixelInputType DeferredVertexShader(VertexInputType input)
 }
 
 
-PixelOutputType DeferredPixelShader(PixelInputType input) : SV_TARGET
+PixelOutputType PixelShaderEntry(PixelInputType input) : SV_TARGET
 {
     PixelOutputType output;
     output.color = mesh_color * shader_texture.Sample(sample_type_wrap, input.uv);

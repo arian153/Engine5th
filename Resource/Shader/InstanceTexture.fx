@@ -29,7 +29,7 @@ struct PixelInputType
 };
 
 //instanced Vertex Shader
-PixelInputType TextureVertexShader(VertexInputType input)
+PixelInputType VertexShaderEntry(VertexInputType input)
 {
     input.position.w = 1.0f;
 
@@ -44,7 +44,7 @@ PixelInputType TextureVertexShader(VertexInputType input)
 
 
 // Pixel Shader
-float4 TexturePixelShader(PixelInputType input) : SV_TARGET
+float4 PixelShaderEntry(PixelInputType input) : SV_TARGET
 {
     return shader_texture.Sample(sample_type, input.uv) * color * input.color;
 }

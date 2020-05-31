@@ -45,7 +45,7 @@ struct PixelInputType
 
 
 //vertex shader
-PixelInputType LightVertexShader(VertexInputType input)
+PixelInputType VertexShaderEntry(VertexInputType input)
 {
     input.position.w = 1.0f;
     float4 world_position = mul(input.position, model);
@@ -63,7 +63,7 @@ PixelInputType LightVertexShader(VertexInputType input)
 
 
 //pixel shader
-float4 LightPixelShader(PixelInputType input) : SV_TARGET
+float4 PixelShaderEntry(PixelInputType input) : SV_TARGET
 {
     float4 texture_color = mesh_color * shader_texture.Sample(sample_type, input.uv);
     float4 light_color = ambient_color;
