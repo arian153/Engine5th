@@ -10,6 +10,10 @@
 #include "../../../Shader/Forward/ForwardDirectionalLightShaderCommon.hpp"
 #include "../../../Shader/Forward/InstanceTextureShaderCommon.hpp"
 #include "../../../Shader/Forward/MultiTextureShaderCommon.hpp"
+#include "../../../Shader/Forward/AlphaMappingShaderCommon.hpp"
+#include "../../../Shader/Forward/LightMappingShaderCommon.hpp"
+#include "../../../Shader/Forward/NormalMappingShaderCommon.hpp"
+#include "../../../Shader/Forward/SpecularMappingShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -122,6 +126,34 @@ namespace Engine5
         m_multi_texture_shader->SetDevice(m_device);
         m_multi_texture_shader->SetDeviceContext(m_device_context);
         m_multi_texture_shader->Initialize();
+        //alpha mapping shader
+        m_alpha_mapping_shader = new AlphaMappingShaderCommon(this);
+        m_alpha_mapping_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"AlphaMapping.fx"));
+        m_alpha_mapping_shader->SetHWnd(m_hwnd);
+        m_alpha_mapping_shader->SetDevice(m_device);
+        m_alpha_mapping_shader->SetDeviceContext(m_device_context);
+        m_alpha_mapping_shader->Initialize();
+        //light mapping shader
+        m_light_mapping_shader = new LightMappingShaderCommon(this);
+        m_light_mapping_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"LightMapping.fx"));
+        m_light_mapping_shader->SetHWnd(m_hwnd);
+        m_light_mapping_shader->SetDevice(m_device);
+        m_light_mapping_shader->SetDeviceContext(m_device_context);
+        m_light_mapping_shader->Initialize();
+        //normal mapping shader
+        m_normal_mapping_shader = new NormalMappingShaderCommon(this);
+        m_normal_mapping_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"NormalMapping.fx"));
+        m_normal_mapping_shader->SetHWnd(m_hwnd);
+        m_normal_mapping_shader->SetDevice(m_device);
+        m_normal_mapping_shader->SetDeviceContext(m_device_context);
+        m_normal_mapping_shader->Initialize();
+        //specular mapping shader
+        m_specular_mapping_shader = new SpecularMappingShaderCommon(this);
+        m_specular_mapping_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"SpecularMapping.fx"));
+        m_specular_mapping_shader->SetHWnd(m_hwnd);
+        m_specular_mapping_shader->SetDevice(m_device);
+        m_specular_mapping_shader->SetDeviceContext(m_device_context);
+        m_specular_mapping_shader->Initialize();
     }
 
     void ShaderManagerCommon::Shutdown()
@@ -168,6 +200,30 @@ namespace Engine5
             delete m_multi_texture_shader;
             m_multi_texture_shader = nullptr;
         }
+        if (m_alpha_mapping_shader != nullptr)
+        {
+            m_alpha_mapping_shader->Shutdown();
+            delete m_alpha_mapping_shader;
+            m_alpha_mapping_shader = nullptr;
+        }
+        if (m_light_mapping_shader != nullptr)
+        {
+            m_light_mapping_shader->Shutdown();
+            delete m_light_mapping_shader;
+            m_light_mapping_shader = nullptr;
+        }
+        if (m_normal_mapping_shader != nullptr)
+        {
+            m_normal_mapping_shader->Shutdown();
+            delete m_normal_mapping_shader;
+            m_normal_mapping_shader = nullptr;
+        }
+        if (m_specular_mapping_shader != nullptr)
+        {
+            m_specular_mapping_shader->Shutdown();
+            delete m_specular_mapping_shader;
+            m_specular_mapping_shader = nullptr;
+        }
     }
 
     void ShaderManagerCommon::RenderColorShader(U32 indices_count, const MatrixData& mvp_data) const
@@ -205,6 +261,26 @@ namespace Engine5
         m_multi_texture_shader->Render(index_count, mvp_data, texture, color, gamma);
     }
 
+    void ShaderManagerCommon::RenderAlphaMappingShader(U32 index_count, const MatrixData& mvp_data, TextureArrayCommon* texture, const Color& color) const
+    {
+        m_alpha_mapping_shader->Render(index_count, mvp_data, texture, color);
+    }
+
+    void ShaderManagerCommon::RenderLightMappingShader(U32 index_count, const MatrixData& mvp_data, TextureArrayCommon* texture, const Color& color) const
+    {
+        m_light_mapping_shader->Render(index_count, mvp_data, texture, color);
+    }
+
+    void ShaderManagerCommon::RenderNormalMappingShader(U32 indices_count, const MatrixData& mvp_data, TextureArrayCommon* texture, const Color& color, DirectionalLight* light) const
+    {
+        m_normal_mapping_shader->Render(indices_count, mvp_data, texture, color, light);
+    }
+
+    void ShaderManagerCommon::RenderSpecularMappingShader(U32 indices_count, const MatrixData& mvp_data, TextureArrayCommon* texture, Camera* camera, const Color& color, DirectionalLight* light) const
+    {
+        m_specular_mapping_shader->Render(indices_count, mvp_data, texture, camera, color, light);
+    }
+
     ColorShaderCommon* ShaderManagerCommon::GetColorShader() const
     {
         return m_color_shader;
@@ -238,5 +314,25 @@ namespace Engine5
     MultiTextureShaderCommon* ShaderManagerCommon::GetMultiTextureShader() const
     {
         return m_multi_texture_shader;
+    }
+
+    AlphaMappingShaderCommon* ShaderManagerCommon::GetAlphaMappingShader() const
+    {
+        return m_alpha_mapping_shader;
+    }
+
+    LightMappingShaderCommon* ShaderManagerCommon::GetLightMappingShader() const
+    {
+        return m_light_mapping_shader;
+    }
+
+    NormalMappingShaderCommon* ShaderManagerCommon::GetNormalMappingShader() const
+    {
+        return m_normal_mapping_shader;
+    }
+
+    SpecularMappingShaderCommon* ShaderManagerCommon::GetSpecularMappingShader() const
+    {
+        return m_specular_mapping_shader;
     }
 }

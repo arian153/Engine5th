@@ -4,6 +4,7 @@
 #include "../../Core/Utility/CoreDef.hpp"
 #include "../DataType/Color.hpp"
 #include "../Texture/TextureArrayCommon.hpp"
+#include "../Light/LightDef.hpp"
 
 namespace Engine5
 {
@@ -41,7 +42,7 @@ namespace Engine5
         eShaderType         GetShaderType() const;
         U32                 GetIndexCount() const;
         Color               GetColor() const;
-        bool                IsDeferred() const;
+        eLightingMethod     GetLightingMethod() const;
 
     private:
         friend class MeshComponent;
@@ -55,7 +56,8 @@ namespace Engine5
         Transform*           m_transform = nullptr;
         MeshComponent*       m_component = nullptr;
         Color                m_color;
-        eShaderType          m_type   = eShaderType::Invalid;
-        U32                  m_stride = 0;
+        eShaderType          m_type     = eShaderType::Invalid;
+        U32                  m_stride   = 0;
+        eLightingMethod      m_lighting = eLightingMethod::None;
     };
 }

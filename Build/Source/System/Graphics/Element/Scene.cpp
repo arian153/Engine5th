@@ -140,7 +140,7 @@ namespace Engine5
         for (auto& camera : m_cameras)
         {
             mvp_data.view = camera->GetViewMatrix();
-            for (auto& mesh : m_forward_meshes)
+            for (auto& mesh : m_other_meshes)
             {
                 mvp_data.model = mesh->GetModelMatrix();
                 auto type      = mesh->GetShaderType();
@@ -154,25 +154,20 @@ namespace Engine5
                     mesh->RenderBuffer();
                     m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
                 }
-                else if (type == eShaderType::ForwardDirectionalLight)
-                {
-                    for (DirectionalLight* directional_light : m_directional_lights)
-                    {
-                        mesh->RenderBuffer();
-                        m_shader_manager->RenderForwardDirectionalLightShader(
-                                                                              mesh->GetIndexCount(),
-                                                                              mvp_data,
-                                                                              mesh->GetTexture(),
-                                                                              camera,
-                                                                              mesh->GetColor(),
-                                                                              directional_light
-                                                                             );
-                    }
-                }
-                else if(type == eShaderType::MultiTexture)
+                else if (type == eShaderType::MultiTexture)
                 {
                     mesh->RenderBuffer();
                     m_shader_manager->RenderMultiTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor(), 1.7f);
+                }
+                else if (type == eShaderType::AlphaMapping)
+                {
+                    mesh->RenderBuffer();
+                    m_shader_manager->RenderAlphaMappingShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor());
+                }
+                else if (type == eShaderType::LightMapping)
+                {
+                    mesh->RenderBuffer();
+                    m_shader_manager->RenderLightMappingShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor());
                 }
             }
             for (auto& text_sprite : m_text_sprites)
@@ -196,6 +191,53 @@ namespace Engine5
                                                               mvp_data,
                                                               particle->GetTexture(),
                                                               ColorDef::Pure::White);
+            }
+        }
+        for (auto& camera : m_cameras)
+        {
+            mvp_data.view = camera->GetViewMatrix();
+            for (auto& mesh : m_forward_meshes)
+            {
+                mvp_data.model = mesh->GetModelMatrix();
+                auto type      = mesh->GetShaderType();
+                for (DirectionalLight* directional_light : m_directional_lights)
+                {
+                    if (type == eShaderType::ForwardDirectionalLight)
+                    {
+                        mesh->RenderBuffer();
+                        m_shader_manager->RenderForwardDirectionalLightShader(
+                                                                              mesh->GetIndexCount(),
+                                                                              mvp_data,
+                                                                              mesh->GetTexture(),
+                                                                              camera,
+                                                                              mesh->GetColor(),
+                                                                              directional_light
+                                                                             );
+                    }
+                    if (type == eShaderType::NormalMapping)
+                    {
+                        mesh->RenderBuffer();
+                        m_shader_manager->RenderNormalMappingShader(
+                                                                    mesh->GetIndexCount(),
+                                                                    mvp_data,
+                                                                    mesh->GetTextureArray(),
+                                                                    mesh->GetColor(),
+                                                                    directional_light
+                                                                   );
+                    }
+                    if (type == eShaderType::SpecularMapping)
+                    {
+                        mesh->RenderBuffer();
+                        m_shader_manager->RenderSpecularMappingShader(
+                                                                      mesh->GetIndexCount(),
+                                                                      mvp_data,
+                                                                      mesh->GetTextureArray(),
+                                                                      camera,
+                                                                      mesh->GetColor(),
+                                                                      directional_light
+                                                                     );
+                    }
+                }
             }
         }
     }
@@ -236,6 +278,13 @@ namespace Engine5
             mesh = nullptr;
         }
         m_deferred_meshes.clear();
+        for (auto& mesh : m_other_meshes)
+        {
+            mesh->Shutdown();
+            delete mesh;
+            mesh = nullptr;
+        }
+        m_other_meshes.clear();
         for (auto& light : m_directional_lights)
         {
             light->Shutdown();
@@ -378,13 +427,18 @@ namespace Engine5
 
     Mesh* Scene::AddMesh(Mesh* mesh)
     {
-        if (mesh->IsDeferred())
+        auto lighting = mesh->GetLightingMethod();
+        if (lighting == eLightingMethod::Deferred)
         {
             m_deferred_meshes.push_back(mesh);
         }
-        else
+        else if (lighting == eLightingMethod::Forward)
         {
             m_forward_meshes.push_back(mesh);
+        }
+        else
+        {
+            m_other_meshes.push_back(mesh);
         }
         mesh->SetRenderer(m_renderer);
         return mesh;
@@ -428,15 +482,33 @@ namespace Engine5
 
     void Scene::RemoveMesh(Mesh* mesh)
     {
-        if (mesh->IsDeferred() && mesh != nullptr)
+        if (mesh != nullptr)
         {
-            auto found = std::find(m_deferred_meshes.begin(), m_deferred_meshes.end(), mesh);
-            m_deferred_meshes.erase(found);
-        }
-        else
-        {
-            auto found = std::find(m_forward_meshes.begin(), m_forward_meshes.end(), mesh);
-            m_forward_meshes.erase(found);
+            auto lighting = mesh->GetLightingMethod();
+            if (lighting == eLightingMethod::Deferred)
+            {
+                if (m_deferred_meshes.empty() == false)
+                {
+                    auto found = std::find(m_deferred_meshes.begin(), m_deferred_meshes.end(), mesh);
+                    m_deferred_meshes.erase(found);
+                }
+            }
+            else if (lighting == eLightingMethod::Forward)
+            {
+                if (m_forward_meshes.empty() == false)
+                {
+                    auto found = std::find(m_forward_meshes.begin(), m_forward_meshes.end(), mesh);
+                    m_forward_meshes.erase(found);
+                }
+            }
+            else
+            {
+                if (m_other_meshes.empty() == false)
+                {
+                    auto found = std::find(m_other_meshes.begin(), m_other_meshes.end(), mesh);
+                    m_other_meshes.erase(found);
+                }
+            }
         }
     }
 
@@ -491,15 +563,28 @@ namespace Engine5
             {
                 m_deferred_meshes.erase(found_deferred);
             }
+            else
+            {
+                auto found_others = std::find(m_other_meshes.begin(), m_other_meshes.end(), mesh);
+                if (found_others != m_other_meshes.end())
+                {
+                    m_other_meshes.erase(found_others);
+                }
+            }
         }
         //add
-        if (mesh->IsDeferred())
+        auto lighting = mesh->GetLightingMethod();
+        if (lighting == eLightingMethod::Deferred)
         {
             m_deferred_meshes.push_back(mesh);
         }
-        else
+        else if (lighting == eLightingMethod::Forward)
         {
             m_forward_meshes.push_back(mesh);
+        }
+        else
+        {
+            m_other_meshes.push_back(mesh);
         }
     }
 

@@ -85,6 +85,7 @@ namespace Engine5
         TextRenderer*         m_text_renderer      = nullptr;
 
         std::vector<Camera*>           m_cameras;
+        std::vector<Mesh*>             m_other_meshes;
         std::vector<Mesh*>             m_forward_meshes;
         std::vector<Mesh*>             m_deferred_meshes;
         std::vector<DirectionalLight*> m_directional_lights;

@@ -99,6 +99,22 @@ namespace Engine5
             {
                 m_mesh->SetShaderType(eShaderType::MultiTexture);
             }
+            else if (shader == "Alpha Mapping")
+            {
+                m_mesh->SetShaderType(eShaderType::AlphaMapping);
+            }
+            else if (shader == "Light Mapping")
+            {
+                m_mesh->SetShaderType(eShaderType::LightMapping);
+            }
+            else if (shader == "Normal Mapping")
+            {
+                m_mesh->SetShaderType(eShaderType::NormalMapping);
+            }
+            else if (shader == "Specular Mapping")
+            {
+                m_mesh->SetShaderType(eShaderType::SpecularMapping);
+            }
             if (m_space != nullptr && m_mesh != nullptr)
             {
                 m_space->GetScene()->ChangeShaderType(m_mesh);

@@ -65,8 +65,8 @@ float4 PixelShaderEntry(PixelInputType input) : SV_TARGET
     float4 normal_map = shader_texture[ 1 ].Sample(sample_type, input.uv);
     normal_map = (normal_map * 2.0f) - 1.0f;
 
-    normal_data = (normal_map.x * input.tangent) + (normal_map.y * input.binormal) + (normal_map.z * input.normal);
-    normal_data = Normalize(normal_data);
+    float3 normal_data = (normal_map.x * input.tangent) + (normal_map.y * input.binormal) + (normal_map.z * input.normal);
+    normal_data = normalize(normal_data);
 
     float3 light_dir = -light_direction;
     float light_intensity = saturate(dot(normal_data, light_dir));

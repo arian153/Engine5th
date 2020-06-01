@@ -119,6 +119,40 @@ namespace Engine5
         if (m_type != type)
         {
             m_type = type;
+            switch (type)
+            {
+            case eShaderType::Invalid:
+                break;
+            case eShaderType::Color:
+                m_lighting = eLightingMethod::None;
+                break;
+            case eShaderType::Texture:
+                m_lighting = eLightingMethod::None;
+                break;
+            case eShaderType::ForwardDirectionalLight:
+                m_lighting = eLightingMethod::Forward;
+                break;
+            case eShaderType::DeferredDirectionalLight:
+                m_lighting = eLightingMethod::Deferred;
+                break;
+            case eShaderType::MultiTexture:
+                m_lighting = eLightingMethod::None;
+                break;
+            case eShaderType::AlphaMapping:
+                m_lighting = eLightingMethod::None;
+                break;
+            case eShaderType::LightMapping:
+                m_lighting = eLightingMethod::None;
+                break;
+            case eShaderType::NormalMapping:
+                m_lighting = eLightingMethod::Forward;
+                break;
+            case eShaderType::SpecularMapping:
+                m_lighting = eLightingMethod::Forward;
+                break;
+            default:
+                break;
+            }
             BuildBuffer();
         }
     }
@@ -171,8 +205,8 @@ namespace Engine5
         return m_color;
     }
 
-    bool Mesh::IsDeferred() const
+    eLightingMethod Mesh::GetLightingMethod() const
     {
-        return m_type == eShaderType::DeferredDirectionalLight;
+        return m_lighting;
     }
 }

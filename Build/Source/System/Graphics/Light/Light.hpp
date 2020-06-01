@@ -33,12 +33,4 @@ namespace Engine5
     private:
         LightComponent* m_component = nullptr;
     };
-
-    enum class eLightType
-    {
-        DirectionalLight
-      , PointLight
-      , SpotLight
-      , CapsuleLight
-    };
 }

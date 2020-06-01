@@ -2,6 +2,7 @@
 #include "..//Component.hpp"
 #include "../../../System/Math/Utility/VectorDef.hpp"
 #include "../../../System/Graphics/Light/Light.hpp"
+#include "../../../System/Graphics/Light/LightDef.hpp"
 
 namespace Engine5
 {

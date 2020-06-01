@@ -10,5 +10,9 @@ namespace Engine5
       , ForwardDirectionalLight
       , DeferredDirectionalLight
       , MultiTexture
+      , AlphaMapping
+      , LightMapping
+      , NormalMapping
+      , SpecularMapping
     };
 }
