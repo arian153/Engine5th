@@ -48,7 +48,7 @@
                     "Value": {
                         "Texture": "../../Resource/Texture/white.dds",
                         "Particle Amount": 1000,
-                        "Emission Amount": 1,
+                        "Emission Amount": 0,
                         "Emission Rate": 0.0,
                         "Life Decay Rate": 0.1,
                         "Scale Decay Rate": 0.1,
@@ -127,9 +127,10 @@
                     }
                 }
             ],
-            "Name": "CubeMesh"
+            "Name": "MultiTextureCube"
         },
 
+       
         {
             "Components": [
                 {
