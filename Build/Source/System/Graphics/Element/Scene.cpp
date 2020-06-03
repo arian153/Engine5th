@@ -170,6 +170,49 @@ namespace Engine5
                     m_shader_manager->RenderLightMappingShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor());
                 }
             }
+            for (auto& mesh : m_forward_meshes)
+            {
+                mvp_data.model = mesh->GetModelMatrix();
+                auto type      = mesh->GetShaderType();
+                for (DirectionalLight* directional_light : m_directional_lights)
+                {
+                    if (type == eShaderType::ForwardDirectionalLight)
+                    {
+                        mesh->RenderBuffer();
+                        m_shader_manager->RenderForwardDirectionalLightShader(
+                                                                              mesh->GetIndexCount(),
+                                                                              mvp_data,
+                                                                              mesh->GetTexture(),
+                                                                              camera,
+                                                                              mesh->GetColor(),
+                                                                              directional_light
+                                                                             );
+                    }
+                    else if (type == eShaderType::NormalMapping)
+                    {
+                        mesh->RenderBuffer();
+                        m_shader_manager->RenderNormalMappingShader(
+                                                                    mesh->GetIndexCount(),
+                                                                    mvp_data,
+                                                                    mesh->GetTextureArray(),
+                                                                    mesh->GetColor(),
+                                                                    directional_light
+                                                                   );
+                    }
+                    else if (type == eShaderType::SpecularMapping)
+                    {
+                        mesh->RenderBuffer();
+                        m_shader_manager->RenderSpecularMappingShader(
+                                                                      mesh->GetIndexCount(),
+                                                                      mvp_data,
+                                                                      mesh->GetTextureArray(),
+                                                                      camera,
+                                                                      mesh->GetColor(),
+                                                                      directional_light
+                                                                     );
+                    }
+                }
+            }
             for (auto& text_sprite : m_text_sprites)
             {
                 mvp_data.model = text_sprite->GetModelMatrix();
@@ -191,53 +234,6 @@ namespace Engine5
                                                               mvp_data,
                                                               particle->GetTexture(),
                                                               ColorDef::Pure::White);
-            }
-        }
-        for (auto& camera : m_cameras)
-        {
-            mvp_data.view = camera->GetViewMatrix();
-            for (auto& mesh : m_forward_meshes)
-            {
-                mvp_data.model = mesh->GetModelMatrix();
-                auto type      = mesh->GetShaderType();
-                for (DirectionalLight* directional_light : m_directional_lights)
-                {
-                    if (type == eShaderType::ForwardDirectionalLight)
-                    {
-                        mesh->RenderBuffer();
-                        m_shader_manager->RenderForwardDirectionalLightShader(
-                                                                              mesh->GetIndexCount(),
-                                                                              mvp_data,
-                                                                              mesh->GetTexture(),
-                                                                              camera,
-                                                                              mesh->GetColor(),
-                                                                              directional_light
-                                                                             );
-                    }
-                    if (type == eShaderType::NormalMapping)
-                    {
-                        mesh->RenderBuffer();
-                        m_shader_manager->RenderNormalMappingShader(
-                                                                    mesh->GetIndexCount(),
-                                                                    mvp_data,
-                                                                    mesh->GetTextureArray(),
-                                                                    mesh->GetColor(),
-                                                                    directional_light
-                                                                   );
-                    }
-                    if (type == eShaderType::SpecularMapping)
-                    {
-                        mesh->RenderBuffer();
-                        m_shader_manager->RenderSpecularMappingShader(
-                                                                      mesh->GetIndexCount(),
-                                                                      mvp_data,
-                                                                      mesh->GetTextureArray(),
-                                                                      camera,
-                                                                      mesh->GetColor(),
-                                                                      directional_light
-                                                                     );
-                    }
-                }
             }
         }
     }

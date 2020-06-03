@@ -270,6 +270,7 @@ namespace Engine5
         // Transpose the matrices to prepare them for the shader.
         // Copy the matrices into the constant buffer.
         camera_data_ptr->camera_position = ConverterDX11::ToXMFloat3(camera->GetPosition());
+        camera_data_ptr->padding = 0.0f;
         // Unlock the constant buffer.
         m_device_context->Unmap(m_camera_buffer, 0);
         // Set the position of the constant buffer in the vertex shader.
