@@ -256,10 +256,7 @@ namespace Engine5
         unsigned int buffer_number = 0;
         // Finally set the constant buffer in the vertex shader with the updated values.
         m_device_context->VSSetConstantBuffers(buffer_number, 1, &m_matrix_buffer);
-        // Set shader texture resource in the pixel shader
-        U32 count = static_cast<U32>(texture->Size());
-        m_device_context->PSSetShaderResources(0, count, texture->Data());
-        //camera buffer
+        // camera buffer
         result = m_device_context->Map(m_camera_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
         if (FAILED(result))
         {
@@ -267,16 +264,16 @@ namespace Engine5
         }
         // Get a pointer to the data in the constant buffer.
         CameraBufferType* camera_data_ptr = (CameraBufferType*)mapped_resource.pData;
-        // Transpose the matrices to prepare them for the shader.
-        // Copy the matrices into the constant buffer.
-        camera_data_ptr->camera_position = ConverterDX11::ToXMFloat3(camera->GetPosition());
-        camera_data_ptr->padding = 0.0f;
+        camera_data_ptr->camera_position  = ConverterDX11::ToXMFloat3(camera->GetPosition());
         // Unlock the constant buffer.
         m_device_context->Unmap(m_camera_buffer, 0);
         // Set the position of the constant buffer in the vertex shader.
         buffer_number = 1;
         // Finally set the constant buffer in the vertex shader with the updated values.
         m_device_context->VSSetConstantBuffers(buffer_number, 1, &m_camera_buffer);
+        // Set shader texture resource in the pixel shader
+        U32 count = static_cast<U32>(texture->Size());
+        m_device_context->PSSetShaderResources(0, count, texture->Data());
         // Color Buffer
         // Lock the light constant buffer so it can be written to.
         result = m_device_context->Map(m_color_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
@@ -306,8 +303,6 @@ namespace Engine5
         // Copy the lighting variables into the constant buffer.
         light_buffer_ptr->diffuse_color   = ConverterDX11::ToXMFloat4(light->diffuse_color);
         light_buffer_ptr->light_direction = ConverterDX11::ToXMFloat3(light->direction);
-        light_buffer_ptr->specular_color  = ConverterDX11::ToXMFloat4(light->specular_color);
-        light_buffer_ptr->specular_power  = light->specular_power;
         // Unlock the constant buffer.
         m_device_context->Unmap(m_light_buffer, 0);
         // Set the position of the light constant buffer in the pixel shader.
