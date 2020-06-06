@@ -2,6 +2,9 @@
 #include "../Space/Space.hpp"
 #include "../../System/Physics/Dynamics/World.hpp"
 #include "../../System/Graphics/Element/Scene.hpp"
+#include "../Object/ObjectManager.hpp"
+#include "../Object/Object.hpp"
+#include "../Component/EngineComponent/TransformComponent.hpp"
 
 namespace Engine5
 {
@@ -19,6 +22,22 @@ namespace Engine5
 
     void Level::Update(Real dt) const
     {
+        /*for (auto& space : m_spaces)
+        {
+            auto obj_manager = space->GetObjectManager();
+            if (obj_manager != nullptr)
+            {
+                auto found = obj_manager->FindObjectBegin("SpecularMapCube");
+                if (found != nullptr && found->HasComponent<TransformComponent>())
+                {
+                    auto transform = found->GetComponent<TransformComponent>();
+                    if (transform != nullptr)
+                    {
+                        transform->AddRotationY(dt);
+                    }
+                }
+            }
+        }*/
     }
 
     void Level::FixedUpdate(Real dt) const
@@ -136,7 +155,6 @@ namespace Engine5
                 world->Draw();
             }
         }
-
         if (flag == eSubsystemFlag::Scene)
         {
             auto scene = space->GetScene();

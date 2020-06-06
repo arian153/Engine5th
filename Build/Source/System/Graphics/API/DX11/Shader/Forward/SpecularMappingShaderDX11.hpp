@@ -27,6 +27,7 @@ namespace Engine5
 
         struct LightBufferType
         {
+            DirectX::XMFLOAT4 ambient_color;
             DirectX::XMFLOAT4 diffuse_color;
             DirectX::XMFLOAT4 specular_color;
             Real              specular_power;

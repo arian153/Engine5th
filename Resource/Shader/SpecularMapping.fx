@@ -19,6 +19,7 @@ cbuffer ColorBuffer
 
 cbuffer LightBuffer
 {
+    float4 ambient_color;
     float4 diffuse_color;
     float4 specular_color;
     float specular_power;
@@ -74,24 +75,24 @@ PixelInputType VertexShaderEntry(VertexInputType input)
 // Pixel Shader
 float4 PixelShaderEntry(PixelInputType input) : SV_TARGET
 {
-    float4 texture_color = shader_texture[ 0 ].Sample(sample_type, input.uv);
+    float4 texture_color = color * shader_texture[ 0 ].Sample(sample_type, input.uv);
     float4 normal_map = shader_texture[ 1 ].Sample(sample_type, input.uv);
     normal_map = (normal_map * 2.0f) - 1.0f;
-    float3 normal_data = input.normal + normal_map.x * input.tangent + normal_map.y * input.binormal;
-    normal_data = normalize(normal_data);
-
+    float3 normal_vector = (normal_map.x * input.tangent) + (normal_map.y * input.binormal) + input.normal;
+    normal_vector = normalize(normal_vector);
     float3 light_dir = -light_direction;
-    float light_intensity = saturate(dot(normal_data, light_dir));
-    float4 light_color = saturate(diffuse_color * light_intensity);
+    float light_intensity = saturate(dot(normal_vector, light_dir));
+    float4 light_color = saturate(ambient_color + (diffuse_color * light_intensity));
     light_color = light_color * texture_color;
 
     if (light_intensity > 0.0f)
     {
         float4 specular_intensity = shader_texture[ 2 ].Sample(sample_type, input.uv);
-        float3 reflection = normalize(2 * light_intensity * normal_data - light_dir);
+        float3 reflection = normalize(2.0f * light_intensity * normal_vector - light_dir);
         float4 specular = pow(saturate(dot(reflection, input.view_direction)), specular_power);
-        specular = specular * specular_intensity;
+        specular = specular_color * specular * specular_intensity;
         light_color = saturate(light_color + specular);
     }
-    return color * light_color;
+
+    return light_color;
 }
