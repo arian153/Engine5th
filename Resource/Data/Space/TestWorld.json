@@ -103,34 +103,6 @@
             ],
             "Name": "Particle"
         },
-
-        {
-            "Components": [
-                {
-                    "Type": "TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 0, 0 ],
-                        "Position": [ 20, 15, 0 ],
-                        "Scale": [ 10, 10, 10 ]
-                    }
-                },
-                {
-                    "Type": "MeshComponent",
-                    "Value": {
-                        "Color": [ 1, 1, 1, 1 ],
-                        "Mesh": "../../Resource/Mesh/cube.obj",
-                        "Shader Type": "Multi Texture",
-                        "Texture Array": [
-                            "../../Resource/Texture/doodle01.png",
-                            "../../Resource/Texture/doodle02.png"
-                        ]
-                    }
-                }
-            ],
-            "Name": "MultiTextureCube"
-        },
-
-       
         {
             "Components": [
                 {
@@ -349,23 +321,23 @@
     ],
     "Settings": {
         "Draw Broad Phase": {
-            "Color": [1, 1, 1, 1],
+            "Color": [ 1, 1, 1, 1 ],
             "Flag": true
         },
         "Draw Contact": {
-            "Color": [1, 1, 1, 1],
+            "Color": [ 1, 1, 1, 1 ],
             "Flag": false
         },
         "Draw EPA": {
-            "Color": [1, 1, 1, 1],
+            "Color": [ 1, 1, 1, 1 ],
             "Flag": false
         },
         "Draw GJK": {
-            "Color": [1, 1, 1, 1],
+            "Color": [ 1, 1, 1, 1 ],
             "Flag": false
         },
         "Draw Primitive": {
-            "Color": [1, 1, 1, 1],
+            "Color": [ 1, 1, 1, 1 ],
             "Flag": true
         },
         "ProjectionMatrix": "Perspective"

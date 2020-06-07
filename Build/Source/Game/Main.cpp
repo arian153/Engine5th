@@ -1,4 +1,3 @@
-//
 #include <iostream>
 #include "../System/Math/Math.hpp"
 #include "../System/Core/Core.hpp"

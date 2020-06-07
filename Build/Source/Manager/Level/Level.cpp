@@ -23,21 +23,30 @@ namespace Engine5
     void Level::Update(Real dt) const
     {
         /*for (auto& space : m_spaces)
-        {
-            auto obj_manager = space->GetObjectManager();
-            if (obj_manager != nullptr)
-            {
-                auto found = obj_manager->FindObjectBegin("SpecularMapCube");
-                if (found != nullptr && found->HasComponent<TransformComponent>())
-                {
-                    auto transform = found->GetComponent<TransformComponent>();
-                    if (transform != nullptr)
-                    {
-                        transform->AddRotationY(dt);
-                    }
-                }
-            }
-        }*/
+         {
+             auto obj_manager = space->GetObjectManager();
+             if (obj_manager != nullptr)
+             {
+                 auto found = obj_manager->FindObjectBegin("SpecularMapCube");
+                 if (found != nullptr && found->HasComponent<TransformComponent>())
+                 {
+                     auto transform = found->GetComponent<TransformComponent>();
+                     if (transform != nullptr)
+                     {
+                         transform->AddRotationY(dt);
+                     }
+                 }
+                 found = obj_manager->FindObjectBegin("AlphaMapCube");
+                 if (found != nullptr && found->HasComponent<TransformComponent>())
+                 {
+                     auto transform = found->GetComponent<TransformComponent>();
+                     if (transform != nullptr)
+                     {
+                         transform->AddRotationY(dt);
+                     }
+                 }
+             }
+         }*/
     }
 
     void Level::FixedUpdate(Real dt) const

@@ -7,7 +7,7 @@ namespace Engine5
     public:
         LogicSystem();
         ~LogicSystem();
-
+        
     private:
     };
 }
