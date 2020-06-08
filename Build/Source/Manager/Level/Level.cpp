@@ -2,13 +2,11 @@
 #include "../Space/Space.hpp"
 #include "../../System/Physics/Dynamics/World.hpp"
 #include "../../System/Graphics/Element/Scene.hpp"
-#include "../Object/ObjectManager.hpp"
-#include "../Object/Object.hpp"
-#include "../Component/EngineComponent/TransformComponent.hpp"
 
 namespace Engine5
 {
     Level::Level(const std::string& name)
+        : m_name(name)
     {
     }
 
@@ -22,31 +20,6 @@ namespace Engine5
 
     void Level::Update(Real dt) const
     {
-        /*for (auto& space : m_spaces)
-         {
-             auto obj_manager = space->GetObjectManager();
-             if (obj_manager != nullptr)
-             {
-                 auto found = obj_manager->FindObjectBegin("SpecularMapCube");
-                 if (found != nullptr && found->HasComponent<TransformComponent>())
-                 {
-                     auto transform = found->GetComponent<TransformComponent>();
-                     if (transform != nullptr)
-                     {
-                         transform->AddRotationY(dt);
-                     }
-                 }
-                 found = obj_manager->FindObjectBegin("AlphaMapCube");
-                 if (found != nullptr && found->HasComponent<TransformComponent>())
-                 {
-                     auto transform = found->GetComponent<TransformComponent>();
-                     if (transform != nullptr)
-                     {
-                         transform->AddRotationY(dt);
-                     }
-                 }
-             }
-         }*/
     }
 
     void Level::FixedUpdate(Real dt) const

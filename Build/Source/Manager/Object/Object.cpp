@@ -199,7 +199,7 @@ namespace Engine5
                 //Load Components
                 if (JsonResource::HasMember(*it, "Type") && (*it)["Type"].isString())
                 {
-                    std::string type    = "class Engine5::" + (*it)["Type"].asString();
+                    std::string type    = (*it)["Type"].asString();
                     Component*  created = AddComponent(type);
                     if (created != nullptr)
                     {
