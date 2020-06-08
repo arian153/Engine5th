@@ -9,14 +9,13 @@ namespace Game
     {
     public:
         ~ControllerComponent();
-        ControllerComponent() = delete;
-        ControllerComponent(const ControllerComponent& rhs) = delete;
+        ControllerComponent()                                          = delete;
+        ControllerComponent(const ControllerComponent& rhs)            = delete;
         ControllerComponent& operator=(const ControllerComponent& rhs) = delete;
 
         void Initialize() override;
         void Update(Engine5::Real dt) override;
         void Shutdown() override;
-
 
     protected:
         bool Load(const Json::Value& data) override;

@@ -22,7 +22,6 @@ namespace Engine5
         Application();
         ~Application();
 
-        void Run();
         void Initialize();
         void Update() const;
         void Shutdown();

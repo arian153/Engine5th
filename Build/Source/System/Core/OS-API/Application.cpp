@@ -30,13 +30,6 @@ namespace Engine5
     {
     }
 
-    void Application::Run()
-    {
-        Initialize();
-        Update();
-        Shutdown();
-    }
-
     void Application::Initialize()
     {
         //create independent utility
@@ -68,7 +61,6 @@ namespace Engine5
         //setup missing system parameters
         m_operating_system->SetLevelManager(m_level_manager);
         m_operating_system->SetInput(m_input);
-
         //Console::CreateConsole();
     }
 
