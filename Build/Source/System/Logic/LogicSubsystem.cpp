@@ -1,4 +1,5 @@
 #include "LogicSubsystem.hpp"
+#include "../../Manager/Component/GameComponent/LogicComponent.hpp"
 
 namespace Engine5
 {
@@ -12,10 +13,15 @@ namespace Engine5
 
     void LogicSubsystem::Initialize()
     {
+
     }
 
     void LogicSubsystem::Update(Real dt)
     {
+        for(auto& logic : m_logic_components)
+        {
+            logic->Update(dt);
+        }
     }
 
     void LogicSubsystem::Render() const

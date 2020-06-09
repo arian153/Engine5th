@@ -37,7 +37,7 @@ namespace Engine5
         void Remove(BoundingAABB* aabb) override;
         void Clear() override;
         void Release() override;
-        void Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color) override;
+        void Render(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color) override;
         void ComputePairs(std::list<ColliderPair>& result) override;
 
         //Query
@@ -55,7 +55,7 @@ namespace Engine5
         void ReleaseNodeRecursive(DynamicBVHNode* node);
         void ShutdownNodeRecursive(DynamicBVHNode* node);
         void CopyNodeRecursive(DynamicBVHNode* node, BroadPhase* other);
-        void DrawNodeRecursive(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color);
+        void RenderNodeRecursive(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color);
         void ComputePairsRecursive(DynamicBVHNode* n0, DynamicBVHNode* n1, std::list<ColliderPair>& result);
         void ClearChildrenCrossFlagRecursive(DynamicBVHNode* node);
         void CrossChildren(DynamicBVHNode* node, std::list<ColliderPair>& result);

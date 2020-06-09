@@ -59,7 +59,7 @@ namespace Engine5
         body_b->SetAngularVelocity(m_velocity.w_b);
     }
 
-    void ContactConstraints::Draw(PrimitiveRenderer* primitive_renderer, const Color& color) const
+    void ContactConstraints::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const
     {
         Quaternion no_rotation;
         Vector3    avg_a, avg_b;

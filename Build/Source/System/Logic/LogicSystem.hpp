@@ -11,9 +11,9 @@ namespace Engine5
     public:
         LogicSystem();
         ~LogicSystem();
-        
+
     private:
         std::vector<LogicSubsystem*> m_subsystems;
-        InputCommon* m_input = nullptr;
+        InputCommon*                 m_input = nullptr;
     };
 }

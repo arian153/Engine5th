@@ -90,7 +90,7 @@ namespace Engine5
         }
     }
 
-    void NarrowPhase::Draw(const ColorFlag& draw_gjk_flag, const ColorFlag& draw_epa_flag)
+    void NarrowPhase::Render(const ColorFlag& draw_gjk_flag, const ColorFlag& draw_epa_flag)
     {
         if (draw_gjk_flag.b_flag)
         {

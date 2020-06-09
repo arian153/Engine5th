@@ -70,7 +70,7 @@ namespace Engine5
         }
     }
 
-    void NSquared::Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
+    void NSquared::Render(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
     {
         E5_UNUSED_ARGS(primitive_renderer, broad_phase_color, primitive_color);
     }

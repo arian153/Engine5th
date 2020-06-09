@@ -162,9 +162,9 @@ namespace Engine5
         ReleaseNodeRecursive(m_root);
     }
 
-    void DynamicBVH::Draw(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
+    void DynamicBVH::Render(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
     {
-        DrawNodeRecursive(m_root, primitive_renderer, broad_phase_color, primitive_color);
+        RenderNodeRecursive(m_root, primitive_renderer, broad_phase_color, primitive_color);
     }
 
     void DynamicBVH::ComputePairs(std::list<ColliderPair>& result)
@@ -548,7 +548,7 @@ namespace Engine5
         }
     }
 
-    void DynamicBVH::DrawNodeRecursive(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
+    void DynamicBVH::RenderNodeRecursive(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
     {
         if (node != nullptr)
         {
@@ -565,11 +565,11 @@ namespace Engine5
             primitive_renderer->DrawBox(node->aabb.Center(), Quaternion(), node->aabb.Size(), eRenderingMode::Line, broad_phase_color.color);
             if (node->children[0] != nullptr)
             {
-                DrawNodeRecursive(node->children[0], primitive_renderer, broad_phase_color, primitive_color);
+                RenderNodeRecursive(node->children[0], primitive_renderer, broad_phase_color, primitive_color);
             }
             if (node->children[1] != nullptr)
             {
-                DrawNodeRecursive(node->children[1], primitive_renderer, broad_phase_color, primitive_color);
+                RenderNodeRecursive(node->children[1], primitive_renderer, broad_phase_color, primitive_color);
             }
         }
     }

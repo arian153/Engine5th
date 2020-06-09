@@ -76,13 +76,13 @@ namespace Engine5
         m_primitive_renderer = primitive_renderer;
     }
 
-    void Resolution::Draw(const ColorFlag& draw_contact_flag)
+    void Resolution::Render(const ColorFlag& draw_contact_flag)
     {
         if (draw_contact_flag.b_flag)
         {
             for (auto& contact : m_contacts)
             {
-                contact.Draw(m_primitive_renderer, draw_contact_flag.color);
+                contact.Render(m_primitive_renderer, draw_contact_flag.color);
             }
         }
     }

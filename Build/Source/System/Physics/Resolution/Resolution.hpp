@@ -23,7 +23,7 @@ namespace Engine5
 
         void Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt);
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
-        void Draw(const ColorFlag& draw_contact_flag);
+        void Render(const ColorFlag& draw_contact_flag);
     private:
         bool m_b_warm_starting = true;
 

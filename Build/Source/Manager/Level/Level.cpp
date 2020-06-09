@@ -134,7 +134,7 @@ namespace Engine5
             auto world = space->GetWorld();
             if (world != nullptr)
             {
-                world->Draw();
+                world->Render();
             }
         }
         if (flag == eSubsystemFlag::Scene)

@@ -25,7 +25,7 @@ namespace Engine5
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
 
         void GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table);
-        void Draw(const ColorFlag& draw_gjk_flag, const ColorFlag& draw_epa_flag);
+        void Render(const ColorFlag& draw_gjk_flag, const ColorFlag& draw_epa_flag);
 
         SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction);
         bool         GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex);
