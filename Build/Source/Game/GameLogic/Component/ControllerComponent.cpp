@@ -20,6 +20,10 @@ namespace Game
     {
     }
 
+    void ControllerComponent::Render()
+    {
+    }
+
     bool ControllerComponent::Load(const Json::Value& data)
     {
         return true;

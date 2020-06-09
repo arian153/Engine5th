@@ -11,6 +11,7 @@ namespace Engine5
         LogicComponent(const LogicComponent& rhs)            = delete;
         LogicComponent& operator=(const LogicComponent& rhs) = delete;
 
+        virtual void Render() = 0;
     protected:
         explicit     LogicComponent(Object* owner);
 

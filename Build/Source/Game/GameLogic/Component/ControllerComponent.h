@@ -16,6 +16,7 @@ namespace Game
         void Initialize() override;
         void Update(Engine5::Real dt) override;
         void Shutdown() override;
+        void Render() override;
 
     protected:
         bool Load(const Json::Value& data) override;

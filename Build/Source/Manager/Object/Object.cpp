@@ -245,6 +245,7 @@ namespace Engine5
     {
     }
 
+    //Add component that have already been created
     Component* Object::AddComponent(Component* component)
     {
         auto type  = component->Type();
@@ -252,12 +253,12 @@ namespace Engine5
         if (found == m_components.end())
         {
             m_components.emplace(type, component);
-            component->Initialize();
             return component;
         }
         return nullptr;
     }
 
+    //Create and add new component
     Component* Object::AddComponent(const std::string& type)
     {
         auto found = m_components.find(type);
