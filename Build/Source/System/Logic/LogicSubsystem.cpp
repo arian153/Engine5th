@@ -55,5 +55,6 @@ namespace Engine5
 
     void LogicSubsystem::InitializeLogic(LogicComponent* logic) const
     {
+        logic->m_input = m_input;
     }
 }

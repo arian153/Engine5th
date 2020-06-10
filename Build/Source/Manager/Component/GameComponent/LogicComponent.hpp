@@ -3,6 +3,8 @@
 
 namespace Engine5
 {
+    class InputCommon;
+
     class LogicComponent : public Component
     {
     public:
@@ -15,6 +17,10 @@ namespace Engine5
     protected:
         explicit     LogicComponent(Object* owner);
 
+    private:
+        friend class LogicSubsystem;
+
     protected:
+        InputCommon* m_input = nullptr;
     };
 }

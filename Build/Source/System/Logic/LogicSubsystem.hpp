@@ -24,6 +24,8 @@ namespace Engine5
 
     private:
         std::vector<LogicComponent*> m_logic_components;
-        InputCommon*                 m_input = nullptr;
+
+        //
+        InputCommon* m_input = nullptr;
     };
 }
