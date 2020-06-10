@@ -4,6 +4,7 @@
 
 namespace Engine5
 {
+    class LogicSystem;
     class ResourceManager;
     class JsonResource;
     class Space;
@@ -16,7 +17,13 @@ namespace Engine5
     {
     public:
         SpaceManager() = delete;
-        explicit SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentRegistry* cmp, ResourceManager* resource);
+        explicit SpaceManager(
+            PhysicsSystem* physics_system, 
+            RenderSystem* render_system, 
+            ObjectFactory* object_factory, 
+            ComponentRegistry* component_registry, 
+            ResourceManager* resource_manager, 
+            LogicSystem* logic_system);
         ~SpaceManager();
 
         void Initialize();
@@ -39,6 +46,7 @@ namespace Engine5
 
         PhysicsSystem*   m_physics_system   = nullptr;
         RenderSystem*    m_render_system    = nullptr;
+        LogicSystem*     m_logic_system     = nullptr;
         ResourceManager* m_resource_manager = nullptr;
 
         //factory

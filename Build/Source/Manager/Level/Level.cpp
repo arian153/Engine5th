@@ -2,6 +2,7 @@
 #include "../Space/Space.hpp"
 #include "../../System/Physics/Dynamics/World.hpp"
 #include "../../System/Graphics/Element/Scene.hpp"
+#include "../../System/Logic/LogicSubsystem.hpp"
 
 namespace Engine5
 {
@@ -109,20 +110,28 @@ namespace Engine5
 
     void Level::UpdateSpace(Real dt, Space* space, eSubsystemFlag flag) const
     {
+        if (flag == eSubsystemFlag::World)
+        {
+            auto world = space->GetWorld();
+            if (world != nullptr)
+            {
+                world->Update(dt);
+            }
+        }
+        if (flag == eSubsystemFlag::Logic)
+        {
+            auto logic = space->GetLogicSubsystem();
+            if (logic != nullptr)
+            {
+                logic->Update(dt);
+            }
+        }
         if (flag == eSubsystemFlag::Scene)
         {
             auto scene = space->GetScene();
             if (scene != nullptr)
             {
                 scene->Update(dt);
-            }
-        }
-        else if (flag == eSubsystemFlag::World)
-        {
-            auto world = space->GetWorld();
-            if (world != nullptr)
-            {
-                world->Update(dt);
             }
         }
     }
@@ -135,6 +144,14 @@ namespace Engine5
             if (world != nullptr)
             {
                 world->Render();
+            }
+        }
+        if (flag == eSubsystemFlag::Logic)
+        {
+            auto logic = space->GetLogicSubsystem();
+            if (logic != nullptr)
+            {
+                logic->Render();
             }
         }
         if (flag == eSubsystemFlag::Scene)

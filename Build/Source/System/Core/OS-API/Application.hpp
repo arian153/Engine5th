@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class LogicSystem;
     class FileUtility;
     class ResourceManager;
     class InputCommon;
@@ -31,6 +32,7 @@ namespace Engine5
         OSCommon*          GetOperatingSystem() const;
         RenderSystem*      GetRenderSystem() const;
         PhysicsSystem*     GetPhysicsSystem() const;
+        LogicSystem*       GetLogicSystem() const;
         FrameUtility*      GetFrameUtility() const;
         TimeUtility*       GetApplicationTimer() const;
         LevelManager*      GetLevelManager() const;
@@ -59,6 +61,7 @@ namespace Engine5
         OSCommon*          m_operating_system   = nullptr;
         RenderSystem*      m_render_system      = nullptr;
         PhysicsSystem*     m_physics_system     = nullptr;
+        LogicSystem*       m_logic_system       = nullptr;
         TimeUtility*       m_time_utility       = nullptr;
         FrameUtility*      m_frame_utility      = nullptr;
         LevelManager*      m_level_manager      = nullptr;

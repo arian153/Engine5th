@@ -5,8 +5,18 @@
 
 namespace Engine5
 {
-    SpaceManager::SpaceManager(PhysicsSystem* physics, RenderSystem* renderer, ObjectFactory* obj, ComponentRegistry* cmp, ResourceManager* resource)
-        : m_physics_system(physics), m_render_system(renderer), m_resource_manager(resource), m_object_factory(obj), m_component_registry(cmp)
+    SpaceManager::SpaceManager(PhysicsSystem*     physics_system,
+                               RenderSystem*      render_system,
+                               ObjectFactory*     object_factory,
+                               ComponentRegistry* component_registry,
+                               ResourceManager*   resource_manager,
+                               LogicSystem*       logic_system)
+        : m_physics_system(physics_system),
+          m_render_system(render_system),
+          m_logic_system(logic_system),
+          m_resource_manager(resource_manager),
+          m_object_factory(object_factory),
+          m_component_registry(component_registry)
     {
     }
 
@@ -19,8 +29,8 @@ namespace Engine5
         if (m_global_space == nullptr)
         {
             m_global_space = new Space();
-            m_global_flag  = eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager | eSubsystemFlag::Scene | eSubsystemFlag::World;
-            m_global_space->Initialize(m_global_flag, m_physics_system, m_render_system, m_object_factory, m_component_registry);
+            m_global_flag  = eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager | eSubsystemFlag::Scene | eSubsystemFlag::World | eSubsystemFlag::Logic;
+            m_global_space->Initialize(m_global_flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
         }
     }
 
@@ -28,14 +38,14 @@ namespace Engine5
     {
         for (auto& space : m_spaces)
         {
-            space->Shutdown(m_physics_system, m_render_system);
+            space->Shutdown(m_physics_system, m_render_system, m_logic_system);
             delete space;
             space = nullptr;
         }
         m_spaces.clear();
         if (m_global_space != nullptr)
         {
-            m_global_space->Shutdown(m_physics_system, m_render_system);
+            m_global_space->Shutdown(m_physics_system, m_render_system, m_logic_system);
             delete m_global_space;
             m_global_space = nullptr;
         }
@@ -50,19 +60,19 @@ namespace Engine5
     {
         Space* space = new Space();
         m_spaces.push_back(space);
-        space->m_creation_flag = flag;
+        space->m_creation_flag    = flag;
         space->m_resource_manager = m_resource_manager;
-        space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry);
+        space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
         return space;
     }
 
     Space* SpaceManager::CreateSpace(JsonResource* resource)
     {
-        Space* space = new Space();
+        Space* space           = new Space();
         space->m_space_manager = this;
         m_spaces.push_back(space);
         space->m_resource_manager = m_resource_manager;
-        space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry);
+        space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
         return space;
     }
 
@@ -75,7 +85,7 @@ namespace Engine5
         if (space != nullptr)
         {
             m_spaces.erase(std::find(m_spaces.begin(), m_spaces.end(), space));
-            space->Shutdown(m_physics_system, m_render_system);
+            space->Shutdown(m_physics_system, m_render_system, m_logic_system);
             delete space;
             space = nullptr;
         }

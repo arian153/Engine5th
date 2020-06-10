@@ -1,4 +1,8 @@
 #include "ControllerComponent.h"
+#include "../../../System/Core/Input/InputCommon.hpp"
+#include "../../../System/Core/Input/KeyboardInput.hpp"
+#include "../../../Manager/Object/Object.hpp"
+#include "../../../Manager/Component/EngineComponent/TransformComponent.hpp"
 
 namespace Game
 {
@@ -14,6 +18,10 @@ namespace Game
 
     void ControllerComponent::Update(Real dt)
     {
+        if (m_input->GetKeyboardInput()->IsPressed(eKeyCodeKeyboard::A))
+        {
+            m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
+        }
     }
 
     void ControllerComponent::Shutdown()
@@ -44,7 +52,6 @@ namespace Game
     ControllerComponent::ControllerComponent(Object* owner)
         : LogicComponent(owner)
     {
-
     }
 
     void ControllerComponent::Clone(ControllerComponent* origin)

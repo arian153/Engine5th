@@ -11,7 +11,6 @@
 #include "../../System/Core/Utility/FrameUtility.hpp"
 #include "../../System/Core/Input/InputCommon.hpp"
 #include "../Resource/ResourceManager.hpp"
-#include "../../System/Core/Utility/ConsoleUtility.hpp"
 #include "../../System/Graphics/Utility/TextRenderer.hpp"
 
 namespace Engine5
@@ -99,17 +98,15 @@ namespace Engine5
                 m_frame_utility->CalculateFrameStatus(m_application_timer->TotalTime());
             }
             Real time_step = m_application_timer->DeltaTime();
-       
             m_render_system->GetTextRenderer()->Output(
-                Vector2(), 
-                ColorDef::Pure::Red, 
-                "total time : ", 
-                m_application_timer->TotalTime(), 
-                "\nFPS : ",
-                m_frame_utility->GetFramePerSecond(),
-                "\nMSPF : ",
-                m_frame_utility->GetMillisecondPerFrame());
-
+                                                       Vector2(),
+                                                       ColorDef::Pure::Red,
+                                                       "total time : ",
+                                                       m_application_timer->TotalTime(),
+                                                       "\nFPS : ",
+                                                       m_frame_utility->GetFramePerSecond(),
+                                                       "\nMSPF : ",
+                                                       m_frame_utility->GetMillisecondPerFrame());
             UpdateLevel(m_level, time_step);
             m_elapsed_time += time_step;
             if (m_elapsed_time >= m_fixed_time_step)
@@ -307,33 +304,28 @@ namespace Engine5
 
     void LevelManager::UpdateLevel(Level* level, Real dt) const
     {
-        //update logic
-        //update physics
+        level->UpdateSubsystem(dt, eSubsystemFlag::Logic);
         level->UpdateSubsystem(dt, eSubsystemFlag::World);
         //update animation
         //update sound
-        //update scene
         level->UpdateSubsystem(dt, eSubsystemFlag::Scene);
         level->Update(dt);
     }
 
     void LevelManager::FixedUpdateLevel(Level* level, Real dt) const
     {
-        //update logic
-        //update physics
+        level->FixedUpdateSubsystem(dt, eSubsystemFlag::Logic);
         level->FixedUpdateSubsystem(dt, eSubsystemFlag::World);
         //update animation
         //update sound
-        //update scene
         level->FixedUpdateSubsystem(dt, eSubsystemFlag::Scene);
         level->FixedUpdate(dt);
     }
 
     void LevelManager::RenderLevel(Level* level, Real dt) const
     {
-        //draw world
+        level->DrawSubsystem(eSubsystemFlag::Logic);
         level->DrawSubsystem(eSubsystemFlag::World);
-
         //render scene
         m_render_system->BeginUpdate();
         level->DrawSubsystem(eSubsystemFlag::Scene);

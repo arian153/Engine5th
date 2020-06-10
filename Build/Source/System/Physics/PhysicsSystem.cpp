@@ -37,7 +37,8 @@ namespace Engine5
     {
         if (world != nullptr)
         {
-            m_worlds.erase(std::find(m_worlds.begin(), m_worlds.end(), world));
+            auto found = std::find(m_worlds.begin(), m_worlds.end(), world);
+            m_worlds.erase(found);
             world->Shutdown();
             delete world;
             world = nullptr;

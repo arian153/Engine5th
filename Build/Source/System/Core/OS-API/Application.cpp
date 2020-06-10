@@ -18,6 +18,7 @@
 #include "../../../Manager/Resource/ResourceManager.hpp"
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../Utility/ConsoleUtility.hpp"
+#include "../../Logic/LogicSystem.hpp"
 
 namespace Engine5
 {
@@ -48,12 +49,15 @@ namespace Engine5
         m_render_system->Initialize(m_initial_setting.screen_width, m_initial_setting.screen_height, m_resource_manager);
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
+        m_logic_system = new LogicSystem();
+        m_logic_system->Initialize();
+
         //create managers
         m_component_registry = new ComponentRegistry();
         m_component_registry->Initialize();
         m_object_factory = new ObjectFactory();
         m_object_factory->Initialize(m_component_registry);
-        m_space_manager = new SpaceManager(m_physics_system, m_render_system, m_object_factory, m_component_registry, m_resource_manager);
+        m_space_manager = new SpaceManager(m_physics_system, m_render_system, m_object_factory, m_component_registry, m_resource_manager, m_logic_system);
         m_space_manager->Initialize();
         m_level_manager = new LevelManager();
         m_level_manager->Initialize(this);
@@ -119,6 +123,12 @@ namespace Engine5
             delete m_frame_utility;
             m_frame_utility = nullptr;
         }
+        if (m_logic_system != nullptr)
+        {
+            m_logic_system->Shutdown();
+            delete m_logic_system;
+            m_logic_system = nullptr;
+        }
         if (m_physics_system != nullptr)
         {
             m_physics_system->Shutdown();
@@ -164,6 +174,11 @@ namespace Engine5
     PhysicsSystem* Application::GetPhysicsSystem() const
     {
         return m_physics_system;
+    }
+
+    LogicSystem* Application::GetLogicSystem() const
+    {
+        return m_logic_system;
     }
 
     FrameUtility* Application::GetFrameUtility() const

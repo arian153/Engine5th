@@ -3,6 +3,8 @@
 
 namespace Engine5
 {
+    class LogicSystem;
+    class LogicSubsystem;
     class ResourceManager;
     class JsonResource;
     class ComponentRegistry;
@@ -21,20 +23,34 @@ namespace Engine5
         Space();
         ~Space();
 
-        void Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry);
-        void Initialize(JsonResource* m_space_resource, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry);
-        void Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system);
+        void Initialize(eSubsystemFlag     flag,
+                        PhysicsSystem*     physics_system,
+                        RenderSystem*      render_system,
+                        ObjectFactory*     obj_factory,
+                        ComponentRegistry* cmp_registry,
+                        LogicSystem*       logic_system);
+        void Initialize(JsonResource*      m_space_resource,
+                        PhysicsSystem*     physics_system,
+                        RenderSystem*      render_system,
+                        ObjectFactory*     obj_factory,
+                        ComponentRegistry* cmp_registry,
+                        LogicSystem*       logic_system);
+        void Shutdown(PhysicsSystem* physics_system,
+                      RenderSystem*  render_system,
+                      LogicSystem*   logic_system);
 
         void ConnectSubsystem(ComponentManager* component_manager);
         void ConnectSubsystem(ObjectManager* object_manager);
         void ConnectSubsystem(Scene* scene);
         void ConnectSubsystem(World* world);
+        void ConnectSubsystem(LogicSubsystem* logic_system);
 
         ObjectManager*    GetObjectManager() const;
         ComponentManager* GetComponentManager() const;
         ResourceManager*  GetResourceManager() const;
         Scene*            GetScene() const;
         World*            GetWorld() const;
+        LogicSubsystem*   GetLogicSubsystem() const;
 
         bool IsSubsystemUpdate(eSubsystemFlag flag) const;
         bool IsSubsystemFixedUpdate(eSubsystemFlag flag) const;
@@ -58,5 +74,6 @@ namespace Engine5
         ResourceManager*  m_resource_manager  = nullptr;
         Scene*            m_scene             = nullptr;
         World*            m_world             = nullptr;
+        LogicSubsystem*   m_logic_subsystem   = nullptr;
     };
 }

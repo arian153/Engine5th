@@ -6,6 +6,8 @@
 #include "../Component/ComponentManager.hpp"
 #include "../Resource/ResourceType/JsonResource.hpp"
 #include "SpaceManager.hpp"
+#include "../../System/Logic/LogicSystem.hpp"
+#include "../../System/Logic/LogicSubsystem.hpp"
 
 namespace Engine5
 {
@@ -17,7 +19,7 @@ namespace Engine5
     {
     }
 
-    void Space::Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry)
+    void Space::Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry, LogicSystem* logic_system)
     {
         m_creation_flag = flag;
         //create component manager
@@ -43,10 +45,21 @@ namespace Engine5
         {
             m_world = physics_system->CreateWorld();
             m_world->Initialize();
+            if (m_scene != nullptr)
+            {
+                m_world->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
+            }
         }
+        //create logic
+        if (m_logic_subsystem == nullptr && HasFlag(flag, eSubsystemFlag::Logic))
+        {
+            m_logic_subsystem = logic_system->CreateLogicSubsystem();
+            m_logic_subsystem->Initialize();
+        }
+
     }
 
-    void Space::Initialize(JsonResource* space_resource, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry)
+    void Space::Initialize(JsonResource* space_resource, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry, LogicSystem* logic_system)
     {
         m_space_resource = space_resource;
         space_resource->LoadSpaceFlag(this);
@@ -78,13 +91,24 @@ namespace Engine5
                 m_world->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
             }
         }
+        //create logic
+        if (m_logic_subsystem == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Logic))
+        {
+            m_logic_subsystem = logic_system->CreateLogicSubsystem();
+            m_logic_subsystem->Initialize();
+        }
 
         space_resource->LoadData(this);
     }
 
-    void Space::Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system)
+    void Space::Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system, LogicSystem* logic_system)
     {
         //maybe add a save data to file.
+        //shutdown logic
+        if (m_world != nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Logic))
+        {
+            logic_system->RemoveLogicSubsystem(m_logic_subsystem);
+        }
         //shutdown world
         if (m_world != nullptr && HasFlag(m_creation_flag, eSubsystemFlag::World))
         {
@@ -143,6 +167,14 @@ namespace Engine5
         }
     }
 
+    void Space::ConnectSubsystem(LogicSubsystem* logic_system)
+    {
+        if (m_logic_subsystem == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Logic) == false)
+        {
+            m_logic_subsystem = logic_system;
+        }
+    }
+
     ObjectManager* Space::GetObjectManager() const
     {
         return m_object_manager;
@@ -166,6 +198,11 @@ namespace Engine5
     World* Space::GetWorld() const
     {
         return m_world;
+    }
+
+    LogicSubsystem* Space::GetLogicSubsystem() const
+    {
+        return m_logic_subsystem;
     }
 
     bool Space::IsSubsystemUpdate(eSubsystemFlag flag) const

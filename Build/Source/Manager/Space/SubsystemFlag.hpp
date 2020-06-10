@@ -9,6 +9,7 @@ namespace Engine5
       , ObjectManager = 0x2
       , Scene = 0x4
       , World = 0x8
+      , Logic = 0x16
     };
 
     constexpr eSubsystemFlag operator^(eSubsystemFlag a, eSubsystemFlag b)

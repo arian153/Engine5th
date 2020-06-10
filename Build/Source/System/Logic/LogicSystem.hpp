@@ -12,6 +12,12 @@ namespace Engine5
         LogicSystem();
         ~LogicSystem();
 
+        void Initialize();
+        void Shutdown();
+
+        LogicSubsystem* CreateLogicSubsystem();
+        void   RemoveLogicSubsystem(LogicSubsystem* logic_subsystem);
+
     private:
         std::vector<LogicSubsystem*> m_subsystems;
         InputCommon*                 m_input = nullptr;
