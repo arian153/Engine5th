@@ -23,6 +23,8 @@ namespace Engine5
         void InitializeLogic(LogicComponent* logic) const;
 
     private:
+        friend class LogicSystem;
+    private:
         std::vector<LogicComponent*> m_logic_components;
 
         //

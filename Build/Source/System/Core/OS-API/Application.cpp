@@ -50,7 +50,9 @@ namespace Engine5
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
         m_logic_system = new LogicSystem();
+        m_logic_system->SetInput(m_input);
         m_logic_system->Initialize();
+      
 
         //create managers
         m_component_registry = new ComponentRegistry();
@@ -61,7 +63,6 @@ namespace Engine5
         m_space_manager->Initialize();
         m_level_manager = new LevelManager();
         m_level_manager->Initialize(this);
-        m_level_manager->SetInitialLevel("Test");
         //setup missing system parameters
         m_operating_system->SetLevelManager(m_level_manager);
         m_operating_system->SetInput(m_input);

@@ -3,6 +3,8 @@
 #include "../../../System/Core/Input/KeyboardInput.hpp"
 #include "../../../Manager/Object/Object.hpp"
 #include "../../../Manager/Component/EngineComponent/TransformComponent.hpp"
+#include "../../../Manager/Space/Space.hpp"
+#include "../../../System/Logic/LogicSubsystem.hpp"
 
 namespace Game
 {
@@ -14,18 +16,34 @@ namespace Game
 
     void ControllerComponent::Initialize()
     {
+        if (m_space != nullptr)
+        {
+            m_space->GetLogicSubsystem()->InitializeLogic(this);
+        }
+        Subscribe();
     }
 
     void ControllerComponent::Update(Real dt)
     {
-        if (m_input->GetKeyboardInput()->IsPressed(eKeyCodeKeyboard::A))
+        if (m_input != nullptr)
         {
-            m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
+            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::A))
+            {
+                m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
+            }
+        }
+        if (m_input != nullptr)
+        {
+            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::D))
+            {
+                m_owner->GetComponent<TransformComponent>()->AddRotationY(-dt);
+            }
         }
     }
 
     void ControllerComponent::Shutdown()
     {
+        Unsubscribe();
     }
 
     void ControllerComponent::Render()
@@ -43,10 +61,18 @@ namespace Game
 
     void ControllerComponent::Subscribe()
     {
+        if (m_space != nullptr)
+        {
+            m_space->GetLogicSubsystem()->AddLogic(this);
+        }
     }
 
     void ControllerComponent::Unsubscribe()
     {
+        if (m_space != nullptr)
+        {
+            m_space->GetLogicSubsystem()->RemoveLogic(this);
+        }
     }
 
     ControllerComponent::ControllerComponent(Object* owner)

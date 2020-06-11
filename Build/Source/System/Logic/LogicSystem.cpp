@@ -26,9 +26,15 @@ namespace Engine5
         m_subsystems.clear();
     }
 
+    void LogicSystem::SetInput(InputCommon* input)
+    {
+        m_input = input;
+    }
+
     LogicSubsystem* LogicSystem::CreateLogicSubsystem()
     {
         LogicSubsystem* logic = new LogicSubsystem();
+        logic->m_input = m_input;
         m_subsystems.push_back(logic);
         return logic;
     }

@@ -15,6 +15,8 @@ namespace Engine5
         void Initialize();
         void Shutdown();
 
+        void SetInput(InputCommon* input);
+
         LogicSubsystem* CreateLogicSubsystem();
         void   RemoveLogicSubsystem(LogicSubsystem* logic_subsystem);
 

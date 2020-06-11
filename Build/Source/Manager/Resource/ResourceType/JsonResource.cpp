@@ -487,6 +487,10 @@ namespace Engine5
                     {
                         space->m_creation_flag |= eSubsystemFlag::World;
                     }
+                    else if (flag == "Logic")
+                    {
+                        space->m_creation_flag |= eSubsystemFlag::Logic;
+                    }
                 }
             }
         }
@@ -513,6 +517,10 @@ namespace Engine5
                     {
                         space->m_update_flag |= eSubsystemFlag::World;
                     }
+                    else if (flag == "Logic")
+                    {
+                        space->m_update_flag |= eSubsystemFlag::Logic;
+                    }
                 }
             }
         }
@@ -538,6 +546,10 @@ namespace Engine5
                     else if (flag == "World")
                     {
                         space->m_fixed_update_flag |= eSubsystemFlag::World;
+                    }
+                    else if (flag == "Logic")
+                    {
+                        space->m_fixed_update_flag |= eSubsystemFlag::Logic;
                     }
                 }
             }

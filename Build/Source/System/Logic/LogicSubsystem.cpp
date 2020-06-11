@@ -33,12 +33,6 @@ namespace Engine5
 
     void LogicSubsystem::Shutdown()
     {
-        for (auto& logic : m_logic_components)
-        {
-            logic->Shutdown();
-            delete logic;
-            logic = nullptr;
-        }
         m_logic_components.clear();
     }
 
@@ -49,8 +43,14 @@ namespace Engine5
 
     void LogicSubsystem::RemoveLogic(LogicComponent* logic)
     {
-        auto found = std::find(m_logic_components.begin(), m_logic_components.end(), logic);
-        m_logic_components.erase(found);
+        if (m_logic_components.empty() == false)
+        {
+            auto found = std::find(m_logic_components.begin(), m_logic_components.end(), logic);
+            if (found != m_logic_components.end())
+            {
+                m_logic_components.erase(found);
+            }
+        }
     }
 
     void LogicSubsystem::InitializeLogic(LogicComponent* logic) const

@@ -3,10 +3,12 @@
         "ComponentManager",
         "ObjectManager",
         "Scene",
-        "World"
+        "World",
+        "Logic"
     ],
     "Update Flag": [
-        "Scene"
+        "Scene",
+        "Logic"
     ],
     "FixedUpdate Flag": [
         "World"
@@ -29,6 +31,9 @@
                         "Position": [ 0, 0, -60 ],
                         "Zoom": 1.0
                     }
+                },
+                {
+                    "Type": "class Game::ControllerComponent"
                 }
             ],
             "Name": "Camera"
