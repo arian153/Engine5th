@@ -36,12 +36,13 @@ namespace Engine5
         friend class CameraComponent;
 
     private:
-        Matrix44   m_view_matrix;
-        Vector3    m_position;
-        Quaternion m_orientation;
-        Real       m_zoom = 1.0f;
-        Basis      m_basis;
-        Scene*     m_scene = nullptr;
+        Matrix44         m_view_matrix;
+        Vector3          m_position;
+        Quaternion       m_orientation;
+        Real             m_zoom = 1.0f;
+        Basis            m_basis;
+        Scene*           m_scene     = nullptr;
+        Transform*       m_transform = nullptr;
         CameraComponent* m_component = nullptr;
     };
 }

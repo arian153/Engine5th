@@ -61,6 +61,11 @@ namespace Engine5
         m_camera->SyncToTransform(m_transform);
     }
 
+    void CameraComponent::Sync() const
+    {
+        m_camera->SyncFromTransform(m_transform);
+    }
+
     void CameraComponent::LookAt(const Vector3& position, const Vector3& target, const Vector3& up) const
     {
         m_camera->LookAt(position, target, up);

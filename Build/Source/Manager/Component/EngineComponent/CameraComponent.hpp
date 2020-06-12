@@ -23,6 +23,7 @@ namespace Engine5
 
         void SetPosition(const Vector3& position) const;
         void SetOrientation(const Quaternion& orientation) const;
+        void Sync() const;
         void LookAt(const Vector3& position, const Vector3& target, const Vector3& up = Math::Vector3::Y_AXIS) const;
 
     protected:

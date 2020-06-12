@@ -107,10 +107,11 @@ namespace Engine5
     {
         if (transform != nullptr)
         {
+            m_transform   = transform;
             m_position    = transform->position;
             m_orientation = transform->orientation;
             m_zoom        = transform->scale.x;
-            m_basis = Basis();
+            m_basis       = Basis();
             m_basis.Rotate(m_orientation);
             Update();
         }

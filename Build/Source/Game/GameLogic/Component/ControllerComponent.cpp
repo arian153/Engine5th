@@ -5,6 +5,7 @@
 #include "../../../Manager/Component/EngineComponent/TransformComponent.hpp"
 #include "../../../Manager/Space/Space.hpp"
 #include "../../../System/Logic/LogicSubsystem.hpp"
+#include "../../../Manager/Component/EngineComponent/CameraComponent.hpp"
 
 namespace Game
 {
@@ -27,16 +28,20 @@ namespace Game
     {
         if (m_input != nullptr)
         {
+            bool b_down = false;
             if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::A))
             {
                 m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
+                b_down = true;
             }
-        }
-        if (m_input != nullptr)
-        {
             if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::D))
             {
                 m_owner->GetComponent<TransformComponent>()->AddRotationY(-dt);
+                b_down = true;
+            }
+            if (b_down && m_owner->HasComponent<CameraComponent>())
+            {
+                m_owner->GetComponent<CameraComponent>()->Sync();
             }
         }
     }
