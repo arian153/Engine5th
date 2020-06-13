@@ -28,20 +28,21 @@ namespace Game
     {
         if (m_input != nullptr)
         {
-            bool b_down = false;
             if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::A))
             {
-                m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
-                b_down = true;
+                m_owner->GetComponent<TransformComponent>()->AddRotationY(-dt);
             }
             if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::D))
             {
-                m_owner->GetComponent<TransformComponent>()->AddRotationY(-dt);
-                b_down = true;
+                m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
             }
-            if (b_down && m_owner->HasComponent<CameraComponent>())
+            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::W))
             {
-                m_owner->GetComponent<CameraComponent>()->Sync();
+                m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
+            }
+            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::S))
+            {
+                m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
             }
         }
     }

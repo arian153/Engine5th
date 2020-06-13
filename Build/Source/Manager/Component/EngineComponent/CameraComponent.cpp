@@ -28,7 +28,9 @@ namespace Engine5
             if (m_owner->HasComponent<TransformComponent>())
             {
                 m_transform = m_owner->GetComponent<TransformComponent>()->GetTransform();
-                m_camera->SyncFromTransform(m_transform);
+                m_camera->SetTransform(m_transform);
+                m_camera->SyncFromTransform();
+                m_camera->UpdateViewMatrix();
             }
         }
     }
@@ -52,24 +54,16 @@ namespace Engine5
     void CameraComponent::SetPosition(const Vector3& position) const
     {
         m_camera->SetPosition(position);
-        m_camera->SyncToTransform(m_transform);
     }
 
     void CameraComponent::SetOrientation(const Quaternion& orientation) const
     {
         m_camera->SetOrientation(orientation);
-        m_camera->SyncToTransform(m_transform);
-    }
-
-    void CameraComponent::Sync() const
-    {
-        m_camera->SyncFromTransform(m_transform);
     }
 
     void CameraComponent::LookAt(const Vector3& position, const Vector3& target, const Vector3& up) const
     {
         m_camera->LookAt(position, target, up);
-        m_camera->SyncToTransform(m_transform);
     }
 
     bool CameraComponent::Load(const Json::Value& data)

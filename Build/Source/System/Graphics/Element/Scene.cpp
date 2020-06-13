@@ -41,6 +41,7 @@ namespace Engine5
 
     void Scene::Update(Real dt)
     {
+        m_b_deferred_shading = false;
         if (m_deferred_meshes.empty() == false)
         {
             MatrixData mvp_data;
@@ -52,6 +53,7 @@ namespace Engine5
             m_deferred_buffer->ClearRenderTargets(Color(0.0f, 0.0f, 0.0f, 0.0f));
             for (auto& camera : m_cameras)
             {
+                camera->Update();
                 mvp_data.view = camera->GetViewMatrix();
                 for (auto& mesh : m_deferred_meshes)
                 {
@@ -139,6 +141,7 @@ namespace Engine5
         mvp_data.projection = m_projection_matrix;
         for (auto& camera : m_cameras)
         {
+            camera->Update();
             mvp_data.view = camera->GetViewMatrix();
             for (auto& mesh : m_other_meshes)
             {

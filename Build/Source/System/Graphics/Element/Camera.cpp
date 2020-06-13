@@ -20,13 +20,10 @@ namespace Engine5
 
     void Camera::Update()
     {
-        Vector3 up    = m_orientation.Rotate(Math::Vector3::Y_AXIS);
-        Vector3 look  = m_orientation.Rotate(Math::Vector3::Z_AXIS) + m_position;
-        m_view_matrix = Math::Matrix44::LookAt(m_position, look, up);
-        m_view_matrix *= m_zoom;
-        if (m_scene != nullptr)
+        if (SyncFromTransform())
         {
-            m_scene->UpdateView();
+            UpdateViewMatrix();
+            SyncToTransform();
         }
     }
 
@@ -41,7 +38,8 @@ namespace Engine5
     void Camera::SetPosition(const Vector3& position)
     {
         m_position = position;
-        Update();
+        UpdateViewMatrix();
+        SyncToTransform();
     }
 
     void Camera::SetOrientation(const Quaternion& orientation)
@@ -49,7 +47,8 @@ namespace Engine5
         m_orientation = orientation;
         m_basis       = Basis();
         m_basis.Rotate(m_orientation);
-        Update();
+        UpdateViewMatrix();
+        SyncToTransform();
     }
 
     void Camera::SetScene(Scene* scene)
@@ -86,6 +85,7 @@ namespace Engine5
         m_basis                  = Basis();
         m_basis.Rotate(m_orientation);
         m_view_matrix *= m_zoom;
+        SyncToTransform();
     }
 
     Basis Camera::GetBasis() const
@@ -93,27 +93,56 @@ namespace Engine5
         return m_basis;
     }
 
-    void Camera::SyncToTransform(Transform* transform) const
+    void Camera::SetTransform(Transform* transform)
     {
-        if (transform != nullptr)
+        m_transform = transform;
+    }
+
+    void Camera::SyncToTransform() const
+    {
+        if (m_transform != nullptr)
         {
-            transform->position    = m_position;
-            transform->orientation = m_orientation;
-            transform->scale       = Vector3(m_zoom, m_zoom, m_zoom);
+            m_transform->position    = m_position;
+            m_transform->orientation = m_orientation;
+            m_transform->scale       = Vector3(m_zoom, m_zoom, m_zoom);
         }
     }
 
-    void Camera::SyncFromTransform(Transform* transform)
+    bool Camera::SyncFromTransform()
     {
-        if (transform != nullptr)
+        bool result = false;
+        if (m_transform != nullptr)
         {
-            m_transform   = transform;
-            m_position    = transform->position;
-            m_orientation = transform->orientation;
-            m_zoom        = transform->scale.x;
-            m_basis       = Basis();
-            m_basis.Rotate(m_orientation);
-            Update();
+            if (m_position.IsNotEqual(m_transform->position))
+            {
+                m_position = m_transform->position;
+                result     = true;
+            }
+            if (m_orientation.IsNotEqual(m_transform->orientation))
+            {
+                m_orientation = m_transform->orientation;
+                m_basis       = Basis();
+                m_basis.Rotate(m_orientation);
+                result = true;
+            }
+            if (Utility::IsNotEqual(m_zoom, m_transform->scale.x))
+            {
+                m_zoom = m_transform->scale.x;
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    void Camera::UpdateViewMatrix()
+    {
+        Vector3 up    = m_orientation.Rotate(Math::Vector3::Y_AXIS);
+        Vector3 look  = m_orientation.Rotate(Math::Vector3::Z_AXIS) + m_position;
+        m_view_matrix = Math::Matrix44::LookAt(m_position, look, up);
+        m_view_matrix *= m_zoom;
+        if (m_scene != nullptr)
+        {
+            m_scene->UpdateView();
         }
     }
 }

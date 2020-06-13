@@ -29,9 +29,10 @@ namespace Engine5
         Matrix44   GetViewMatrix() const;
         Basis      GetBasis() const;
 
-        void SyncToTransform(Transform* transform) const;
-        void SyncFromTransform(Transform* transform);
-
+        void SetTransform(Transform* transform);
+        void SyncToTransform() const;
+        bool SyncFromTransform();
+        void UpdateViewMatrix();
     private:
         friend class CameraComponent;
 
