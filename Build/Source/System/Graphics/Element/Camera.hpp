@@ -21,6 +21,7 @@ namespace Engine5
         void Shutdown() const;
         void SetPosition(const Vector3& position);
         void SetOrientation(const Quaternion& orientation);
+        void SetZoom(Real zoom);
         void SetScene(Scene* scene);
         void LookAt(const Vector3& position, const Vector3& target, const Vector3& up = Math::Vector3::Y_AXIS);
 

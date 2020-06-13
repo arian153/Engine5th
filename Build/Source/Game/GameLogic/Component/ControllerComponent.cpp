@@ -30,19 +30,31 @@ namespace Game
         {
             if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::A))
             {
-                m_owner->GetComponent<TransformComponent>()->AddRotationY(-dt);
+                m_owner->GetComponent<CameraComponent>()->AddRotationY(-dt * 0.5f);
             }
             if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::D))
             {
-                m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
+                m_owner->GetComponent<CameraComponent>()->AddRotationY(dt * 0.5f);
             }
             if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::W))
             {
-                m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
+                m_owner->GetComponent<CameraComponent>()->AddDistanceInLookingDirection(dt * 10.0f);
             }
             if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::S))
             {
-                m_owner->GetComponent<TransformComponent>()->AddRotationY(dt);
+                m_owner->GetComponent<CameraComponent>()->AddDistanceInLookingDirection(-dt * 10.0f);
+            }
+            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::Q))
+            {
+                m_owner->GetComponent<CameraComponent>()->AddRotationZ(-dt * 0.5f);
+            }
+            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::E))
+            {
+                m_owner->GetComponent<CameraComponent>()->AddRotationZ(dt * 0.5f);
+            }
+            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::Space))
+            {
+                m_owner->GetComponent<CameraComponent>()->AddRotationA(dt * 0.5f);
             }
         }
     }

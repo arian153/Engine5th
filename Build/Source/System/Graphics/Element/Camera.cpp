@@ -51,6 +51,13 @@ namespace Engine5
         SyncToTransform();
     }
 
+    void Camera::SetZoom(Real zoom)
+    {
+        m_zoom = zoom;
+        UpdateViewMatrix();
+        SyncToTransform();
+    }
+
     void Camera::SetScene(Scene* scene)
     {
         if (scene != nullptr)

@@ -66,6 +66,70 @@ namespace Engine5
         m_camera->LookAt(position, target, up);
     }
 
+    void CameraComponent::AddPosition(const Vector3& delta_position) const
+    {
+        m_camera->SetPosition(delta_position + m_camera->m_position);
+    }
+
+    void CameraComponent::AddDistanceInLookingDirection(Real distance) const
+    {
+        auto    basis = m_camera->GetBasis();
+        Vector3 look  = basis.k;
+        m_camera->SetPosition(look * distance + m_camera->m_position);
+    }
+
+    void CameraComponent::AddRotation(const Quaternion& delta_rotation)
+    {
+        m_camera->m_orientation.AddRotation(delta_rotation);
+        m_camera->SetOrientation(m_camera->m_orientation);
+        m_axis_holder = m_camera->m_orientation.ToAxisRadian();
+    }
+
+    void CameraComponent::AddRotation(const AxisRadian& axis_radian)
+    {
+        m_camera->m_orientation.AddRotation(axis_radian.axis, axis_radian.radian);
+        m_camera->SetOrientation(m_camera->m_orientation);
+        m_axis_holder = m_camera->m_orientation.ToAxisRadian();
+    }
+
+    void CameraComponent::AddRotationX(Real radian)
+    {
+        m_camera->m_orientation.AddRotation(Math::Vector3::X_AXIS, radian);
+        m_camera->SetOrientation(m_camera->m_orientation);
+        m_axis_holder = m_camera->m_orientation.ToAxisRadian();
+    }
+
+    void CameraComponent::AddRotationY(Real radian)
+    {
+        m_camera->m_orientation.AddRotation(Math::Vector3::Y_AXIS, radian);
+        m_camera->SetOrientation(m_camera->m_orientation);
+        m_axis_holder = m_camera->m_orientation.ToAxisRadian();
+    }
+
+    void CameraComponent::AddRotationZ(Real radian)
+    {
+        m_camera->m_orientation.AddRotation(Math::Vector3::Z_AXIS, radian);
+        m_camera->SetOrientation(m_camera->m_orientation);
+        m_axis_holder = m_camera->m_orientation.ToAxisRadian();
+    }
+
+    void CameraComponent::AddRotationA(Real radian)
+    {
+        m_axis_holder.radian += radian;
+        m_camera->m_orientation.Set(m_axis_holder);
+        m_camera->SetOrientation(m_camera->m_orientation);
+    }
+
+    void CameraComponent::AddZoom(Real zoom) const
+    {
+        m_camera->SetZoom(m_camera->m_zoom + zoom);
+    }
+
+    void CameraComponent::ResetZoom() const
+    {
+        m_camera->SetZoom(1.0f);
+    }
+
     bool CameraComponent::Load(const Json::Value& data)
     {
         if (JsonResource::HasMember(data, "Orientation") && JsonResource::IsQuaternion(data["Orientation"]))
