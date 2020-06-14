@@ -30,6 +30,8 @@ namespace Engine5
         //modify addition
         void AddPosition(const Vector3& delta_position) const;
         void AddDistanceInLookingDirection(Real distance) const;
+        void AddDistanceInUpDirection(Real distance) const;
+        void AddDistanceInRightDirection(Real distance) const;
         void AddRotation(const Quaternion& delta_rotation);
         void AddRotation(const AxisRadian& axis_radian);
         void AddRotationX(Real radian);

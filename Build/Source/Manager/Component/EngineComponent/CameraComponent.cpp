@@ -73,9 +73,23 @@ namespace Engine5
 
     void CameraComponent::AddDistanceInLookingDirection(Real distance) const
     {
+        auto    basis  = m_camera->GetBasis();
+        Vector3 result = basis.k * distance;
+        m_camera->SetPosition(result + m_camera->m_position);
+    }
+
+    void CameraComponent::AddDistanceInUpDirection(Real distance) const
+    {
         auto    basis = m_camera->GetBasis();
-        Vector3 look  = basis.k;
-        m_camera->SetPosition(look * distance + m_camera->m_position);
+        Vector3 result = basis.j * distance;
+        m_camera->SetPosition(result + m_camera->m_position);
+    }
+
+    void CameraComponent::AddDistanceInRightDirection(Real distance) const
+    {
+        auto    basis = m_camera->GetBasis();
+        Vector3 result = basis.i * distance;
+        m_camera->SetPosition(result + m_camera->m_position);
     }
 
     void CameraComponent::AddRotation(const Quaternion& delta_rotation)

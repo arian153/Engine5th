@@ -6,6 +6,7 @@
 #include "../../../Manager/Space/Space.hpp"
 #include "../../../System/Logic/LogicSubsystem.hpp"
 #include "../../../Manager/Component/EngineComponent/CameraComponent.hpp"
+#include "../../../System/Core/Input/MouseInput.hpp"
 
 namespace Game
 {
@@ -26,35 +27,31 @@ namespace Game
 
     void ControllerComponent::Update(Real dt)
     {
-        if (m_input != nullptr)
+        if (m_input != nullptr && m_owner->HasComponent<CameraComponent>())
         {
-            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::A))
+            auto mouse    = m_input->GetMouseInput();
+            auto keyboard = m_input->GetKeyboardInput();
+            auto camera   = m_owner->GetComponent<CameraComponent>();
+            if (mouse->IsDown(eKeyCodeMouse::Right))
             {
-                m_owner->GetComponent<CameraComponent>()->AddRotationY(-dt * 0.5f);
+                int  curr_x = mouse->CurrentPosition().x;
+                int  curr_y = mouse->CurrentPosition().y;
+                int  prev_x = mouse->PreviousPosition().x;
+                int  prev_y = mouse->PreviousPosition().y;
+                Real dx     = static_cast<Real>(curr_x - prev_x);
+                Real dy     = static_cast<Real>(curr_y - prev_y);
+                camera->AddDistanceInUpDirection(dt * 10.0f * dy);
+                camera->AddDistanceInRightDirection(dt * 10.0f * dx);
             }
-            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::D))
+            if (m_input->GetMouseInput()->IsWheelRolling())
             {
-                m_owner->GetComponent<CameraComponent>()->AddRotationY(dt * 0.5f);
+                camera->AddDistanceInLookingDirection(dt * 10.0f * mouse->MouseWheelRollingDirection());
             }
-            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::W))
+            if (keyboard->IsDown(eKeyCodeKeyboard::W))
             {
-                m_owner->GetComponent<CameraComponent>()->AddDistanceInLookingDirection(dt * 10.0f);
             }
-            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::S))
+            if (keyboard->IsDown(eKeyCodeKeyboard::S))
             {
-                m_owner->GetComponent<CameraComponent>()->AddDistanceInLookingDirection(-dt * 10.0f);
-            }
-            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::Q))
-            {
-                m_owner->GetComponent<CameraComponent>()->AddRotationZ(-dt * 0.5f);
-            }
-            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::E))
-            {
-                m_owner->GetComponent<CameraComponent>()->AddRotationZ(dt * 0.5f);
-            }
-            if (m_input->GetKeyboardInput()->IsDown(eKeyCodeKeyboard::Space))
-            {
-                m_owner->GetComponent<CameraComponent>()->AddRotationA(dt * 0.5f);
             }
         }
     }

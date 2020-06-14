@@ -45,7 +45,8 @@ namespace Engine5
     void Camera::SetOrientation(const Quaternion& orientation)
     {
         m_orientation = orientation;
-        m_basis       = Basis();
+        m_orientation.SetNormalize();
+        m_basis = Basis();
         m_basis.Rotate(m_orientation);
         UpdateViewMatrix();
         SyncToTransform();
@@ -83,6 +84,11 @@ namespace Engine5
 
     void Camera::LookAt(const Vector3& position, const Vector3& target, const Vector3& up)
     {
+        //up     = m_orientation.Rotate(Math::Vector3::Y_AXIS)
+        //target = m_orientation.Rotate(Math::Vector3::Z_AXIS) + m_position
+
+
+
         m_view_matrix            = Math::Matrix44::LookAt(position, target, up);
         Matrix44 view_matrix     = m_view_matrix;
         view_matrix              = Math::Matrix44::Translation(-position) * view_matrix;
@@ -90,8 +96,13 @@ namespace Engine5
         m_orientation            = rotation_matrix.ToQuaternion();
         m_position               = position;
         m_basis                  = Basis();
+        m_orientation.SetNormalize();
         m_basis.Rotate(m_orientation);
         m_view_matrix *= m_zoom;
+        if (m_scene != nullptr)
+        {
+            m_scene->UpdateView();
+        }
         SyncToTransform();
     }
 
@@ -129,6 +140,7 @@ namespace Engine5
             {
                 m_orientation = m_transform->orientation;
                 m_basis       = Basis();
+                m_orientation.SetNormalize();
                 m_basis.Rotate(m_orientation);
                 result = true;
             }

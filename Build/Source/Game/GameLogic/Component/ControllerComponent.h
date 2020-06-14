@@ -30,5 +30,11 @@ namespace Game
     private:
         explicit ControllerComponent(Engine5::Object* owner);
         void     Clone(ControllerComponent* origin);
+
+    private:
+        Engine5::Real    m_theta  = 0.0f;
+        Engine5::Real    m_phi    = 0.0f;
+        Engine5::Real    m_radius = 60.0f;
+        Engine5::Vector3 target_pos;
     };
 }
