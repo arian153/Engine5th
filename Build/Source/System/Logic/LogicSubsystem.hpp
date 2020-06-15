@@ -4,6 +4,8 @@
 
 namespace Engine5
 {
+    class PrimitiveRenderer;
+    class TextRenderer;
     class InputCommon;
     class LogicComponent;
 
@@ -21,6 +23,7 @@ namespace Engine5
         void AddLogic(LogicComponent* logic);
         void RemoveLogic(LogicComponent* logic);
         void InitializeLogic(LogicComponent* logic) const;
+        void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
 
     private:
         friend class LogicSystem;
@@ -28,6 +31,8 @@ namespace Engine5
         std::vector<LogicComponent*> m_logic_components;
 
         //
-        InputCommon* m_input = nullptr;
+        InputCommon*       m_input              = nullptr;
+        TextRenderer*      m_text_renderer      = nullptr;
+        PrimitiveRenderer* m_primitive_renderer = nullptr;
     };
 }

@@ -55,6 +55,10 @@ namespace Engine5
         {
             m_logic_subsystem = logic_system->CreateLogicSubsystem();
             m_logic_subsystem->Initialize();
+            if (m_scene != nullptr)
+            {
+                m_logic_subsystem->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
+            }
         }
 
     }
@@ -96,6 +100,10 @@ namespace Engine5
         {
             m_logic_subsystem = logic_system->CreateLogicSubsystem();
             m_logic_subsystem->Initialize();
+            if (m_scene != nullptr)
+            {
+                m_logic_subsystem->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
+            }
         }
 
         space_resource->LoadData(this);

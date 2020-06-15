@@ -2,6 +2,7 @@
 #include "..//Component.hpp"
 #include "../../../System/Math/Utility/VectorDef.hpp"
 #include "../../../System/Math/Structure/AxisRadian.hpp"
+#include "../../../System/Math/Structure/Basis.hpp"
 
 namespace Engine5
 {
@@ -41,6 +42,9 @@ namespace Engine5
         void AddZoom(Real zoom) const;
 
         void ResetZoom() const;
+
+        Basis GetBasis() const;
+        Vector3 GetPosition() const;
     protected:
         bool Load(const Json::Value& data) override;
         void Save(Json::Value& data) const override;

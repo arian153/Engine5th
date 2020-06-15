@@ -55,6 +55,13 @@ namespace Engine5
 
     void LogicSubsystem::InitializeLogic(LogicComponent* logic) const
     {
-        logic->m_input = m_input;
+        logic->m_input              = m_input;
+        logic->m_text_renderer      = m_text_renderer;
+        logic->m_primitive_renderer = m_primitive_renderer;
+    }
+
+    void LogicSubsystem::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
+    {
+        m_primitive_renderer = primitive_renderer;
     }
 }

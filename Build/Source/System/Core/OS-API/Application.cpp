@@ -51,6 +51,7 @@ namespace Engine5
         m_physics_system->Initialize();
         m_logic_system = new LogicSystem();
         m_logic_system->SetInput(m_input);
+        m_logic_system->SetTextRenderer(m_render_system->GetTextRenderer());
         m_logic_system->Initialize();
       
 

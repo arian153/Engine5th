@@ -7,6 +7,7 @@
 #include "../../../System/Logic/LogicSubsystem.hpp"
 #include "../../../Manager/Component/EngineComponent/CameraComponent.hpp"
 #include "../../../System/Core/Input/MouseInput.hpp"
+#include "../../../System/Graphics/Utility/TextRenderer.hpp"
 
 namespace Game
 {
@@ -32,20 +33,21 @@ namespace Game
             auto mouse    = m_input->GetMouseInput();
             auto keyboard = m_input->GetKeyboardInput();
             auto camera   = m_owner->GetComponent<CameraComponent>();
+            int  curr_x   = mouse->CurrentPosition().x;
+            int  curr_y   = mouse->CurrentPosition().y;
+            int  prev_x   = mouse->PreviousPosition().x;
+            int  prev_y   = mouse->PreviousPosition().y;
+            Real dx       = static_cast<Real>(curr_x - prev_x);
+            Real dy       = static_cast<Real>(curr_y - prev_y);
+            m_text_renderer->Output(Vector2(520), ColorDef::Pure::Red, "camera : ", camera->GetPosition());
             if (mouse->IsDown(eKeyCodeMouse::Right))
             {
-                int  curr_x = mouse->CurrentPosition().x;
-                int  curr_y = mouse->CurrentPosition().y;
-                int  prev_x = mouse->PreviousPosition().x;
-                int  prev_y = mouse->PreviousPosition().y;
-                Real dx     = static_cast<Real>(curr_x - prev_x);
-                Real dy     = static_cast<Real>(curr_y - prev_y);
-                camera->AddDistanceInUpDirection(dt * 10.0f * dy);
-                camera->AddDistanceInRightDirection(dt * 10.0f * dx);
+                camera->AddDistanceInUpDirection(dt * dy);
+                camera->AddDistanceInRightDirection(dt * dx);
             }
             if (m_input->GetMouseInput()->IsWheelRolling())
             {
-                camera->AddDistanceInLookingDirection(dt * 10.0f * mouse->MouseWheelRollingDirection());
+                camera->AddDistanceInLookingDirection(dt * 20.0f * mouse->MouseWheelRollingDirection());
             }
             if (keyboard->IsDown(eKeyCodeKeyboard::W))
             {

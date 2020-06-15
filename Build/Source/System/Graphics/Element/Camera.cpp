@@ -98,6 +98,7 @@ namespace Engine5
         m_basis                  = Basis();
         m_orientation.SetNormalize();
         m_basis.Rotate(m_orientation);
+        m_basis.Normalize();
         m_view_matrix *= m_zoom;
         if (m_scene != nullptr)
         {
@@ -142,6 +143,7 @@ namespace Engine5
                 m_basis       = Basis();
                 m_orientation.SetNormalize();
                 m_basis.Rotate(m_orientation);
+                m_basis.Normalize();
                 result = true;
             }
             if (Utility::IsNotEqual(m_zoom, m_transform->scale.x))
@@ -156,8 +158,8 @@ namespace Engine5
     void Camera::UpdateViewMatrix()
     {
         Vector3 up    = m_orientation.Rotate(Math::Vector3::Y_AXIS);
-        Vector3 look  = m_orientation.Rotate(Math::Vector3::Z_AXIS) + m_position;
-        m_view_matrix = Math::Matrix44::LookAt(m_position, look, up);
+        Vector3 look  = m_orientation.Rotate(Math::Vector3::Z_AXIS);
+        m_view_matrix = Math::Matrix44::LookAt(m_position, look + m_position, up);
         m_view_matrix *= m_zoom;
         if (m_scene != nullptr)
         {

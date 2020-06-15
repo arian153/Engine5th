@@ -14,6 +14,7 @@
 #include <ostream>
 #include "Vector4.hpp"
 #include "Vector2.hpp"
+#include <sstream>
 
 namespace Engine5
 {
@@ -402,6 +403,12 @@ namespace Engine5
     }
 
     std::ostream& operator<<(std::ostream& os, const Vector3& rhs)
+    {
+        os << "[" << rhs.x << ", " << rhs.y << ", " << rhs.z << "]";
+        return os;
+    }
+
+    std::wstringstream& operator<<(std::wstringstream& os, const Vector3& rhs)
     {
         os << "[" << rhs.x << ", " << rhs.y << ", " << rhs.z << "]";
         return os;

@@ -144,6 +144,16 @@ namespace Engine5
         m_camera->SetZoom(1.0f);
     }
 
+    Basis CameraComponent::GetBasis() const
+    {
+        return m_camera->GetBasis();
+    }
+
+    Vector3 CameraComponent::GetPosition() const
+    {
+        return m_camera->GetPosition();
+    }
+
     bool CameraComponent::Load(const Json::Value& data)
     {
         if (JsonResource::HasMember(data, "Orientation") && JsonResource::IsQuaternion(data["Orientation"]))

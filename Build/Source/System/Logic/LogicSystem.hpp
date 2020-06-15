@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class TextRenderer;
     class InputCommon;
     class LogicSubsystem;
 
@@ -16,12 +17,16 @@ namespace Engine5
         void Shutdown();
 
         void SetInput(InputCommon* input);
+        void SetTextRenderer(TextRenderer* text_renderer);
 
         LogicSubsystem* CreateLogicSubsystem();
-        void   RemoveLogicSubsystem(LogicSubsystem* logic_subsystem);
+        void            RemoveLogicSubsystem(LogicSubsystem* logic_subsystem);
 
     private:
         std::vector<LogicSubsystem*> m_subsystems;
-        InputCommon*                 m_input = nullptr;
+
+        //others
+        InputCommon*  m_input         = nullptr;
+        TextRenderer* m_text_renderer = nullptr;
     };
 }

@@ -31,10 +31,16 @@ namespace Engine5
         m_input = input;
     }
 
+    void LogicSystem::SetTextRenderer(TextRenderer* text_renderer)
+    {
+        m_text_renderer = text_renderer;
+    }
+
     LogicSubsystem* LogicSystem::CreateLogicSubsystem()
     {
-        LogicSubsystem* logic = new LogicSubsystem();
-        logic->m_input = m_input;
+        LogicSubsystem* logic  = new LogicSubsystem();
+        logic->m_input         = m_input;
+        logic->m_text_renderer = m_text_renderer;
         m_subsystems.push_back(logic);
         return logic;
     }

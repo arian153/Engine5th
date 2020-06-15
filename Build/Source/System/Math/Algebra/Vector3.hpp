@@ -99,6 +99,7 @@ namespace Engine5
         Vector3              operator *(Real real) const;
         Vector3              operator /(Real real) const;
         friend std::ostream& operator<<(std::ostream& os, const Vector3& rhs);
+        friend std::wstringstream& operator<<(std::wstringstream& os, const Vector3& rhs);
         friend Vector3       operator*(Real real, const Vector3& vector);
         Vector3&             operator ++();
         Vector3              operator ++(int);
