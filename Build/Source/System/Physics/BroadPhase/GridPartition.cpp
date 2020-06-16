@@ -395,7 +395,7 @@ namespace Engine5
     {
         GridDirection result;
         result.cell = static_cast<int>(std::floorf(pos / (Real)m_size_of_cell)) + 1;
-        if (Utility::IsGreatorThanZero(dir) == true)
+        if (Math::IsGreatorThanZero(dir) == true)
         {
             result.delta_cell = 1;
             result.delta_t    = (result.cell * m_size_of_cell - pos) / dir;

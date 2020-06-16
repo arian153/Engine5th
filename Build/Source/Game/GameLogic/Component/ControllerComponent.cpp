@@ -39,10 +39,9 @@ namespace Game
             int  prev_y   = mouse->PreviousPosition().y;
             Real dx       = static_cast<Real>(curr_x - prev_x);
             Real dy       = static_cast<Real>(curr_y - prev_y);
-            m_text_renderer->Output(Vector2(520), ColorDef::Pure::Red, "camera : ", camera->GetPosition());
             if (mouse->IsDown(eKeyCodeMouse::Right))
             {
-                camera->AddDistanceInUpDirection(dt * dy);
+                camera->AddDistanceInUpDirection(-dt * dy);
                 camera->AddDistanceInRightDirection(dt * dx);
             }
             if (m_input->GetMouseInput()->IsWheelRolling())
@@ -51,9 +50,27 @@ namespace Game
             }
             if (keyboard->IsDown(eKeyCodeKeyboard::W))
             {
+                camera->AddRotationX(-dt);
             }
             if (keyboard->IsDown(eKeyCodeKeyboard::S))
             {
+                camera->AddRotationX(dt);
+            }
+            if (keyboard->IsDown(eKeyCodeKeyboard::A))
+            {
+                camera->AddRotationY(-dt);
+            }
+            if (keyboard->IsDown(eKeyCodeKeyboard::D))
+            {
+                camera->AddRotationY(dt);
+            }
+            if (keyboard->IsDown(eKeyCodeKeyboard::Q))
+            {
+                camera->AddRotationZ(-dt);
+            }
+            if (keyboard->IsDown(eKeyCodeKeyboard::E))
+            {
+                camera->AddRotationZ(dt);
             }
         }
     }
@@ -65,6 +82,14 @@ namespace Game
 
     void ControllerComponent::Render()
     {
+        if (m_input != nullptr && m_owner->HasComponent<CameraComponent>())
+        {
+            auto camera = m_owner->GetComponent<CameraComponent>();
+            auto basis  = camera->GetBasis();
+            m_text_renderer->Output(
+                                    Vector2(520), ColorDef::Pure::Red, "P : ", camera->GetPosition(),
+                                    "\nI : ", basis.i, "\nJ : ", basis.j, "\nK : ", basis.k);
+        }
     }
 
     bool ControllerComponent::Load(const Json::Value& data)

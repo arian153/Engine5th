@@ -7,12 +7,12 @@ namespace Engine5
     class Vector3;
     class Vector3Pair;
 
-    namespace Utility
+    namespace Math
     {
         Real        LinearInterpolation(Real v0, Real v1, Real t);
         Real        SmoothStart(Real t);
         Real        SmoothStop(Real t);
-        Vector3Pair GetTangentUsingQuaternion(const Vector3& normal);
+        Vector3Pair GetTangentUsingQuaternion(const Engine5::Vector3& normal);
         bool SolveQuadratic(Real a, Real b, Real c, Real& result1, Real& result2);
 
         template <typename T>

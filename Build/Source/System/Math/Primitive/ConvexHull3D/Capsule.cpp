@@ -205,7 +205,7 @@ namespace Engine5
         {
             //sphere case
             Vector3 sphere_origin;
-            sphere_origin.y = half_height * Utility::Signum(local_point_on_primitive.y);
+            sphere_origin.y = half_height * Math::Signum(local_point_on_primitive.y);
             normal          = (local_point_on_primitive - sphere_origin).Normalize();
         }
         else

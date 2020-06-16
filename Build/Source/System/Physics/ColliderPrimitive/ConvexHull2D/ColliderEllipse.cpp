@@ -53,16 +53,16 @@ namespace Engine5
         Vector3 normal(0.0f, 0.0f, 1.0f);
         Vector3 pc          = -local_ray.position;
         Real    denominator = normal.DotProduct(local_ray.direction);
-        if (Utility::IsZero(denominator) == true)
+        if (Math::IsZero(denominator) == true)
         {
             //ray is parallel to plane.
-            if (Utility::IsZero(pc.DotProduct(normal)) == true)
+            if (Math::IsZero(pc.DotProduct(normal)) == true)
             {
                 //ray is on the plane.
-                if (Utility::SolveQuadratic(a, b, c, ellipse_max_t, ellipse_min_t))
+                if (Math::SolveQuadratic(a, b, c, ellipse_max_t, ellipse_min_t))
                 {
                     //solve intersection
-                    if (Utility::IsEqual(ellipse_min_t, ellipse_max_t))
+                    if (Math::IsEqual(ellipse_min_t, ellipse_max_t))
                     {
                         minimum_t = maximum_t = ellipse_min_t;
                     }
@@ -110,7 +110,7 @@ namespace Engine5
         Vector2 radius         = Radius();
         Real    ellipse_result = local_point_on_collider.x * local_point_on_collider.x / (radius.x * radius.x)
                 + local_point_on_collider.y * local_point_on_collider.y / (radius.y * radius.y);
-        if (Utility::IsEqual(ellipse_result, 1.0f))
+        if (Math::IsEqual(ellipse_result, 1.0f))
         {
             Vector3 normal;
             normal.x = 2.0f * local_point_on_collider.x / radius.x * radius.x;

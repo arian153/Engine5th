@@ -63,9 +63,9 @@ namespace Engine5
 
     void Vector3::SetInverse()
     {
-        this->x = Utility::IsZero(x) ? 0.0f : 1.0f / this->x;
-        this->y = Utility::IsZero(y) ? 0.0f : 1.0f / this->y;
-        this->z = Utility::IsZero(z) ? 0.0f : 1.0f / this->z;
+        this->x = Math::IsZero(x) ? 0.0f : 1.0f / this->x;
+        this->y = Math::IsZero(y) ? 0.0f : 1.0f / this->y;
+        this->z = Math::IsZero(z) ? 0.0f : 1.0f / this->z;
     }
 
     void Vector3::SetNegate()
@@ -93,11 +93,11 @@ namespace Engine5
 
     void Vector3::SetClean()
     {
-        if (Utility::IsZero(x))
+        if (Math::IsZero(x))
             x = 0.0f;
-        if (Utility::IsZero(y))
+        if (Math::IsZero(y))
             y = 0.0f;
-        if (Utility::IsZero(z))
+        if (Math::IsZero(z))
             z = 0.0f;
     }
 
@@ -175,9 +175,9 @@ namespace Engine5
     Vector3 Vector3::Inverse() const
     {
         return Vector3(
-                       Utility::IsZero(x) ? 0.0f : 1.0f / this->x,
-                       Utility::IsZero(y) ? 0.0f : 1.0f / this->y,
-                       Utility::IsZero(z) ? 0.0f : 1.0f / this->z);
+                       Math::IsZero(x) ? 0.0f : 1.0f / this->x,
+                       Math::IsZero(y) ? 0.0f : 1.0f / this->y,
+                       Math::IsZero(z) ? 0.0f : 1.0f / this->z);
     }
 
     Vector3 Vector3::Negate() const
@@ -224,26 +224,26 @@ namespace Engine5
 
     bool Vector3::IsValid() const
     {
-        return Utility::IsValid(x) && Utility::IsValid(y) && Utility::IsValid(z);
+        return Math::IsValid(x) && Math::IsValid(y) && Math::IsValid(z);
     }
 
     bool Vector3::IsZero() const
     {
-        return Utility::IsZero(x) && Utility::IsZero(y) && Utility::IsZero(z);
+        return Math::IsZero(x) && Math::IsZero(y) && Math::IsZero(z);
     }
 
     bool Vector3::IsEqual(const Vector3& rhs) const
     {
-        return (Utility::IsEqual(x, rhs.x)
-            && Utility::IsEqual(y, rhs.y)
-            && Utility::IsEqual(z, rhs.z));
+        return (Math::IsEqual(x, rhs.x)
+            && Math::IsEqual(y, rhs.y)
+            && Math::IsEqual(z, rhs.z));
     }
 
     bool Vector3::IsNotEqual(const Vector3& rhs) const
     {
-        return (Utility::IsNotEqual(x, rhs.x)
-            || Utility::IsNotEqual(y, rhs.y)
-            || Utility::IsNotEqual(z, rhs.z));
+        return (Math::IsNotEqual(x, rhs.x)
+            || Math::IsNotEqual(y, rhs.y)
+            || Math::IsNotEqual(z, rhs.z));
     }
 
     Real Vector3::GrepVec1(size_t flag0) const
@@ -273,16 +273,16 @@ namespace Engine5
 
     bool Vector3::operator==(const Vector3& rhs) const
     {
-        return (Utility::IsEqual(x, rhs.x)
-            && Utility::IsEqual(y, rhs.y)
-            && Utility::IsEqual(z, rhs.z));
+        return (Math::IsEqual(x, rhs.x)
+            && Math::IsEqual(y, rhs.y)
+            && Math::IsEqual(z, rhs.z));
     }
 
     bool Vector3::operator!=(const Vector3& rhs) const
     {
-        return (Utility::IsNotEqual(x, rhs.x)
-            || Utility::IsNotEqual(y, rhs.y)
-            || Utility::IsNotEqual(z, rhs.z));
+        return (Math::IsNotEqual(x, rhs.x)
+            || Math::IsNotEqual(y, rhs.y)
+            || Math::IsNotEqual(z, rhs.z));
     }
 
     Vector3 Vector3::operator-() const

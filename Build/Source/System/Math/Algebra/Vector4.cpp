@@ -70,10 +70,10 @@ namespace Engine5
 
     void Vector4::SetInverse()
     {
-        this->x = Utility::IsZero(x) ? 0.0f : 1.0f / this->x;
-        this->y = Utility::IsZero(y) ? 0.0f : 1.0f / this->y;
-        this->z = Utility::IsZero(z) ? 0.0f : 1.0f / this->z;
-        this->w = Utility::IsZero(w) ? 0.0f : 1.0f / this->w;
+        this->x = Math::IsZero(x) ? 0.0f : 1.0f / this->x;
+        this->y = Math::IsZero(y) ? 0.0f : 1.0f / this->y;
+        this->z = Math::IsZero(z) ? 0.0f : 1.0f / this->z;
+        this->w = Math::IsZero(w) ? 0.0f : 1.0f / this->w;
     }
 
     void Vector4::SetNegate()
@@ -103,13 +103,13 @@ namespace Engine5
 
     void Vector4::SetClean()
     {
-        if (Utility::IsZero(x))
+        if (Math::IsZero(x))
             x = 0.0f;
-        if (Utility::IsZero(y))
+        if (Math::IsZero(y))
             y = 0.0f;
-        if (Utility::IsZero(z))
+        if (Math::IsZero(z))
             z = 0.0f;
-        if (Utility::IsZero(w))
+        if (Math::IsZero(w))
             w = 0.0f;
     }
 
@@ -211,12 +211,12 @@ namespace Engine5
 
     bool Vector4::IsValid() const
     {
-        return Utility::IsValid(x) && Utility::IsValid(y) && Utility::IsValid(z) && Utility::IsValid(w);
+        return Math::IsValid(x) && Math::IsValid(y) && Math::IsValid(z) && Math::IsValid(w);
     }
 
     bool Vector4::IsZero() const
     {
-        return Utility::IsZero(x) && Utility::IsZero(y) && Utility::IsZero(z) && Utility::IsZero(w);
+        return Math::IsZero(x) && Math::IsZero(y) && Math::IsZero(z) && Math::IsZero(w);
     }
 
     bool Vector4::IsEqual(const Vector4& rhs) const
@@ -256,18 +256,18 @@ namespace Engine5
 
     bool Vector4::operator==(const Vector4& rhs) const
     {
-        return (Utility::IsEqual(x, rhs.x)
-            && Utility::IsEqual(y, rhs.y)
-            && Utility::IsEqual(z, rhs.z)
-            && Utility::IsEqual(z, rhs.w));
+        return (Math::IsEqual(x, rhs.x)
+            && Math::IsEqual(y, rhs.y)
+            && Math::IsEqual(z, rhs.z)
+            && Math::IsEqual(z, rhs.w));
     }
 
     bool Vector4::operator!=(const Vector4& rhs) const
     {
-        return (Utility::IsNotEqual(x, rhs.x)
-            || Utility::IsNotEqual(y, rhs.y)
-            || Utility::IsNotEqual(z, rhs.z)
-            || Utility::IsNotEqual(z, rhs.w));
+        return (Math::IsNotEqual(x, rhs.x)
+            || Math::IsNotEqual(y, rhs.y)
+            || Math::IsNotEqual(z, rhs.z)
+            || Math::IsNotEqual(z, rhs.w));
     }
 
     Vector4 Vector4::operator-() const

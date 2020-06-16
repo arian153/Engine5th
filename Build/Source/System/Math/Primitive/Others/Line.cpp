@@ -28,15 +28,15 @@ namespace Engine5
         Vector3 inv_dir = direction;
         inv_dir.SetInverse();
         Vector3 t_vector = t_dir.HadamardProduct(inv_dir);
-        if (Utility::IsValid(t_vector.x) == true)
+        if (Math::IsValid(t_vector.x) == true)
         {
             return t_vector.x;
         }
-        if (Utility::IsValid(t_vector.y) == true)
+        if (Math::IsValid(t_vector.y) == true)
         {
             return t_vector.y;
         }
-        if (Utility::IsValid(t_vector.z) == true)
+        if (Math::IsValid(t_vector.z) == true)
         {
             return t_vector.z;
         }
@@ -88,7 +88,7 @@ namespace Engine5
         Real        l0d_dot_w   = direction.DotProduct(w0);
         Real        l1d_dot_w   = line.direction.DotProduct(w0);
         Real        denominator = l0d_dot_l0d * l1d_dot_l1d - l0d_dot_l1d * l0d_dot_l1d;
-        if (Utility::IsZero(denominator) == true)
+        if (Math::IsZero(denominator) == true)
         {
             result.a = position;
             result.b = line.position + (l1d_dot_w / l1d_dot_l1d) * line.direction;

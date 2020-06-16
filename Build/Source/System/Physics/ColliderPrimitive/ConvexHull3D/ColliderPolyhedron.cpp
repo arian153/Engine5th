@@ -164,7 +164,7 @@ namespace Engine5
             m_mass += sub_data.mass;
             m_local_inertia_tensor += sub_data.inertia;
         }
-        if (Utility::IsZero(m_mass) == false)
+        if (Math::IsZero(m_mass) == false)
         {
             m_centroid /= m_mass;
         }
@@ -551,7 +551,7 @@ namespace Engine5
         Vector3 h     = ray.direction.CrossProduct(edge2);
         Real    a     = edge1.DotProduct(h);
         t             = -1.0f;
-        if (Utility::IsZero(a))
+        if (Math::IsZero(a))
         {
             return false;
         }
@@ -714,7 +714,7 @@ namespace Engine5
                 max_triangle = vertex;
             }
         }
-        if (Utility::IsZero(max_distance))
+        if (Math::IsZero(max_distance))
         {
             return 1;
         }
@@ -730,7 +730,7 @@ namespace Engine5
                 max_tetrahedron = vertex;
             }
         }
-        if (Utility::IsZero(max_distance))
+        if (Math::IsZero(max_distance))
         {
             return 2;
         }
@@ -775,7 +775,7 @@ namespace Engine5
             //1. distance = Distance from the plane of the face to the vertex
             Real distance = plane.Distance(*it);
             //2. If the vertex is in the plane of the face(i.e.distance == 0)
-            if (Utility::IsZero(distance))
+            if (Math::IsZero(distance))
             {
                 //3. Then check to see if the vertex is coincident with any vertices of the face, and if so merge it into that face vertex.
                 if (Triangle::IsContainPoint(*it, face_a, face_b, face_c))

@@ -267,22 +267,22 @@ namespace Engine5
 
     Real GamePadInput::LeftStickAngle_Rad(size_t pad) const
     {
-        return Utility::XYToRadian(m_game_pad_state[pad].thumb_stick_left_x, m_game_pad_state[pad].thumb_stick_left_y);
+        return Math::XYToRadian(m_game_pad_state[pad].thumb_stick_left_x, m_game_pad_state[pad].thumb_stick_left_y);
     }
 
     Real GamePadInput::RightStickAngle_Rad(size_t pad) const
     {
-        return Utility::XYToRadian(m_game_pad_state[pad].thumb_stick_right_x, m_game_pad_state[pad].thumb_stick_right_y);
+        return Math::XYToRadian(m_game_pad_state[pad].thumb_stick_right_x, m_game_pad_state[pad].thumb_stick_right_y);
     }
 
     Real GamePadInput::LeftStickAngle_Deg(size_t pad) const
     {
-        return Utility::RadiansToDegrees(LeftStickAngle_Rad(pad));
+        return Math::RadiansToDegrees(LeftStickAngle_Rad(pad));
     }
 
     Real GamePadInput::RightStickAngle_Deg(size_t pad) const
     {
-        return Utility::RadiansToDegrees(RightStickAngle_Rad(pad));
+        return Math::RadiansToDegrees(RightStickAngle_Rad(pad));
     }
 
     Real GamePadInput::LeftTrigger(size_t pad) const

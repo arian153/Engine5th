@@ -62,7 +62,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 4; ++i)
         {
-            if (Utility::IsZero(data[i]))
+            if (Math::IsZero(data[i]))
                 data[i] = 0.0f;
         }
     }
@@ -97,7 +97,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 4; ++i)
         {
-            if (Utility::IsZero(data[i]) == false)
+            if (Math::IsZero(data[i]) == false)
                 return false;
         }
         return true;
@@ -105,17 +105,17 @@ namespace Engine5
 
     bool Matrix22::IsIdentity() const
     {
-        return Utility::IsEqual(1.0f, data[0])
-                && Utility::IsEqual(1.0f, data[3])
-                && Utility::IsZero(data[1])
-                && Utility::IsZero(data[2]);
+        return Math::IsEqual(1.0f, data[0])
+                && Math::IsEqual(1.0f, data[3])
+                && Math::IsZero(data[1])
+                && Math::IsZero(data[2]);
     }
 
     bool Matrix22::IsEqual(const Matrix22& rhs) const
     {
         for (size_t i = 0; i < 4; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return false;
         }
         return true;
@@ -125,7 +125,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 4; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return true;
         }
         return false;
@@ -183,7 +183,7 @@ namespace Engine5
     {
         Matrix22 result;
         Real     det = data[0] * data[3] - data[1] * data[2];
-        if (Utility::IsZero(det))
+        if (Math::IsZero(det))
         {
             E5_ASSERT(false, "Inverse singular matrix");
             return result;
@@ -265,7 +265,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 4; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return false;
         }
         return true;
@@ -275,7 +275,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 4; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return true;
         }
         return false;

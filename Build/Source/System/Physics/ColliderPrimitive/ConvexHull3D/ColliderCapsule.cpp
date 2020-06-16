@@ -60,7 +60,7 @@ namespace Engine5
         Real    c             = local_ray.position.x * local_ray.position.x * denominator_x + local_ray.position.z * local_ray.position.z * denominator_z - 1.0f;
         Vector3 axis_test     = local_ray.direction - local_ray.direction.ProjectionTo(axis);
         Real    cylinder_min_t, cylinder_max_t;
-        if (Utility::IsZero(axis_test.LengthSquared()))
+        if (Math::IsZero(axis_test.LengthSquared()))
         {
             Real sphere_a_min_t, sphere_a_max_t, sphere_b_min_t, sphere_b_max_t;
             if (!this->TestRayEllipsoid(local_ray, capsule_a, sphere_a_min_t, sphere_a_max_t) ||
@@ -87,7 +87,7 @@ namespace Engine5
         }
         else
         {
-            if (Utility::SolveQuadratic(a, b, c, cylinder_max_t, cylinder_min_t) == true)
+            if (Math::SolveQuadratic(a, b, c, cylinder_max_t, cylinder_min_t) == true)
             {
                 minimum_t = cylinder_min_t;
                 maximum_t = cylinder_max_t;
@@ -193,8 +193,8 @@ namespace Engine5
                 }
                 if (sphere_a_result == true && sphere_b_result == true)
                 {
-                    minimum_t = Utility::Min(Utility::Min(Utility::Min(sphere_a_min_t, sphere_a_max_t), sphere_b_min_t), sphere_b_max_t);
-                    maximum_t = Utility::Max(Utility::Max(Utility::Max(sphere_a_min_t, sphere_a_max_t), sphere_b_min_t), sphere_b_max_t);
+                    minimum_t = Math::Min(Math::Min(Math::Min(sphere_a_min_t, sphere_a_max_t), sphere_b_min_t), sphere_b_max_t);
+                    maximum_t = Math::Max(Math::Max(Math::Max(sphere_a_min_t, sphere_a_max_t), sphere_b_min_t), sphere_b_max_t);
                 }
             }
             else
@@ -222,7 +222,7 @@ namespace Engine5
         {
             //sphere case
             Vector3 sphere_origin;
-            sphere_origin.y   = half_height * Utility::Signum(local_point_on_collider.y);
+            sphere_origin.y   = half_height * Math::Signum(local_point_on_collider.y);
             Vector3 ellipsoid = local_point_on_collider - sphere_origin;
             normal.x          = 2.0f * ellipsoid.x / radius.x * radius.x;
             normal.y          = 2.0f * ellipsoid.y / radius.y * radius.y;
@@ -621,7 +621,7 @@ namespace Engine5
         Real c = (co.x * co.x / (radius.x * radius.x))
                 + (co.y * co.y / (radius.y * radius.y))
                 + (co.z * co.z / (radius.z * radius.z)) - 1.0f;
-        if (Utility::SolveQuadratic(a, b, c, max_t, min_t) == true)
+        if (Math::SolveQuadratic(a, b, c, max_t, min_t) == true)
         {
             if (min_t < 0.0f && max_t < 0.0f)
             {

@@ -155,7 +155,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 16; ++i)
         {
-            if (Utility::IsZero(data[i]))
+            if (Math::IsZero(data[i]))
                 data[i] = 0.0f;
         }
     }
@@ -487,7 +487,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 16; ++i)
         {
-            if (Utility::IsZero(data[i]) == false)
+            if (Math::IsZero(data[i]) == false)
                 return false;
         }
         return true;
@@ -495,29 +495,29 @@ namespace Engine5
 
     bool Matrix44::IsIdentity() const
     {
-        return Utility::IsEqual(1.0f, data[0])
-                && Utility::IsEqual(1.0f, data[5])
-                && Utility::IsEqual(1.0f, data[10])
-                && Utility::IsEqual(1.0f, data[15])
-                && Utility::IsZero(data[1])
-                && Utility::IsZero(data[2])
-                && Utility::IsZero(data[3])
-                && Utility::IsZero(data[4])
-                && Utility::IsZero(data[6])
-                && Utility::IsZero(data[7])
-                && Utility::IsZero(data[8])
-                && Utility::IsZero(data[9])
-                && Utility::IsZero(data[11])
-                && Utility::IsZero(data[12])
-                && Utility::IsZero(data[13])
-                && Utility::IsZero(data[14]);
+        return Math::IsEqual(1.0f, data[0])
+                && Math::IsEqual(1.0f, data[5])
+                && Math::IsEqual(1.0f, data[10])
+                && Math::IsEqual(1.0f, data[15])
+                && Math::IsZero(data[1])
+                && Math::IsZero(data[2])
+                && Math::IsZero(data[3])
+                && Math::IsZero(data[4])
+                && Math::IsZero(data[6])
+                && Math::IsZero(data[7])
+                && Math::IsZero(data[8])
+                && Math::IsZero(data[9])
+                && Math::IsZero(data[11])
+                && Math::IsZero(data[12])
+                && Math::IsZero(data[13])
+                && Math::IsZero(data[14]);
     }
 
     bool Matrix44::IsEqual(const Matrix44& rhs) const
     {
         for (size_t i = 0; i < 16; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return false;
         }
         return true;
@@ -527,7 +527,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 16; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return true;
         }
         return false;
@@ -685,7 +685,7 @@ namespace Engine5
     {
         Matrix44 result;
         Real     det = Determinant();
-        if (Utility::IsZero(det))
+        if (Math::IsZero(det))
         {
             E5_ASSERT(false, "Inverse singular matrix");
             return result;
@@ -778,7 +778,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 16; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return false;
         }
         return true;
@@ -788,7 +788,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 16; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return true;
         }
         return false;

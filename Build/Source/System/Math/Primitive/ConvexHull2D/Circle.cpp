@@ -47,16 +47,16 @@ namespace Engine5
         Vector3 normal(0.0f, 0.0f, 1.0f);
         Vector3 pc          = -local_ray.position;
         Real    denominator = normal.DotProduct(local_ray.direction);
-        if (Utility::IsZero(denominator) == true)
+        if (Math::IsZero(denominator) == true)
         {
             //ray is parallel to plane.
-            if (Utility::IsZero(pc.DotProduct(normal)) == true)
+            if (Math::IsZero(pc.DotProduct(normal)) == true)
             {
                 //ray is on the plane.
-                if (Utility::SolveQuadratic(a, b, c, circle_max_t, circle_min_t))
+                if (Math::SolveQuadratic(a, b, c, circle_max_t, circle_min_t))
                 {
                     //solve intersection
-                    if (Utility::IsEqual(circle_min_t, circle_max_t))
+                    if (Math::IsEqual(circle_min_t, circle_max_t))
                     {
                         minimum_t = maximum_t = circle_min_t;
                     }
@@ -102,7 +102,7 @@ namespace Engine5
     Vector3 Circle::GetNormal(const Vector3& local_point_on_primitive)
     {
         Real point_radius = local_point_on_primitive.x * local_point_on_primitive.x + local_point_on_primitive.y * local_point_on_primitive.y;
-        if (Utility::IsEqual(point_radius, radius * radius))
+        if (Math::IsEqual(point_radius, radius * radius))
         {
             return local_point_on_primitive.Normalize();
         }

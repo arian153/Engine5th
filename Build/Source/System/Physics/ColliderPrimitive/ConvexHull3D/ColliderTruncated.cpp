@@ -77,7 +77,7 @@ namespace Engine5
                 - local_ray.position.y * ratio_multiplier_c / height
                 - 0.25f * ratio_multiplier_b;
         Real truncated_min_t, truncated_max_t;
-        if (Utility::SolveQuadratic(a, b, c, truncated_max_t, truncated_min_t) == true)
+        if (Math::SolveQuadratic(a, b, c, truncated_max_t, truncated_min_t) == true)
         {
             if (truncated_min_t > truncated_max_t)
             {
@@ -225,13 +225,13 @@ namespace Engine5
         Real    t             = 2.0f * (1.0f - m_ratio) * (local_point_on_collider.x * x_max * denominator_x + local_point_on_collider.z * z_max * denominator_z) * denominator_y;
         Real    point_radius  = local_point_on_collider.x * local_point_on_collider.x * denominator_x + local_point_on_collider.z * local_point_on_collider.z * denominator_z;
         Vector3 normal;
-        if (Utility::IsEqual(local_point_on_collider.y, half_height) && point_radius < m_ratio * m_ratio)
+        if (Math::IsEqual(local_point_on_collider.y, half_height) && point_radius < m_ratio * m_ratio)
         {
-            normal.y = Utility::Signum(local_point_on_collider.y);
+            normal.y = Math::Signum(local_point_on_collider.y);
         }
-        else if (Utility::IsEqual(local_point_on_collider.y, -half_height) && point_radius < 1.0f)
+        else if (Math::IsEqual(local_point_on_collider.y, -half_height) && point_radius < 1.0f)
         {
-            normal.y = Utility::Signum(local_point_on_collider.y);
+            normal.y = Math::Signum(local_point_on_collider.y);
         }
         else
         {

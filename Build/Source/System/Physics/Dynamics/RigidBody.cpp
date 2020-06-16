@@ -37,9 +37,9 @@ namespace Engine5
         // integrate orientation
         //Vector3 delta_angular_velocity = m_angular_velocity;
         Vector3 delta_angular_velocity(
-                                       Utility::DegreesToRadians(m_angular_velocity.x),
-                                       Utility::DegreesToRadians(m_angular_velocity.y),
-                                       Utility::DegreesToRadians(m_angular_velocity.z));
+                                       Math::DegreesToRadians(m_angular_velocity.x),
+                                       Math::DegreesToRadians(m_angular_velocity.y),
+                                       Math::DegreesToRadians(m_angular_velocity.z));
         delta_angular_velocity = delta_angular_velocity.HadamardProduct(m_constraints_rotational);
         Vector3 axis           = delta_angular_velocity.Unit();
         Real    radian         = delta_angular_velocity.Length() * dt;

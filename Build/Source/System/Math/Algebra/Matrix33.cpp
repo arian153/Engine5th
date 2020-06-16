@@ -105,7 +105,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 9; ++i)
         {
-            if (Utility::IsZero(data[i]))
+            if (Math::IsZero(data[i]))
                 data[i] = 0.0f;
         }
     }
@@ -320,7 +320,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 9; ++i)
         {
-            if (Utility::IsZero(data[i]) == false)
+            if (Math::IsZero(data[i]) == false)
                 return false;
         }
         return true;
@@ -328,22 +328,22 @@ namespace Engine5
 
     bool Matrix33::IsIdentity() const
     {
-        return Utility::IsEqual(1.0f, data[0])
-                && Utility::IsEqual(1.0f, data[4])
-                && Utility::IsEqual(1.0f, data[8])
-                && Utility::IsZero(data[1])
-                && Utility::IsZero(data[2])
-                && Utility::IsZero(data[3])
-                && Utility::IsZero(data[5])
-                && Utility::IsZero(data[6])
-                && Utility::IsZero(data[7]);
+        return Math::IsEqual(1.0f, data[0])
+                && Math::IsEqual(1.0f, data[4])
+                && Math::IsEqual(1.0f, data[8])
+                && Math::IsZero(data[1])
+                && Math::IsZero(data[2])
+                && Math::IsZero(data[3])
+                && Math::IsZero(data[5])
+                && Math::IsZero(data[6])
+                && Math::IsZero(data[7]);
     }
 
     bool Matrix33::IsEqual(const Matrix33& rhs) const
     {
         for (size_t i = 0; i < 9; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return false;
         }
         return true;
@@ -353,7 +353,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 9; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return true;
         }
         return false;
@@ -440,7 +440,7 @@ namespace Engine5
         Real    radian    = acosf(cos_theta);
         Vector3 axis;
         // angle is zero, axis can be anything
-        if (Utility::IsZero(radian))
+        if (Math::IsZero(radian))
         {
             axis = Math::Vector3::Y_AXIS;
         }
@@ -478,7 +478,7 @@ namespace Engine5
         Real cos_x, sin_x, cos_z, sin_z;
         Real sin_y = data[2];
         Real cos_y = sqrtf(1.0f - sin_y * sin_y);
-        if (Utility::IsZero(cos_y) == false)
+        if (Math::IsZero(cos_y) == false)
         {
             Real factor = 1.0f / cos_y;
             sin_x       = -data[5] * factor;
@@ -535,7 +535,7 @@ namespace Engine5
         Real cofactor3 = this->data[5] * this->data[6] - this->data[3] * this->data[8];
         Real cofactor6 = this->data[3] * this->data[7] - this->data[4] * this->data[6];
         Real det       = this->data[0] * cofactor0 + this->data[1] * cofactor3 + this->data[2] * cofactor6;
-        if (Utility::IsZero(det))
+        if (Math::IsZero(det))
         {
             E5_ASSERT(false, "Inverse singular matrix");
             return result;
@@ -628,7 +628,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 9; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return false;
         }
         return true;
@@ -638,7 +638,7 @@ namespace Engine5
     {
         for (size_t i = 0; i < 9; ++i)
         {
-            if (Utility::IsEqual(data[i], rhs.data[i]) == false)
+            if (Math::IsEqual(data[i], rhs.data[i]) == false)
                 return true;
         }
         return false;

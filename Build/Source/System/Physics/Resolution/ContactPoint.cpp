@@ -58,9 +58,9 @@ namespace Engine5
 
     void ContactPoint::Swap()
     {
-        Utility::Swap(collider_a, collider_b);
-        Utility::Swap(global_position_a, global_position_b);
-        Utility::Swap(local_position_a, local_position_b);
+        Math::Swap(collider_a, collider_b);
+        Math::Swap(global_position_a, global_position_b);
+        Math::Swap(local_position_a, local_position_b);
         Basis basis;
         basis.CalculateBasisQuaternion(-normal);
         normal    = basis.i;

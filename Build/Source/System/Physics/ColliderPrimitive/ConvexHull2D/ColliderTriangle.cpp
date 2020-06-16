@@ -49,10 +49,10 @@ namespace Engine5
         Vector3 normal(0.0f, 0.0f, 1.0f);
         Vector3 pc          = -local_ray.position;
         Real    denominator = normal.DotProduct(local_ray.direction);
-        if (Utility::IsZero(denominator) == true)
+        if (Math::IsZero(denominator) == true)
         {
             //ray is parallel to plane.
-            if (Utility::IsZero(pc.DotProduct(normal)) == true)
+            if (Math::IsZero(pc.DotProduct(normal)) == true)
             {
                 //ray is on the plane.
                 Vector2 dir(local_ray.direction.x, local_ray.direction.y);
@@ -65,9 +65,9 @@ namespace Engine5
                 Vector2 edge2   = p2 - p1;
                 Vector2 edge3   = p0 - p2;
                 Real    inv_dir = 1.0f / dir.DotProduct(dir);
-                if (Utility::IsZero(dir.CrossProduct(edge1)) == true)
+                if (Math::IsZero(dir.CrossProduct(edge1)) == true)
                 {
-                    if (Utility::IsZero((p0 - pos).CrossProduct(dir)) == true)
+                    if (Math::IsZero((p0 - pos).CrossProduct(dir)) == true)
                     {
                         triangle_min_t = (p0 - pos).DotProduct(dir) * inv_dir;
                         triangle_max_t = (p1 - pos).DotProduct(dir) * inv_dir;
@@ -85,9 +85,9 @@ namespace Engine5
                         triangle_max_t = t;
                     }
                 }
-                if (Utility::IsZero(dir.CrossProduct(edge2)) == true)
+                if (Math::IsZero(dir.CrossProduct(edge2)) == true)
                 {
-                    if (Utility::IsZero((p1 - pos).CrossProduct(dir)) == true)
+                    if (Math::IsZero((p1 - pos).CrossProduct(dir)) == true)
                     {
                         triangle_min_t = (p1 - pos).DotProduct(dir) * inv_dir;
                         triangle_max_t = (p2 - pos).DotProduct(dir) * inv_dir;
@@ -105,9 +105,9 @@ namespace Engine5
                         triangle_max_t = t;
                     }
                 }
-                if (Utility::IsZero(dir.CrossProduct(edge3)) == true)
+                if (Math::IsZero(dir.CrossProduct(edge3)) == true)
                 {
-                    if (Utility::IsZero((p2 - pos).CrossProduct(dir)) == true)
+                    if (Math::IsZero((p2 - pos).CrossProduct(dir)) == true)
                     {
                         triangle_min_t = (p2 - pos).DotProduct(dir) * inv_dir;
                         triangle_max_t = (p0 - pos).DotProduct(dir) * inv_dir;
@@ -145,7 +145,7 @@ namespace Engine5
             Vector3 edge2(v2edge2.x, v2edge2.y);
             Vector3 h = local_ray.direction.CrossProduct(edge2);
             Real    a = edge1.DotProduct(h);
-            if (Utility::IsZero(a))
+            if (Math::IsZero(a))
             {
                 return false;
             }
@@ -197,7 +197,7 @@ namespace Engine5
             {
                 Real tx = (v.x - p0.x) / edge.x;
                 Real ty = (v.y - p0.y) / edge.y;
-                Real t  = Utility::IsEqual(tx, ty) ? tx : (!Utility::IsZero(tx) ? tx : ty);
+                Real t  = Math::IsEqual(tx, ty) ? tx : (!Math::IsZero(tx) ? tx : ty);
                 //is point on edge ?
                 if (t <= 1.0f && t >= 0.0f)
                 {

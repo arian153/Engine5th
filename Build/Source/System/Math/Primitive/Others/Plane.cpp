@@ -45,7 +45,7 @@ namespace Engine5
     void Plane::Set(Real _a, Real _b, Real _c, Real _d)
     {
         Real length_squared = _a * _a + _b * _b + _c * _c;
-        if (Utility::IsZero(length_squared) == true)
+        if (Math::IsZero(length_squared) == true)
         {
             a = 0.0f;
             b = 0.0f;
@@ -54,7 +54,7 @@ namespace Engine5
         }
         else
         {
-            Real inv_sqrt = Utility::InvSqrt(length_squared);
+            Real inv_sqrt = Math::InvSqrt(length_squared);
             a             = _a * inv_sqrt;
             b             = _b * inv_sqrt;
             c             = _c * inv_sqrt;
@@ -64,7 +64,7 @@ namespace Engine5
 
     void Plane::Set(const Vector3& normal, Real offset)
     {
-        if (Utility::IsZero(normal.LengthSquared()) == true)
+        if (Math::IsZero(normal.LengthSquared()) == true)
         {
             a = 0.0f;
             b = 0.0f;
@@ -86,7 +86,7 @@ namespace Engine5
         Vector3 u = p1 - p0;
         Vector3 v = p2 - p0;
         Vector3 w = u.CrossProduct(v);
-        if (Utility::IsZero(w.LengthSquared()) == true)
+        if (Math::IsZero(w.LengthSquared()) == true)
         {
             a = 0.0f;
             b = 0.0f;

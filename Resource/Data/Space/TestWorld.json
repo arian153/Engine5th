@@ -9,9 +9,12 @@
     "Update Flag": [
         "Scene",
         "Logic"
+
+
     ],
     "FixedUpdate Flag": [
         "World"
+      
     ],
     "Objects": [
         {
@@ -88,7 +91,7 @@
                     "Value": {
                         "Texture": "../../Resource/Texture/white.dds",
                         "Particle Amount": 10000,
-                        "Emission Amount": 5000,
+                        "Emission Amount": 0,
                         "Emission Rate": 12,
                         "Life Decay Rate": 0.0,
                         "Scale Decay Rate": 0.15,

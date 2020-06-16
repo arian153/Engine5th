@@ -33,15 +33,15 @@ namespace Engine5
         Vector3 inv_dir = direction;
         inv_dir.SetInverse();
         Vector3 t_vector = t_dir.HadamardProduct(inv_dir);
-        if (Utility::IsValid(t_vector.x) == true)
+        if (Math::IsValid(t_vector.x) == true)
         {
             return t_vector.x;
         }
-        if (Utility::IsValid(t_vector.y) == true)
+        if (Math::IsValid(t_vector.y) == true)
         {
             return t_vector.y;
         }
-        if (Utility::IsValid(t_vector.z) == true)
+        if (Math::IsValid(t_vector.z) == true)
         {
             return t_vector.z;
         }
@@ -112,7 +112,7 @@ namespace Engine5
         Real sn,  sd, tn, td;
 
         // if denominator is zero, try finding closest point on ray1 to origin0
-        if (Utility::IsZero(denominator))
+        if (Math::IsZero(denominator))
         {
             sd = td = r1d_dot_r1d;
             sn = 0.0f;
@@ -212,7 +212,7 @@ namespace Engine5
         Real    sn, sd, tn, td;
 
         // if denominator is zero, try finding closest point on ray1 to origin0
-        if (Utility::IsZero(denominator) == true)
+        if (Math::IsZero(denominator) == true)
         {
             // clamp s_c to 0
             sd = td = r1d_dot_r1d;
@@ -288,7 +288,7 @@ namespace Engine5
         Real    denominator = rd_dot_rd * ld_dot_ld - rd_dot_ld * rd_dot_ld;
 
         // if denominator is zero, try finding closest point on ray1 to origin0
-        if (Utility::IsZero(denominator))
+        if (Math::IsZero(denominator))
         {
             s = 0.0f;
             t = ld_dot_w / ld_dot_ld;
@@ -341,7 +341,7 @@ namespace Engine5
         Real sn,  sd, tn, td;
 
         // if denominator is zero, try finding closest point on ray1 to origin0
-        if (Utility::IsZero(denominator))
+        if (Math::IsZero(denominator))
         {
             sd = td = r1d_dot_r1d;
             sn = 0.0f;
@@ -401,7 +401,7 @@ namespace Engine5
         Real        denominator = rd_dot_rd * ld_dot_ld - rd_dot_ld * rd_dot_ld;
 
         // if denominator is zero, try finding closest point on ray1 to origin0
-        if (Utility::IsZero(denominator))
+        if (Math::IsZero(denominator))
         {
             // compute closest points
             result.a = ray.position;

@@ -172,7 +172,7 @@ namespace Engine5
             {
                 Real u, v, w;
                 closest_face.BarycentricCoordinates(closest_face.normal * closest_face.distance, u, v, w, &polytope);
-                if (Utility::IsValid(u) == false || Utility::IsValid(v) == false || Utility::IsValid(w) == false)
+                if (Math::IsValid(u) == false || Math::IsValid(v) == false || Math::IsValid(w) == false)
                 {
                     //barycentric can fail and generate invalid coordinates, if this happens return invalid result.
                     result.b_valid = false;

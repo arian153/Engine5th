@@ -110,7 +110,7 @@ namespace Engine5
     {
         // if axis of rotation is zero vector, just set to identity quat
         Real length = axis.LengthSquared();
-        if (Utility::IsZero(length) == true)
+        if (Math::IsZero(length) == true)
         {
             SetIdentity();
             return;
@@ -172,7 +172,7 @@ namespace Engine5
     {
         // if axis of rotation is zero vector, just set to identity quat
         Real length = axis_radian.axis.LengthSquared();
-        if (Utility::IsZero(length) == true)
+        if (Math::IsZero(length) == true)
         {
             SetIdentity();
             return;
@@ -218,12 +218,12 @@ namespace Engine5
         Real d = r * r + i * i + j * j + k * k;
         // Check for zero length quaternion, 
         //and use the no-rotation quaternion in that case.
-        if (Utility::IsZero(d) == true)
+        if (Math::IsZero(d) == true)
         {
             r = 1.0f;
             return;
         }
-        Real multiplier = Utility::InvSqrt(d);//1.f / sqrtf(d); 
+        Real multiplier = Math::InvSqrt(d);//1.f / sqrtf(d); 
         r *= multiplier;
         i *= multiplier;
         j *= multiplier;
@@ -232,13 +232,13 @@ namespace Engine5
 
     void Quaternion::SetClean()
     {
-        if (Utility::IsZero(r))
+        if (Math::IsZero(r))
             r = 0.0f;
-        if (Utility::IsZero(i))
+        if (Math::IsZero(i))
             i = 0.0f;
-        if (Utility::IsZero(j))
+        if (Math::IsZero(j))
             j = 0.0f;
-        if (Utility::IsZero(k))
+        if (Math::IsZero(k))
             k = 0.0f;
     }
 
@@ -263,7 +263,7 @@ namespace Engine5
     void Quaternion::SetInverse()
     {
         Real norm = r * r + i * i + j * j + k * k;
-        if (Utility::IsZero(norm))
+        if (Math::IsZero(norm))
         {
             //E5_ASSERT(false, "inverse the zero quaternion");
             return;
@@ -287,51 +287,51 @@ namespace Engine5
 
     bool Quaternion::IsZero() const
     {
-        return Utility::IsZero(r * r + i * i + j * j + k * k);
+        return Math::IsZero(r * r + i * i + j * j + k * k);
     }
 
     bool Quaternion::IsUnit() const
     {
-        return Utility::IsZero(1.0f - (r * r + i * i + j * j + k * k));
+        return Math::IsZero(1.0f - (r * r + i * i + j * j + k * k));
     }
 
     bool Quaternion::IsIdentity() const
     {
-        return Utility::IsZero(1.0f - r)
-                && Utility::IsZero(i)
-                && Utility::IsZero(j)
-                && Utility::IsZero(k);
+        return Math::IsZero(1.0f - r)
+                && Math::IsZero(i)
+                && Math::IsZero(j)
+                && Math::IsZero(k);
     }
 
     bool Quaternion::IsEqual(const Quaternion& rhs) const
     {
-        if (Utility::IsEqual(r, rhs.r) == false)
+        if (Math::IsEqual(r, rhs.r) == false)
             return false;
-        if (Utility::IsEqual(i, rhs.i) == false)
+        if (Math::IsEqual(i, rhs.i) == false)
             return false;
-        if (Utility::IsEqual(j, rhs.j) == false)
+        if (Math::IsEqual(j, rhs.j) == false)
             return false;
-        if (Utility::IsEqual(k, rhs.k) == false)
+        if (Math::IsEqual(k, rhs.k) == false)
             return false;
         return true;
     }
 
     bool Quaternion::IsNotEqual(const Quaternion& rhs) const
     {
-        if (Utility::IsEqual(r, rhs.r) == false)
+        if (Math::IsEqual(r, rhs.r) == false)
             return true;
-        if (Utility::IsEqual(i, rhs.i) == false)
+        if (Math::IsEqual(i, rhs.i) == false)
             return true;
-        if (Utility::IsEqual(j, rhs.j) == false)
+        if (Math::IsEqual(j, rhs.j) == false)
             return true;
-        if (Utility::IsEqual(k, rhs.k) == false)
+        if (Math::IsEqual(k, rhs.k) == false)
             return true;
         return false;
     }
 
     bool Quaternion::IsLostAxis() const
     {
-        return Utility::IsZero(1.0f - r);
+        return Math::IsZero(1.0f - r);
     }
 
     Vector3 Quaternion::ToVector() const
@@ -374,7 +374,7 @@ namespace Engine5
         Real    radian = 2.0f * acosf(r);
         Real    length = sqrtf(1.0f - (r * r));
         Vector3 axis   = Math::Vector3::Y_AXIS;
-        if (Utility::IsZero(length) == false)
+        if (Math::IsZero(length) == false)
         {
             length = 1.0f / length;
             axis.Set(i * length, j * length, k * length);
@@ -404,7 +404,7 @@ namespace Engine5
     {
         Real norm = r * r + i * i + j * j + k * k;
         // if we're the zero quaternion, just return
-        if (Utility::IsZero(norm))
+        if (Math::IsZero(norm))
             return Quaternion(r, i, j, k);
         Real inverse_norm = 1.0f / norm;
         return Quaternion(inverse_norm * r, -inverse_norm * i, -inverse_norm * j, -inverse_norm * k);
@@ -470,7 +470,7 @@ namespace Engine5
         Real    half_rad  = (curr_rad + radian) * 0.5f;
         Real    sin_theta = sinf(half_rad);
         Real    cos_theta = cosf(half_rad);
-        if (Utility::IsZero(length) == false)
+        if (Math::IsZero(length) == false)
         {
             length = 1.0f / length;
             axis.Set(i * length, j * length, k * length);
@@ -486,7 +486,7 @@ namespace Engine5
         Real radian      = 2.0f * acosf(r);
         Real length      = sqrtf(1.0f - (r * r));
         Real axis_length = axis.LengthSquared();
-        if (Utility::IsZero(length) == false && Utility::IsZero(axis_length) == false)
+        if (Math::IsZero(length) == false && Math::IsZero(axis_length) == false)
         {
             Real half_rad  = (radian) * 0.5f;
             Real sin_theta = sinf(half_rad);
@@ -519,26 +519,26 @@ namespace Engine5
 
     bool Quaternion::operator==(const Quaternion& rhs) const
     {
-        if (Utility::IsEqual(r, rhs.r) == false)
+        if (Math::IsEqual(r, rhs.r) == false)
             return false;
-        if (Utility::IsEqual(i, rhs.i) == false)
+        if (Math::IsEqual(i, rhs.i) == false)
             return false;
-        if (Utility::IsEqual(j, rhs.j) == false)
+        if (Math::IsEqual(j, rhs.j) == false)
             return false;
-        if (Utility::IsEqual(k, rhs.k) == false)
+        if (Math::IsEqual(k, rhs.k) == false)
             return false;
         return true;
     }
 
     bool Quaternion::operator!=(const Quaternion& rhs) const
     {
-        if (Utility::IsEqual(r, rhs.r) == false)
+        if (Math::IsEqual(r, rhs.r) == false)
             return true;
-        if (Utility::IsEqual(i, rhs.i) == false)
+        if (Math::IsEqual(i, rhs.i) == false)
             return true;
-        if (Utility::IsEqual(j, rhs.j) == false)
+        if (Math::IsEqual(j, rhs.j) == false)
             return true;
-        if (Utility::IsEqual(k, rhs.k) == false)
+        if (Math::IsEqual(k, rhs.k) == false)
             return true;
         return false;
     }
@@ -824,12 +824,12 @@ namespace Engine5
             Real    radian = 2.0f * acosf(rhs.r);
             Real    length = sqrtf(1.0f - (rhs.r * rhs.r));
             Vector3 axis   = Math::Vector3::Y_AXIS;
-            if (Utility::IsZero(length) == false)
+            if (Math::IsZero(length) == false)
             {
                 length = 1.0f / length;
                 axis.Set(rhs.i * length, rhs.j * length, rhs.k * length);
             }
-            Real degree = Utility::RadiansToDegrees(radian);
+            Real degree = Math::RadiansToDegrees(radian);
             //os << std::setprecision(3);
             os << "[cos(" << degree << ") + sin(" << degree << ") * (" << axis.x << "i + " << axis.y << "j + " << axis.z << "k)]";
             //os << std::setprecision(std::ios_base::precision);

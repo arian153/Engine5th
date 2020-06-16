@@ -49,7 +49,7 @@ namespace Engine5
                 + (local_ray.position.z * local_ray.position.z / (radius.z * radius.z)) - 1.0f;
         minimum_t = -1.0f;
         maximum_t = -1.0f;
-        if (Utility::SolveQuadratic(a, b, c, maximum_t, minimum_t) == true)
+        if (Math::SolveQuadratic(a, b, c, maximum_t, minimum_t) == true)
         {
             if (minimum_t < 0.0f && maximum_t < 0.0f)
             {

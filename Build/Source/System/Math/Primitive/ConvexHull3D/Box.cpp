@@ -142,20 +142,20 @@ namespace Engine5
         {
             min = distance;
             normal.Set(1.0f, 0.0f, 0.0f);
-            normal *= Utility::Signum(local_point_on_primitive.x);
+            normal *= Math::Signum(local_point_on_primitive.x);
         }
         distance = fabsf(size.y - fabsf(local_point_on_primitive.y));
         if (distance < min)
         {
             min = distance;
             normal.Set(0.0f, 1.0f, 0.0f);
-            normal *= Utility::Signum(local_point_on_primitive.y);
+            normal *= Math::Signum(local_point_on_primitive.y);
         }
         distance = fabsf(size.z - fabsf(local_point_on_primitive.z));
         if (distance < min)
         {
             normal.Set(0.0f, 0.0f, 1.0f);
-            normal *= Utility::Signum(local_point_on_primitive.z);
+            normal *= Math::Signum(local_point_on_primitive.z);
         }
         return normal;
     }

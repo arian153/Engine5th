@@ -339,7 +339,7 @@ namespace Engine5
         Matrix44 result;
         result.SetDiagonal(particle.scale, particle.scale, particle.scale, 1.0f);
         Real angle    = atan2f(particle.position.x - m_billboard_position.x, particle.position.z - m_billboard_position.z) * (180.0f / Math::PI);
-        Real rotation = Utility::DegreesToRadians(angle);
+        Real rotation = Math::DegreesToRadians(angle);
         result        = Math::Matrix44::RotationY(rotation) * result;
         result.AddVectorColumn(3, particle.position);
         return result;

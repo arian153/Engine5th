@@ -3,7 +3,7 @@
 
 namespace Engine5
 {
-    namespace Utility
+    namespace Math
     {
         inline bool IsValid(Real rhs)
         {

@@ -77,7 +77,7 @@ namespace Engine5
         Real b                     = 2.0f * (none_axis_direction_x * none_axis_position_x + none_axis_direction_z * none_axis_position_z);
         Real c                     = (none_axis_position_x * none_axis_position_x + none_axis_position_z * none_axis_position_z) - (radius * radius);
         Real cylinder_min_t, cylinder_max_t;
-        if (Utility::SolveQuadratic(a, b, c, cylinder_max_t, cylinder_min_t) == true)
+        if (Math::SolveQuadratic(a, b, c, cylinder_max_t, cylinder_min_t) == true)
         {
             if (cylinder_min_t > cylinder_max_t)
             {
@@ -195,12 +195,12 @@ namespace Engine5
         Real point_radius   = (local_point_on_primitive.x * local_point_on_primitive.x)
                 + (local_point_on_primitive.z * local_point_on_primitive.z);
         Vector3 normal;
-        if ((Utility::IsEqual(point_height, half_height) || Utility::IsEqual(point_height, -half_height))
+        if ((Math::IsEqual(point_height, half_height) || Math::IsEqual(point_height, -half_height))
             && radius_squared > point_radius)
         {
             // point on top disc or bottom disc 
             // also point in disc.
-            normal.y = Utility::Signum(point_height);
+            normal.y = Math::Signum(point_height);
         }
         else
         {

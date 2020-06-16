@@ -67,10 +67,10 @@ namespace Engine5
         Vector2 rect_max = vertices[0];
         Vector3 inv_dir = local_ray.direction;
         inv_dir.SetInverse();
-        if (Utility::IsZero(denominator) == true)
+        if (Math::IsZero(denominator) == true)
         {
             //ray is parallel to plane.
-            if (Utility::IsZero(pc.DotProduct(normal)) == true)
+            if (Math::IsZero(pc.DotProduct(normal)) == true)
             {
                 //ray is on the plane.
                 if (inv_dir.x >= 0.0f)
@@ -142,19 +142,19 @@ namespace Engine5
     {
         Vector2 rect_min = vertices[3];
         Vector2 rect_max = vertices[0];
-        if (Utility::IsEqual(local_point_on_primitive.x, rect_min.x))
+        if (Math::IsEqual(local_point_on_primitive.x, rect_min.x))
         {
             return Vector3(-1.0f);
         }
-        if (Utility::IsEqual(local_point_on_primitive.x, rect_max.x))
+        if (Math::IsEqual(local_point_on_primitive.x, rect_max.x))
         {
             return Vector3(1.0f);
         }
-        if (Utility::IsEqual(local_point_on_primitive.y, rect_min.y))
+        if (Math::IsEqual(local_point_on_primitive.y, rect_min.y))
         {
             return Vector3(0.0f, -1.0f);
         }
-        if (Utility::IsEqual(local_point_on_primitive.y, rect_max.y))
+        if (Math::IsEqual(local_point_on_primitive.y, rect_max.y))
         {
             return Vector3(0.0f, 1.0f);
         }

@@ -46,7 +46,7 @@ namespace Engine5
 
     bool Assert(int expression, const String& output_message, const String& function_name, const String& file_name, unsigned line_number);
 
-    namespace Utility
+    namespace Math
     {
         template <typename T>
         void Swap(T& a, T& b)

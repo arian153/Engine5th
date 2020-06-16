@@ -64,7 +64,7 @@ namespace Engine5
                 - local_ray.position.y * local_ray.position.y * denominator_y
                 + local_ray.position.y / height - 0.25f;
         Real cone_min_t, cone_max_t;
-        if (Utility::SolveQuadratic(a, b, c, cone_max_t, cone_min_t) == true)
+        if (Math::SolveQuadratic(a, b, c, cone_max_t, cone_min_t) == true)
         {
             if (cone_min_t > cone_max_t)
             {
@@ -141,7 +141,7 @@ namespace Engine5
                     }
                 }
             }
-            if (Utility::IsEqual(min_axis_height, half_height) == true)
+            if (Math::IsEqual(min_axis_height, half_height) == true)
             {
                 Real disc_t = (-half_height - local_ray.position.y) / local_ray.direction.y;
                 Real disc_a = local_ray.direction.x * disc_t + local_ray.position.x;
@@ -188,15 +188,15 @@ namespace Engine5
         Real    point_radius  = local_point_on_collider.x * local_point_on_collider.x * denominator_x + local_point_on_collider.z * local_point_on_collider.z * denominator_z;
         Vector3 normal;
         Real    point_height = local_point_on_collider.y;
-        if (Utility::IsEqual(point_height, half_height)
-            || (Utility::IsEqual(point_height, -half_height)
+        if (Math::IsEqual(point_height, half_height)
+            || (Math::IsEqual(point_height, -half_height)
                 && 1.0f > point_radius))
         {
             // point on top point or bottom disc 
-            normal.y = Utility::Signum(point_height);
+            normal.y = Math::Signum(point_height);
         }
-        else if (Utility::IsEqual(point_height, -half_height)
-            && Utility::IsEqual(1.0f, point_radius))
+        else if (Math::IsEqual(point_height, -half_height)
+            && Math::IsEqual(1.0f, point_radius))
         {
             // point on cylinder disc.
             normal.x = 2.0f * local_point_on_collider.x * denominator_x;

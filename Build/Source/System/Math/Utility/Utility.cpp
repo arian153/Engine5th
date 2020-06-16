@@ -6,7 +6,7 @@
 
 namespace Engine5
 {
-    namespace Utility
+    namespace Math
     {
         Real LinearInterpolation(Real v0, Real v1, Real t)
         {
@@ -23,7 +23,7 @@ namespace Engine5
             return 1.0f - ((1.0f - t) * (1.0f - t));
         }
 
-        Vector3Pair GetTangentUsingQuaternion(const Vector3& normal)
+        Vector3Pair GetTangentUsingQuaternion(const Engine5::Vector3& normal)
         {
             Quaternion axis_to_normal(Math::Vector3::Y_AXIS, normal);
             return Vector3Pair(axis_to_normal.Rotate(Math::Vector3::X_AXIS), axis_to_normal.Rotate(Math::Vector3::Z_AXIS));

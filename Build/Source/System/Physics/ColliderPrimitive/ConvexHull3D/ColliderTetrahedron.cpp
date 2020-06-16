@@ -420,7 +420,7 @@ namespace Engine5
         Vector3 h     = ray.direction.CrossProduct(edge2);
         Real    a     = edge1.DotProduct(h);
         t             = -1.0f;
-        if (Utility::IsZero(a))
+        if (Math::IsZero(a))
         {
             return false;
         }

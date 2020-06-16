@@ -147,7 +147,7 @@ namespace Engine5
         Real vn     = DotProduct(dv, contact_point.normal);
         Real lambda = -contact_point.normal_mass * (vn - contact_point.velocity_bias);
         // b2Clamp the accumulated impulse
-        Real new_impulse                 = Utility::Max(contact_point.normal_impulse_sum + lambda, 0.0f);
+        Real new_impulse                 = Math::Max(contact_point.normal_impulse_sum + lambda, 0.0f);
         lambda                           = new_impulse - contact_point.normal_impulse_sum;
         contact_point.normal_impulse_sum = new_impulse;
         // Apply contact impulse
@@ -167,7 +167,7 @@ namespace Engine5
         Real vt_a     = DotProduct(dv, contact_point.tangent_a) - tangent_speed;
         Real lambda_a = contact_point.tangent_a_mass * (-vt_a);
         // b2Clamp the accumulated force
-        Real new_impulse_a                  = Utility::Clamp(contact_point.tangent_a_impulse_sum + lambda_a, -max_friction, max_friction);
+        Real new_impulse_a                  = Math::Clamp(contact_point.tangent_a_impulse_sum + lambda_a, -max_friction, max_friction);
         lambda_a                            = new_impulse_a - contact_point.tangent_a_impulse_sum;
         contact_point.tangent_a_impulse_sum = new_impulse_a;
         // Apply contact impulse
@@ -176,7 +176,7 @@ namespace Engine5
         Real vt_b     = DotProduct(dv, contact_point.tangent_b) - tangent_speed;
         Real lambda_b = contact_point.tangent_b_mass * (-vt_b);
         // b2Clamp the accumulated force
-        Real new_impulse_b                  = Utility::Clamp(contact_point.tangent_b_impulse_sum + lambda_b, -max_friction, max_friction);
+        Real new_impulse_b                  = Math::Clamp(contact_point.tangent_b_impulse_sum + lambda_b, -max_friction, max_friction);
         lambda_b                            = new_impulse_b - contact_point.tangent_b_impulse_sum;
         contact_point.tangent_b_impulse_sum = new_impulse_b;
         // Apply contact impulse
@@ -227,7 +227,7 @@ namespace Engine5
         for (auto& contact : m_manifold->contacts)
         {
             Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
-            Real    c          = Utility::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
+            Real    c          = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
             Vector3 c_a        = body_a->GetCentroid(); //global centroid.
             Vector3 c_b        = body_b->GetCentroid(); //global centroid.
             Vector3 r_a        = contact.global_position_a - c_a;
@@ -268,7 +268,7 @@ namespace Engine5
         for (auto& contact : manifold.contacts)
         {
             Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
-            Real    c          = Utility::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
+            Real    c          = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
             Vector3 c_a        = body_a->GetCentroid(); //global centroid.
             Vector3 c_b        = body_b->GetCentroid(); //global centroid.
             Vector3 r_a        = contact.global_position_a - c_a;
@@ -295,6 +295,6 @@ namespace Engine5
     {
         Physics::MaterialCoefficient m_a(a->GetMaterial());
         Physics::MaterialCoefficient m_b(b->GetMaterial());
-        return Utility::Min(m_a.restitution, m_b.restitution);
+        return Math::Min(m_a.restitution, m_b.restitution);
     }
 }

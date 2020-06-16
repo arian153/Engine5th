@@ -70,21 +70,21 @@ namespace Engine5
     void Complex::SetNormalize()
     {
         Real norm = r * r + i * i;
-        if (Utility::IsZero(norm) == true)
+        if (Math::IsZero(norm) == true)
         {
             r = 1.0f;
             return;
         }
-        Real multiplier = Utility::InvSqrt(norm);
+        Real multiplier = Math::InvSqrt(norm);
         r *= multiplier;
         i *= multiplier;
     }
 
     void Complex::SetClean()
     {
-        if (Utility::IsZero(r))
+        if (Math::IsZero(r))
             r = 0.0f;
-        if (Utility::IsZero(i))
+        if (Math::IsZero(i))
             i = 0.0f;
     }
 
@@ -107,7 +107,7 @@ namespace Engine5
     void Complex::SetInverse()
     {
         Real norm = r * r + i * i;
-        if (Utility::IsZero(norm))
+        if (Math::IsZero(norm))
         {
             return;
         }
@@ -128,33 +128,33 @@ namespace Engine5
 
     bool Complex::IsZero() const
     {
-        return Utility::IsZero(r * r + i * i);
+        return Math::IsZero(r * r + i * i);
     }
 
     bool Complex::IsUnit() const
     {
-        return Utility::IsZero(1.0f - (r * r + i * i));
+        return Math::IsZero(1.0f - (r * r + i * i));
     }
 
     bool Complex::IsIdentity() const
     {
-        return Utility::IsZero(1.0f - r) && Utility::IsZero(i);
+        return Math::IsZero(1.0f - r) && Math::IsZero(i);
     }
 
     bool Complex::IsEqual(const Complex& rhs) const
     {
-        if (Utility::IsEqual(r, rhs.r) == false)
+        if (Math::IsEqual(r, rhs.r) == false)
             return false;
-        if (Utility::IsEqual(i, rhs.i) == false)
+        if (Math::IsEqual(i, rhs.i) == false)
             return false;
         return true;
     }
 
     bool Complex::IsNotEqual(const Complex& rhs) const
     {
-        if (Utility::IsEqual(r, rhs.r) == false)
+        if (Math::IsEqual(r, rhs.r) == false)
             return true;
-        if (Utility::IsEqual(i, rhs.i) == false)
+        if (Math::IsEqual(i, rhs.i) == false)
             return true;
         return false;
     }
@@ -177,7 +177,7 @@ namespace Engine5
     Complex Complex::Inverse() const
     {
         Real norm = r * r + i * i;
-        if (Utility::IsZero(norm))
+        if (Math::IsZero(norm))
         {
             return Complex(r, i);
         }
@@ -232,18 +232,18 @@ namespace Engine5
 
     bool Complex::operator==(const Complex& rhs) const
     {
-        if (Utility::IsEqual(r, rhs.r) == false)
+        if (Math::IsEqual(r, rhs.r) == false)
             return false;
-        if (Utility::IsEqual(i, rhs.i) == false)
+        if (Math::IsEqual(i, rhs.i) == false)
             return false;
         return true;
     }
 
     bool Complex::operator!=(const Complex& rhs) const
     {
-        if (Utility::IsEqual(r, rhs.r) == false)
+        if (Math::IsEqual(r, rhs.r) == false)
             return true;
-        if (Utility::IsEqual(i, rhs.i) == false)
+        if (Math::IsEqual(i, rhs.i) == false)
             return true;
         return false;
     }

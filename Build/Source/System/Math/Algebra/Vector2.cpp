@@ -88,9 +88,9 @@ namespace Engine5
 
     void Vector2::SetClean()
     {
-        if (Utility::IsZero(x))
+        if (Math::IsZero(x))
             x = 0.0f;
-        if (Utility::IsZero(y))
+        if (Math::IsZero(y))
             y = 0.0f;
     }
 
@@ -158,8 +158,8 @@ namespace Engine5
     Vector2 Vector2::Inverse() const
     {
         return Vector2(
-                       Utility::IsZero(x) ? 0.0f : 1.0f / this->x,
-                       Utility::IsZero(y) ? 0.0f : 1.0f / this->y);
+                       Math::IsZero(x) ? 0.0f : 1.0f / this->x,
+                       Math::IsZero(y) ? 0.0f : 1.0f / this->y);
     }
 
     Real Vector2::DotProduct(const Vector2& rhs) const
@@ -191,22 +191,22 @@ namespace Engine5
 
     bool Vector2::IsValid() const
     {
-        return Utility::IsValid(x) && Utility::IsValid(y);
+        return Math::IsValid(x) && Math::IsValid(y);
     }
 
     bool Vector2::IsZero() const
     {
-        return Utility::IsZero(x) && Utility::IsZero(y);
+        return Math::IsZero(x) && Math::IsZero(y);
     }
 
     bool Vector2::IsEqual(const Vector2& rhs) const
     {
-        return Utility::IsEqual(x, rhs.x) && Utility::IsEqual(y, rhs.y);
+        return Math::IsEqual(x, rhs.x) && Math::IsEqual(y, rhs.y);
     }
 
     bool Vector2::IsNotEqual(const Vector2& rhs) const
     {
-        return Utility::IsNotEqual(x, rhs.x) || Utility::IsNotEqual(y, rhs.y);
+        return Math::IsNotEqual(x, rhs.x) || Math::IsNotEqual(y, rhs.y);
     }
 
     Real Vector2::GrepVec1(size_t flag0) const
@@ -236,12 +236,12 @@ namespace Engine5
 
     bool Vector2::operator==(const Vector2& rhs) const
     {
-        return Utility::IsEqual(x, rhs.x) && Utility::IsEqual(y, rhs.y);
+        return Math::IsEqual(x, rhs.x) && Math::IsEqual(y, rhs.y);
     }
 
     bool Vector2::operator!=(const Vector2& rhs) const
     {
-        return Utility::IsNotEqual(x, rhs.x) || Utility::IsNotEqual(y, rhs.y);
+        return Math::IsNotEqual(x, rhs.x) || Math::IsNotEqual(y, rhs.y);
     }
 
     Vector2 Vector2::operator-() const

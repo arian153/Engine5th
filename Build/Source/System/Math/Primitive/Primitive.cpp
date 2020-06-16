@@ -53,7 +53,7 @@ namespace Engine5
             hit_data_b.primitive = this;
 
             //ray cast done
-            if (Utility::IsEqual(hit_data_a.t, hit_data_b.t))
+            if (Math::IsEqual(hit_data_a.t, hit_data_b.t))
             {
                 if (hit_data_a.t > max_distance || max_distance < 0.0f)
                 {

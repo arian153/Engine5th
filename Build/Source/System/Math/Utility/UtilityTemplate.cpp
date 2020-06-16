@@ -2,7 +2,7 @@
 
 namespace Engine5
 {
-    namespace Utility
+    namespace Math 
     {
         template<typename T>
         T Min(const T& a, const T& b)

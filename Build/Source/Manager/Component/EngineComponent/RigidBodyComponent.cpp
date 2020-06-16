@@ -234,7 +234,7 @@ namespace Engine5
             if (JsonResource::HasMember(mass_data, "Mass") && mass_data["Mass"].isDouble())
             {
                 Real mass = mass_data["Mass"].asFloat();
-                Utility::IsZero(mass)
+                Math::IsZero(mass)
                     ? m_rigid_body->SetMassInfinite()
                     : m_rigid_body->SetMass(mass);
             }

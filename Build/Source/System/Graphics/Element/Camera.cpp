@@ -146,7 +146,7 @@ namespace Engine5
                 m_basis.Normalize();
                 result = true;
             }
-            if (Utility::IsNotEqual(m_zoom, m_transform->scale.x))
+            if (Math::IsNotEqual(m_zoom, m_transform->scale.x))
             {
                 m_zoom = m_transform->scale.x;
                 result = true;

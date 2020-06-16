@@ -60,7 +60,7 @@ namespace Engine5
         Real c = (local_ray.position.x * local_ray.position.x * denominator_x)
                 + (local_ray.position.y * local_ray.position.y / (radius.y * radius.y))
                 + (local_ray.position.z * local_ray.position.z * denominator_z) - 1.0f;
-        if (Utility::SolveQuadratic(a, b, c, maximum_t, minimum_t) == true)
+        if (Math::SolveQuadratic(a, b, c, maximum_t, minimum_t) == true)
         {
             Real max_height = local_ray.direction.y * maximum_t + local_ray.position.y;
             Real min_height = local_ray.direction.y * minimum_t + local_ray.position.y;

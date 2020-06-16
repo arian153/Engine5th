@@ -204,7 +204,7 @@ namespace Engine5
                 m_mass_data.local_centroid += collider_data->m_mass * collider_data->WorldCentroid();
             }
             // compute inverse mass
-            if (Utility::IsZero(m_mass_data.mass) == false)
+            if (Math::IsZero(m_mass_data.mass) == false)
             {
                 m_mass_data.inverse_mass = 1.0f / m_mass_data.mass;
             }

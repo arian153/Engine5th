@@ -59,10 +59,10 @@ namespace Engine5
         Vector3 normal(0.0f, 0.0f, 1.0f);
         Vector3 pc          = -local_ray.position;
         Real    denominator = normal.DotProduct(local_ray.direction);
-        if (Utility::IsZero(denominator) == true)
+        if (Math::IsZero(denominator) == true)
         {
             //ray is parallel to plane.
-            if (Utility::IsZero(pc.DotProduct(normal)) == true)
+            if (Math::IsZero(pc.DotProduct(normal)) == true)
             {
                 std::vector<Vector2>* vertices;
                 if (m_collider_set != nullptr)
@@ -84,9 +84,9 @@ namespace Engine5
                     Vector2 p0   = vertices->at(i);
                     Vector2 p1   = vertices->at(j);
                     Vector2 edge = p1 - p0;
-                    if (Utility::IsZero(dir.CrossProduct(edge)) == true)
+                    if (Math::IsZero(dir.CrossProduct(edge)) == true)
                     {
-                        if (Utility::IsZero((p0 - pos).CrossProduct(dir)) == true)
+                        if (Math::IsZero((p0 - pos).CrossProduct(dir)) == true)
                         {
                             polygon_min_t = (p0 - pos).DotProduct(dir) * inv_dir;
                             polygon_max_t = (p1 - pos).DotProduct(dir) * inv_dir;
@@ -165,7 +165,7 @@ namespace Engine5
             {
                 Real tx = (v.x - p0.x) / edge.x;
                 Real ty = (v.y - p0.y) / edge.y;
-                Real t  = Utility::IsEqual(tx, ty) ? tx : (!Utility::IsZero(tx) ? tx : ty);
+                Real t  = Math::IsEqual(tx, ty) ? tx : (!Math::IsZero(tx) ? tx : ty);
                 //is point on edge ?
                 if (t <= 1.0f && t >= 0.0f)
                 {

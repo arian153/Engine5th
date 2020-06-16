@@ -45,7 +45,7 @@ namespace Engine5
         Real c = (local_ray.position.x * local_ray.position.x / (radius.x * radius.x))
                 + (local_ray.position.y * local_ray.position.y / (radius.y * radius.y))
                 + (local_ray.position.z * local_ray.position.z / (radius.z * radius.z)) - 1.0f;
-        if (Utility::SolveQuadratic(a, b, c, maximum_t, minimum_t) == true)
+        if (Math::SolveQuadratic(a, b, c, maximum_t, minimum_t) == true)
         {
             if (minimum_t < 0.0f && maximum_t < 0.0f)
             {
