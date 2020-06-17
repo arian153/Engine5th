@@ -50,27 +50,69 @@ namespace Game
             }
             if (keyboard->IsDown(eKeyCodeKeyboard::W))
             {
-                camera->AddRotationX(-dt);
+                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                {
+                    camera->AddDistanceInUpDirection(dt * 10.0f);
+                }
+                else
+                {
+                    camera->AddRotationX(-dt);
+                }
             }
             if (keyboard->IsDown(eKeyCodeKeyboard::S))
             {
-                camera->AddRotationX(dt);
+                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                {
+                    camera->AddDistanceInUpDirection(-dt * 10.0f);
+                }
+                else
+                {
+                    camera->AddRotationX(dt);
+                }
             }
             if (keyboard->IsDown(eKeyCodeKeyboard::A))
             {
-                camera->AddRotationY(-dt);
+                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                {
+                    camera->AddDistanceInRightDirection(-dt * 10.0f);
+                }
+                else
+                {
+                    camera->AddRotationY(-dt);
+                }
             }
             if (keyboard->IsDown(eKeyCodeKeyboard::D))
             {
-                camera->AddRotationY(dt);
+                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                {
+                    camera->AddDistanceInRightDirection(dt * 10.0f);
+                }
+                else
+                {
+                    camera->AddRotationY(dt);
+                }
             }
             if (keyboard->IsDown(eKeyCodeKeyboard::Q))
             {
-                camera->AddRotationZ(-dt);
+                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                {
+                    camera->AddDistanceInLookingDirection(dt * 10.0f);
+                }
+                else
+                {
+                    camera->AddRotationZ(-dt);
+                }
             }
             if (keyboard->IsDown(eKeyCodeKeyboard::E))
             {
-                camera->AddRotationZ(dt);
+                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                {
+                    camera->AddDistanceInLookingDirection(-dt * 10.0f);
+                }
+                else
+                {
+                    camera->AddRotationZ(dt);
+                }
             }
         }
     }
