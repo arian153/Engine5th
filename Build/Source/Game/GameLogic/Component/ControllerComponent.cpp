@@ -28,90 +28,105 @@ namespace Game
 
     void ControllerComponent::Update(Real dt)
     {
-        if (m_input != nullptr && m_owner->HasComponent<CameraComponent>())
+        if (m_input != nullptr)
         {
             auto mouse    = m_input->GetMouseInput();
             auto keyboard = m_input->GetKeyboardInput();
-            auto camera   = m_owner->GetComponent<CameraComponent>();
-            int  curr_x   = mouse->CurrentPosition().x;
-            int  curr_y   = mouse->CurrentPosition().y;
-            int  prev_x   = mouse->PreviousPosition().x;
-            int  prev_y   = mouse->PreviousPosition().y;
-            Real dx       = static_cast<Real>(curr_x - prev_x);
-            Real dy       = static_cast<Real>(curr_y - prev_y);
-            if (mouse->IsDown(eKeyCodeMouse::Right))
+            if (m_owner->HasComponent<CameraComponent>())
             {
-                camera->AddDistanceInUpDirection(-dt * dy);
-                camera->AddDistanceInRightDirection(dt * dx);
+                auto camera = m_owner->GetComponent<CameraComponent>();
+                int  curr_x = mouse->CurrentPosition().x;
+                int  curr_y = mouse->CurrentPosition().y;
+                int  prev_x = mouse->PreviousPosition().x;
+                int  prev_y = mouse->PreviousPosition().y;
+                Real dx     = static_cast<Real>(curr_x - prev_x);
+                Real dy     = static_cast<Real>(curr_y - prev_y);
+                if (mouse->IsDown(eKeyCodeMouse::Right))
+                {
+                    camera->AddDistanceInUpDirection(-dt * dy);
+                    camera->AddDistanceInRightDirection(dt * dx);
+                }
+                if (m_input->GetMouseInput()->IsWheelRolling())
+                {
+                    camera->AddDistanceInLookingDirection(dt * 20.0f * mouse->MouseWheelRollingDirection());
+                }
+                if (keyboard->IsDown(eKeyCodeKeyboard::W))
+                {
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        camera->AddDistanceInUpDirection(dt * 10.0f);
+                    }
+                    else
+                    {
+                        camera->AddRotationX(-dt);
+                    }
+                }
+                if (keyboard->IsDown(eKeyCodeKeyboard::S))
+                {
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        camera->AddDistanceInUpDirection(-dt * 10.0f);
+                    }
+                    else
+                    {
+                        camera->AddRotationX(dt);
+                    }
+                }
+                if (keyboard->IsDown(eKeyCodeKeyboard::A))
+                {
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        camera->AddDistanceInRightDirection(-dt * 10.0f);
+                    }
+                    else
+                    {
+                        camera->AddRotationY(-dt);
+                    }
+                }
+                if (keyboard->IsDown(eKeyCodeKeyboard::D))
+                {
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        camera->AddDistanceInRightDirection(dt * 10.0f);
+                    }
+                    else
+                    {
+                        camera->AddRotationY(dt);
+                    }
+                }
+                if (keyboard->IsDown(eKeyCodeKeyboard::Q))
+                {
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        camera->AddDistanceInLookingDirection(dt * 10.0f);
+                    }
+                    else
+                    {
+                        camera->AddRotationZ(-dt);
+                    }
+                }
+                if (keyboard->IsDown(eKeyCodeKeyboard::E))
+                {
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        camera->AddDistanceInLookingDirection(-dt * 10.0f);
+                    }
+                    else
+                    {
+                        camera->AddRotationZ(dt);
+                    }
+                }
             }
-            if (m_input->GetMouseInput()->IsWheelRolling())
+            else
             {
-                camera->AddDistanceInLookingDirection(dt * 20.0f * mouse->MouseWheelRollingDirection());
-            }
-            if (keyboard->IsDown(eKeyCodeKeyboard::W))
-            {
-                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                auto transform = m_owner->GetComponent<TransformComponent>();
+                if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Left))
                 {
-                    camera->AddDistanceInUpDirection(dt * 10.0f);
+                    transform->AddRotationY(-dt);
                 }
-                else
+                if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Right))
                 {
-                    camera->AddRotationX(-dt);
-                }
-            }
-            if (keyboard->IsDown(eKeyCodeKeyboard::S))
-            {
-                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                {
-                    camera->AddDistanceInUpDirection(-dt * 10.0f);
-                }
-                else
-                {
-                    camera->AddRotationX(dt);
-                }
-            }
-            if (keyboard->IsDown(eKeyCodeKeyboard::A))
-            {
-                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                {
-                    camera->AddDistanceInRightDirection(-dt * 10.0f);
-                }
-                else
-                {
-                    camera->AddRotationY(-dt);
-                }
-            }
-            if (keyboard->IsDown(eKeyCodeKeyboard::D))
-            {
-                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                {
-                    camera->AddDistanceInRightDirection(dt * 10.0f);
-                }
-                else
-                {
-                    camera->AddRotationY(dt);
-                }
-            }
-            if (keyboard->IsDown(eKeyCodeKeyboard::Q))
-            {
-                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                {
-                    camera->AddDistanceInLookingDirection(dt * 10.0f);
-                }
-                else
-                {
-                    camera->AddRotationZ(-dt);
-                }
-            }
-            if (keyboard->IsDown(eKeyCodeKeyboard::E))
-            {
-                if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                {
-                    camera->AddDistanceInLookingDirection(-dt * 10.0f);
-                }
-                else
-                {
-                    camera->AddRotationZ(dt);
+                    transform->AddRotationY(dt);
                 }
             }
         }

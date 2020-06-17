@@ -341,6 +341,10 @@ namespace Engine5
         Real angle    = atan2f(particle.position.x - m_billboard_position.x, particle.position.z - m_billboard_position.z) * (180.0f / Math::PI);
         Real rotation = Math::DegreesToRadians(angle);
         result        = Math::Matrix44::RotationY(rotation) * result;
+        if (m_transform != nullptr)
+        {
+            result = Math::Matrix44::Rotation(m_transform->orientation.Inverse()) * result;
+        }
         result.AddVectorColumn(3, particle.position);
         return result;
     }
