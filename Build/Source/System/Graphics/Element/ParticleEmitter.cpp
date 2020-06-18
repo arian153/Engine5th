@@ -350,9 +350,11 @@ namespace Engine5
     {
         Matrix44 result;
         result.SetDiagonal(particle.scale, particle.scale, particle.scale, 1.0f);
-        Real angle    = atan2f(particle.position.x - m_billboard_position.x, particle.position.z - m_billboard_position.z) * (180.0f / Math::PI);
-        Real rotation = Math::DegreesToRadians(angle);
-        result        = Math::Matrix44::RotationY(rotation) * result;
+        Real       angle = atan2f(particle.position.x - m_billboard_position.x, particle.position.z - m_billboard_position.z) * (180.0f / Math::PI);
+        //Quaternion quat(Math::Vector3::Z_AXIS, (particle.position - m_billboard_position).Unit());
+        Real       rotation = Math::DegreesToRadians(angle);
+        result              = Math::Matrix44::RotationY(rotation) * result;
+        //result = Math::Matrix44::Rotation(quat) * result;
         if (m_transform != nullptr)
         {
             result = Math::Matrix44::Rotation(m_transform->orientation.Inverse()) * result;
