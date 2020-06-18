@@ -7,6 +7,7 @@
 #include "../../Math/Structure/Transform.hpp"
 #include "../../Math/Utility/Utility.hpp"
 #include "../../Math/Utility/MatrixUtility.hpp"
+#include <algorithm>
 
 namespace Engine5
 {
@@ -26,6 +27,7 @@ namespace Engine5
     void ParticleEmitter::Update(Real dt)
     {
         KillParticles();
+        SortParticle();
         m_elapsed_time += dt;
         if (m_elapsed_time > m_emission_rate)
         {
@@ -331,7 +333,17 @@ namespace Engine5
             {
                 ++i;
             }
+            m_particles[i].factor = m_particles[i].position.DistanceSquaredTo(m_billboard_position);
         }
+    }
+
+    void ParticleEmitter::SortParticle()
+    {
+        std::sort(
+                  m_particles.begin(), m_particles.begin() + m_active_amount, [](const Particle& lhs, const Particle& rhs)
+                  {
+                      return lhs.factor > rhs.factor;
+                  });
     }
 
     Matrix44 ParticleEmitter::ParticleToWorldMatrix(const Particle& particle) const

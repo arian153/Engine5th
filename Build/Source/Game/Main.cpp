@@ -4,7 +4,7 @@
 #include "GameLogic/Factory/ControllerFactory.h"
 #include "../Manager/Level/LevelManager.hpp"
 
-int WINAPI WinMain(HINSTANCE /*instance*/, HINSTANCE /*prev_instance*/, LPSTR /*cmd_line*/, int /*show_cmd*/)
+int WINAPI WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR cmd_line, int show_cmd)
 {
     E5_LEAK_CHECKS(-1);
     auto app = new Engine5::Application();

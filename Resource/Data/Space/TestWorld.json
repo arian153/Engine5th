@@ -89,7 +89,7 @@
                 {
                     "Type": "class Engine5::ParticleEmitterComponent",
                     "Value": {
-                        "Texture": "../../Resource/Texture/white.dds",
+                        "Texture": "../../Resource/Texture/star.png",
                         "Particle Amount": 10000,
                         "Emission Amount": 1000,
                         "Emission Rate": 2,

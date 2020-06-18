@@ -43,6 +43,7 @@ namespace Engine5
                 life     = rhs.life;
                 scale    = rhs.scale;
                 b_active = rhs.b_active;
+                factor   = rhs.factor;
             }
             return *this;
         }
@@ -53,6 +54,7 @@ namespace Engine5
         Color   color;
         Real    life     = 0.0f;
         Real    scale    = 1.0f;
+        Real    factor   = 0.0f;
         bool    b_active = false;
     };
 }

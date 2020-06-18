@@ -60,6 +60,7 @@ namespace Engine5
         size_t   GetFreeIndex();
         void     EmitParticles();
         void     KillParticles();
+        void     SortParticle();
         Matrix44 ParticleToWorldMatrix(const Particle& particle) const;
 
     private:
