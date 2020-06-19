@@ -319,6 +319,7 @@ namespace Engine5
 
     void ParticleEmitter::KillParticles()
     {
+        Matrix44 transform = m_transform != nullptr ? m_transform->LocalToWorldMatrix() : Matrix44();
         for (size_t i = 0; i < m_active_amount;)
         {
             if (m_particles[i].b_active == true && m_particles[i].IsAlive() == false)
@@ -333,7 +334,8 @@ namespace Engine5
             {
                 ++i;
             }
-            m_particles[i].factor = m_particles[i].position.DistanceSquaredTo(m_billboard_position);
+            Vector3 position      = (transform * Vector4(m_particles[i].position, 1.0f)).GrepVec3(0, 1, 2);
+            m_particles[i].factor = position.DistanceSquaredTo(m_billboard_position);
         }
     }
 
@@ -350,10 +352,10 @@ namespace Engine5
     {
         Matrix44 result;
         result.SetDiagonal(particle.scale, particle.scale, particle.scale, 1.0f);
-        Real       angle = atan2f(particle.position.x - m_billboard_position.x, particle.position.z - m_billboard_position.z) * (180.0f / Math::PI);
+        Real angle = atan2f(particle.position.x - m_billboard_position.x, particle.position.z - m_billboard_position.z) * (180.0f / Math::PI);
         //Quaternion quat(Math::Vector3::Z_AXIS, (particle.position - m_billboard_position).Unit());
-        Real       rotation = Math::DegreesToRadians(angle);
-        result              = Math::Matrix44::RotationY(rotation) * result;
+        Real rotation = Math::DegreesToRadians(angle);
+        result        = Math::Matrix44::RotationY(rotation) * result;
         //result = Math::Matrix44::Rotation(quat) * result;
         if (m_transform != nullptr)
         {
