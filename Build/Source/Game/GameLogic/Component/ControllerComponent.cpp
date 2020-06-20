@@ -139,7 +139,7 @@ namespace Game
 
     void ControllerComponent::Render()
     {
-        if (m_input != nullptr && m_owner->HasComponent<CameraComponent>())
+        if (m_owner->HasComponent<CameraComponent>())
         {
             auto camera = m_owner->GetComponent<CameraComponent>();
             auto basis  = camera->GetBasis();
@@ -147,6 +147,15 @@ namespace Game
                                     Vector2(520), ColorDef::Pure::Red, "P : ", camera->GetPosition(),
                                     "\nI : ", basis.i, "\nJ : ", basis.j, "\nK : ", basis.k);
         }
+        else
+        {
+            auto transform = m_owner->GetComponent<TransformComponent>();
+          
+            m_text_renderer->Output(
+                Vector2(520, 400), ColorDef::Pure::Red, "O : ", transform->GetOrientation()
+                );
+        }
+
     }
 
     bool ControllerComponent::Load(const Json::Value& data)

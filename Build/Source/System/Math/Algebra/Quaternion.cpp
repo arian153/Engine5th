@@ -14,6 +14,7 @@
 #include "..//Utility/Utility.hpp"
 #include <ostream>
 #include "../Utility/VectorDef.hpp"
+#include <sstream>
 
 namespace Engine5
 {
@@ -824,6 +825,30 @@ namespace Engine5
             Real    radian = 2.0f * acosf(rhs.r);
             Real    length = sqrtf(1.0f - (rhs.r * rhs.r));
             Vector3 axis   = Math::Vector3::Y_AXIS;
+            if (Math::IsZero(length) == false)
+            {
+                length = 1.0f / length;
+                axis.Set(rhs.i * length, rhs.j * length, rhs.k * length);
+            }
+            Real degree = Math::RadiansToDegrees(radian);
+            //os << std::setprecision(3);
+            os << "[cos(" << degree << ") + sin(" << degree << ") * (" << axis.x << "i + " << axis.y << "j + " << axis.z << "k)]";
+            //os << std::setprecision(std::ios_base::precision);
+        }
+        else
+        {
+            os << "[" << rhs.r << ", " << rhs.i << ", " << rhs.j << ", " << rhs.k << "]";
+        }
+        return os;
+    }
+
+    std::wstringstream& operator<<(std::wstringstream& os, const Quaternion& rhs)
+    {
+        if (rhs.IsUnit() == true)
+        {
+            Real    radian = 2.0f * acosf(rhs.r);
+            Real    length = sqrtf(1.0f - (rhs.r * rhs.r));
+            Vector3 axis = Math::Vector3::Y_AXIS;
             if (Math::IsZero(length) == false)
             {
                 length = 1.0f / length;

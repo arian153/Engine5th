@@ -36,12 +36,13 @@ namespace Engine5
         }
         m_instances.clear();
         m_instances.reserve(m_active_amount);
+        Matrix44 orientation = m_transform != nullptr ? Math::Matrix44::Rotation(m_transform->orientation.Inverse()) : Matrix44();
         for (size_t i = 0; i < m_active_amount; ++i)
         {
             m_particles[i].position += m_particles[i].velocity * dt;
             m_particles[i].life -= m_base_particle.life * m_life_decay_rate * dt;
             m_particles[i].scale -= m_base_particle.scale * m_scale_decay_rate * dt;
-            auto world = ParticleToWorldMatrix(m_particles[i]);
+            auto world = ParticleToWorldMatrix(m_particles[i], orientation);
             m_instances.emplace_back(world, m_particles[i].color);
         }
         m_buffer->UpdateInstanceBuffer(m_instances);
@@ -335,7 +336,7 @@ namespace Engine5
                 ++i;
             }
             Vector3 position      = (transform * Vector4(m_particles[i].position, 1.0f)).GrepVec3(0, 1, 2);
-            m_particles[i].factor = (position - m_billboard_position).z;
+            m_particles[i].factor = position.DistanceTo(m_billboard_position);
         }
     }
 
@@ -348,19 +349,16 @@ namespace Engine5
                   });
     }
 
-    Matrix44 ParticleEmitter::ParticleToWorldMatrix(const Particle& particle) const
+    Matrix44 ParticleEmitter::ParticleToWorldMatrix(const Particle& particle, const Matrix44& orientation) const
     {
         Matrix44 result;
         result.SetDiagonal(particle.scale, particle.scale, particle.scale, 1.0f);
         Real angle = atan2f(particle.position.x - m_billboard_position.x, particle.position.z - m_billboard_position.z) * (180.0f / Math::PI);
         //Quaternion quat(Math::Vector3::Z_AXIS, (particle.position - m_billboard_position).Unit());
         Real rotation = Math::DegreesToRadians(angle);
-        //result        = Math::Matrix44::RotationY(rotation) * result;
+        result        = Math::Matrix44::RotationY(rotation) * result;
         //result = Math::Matrix44::Rotation(quat) * result;
-        if (m_transform != nullptr)
-        {
-            result = Math::Matrix44::Rotation(m_transform->orientation.Inverse()) * result;
-        }
+        result = orientation * result;
         result.AddVectorColumn(3, particle.position);
         return result;
     }

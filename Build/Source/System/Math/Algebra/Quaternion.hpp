@@ -101,6 +101,7 @@ namespace Engine5
         friend Quaternion    operator*(Real scalar, const Quaternion& quaternion);
         Quaternion&          operator*=(Real scalar);
         friend std::ostream& operator<<(std::ostream& os, const Quaternion& rhs);
+        friend std::wstringstream& operator<<(std::wstringstream& os, const Quaternion& rhs);
         Quaternion           operator*(const Vector3& vector) const;
         friend Quaternion    operator*(const Vector3& vector, const Quaternion& quaternion);
         Matrix33             operator*(const Matrix33& matrix) const;

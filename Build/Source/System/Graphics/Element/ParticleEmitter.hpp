@@ -61,7 +61,7 @@ namespace Engine5
         void     EmitParticles();
         void     KillParticles();
         void     SortParticle();
-        Matrix44 ParticleToWorldMatrix(const Particle& particle) const;
+        Matrix44 ParticleToWorldMatrix(const Particle& particle, const Matrix44& orientation) const;
 
     private:
         friend class ParticleEmitterComponent;
