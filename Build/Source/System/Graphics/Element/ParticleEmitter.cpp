@@ -335,7 +335,7 @@ namespace Engine5
                 ++i;
             }
             Vector3 position      = (transform * Vector4(m_particles[i].position, 1.0f)).GrepVec3(0, 1, 2);
-            m_particles[i].factor = position.DistanceSquaredTo(m_billboard_position);
+            m_particles[i].factor = (position - m_billboard_position).z;
         }
     }
 
@@ -355,7 +355,7 @@ namespace Engine5
         Real angle = atan2f(particle.position.x - m_billboard_position.x, particle.position.z - m_billboard_position.z) * (180.0f / Math::PI);
         //Quaternion quat(Math::Vector3::Z_AXIS, (particle.position - m_billboard_position).Unit());
         Real rotation = Math::DegreesToRadians(angle);
-        result        = Math::Matrix44::RotationY(rotation) * result;
+        //result        = Math::Matrix44::RotationY(rotation) * result;
         //result = Math::Matrix44::Rotation(quat) * result;
         if (m_transform != nullptr)
         {
