@@ -1,6 +1,9 @@
 #pragma once
 #include "../API/GraphicsAPI.hpp"
 #include IncludeTextureAtlasAPI
+#include "../../Math/Algebra/Vector4.hpp"
+#include "../../Math/Algebra/Vector2.hpp"
+#include <vector>
 
 namespace Engine5
 {
@@ -10,6 +13,11 @@ namespace Engine5
         TextureAtlasCommon();
         ~TextureAtlasCommon();
 
+        Vector4 GetUVRect(size_t index);
+
+        Vector2 ConvertUV(const Vector2& uv, size_t index);
+
     private:
+        std::vector<Vector4> m_fragments;
     };
 }
