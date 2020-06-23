@@ -47,7 +47,7 @@ namespace Engine5
         {
             for (auto& contact : m_contacts)
             {
-                contact.Solve(dt);
+                contact.SolveVelocityConstraints(dt);
             }
         }
         //apply

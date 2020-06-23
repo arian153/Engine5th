@@ -73,7 +73,8 @@ namespace Engine5
         ~ContactConstraints();
 
         void Initialize() override;
-        void Solve(Real dt) override;
+        void SolveVelocityConstraints(Real dt) override;
+        void SolvePositionConstraints(Real dt) override;
         void Apply() override;
         void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const;
 
@@ -89,7 +90,6 @@ namespace Engine5
         static void SolvePositionConstraints(const ContactManifold& manifold);
 
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
-
 
     private:
         Physics::FrictionUtility* m_friction_utility = nullptr;

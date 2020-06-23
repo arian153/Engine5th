@@ -38,13 +38,18 @@ namespace Engine5
         }
     }
 
-    void ContactConstraints::Solve(Real dt)
+    void ContactConstraints::SolveVelocityConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
         for (auto& contact : m_manifold->contacts)
         {
             SolveContactPoint(contact);
         }
+    }
+
+    void ContactConstraints::SolvePositionConstraints(Real dt)
+    {
+        E5_UNUSED_PARAM(dt);
     }
 
     void ContactConstraints::Apply()

@@ -10,7 +10,8 @@ namespace Engine5
         virtual ~Constraints();
 
         virtual void Initialize() = 0;
-        virtual void Solve(Real dt) = 0;
+        virtual void SolveVelocityConstraints(Real dt) = 0;
+        virtual void SolvePositionConstraints(Real dt) = 0;
         virtual void Apply() = 0;
 
     private:
