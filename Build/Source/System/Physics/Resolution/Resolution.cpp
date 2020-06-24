@@ -1,6 +1,6 @@
 #include "Resolution.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
-#include "Constraints/ContactConstraints.hpp"
+#include "Constraints/ContactConstraint.hpp"
 #include <vector>
 // ReSharper disable once CppUnusedIncludeDirective
 #include "ContactManifold.hpp"
@@ -28,47 +28,51 @@ namespace Engine5
 
     void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
     {
+        //velocity integration phase
+        for (auto& body : *rigid_bodies)
+        {
+            body->IntegrateVelocity(dt);
+        }
         //resolution phase
-        m_contacts.clear();
-        //solve contact manifold
+        m_contact_constraints.clear();
+        //generate contact manifold
         for (auto& manifold : manifold_table->m_manifold_table)
         {
-            auto contact = m_contacts.emplace_back(&manifold.second, &m_friction);
+            auto contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction);
             contact.Initialize();
         }
         if (m_b_warm_starting == true)
         {
-            for (auto& contact : m_contacts)
+            for (auto& contact : m_contact_constraints)
             {
                 contact.WarmStart();
             }
         }
         for (size_t i = 0; i < m_velocity_iteration; ++i)
         {
-            for (auto& contact : m_contacts)
+            for (auto& contact : m_contact_constraints)
             {
                 contact.SolveVelocityConstraints(dt);
             }
         }
         //apply
-        for (auto& contact : m_contacts)
+        for (auto& contact : m_contact_constraints)
         {
             contact.Apply();
         }
-        //integration phase
+        //position integration phase
         for (auto& body : *rigid_bodies)
         {
-            body->Integrate(dt);
+            body->IntegratePosition(dt);
         }
         //solve position constraints.
         for (size_t i = 0; i < m_position_iteration; ++i)
         {
-            for (auto& contact : m_contacts)
+            for (auto& contact : m_contact_constraints)
             {
                 contact.SolvePositionConstraints();
             }
         }
-       
     }
 
     void Resolution::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
@@ -80,7 +84,7 @@ namespace Engine5
     {
         if (draw_contact_flag.b_flag)
         {
-            for (auto& contact : m_contacts)
+            for (auto& contact : m_contact_constraints)
             {
                 contact.Render(m_primitive_renderer, draw_contact_flag.color);
             }

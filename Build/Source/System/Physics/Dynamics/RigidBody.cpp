@@ -21,9 +21,8 @@ namespace Engine5
         }
     }
 
-    void RigidBody::Integrate(Real dt)
+    void RigidBody::IntegrateVelocity(Real dt)
     {
-        SyncFromTransform(m_transform);
         // integrate linear velocity
         m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * dt;
         // integrate angular velocity
@@ -31,6 +30,11 @@ namespace Engine5
         // zero out accumulated force and torque
         m_force_accumulator.SetZero();
         m_torque_accumulator.SetZero();
+    }
+
+    void RigidBody::IntegratePosition(Real dt)
+    {
+        SyncFromTransform(m_transform);
         Vector3 delta_linear_velocity = m_linear_velocity * dt;
         delta_linear_velocity         = delta_linear_velocity.HadamardProduct(m_constraints_positional);
         m_global_centroid += delta_linear_velocity;
@@ -63,7 +67,7 @@ namespace Engine5
     void RigidBody::UpdateGlobalInertiaTensor()
     {
         m_global_inverse_inertia_tensor = m_orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
-        m_global_inertia_tensor = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
+        m_global_inertia_tensor         = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
     }
 
     void RigidBody::UpdateOrientation()

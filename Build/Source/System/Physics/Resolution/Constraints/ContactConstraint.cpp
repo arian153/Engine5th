@@ -1,4 +1,4 @@
-#include "ContactConstraints.hpp"
+#include "ContactConstraint.hpp"
 #include "../../Dynamics/RigidBody.hpp"
 #include "../ContactManifold.hpp"
 #include "../ContactPoint.hpp"
@@ -9,16 +9,16 @@
 
 namespace Engine5
 {
-    ContactConstraints::ContactConstraints(ContactManifold* input, Physics::FrictionUtility* friction_utility, Real tangent_speed)
+    ContactConstraint::ContactConstraint(ContactManifold* input, Physics::FrictionUtility* friction_utility, Real tangent_speed)
         : m_friction_utility(friction_utility), m_manifold(input), m_tangent_speed(tangent_speed)
     {
     }
 
-    ContactConstraints::~ContactConstraints()
+    ContactConstraint::~ContactConstraint()
     {
     }
 
-    void ContactConstraints::Initialize()
+    void ContactConstraint::Initialize()
     {
         RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
         RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
@@ -38,7 +38,7 @@ namespace Engine5
         }
     }
 
-    void ContactConstraints::SolveVelocityConstraints(Real dt)
+    void ContactConstraint::SolveVelocityConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
         for (auto& contact : m_manifold->contacts)
@@ -47,12 +47,12 @@ namespace Engine5
         }
     }
 
-    void ContactConstraints::SolvePositionConstraints(Real dt)
+    void ContactConstraint::SolvePositionConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
     }
 
-    void ContactConstraints::Apply()
+    void ContactConstraint::Apply()
     {
         RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
         RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
@@ -64,7 +64,7 @@ namespace Engine5
         body_b->SetAngularVelocity(m_velocity.w_b);
     }
 
-    void ContactConstraints::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const
+    void ContactConstraint::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const
     {
         Quaternion no_rotation;
         Vector3    avg_a, avg_b;
@@ -88,7 +88,7 @@ namespace Engine5
         primitive_renderer->DrawSegment(avg_b, avg_b + m_manifold->manifold_normal, color);
     }
 
-    void ContactConstraints::InitializeContactPoint(ContactPoint& contact_point) const
+    void ContactConstraint::InitializeContactPoint(ContactPoint& contact_point) const
     {
         RigidBody* body_a = contact_point.collider_a->GetRigidBody();
         RigidBody* body_b = contact_point.collider_b->GetRigidBody();
@@ -130,7 +130,7 @@ namespace Engine5
         }
     }
 
-    void ContactConstraints::SolveContactPoint(ContactPoint& contact_point)
+    void ContactConstraint::SolveContactPoint(ContactPoint& contact_point)
     {
         RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
         RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
@@ -144,7 +144,7 @@ namespace Engine5
         SolveNormalConstraints(m_mass, m_velocity, contact_point);
     }
 
-    void ContactConstraints::SolveNormalConstraints(const MassTerm& mass, VelocityTerm& velocity, ContactPoint& contact_point) const
+    void ContactConstraint::SolveNormalConstraints(const MassTerm& mass, VelocityTerm& velocity, ContactPoint& contact_point) const
     {
         // Relative velocity at contact
         Vector3 dv = velocity.v_b + CrossProduct(velocity.w_b, contact_point.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact_point.r_a);
@@ -163,7 +163,7 @@ namespace Engine5
         velocity.w_b += mass.i_b * CrossProduct(contact_point.r_b, p);
     }
 
-    void ContactConstraints::SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const
+    void ContactConstraint::SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const
     {
         Vector3 dv           = velocity.v_b + CrossProduct(velocity.w_b, contact_point.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact_point.r_a);
         auto    friction     = m_friction_utility->Find(contact_point.collider_a->GetMaterial(), contact_point.collider_b->GetMaterial());
@@ -192,7 +192,7 @@ namespace Engine5
         velocity.w_b += mass.i_b * (CrossProduct(contact_point.r_b, p_a) + CrossProduct(contact_point.r_b, p_b));
     }
 
-    void ContactConstraints::WarmStart()
+    void ContactConstraint::WarmStart()
     {
         Basis normal_basis;
         normal_basis.CalculateBasisApprox(m_manifold->manifold_normal);
@@ -217,7 +217,7 @@ namespace Engine5
         }
     }
 
-    void ContactConstraints::SolvePositionConstraints()
+    void ContactConstraint::SolvePositionConstraints()
     {
         RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
         RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
@@ -255,7 +255,7 @@ namespace Engine5
         body_b->SetOrientation(m_position.o_b);
     }
 
-    void ContactConstraints::SolvePositionConstraints(const ContactManifold& manifold)
+    void ContactConstraint::SolvePositionConstraints(const ContactManifold& manifold)
     {
         RigidBody* body_a = manifold.m_set_a->GetRigidBody();
         RigidBody* body_b = manifold.m_set_b->GetRigidBody();
@@ -296,7 +296,7 @@ namespace Engine5
         body_b->SetOrientation(position.o_b);
     }
 
-    Real ContactConstraints::GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const
+    Real ContactConstraint::GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const
     {
         Physics::MaterialCoefficient m_a(a->GetMaterial());
         Physics::MaterialCoefficient m_b(b->GetMaterial());

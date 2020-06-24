@@ -3,11 +3,11 @@
 
 namespace Engine5
 {
-    class Constraints
+    class Constraint
     {
     public:
-        Constraints();
-        virtual ~Constraints();
+        Constraint();
+        virtual ~Constraint();
 
         virtual void Initialize() = 0;
         virtual void SolveVelocityConstraints(Real dt) = 0;

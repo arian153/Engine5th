@@ -1,13 +1,13 @@
 #pragma once
-#include "Constraints.hpp"
+#include "Constraint.hpp"
 
 namespace Engine5
 {
-    class PointConstraints : public Constraints
+    class PointConstraint final : public Constraint
     {
     public:
-        PointConstraints();
-        ~PointConstraints();
+        PointConstraint();
+        ~PointConstraint();
 
         void Initialize() override;
         void SolveVelocityConstraints(Real dt) override;

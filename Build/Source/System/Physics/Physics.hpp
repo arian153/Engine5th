@@ -23,7 +23,7 @@
 #include "Resolution/Resolution.hpp"
 #include "Resolution/ContactPoint.hpp"
 #include "Resolution/ContactManifold.hpp"
-#include "Resolution/Constraints/ContactConstraints.hpp"
+#include "Resolution/Constraints/ContactConstraint.hpp"
 
 //Utility
 #include "Utility/IntersectionUtility.hpp"

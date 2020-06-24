@@ -1,6 +1,6 @@
 #pragma once
 #include "../../../Math/Math.hpp"
-#include "Constraints.hpp"
+#include "Constraint.hpp"
 #include "../../Utility/FrictionUtility.hpp"
 
 namespace Engine5
@@ -66,11 +66,11 @@ namespace Engine5
         Real    tangent_impulse = 0.0f;
     };
 
-    class ContactConstraints final : public Constraints
+    class ContactConstraint final : public Constraint
     {
     public:
-        explicit ContactConstraints(ContactManifold* input, Physics::FrictionUtility* friction_utility, Real tangent_speed = 0.0f);
-        ~ContactConstraints();
+        explicit ContactConstraint(ContactManifold* input, Physics::FrictionUtility* friction_utility, Real tangent_speed = 0.0f);
+        ~ContactConstraint();
 
         void Initialize() override;
         void SolveVelocityConstraints(Real dt) override;

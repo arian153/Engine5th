@@ -4,12 +4,12 @@
 #include "../Dynamics/RigidBody.hpp"
 #include "../Utility/FrictionUtility.hpp"
 #include <vector>
-#include "Constraints/ContactConstraints.hpp"
+#include "Constraints/ContactConstraint.hpp"
 
 namespace Engine5
 {
     class ColorFlag;
-    class Constraints;
+    class Constraint;
     class ContactPoint;
     class ContactManifold;
 
@@ -31,7 +31,7 @@ namespace Engine5
         size_t m_position_iteration = 3;
 
         Physics::FrictionUtility        m_friction;
-        std::vector<ContactConstraints> m_contacts;
+        std::vector<ContactConstraint> m_contact_constraints;
         PrimitiveRenderer*              m_primitive_renderer = nullptr;
     };
 }

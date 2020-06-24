@@ -13,7 +13,8 @@ namespace Engine5
 
         void Shutdown() const;
 
-        void Integrate(Real dt);
+        void IntegrateVelocity(Real dt);
+        void IntegratePosition(Real dt);
 
         void UpdateGlobalCentroidFromPosition();
         void UpdatePositionFromGlobalCentroid();

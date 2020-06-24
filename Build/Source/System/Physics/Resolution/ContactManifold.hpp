@@ -36,7 +36,7 @@ namespace Engine5
     private:
         friend class Resolution;
         friend class NarrowPhase;
-        friend class ContactConstraints;
+        friend class ContactConstraint;
         friend class ManifoldTable;
 
     private:
