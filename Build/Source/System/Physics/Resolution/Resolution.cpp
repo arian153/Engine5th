@@ -28,18 +28,16 @@ namespace Engine5
 
     void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
     {
-        //velocity integration phase
+        //velocity phase
         for (auto& body : *rigid_bodies)
         {
             body->IntegrateVelocity(dt);
         }
-        //resolution phase
         m_contact_constraints.clear();
-        //generate contact manifold
         for (auto& manifold : manifold_table->m_manifold_table)
         {
             auto contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction);
-            contact.Initialize();
+            contact.GenerateVelocityConstraints();
         }
         if (m_b_warm_starting == true)
         {
@@ -55,23 +53,29 @@ namespace Engine5
                 contact.SolveVelocityConstraints(dt);
             }
         }
-        //apply
         for (auto& contact : m_contact_constraints)
         {
-            contact.Apply();
+            contact.ApplyVelocityConstraints();
         }
-        //position integration phase
+        //position phase
         for (auto& body : *rigid_bodies)
         {
             body->IntegratePosition(dt);
         }
-        //solve position constraints.
+        for (auto& contact : m_contact_constraints)
+        {
+            contact.GeneratePositionConstraints();
+        }
         for (size_t i = 0; i < m_position_iteration; ++i)
         {
             for (auto& contact : m_contact_constraints)
             {
                 contact.SolvePositionConstraints();
             }
+        }
+        for (auto& contact : m_contact_constraints)
+        {
+            contact.ApplyPositionConstraints();
         }
     }
 

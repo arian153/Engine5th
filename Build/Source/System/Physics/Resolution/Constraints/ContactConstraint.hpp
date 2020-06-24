@@ -72,10 +72,13 @@ namespace Engine5
         explicit ContactConstraint(ContactManifold* input, Physics::FrictionUtility* friction_utility, Real tangent_speed = 0.0f);
         ~ContactConstraint();
 
-        void Initialize() override;
+        void GenerateVelocityConstraints() override;
+        void GeneratePositionConstraints() override;
         void SolveVelocityConstraints(Real dt) override;
         void SolvePositionConstraints(Real dt) override;
-        void Apply() override;
+        void ApplyVelocityConstraints() override;
+        void ApplyPositionConstraints() override;
+
         void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const;
 
         void InitializeContactPoint(ContactPoint& contact_point) const;

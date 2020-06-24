@@ -18,7 +18,7 @@ namespace Engine5
     {
     }
 
-    void ContactConstraint::Initialize()
+    void ContactConstraint::GenerateVelocityConstraints()
     {
         RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
         RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
@@ -38,6 +38,10 @@ namespace Engine5
         }
     }
 
+    void ContactConstraint::GeneratePositionConstraints()
+    {
+    }
+
     void ContactConstraint::SolveVelocityConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
@@ -52,7 +56,7 @@ namespace Engine5
         E5_UNUSED_PARAM(dt);
     }
 
-    void ContactConstraint::Apply()
+    void ContactConstraint::ApplyVelocityConstraints()
     {
         RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
         RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
@@ -62,6 +66,10 @@ namespace Engine5
         //apply body b
         body_b->SetLinearVelocity(m_velocity.v_b);
         body_b->SetAngularVelocity(m_velocity.w_b);
+    }
+
+    void ContactConstraint::ApplyPositionConstraints()
+    {
     }
 
     void ContactConstraint::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const

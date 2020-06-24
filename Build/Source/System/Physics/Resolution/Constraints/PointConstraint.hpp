@@ -9,10 +9,10 @@ namespace Engine5
         PointConstraint();
         ~PointConstraint();
 
-        void Initialize() override;
+        void GenerateVelocityConstraints() override;
+        void GeneratePositionConstraints() override;
         void SolveVelocityConstraints(Real dt) override;
         void SolvePositionConstraints(Real dt) override;
-        void Apply() override;
     private:
     };
 }

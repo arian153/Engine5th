@@ -11,7 +11,11 @@ namespace Engine5
     {
     }
 
-    void PointConstraint::Initialize()
+    void PointConstraint::GenerateVelocityConstraints()
+    {
+    }
+
+    void PointConstraint::GeneratePositionConstraints()
     {
     }
 
@@ -23,9 +27,5 @@ namespace Engine5
     void PointConstraint::SolvePositionConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
-    }
-
-    void PointConstraint::Apply()
-    {
     }
 }
