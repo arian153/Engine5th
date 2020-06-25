@@ -54,6 +54,41 @@ namespace Engine5
     void ContactConstraint::SolvePositionConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
+
+        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
+        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
+        m_position.p_a = body_a->GetCentroid();
+        m_position.p_b = body_b->GetCentroid();
+        m_position.o_a = body_a->GetOrientation();
+        m_position.o_b = body_b->GetOrientation();
+        m_mass.m_a = body_a->Mass();
+        m_mass.i_a = body_a->Inertia();
+        m_mass.m_b = body_b->Mass();
+        m_mass.i_b = body_b->Inertia();
+        for (auto& contact : m_manifold->contacts)
+        {
+            Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
+            Real    c = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
+            Vector3 c_a = body_a->GetCentroid(); //global centroid.
+            Vector3 c_b = body_b->GetCentroid(); //global centroid.
+            Vector3 r_a = contact.global_position_a - c_a;
+            Vector3 r_b = contact.global_position_b - c_b;
+            Vector3 ra_n = CrossProduct(contact.r_a, contact.normal);
+            Vector3 rb_n = CrossProduct(contact.r_b, contact.normal);
+            Real    k = m_mass.m_a + ra_n * m_mass.i_a * ra_n + m_mass.m_b + rb_n * m_mass.i_b * rb_n;
+            Real    impulse = k > 0.0f ? -c / k : 0.0f;
+            Vector3 p = impulse * contact.normal;
+            Vector3 o_a = m_mass.i_a * CrossProduct(contact.r_a, p);
+            Vector3 o_b = m_mass.i_b * CrossProduct(contact.r_b, p);
+            m_position.p_a -= m_mass.m_a * p;
+            m_position.p_b += m_mass.m_b * p;
+            m_position.o_a.AddRotation(o_a.Unit(), o_a.Length());
+            m_position.o_b.AddRotation(o_b.Unit(), o_b.Length());
+        }
+        body_a->SetCentroid(m_position.p_a);
+        body_b->SetCentroid(m_position.p_b);
+        body_a->SetOrientation(m_position.o_a);
+        body_b->SetOrientation(m_position.o_b);
     }
 
     void ContactConstraint::ApplyVelocityConstraints()
@@ -225,44 +260,7 @@ namespace Engine5
         }
     }
 
-    void ContactConstraint::SolvePositionConstraints()
-    {
-        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
-        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
-        m_position.p_a    = body_a->GetCentroid();
-        m_position.p_b    = body_b->GetCentroid();
-        m_position.o_a    = body_a->GetOrientation();
-        m_position.o_b    = body_b->GetOrientation();
-        m_mass.m_a        = body_a->Mass();
-        m_mass.i_a        = body_a->Inertia();
-        m_mass.m_b        = body_b->Mass();
-        m_mass.i_b        = body_b->Inertia();
-        for (auto& contact : m_manifold->contacts)
-        {
-            Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
-            Real    c          = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
-            Vector3 c_a        = body_a->GetCentroid(); //global centroid.
-            Vector3 c_b        = body_b->GetCentroid(); //global centroid.
-            Vector3 r_a        = contact.global_position_a - c_a;
-            Vector3 r_b        = contact.global_position_b - c_b;
-            Vector3 ra_n       = CrossProduct(contact.r_a, contact.normal);
-            Vector3 rb_n       = CrossProduct(contact.r_b, contact.normal);
-            Real    k          = m_mass.m_a + ra_n * m_mass.i_a * ra_n + m_mass.m_b + rb_n * m_mass.i_b * rb_n;
-            Real    impulse    = k > 0.0f ? -c / k : 0.0f;
-            Vector3 p          = impulse * contact.normal;
-            Vector3 o_a        = m_mass.i_a * CrossProduct(contact.r_a, p);
-            Vector3 o_b        = m_mass.i_b * CrossProduct(contact.r_b, p);
-            m_position.p_a -= m_mass.m_a * p;
-            m_position.p_b += m_mass.m_b * p;
-            m_position.o_a.AddRotation(o_a.Unit(), o_a.Length());
-            m_position.o_b.AddRotation(o_b.Unit(), o_b.Length());
-        }
-        body_a->SetCentroid(m_position.p_a);
-        body_b->SetCentroid(m_position.p_b);
-        body_a->SetOrientation(m_position.o_a);
-        body_b->SetOrientation(m_position.o_b);
-    }
-
+    
     void ContactConstraint::SolvePositionConstraints(const ContactManifold& manifold)
     {
         RigidBody* body_a = manifold.m_set_a->GetRigidBody();

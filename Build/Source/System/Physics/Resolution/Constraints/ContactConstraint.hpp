@@ -87,9 +87,6 @@ namespace Engine5
         void SolveNormalConstraints(const MassTerm& mass, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void WarmStart();
-
-        void SolvePositionConstraints();
-
         static void SolvePositionConstraints(const ContactManifold& manifold);
 
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
