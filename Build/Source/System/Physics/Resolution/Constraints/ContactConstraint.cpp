@@ -40,6 +40,18 @@ namespace Engine5
 
     void ContactConstraint::GeneratePositionConstraints()
     {
+        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
+        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
+        //set position
+        m_position.p_a = body_a->GetCentroid();
+        m_position.p_b = body_b->GetCentroid();
+        m_position.o_a = body_a->GetOrientation();
+        m_position.o_b = body_b->GetOrientation();
+        //set mass
+        m_mass.m_a = body_a->Mass();
+        m_mass.i_a = body_a->Inertia();
+        m_mass.m_b = body_b->Mass();
+        m_mass.i_b = body_b->Inertia();
     }
 
     void ContactConstraint::SolveVelocityConstraints(Real dt)
@@ -47,48 +59,36 @@ namespace Engine5
         E5_UNUSED_PARAM(dt);
         for (auto& contact : m_manifold->contacts)
         {
-            SolveContactPoint(contact);
+            // Solve tangent constraints first because non-penetration is more important than friction.
+            SolveTangentConstraints(m_mass, m_tangent_speed, m_velocity, contact);
+            // Solve normal constraints
+            SolveNormalConstraints(m_mass, m_velocity, contact);
         }
     }
 
     void ContactConstraint::SolvePositionConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
-
-        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
-        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
-        m_position.p_a = body_a->GetCentroid();
-        m_position.p_b = body_b->GetCentroid();
-        m_position.o_a = body_a->GetOrientation();
-        m_position.o_b = body_b->GetOrientation();
-        m_mass.m_a = body_a->Mass();
-        m_mass.i_a = body_a->Inertia();
-        m_mass.m_b = body_b->Mass();
-        m_mass.i_b = body_b->Inertia();
         for (auto& contact : m_manifold->contacts)
         {
             Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
-            Real    c = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
-            Vector3 c_a = body_a->GetCentroid(); //global centroid.
-            Vector3 c_b = body_b->GetCentroid(); //global centroid.
-            Vector3 r_a = contact.global_position_a - c_a;
-            Vector3 r_b = contact.global_position_b - c_b;
-            Vector3 ra_n = CrossProduct(contact.r_a, contact.normal);
-            Vector3 rb_n = CrossProduct(contact.r_b, contact.normal);
-            Real    k = m_mass.m_a + ra_n * m_mass.i_a * ra_n + m_mass.m_b + rb_n * m_mass.i_b * rb_n;
-            Real    impulse = k > 0.0f ? -c / k : 0.0f;
-            Vector3 p = impulse * contact.normal;
-            Vector3 o_a = m_mass.i_a * CrossProduct(contact.r_a, p);
-            Vector3 o_b = m_mass.i_b * CrossProduct(contact.r_b, p);
+            Real    c          = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
+            Vector3 c_a        = m_position.p_a;
+            Vector3 c_b        = m_position.p_b;
+            Vector3 r_a        = contact.global_position_a - c_a;
+            Vector3 r_b        = contact.global_position_b - c_b;
+            Vector3 ra_n       = CrossProduct(contact.r_a, contact.normal);
+            Vector3 rb_n       = CrossProduct(contact.r_b, contact.normal);
+            Real    k          = m_mass.m_a + ra_n * m_mass.i_a * ra_n + m_mass.m_b + rb_n * m_mass.i_b * rb_n;
+            Real    impulse    = k > 0.0f ? -c / k : 0.0f;
+            Vector3 p          = impulse * contact.normal;
+            Vector3 o_a        = m_mass.i_a * CrossProduct(contact.r_a, p);
+            Vector3 o_b        = m_mass.i_b * CrossProduct(contact.r_b, p);
             m_position.p_a -= m_mass.m_a * p;
             m_position.p_b += m_mass.m_b * p;
             m_position.o_a.AddRotation(o_a.Unit(), o_a.Length());
             m_position.o_b.AddRotation(o_b.Unit(), o_b.Length());
         }
-        body_a->SetCentroid(m_position.p_a);
-        body_b->SetCentroid(m_position.p_b);
-        body_a->SetOrientation(m_position.o_a);
-        body_b->SetOrientation(m_position.o_b);
     }
 
     void ContactConstraint::ApplyVelocityConstraints()
@@ -105,6 +105,14 @@ namespace Engine5
 
     void ContactConstraint::ApplyPositionConstraints()
     {
+        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
+        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
+        //apply body a
+        body_a->SetCentroid(m_position.p_a);
+        body_b->SetCentroid(m_position.p_b);
+        //apply body b
+        body_a->SetOrientation(m_position.o_a);
+        body_b->SetOrientation(m_position.o_b);
     }
 
     void ContactConstraint::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const
@@ -171,20 +179,6 @@ namespace Engine5
             Real restitution            = GetRestitution(contact_point.collider_a, contact_point.collider_b);
             contact_point.velocity_bias = -restitution * rel;
         }
-    }
-
-    void ContactConstraint::SolveContactPoint(ContactPoint& contact_point)
-    {
-        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
-        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
-        m_mass.m_a        = body_a->Mass();
-        m_mass.i_a        = body_a->Inertia();
-        m_mass.m_b        = body_b->Mass();
-        m_mass.i_b        = body_b->Inertia();
-        // Solve tangent constraints first because non-penetration is more important than friction.
-        SolveTangentConstraints(m_mass, m_tangent_speed, m_velocity, contact_point);
-        // Solve normal constraints
-        SolveNormalConstraints(m_mass, m_velocity, contact_point);
     }
 
     void ContactConstraint::SolveNormalConstraints(const MassTerm& mass, VelocityTerm& velocity, ContactPoint& contact_point) const
@@ -258,48 +252,6 @@ namespace Engine5
             m_velocity.v_b += m_mass.m_b * p;
             m_velocity.w_b += m_mass.i_b * CrossProduct(contact.r_b, p);
         }
-    }
-
-    
-    void ContactConstraint::SolvePositionConstraints(const ContactManifold& manifold)
-    {
-        RigidBody* body_a = manifold.m_set_a->GetRigidBody();
-        RigidBody* body_b = manifold.m_set_b->GetRigidBody();
-        MassTerm   mass;
-        mass.m_a = body_a->Mass();
-        mass.i_a = body_a->Inertia();
-        mass.m_b = body_b->Mass();
-        mass.i_b = body_b->Inertia();
-        PositionTerm position;
-        position.p_a = body_a->GetCentroid();
-        position.p_b = body_b->GetCentroid();
-        position.o_a = body_a->GetOrientation();
-        position.o_b = body_b->GetOrientation();
-        // Solve normal constraints
-        for (auto& contact : manifold.contacts)
-        {
-            Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
-            Real    c          = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
-            Vector3 c_a        = body_a->GetCentroid(); //global centroid.
-            Vector3 c_b        = body_b->GetCentroid(); //global centroid.
-            Vector3 r_a        = contact.global_position_a - c_a;
-            Vector3 r_b        = contact.global_position_b - c_b;
-            Vector3 ra_n       = CrossProduct(contact.r_a, contact.normal);
-            Vector3 rb_n       = CrossProduct(contact.r_b, contact.normal);
-            Real    k          = mass.m_a + ra_n * mass.i_a * ra_n + mass.m_b + rb_n * mass.i_b * rb_n;
-            Real    impulse    = k > 0.0f ? -c / k : 0.0f;
-            Vector3 p          = impulse * contact.normal;
-            Vector3 o_a        = mass.i_a * CrossProduct(contact.r_a, p);
-            Vector3 o_b        = mass.i_b * CrossProduct(contact.r_b, p);
-            position.p_a -= mass.m_a * p;
-            position.p_b += mass.m_b * p;
-            position.o_a.AddRotation(o_a.Unit(), o_a.Length());
-            position.o_b.AddRotation(o_b.Unit(), o_b.Length());
-        }
-        body_a->SetCentroid(position.p_a);
-        body_b->SetCentroid(position.p_b);
-        body_a->SetOrientation(position.o_a);
-        body_b->SetOrientation(position.o_b);
     }
 
     Real ContactConstraint::GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const

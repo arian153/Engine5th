@@ -8,6 +8,7 @@
 #include "../../../Manager/Component/EngineComponent/CameraComponent.hpp"
 #include "../../../System/Core/Input/MouseInput.hpp"
 #include "../../../System/Graphics/Utility/TextRenderer.hpp"
+#include "../../../Manager/Component/EngineComponent/RigidBodyComponent.hpp"
 
 namespace Game
 {
@@ -119,14 +120,14 @@ namespace Game
             }
             else
             {
-                auto transform = m_owner->GetComponent<TransformComponent>();
+                auto body = m_owner->GetComponent<RigidBodyComponent>();
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Left))
                 {
-                    transform->AddRotationY(-dt);
+                    body->ApplyForceCentroid(Vector3(-10000.0f));
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Right))
                 {
-                    transform->AddRotationY(dt);
+                    body->ApplyForceCentroid(Vector3(10000.0f));
                 }
             }
         }

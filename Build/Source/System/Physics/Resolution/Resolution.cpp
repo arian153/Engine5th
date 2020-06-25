@@ -32,6 +32,7 @@ namespace Engine5
         for (auto& body : *rigid_bodies)
         {
             body->IntegrateVelocity(dt);
+            body->IntegratePosition(dt);
         }
         m_contact_constraints.clear();
         for (auto& manifold : manifold_table->m_manifold_table)

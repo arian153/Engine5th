@@ -107,10 +107,8 @@
                         "Life Variance": 0.1,
                         "Scale Variance": 0.0
                     }
-                },
-                {
-                    "Type": "class Game::ControllerComponent"
                 }
+                
             ],
             "Name": "Particle"
         },
@@ -252,7 +250,11 @@
                             }
                         ]
                     }
+                },
+                {
+                    "Type": "class Game::ControllerComponent"
                 }
+
             ],
             "Name": "HelloWorld"
         },
