@@ -26,25 +26,24 @@ namespace Engine5
         m_friction.Shutdown();
     }
 
-    void Resolution::Solve(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
+    void Resolution::SolveConstraints(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
     {
         //velocity phase
         for (auto& body : *rigid_bodies)
         {
             body->IntegrateVelocity(dt);
-            body->IntegratePosition(dt);
         }
         m_contact_constraints.clear();
         for (auto& manifold : manifold_table->m_manifold_table)
         {
-            auto contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction);
+            auto& contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction);
             contact.GenerateVelocityConstraints();
         }
         if (m_b_warm_starting == true)
         {
-            for (auto& contact : m_contact_constraints)
+            for (auto& contact_constraint : m_contact_constraints)
             {
-                contact.WarmStart();
+                contact_constraint.WarmStart();
             }
         }
         for (size_t i = 0; i < m_velocity_iteration; ++i)

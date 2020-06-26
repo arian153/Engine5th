@@ -52,4 +52,9 @@ namespace Engine5
     {
         return (this->global == rhs.global);
     }
+
+    bool SupportPoint::IsValid() const
+    {
+        return global.IsValid();
+    }
 }

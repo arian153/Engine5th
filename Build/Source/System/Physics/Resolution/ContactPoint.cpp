@@ -18,8 +18,8 @@ namespace Engine5
         local_position_a.SetZero();
         local_position_b.SetZero();
         normal.SetZero();
-        tangent_a.SetZero();
-        tangent_b.SetZero();
+        tangent.SetZero();
+        bitangent.SetZero();
         depth                 = 0.0f;
         normal_impulse_sum    = 0.0f;
         tangent_a_impulse_sum = 0.0f;
@@ -39,8 +39,8 @@ namespace Engine5
             this->local_position_a      = rhs.local_position_a;
             this->local_position_b      = rhs.local_position_b;
             this->normal                = rhs.normal;
-            this->tangent_a             = rhs.tangent_a;
-            this->tangent_b             = rhs.tangent_b;
+            this->tangent             = rhs.tangent;
+            this->bitangent             = rhs.bitangent;
             this->depth                 = rhs.depth;
             this->normal_impulse_sum    = rhs.normal_impulse_sum;
             this->tangent_a_impulse_sum = rhs.tangent_a_impulse_sum;
@@ -64,8 +64,8 @@ namespace Engine5
         Basis basis;
         basis.CalculateBasisQuaternion(-normal);
         normal    = basis.i;
-        tangent_a = basis.j;
-        tangent_b = basis.k;
+        tangent = basis.j;
+        bitangent = basis.k;
     }
 
     ContactPoint ContactPoint::SwappedContactPoint() const
@@ -74,8 +74,8 @@ namespace Engine5
         basis.CalculateBasisQuaternion(-normal);
         ContactPoint result;
         result.normal            = basis.i;
-        result.tangent_a         = basis.j;
-        result.tangent_b         = basis.k;
+        result.tangent         = basis.j;
+        result.bitangent         = basis.k;
         result.depth             = this->depth;
         result.collider_a        = this->collider_b;
         result.collider_b        = this->collider_a;

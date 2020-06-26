@@ -30,8 +30,8 @@ namespace Engine5
 
         //Two contact tangents perpendicular to each other and the contact normal. 
         //These vectors are used to resolve the frictional part of collision resolution.
-        Vector3 tangent_a;
-        Vector3 tangent_b;
+        Vector3 tangent;
+        Vector3 bitangent;
 
         Vector3 c_a;
         Vector3 c_b;

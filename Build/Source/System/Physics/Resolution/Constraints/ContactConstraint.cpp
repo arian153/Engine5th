@@ -20,18 +20,18 @@ namespace Engine5
 
     void ContactConstraint::GenerateVelocityConstraints()
     {
-        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
-        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
-        //mass term
-        m_mass.m_a = body_a->Mass();
-        m_mass.i_a = body_a->Inertia();
-        m_mass.m_b = body_b->Mass();
-        m_mass.i_b = body_b->Inertia();
+        m_body_a = m_manifold->m_set_a->GetRigidBody();
+        m_body_b = m_manifold->m_set_b->GetRigidBody();
+        //set mass
+        m_mass.m_a = m_body_a->Mass();
+        m_mass.i_a = m_body_a->Inertia();
+        m_mass.m_b = m_body_b->Mass();
+        m_mass.i_b = m_body_b->Inertia();
         //velocity term
-        m_velocity.v_a = body_a->GetLinearVelocity();
-        m_velocity.w_a = body_a->GetAngularVelocity();
-        m_velocity.v_b = body_b->GetLinearVelocity();
-        m_velocity.w_b = body_b->GetAngularVelocity();
+        m_velocity.v_a = m_body_a->GetLinearVelocity();
+        m_velocity.w_a = m_body_a->GetAngularVelocity();
+        m_velocity.v_b = m_body_b->GetLinearVelocity();
+        m_velocity.w_b = m_body_b->GetAngularVelocity();
         for (auto& contact : m_manifold->contacts)
         {
             InitializeContactPoint(contact);
@@ -40,18 +40,16 @@ namespace Engine5
 
     void ContactConstraint::GeneratePositionConstraints()
     {
-        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
-        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
-        //set position
-        m_position.p_a = body_a->GetCentroid();
-        m_position.p_b = body_b->GetCentroid();
-        m_position.o_a = body_a->GetOrientation();
-        m_position.o_b = body_b->GetOrientation();
-        //set mass
-        m_mass.m_a = body_a->Mass();
-        m_mass.i_a = body_a->Inertia();
-        m_mass.m_b = body_b->Mass();
-        m_mass.i_b = body_b->Inertia();
+        if (m_body_a != nullptr)
+        {
+            m_position.p_a = m_body_a->GetCentroid();
+            m_position.o_a = m_body_a->GetOrientation();
+        }
+        if (m_body_b != nullptr)
+        {
+            m_position.p_b = m_body_b->GetCentroid();
+            m_position.o_b = m_body_b->GetOrientation();
+        }
     }
 
     void ContactConstraint::SolveVelocityConstraints(Real dt)
@@ -93,26 +91,34 @@ namespace Engine5
 
     void ContactConstraint::ApplyVelocityConstraints()
     {
-        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
-        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
-        //apply body a
-        body_a->SetLinearVelocity(m_velocity.v_a);
-        body_a->SetAngularVelocity(m_velocity.w_a);
-        //apply body b
-        body_b->SetLinearVelocity(m_velocity.v_b);
-        body_b->SetAngularVelocity(m_velocity.w_b);
+        if (m_body_a != nullptr)
+        {
+            //apply body a
+            m_body_a->SetLinearVelocity(m_velocity.v_a);
+            m_body_a->SetAngularVelocity(m_velocity.w_a);
+        }
+        if (m_body_b != nullptr)
+        {
+            //apply body b
+            m_body_b->SetLinearVelocity(m_velocity.v_b);
+            m_body_b->SetAngularVelocity(m_velocity.w_b);
+        }
     }
 
     void ContactConstraint::ApplyPositionConstraints()
     {
-        RigidBody* body_a = m_manifold->m_set_a->GetRigidBody();
-        RigidBody* body_b = m_manifold->m_set_b->GetRigidBody();
-        //apply body a
-        body_a->SetCentroid(m_position.p_a);
-        body_b->SetCentroid(m_position.p_b);
-        //apply body b
-        body_a->SetOrientation(m_position.o_a);
-        body_b->SetOrientation(m_position.o_b);
+        if (m_body_a != nullptr)
+        {
+            //apply body a
+            m_body_a->SetCentroid(m_position.p_a);
+            m_body_a->SetOrientation(m_position.o_a);
+        }
+        if (m_body_b != nullptr)
+        {
+            //apply body b
+            m_body_b->SetCentroid(m_position.p_b);
+            m_body_b->SetOrientation(m_position.o_b);
+        }
     }
 
     void ContactConstraint::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const
@@ -141,23 +147,21 @@ namespace Engine5
 
     void ContactConstraint::InitializeContactPoint(ContactPoint& contact_point) const
     {
-        RigidBody* body_a = contact_point.collider_a->GetRigidBody();
-        RigidBody* body_b = contact_point.collider_b->GetRigidBody();
-        contact_point.c_a = body_a->GetCentroid(); //global centroid.
-        contact_point.c_b = body_b->GetCentroid(); //global centroid.
+        contact_point.c_a = m_body_a->GetCentroid(); //global centroid.
+        contact_point.c_b = m_body_b->GetCentroid(); //global centroid.
         contact_point.r_a = contact_point.global_position_a - contact_point.c_a;
         contact_point.r_b = contact_point.global_position_b - contact_point.c_b;
         Vector3 n         = contact_point.normal;
-        Vector3 ta        = contact_point.tangent_a;
-        Vector3 tb        = contact_point.tangent_b;
+        Vector3 ta        = contact_point.tangent;
+        Vector3 tb        = contact_point.bitangent;
         Vector3 ra_ta     = CrossProduct(contact_point.r_a, ta);
         Vector3 rb_ta     = CrossProduct(contact_point.r_b, ta);
         Vector3 ra_tb     = CrossProduct(contact_point.r_a, tb);
         Vector3 rb_tb     = CrossProduct(contact_point.r_b, tb);
         Vector3 ra_n      = CrossProduct(contact_point.r_a, n);
         Vector3 rb_n      = CrossProduct(contact_point.r_b, n);
-        bool    motion_a  = body_a->GetMotionMode() == eMotionMode::Dynamic;
-        bool    motion_b  = body_b->GetMotionMode() == eMotionMode::Dynamic;
+        bool    motion_a  = m_body_a->GetMotionMode() == eMotionMode::Dynamic;
+        bool    motion_b  = m_body_b->GetMotionMode() == eMotionMode::Dynamic;
         Real    tangent_a_mass
                 = (motion_a ? m_mass.m_a + ra_ta * m_mass.i_a * ra_ta : 0.0f)
                 + (motion_b ? m_mass.m_b + rb_ta * m_mass.i_b * rb_ta : 0.0f);
@@ -206,23 +210,23 @@ namespace Engine5
         auto    friction     = m_friction_utility->Find(contact_point.collider_a->GetMaterial(), contact_point.collider_b->GetMaterial());
         Real    max_friction = friction.dynamic_friction * contact_point.normal_impulse_sum; //max friction
         // Compute tangent force
-        Real vt_a     = DotProduct(dv, contact_point.tangent_a) - tangent_speed;
+        Real vt_a     = DotProduct(dv, contact_point.tangent) - tangent_speed;
         Real lambda_a = contact_point.tangent_a_mass * (-vt_a);
         // b2Clamp the accumulated force
         Real new_impulse_a                  = Math::Clamp(contact_point.tangent_a_impulse_sum + lambda_a, -max_friction, max_friction);
         lambda_a                            = new_impulse_a - contact_point.tangent_a_impulse_sum;
         contact_point.tangent_a_impulse_sum = new_impulse_a;
         // Apply contact impulse
-        Vector3 p_a = lambda_a * contact_point.tangent_a;
+        Vector3 p_a = lambda_a * contact_point.tangent;
         // Compute tangent force
-        Real vt_b     = DotProduct(dv, contact_point.tangent_b) - tangent_speed;
+        Real vt_b     = DotProduct(dv, contact_point.bitangent) - tangent_speed;
         Real lambda_b = contact_point.tangent_b_mass * (-vt_b);
         // b2Clamp the accumulated force
         Real new_impulse_b                  = Math::Clamp(contact_point.tangent_b_impulse_sum + lambda_b, -max_friction, max_friction);
         lambda_b                            = new_impulse_b - contact_point.tangent_b_impulse_sum;
         contact_point.tangent_b_impulse_sum = new_impulse_b;
         // Apply contact impulse
-        Vector3 p_b = lambda_b * contact_point.tangent_a;
+        Vector3 p_b = lambda_b * contact_point.tangent;
         velocity.v_a -= mass.m_a * (p_a + p_b);
         velocity.w_a -= mass.i_a * (CrossProduct(contact_point.r_a, p_a) + CrossProduct(contact_point.r_a, p_b));
         velocity.v_b += mass.m_b * (p_a + p_b);

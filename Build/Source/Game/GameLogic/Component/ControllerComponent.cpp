@@ -123,11 +123,11 @@ namespace Game
                 auto body = m_owner->GetComponent<RigidBodyComponent>();
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Left))
                 {
-                    body->ApplyForceCentroid(Vector3(-10000.0f));
+                    body->ApplyForceCentroid(Vector3(-100.0f));
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Right))
                 {
-                    body->ApplyForceCentroid(Vector3(10000.0f));
+                    body->ApplyForceCentroid(Vector3(100.0f));
                 }
             }
         }

@@ -16,6 +16,7 @@ namespace Engine5
         Vector3       operator[](size_t index) const;
         bool          operator==(const SupportPoint& rhs);
         bool          operator==(const SupportPoint& rhs) const;
+        bool IsValid() const;
 
     public:
         Vector3 global;

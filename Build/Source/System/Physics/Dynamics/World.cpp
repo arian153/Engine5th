@@ -75,7 +75,7 @@ namespace Engine5
         //narrow phase
         m_narrow_phase->GenerateContact(m_pairs, m_manifold_table);
         //resolution
-        m_resolution_phase->Solve(m_manifold_table, &m_rigid_bodies, dt);
+        m_resolution_phase->SolveConstraints(m_manifold_table, &m_rigid_bodies, dt);
     }
 
     void World::Shutdown()

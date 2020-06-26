@@ -47,25 +47,6 @@ namespace Engine5
         Vector3 c_b;
     };
 
-    class NormalTerm
-    {
-    public:
-        Vector3 normal;
-        Real    restitution    = 0.0f;
-        Real    normal_mass    = 0.0f;
-        Real    normal_impulse = 0.0f;
-    };
-
-    class TangentTerm
-    {
-    public:
-        Vector3 tangent;
-        Real    friction        = 0.0f;
-        Real    tangent_speed   = 0.0f;
-        Real    tangent_mass    = 0.0f;
-        Real    tangent_impulse = 0.0f;
-    };
-
     class ContactConstraint final : public Constraint
     {
     public:
@@ -82,13 +63,24 @@ namespace Engine5
         void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const;
 
         void InitializeContactPoint(ContactPoint& contact_point) const;
-        void SolveContactPoint(ContactPoint& contact_point);
-
         void SolveNormalConstraints(const MassTerm& mass, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const;
         void WarmStart();
 
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
+
+    private:
+        class Jacobian
+        {
+        public:
+            Vector3 v_a;
+            Vector3 w_a;
+            Vector3 v_b;
+            Vector3 w_b;
+            Real    bias           = 0.0f;
+            Real    effective_mass = 0.0f;
+            Real    m_total_lambda = 0.0f;
+        };
 
     private:
         Physics::FrictionUtility* m_friction_utility = nullptr;
@@ -97,5 +89,12 @@ namespace Engine5
         VelocityTerm              m_velocity;
         MassTerm                  m_mass;
         Real                      m_tangent_speed = 0.0f;
+
+        Jacobian m_normal;
+        Jacobian m_tangent;
+        Jacobian m_bitangent;
+
+        RigidBody* m_body_a = nullptr;
+        RigidBody* m_body_b = nullptr;
     };
 }
