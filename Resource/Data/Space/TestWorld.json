@@ -223,7 +223,7 @@
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 6, 0, 0 ],
+                        "Position": [ -2, 5, 0 ],
                         "Scale": [ 1, 1, 1 ]
                     }
                 },
@@ -293,45 +293,8 @@
                 }
             ],
             "Name": "HelloWorld2"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 0, 0 ],
-                        "Scale": [ 1, 1, 1 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::RigidBodyComponent",
-                    "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 0, 0 ],
-                        "Scale": [ 1, 1, 1 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::ColliderComponent",
-                    "Value": {
-                        "Colliders": [
-                            {
-                                "Density": 1.0,
-                                "Material": "Rubber",
-                                "Orientation": [ 1, 0, 0, 0 ],
-                                "Position": [ 0, 0, 0 ],
-                                "Radius": [ 2, 4, 2 ],
-                                "Scale": 1,
-                                "Type": "Ellipsoid"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "Name": "HelloWorld3"
         }
-    ],
+            ],
     "Settings": {
         "Draw Broad Phase": {
             "Color": [ 1, 1, 1, 1 ],

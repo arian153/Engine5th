@@ -129,6 +129,14 @@ namespace Game
                 {
                     body->ApplyForceCentroid(Vector3(100.0f));
                 }
+                if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Up))
+                {
+                    body->ApplyForceCentroid(Vector3(0.0f, 100.0f));
+                }
+                if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Down))
+                {
+                    body->ApplyForceCentroid(Vector3(0.0f, -100.0f));
+                }
             }
         }
     }
@@ -151,12 +159,10 @@ namespace Game
         else
         {
             auto transform = m_owner->GetComponent<TransformComponent>();
-          
             m_text_renderer->Output(
-                Vector2(520, 400), ColorDef::Pure::Red, "O : ", transform->GetOrientation()
-                );
+                                    Vector2(520, 400), ColorDef::Pure::Red, "O : ", transform->GetOrientation()
+                                   );
         }
-
     }
 
     bool ControllerComponent::Load(const Json::Value& data)

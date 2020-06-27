@@ -185,7 +185,7 @@ namespace Engine5
         }
     }
 
-    void ContactConstraint::SolveNormalConstraints(const MassTerm& mass, VelocityTerm& velocity, ContactPoint& contact_point) const
+    void ContactConstraint::SolveNormalConstraints(const MassTerm& mass, VelocityData& velocity, ContactPoint& contact_point) const
     {
         // Relative velocity at contact
         Vector3 dv = velocity.v_b + CrossProduct(velocity.w_b, contact_point.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact_point.r_a);
@@ -204,7 +204,7 @@ namespace Engine5
         velocity.w_b += mass.i_b * CrossProduct(contact_point.r_b, p);
     }
 
-    void ContactConstraint::SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityTerm& velocity, ContactPoint& contact_point) const
+    void ContactConstraint::SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityData& velocity, ContactPoint& contact_point) const
     {
         Vector3 dv           = velocity.v_b + CrossProduct(velocity.w_b, contact_point.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact_point.r_a);
         auto    friction     = m_friction_utility->Find(contact_point.collider_a->GetMaterial(), contact_point.collider_b->GetMaterial());
