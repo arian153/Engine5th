@@ -9,8 +9,8 @@ namespace Engine5
         Constraint();
         virtual ~Constraint();
 
-        virtual void GenerateVelocityConstraints() = 0;
-        virtual void GeneratePositionConstraints() = 0;
+        virtual void GenerateVelocityConstraints(Real dt) = 0;
+        virtual void GeneratePositionConstraints(Real dt) = 0;
         virtual void SolveVelocityConstraints(Real dt) = 0;
         virtual void SolvePositionConstraints(Real dt) = 0;
         virtual void ApplyVelocityConstraints() = 0;

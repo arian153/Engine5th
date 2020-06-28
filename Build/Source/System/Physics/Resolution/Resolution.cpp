@@ -37,7 +37,7 @@ namespace Engine5
         for (auto& manifold : manifold_table->m_manifold_table)
         {
             auto& contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction);
-            contact.GenerateVelocityConstraints();
+            contact.GenerateVelocityConstraints(dt);
         }
         if (m_b_warm_starting == true)
         {
@@ -64,7 +64,7 @@ namespace Engine5
         }
         for (auto& contact : m_contact_constraints)
         {
-            contact.GeneratePositionConstraints();
+            contact.GeneratePositionConstraints(dt);
         }
         for (size_t i = 0; i < m_position_iteration; ++i)
         {

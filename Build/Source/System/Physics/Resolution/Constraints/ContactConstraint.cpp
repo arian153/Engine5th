@@ -18,7 +18,7 @@ namespace Engine5
     {
     }
 
-    void ContactConstraint::GenerateVelocityConstraints()
+    void ContactConstraint::GenerateVelocityConstraints(Real dt)
     {
         m_body_a = m_manifold->m_set_a->GetRigidBody();
         m_body_b = m_manifold->m_set_b->GetRigidBody();
@@ -32,13 +32,20 @@ namespace Engine5
         m_velocity.w_a = m_body_a->GetAngularVelocity();
         m_velocity.v_b = m_body_b->GetLinearVelocity();
         m_velocity.w_b = m_body_b->GetAngularVelocity();
-        for (auto& contact : m_manifold->contacts)
+        m_count        = m_manifold->contacts.size();
+        for (size_t i = 0; i < m_count; ++i)
         {
-            InitializeContactPoint(contact);
+            m_manifold->contacts[i].c_a = m_body_a->GetCentroid(); //global centroid.
+            m_manifold->contacts[i].c_b = m_body_b->GetCentroid(); //global centroid.
+            m_manifold->contacts[i].r_a = m_manifold->contacts[i].global_position_a - m_manifold->contacts[i].c_a;
+            m_manifold->contacts[i].r_b = m_manifold->contacts[i].global_position_b - m_manifold->contacts[i].c_b;
+            InitializeJacobianVelocity(m_manifold->contacts[i], m_manifold->contacts[i].normal, m_normal[i], dt, true);
+            InitializeJacobianVelocity(m_manifold->contacts[i], m_manifold->contacts[i].tangent, m_tangent[i], dt);
+            InitializeJacobianVelocity(m_manifold->contacts[i], m_manifold->contacts[i].bitangent, m_bitangent[i], dt);
         }
     }
 
-    void ContactConstraint::GeneratePositionConstraints()
+    void ContactConstraint::GeneratePositionConstraints(Real dt)
     {
         if (m_body_a != nullptr)
         {
@@ -50,17 +57,19 @@ namespace Engine5
             m_position.p_b = m_body_b->GetCentroid();
             m_position.o_b = m_body_b->GetOrientation();
         }
+        E5_UNUSED_PARAM(dt);
     }
 
     void ContactConstraint::SolveVelocityConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
-        for (auto& contact : m_manifold->contacts)
+        for (size_t i = 0; i < m_count; ++i)
         {
             // Solve tangent constraints first because non-penetration is more important than friction.
-            SolveTangentConstraints(m_mass, m_tangent_speed, m_velocity, contact);
+            SolveJacobianVelocity(m_manifold->contacts[i], m_tangent[i], i, true);
+            SolveJacobianVelocity(m_manifold->contacts[i], m_bitangent[i], i, true);
             // Solve normal constraints
-            SolveNormalConstraints(m_mass, m_velocity, contact);
+            SolveJacobianVelocity(m_manifold->contacts[i], m_normal[i], i, true);
         }
     }
 
@@ -145,94 +154,6 @@ namespace Engine5
         primitive_renderer->DrawSegment(avg_b, avg_b + m_manifold->manifold_normal, color);
     }
 
-    void ContactConstraint::InitializeContactPoint(ContactPoint& contact_point) const
-    {
-        contact_point.c_a = m_body_a->GetCentroid(); //global centroid.
-        contact_point.c_b = m_body_b->GetCentroid(); //global centroid.
-        contact_point.r_a = contact_point.global_position_a - contact_point.c_a;
-        contact_point.r_b = contact_point.global_position_b - contact_point.c_b;
-        Vector3 n         = contact_point.normal;
-        Vector3 ta        = contact_point.tangent;
-        Vector3 tb        = contact_point.bitangent;
-        Vector3 ra_ta     = CrossProduct(contact_point.r_a, ta);
-        Vector3 rb_ta     = CrossProduct(contact_point.r_b, ta);
-        Vector3 ra_tb     = CrossProduct(contact_point.r_a, tb);
-        Vector3 rb_tb     = CrossProduct(contact_point.r_b, tb);
-        Vector3 ra_n      = CrossProduct(contact_point.r_a, n);
-        Vector3 rb_n      = CrossProduct(contact_point.r_b, n);
-        bool    motion_a  = m_body_a->GetMotionMode() == eMotionMode::Dynamic;
-        bool    motion_b  = m_body_b->GetMotionMode() == eMotionMode::Dynamic;
-        Real    tangent_a_mass
-                = (motion_a ? m_mass.m_a + ra_ta * m_mass.i_a * ra_ta : 0.0f)
-                + (motion_b ? m_mass.m_b + rb_ta * m_mass.i_b * rb_ta : 0.0f);
-        contact_point.tangent_a_mass = tangent_a_mass > 0.0f ? 1.0f / tangent_a_mass : 0.0f;
-        Real tangent_b_mass
-                = (motion_a ? m_mass.m_a + ra_tb * m_mass.i_a * ra_tb : 0.0f)
-                + (motion_b ? m_mass.m_b + rb_tb * m_mass.i_b * rb_tb : 0.0f);
-        contact_point.tangent_b_mass = tangent_b_mass > 0.0f ? 1.0f / tangent_b_mass : 0.0f;
-        Real normal_mass
-                = (motion_a ? m_mass.m_a + ra_n * m_mass.i_a * ra_n : 0.0f)
-                + (motion_b ? m_mass.m_b + rb_n * m_mass.i_b * rb_n : 0.0f);
-        contact_point.normal_mass   = normal_mass > 0.0f ? 1.0f / normal_mass : 0.0f;
-        contact_point.velocity_bias = 0.0f;
-        Real rel                    = DotProduct(
-                                                 n, m_velocity.v_b + CrossProduct(m_velocity.w_b, contact_point.r_b)
-                                                 - m_velocity.v_a - CrossProduct(m_velocity.w_a, contact_point.r_a));
-        if (rel < -Physics::Dynamics::ELASTIC_THRESHOLD)
-        {
-            Real restitution            = GetRestitution(contact_point.collider_a, contact_point.collider_b);
-            contact_point.velocity_bias = -restitution * rel;
-        }
-    }
-
-    void ContactConstraint::SolveNormalConstraints(const MassTerm& mass, VelocityData& velocity, ContactPoint& contact_point) const
-    {
-        // Relative velocity at contact
-        Vector3 dv = velocity.v_b + CrossProduct(velocity.w_b, contact_point.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact_point.r_a);
-        // Compute normal impulse
-        Real vn     = DotProduct(dv, contact_point.normal);
-        Real lambda = -contact_point.normal_mass * (vn - contact_point.velocity_bias);
-        // b2Clamp the accumulated impulse
-        Real new_impulse                 = Math::Max(contact_point.normal_impulse_sum + lambda, 0.0f);
-        lambda                           = new_impulse - contact_point.normal_impulse_sum;
-        contact_point.normal_impulse_sum = new_impulse;
-        // Apply contact impulse
-        Vector3 p = lambda * contact_point.normal;
-        velocity.v_a -= mass.m_a * p;
-        velocity.w_a -= mass.i_a * CrossProduct(contact_point.r_a, p);
-        velocity.v_b += mass.m_b * p;
-        velocity.w_b += mass.i_b * CrossProduct(contact_point.r_b, p);
-    }
-
-    void ContactConstraint::SolveTangentConstraints(const MassTerm& mass, Real tangent_speed, VelocityData& velocity, ContactPoint& contact_point) const
-    {
-        Vector3 dv           = velocity.v_b + CrossProduct(velocity.w_b, contact_point.r_b) - velocity.v_a - CrossProduct(velocity.w_a, contact_point.r_a);
-        auto    friction     = m_friction_utility->Find(contact_point.collider_a->GetMaterial(), contact_point.collider_b->GetMaterial());
-        Real    max_friction = friction.dynamic_friction * contact_point.normal_impulse_sum; //max friction
-        // Compute tangent force
-        Real vt_a     = DotProduct(dv, contact_point.tangent) - tangent_speed;
-        Real lambda_a = contact_point.tangent_a_mass * (-vt_a);
-        // b2Clamp the accumulated force
-        Real new_impulse_a                  = Math::Clamp(contact_point.tangent_a_impulse_sum + lambda_a, -max_friction, max_friction);
-        lambda_a                            = new_impulse_a - contact_point.tangent_a_impulse_sum;
-        contact_point.tangent_a_impulse_sum = new_impulse_a;
-        // Apply contact impulse
-        Vector3 p_a = lambda_a * contact_point.tangent;
-        // Compute tangent force
-        Real vt_b     = DotProduct(dv, contact_point.bitangent) - tangent_speed;
-        Real lambda_b = contact_point.tangent_b_mass * (-vt_b);
-        // b2Clamp the accumulated force
-        Real new_impulse_b                  = Math::Clamp(contact_point.tangent_b_impulse_sum + lambda_b, -max_friction, max_friction);
-        lambda_b                            = new_impulse_b - contact_point.tangent_b_impulse_sum;
-        contact_point.tangent_b_impulse_sum = new_impulse_b;
-        // Apply contact impulse
-        Vector3 p_b = lambda_b * contact_point.tangent;
-        velocity.v_a -= mass.m_a * (p_a + p_b);
-        velocity.w_a -= mass.i_a * (CrossProduct(contact_point.r_a, p_a) + CrossProduct(contact_point.r_a, p_b));
-        velocity.v_b += mass.m_b * (p_a + p_b);
-        velocity.w_b += mass.i_b * (CrossProduct(contact_point.r_b, p_a) + CrossProduct(contact_point.r_b, p_b));
-    }
-
     void ContactConstraint::WarmStart()
     {
         Basis normal_basis;
@@ -263,5 +184,70 @@ namespace Engine5
         Physics::MaterialCoefficient m_a(a->GetMaterial());
         Physics::MaterialCoefficient m_b(b->GetMaterial());
         return Math::Min(m_a.restitution, m_b.restitution);
+    }
+
+    void ContactConstraint::InitializeJacobianVelocity(const ContactPoint& contact, const Vector3& direction, JacobianVelocity& jacobian, Real dt, bool b_normal) const
+    {
+        jacobian.v_a  = -direction;
+        jacobian.w_a  = -CrossProduct(contact.r_a, direction);
+        jacobian.v_b  = direction;
+        jacobian.w_b  = CrossProduct(contact.r_b, direction);
+        jacobian.bias = 0.0f;
+        if (b_normal)
+        {
+            Real    beta              = m_beta;//contact.contact_beta_a * contact.contact_beta_b;
+            Real    restitution       = GetRestitution(contact.collider_a, contact.collider_b);
+            Vector3 relative_velocity =
+                    -m_velocity.v_a
+                    - CrossProduct(m_velocity.w_a, contact.r_a)
+                    + m_velocity.v_b
+                    + CrossProduct(m_velocity.w_b, contact.r_b);
+            Real closing_velocity = DotProduct(relative_velocity, direction);
+            jacobian.bias         = -(beta / dt) * contact.depth + restitution * closing_velocity;
+        }
+        else
+        {
+            jacobian.bias = -m_tangent_speed;
+        }
+        bool motion_a = m_body_a->GetMotionMode() == eMotionMode::Dynamic;
+        bool motion_b = m_body_b->GetMotionMode() == eMotionMode::Dynamic;
+        Real k
+                = (motion_a ? m_mass.m_a + jacobian.w_a * m_mass.i_a * jacobian.w_a : 0.0f)
+                + (motion_b ? m_mass.m_b + jacobian.w_b * m_mass.i_b * jacobian.w_b : 0.0f);
+        jacobian.effective_mass = k > 0.0f ? 1.0f / k : 0.0f;;
+        jacobian.total_lambda   = 0.0f;
+    }
+
+    void ContactConstraint::SolveJacobianVelocity(const ContactPoint& contact, JacobianVelocity& jacobian, size_t i, bool b_normal)
+    {
+        Vector3 dir = jacobian.v_b;
+        // JV = Jacobian * velocity vector
+        float jv =
+                DotProduct(jacobian.v_a, m_velocity.v_a)
+                + DotProduct(jacobian.w_a, m_velocity.w_a)
+                + DotProduct(jacobian.v_b, m_velocity.v_b)
+                + DotProduct(jacobian.w_b, m_velocity.w_b);
+        // raw lambda
+        float lambda = jacobian.effective_mass * (-(jv + jacobian.bias));
+        // clamped lambda
+        float old_total_lambda = jacobian.total_lambda;
+        if (b_normal)
+        {
+            //normal - contact resolution : lambda >= 0
+            jacobian.total_lambda = Math::Max(0.0f, jacobian.total_lambda + lambda);
+        }
+        else
+        {
+            //tangent - friction : -max_friction <= lambda <= max_friction
+            auto friction_data    = m_friction_utility->Find(contact.collider_a->GetMaterial(), contact.collider_b->GetMaterial());
+            Real max_friction     = friction_data.dynamic_friction * m_normal[i].total_lambda;
+            jacobian.total_lambda = Math::Clamp(jacobian.total_lambda + lambda, -max_friction, max_friction);
+        }
+        lambda = jacobian.total_lambda - old_total_lambda;
+        // velocity correction
+        m_velocity.v_a += m_mass.m_a * jacobian.v_a * lambda;
+        m_velocity.w_a += m_mass.i_a * jacobian.w_a * lambda;
+        m_velocity.v_b += m_mass.m_b * jacobian.v_b * lambda;
+        m_velocity.w_b += m_mass.i_b * jacobian.w_b * lambda;
     }
 }

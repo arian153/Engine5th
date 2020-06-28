@@ -141,7 +141,7 @@ namespace Engine5
 
     void ContactManifold::CutDownManifold()
     {
-        if (contacts.size() < 4)
+        if (contacts.size() < Physics::Collision::MAX_MANIFOLD_POINT_COUNT)
         {
             return;
         }
