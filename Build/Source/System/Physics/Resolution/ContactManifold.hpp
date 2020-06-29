@@ -18,12 +18,13 @@ namespace Engine5
         ContactManifold(const ContactManifold& rhs);
         ContactManifold& operator=(const ContactManifold& rhs);
 
-        void Set(const ContactManifold& manifold);
-        void SetPersistentThreshold(Real threshold);
-        void UpdateInvalidContact();
-        void UpdateCurrentManifold(const ContactPoint& new_contact);
-        void CutDownManifold();
+        void   Set(const ContactManifold& manifold);
+        void   SetPersistentThreshold(Real threshold);
+        void   UpdateInvalidContact();
+        void   UpdateCurrentManifold(const ContactPoint& new_contact);
+        void   CutDownManifold();
         size_t ContactsCount() const;
+        void ClearContacts();
 
     private:
         Real DistanceFromPoint(const ContactPoint& contact, ContactPoint* p0);
@@ -31,7 +32,6 @@ namespace Engine5
         Real DistanceFromTriangle(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2);
         bool OnTriangle(ContactPoint* point, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2);
         void CalculateNormal();
-
 
     private:
         friend class Resolution;
@@ -41,8 +41,9 @@ namespace Engine5
 
     private:
         Real    persistent_threshold_squared = Physics::Collision::PERSISTENT_THRESHOLD_SQUARED;
-        bool    is_collide = false;
+        bool    is_collide                   = false;
         Vector3 manifold_normal;
+        size_t  prev_count = 0;
 
         //data
         ColliderSet* m_set_a = nullptr;

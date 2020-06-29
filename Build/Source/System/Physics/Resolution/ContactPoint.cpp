@@ -20,33 +20,33 @@ namespace Engine5
         normal.SetZero();
         tangent.SetZero();
         bitangent.SetZero();
-        depth                 = 0.0f;
-        normal_impulse_sum    = 0.0f;
-        tangent_a_impulse_sum = 0.0f;
-        tangent_b_impulse_sum = 0.0f;
-        b_valid               = true;
-        b_persistent          = false;
+        depth            = 0.0f;
+        normal_lambda    = 0.0f;
+        tangent_lambda   = 0.0f;
+        bitangent_lambda = 0.0f;
+        b_valid          = true;
+        b_persistent     = false;
     }
 
     ContactPoint& ContactPoint::operator=(const ContactPoint& rhs)
     {
         if (this != &rhs)
         {
-            this->collider_a            = rhs.collider_a;
-            this->collider_b            = rhs.collider_b;
-            this->global_position_a     = rhs.global_position_a;
-            this->global_position_b     = rhs.global_position_b;
-            this->local_position_a      = rhs.local_position_a;
-            this->local_position_b      = rhs.local_position_b;
-            this->normal                = rhs.normal;
-            this->tangent             = rhs.tangent;
-            this->bitangent             = rhs.bitangent;
-            this->depth                 = rhs.depth;
-            this->normal_impulse_sum    = rhs.normal_impulse_sum;
-            this->tangent_a_impulse_sum = rhs.tangent_a_impulse_sum;
-            this->tangent_b_impulse_sum = rhs.tangent_b_impulse_sum;
-            this->b_valid               = rhs.b_valid;
-            this->b_persistent          = rhs.b_persistent;
+            this->collider_a        = rhs.collider_a;
+            this->collider_b        = rhs.collider_b;
+            this->global_position_a = rhs.global_position_a;
+            this->global_position_b = rhs.global_position_b;
+            this->local_position_a  = rhs.local_position_a;
+            this->local_position_b  = rhs.local_position_b;
+            this->normal            = rhs.normal;
+            this->tangent           = rhs.tangent;
+            this->bitangent         = rhs.bitangent;
+            this->depth             = rhs.depth;
+            this->normal_lambda     = rhs.normal_lambda;
+            this->tangent_lambda    = rhs.tangent_lambda;
+            this->bitangent_lambda  = rhs.bitangent_lambda;
+            this->b_valid           = rhs.b_valid;
+            this->b_persistent      = rhs.b_persistent;
         }
         return *this;
     }
@@ -64,7 +64,7 @@ namespace Engine5
         Basis basis;
         basis.CalculateBasisQuaternion(-normal);
         normal    = basis.i;
-        tangent = basis.j;
+        tangent   = basis.j;
         bitangent = basis.k;
     }
 
@@ -74,7 +74,7 @@ namespace Engine5
         basis.CalculateBasisQuaternion(-normal);
         ContactPoint result;
         result.normal            = basis.i;
-        result.tangent         = basis.j;
+        result.tangent           = basis.j;
         result.bitangent         = basis.k;
         result.depth             = this->depth;
         result.collider_a        = this->collider_b;

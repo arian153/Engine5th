@@ -67,6 +67,7 @@ namespace Engine5
                     data_table->SendHasCollision(set_a, set_b, found->is_collide);
                     found->UpdateCurrentManifold(new_contact_data);
                     found->CutDownManifold();
+                    found->CalculateNormal();
                     found->is_collide = true;
                 }
                 else
@@ -84,6 +85,7 @@ namespace Engine5
                 if (found != nullptr)
                 {
                     data_table->SendNotCollision(set_a, set_b, found->is_collide);
+                    found->ClearContacts();
                     found->is_collide = false;
                 }
             }

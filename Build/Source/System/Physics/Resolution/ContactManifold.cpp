@@ -68,7 +68,6 @@ namespace Engine5
         {
             //convert existing contact point from local space to world space.
             //if both bodies are far enough away, remove contact from manifold data.
-            ;
             Vector3 local_to_global_a = m_set_a->m_rigid_body->LocalToWorldPoint(contact.local_position_a);
             Vector3 local_to_global_b = m_set_b->m_rigid_body->LocalToWorldPoint(contact.local_position_b);
             //current frame's distance between a to b.
@@ -217,6 +216,14 @@ namespace Engine5
         return contacts.size();
     }
 
+    void ContactManifold::ClearContacts()
+    {
+        contacts.clear();
+        is_collide = false;
+        manifold_normal.SetZero();
+        prev_count = 0;
+    }
+
     Real ContactManifold::DistanceFromPoint(const ContactPoint& contact, ContactPoint* p0)
     {
         if (p0 == nullptr)
@@ -292,24 +299,11 @@ namespace Engine5
     void ContactManifold::CalculateNormal()
     {
         size_t contact_size = contacts.size();
-        if (contact_size == 1)
-        {
-            manifold_normal = contacts.at(0).normal;
-        }
-        else if (contact_size == 2)
-        {
-            Vector3 line_dir = (contacts.at(1).global_position_a - contacts.at(0).global_position_a).Normalize();
-            Vector3 pos_t    = CrossProduct(line_dir, (m_set_b->m_rigid_body->GetPosition() - m_set_a->m_rigid_body->GetPosition()).Normalize());
-            Vector3 c0n_t    = CrossProduct(line_dir, contacts.at(0).normal);
-            Vector3 c1n_t    = CrossProduct(line_dir, contacts.at(1).normal);
-            Vector3 tangent  = (pos_t + c0n_t + c1n_t).Normalize();
-            manifold_normal  = line_dir.CrossProduct(tangent);
-        }
-        else if (contact_size == 3)
+        if (contact_size == 3)
         {
             manifold_normal = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(2).global_position_a);
         }
-        else
+        else if (contact_size == 4)
         {
             Vector3 n_a     = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(2).global_position_a);
             Vector3 n_b     = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(3).global_position_a);

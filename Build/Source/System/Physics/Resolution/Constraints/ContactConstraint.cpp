@@ -66,8 +66,8 @@ namespace Engine5
         for (size_t i = 0; i < m_count; ++i)
         {
             // Solve tangent constraints first because non-penetration is more important than friction.
-            SolveJacobianVelocity(m_manifold->contacts[i], m_tangent[i], i, true);
-            SolveJacobianVelocity(m_manifold->contacts[i], m_bitangent[i], i, true);
+            SolveJacobianVelocity(m_manifold->contacts[i], m_tangent[i], i);
+            SolveJacobianVelocity(m_manifold->contacts[i], m_bitangent[i], i);
             // Solve normal constraints
             SolveJacobianVelocity(m_manifold->contacts[i], m_normal[i], i, true);
         }
@@ -78,7 +78,7 @@ namespace Engine5
         E5_UNUSED_PARAM(dt);
         for (auto& contact : m_manifold->contacts)
         {
-            Real    separation = DotProduct((contact.global_position_b - contact.global_position_a), contact.normal) - Physics::Collision::SEPARATION_SLOP;
+            Real    separation = DotProduct(contact.global_position_b - contact.global_position_a, contact.normal) - Physics::Collision::SEPARATION_SLOP;
             Real    c          = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
             Vector3 c_a        = m_position.p_a;
             Vector3 c_b        = m_position.p_b;
@@ -100,34 +100,29 @@ namespace Engine5
 
     void ContactConstraint::ApplyVelocityConstraints()
     {
-        if (m_body_a != nullptr)
+        for (size_t i = 0; i < m_count; ++i)
         {
-            //apply body a
-            m_body_a->SetLinearVelocity(m_velocity.v_a);
-            m_body_a->SetAngularVelocity(m_velocity.w_a);
+            m_manifold->contacts[i].tangent_lambda   = m_tangent[i].total_lambda;
+            m_manifold->contacts[i].bitangent_lambda = m_bitangent[i].total_lambda;
+            m_manifold->contacts[i].normal_lambda    = m_normal[i].total_lambda;
         }
-        if (m_body_b != nullptr)
-        {
-            //apply body b
-            m_body_b->SetLinearVelocity(m_velocity.v_b);
-            m_body_b->SetAngularVelocity(m_velocity.w_b);
-        }
+        m_manifold->prev_count = m_count;
+        //apply body a
+        m_body_a->SetLinearVelocity(m_velocity.v_a);
+        m_body_a->SetAngularVelocity(m_velocity.w_a);
+        //apply body b
+        m_body_b->SetLinearVelocity(m_velocity.v_b);
+        m_body_b->SetAngularVelocity(m_velocity.w_b);
     }
 
     void ContactConstraint::ApplyPositionConstraints()
     {
-        if (m_body_a != nullptr)
-        {
-            //apply body a
-            m_body_a->SetCentroid(m_position.p_a);
-            m_body_a->SetOrientation(m_position.o_a);
-        }
-        if (m_body_b != nullptr)
-        {
-            //apply body b
-            m_body_b->SetCentroid(m_position.p_b);
-            m_body_b->SetOrientation(m_position.o_b);
-        }
+        //apply body a
+        m_body_a->SetCentroid(m_position.p_a);
+        m_body_a->SetOrientation(m_position.o_a);
+        //apply body b
+        m_body_b->SetCentroid(m_position.p_b);
+        m_body_b->SetOrientation(m_position.o_b);
     }
 
     void ContactConstraint::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const
@@ -156,26 +151,24 @@ namespace Engine5
 
     void ContactConstraint::WarmStart()
     {
-        Basis normal_basis;
-        normal_basis.CalculateBasisApprox(m_manifold->manifold_normal);
-        Vector3    normal    = normal_basis.i;
-        Vector3    tangent_a = normal_basis.j;
-        Vector3    tangent_b = normal_basis.k;
-        RigidBody* body_a    = m_manifold->m_set_a->GetRigidBody();
-        RigidBody* body_b    = m_manifold->m_set_b->GetRigidBody();
-        m_mass.m_a           = body_a->Mass();
-        m_mass.i_a           = body_a->Inertia();
-        m_mass.m_b           = body_b->Mass();
-        m_mass.i_b           = body_b->Inertia();
-        for (auto& contact : m_manifold->contacts)
+        size_t count = m_manifold->contacts.size();
+        if (m_manifold->prev_count <= count && count > 2)
         {
-            Vector3 p = contact.normal_impulse_sum * normal
-                    + contact.tangent_a_impulse_sum * tangent_a
-                    + contact.tangent_b_impulse_sum * tangent_b;
-            m_velocity.v_a -= m_mass.m_a * p;
-            m_velocity.w_a -= m_mass.i_a * CrossProduct(contact.r_a, p);
-            m_velocity.v_b += m_mass.m_b * p;
-            m_velocity.w_b += m_mass.i_b * CrossProduct(contact.r_b, p);
+            Basis normal_basis;
+            normal_basis.CalculateBasisApprox(m_manifold->manifold_normal);
+            Vector3 normal    = normal_basis.i;
+            Vector3 tangent   = normal_basis.j;
+            Vector3 bitangent = normal_basis.k;
+            for (size_t i = 0; i < m_manifold->prev_count; ++i)
+            {
+                Vector3 p = m_manifold->contacts[i].normal_lambda * normal
+                        + m_manifold->contacts[i].tangent_lambda * tangent
+                        + m_manifold->contacts[i].bitangent_lambda * bitangent;
+                m_velocity.v_a -= m_mass.m_a * p;
+                m_velocity.w_a -= m_mass.i_a * CrossProduct(m_manifold->contacts[i].r_a, p);
+                m_velocity.v_b += m_mass.m_b * p;
+                m_velocity.w_b += m_mass.i_b * CrossProduct(m_manifold->contacts[i].r_b, p);
+            }
         }
     }
 
@@ -221,16 +214,16 @@ namespace Engine5
     void ContactConstraint::SolveJacobianVelocity(const ContactPoint& contact, JacobianVelocity& jacobian, size_t i, bool b_normal)
     {
         Vector3 dir = jacobian.v_b;
-        // JV = Jacobian * velocity vector
-        float jv =
+        // jv = Jacobian * velocity vector
+        Real jv =
                 DotProduct(jacobian.v_a, m_velocity.v_a)
                 + DotProduct(jacobian.w_a, m_velocity.w_a)
                 + DotProduct(jacobian.v_b, m_velocity.v_b)
                 + DotProduct(jacobian.w_b, m_velocity.w_b);
         // raw lambda
-        float lambda = jacobian.effective_mass * (-(jv + jacobian.bias));
+        Real lambda = jacobian.effective_mass * -(jv + jacobian.bias);
         // clamped lambda
-        float old_total_lambda = jacobian.total_lambda;
+        Real old_total_lambda = jacobian.total_lambda;
         if (b_normal)
         {
             //normal - contact resolution : lambda >= 0

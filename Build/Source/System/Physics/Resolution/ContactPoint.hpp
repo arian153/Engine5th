@@ -42,15 +42,9 @@ namespace Engine5
         Real depth = 0.0f;
 
         //lagrangian multiplier sum.
-        Real normal_impulse_sum    = 0.0f;
-        Real tangent_a_impulse_sum = 0.0f;
-        Real tangent_b_impulse_sum = 0.0f;
-
-        Real normal_mass    = 0.0f;
-        Real tangent_a_mass = 0.0f;
-        Real tangent_b_mass = 0.0f;
-
-        Real velocity_bias = 0.0f;
+        Real normal_lambda    = 0.0f;
+        Real tangent_lambda   = 0.0f;
+        Real bitangent_lambda = 0.0f;
 
         ColliderPrimitive* collider_a = nullptr;
         ColliderPrimitive* collider_b = nullptr;

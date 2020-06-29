@@ -223,7 +223,7 @@
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ -2, 0, 0 ],
+                        "Position": [ 2, 0, 0 ],
                         "Scale": [ 1, 1, 1 ]
                     }
                 },
@@ -244,7 +244,7 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [ 4, 2, 2 ],
+                                "Radius": [ 2, 4, 2 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }
