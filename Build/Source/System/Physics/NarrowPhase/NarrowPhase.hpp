@@ -43,6 +43,9 @@ namespace Engine5
         std::vector<Simplex>  m_simplexes;
         std::vector<Polytope> m_polytopes;
 
+        size_t m_gjk_exit_iteration = 100;
+        size_t m_epa_exit_iteration = 100;
+
         Vector3 m_search_dirs[6];
         Vector3 m_axes[3];
     };

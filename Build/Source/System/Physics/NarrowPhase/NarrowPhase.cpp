@@ -136,11 +136,10 @@ namespace Engine5
     bool NarrowPhase::GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex)
     {
         Vector3 direction        = Vector3(0.0f, 1.0f, 0.0f);
-        int     exit_iteration   = 0;
         simplex.simplex_vertex_a = GenerateCSOSupport(a, b, direction);
         simplex.DoSimplexPoint(direction);
         //avoid infinite loop
-        while (exit_iteration < 50)
+        for (size_t i = 0; i < m_gjk_exit_iteration; ++i)
         {
             if (direction.IsValid() == false)
             {
@@ -155,70 +154,32 @@ namespace Engine5
             {
                 return true;
             }
-            exit_iteration++;
         }
         return false;
     }
 
     bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result)
     {
-        int exit_iteration = 0;
-        while (exit_iteration < 100)
+        PolytopeFace closest_face = polytope.PickClosestFaceOfPolytopeToOrigin();
+        for (size_t i = 0; i < m_epa_exit_iteration; ++i)
         {
-            PolytopeFace closest_face = polytope.PickClosestFaceOfPolytopeToOrigin();
-            SupportPoint p            = GenerateCSOSupport(a, b, closest_face.normal);
-            if (p.IsValid() == false)
+            closest_face               = polytope.PickClosestFaceOfPolytopeToOrigin();
+            SupportPoint support_point = GenerateCSOSupport(a, b, closest_face.normal);
+            if (support_point.IsValid() == false)
+            {
+                //if any of the invalid value such as nan, infinite, return false.
+                result.b_valid = false;
+                return false;
+            }
+            Real distance = support_point.global.DotProduct(closest_face.normal);
+            if (distance - closest_face.distance < Math::EPSILON)
             {
                 break;
             }
-            Real distance = p.global.DotProduct(closest_face.normal);
-            if (distance - closest_face.distance < Math::EPSILON)
-            {
-                Real u, v, w;
-                closest_face.BarycentricCoordinates(closest_face.normal * closest_face.distance, u, v, w, &polytope);
-                if (Math::IsValid(u) == false || Math::IsValid(v) == false || Math::IsValid(w) == false)
-                {
-                    //barycentric can fail and generate invalid coordinates, if this happens return invalid result.
-                    result.b_valid = false;
-                    return false;
-                }
-                if (fabsf(u) > 1.0f || fabsf(v) > 1.0f || fabsf(w) > 1.0f)
-                {
-                    //if any of the barycentric coefficients have a magnitude greater than 1, 
-                    //then the origin is not within the triangular prism described by 'triangle'
-                    //thus, there is no collision here, return invalid result.
-                    result.b_valid = false;
-                    return false;
-                }
-                result.collider_a = a;
-                result.collider_b = b;
-                result.local_position_a
-                        = u * polytope.vertices[closest_face.a].local_a
-                        + v * polytope.vertices[closest_face.b].local_a
-                        + w * polytope.vertices[closest_face.c].local_a;
-                result.local_position_b
-                        = u * polytope.vertices[closest_face.a].local_b
-                        + v * polytope.vertices[closest_face.b].local_b
-                        + w * polytope.vertices[closest_face.c].local_b;
-                result.global_position_a
-                        = a->m_rigid_body != nullptr
-                              ? a->m_rigid_body->LocalToWorldPoint(a->LocalToWorldPoint(result.local_position_a))
-                              : a->LocalToWorldPoint(result.local_position_a);
-                result.global_position_b
-                        = b->m_rigid_body != nullptr
-                              ? b->m_rigid_body->LocalToWorldPoint(b->LocalToWorldPoint(result.local_position_b))
-                              : b->LocalToWorldPoint(result.local_position_b);
-                result.normal = closest_face.normal.Normalize();
-                result.depth  = closest_face.distance;
-                ComputeBasisQuaternion(result.normal, result.tangent, result.bitangent);
-                return true;
-            }
-            polytope.Push(p);
-            polytope.Expand(p);
+            polytope.Push(support_point);
+            polytope.Expand(support_point);
         }
-        PolytopeFace closest_face = polytope.PickClosestFaceOfPolytopeToOrigin();
-        SupportPoint p            = GenerateCSOSupport(a, b, closest_face.normal);
-        Real         u, v, w;
+        Real u, v, w;
         closest_face.BarycentricCoordinates(closest_face.normal * closest_face.distance, u, v, w, &polytope);
         if (Math::IsValid(u) == false || Math::IsValid(v) == false || Math::IsValid(w) == false)
         {
