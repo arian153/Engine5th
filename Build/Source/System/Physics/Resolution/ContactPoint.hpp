@@ -27,14 +27,6 @@ namespace Engine5
 
         //Contact normal representing the "best direction" to separate the two colliding colliders.
         Vector3 normal;
-
-        //Two contact tangents perpendicular to each other and the contact normal. 
-        //These vectors are used to resolve the frictional part of collision resolution.
-        Vector3 tangent;
-        Vector3 bitangent;
-
-        Vector3 c_a;
-        Vector3 c_b;
         Vector3 r_a;
         Vector3 r_b;
 

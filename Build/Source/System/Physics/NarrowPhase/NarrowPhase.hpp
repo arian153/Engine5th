@@ -32,9 +32,6 @@ namespace Engine5
         bool         EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result);
 
     private:
-        void   ComputeBasisQuaternion(const Vector3& normal, Vector3& tangent_a, Vector3& tangent_b);
-        void   ComputeBasisCrossProduct(const Vector3& normal, Vector3& tangent_a, Vector3& tangent_b);
-        void   ComputeBasisFast(const Vector3& normal, Vector3& tangent_a, Vector3& tangent_b);
         size_t FindLeastSignificantComponent(const Vector3& vector3);
         void   BlowUpSimplexToTetrahedron(ColliderPrimitive* collider_a, ColliderPrimitive* collider_b, const Simplex& simplex);
 

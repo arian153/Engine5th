@@ -33,15 +33,15 @@ namespace Engine5
         m_velocity.v_b = m_body_b->GetLinearVelocity();
         m_velocity.w_b = m_body_b->GetAngularVelocity();
         m_count        = m_manifold->contacts.size();
+        Basis basis;
         for (size_t i = 0; i < m_count; ++i)
         {
-            m_manifold->contacts[i].c_a = m_body_a->GetCentroid(); //global centroid.
-            m_manifold->contacts[i].c_b = m_body_b->GetCentroid(); //global centroid.
-            m_manifold->contacts[i].r_a = m_manifold->contacts[i].global_position_a - m_manifold->contacts[i].c_a;
-            m_manifold->contacts[i].r_b = m_manifold->contacts[i].global_position_b - m_manifold->contacts[i].c_b;
-            InitializeJacobianVelocity(m_manifold->contacts[i], m_manifold->contacts[i].normal, m_normal[i], dt, true);
-            InitializeJacobianVelocity(m_manifold->contacts[i], m_manifold->contacts[i].tangent, m_tangent[i], dt);
-            InitializeJacobianVelocity(m_manifold->contacts[i], m_manifold->contacts[i].bitangent, m_bitangent[i], dt);
+            basis.CalculateBasisApprox(m_manifold->contacts[i].normal);
+            m_manifold->contacts[i].r_a = m_manifold->contacts[i].global_position_a - m_body_a->GetCentroid();
+            m_manifold->contacts[i].r_b = m_manifold->contacts[i].global_position_b - m_body_b->GetCentroid();
+            InitializeJacobianVelocity(m_manifold->contacts[i], basis.i, m_normal[i], dt, true);
+            InitializeJacobianVelocity(m_manifold->contacts[i], basis.j, m_tangent[i], dt);
+            InitializeJacobianVelocity(m_manifold->contacts[i], basis.k, m_bitangent[i], dt);
         }
     }
 
@@ -80,10 +80,8 @@ namespace Engine5
         {
             Real    separation = DotProduct(contact.global_position_b - contact.global_position_a, contact.normal) - Physics::Collision::SEPARATION_SLOP;
             Real    c          = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
-            Vector3 c_a        = m_position.p_a;
-            Vector3 c_b        = m_position.p_b;
-            Vector3 r_a        = contact.global_position_a - c_a;
-            Vector3 r_b        = contact.global_position_b - c_b;
+            Vector3 r_a        = contact.global_position_a - m_position.p_a;
+            Vector3 r_b        = contact.global_position_b - m_position.p_b;
             Vector3 ra_n       = CrossProduct(contact.r_a, contact.normal);
             Vector3 rb_n       = CrossProduct(contact.r_b, contact.normal);
             Real    k          = m_mass.m_a + ra_n * m_mass.i_a * ra_n + m_mass.m_b + rb_n * m_mass.i_b * rb_n;

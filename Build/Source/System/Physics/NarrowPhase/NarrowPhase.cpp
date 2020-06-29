@@ -217,58 +217,7 @@ namespace Engine5
                       : b->LocalToWorldPoint(result.local_position_b);
         result.normal = closest_face.normal.Normalize();
         result.depth  = closest_face.distance;
-        ComputeBasisQuaternion(result.normal, result.tangent, result.bitangent);
         return true;
-    }
-
-    void NarrowPhase::ComputeBasisQuaternion(const Vector3& normal, Vector3& tangent_a, Vector3& tangent_b)
-    {
-        Quaternion rotation(normal, Math::Vector3::Y_AXIS);
-        tangent_a = rotation.Rotate(Math::Vector3::X_AXIS);
-        tangent_a.SetNormalize();
-        tangent_b = rotation.Rotate(Math::Vector3::Z_AXIS);
-        tangent_b.SetNormalize();
-    }
-
-    void NarrowPhase::ComputeBasisCrossProduct(const Vector3& normal, Vector3& tangent_a, Vector3& tangent_b)
-    {
-        // find least axis of least significant component
-        Real    abs_x = fabsf(normal.x);
-        Real    abs_y = fabsf(normal.y);
-        Real    abs_z = fabsf(normal.z);
-        Vector3 axis(0.0f, 0.0f, 0.0f);
-        if (abs_x > abs_y)
-        {
-            if (abs_x > abs_z)
-                axis.x = 1.0f; // X > Y > Z, X > Z > Y
-            else
-                axis.z = 1.0f; // Z > X > Y
-        }
-        else
-        {
-            if (abs_y > abs_z)
-                axis.y = 1.0f; // Y > X > Z, Y > Z > X
-            else
-                axis.z = 1.0f; // Z > Y > X
-        }
-        // compute tangents
-        tangent_a = normal.CrossProduct(axis).Normalize();
-        tangent_b = normal.CrossProduct(tangent_a).Normalize();
-    }
-
-    void NarrowPhase::ComputeBasisFast(const Vector3& normal, Vector3& tangent_a, Vector3& tangent_b)
-    {
-        //sqrt(1/3) = 0.57735
-        if (fabsf(normal.x) >= 0.57735f)
-        {
-            tangent_a.Set(normal.y, -normal.x, 0.0f);
-        }
-        else
-        {
-            tangent_a.Set(0.0f, normal.z, -normal.y);
-        }
-        tangent_a.SetNormalize();
-        tangent_b = normal.CrossProduct(tangent_a).Normalize();
     }
 
     size_t NarrowPhase::FindLeastSignificantComponent(const Vector3& vector3)

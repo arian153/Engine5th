@@ -18,8 +18,6 @@ namespace Engine5
         local_position_a.SetZero();
         local_position_b.SetZero();
         normal.SetZero();
-        tangent.SetZero();
-        bitangent.SetZero();
         depth            = 0.0f;
         normal_lambda    = 0.0f;
         tangent_lambda   = 0.0f;
@@ -39,8 +37,6 @@ namespace Engine5
             this->local_position_a  = rhs.local_position_a;
             this->local_position_b  = rhs.local_position_b;
             this->normal            = rhs.normal;
-            this->tangent           = rhs.tangent;
-            this->bitangent         = rhs.bitangent;
             this->depth             = rhs.depth;
             this->normal_lambda     = rhs.normal_lambda;
             this->tangent_lambda    = rhs.tangent_lambda;
@@ -61,21 +57,13 @@ namespace Engine5
         Math::Swap(collider_a, collider_b);
         Math::Swap(global_position_a, global_position_b);
         Math::Swap(local_position_a, local_position_b);
-        Basis basis;
-        basis.CalculateBasisQuaternion(-normal);
-        normal    = basis.i;
-        tangent   = basis.j;
-        bitangent = basis.k;
+        normal = -normal;
     }
 
     ContactPoint ContactPoint::SwappedContactPoint() const
     {
-        Basis basis;
-        basis.CalculateBasisQuaternion(-normal);
         ContactPoint result;
-        result.normal            = basis.i;
-        result.tangent           = basis.j;
-        result.bitangent         = basis.k;
+        result.normal            = -normal;
         result.depth             = this->depth;
         result.collider_a        = this->collider_b;
         result.collider_b        = this->collider_a;
