@@ -27,12 +27,6 @@ namespace Engine5
             Real    total_lambda   = 0.0f;
         };
 
-        class JacobianPosition
-        {
-        public:
-
-        };
-
         class VelocityTerm
         {
         public:
@@ -45,10 +39,8 @@ namespace Engine5
         class PositionTerm
         {
         public:
-            Vector3    p_a; //global centroid
-            Vector3    p_b; //global centroid
-            Quaternion o_a; //global orientation
-            Quaternion o_b; //global orientation
+            Vector3 p_a;
+            Vector3 p_b;
         };
 
         class MassTerm
@@ -80,9 +72,9 @@ namespace Engine5
     private:
         Physics::FrictionUtility* m_friction_utility = nullptr;
         ContactManifold*          m_manifold         = nullptr;
-        PositionTerm              m_position;
-        VelocityTerm              m_velocity;
-        MassTerm                  m_mass;
+        PositionTerm              m_position_term;
+        VelocityTerm              m_velocity_term;
+        MassTerm                  m_mass_term;
         Real                      m_tangent_speed = 0.0f;
         Real                      m_beta          = 0.25f;
 

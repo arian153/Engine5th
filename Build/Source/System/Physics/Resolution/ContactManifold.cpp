@@ -68,8 +68,9 @@ namespace Engine5
         {
             //convert existing contact point from local space to world space.
             //if both bodies are far enough away, remove contact from manifold data.
-            Vector3 local_to_global_a = m_set_a->m_rigid_body->LocalToWorldPoint(contact.local_position_a);
-            Vector3 local_to_global_b = m_set_b->m_rigid_body->LocalToWorldPoint(contact.local_position_b);
+            //a->m_rigid_body->LocalToWorldPoint(a->LocalToWorldPoint(result.local_position_a))
+            Vector3 local_to_global_a = m_set_a->m_rigid_body->LocalToWorldPoint(contact.collider_a->LocalToWorldPoint(contact.local_position_a));
+            Vector3 local_to_global_b = m_set_b->m_rigid_body->LocalToWorldPoint(contact.collider_b->LocalToWorldPoint(contact.local_position_b));
             //current frame's distance between a to b.
             Vector3 r_ab = local_to_global_b - local_to_global_a;
             //how much distance changed between prev to current
