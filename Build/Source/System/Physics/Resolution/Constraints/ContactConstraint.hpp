@@ -27,6 +27,12 @@ namespace Engine5
             Real    total_lambda   = 0.0f;
         };
 
+        class JacobianPosition
+        {
+        public:
+
+        };
+
         class VelocityTerm
         {
         public:

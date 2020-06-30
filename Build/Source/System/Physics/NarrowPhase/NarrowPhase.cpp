@@ -165,6 +165,12 @@ namespace Engine5
         PolytopeFace closest_face = polytope.PickClosestFaceOfPolytopeToOrigin();
         for (size_t i = 0; i < m_epa_exit_iteration; ++i)
         {
+            if (polytope.faces.empty())
+            {
+                //if no face in polytope return false.
+                result.b_valid = false;
+                return false;
+            }
             closest_face               = polytope.PickClosestFaceOfPolytopeToOrigin();
             SupportPoint support_point = GenerateCSOSupport(a, b, closest_face.normal);
             if (support_point.IsValid() == false)

@@ -86,7 +86,7 @@ namespace Engine5
             Vector3 rb_n       = CrossProduct(contact.r_b, contact.normal);
             Real    k          = m_mass.m_a + ra_n * m_mass.i_a * ra_n + m_mass.m_b + rb_n * m_mass.i_b * rb_n;
             Real    impulse    = k > 0.0f ? -c / k : 0.0f;
-            Vector3 p          = impulse * contact.normal;
+            Vector3 p          = impulse * dt * contact.normal;
             Vector3 o_a        = m_mass.i_a * CrossProduct(contact.r_a, p);
             Vector3 o_b        = m_mass.i_b * CrossProduct(contact.r_b, p);
             m_position.p_a -= m_mass.m_a * p;
