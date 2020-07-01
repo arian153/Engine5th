@@ -12,25 +12,31 @@ namespace Engine5
     class ConstraintCoefficient
     {
     public:
-        Real damping = 0.0f;
-        Real spring  = 0.0f;
+        Real damping_coefficient = 0.0f;
+        Real spring_constant     = 0.0f;
     };
 
-    class ConstraintDef
+    class ConstraintBias
     {
     public:
-        ConstraintDef();
-        ~ConstraintDef();
+        Real position_bias = 0.0f;
+        Real softness_bias = 0.0f;
+    };
 
-        void SetConstraintMode(eConstraintMode mode);
-        void SetFrequency(Real frequency);
-        void SetDampingRatio(Real damping_ratio);
+    class ConstraintUtility
+    {
+    public:
+        ConstraintUtility();
+        ~ConstraintUtility();
 
-        ConstraintCoefficient GenerateCoefficient(Real mass) const;
+        ConstraintCoefficient GenerateSoftCoefficient(Real mass, Real frequency = 5.0f, Real damping_ratio = 0.5f);
+        ConstraintBias        GenerateConstraintBias(Real damping_coefficient, Real spring_constant, eConstraintMode mode, Real dt);
+        ConstraintBias        GenerateConstraintBias(const ConstraintCoefficient& c, eConstraintMode mode, Real dt);
+        ConstraintBias        GenerateConstraintBias(Real mass, Real frequency, Real damping_ratio, eConstraintMode mode, Real dt);
+
+        Real GenerateDampingCoefficient(Real mass, Real frequency = 5.0f, Real damping_ratio = 0.5f);
+        Real GenerateSpringConstant(Real mass, Real frequency = 5.0f);
 
     private:
-        eConstraintMode m_mode          = eConstraintMode::Hard;
-        Real            m_frequency     = 5.0f;
-        Real            m_damping_ratio = 0.5f;
     };
 }
