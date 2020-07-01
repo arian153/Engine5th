@@ -13,7 +13,6 @@
 #include "../Structure/EulerAngle.hpp"
 #include "../Structure/AxisRadian.hpp"
 
-
 namespace Engine5
 {
     class Quaternion;
@@ -58,6 +57,8 @@ namespace Engine5
         void SetScale(const Vector3& scale);
         void SetTranslation(const Vector2& translation);
 
+        void SetSkew(const Vector3& v);
+
         bool IsZero() const;
         bool IsIdentity() const;
         bool IsEqual(const Matrix33& rhs) const;
@@ -84,6 +85,7 @@ namespace Engine5
         friend Matrix33 Inverse(const Matrix33& mat);
         friend Matrix33 Transpose(const Matrix33& mat);
         friend Matrix33 HadamardProduct(const Matrix33& mat1, const Matrix33& mat2);
+        friend Matrix33 Skew(const Vector3& v);
 
     public:
         Matrix33&            operator=(const Matrix33& rhs);

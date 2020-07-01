@@ -5,6 +5,7 @@
 #include "../Utility/FrictionUtility.hpp"
 #include <vector>
 #include "Constraints/ContactConstraint.hpp"
+#include "../Utility/ConstraintUtility.hpp"
 
 namespace Engine5
 {
@@ -30,8 +31,9 @@ namespace Engine5
         size_t m_velocity_iteration = 8;
         size_t m_position_iteration = 3;
 
-        Physics::FrictionUtility        m_friction;
+        Physics::FrictionUtility       m_friction;
+        ConstraintUtility              m_constraint_utility;
         std::vector<ContactConstraint> m_contact_constraints;
-        PrimitiveRenderer*              m_primitive_renderer = nullptr;
+        PrimitiveRenderer*             m_primitive_renderer = nullptr;
     };
 }

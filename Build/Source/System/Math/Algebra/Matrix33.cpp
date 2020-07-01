@@ -316,6 +316,19 @@ namespace Engine5
         data[8] = 1.0f;
     }
 
+    void Matrix33::SetSkew(const Vector3& v)
+    {
+        data[0] = 0.0f;
+        data[1] = -v.z;
+        data[2] = v.y;
+        data[3] = v.z;
+        data[4] = 0.0f;
+        data[5] = -v.x;
+        data[6] = -v.y;
+        data[7] = v.x;
+        data[8] = 0.0f;
+    }
+
     bool Matrix33::IsZero() const
     {
         for (size_t i = 0; i < 9; ++i)
@@ -590,6 +603,15 @@ namespace Engine5
     Matrix33 HadamardProduct(const Matrix33& mat1, const Matrix33& mat2)
     {
         return mat1.HadamardProduct(mat2);
+    }
+
+    Matrix33 Skew(const Vector3& v)
+    {
+        return Matrix33(
+                        0.0f, -v.z, v.y,
+                        v.z, 0.0f, -v.x,
+                        -v.y, v.x, 0.0f
+                       );
     }
 
     Matrix33& Matrix33::operator=(const Matrix33& rhs)

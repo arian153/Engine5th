@@ -29,13 +29,13 @@ namespace Engine5
         ConstraintUtility();
         ~ConstraintUtility();
 
-        ConstraintCoefficient GenerateSoftCoefficient(Real mass, Real frequency = 5.0f, Real damping_ratio = 0.5f);
+        ConstraintCoefficient GenerateSoftCoefficient(Real mass, Real frequency, Real damping_ratio);
         ConstraintBias        GenerateConstraintBias(Real damping_coefficient, Real spring_constant, eConstraintMode mode, Real dt);
         ConstraintBias        GenerateConstraintBias(const ConstraintCoefficient& c, eConstraintMode mode, Real dt);
         ConstraintBias        GenerateConstraintBias(Real mass, Real frequency, Real damping_ratio, eConstraintMode mode, Real dt);
 
-        Real GenerateDampingCoefficient(Real mass, Real frequency = 5.0f, Real damping_ratio = 0.5f);
-        Real GenerateSpringConstant(Real mass, Real frequency = 5.0f);
+        Real GenerateDampingCoefficient(Real mass, Real frequency, Real damping_ratio);
+        Real GenerateSpringConstant(Real mass, Real frequency);
 
     private:
     };
