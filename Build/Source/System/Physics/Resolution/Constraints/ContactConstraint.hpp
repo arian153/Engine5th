@@ -15,7 +15,7 @@ namespace Engine5
     class ContactConstraint final : public Constraint
     {
     private:
-        class JacobianVelocity
+        class Jacobian
         {
         public:
             Vector3 v_a;
@@ -57,33 +57,33 @@ namespace Engine5
         ~ContactConstraint();
 
         void GenerateVelocityConstraints(Real dt) override;
-        void GeneratePositionConstraints(Real dt) override;
         void SolveVelocityConstraints(Real dt) override;
-        void SolvePositionConstraints(Real dt) override;
         void ApplyVelocityConstraints() override;
+
+        void GeneratePositionConstraints(Real dt) override;
+        void SolvePositionConstraints(Real dt) override;
         void ApplyPositionConstraints() override;
 
         void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const;
         void WarmStart();
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
-        void InitializeJacobianVelocity(const ContactPoint& contact, const Vector3& direction, JacobianVelocity& jacobian, Real dt, bool b_normal = false) const;
-        void SolveJacobianVelocity(const ContactPoint& contact, JacobianVelocity& jacobian, size_t i, bool b_normal = false);
+        void InitializeJacobian(const ContactPoint& contact, const Vector3& direction, Jacobian& jacobian, Real dt, bool b_normal = false) const;
+        void SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, bool b_normal = false);
 
     private:
         Physics::FrictionUtility* m_friction_utility = nullptr;
         ContactManifold*          m_manifold         = nullptr;
-        PositionTerm              m_position_term;
-        VelocityTerm              m_velocity_term;
-        MassTerm                  m_mass_term;
-        Real                      m_tangent_speed = 0.0f;
-        Real                      m_beta          = 0.25f;
-
-        JacobianVelocity m_normal[ Physics::Collision::MAX_MANIFOLD_POINT_COUNT ];
-        JacobianVelocity m_tangent[ Physics::Collision::MAX_MANIFOLD_POINT_COUNT ];
-        JacobianVelocity m_bitangent[ Physics::Collision::MAX_MANIFOLD_POINT_COUNT ];
-        size_t           m_count = 0;
-
-        RigidBody* m_body_a = nullptr;
-        RigidBody* m_body_b = nullptr;
+        RigidBody*                m_body_a           = nullptr;
+        RigidBody*                m_body_b           = nullptr;
+        
+        PositionTerm m_position_term;
+        VelocityTerm m_velocity_term;
+        MassTerm     m_mass_term;
+        Jacobian     m_normal[ Physics::Collision::MAX_MANIFOLD_POINT_COUNT ];
+        Jacobian     m_tangent[ Physics::Collision::MAX_MANIFOLD_POINT_COUNT ];
+        Jacobian     m_bitangent[ Physics::Collision::MAX_MANIFOLD_POINT_COUNT ];
+        Real         m_tangent_speed = 0.0f;
+        Real         m_beta          = 0.25f;
+        size_t       m_count         = 0;
     };
 }

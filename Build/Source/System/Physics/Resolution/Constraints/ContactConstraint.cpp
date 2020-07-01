@@ -39,17 +39,10 @@ namespace Engine5
             basis.CalculateBasisApprox(m_manifold->contacts[i].normal);
             m_manifold->contacts[i].r_a = m_manifold->contacts[i].global_position_a - m_body_a->GetCentroid();
             m_manifold->contacts[i].r_b = m_manifold->contacts[i].global_position_b - m_body_b->GetCentroid();
-            InitializeJacobianVelocity(m_manifold->contacts[i], basis.i, m_normal[i], dt, true);
-            InitializeJacobianVelocity(m_manifold->contacts[i], basis.j, m_tangent[i], dt);
-            InitializeJacobianVelocity(m_manifold->contacts[i], basis.k, m_bitangent[i], dt);
+            InitializeJacobian(m_manifold->contacts[i], basis.i, m_normal[i], dt, true);
+            InitializeJacobian(m_manifold->contacts[i], basis.j, m_tangent[i], dt);
+            InitializeJacobian(m_manifold->contacts[i], basis.k, m_bitangent[i], dt);
         }
-    }
-
-    void ContactConstraint::GeneratePositionConstraints(Real dt)
-    {
-        E5_UNUSED_PARAM(dt);
-        m_position_term.p_a = m_body_a->GetCentroid();
-        m_position_term.p_b = m_body_b->GetCentroid();
     }
 
     void ContactConstraint::SolveVelocityConstraints(Real dt)
@@ -58,11 +51,35 @@ namespace Engine5
         for (size_t i = 0; i < m_count; ++i)
         {
             // Solve tangent constraints first because non-penetration is more important than friction.
-            SolveJacobianVelocity(m_manifold->contacts[i], m_tangent[i], i);
-            SolveJacobianVelocity(m_manifold->contacts[i], m_bitangent[i], i);
+            SolveJacobian(m_manifold->contacts[i], m_tangent[i], i);
+            SolveJacobian(m_manifold->contacts[i], m_bitangent[i], i);
             // Solve normal constraints
-            SolveJacobianVelocity(m_manifold->contacts[i], m_normal[i], i, true);
+            SolveJacobian(m_manifold->contacts[i], m_normal[i], i, true);
         }
+    }
+
+    void ContactConstraint::ApplyVelocityConstraints()
+    {
+        for (size_t i = 0; i < m_count; ++i)
+        {
+            m_manifold->contacts[i].tangent_lambda   = m_tangent[i].total_lambda;
+            m_manifold->contacts[i].bitangent_lambda = m_bitangent[i].total_lambda;
+            m_manifold->contacts[i].normal_lambda    = m_normal[i].total_lambda;
+        }
+        m_manifold->prev_count = m_count;
+        //apply body a
+        m_body_a->SetLinearVelocity(m_velocity_term.v_a);
+        m_body_a->SetAngularVelocity(m_velocity_term.w_a);
+        //apply body b
+        m_body_b->SetLinearVelocity(m_velocity_term.v_b);
+        m_body_b->SetAngularVelocity(m_velocity_term.w_b);
+    }
+
+    void ContactConstraint::GeneratePositionConstraints(Real dt)
+    {
+        E5_UNUSED_PARAM(dt);
+        m_position_term.p_a = m_body_a->GetCentroid();
+        m_position_term.p_b = m_body_b->GetCentroid();
     }
 
     void ContactConstraint::SolvePositionConstraints(Real dt)
@@ -85,23 +102,6 @@ namespace Engine5
             m_position_term.p_a -= m_mass_term.m_a * p;
             m_position_term.p_b += m_mass_term.m_b * p;
         }
-    }
-
-    void ContactConstraint::ApplyVelocityConstraints()
-    {
-        for (size_t i = 0; i < m_count; ++i)
-        {
-            m_manifold->contacts[i].tangent_lambda   = m_tangent[i].total_lambda;
-            m_manifold->contacts[i].bitangent_lambda = m_bitangent[i].total_lambda;
-            m_manifold->contacts[i].normal_lambda    = m_normal[i].total_lambda;
-        }
-        m_manifold->prev_count = m_count;
-        //apply body a
-        m_body_a->SetLinearVelocity(m_velocity_term.v_a);
-        m_body_a->SetAngularVelocity(m_velocity_term.w_a);
-        //apply body b
-        m_body_b->SetLinearVelocity(m_velocity_term.v_b);
-        m_body_b->SetAngularVelocity(m_velocity_term.w_b);
     }
 
     void ContactConstraint::ApplyPositionConstraints()
@@ -164,7 +164,7 @@ namespace Engine5
         return Math::Min(m_a.restitution, m_b.restitution);
     }
 
-    void ContactConstraint::InitializeJacobianVelocity(const ContactPoint& contact, const Vector3& direction, JacobianVelocity& jacobian, Real dt, bool b_normal) const
+    void ContactConstraint::InitializeJacobian(const ContactPoint& contact, const Vector3& direction, Jacobian& jacobian, Real dt, bool b_normal) const
     {
         jacobian.v_a  = -direction;
         jacobian.w_a  = -CrossProduct(contact.r_a, direction);
@@ -196,7 +196,7 @@ namespace Engine5
         jacobian.total_lambda   = 0.0f;
     }
 
-    void ContactConstraint::SolveJacobianVelocity(const ContactPoint& contact, JacobianVelocity& jacobian, size_t i, bool b_normal)
+    void ContactConstraint::SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, bool b_normal)
     {
         Vector3 dir = jacobian.v_b;
         // jv = Jacobian * velocity vector
