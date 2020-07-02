@@ -223,7 +223,7 @@
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 0, 0 ],
+                        "Position": [ 0, 15, 0 ],
                         "Scale": [ 1, 1, 1 ]
                     }
                 },
@@ -272,7 +272,8 @@
                     "Type": "class Engine5::RigidBodyComponent",
                     "Value": {
                         "Linear": {
-                        }
+                        },
+                        "Motion" : "Static"
                     }
                 },
                 {
@@ -284,7 +285,7 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [ 4, 2, 2 ],
+                                "Radius": [ 10, 2, 10 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }
@@ -301,8 +302,8 @@
             "Flag": true
         },
         "Draw Contact": {
-            "Color": [ 1, 1, 1, 1 ],
-            "Flag": false
+            "Color": [ 1, 0, 0, 1 ],
+            "Flag": true
         },
         "Draw EPA": {
             "Color": [ 1, 1, 1, 1 ],

@@ -6,8 +6,8 @@
 
 namespace Engine5
 {
-    PointConstraint::PointConstraint(ConstraintUtility* utility)
-        : m_constraint_utility(utility)
+    PointConstraint::PointConstraint(RigidBody* body, ConstraintUtility* utility)
+        : m_constraint_utility(utility), m_body(body)
     {
     }
 
@@ -27,7 +27,7 @@ namespace Engine5
         Vector3 c_vel = m_v + CrossProduct(m_w, m_r);
         m_cross.SetSkew(-m_r);
         Matrix33 k = m_m * Matrix33();
-        if (m_b_enable_rotation)
+        if (m_b_rotation)
         {
             k += m_cross * m_i * m_cross.Transpose();
         }
@@ -45,7 +45,7 @@ namespace Engine5
         Vector3 lambda = m_effective_mass * (-jvb);
         m_total_lambda += lambda;
         m_v += m_m * lambda;
-        if (m_b_enable_rotation)
+        if (m_b_rotation)
         {
             m_w += m_i * m_cross.Transpose() * lambda;
         }
@@ -69,5 +69,25 @@ namespace Engine5
 
     void PointConstraint::ApplyPositionConstraints()
     {
+    }
+
+    void PointConstraint::SetConstraintMode(eConstraintMode mode)
+    {
+        m_mode = mode;
+    }
+
+    void PointConstraint::SetFrequency(Real frequency)
+    {
+        m_frequency = Math::Clamp(frequency, 0.001f, 10.0f);
+    }
+
+    void PointConstraint::SetDampingRatio(Real damping_ratio)
+    {
+        m_damping_ratio = Math::Clamp(damping_ratio, 0.0f, 10.0f);;
+    }
+
+    void PointConstraint::EnableRotation(bool b_rotation)
+    {
+        m_b_rotation = b_rotation;
     }
 }

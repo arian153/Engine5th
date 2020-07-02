@@ -34,48 +34,54 @@ namespace Engine5
             body->IntegrateVelocity(dt);
         }
         m_contact_constraints.clear();
-        for (auto& manifold : manifold_table->m_manifold_table)
+        if (m_velocity_iteration > 0)
         {
-            auto& contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction);
-            contact.GenerateVelocityConstraints(dt);
-        }
-        if (m_b_warm_starting == true)
-        {
-            for (auto& contact_constraint : m_contact_constraints)
+            for (auto& manifold : manifold_table->m_manifold_table)
             {
-                contact_constraint.WarmStart();
+                auto& contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction);
+                contact.GenerateVelocityConstraints(dt);
             }
-        }
-        for (size_t i = 0; i < m_velocity_iteration; ++i)
-        {
+            if (m_b_warm_starting == true)
+            {
+                for (auto& contact_constraint : m_contact_constraints)
+                {
+                    contact_constraint.WarmStart();
+                }
+            }
+            for (size_t i = 0; i < m_velocity_iteration; ++i)
+            {
+                for (auto& contact : m_contact_constraints)
+                {
+                    contact.SolveVelocityConstraints(dt);
+                }
+            }
             for (auto& contact : m_contact_constraints)
             {
-                contact.SolveVelocityConstraints(dt);
+                contact.ApplyVelocityConstraints();
             }
-        }
-        for (auto& contact : m_contact_constraints)
-        {
-            contact.ApplyVelocityConstraints();
         }
         //position phase
         for (auto& body : *rigid_bodies)
         {
             body->IntegratePosition(dt);
         }
-        for (auto& contact : m_contact_constraints)
-        {
-            contact.GeneratePositionConstraints(dt);
-        }
-        for (size_t i = 0; i < m_position_iteration; ++i)
+        if (m_position_iteration > 0)
         {
             for (auto& contact : m_contact_constraints)
             {
-                contact.SolvePositionConstraints(dt);
+                contact.GeneratePositionConstraints(dt);
             }
-        }
-        for (auto& contact : m_contact_constraints)
-        {
-            contact.ApplyPositionConstraints();
+            for (size_t i = 0; i < m_position_iteration; ++i)
+            {
+                for (auto& contact : m_contact_constraints)
+                {
+                    contact.SolvePositionConstraints(dt);
+                }
+            }
+            for (auto& contact : m_contact_constraints)
+            {
+                contact.ApplyPositionConstraints();
+            }
         }
     }
 
@@ -93,5 +99,20 @@ namespace Engine5
                 contact.Render(m_primitive_renderer, draw_contact_flag.color);
             }
         }
+    }
+
+    void Resolution::SetVelocityIteration(size_t iteration)
+    {
+        m_velocity_iteration = iteration;
+    }
+
+    void Resolution::SetPositionIteration(size_t iteration)
+    {
+        m_position_iteration = iteration;
+    }
+
+    void Resolution::SetWarmStarting(bool b_warm_starting)
+    {
+        m_b_warm_starting = b_warm_starting;
     }
 }

@@ -25,6 +25,10 @@ namespace Engine5
         void SolveConstraints(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt);
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
         void Render(const ColorFlag& draw_contact_flag);
+
+        void SetVelocityIteration(size_t iteration);
+        void SetPositionIteration(size_t iteration);
+        void SetWarmStarting(bool b_warm_starting);
     private:
         bool m_b_warm_starting = true;
 
@@ -34,6 +38,7 @@ namespace Engine5
         Physics::FrictionUtility       m_friction;
         ConstraintUtility              m_constraint_utility;
         std::vector<ContactConstraint> m_contact_constraints;
+        std::vector<Constraint*>       m_constraints;
         PrimitiveRenderer*             m_primitive_renderer = nullptr;
     };
 }

@@ -9,7 +9,7 @@ namespace Engine5
     class PointConstraint final : public Constraint
     {
     public:
-        explicit PointConstraint(ConstraintUtility* utility);
+        explicit PointConstraint(RigidBody* body, ConstraintUtility* utility);
         ~PointConstraint();
 
         void GenerateVelocityConstraints(Real dt) override;
@@ -18,6 +18,12 @@ namespace Engine5
         void SolvePositionConstraints(Real dt) override;
         void ApplyVelocityConstraints() override;
         void ApplyPositionConstraints() override;
+
+        void SetConstraintMode(eConstraintMode mode);
+        void SetFrequency(Real frequency);
+        void SetDampingRatio(Real damping_ratio);
+        void EnableRotation(bool b_rotation);
+
     private:
         ConstraintUtility* m_constraint_utility = nullptr;
         RigidBody*         m_body               = nullptr;
@@ -25,9 +31,9 @@ namespace Engine5
         eConstraintMode m_mode = eConstraintMode::Hard;
         ConstraintBias  m_bias;
 
-        Real m_frequency         = 5.0f;
-        Real m_damping_ratio     = 0.5f;
-        bool m_b_enable_rotation = true;
+        Real m_frequency     = 5.0f;
+        Real m_damping_ratio = 0.5f;
+        bool m_b_rotation    = true;
 
         Vector3  m_total_lambda;
         Vector3  m_r;
