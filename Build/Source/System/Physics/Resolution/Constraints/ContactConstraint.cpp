@@ -9,7 +9,7 @@
 
 namespace Engine5
 {
-    ContactConstraint::ContactConstraint(ContactManifold* input, Physics::FrictionUtility* friction_utility, Real tangent_speed)
+    ContactConstraint::ContactConstraint(ContactManifold* input, FrictionUtility* friction_utility, Real tangent_speed)
         : m_friction_utility(friction_utility), m_manifold(input), m_tangent_speed(tangent_speed)
     {
     }

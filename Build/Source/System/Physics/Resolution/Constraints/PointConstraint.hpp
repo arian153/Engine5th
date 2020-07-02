@@ -24,7 +24,7 @@ namespace Engine5
         void SetDampingRatio(Real damping_ratio);
         void EnableRotation(bool b_rotation);
 
-    private:
+    protected:
         ConstraintUtility* m_constraint_utility = nullptr;
         RigidBody*         m_body               = nullptr;
 

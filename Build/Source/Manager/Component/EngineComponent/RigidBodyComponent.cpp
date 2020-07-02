@@ -163,6 +163,11 @@ namespace Engine5
         return m_rigid_body->GetMotionMode();
     }
 
+    RigidBody* RigidBodyComponent::GetRigidBody() const
+    {
+        return m_rigid_body;
+    }
+
     bool RigidBodyComponent::Load(const Json::Value& data)
     {
         if (JsonResource::HasMember(data, "Motion") && (data["Motion"].isString()))

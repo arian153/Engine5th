@@ -5,34 +5,31 @@
 
 namespace Engine5
 {
-    namespace Physics
+       class FrictionCoefficient
     {
-        class FrictionCoefficient
-        {
-        public:
-            explicit FrictionCoefficient(Real static_friction = 0.5f, Real dynamic_friction = 0.4f);
-            ~FrictionCoefficient();
+    public:
+        explicit FrictionCoefficient(Real static_friction = 0.5f, Real dynamic_friction = 0.4f);
+        ~FrictionCoefficient();
 
-        public:
-            Real static_friction;
-            Real dynamic_friction;
-        };
+    public:
+        Real static_friction;
+        Real dynamic_friction;
+    };
 
-        class FrictionUtility
-        {
-        public:
-            FrictionUtility();
-            ~FrictionUtility();
+    class FrictionUtility
+    {
+    public:
+        FrictionUtility();
+        ~FrictionUtility();
 
-            void Initialize();
-            void Shutdown();
+        void Initialize();
+        void Shutdown();
 
-            //find
-            FrictionCoefficient Find(eMaterial a, eMaterial b);
-            FrictionCoefficient Find(MaterialCoefficient a, MaterialCoefficient b);
+        //find
+        FrictionCoefficient Find(Physics::eMaterial a, Physics::eMaterial b);
+        FrictionCoefficient Find(Physics::MaterialCoefficient a, Physics::MaterialCoefficient b);
 
-        private:
-            std::unordered_map<size_t, FrictionCoefficient> m_friction_map;
-        };
-    }
+    private:
+        std::unordered_map<size_t, FrictionCoefficient> m_friction_map;
+    };
 }

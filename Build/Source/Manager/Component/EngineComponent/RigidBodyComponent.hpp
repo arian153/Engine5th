@@ -38,6 +38,7 @@ namespace Engine5
         Matrix33    GetInertia() const;
         Matrix33    GetInverseInertia() const;
         eMotionMode GetMotionMode() const;
+        RigidBody* GetRigidBody() const;
 
     protected:
         bool Load(const Json::Value& data) override;

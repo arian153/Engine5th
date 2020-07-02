@@ -53,7 +53,7 @@ namespace Engine5
         };
 
     public:
-        explicit ContactConstraint(ContactManifold* input, Physics::FrictionUtility* friction_utility, Real tangent_speed = 0.0f);
+        explicit ContactConstraint(ContactManifold* input, FrictionUtility* friction_utility, Real tangent_speed = 0.0f);
         ~ContactConstraint();
 
         void GenerateVelocityConstraints(Real dt) override;
@@ -71,11 +71,11 @@ namespace Engine5
         void SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, bool b_normal = false);
 
     private:
-        Physics::FrictionUtility* m_friction_utility = nullptr;
-        ContactManifold*          m_manifold         = nullptr;
-        RigidBody*                m_body_a           = nullptr;
-        RigidBody*                m_body_b           = nullptr;
-        
+        FrictionUtility* m_friction_utility = nullptr;
+        ContactManifold* m_manifold         = nullptr;
+        RigidBody*       m_body_a           = nullptr;
+        RigidBody*       m_body_b           = nullptr;
+
         PositionTerm m_position_term;
         VelocityTerm m_velocity_term;
         MassTerm     m_mass_term;

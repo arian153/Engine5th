@@ -7,10 +7,12 @@
 #include "../Resolution/ContactManifold.hpp"
 #include <unordered_map>
 #include "../../Graphics/DataType/Color.hpp"
+#include "../Utility/FrictionUtility.hpp"
 
 namespace Engine5
 {
     class ManifoldTable;
+    class ConstraintUtility;
 
     class World
     {
@@ -41,7 +43,12 @@ namespace Engine5
         void RemoveColliderSet(ColliderSet* set);
         void RemovePrimitive(ColliderPrimitive* collider_primitive) const;
 
-    private:
+        void SetVelocityIteration(size_t iteration) const;
+        void SetPositionIteration(size_t iteration) const;
+        void SetWarmStarting(bool b_warm_starting) const;
+
+        FrictionUtility*   GetFrictionUtility() const;
+        ConstraintUtility* GetConstraintUtility() const;
 
     private:
         eBroadPhaseMode    m_mode               = eBroadPhaseMode::DynamicBVH;

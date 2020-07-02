@@ -18,6 +18,11 @@ namespace Engine5
         void Update(Real dt) override;
         void Shutdown() override;
 
+        void SetConstraintMode(eConstraintMode mode) const;
+        void SetFrequency(Real frequency) const;
+        void SetDampingRatio(Real damping_ratio) const;
+        void EnableRotation(bool b_rotation) const;
+
     protected:
         bool Load(const Json::Value& data) override;
         void Save(Json::Value& data) const override;

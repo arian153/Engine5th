@@ -18,12 +18,12 @@ namespace Engine5
 
     void Resolution::Initialize()
     {
-        m_friction.Initialize();
+        m_friction_utility.Initialize();
     }
 
     void Resolution::Shutdown()
     {
-        m_friction.Shutdown();
+        m_friction_utility.Shutdown();
     }
 
     void Resolution::SolveConstraints(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
@@ -38,7 +38,7 @@ namespace Engine5
         {
             for (auto& manifold : manifold_table->m_manifold_table)
             {
-                auto& contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction);
+                auto& contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction_utility);
                 contact.GenerateVelocityConstraints(dt);
             }
             if (m_b_warm_starting == true)
@@ -99,20 +99,5 @@ namespace Engine5
                 contact.Render(m_primitive_renderer, draw_contact_flag.color);
             }
         }
-    }
-
-    void Resolution::SetVelocityIteration(size_t iteration)
-    {
-        m_velocity_iteration = iteration;
-    }
-
-    void Resolution::SetPositionIteration(size_t iteration)
-    {
-        m_position_iteration = iteration;
-    }
-
-    void Resolution::SetWarmStarting(bool b_warm_starting)
-    {
-        m_b_warm_starting = b_warm_starting;
     }
 }

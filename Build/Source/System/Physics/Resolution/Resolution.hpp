@@ -26,16 +26,15 @@ namespace Engine5
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
         void Render(const ColorFlag& draw_contact_flag);
 
-        void SetVelocityIteration(size_t iteration);
-        void SetPositionIteration(size_t iteration);
-        void SetWarmStarting(bool b_warm_starting);
+    private:
+        friend class World;
     private:
         bool m_b_warm_starting = true;
 
         size_t m_velocity_iteration = 8;
         size_t m_position_iteration = 3;
 
-        Physics::FrictionUtility       m_friction;
+        FrictionUtility                m_friction_utility;
         ConstraintUtility              m_constraint_utility;
         std::vector<ContactConstraint> m_contact_constraints;
         std::vector<Constraint*>       m_constraints;

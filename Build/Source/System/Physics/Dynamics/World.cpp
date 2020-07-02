@@ -235,4 +235,29 @@ namespace Engine5
     {
         m_broad_phase->Remove(collider_primitive->GetBoundingVolume());
     }
+
+    void World::SetVelocityIteration(size_t iteration) const
+    {
+        m_resolution_phase->m_velocity_iteration = iteration;
+    }
+
+    void World::SetPositionIteration(size_t iteration) const
+    {
+        m_resolution_phase->m_position_iteration = iteration;
+    }
+
+    void World::SetWarmStarting(bool b_warm_starting) const
+    {
+        m_resolution_phase->m_b_warm_starting = b_warm_starting;
+    }
+
+    FrictionUtility* World::GetFrictionUtility() const
+    {
+        return &m_resolution_phase->m_friction_utility;
+    }
+
+    ConstraintUtility* World::GetConstraintUtility() const
+    {
+        return &m_resolution_phase->m_constraint_utility;
+    }
 }
