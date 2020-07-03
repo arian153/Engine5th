@@ -22,6 +22,8 @@ namespace Engine5
         void SetFrequency(Real frequency) const;
         void SetDampingRatio(Real damping_ratio) const;
         void EnableRotation(bool b_rotation) const;
+        void SetTargetPoint(const Vector3& target) const;
+        void SetAnchorPoint(const Vector3& local_anchor) const;
 
     protected:
         bool Load(const Json::Value& data) override;
@@ -30,9 +32,8 @@ namespace Engine5
         void Unsubscribe() override;
 
     private:
-        friend class RigidBodyFactory;
-        friend class ColliderComponent;
-        friend class RigidBody;
+        friend class PointConstraintFactory;
+        friend class PointConstraint;
 
     private:
         explicit PointConstraintComponent(Object* owner);

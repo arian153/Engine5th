@@ -12,6 +12,8 @@ namespace Engine5
         explicit PointConstraint(RigidBody* body, ConstraintUtility* utility);
         ~PointConstraint();
 
+        void Shutdown() override;
+
         void GenerateVelocityConstraints(Real dt) override;
         void GeneratePositionConstraints(Real dt) override;
         void SolveVelocityConstraints(Real dt) override;
@@ -23,10 +25,16 @@ namespace Engine5
         void SetFrequency(Real frequency);
         void SetDampingRatio(Real damping_ratio);
         void EnableRotation(bool b_rotation);
+        void SetTargetPoint(const Vector3& target);
+        void SetAnchorPoint(const Vector3& anchor);
+
+    private:
+        friend class PointConstraintComponent;
 
     protected:
-        ConstraintUtility* m_constraint_utility = nullptr;
-        RigidBody*         m_body               = nullptr;
+        PointConstraintComponent* m_component          = nullptr;
+        ConstraintUtility*        m_constraint_utility = nullptr;
+        RigidBody*                m_body               = nullptr;
 
         eConstraintMode m_mode = eConstraintMode::Hard;
         ConstraintBias  m_bias;

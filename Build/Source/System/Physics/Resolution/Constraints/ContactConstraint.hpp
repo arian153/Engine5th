@@ -56,6 +56,8 @@ namespace Engine5
         explicit ContactConstraint(ContactManifold* input, FrictionUtility* friction_utility, Real tangent_speed = 0.0f);
         ~ContactConstraint();
 
+        void Shutdown() override;
+
         void GenerateVelocityConstraints(Real dt) override;
         void SolveVelocityConstraints(Real dt) override;
         void ApplyVelocityConstraints() override;

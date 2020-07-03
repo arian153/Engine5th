@@ -18,6 +18,11 @@ namespace Engine5
     {
     }
 
+    void ContactConstraint::Shutdown()
+    {
+
+    }
+
     void ContactConstraint::GenerateVelocityConstraints(Real dt)
     {
         m_body_a = m_manifold->m_set_a->GetRigidBody();

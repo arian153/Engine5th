@@ -3,6 +3,7 @@
 #include "../../Utility/ConstraintUtility.hpp"
 #include "../../Dynamics/RigidBody.hpp"
 #include "../../../Math/Algebra/Matrix33.hpp"
+#include "../../../../Manager/Component/EngineComponent/PointConstraintComponent.hpp"
 
 namespace Engine5
 {
@@ -13,6 +14,15 @@ namespace Engine5
 
     PointConstraint::~PointConstraint()
     {
+    }
+
+    void PointConstraint::Shutdown()
+    {
+        //disconnect rigid body
+        if (m_component != nullptr)
+        {
+            m_component->m_point_constraint = nullptr;
+        }
     }
 
     void PointConstraint::GenerateVelocityConstraints(Real dt)
@@ -89,5 +99,15 @@ namespace Engine5
     void PointConstraint::EnableRotation(bool b_rotation)
     {
         m_b_rotation = b_rotation;
+    }
+
+    void PointConstraint::SetTargetPoint(const Vector3& target)
+    {
+        m_target = target;
+    }
+
+    void PointConstraint::SetAnchorPoint(const Vector3& anchor)
+    {
+        m_local_anchor = anchor;
     }
 }

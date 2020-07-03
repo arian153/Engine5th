@@ -219,6 +219,11 @@ namespace Engine5
         m_broad_phase->Add(bounding_volume);
     }
 
+    void World::AddConstraint(Constraint* constraint) const
+    {
+        m_resolution_phase->m_constraints.push_back(constraint);
+    }
+
     void World::RemoveRigidBody(RigidBody* body)
     {
         auto found = std::find(m_rigid_bodies.begin(), m_rigid_bodies.end(), body);
@@ -234,6 +239,14 @@ namespace Engine5
     void World::RemovePrimitive(ColliderPrimitive* collider_primitive) const
     {
         m_broad_phase->Remove(collider_primitive->GetBoundingVolume());
+    }
+
+    void World::RemoveConstraint(Constraint* constraint) const
+    {
+        auto found = std::find(
+                               m_resolution_phase->m_constraints.begin(),
+                               m_resolution_phase->m_constraints.end(), constraint);
+        m_resolution_phase->m_constraints.erase(found);
     }
 
     void World::SetVelocityIteration(size_t iteration) const

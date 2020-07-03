@@ -9,6 +9,8 @@ namespace Engine5
         Constraint();
         virtual ~Constraint();
 
+        virtual void Shutdown() = 0;
+
         virtual void GenerateVelocityConstraints(Real dt) = 0;
         virtual void SolveVelocityConstraints(Real dt) = 0;
         virtual void ApplyVelocityConstraints() = 0;
