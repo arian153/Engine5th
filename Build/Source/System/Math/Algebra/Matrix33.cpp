@@ -550,7 +550,7 @@ namespace Engine5
         Real det       = this->data[0] * cofactor0 + this->data[1] * cofactor3 + this->data[2] * cofactor6;
         if (Math::IsZero(det))
         {
-            E5_ASSERT(false, "Inverse singular matrix");
+            //E5_ASSERT(false, "Inverse singular matrix");
             return result;
         }
         // create adjoint matrix and multiply by 1/det to get inverse

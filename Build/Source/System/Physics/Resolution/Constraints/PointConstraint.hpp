@@ -49,7 +49,8 @@ namespace Engine5
         Matrix33 m_cross;
         Vector3  m_position_error_bias;
         Vector3  m_local_anchor;
-        Vector3  m_target;
+        Vector3  m_local_target;
+        Vector3& m_target = m_local_target;
 
         Real     m_m = 1.0f;
         Matrix33 m_i;

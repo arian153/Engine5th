@@ -24,6 +24,13 @@ namespace Engine5
     void Resolution::Shutdown()
     {
         m_friction_utility.Shutdown();
+        for (auto& constraint : m_constraints)
+        {
+            constraint->Shutdown();
+            delete constraint;
+            constraint = nullptr;
+        }
+        m_constraints.clear();
     }
 
     void Resolution::SolveConstraints(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
@@ -41,6 +48,10 @@ namespace Engine5
                 auto& contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction_utility);
                 contact.GenerateVelocityConstraints(dt);
             }
+            for(auto& constraint : m_constraints)
+            {
+                constraint->GenerateVelocityConstraints(dt);
+            }
             if (m_b_warm_starting == true)
             {
                 for (auto& contact_constraint : m_contact_constraints)
@@ -54,10 +65,18 @@ namespace Engine5
                 {
                     contact.SolveVelocityConstraints(dt);
                 }
+                for (auto& constraint : m_constraints)
+                {
+                    constraint->SolveVelocityConstraints(dt);
+                }
             }
             for (auto& contact : m_contact_constraints)
             {
                 contact.ApplyVelocityConstraints();
+            }
+            for (auto& constraint : m_constraints)
+            {
+                constraint->ApplyVelocityConstraints();
             }
         }
         //position phase
@@ -71,16 +90,28 @@ namespace Engine5
             {
                 contact.GeneratePositionConstraints(dt);
             }
+            for (auto& constraint : m_constraints)
+            {
+                constraint->GeneratePositionConstraints(dt);
+            }
             for (size_t i = 0; i < m_position_iteration; ++i)
             {
                 for (auto& contact : m_contact_constraints)
                 {
                     contact.SolvePositionConstraints(dt);
                 }
+                for (auto& constraint : m_constraints)
+                {
+                    constraint->SolvePositionConstraints(dt);
+                }
             }
             for (auto& contact : m_contact_constraints)
             {
                 contact.ApplyPositionConstraints();
+            }
+            for (auto& constraint : m_constraints)
+            {
+                constraint->ApplyPositionConstraints();
             }
         }
     }

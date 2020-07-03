@@ -240,7 +240,7 @@
                     "Value": {
                         "Colliders": [
                             {
-                                "Density": 1.0,
+                                "Density": 5.0,
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
@@ -273,7 +273,7 @@
                     "Value": {
                         "Linear": {
                         },
-                        "Motion" : "Static"
+                        "Motion": "Static"
                     }
                 },
                 {
@@ -294,7 +294,53 @@
                 }
             ],
             "Name": "HelloWorld2"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 2, 4, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::RigidBodyComponent",
+                    "Value": {
+                        "Linear": {
+                        },
+                        "Motion": "Dynamic"
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 4, 2, 2 ],
+                                "Scale": 1,
+                                "Type": "Ellipsoid"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::PointConstraintComponent",
+                    "Value": {
+                        "Mode": "Soft",
+                        "Anchor": [ 0.1, 0, 0 ],
+                        "Target Object": "HelloWorld"
+                    }
+                }
+            ],
+            "Name": "HelloWorld3"
         }
+
             ],
     "Settings": {
         "Draw Broad Phase": {

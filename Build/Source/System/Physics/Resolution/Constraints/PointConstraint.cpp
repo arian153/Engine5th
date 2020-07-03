@@ -52,7 +52,7 @@ namespace Engine5
         E5_UNUSED_PARAM(dt);
         Vector3 cVel   = m_v + CrossProduct(m_w, m_r);
         Vector3 jvb    = cVel + m_position_error_bias + m_bias.softness_bias * m_total_lambda;
-        Vector3 lambda = m_effective_mass * (-jvb);
+        Vector3 lambda = m_effective_mass * (-jvb) * dt;
         m_total_lambda += lambda;
         m_v += m_m * lambda;
         if (m_b_rotation)
@@ -103,7 +103,7 @@ namespace Engine5
 
     void PointConstraint::SetTargetPoint(const Vector3& target)
     {
-        m_target = target;
+        m_local_target = target;
     }
 
     void PointConstraint::SetAnchorPoint(const Vector3& anchor)

@@ -24,6 +24,7 @@ namespace Engine5
         void EnableRotation(bool b_rotation) const;
         void SetTargetPoint(const Vector3& target) const;
         void SetAnchorPoint(const Vector3& local_anchor) const;
+        void SetTargetObject(Object* target) const;
 
     protected:
         bool Load(const Json::Value& data) override;
@@ -41,8 +42,9 @@ namespace Engine5
 
     private:
         RigidBody*       m_rigid_body       = nullptr;
-        Transform*       m_transform        = nullptr;
         PointConstraint* m_point_constraint = nullptr;
+
+        Object*    m_target_object    = nullptr;
 
         bool m_b_init = false;
     };

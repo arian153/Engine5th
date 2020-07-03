@@ -7,6 +7,7 @@
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../Resource/ResourceType/JsonResource.hpp"
+#include "../../Object/ObjectManager.hpp"
 
 namespace Engine5
 {
@@ -30,13 +31,6 @@ namespace Engine5
                 m_point_constraint->m_component = this;
                 Subscribe();
                 m_b_init = true;
-            }
-        }
-        if (m_transform == nullptr)
-        {
-            if (m_owner->HasComponent<TransformComponent>())
-            {
-                m_transform = m_owner->GetComponent<TransformComponent>()->GetTransform();
             }
         }
     }
@@ -87,9 +81,21 @@ namespace Engine5
         m_point_constraint->SetAnchorPoint(local_anchor);
     }
 
+    void PointConstraintComponent::SetTargetObject(Object* target) const
+    {
+        if (target != nullptr && target->HasComponent<TransformComponent>())
+        {
+            m_point_constraint->m_target = target->GetComponent<TransformComponent>()->GetTransform()->position;
+        }
+        else
+        {
+            m_point_constraint->m_target = m_point_constraint->m_local_target;
+        }
+    }
+
     bool PointConstraintComponent::Load(const Json::Value& data)
     {
-        if (JsonResource::HasMember(data, "Mode") && data["Damping Ratio"].isString())
+        if (JsonResource::HasMember(data, "Mode") && data["Mode"].isString())
         {
             std::string mode = data["Mode"].asString();
             if (mode == "Hard")
@@ -113,6 +119,15 @@ namespace Engine5
         {
             m_point_constraint->SetTargetPoint(JsonResource::AsVector3(data["Target"]));
         }
+        if (JsonResource::HasMember(data, "Target Object") && data["Target Object"].isString())
+        {
+            std::string name  = data["Target Object"].asString();
+            auto        found = m_space->GetObjectManager()->FindObjectBegin(name);
+            if (found != nullptr)
+            {
+                SetTargetObject(found);
+            }
+        }
         if (JsonResource::HasMember(data, "Damping Ratio") && data["Damping Ratio"].isDouble())
         {
             m_point_constraint->SetDampingRatio(data["Damping Ratio"].asFloat());
@@ -134,10 +149,18 @@ namespace Engine5
 
     void PointConstraintComponent::Subscribe()
     {
+        if (m_space != nullptr && m_point_constraint != nullptr)
+        {
+            m_space->GetWorld()->AddConstraint(m_point_constraint);
+        }
     }
 
     void PointConstraintComponent::Unsubscribe()
     {
+        if (m_space != nullptr && m_point_constraint != nullptr)
+        {
+            m_space->GetWorld()->RemoveConstraint(m_point_constraint);
+        }
     }
 
     PointConstraintComponent::PointConstraintComponent(Object* owner)
