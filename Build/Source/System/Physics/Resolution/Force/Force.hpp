@@ -1,7 +1,10 @@
 #pragma once
+#include "../../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
+    class RigidBody;
+
     class Force
     {
     public:
@@ -13,6 +16,7 @@ namespace Engine5
         {
         }
 
+        virtual void Update(RigidBody* body, Real dt) = 0;
     protected:
     };
 }

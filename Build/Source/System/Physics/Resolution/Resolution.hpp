@@ -9,6 +9,7 @@
 
 namespace Engine5
 {
+    class Force;
     class ColorFlag;
     class Constraint;
     class ContactPoint;
@@ -38,6 +39,7 @@ namespace Engine5
         ConstraintUtility              m_constraint_utility;
         std::vector<ContactConstraint> m_contact_constraints;
         std::vector<Constraint*>       m_constraints;
+        std::vector<Force*>            m_forces;
         PrimitiveRenderer*             m_primitive_renderer = nullptr;
     };
 }

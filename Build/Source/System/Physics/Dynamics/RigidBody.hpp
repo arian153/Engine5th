@@ -25,6 +25,7 @@ namespace Engine5
 
         void ApplyForce(const Vector3& force, const Vector3& at);
         void ApplyForceCentroid(const Vector3& force);
+        void ApplyTorque(const Vector3& torque);
 
         void SetPosition(const Vector3& position);
         void SetCentroid(const Vector3& centroid);

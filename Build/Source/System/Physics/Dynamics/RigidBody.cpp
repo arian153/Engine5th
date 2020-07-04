@@ -98,6 +98,11 @@ namespace Engine5
         m_force_accumulator += force;
     }
 
+    void RigidBody::ApplyTorque(const Vector3& torque)
+    {
+        m_torque_accumulator += torque;
+    }
+
     void RigidBody::SetPosition(const Vector3& position)
     {
         m_position = position;

@@ -5,6 +5,9 @@
 // ReSharper disable once CppUnusedIncludeDirective
 #include "ContactManifold.hpp"
 #include "../../Graphics/DataType/Color.hpp"
+#include "Force/Force.hpp"
+#include "Force/Gravity.hpp"
+#include "Force/Drag.hpp"
 
 namespace Engine5
 {
@@ -19,6 +22,10 @@ namespace Engine5
     void Resolution::Initialize()
     {
         m_friction_utility.Initialize();
+        Gravity* gravity = new Gravity();
+        m_forces.push_back(gravity);
+        Drag* drag = new Drag();
+        m_forces.push_back(drag);
     }
 
     void Resolution::Shutdown()
@@ -31,10 +38,23 @@ namespace Engine5
             constraint = nullptr;
         }
         m_constraints.clear();
+        for (auto& force : m_forces)
+        {
+            delete force;
+            force = nullptr;
+        }
+        m_forces.clear();
     }
 
     void Resolution::SolveConstraints(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
     {
+        for (auto& force : m_forces)
+        {
+            for (auto& body : *rigid_bodies)
+            {
+                force->Update(body, dt);
+            }
+        }
         m_contact_constraints.clear();
         if (m_velocity_iteration > 0)
         {
