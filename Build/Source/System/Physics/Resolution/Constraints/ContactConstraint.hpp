@@ -70,7 +70,7 @@ namespace Engine5
         void WarmStart();
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
         void InitializeJacobian(const ContactPoint& contact, const Vector3& direction, Jacobian& jacobian, Real dt, bool b_normal = false) const;
-        void SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, bool b_normal = false);
+        void SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, Real dt, bool b_normal = false);
 
     private:
         FrictionUtility* m_friction_utility = nullptr;

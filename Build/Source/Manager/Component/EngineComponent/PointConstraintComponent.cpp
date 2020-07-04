@@ -85,11 +85,11 @@ namespace Engine5
     {
         if (target != nullptr && target->HasComponent<TransformComponent>())
         {
-            m_point_constraint->m_target = target->GetComponent<TransformComponent>()->GetTransform()->position;
+            m_point_constraint->m_target = &target->GetComponent<TransformComponent>()->GetTransform()->position;
         }
         else
         {
-            m_point_constraint->m_target = m_point_constraint->m_local_target;
+            m_point_constraint->m_target = &m_point_constraint->m_local_target;
         }
     }
 

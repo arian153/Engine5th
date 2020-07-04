@@ -10,6 +10,7 @@ namespace Engine5
     PointConstraint::PointConstraint(RigidBody* body, ConstraintUtility* utility)
         : m_constraint_utility(utility), m_body(body)
     {
+        m_target = &m_local_anchor;
     }
 
     PointConstraint::~PointConstraint()
@@ -27,19 +28,15 @@ namespace Engine5
 
     void PointConstraint::GenerateVelocityConstraints(Real dt)
     {
-        m_m           = m_body->InverseMass();
-        m_i           = m_body->InverseInertia();
-        m_v           = m_body->GetLinearVelocity();
-        m_w           = m_body->GetAngularVelocity();
-        m_r           = m_body->GetOrientation().Rotate(m_local_anchor - m_body->GetLocalCentroid());
-        m_bias        = m_constraint_utility->GenerateConstraintBias(m_body->Mass(), m_frequency, m_damping_ratio, m_mode, dt);
-        Vector3 c_pos = (m_body->GetCentroid() + m_r) - m_target;
-        Vector3 c_vel = m_v + CrossProduct(m_w, m_r);
+        m_bias        = m_constraint_utility->GenerateConstraintBias(m_body->InverseMass(), m_frequency, m_damping_ratio, m_mode, dt);
+        m_r           = m_body->LocalToWorldVector(m_local_anchor - m_body->GetLocalCentroid());
+        Vector3 c_pos = (m_body->GetCentroid() + m_r) - *m_target;
+        Vector3 c_vel = m_body->GetLinearVelocity() + CrossProduct(m_body->GetAngularVelocity(), m_r);
         m_cross.SetSkew(-m_r);
-        Matrix33 k = m_m * Matrix33();
+        Matrix33 k = m_body->InverseMassMatrix();
         if (m_b_rotation)
         {
-            k += m_cross * m_i * m_cross.Transpose();
+            k += m_cross * m_body->InverseInertia() * m_cross.Transpose();
         }
         k += m_bias.softness_bias * Matrix33();
         m_position_error_bias = m_bias.position_bias * c_pos;
@@ -50,21 +47,23 @@ namespace Engine5
     void PointConstraint::SolveVelocityConstraints(Real dt)
     {
         E5_UNUSED_PARAM(dt);
-        Vector3 cVel   = m_v + CrossProduct(m_w, m_r);
-        Vector3 jvb    = cVel + m_position_error_bias + m_bias.softness_bias * m_total_lambda;
+        Vector3 v      = m_body->GetLinearVelocity();
+        Vector3 w      = m_body->GetAngularVelocity();
+        Vector3 c_vel  = v + CrossProduct(w, m_r);
+        Vector3 jvb    = c_vel + m_position_error_bias + m_bias.softness_bias * m_total_lambda;
         Vector3 lambda = m_effective_mass * (-jvb) * dt;
         m_total_lambda += lambda;
-        m_v += m_m * lambda;
+        v += m_body->InverseMass() * lambda;
+        m_body->SetLinearVelocity(v);
         if (m_b_rotation)
         {
-            m_w += m_i * m_cross.Transpose() * lambda;
+            w += m_body->InverseInertia() * m_cross.Transpose() * lambda;
+            m_body->SetAngularVelocity(w);
         }
     }
 
     void PointConstraint::ApplyVelocityConstraints()
     {
-        m_body->SetLinearVelocity(m_v);
-        m_body->SetAngularVelocity(m_w);
     }
 
     void PointConstraint::GeneratePositionConstraints(Real dt)

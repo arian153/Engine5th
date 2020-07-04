@@ -35,22 +35,18 @@ namespace Engine5
 
     void Resolution::SolveConstraints(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
     {
-        //velocity phase
-        for (auto& body : *rigid_bodies)
-        {
-            body->IntegrateVelocity(dt);
-        }
+        
         m_contact_constraints.clear();
         if (m_velocity_iteration > 0)
         {
+            for (auto& constraint : m_constraints)
+            {
+                constraint->GenerateVelocityConstraints(dt);
+            }
             for (auto& manifold : manifold_table->m_manifold_table)
             {
                 auto& contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction_utility);
                 contact.GenerateVelocityConstraints(dt);
-            }
-            for(auto& constraint : m_constraints)
-            {
-                constraint->GenerateVelocityConstraints(dt);
             }
             if (m_b_warm_starting == true)
             {
@@ -61,57 +57,58 @@ namespace Engine5
             }
             for (size_t i = 0; i < m_velocity_iteration; ++i)
             {
-                for (auto& contact : m_contact_constraints)
-                {
-                    contact.SolveVelocityConstraints(dt);
-                }
                 for (auto& constraint : m_constraints)
                 {
                     constraint->SolveVelocityConstraints(dt);
                 }
-            }
-            for (auto& contact : m_contact_constraints)
-            {
-                contact.ApplyVelocityConstraints();
+                for (auto& contact : m_contact_constraints)
+                {
+                    contact.SolveVelocityConstraints(dt);
+                }
             }
             for (auto& constraint : m_constraints)
             {
                 constraint->ApplyVelocityConstraints();
             }
-        }
-        //position phase
-        for (auto& body : *rigid_bodies)
-        {
-            body->IntegratePosition(dt);
-        }
-        if (m_position_iteration > 0)
-        {
             for (auto& contact : m_contact_constraints)
             {
-                contact.GeneratePositionConstraints(dt);
+                contact.ApplyVelocityConstraints();
             }
+        }
+        //velocity phase
+        for (auto& body : *rigid_bodies)
+        {
+            body->IntegrateVelocity(dt);
+            body->IntegratePosition(dt);
+        }
+                if (m_position_iteration > 0)
+        {
             for (auto& constraint : m_constraints)
             {
                 constraint->GeneratePositionConstraints(dt);
             }
+            for (auto& contact : m_contact_constraints)
+            {
+                contact.GeneratePositionConstraints(dt);
+            }
             for (size_t i = 0; i < m_position_iteration; ++i)
             {
-                for (auto& contact : m_contact_constraints)
-                {
-                    contact.SolvePositionConstraints(dt);
-                }
                 for (auto& constraint : m_constraints)
                 {
                     constraint->SolvePositionConstraints(dt);
                 }
-            }
-            for (auto& contact : m_contact_constraints)
-            {
-                contact.ApplyPositionConstraints();
+                for (auto& contact : m_contact_constraints)
+                {
+                    contact.SolvePositionConstraints(dt);
+                }
             }
             for (auto& constraint : m_constraints)
             {
                 constraint->ApplyPositionConstraints();
+            }
+            for (auto& contact : m_contact_constraints)
+            {
+                contact.ApplyPositionConstraints();
             }
         }
     }

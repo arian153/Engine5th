@@ -20,7 +20,6 @@ namespace Engine5
 
     void ContactConstraint::Shutdown()
     {
-
     }
 
     void ContactConstraint::GenerateVelocityConstraints(Real dt)
@@ -56,10 +55,10 @@ namespace Engine5
         for (size_t i = 0; i < m_count; ++i)
         {
             // Solve tangent constraints first because non-penetration is more important than friction.
-            SolveJacobian(m_manifold->contacts[i], m_tangent[i], i);
-            SolveJacobian(m_manifold->contacts[i], m_bitangent[i], i);
+            SolveJacobian(m_manifold->contacts[i], m_tangent[i], i, dt);
+            SolveJacobian(m_manifold->contacts[i], m_bitangent[i], i, dt);
             // Solve normal constraints
-            SolveJacobian(m_manifold->contacts[i], m_normal[i], i, true);
+            SolveJacobian(m_manifold->contacts[i], m_normal[i], i, dt, true);
         }
     }
 
@@ -195,7 +194,7 @@ namespace Engine5
         jacobian.total_lambda   = 0.0f;
     }
 
-    void ContactConstraint::SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, bool b_normal)
+    void ContactConstraint::SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, Real dt, bool b_normal)
     {
         Vector3 dir = jacobian.v_b;
         // jv = Jacobian * velocity vector
@@ -220,7 +219,7 @@ namespace Engine5
             Real max_friction     = friction_data.dynamic_friction * m_normal[i].total_lambda;
             jacobian.total_lambda = Math::Clamp(jacobian.total_lambda + lambda, -max_friction, max_friction);
         }
-        lambda = jacobian.total_lambda - old_total_lambda;
+        lambda = (jacobian.total_lambda - old_total_lambda);
         // velocity correction
         m_velocity_term.v_a += m_mass_term.m_a * jacobian.v_a * lambda;
         m_velocity_term.w_a += m_mass_term.i_a * jacobian.w_a * lambda;

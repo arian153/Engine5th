@@ -35,6 +35,7 @@ namespace Engine5
         PointConstraintComponent* m_component          = nullptr;
         ConstraintUtility*        m_constraint_utility = nullptr;
         RigidBody*                m_body               = nullptr;
+        Vector3*                  m_target             = nullptr;
 
         eConstraintMode m_mode = eConstraintMode::Hard;
         ConstraintBias  m_bias;
@@ -50,11 +51,6 @@ namespace Engine5
         Vector3  m_position_error_bias;
         Vector3  m_local_anchor;
         Vector3  m_local_target;
-        Vector3& m_target = m_local_target;
 
-        Real     m_m = 1.0f;
-        Matrix33 m_i;
-        Vector3  m_v;
-        Vector3  m_w;
     };
 }
