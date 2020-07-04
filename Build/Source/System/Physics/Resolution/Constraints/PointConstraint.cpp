@@ -51,7 +51,7 @@ namespace Engine5
         Vector3 w      = m_body->GetAngularVelocity();
         Vector3 c_vel  = v + CrossProduct(w, m_r);
         Vector3 jvb    = c_vel + m_position_error_bias + m_bias.softness_bias * m_total_lambda;
-        Vector3 lambda = m_effective_mass * (-jvb) * dt;
+        Vector3 lambda = m_effective_mass * (-jvb);
         m_total_lambda += lambda;
         v += m_body->InverseMass() * lambda;
         m_body->SetLinearVelocity(v);

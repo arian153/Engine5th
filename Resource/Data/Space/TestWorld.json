@@ -14,7 +14,7 @@
     ],
     "FixedUpdate Flag": [
         "World"
-      
+
     ],
     "Objects": [
         {
@@ -108,7 +108,7 @@
                         "Scale Variance": 0.0
                     }
                 }
-                
+
             ],
             "Name": "Particle"
         },
@@ -325,12 +325,21 @@
                             }
                         ]
                     }
+                },
+                {
+                    "Type": "class Engine5::PointConstraintComponent",
+                    "Value": {
+                        "Mode": "Soft",
+                        "Anchor": [ 0.1, 0, 0 ],
+                        "Target Object": "HelloWorld"
+                    }
                 }
-                            ],
+
+            ],
             "Name": "HelloWorld3"
         }
 
-            ],
+    ],
     "Settings": {
         "Draw Broad Phase": {
             "Color": [ 1, 1, 1, 1 ],
@@ -341,12 +350,12 @@
             "Flag": true
         },
         "Draw EPA": {
-            "Color": [ 1, 1, 1, 1 ],
-            "Flag": false
+            "Color": [ 1, 1, 0, 1 ],
+            "Flag": true
         },
         "Draw GJK": {
-            "Color": [ 1, 1, 1, 1 ],
-            "Flag": false
+            "Color": [ 0, 1, 0, 1 ],
+            "Flag": true
         },
         "Draw Primitive": {
             "Color": [ 1, 1, 1, 1 ],

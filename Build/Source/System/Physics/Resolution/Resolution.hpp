@@ -31,8 +31,8 @@ namespace Engine5
     private:
         bool m_b_warm_starting = true;
 
-        size_t m_velocity_iteration = 8;
-        size_t m_position_iteration = 3;
+        size_t m_velocity_iteration = 10;
+        size_t m_position_iteration = 0;
 
         FrictionUtility                m_friction_utility;
         ConstraintUtility              m_constraint_utility;

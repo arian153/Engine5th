@@ -35,7 +35,6 @@ namespace Engine5
 
     void Resolution::SolveConstraints(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
     {
-        
         m_contact_constraints.clear();
         if (m_velocity_iteration > 0)
         {
@@ -75,13 +74,12 @@ namespace Engine5
                 contact.ApplyVelocityConstraints();
             }
         }
-        //velocity phase
         for (auto& body : *rigid_bodies)
         {
             body->IntegrateVelocity(dt);
             body->IntegratePosition(dt);
         }
-                if (m_position_iteration > 0)
+        if (m_position_iteration > 0)
         {
             for (auto& constraint : m_constraints)
             {
