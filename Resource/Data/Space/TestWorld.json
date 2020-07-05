@@ -241,7 +241,7 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [ 2, 2, 2 ],
+                                "Radius": [ 3, 2, 2 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }
@@ -319,7 +319,7 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [ 2, 2, 2 ],
+                                "Radius": [ 2, 3, 2 ],
                                 "Scale": 1,
                                 "Type": "Ellipsoid"
                             }

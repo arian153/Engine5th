@@ -23,8 +23,12 @@ namespace Engine5
     {
         m_friction_utility.Initialize();
         Gravity* gravity = new Gravity();
+
+        gravity->SetLocalGravity(Vector3(-3, 8, 0), 100.0f, 1.0f);
+
         m_forces.push_back(gravity);
         Drag* drag = new Drag();
+        drag->SetLinearDrag(0.7f);
         m_forces.push_back(drag);
     }
 
