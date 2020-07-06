@@ -27,7 +27,7 @@ namespace Engine5
 
         //find
         FrictionCoefficient Find(Physics::eMaterial a, Physics::eMaterial b);
-        FrictionCoefficient Find(Physics::MaterialCoefficient a, Physics::MaterialCoefficient b);
+        FrictionCoefficient Find(Physics::MaterialData a, Physics::MaterialData b);
 
     private:
         std::unordered_map<size_t, FrictionCoefficient> m_friction_map;

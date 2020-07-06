@@ -157,8 +157,8 @@ namespace Engine5
 
     Real ContactConstraint::GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const
     {
-        Physics::MaterialCoefficient m_a(a->GetMaterial());
-        Physics::MaterialCoefficient m_b(b->GetMaterial());
+        Physics::MaterialData m_a(a->GetMaterialCode());
+        Physics::MaterialData m_b(b->GetMaterialCode());
         return Math::Min(m_a.restitution, m_b.restitution);
     }
 
@@ -215,7 +215,7 @@ namespace Engine5
         else
         {
             //tangent - friction : -max_friction <= lambda <= max_friction
-            auto friction_data    = m_friction_utility->Find(contact.collider_a->GetMaterial(), contact.collider_b->GetMaterial());
+            auto friction_data    = m_friction_utility->Find(contact.collider_a->GetMaterialCode(), contact.collider_b->GetMaterialCode());
             Real max_friction     = friction_data.dynamic_friction * m_normal[i].total_lambda;
             jacobian.total_lambda = Math::Clamp(jacobian.total_lambda + lambda, -max_friction, max_friction);
         }

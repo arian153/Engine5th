@@ -22,13 +22,12 @@ namespace Engine5
     void Resolution::Initialize()
     {
         m_friction_utility.Initialize();
-        Gravity* gravity = new Gravity();
-
-        gravity->SetLocalGravity(Vector3(-3, 8, 0), 100.0f, 1.0f);
-
-        m_forces.push_back(gravity);
+        //Gravity* gravity = new Gravity();
+        //gravity->SetGlobalGravity(Vector3(0, -1.0f, 0), 0.3f);
+        //gravity->SetLocalGravity(Vector3(-3, 8, 0), 100.0f, 1.0f);
+        //m_forces.push_back(gravity);
         Drag* drag = new Drag();
-        drag->SetLinearDrag(0.7f);
+        drag->SetLinearDrag(0.25f);
         m_forces.push_back(drag);
     }
 

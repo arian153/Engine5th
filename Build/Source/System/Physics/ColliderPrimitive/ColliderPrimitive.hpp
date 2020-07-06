@@ -45,8 +45,9 @@ namespace Engine5
         Vector3            ConvertBodyWorldPoint(const Vector3& local_point) const;
         void               SetScale(const Vector3& scale);
         void               SetMass(Real density);
-        void               SetMaterial(Physics::eMaterial material);
-        Physics::eMaterial GetMaterial() const;
+        void               SetMaterial(Physics::eMaterial material, Real d = 0.0f, Real r = 0.0f);
+        Physics::eMaterial GetMaterialCode() const;
+        Physics::MaterialData GetMaterial() const;
 
         eColliderType Type() const;
 
@@ -74,6 +75,9 @@ namespace Engine5
         void UpdatePrimitive();
         void UpdateMassData() const;
         void UpdateScaleData();
+        void LoadMaterial(const Json::Value& data);
+        void LoadTransform(const Json::Value& data);
+        void LoadMass(const Json::Value& data);
 
     protected:
         virtual void SetMassData(Real density) = 0;
@@ -105,14 +109,12 @@ namespace Engine5
         Vector3  m_centroid; //center of mass
         Real     m_mass;
         Matrix33 m_local_inertia_tensor;
-        Real     m_density = 1.0f;
-
-        Physics::eMaterial m_material = Physics::eMaterial::Rock;
 
         //other data
         RigidBody*    m_rigid_body      = nullptr;
         ColliderSet*  m_collider_set    = nullptr;
         BoundingAABB* m_bounding_volume = nullptr;
         eColliderType m_type;
+        Physics::MaterialData m_material;
     };
 }

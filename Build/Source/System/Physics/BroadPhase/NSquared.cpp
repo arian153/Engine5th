@@ -2,6 +2,7 @@
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "..//ColliderPrimitive/ColliderPrimitive.hpp"
 #include <algorithm>
+#include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
@@ -72,7 +73,14 @@ namespace Engine5
 
     void NSquared::Render(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
     {
-        E5_UNUSED_ARGS(primitive_renderer, broad_phase_color, primitive_color);
+        for (auto& aabb : m_aabb_list)
+        {
+            if (aabb->GetCollider() != nullptr)
+            {
+                aabb->GetCollider()->Draw(primitive_renderer, eRenderingMode::Line, primitive_color.color);
+            }
+            primitive_renderer->DrawBox(aabb->Center(), Quaternion(), aabb->Size(), eRenderingMode::Line, broad_phase_color.color);
+        }
     }
 
     void NSquared::ComputePairs(std::list<ColliderPair>& result)

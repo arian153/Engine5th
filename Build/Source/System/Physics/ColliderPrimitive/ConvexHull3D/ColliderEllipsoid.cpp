@@ -80,9 +80,14 @@ namespace Engine5
 
     void ColliderEllipsoid::SetMassData(Real density)
     {
+        if (Math::IsNotEqual(m_material.density, density))
+        {
+            m_material.density = density;
+            m_material.type = Physics::eMaterial::UserType;
+        }
+
         Real a, b, c;
-        m_density = density;
-        m_mass    = density * GetVolume();
+        m_mass = density * GetVolume();
         if (m_collider_set != nullptr)
         {
             a = m_scaled_radius.x;
@@ -282,7 +287,6 @@ namespace Engine5
             m_centroid             = ellipsoid->m_centroid;
             m_mass                 = ellipsoid->m_mass;
             m_local_inertia_tensor = ellipsoid->m_local_inertia_tensor;
-            m_density              = ellipsoid->m_density;
             m_material             = ellipsoid->m_material;
             //ellipsoid
             m_radius        = ellipsoid->m_radius;
@@ -292,96 +296,15 @@ namespace Engine5
 
     void ColliderEllipsoid::Load(const Json::Value& data)
     {
-        if (JsonResource::HasMember(data, "Orientation") && JsonResource::IsQuaternion(data["Orientation"]))
+        LoadTransform(data);
+        //ellipsoid data
+        if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector3(data["Radius"]))
         {
-            m_orientation = JsonResource::AsQuaternionRIJK(data["Orientation"]);
-        }
-        if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data["Position"]))
-        {
-            m_position = JsonResource::AsVector3(data["Position"]);
-        }
-        if (JsonResource::HasMember(data, "Scale") && data["Scale"].isDouble())
-        {
-            m_scale_factor = data["Scale"].asFloat();
-        }
-        if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector3(data[ "Radius" ]))
-        {
-            m_radius = JsonResource::AsVector3(data[ "Radius" ]);
+            m_radius        = JsonResource::AsVector3(data["Radius"]);
             m_scaled_radius = m_scale_factor * m_radius;
         }
-        if (JsonResource::HasMember(data, "Density") && data["Density"].isDouble())
-        {
-            m_density = data["Density"].asFloat();
-            SetMassData(m_density);
-        }
-        if (JsonResource::HasMember(data, "Centroid") && JsonResource::IsVector3(data["Centroid"]))
-        {
-            m_centroid = JsonResource::AsVector3(data["Centroid"]);
-        }
-        if (JsonResource::HasMember(data, "Mass") && data["Mass"].isDouble())
-        {
-            m_mass = data["Mass"].asFloat();
-        }
-        if (JsonResource::HasMember(data, "Inertia") && JsonResource::IsMatrix33(data["Inertia"]))
-        {
-            m_local_inertia_tensor = JsonResource::AsMatrix33(data["Inertia"]);
-        }
-        if (JsonResource::HasMember(data, "Material") && data["Material"].isString())
-        {
-            std::string material = data["Material"].asString();
-            if (material == "Rock")
-            {
-                m_material = Physics::eMaterial::Rock;
-            }
-            else if (material == "Wood")
-            {
-                m_material = Physics::eMaterial::Wood;
-            }
-            else if (material == "Metal")
-            {
-                m_material = Physics::eMaterial::Metal;
-            }
-            else if (material == "BouncyBall")
-            {
-                m_material = Physics::eMaterial::BouncyBall;
-            }
-            else if (material == "SuperBall")
-            {
-                m_material = Physics::eMaterial::SuperBall;
-            }
-            else if (material == "Pillow")
-            {
-                m_material = Physics::eMaterial::Pillow;
-            }
-            else if (material == "Static")
-            {
-                m_material = Physics::eMaterial::Static;
-            }
-            else if (material == "Concrete")
-            {
-                m_material = Physics::eMaterial::Concrete;
-            }
-            else if (material == "Ice")
-            {
-                m_material = Physics::eMaterial::Ice;
-            }
-            else if (material == "Glass")
-            {
-                m_material = Physics::eMaterial::Glass;
-            }
-            else if (material == "Lubricant")
-            {
-                m_material = Physics::eMaterial::Lubricant;
-            }
-            else if (material == "Rubber")
-            {
-                m_material = Physics::eMaterial::Rubber;
-            }
-            else if (material == "Velcro")
-            {
-                m_material = Physics::eMaterial::Velcro;
-            }
-        }
+        LoadMaterial(data);
+        LoadMass(data);
     }
 
     void ColliderEllipsoid::Save(const Json::Value& data)

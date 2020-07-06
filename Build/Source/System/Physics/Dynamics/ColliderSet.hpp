@@ -56,7 +56,7 @@ namespace Engine5
         RigidBody*         m_rigid_body = nullptr;
         World*             m_world      = nullptr;
         MassData           m_mass_data;
-        Vector3            m_scale;
+        Vector3            m_scale = Vector3(1.0f, 1.0f, 1.0f);
         BoundingAABB       m_bounding_volume;
         ColliderComponent* m_component = nullptr;
 

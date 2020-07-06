@@ -1,4 +1,6 @@
 #include "ColliderPrimitive.hpp"
+#include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
+#include "../../../External/JSONCPP/json/json.h"
 
 namespace Engine5
 {
@@ -179,7 +181,7 @@ namespace Engine5
 
     Real ColliderPrimitive::GetDensity() const
     {
-        return m_density;
+        return m_material.density;
     }
 
     Vector3 ColliderPrimitive::ConvertBodyWorldPoint(const Vector3& local_point) const
@@ -203,12 +205,17 @@ namespace Engine5
         UpdateMassData();
     }
 
-    void ColliderPrimitive::SetMaterial(Physics::eMaterial material)
+    void ColliderPrimitive::SetMaterial(Physics::eMaterial material, Real d, Real r)
     {
-        m_material = material;
+        m_material = Physics::MaterialData(material, d, r);
     }
 
-    Physics::eMaterial ColliderPrimitive::GetMaterial() const
+    Physics::eMaterial ColliderPrimitive::GetMaterialCode() const
+    {
+        return m_material.type;
+    }
+
+    Physics::MaterialData ColliderPrimitive::GetMaterial() const
     {
         return m_material;
     }
@@ -227,7 +234,7 @@ namespace Engine5
             {
                 UpdateBoundingVolume();
             }
-            SetMassData(m_density);
+            SetMassData(m_material.density);
             m_collider_set->UpdateMassData();
             m_collider_set->UpdateBoundingVolume();
         }
@@ -249,9 +256,123 @@ namespace Engine5
             {
                 UpdateBoundingVolume();
             }
-            SetMassData(m_density);
+            SetMassData(m_material.density);
             m_collider_set->UpdateMassData();
             m_collider_set->UpdateBoundingVolume();
+        }
+    }
+
+    void ColliderPrimitive::LoadMaterial(const Json::Value& data)
+    {
+        if (JsonResource::HasMember(data, "Material"))
+        {
+            Vector2            material_data;
+            Physics::eMaterial type = Physics::eMaterial::Rock;
+            if (data["Material"].isString())
+            {
+                std::string material = data["Material"].asString();
+                if (material == "Rock")
+                {
+                    type = Physics::eMaterial::Rock;
+                }
+                else if (material == "Wood")
+                {
+                    type = Physics::eMaterial::Wood;
+                }
+                else if (material == "Metal")
+                {
+                    type = Physics::eMaterial::Metal;
+                }
+                else if (material == "BouncyBall")
+                {
+                    type = Physics::eMaterial::BouncyBall;
+                }
+                else if (material == "SuperBall")
+                {
+                    type = Physics::eMaterial::SuperBall;
+                }
+                else if (material == "Pillow")
+                {
+                    type = Physics::eMaterial::Pillow;
+                }
+                else if (material == "Static")
+                {
+                    type = Physics::eMaterial::Static;
+                }
+                else if (material == "Concrete")
+                {
+                    type = Physics::eMaterial::Concrete;
+                }
+                else if (material == "Ice")
+                {
+                    type = Physics::eMaterial::Ice;
+                }
+                else if (material == "Glass")
+                {
+                    type = Physics::eMaterial::Glass;
+                }
+                else if (material == "Lubricant")
+                {
+                    type = Physics::eMaterial::Lubricant;
+                }
+                else if (material == "Rubber")
+                {
+                    type = Physics::eMaterial::Rubber;
+                }
+                else if (material == "Velcro")
+                {
+                    type = Physics::eMaterial::Velcro;
+                }
+            }
+            else if (JsonResource::IsVector2(data["Material"]))
+            {
+                type          = Physics::eMaterial::UserType;
+                material_data = JsonResource::AsVector2(data["Material"]);
+            }
+            SetMaterial(type, material_data.x, material_data.y);
+        }
+        if (JsonResource::HasMember(data, "Density") && data["Density"].isDouble())
+        {
+            m_material.type    = Physics::eMaterial::UserType;
+            m_material.density = data["Density"].asFloat();
+        }
+        if (JsonResource::HasMember(data, "Restitution") && data["Restitution"].isDouble())
+        {
+            m_material.type        = Physics::eMaterial::UserType;
+            m_material.restitution = data["Restitution"].asFloat();
+        }
+        SetMassData(m_material.density);
+    }
+
+    void ColliderPrimitive::LoadTransform(const Json::Value& data)
+    {
+        if (JsonResource::HasMember(data, "Orientation") && JsonResource::IsQuaternion(data["Orientation"]))
+        {
+            m_orientation = JsonResource::AsQuaternionRIJK(data["Orientation"]);
+        }
+        if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data["Position"]))
+        {
+            m_position = JsonResource::AsVector3(data["Position"]);
+        }
+        if (JsonResource::HasMember(data, "Scale") && data["Scale"].isDouble())
+        {
+            m_scale_factor = data["Scale"].asFloat();
+        }
+    }
+
+    void ColliderPrimitive::LoadMass(const Json::Value& data)
+    {
+        if (JsonResource::HasMember(data, "Centroid") && JsonResource::IsVector3(data["Centroid"]))
+        {
+            m_centroid = JsonResource::AsVector3(data["Centroid"]);
+        }
+        if (JsonResource::HasMember(data, "Mass") && data["Mass"].isDouble())
+        {
+            m_mass = data["Mass"].asFloat();
+        }
+        if (JsonResource::HasMember(data, "Inertia") && JsonResource::IsMatrix33(data["Inertia"]))
+        {
+            m_local_inertia_tensor = JsonResource::AsMatrix33(data["Inertia"]);
         }
     }
 

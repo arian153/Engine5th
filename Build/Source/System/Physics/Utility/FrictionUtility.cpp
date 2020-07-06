@@ -51,7 +51,7 @@ namespace Engine5
         return FrictionCoefficient();
     }
 
-    FrictionCoefficient FrictionUtility::Find(Physics::MaterialCoefficient a, Physics::MaterialCoefficient b)
+    FrictionCoefficient FrictionUtility::Find(Physics::MaterialData a, Physics::MaterialData b)
     {
         size_t key   = static_cast<size_t>(a.type) + static_cast<size_t>(b.type);
         auto   found = m_friction_map.find(key);

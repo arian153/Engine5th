@@ -9,12 +9,9 @@
     "Update Flag": [
         "Scene",
         "Logic"
-
-
     ],
     "FixedUpdate Flag": [
         "World"
-
     ],
     "Objects": [
         {
@@ -46,182 +43,6 @@
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 0, 0, 0 ],
-                        "Position": [ 0, 0, 0 ],
-                        "Scale": [ 1, 1, 1 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::ParticleEmitterComponent",
-                    "Value": {
-                        "Texture": "../../Resource/Texture/white.dds",
-                        "Particle Amount": 1000,
-                        "Emission Amount": 0,
-                        "Emission Rate": 0.0,
-                        "Life Decay Rate": 0.1,
-                        "Scale Decay Rate": 0.1,
-                        "Base Position": [ 0, 0, 0 ],
-                        "Base Velocity": [ 0, 0, 0 ],
-                        "Base Color": [ 1, 1, 0.5, 1.0 ],
-                        "Base Life": 3.0,
-                        "Base Scale": 1,
-                        "Position Variance": [ 0, 0, 0 ],
-                        "Direction Variance": [ 0.5, 1, 1 ],
-                        "Color Variance": [ 0.1, 0.1, 0, 0 ],
-                        "Speed Variance": 5.0,
-                        "Life Variance": 0.1,
-                        "Scale Variance": 0.0
-                    }
-                }
-            ],
-            "Name": "Particle"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 0, 0 ],
-                        "Position": [ -10, 5, 0 ],
-                        "Scale": [ 1, 1, 1 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::ParticleEmitterComponent",
-                    "Value": {
-                        "Texture": "../../Resource/Texture/star.png",
-                        "Particle Amount": 10000,
-                        "Emission Amount": 1000,
-                        "Emission Rate": 2,
-                        "Life Decay Rate": 0.0,
-                        "Scale Decay Rate": 0.15,
-                        "Base Position": [ 0, 0, 0 ],
-                        "Base Velocity": [ 0, -1, 0 ],
-                        "Base Color": [ 0.5, 0.5, 1, 1.0 ],
-                        "Base Life": 3.0,
-                        "Base Scale": 0.5,
-                        "Position Variance": [ 0, 0, 0 ],
-                        "Direction Variance": [ 0.5, 0.5, 0.5 ],
-                        "Color Variance": [ 0.1, 0.1, 0, 0 ],
-                        "Speed Variance": 5.0,
-                        "Life Variance": 0.1,
-                        "Scale Variance": 0.0
-                    }
-                }
-
-            ],
-            "Name": "Particle"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 1.7, 0 ],
-                        "Position": [ 0, -35, 0 ],
-                        "Scale": [ 0.02, 0.02, 0.02 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::MeshComponent",
-                    "Value": {
-                        "Color": [ 1, 1, 1, 1 ],
-                        "Mesh": "../../Resource/Mesh/deer.obj",
-                        "Shader Type": "Forward Directional Light",
-                        "Texture": "../../Resource/Texture/white.dds"
-                    }
-                }
-            ],
-            "Name": "Deer1"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 1.7, 0 ],
-                        "Position": [ 10, -35, 0 ],
-                        "Scale": [ 0.02, 0.02, 0.02 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::MeshComponent",
-                    "Value": {
-                        "Color": [ 1, 1, 1, 1 ],
-                        "Mesh": "../../Resource/Mesh/deer.obj",
-                        "Shader Type": "Forward Directional Light",
-                        "Texture": "../../Resource/Texture/white.dds"
-                    }
-                }
-            ],
-            "Name": "Deer2"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 1.7, 0 ],
-                        "Position": [ 10, -15, 0 ],
-                        "Scale": [ 0.02, 0.02, 0.02 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::LightComponent",
-                    "Value": {
-                        "Type": "DirectionalLight",
-                        "Ambient Color": [ 0.5, 0.1, 0.1, 1 ]
-                    }
-                }
-            ],
-            "Name": "Light"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 1.7, 0 ],
-                        "Position": [ 10, -15, 0 ],
-                        "Scale": [ 0.02, 0.02, 0.02 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::LightComponent",
-                    "Value": {
-                        "Type": "DirectionalLight",
-                        "Ambient Color": [ 0.5, 0.1, 0.1, 1 ]
-                    }
-                }
-            ],
-            "Name": "Light2"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 0, 0 ],
-                        "Position": [ 20, 5, 0 ],
-                        "Scale": [ 5.0, 5.0, 10.0 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::TextSpriteComponent",
-                    "Value": {
-                        "Color": [ 1, 1, 1, 1 ],
-                        "Text": "Hello World",
-                        "Font": "consolas"
-                    }
-                }
-            ],
-            "Name": "Text Object"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
                         "Position": [ 0, 15, 0 ],
                         "Scale": [ 1, 1, 1 ]
@@ -241,9 +62,9 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [ 3, 2, 2 ],
+                                "Cube": [ 6, 4, 4 ],
                                 "Scale": 1,
-                                "Type": "Ellipsoid"
+                                "Type": "Box"
                             }
                         ]
                     }
@@ -251,46 +72,8 @@
                 {
                     "Type": "class Game::ControllerComponent"
                 }
-
             ],
-            "Name": "HelloWorld"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ -6, 0, 0 ],
-                        "Scale": [ 1, 1, 1 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::RigidBodyComponent",
-                    "Value": {
-                        "Linear": {
-                        },
-                        "Motion": "Static"
-                    }
-                },
-                {
-                    "Type": "class Engine5::ColliderComponent",
-                    "Value": {
-                        "Colliders": [
-                            {
-                                "Density": 1.0,
-                                "Material": "Rubber",
-                                "Orientation": [ 1, 0, 0, 0 ],
-                                "Position": [ 0, 0, 0 ],
-                                "Radius": [ 10, 2, 10 ],
-                                "Scale": 1,
-                                "Type": "Ellipsoid"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "Name": "HelloWorld2"
+            "Name": "Box1"
         },
         {
             "Components": [
@@ -315,7 +98,6 @@
                     "Value": {
                         "Colliders": [
                             {
-                                "Density": 1.0,
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
@@ -325,40 +107,315 @@
                             }
                         ]
                     }
+                }
+            ],
+            "Name": "Ellipsoid1"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -10, 15, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
                 },
                 {
-                    "Type": "class Engine5::PointConstraintComponent",
+                    "Type": "class Engine5::RigidBodyComponent",
                     "Value": {
-                        "Mode": "Soft",
-                        "Anchor": [ 0.1, 0, 0 ],
-                        "Target Object": "HelloWorld"
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 2, 1.5, 3 ],
+                                "Height": 3,
+                                "Scale": 1,
+                                "Type": "Capsule"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Capsule"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -5, 15, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 2, 3 ],
+                                "Height": 3,
+                                "Scale": 1,
+                                "Type": "Cone"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Cone"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 5, 15, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 2, 3 ],
+                                "Height": 3,
+                                "Scale": 1,
+                                "Type": "Cylinder"
+                            }
+                        ]
                     }
                 }
 
             ],
-            "Name": "HelloWorld3"
+            "Name": "Cylinder"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 10, 15, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 2, 1.5, 3 ],
+                                "Scale": 1,
+                                "Type": "Dome"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Dome"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 15, 15, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Scale": 1,
+                                "Type": "Tetrahedron",
+                                "Vertices": [
+                                    [ 0, 0, 0 ],
+                                    [ 1, 0, 0 ],
+                                    [ 0, 1, 0 ],
+                                    [ 0, 0, 1 ]
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Tetrahedron"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -10, 5, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 2, 3 ],
+                                "Height": 3,
+                                "Ratio": 1.5,
+                                "Scale": 1,
+                                "Type": "Truncated"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Truncated"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -10, 5, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 2, 3 ],
+                                "Scale": 1,
+                                "Type": "Ellipse"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Ellipse"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, -10, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::RigidBodyComponent",
+                    "Value": {
+                        "Linear": {
+                        },
+                        "Motion": "Static"
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Cube": [ 80, 3, 80 ],
+                                "Scale": 1,
+                                "Type": "Box"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "StaticBox"
         }
-
     ],
     "Settings": {
         "Draw Broad Phase": {
-            "Color": [ 1, 1, 1, 1 ],
+            "Color": [1, 1, 1, 1],
             "Flag": true
         },
         "Draw Contact": {
-            "Color": [ 1, 0, 0, 1 ],
+            "Color": [1, 0, 0, 1],
             "Flag": true
         },
         "Draw EPA": {
-            "Color": [ 1, 1, 0, 1 ],
+            "Color": [1, 1, 0, 1],
             "Flag": true
         },
         "Draw GJK": {
-            "Color": [ 0, 1, 0, 1 ],
+            "Color": [0, 1, 0, 1],
             "Flag": true
         },
         "Draw Primitive": {
-            "Color": [ 1, 1, 1, 1 ],
+            "Color": [0, 0, 1, 1],
             "Flag": true
         },
         "ProjectionMatrix": "Perspective"

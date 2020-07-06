@@ -23,11 +23,11 @@ namespace Engine5
           , UserType = 8192
         };
 
-        class MaterialCoefficient
+        class MaterialData
         {
         public:
-            explicit MaterialCoefficient(eMaterial type = eMaterial::Rock, Real user_density = 1.0f, Real user_restitution = 1.0f);
-            ~MaterialCoefficient();
+            explicit MaterialData(eMaterial type = eMaterial::Rock, Real user_density = 1.0f, Real user_restitution = 1.0f);
+            ~MaterialData();
 
         public:
             eMaterial type;
@@ -35,7 +35,7 @@ namespace Engine5
             Real      restitution;
         };
 
-        inline MaterialCoefficient::MaterialCoefficient(eMaterial type, Real user_density, Real user_restitution)
+        inline MaterialData::MaterialData(eMaterial type, Real user_density, Real user_restitution)
             : type(type)
         {
             switch (type)
@@ -103,25 +103,25 @@ namespace Engine5
             }
         }
 
-        inline MaterialCoefficient::~MaterialCoefficient()
+        inline MaterialData::~MaterialData()
         {
         }
 
         namespace Material
         {
-            const MaterialCoefficient ROCK        = MaterialCoefficient(eMaterial::Rock);
-            const MaterialCoefficient WOOD        = MaterialCoefficient(eMaterial::Wood);
-            const MaterialCoefficient METAL       = MaterialCoefficient(eMaterial::Metal);
-            const MaterialCoefficient BOUNCY_BALL = MaterialCoefficient(eMaterial::BouncyBall);
-            const MaterialCoefficient SUPER_BALL  = MaterialCoefficient(eMaterial::SuperBall);
-            const MaterialCoefficient PILLOW      = MaterialCoefficient(eMaterial::Pillow);
-            const MaterialCoefficient STATIC      = MaterialCoefficient(eMaterial::Static);
-            const MaterialCoefficient CONCRETE    = MaterialCoefficient(eMaterial::Concrete);
-            const MaterialCoefficient ICE         = MaterialCoefficient(eMaterial::Ice);
-            const MaterialCoefficient GLASS       = MaterialCoefficient(eMaterial::Glass);
-            const MaterialCoefficient LUBRICANT   = MaterialCoefficient(eMaterial::Lubricant);
-            const MaterialCoefficient RUBBER      = MaterialCoefficient(eMaterial::Rubber);
-            const MaterialCoefficient VELCRO      = MaterialCoefficient(eMaterial::Velcro);
+            const MaterialData ROCK        = MaterialData(eMaterial::Rock);
+            const MaterialData WOOD        = MaterialData(eMaterial::Wood);
+            const MaterialData METAL       = MaterialData(eMaterial::Metal);
+            const MaterialData BOUNCY_BALL = MaterialData(eMaterial::BouncyBall);
+            const MaterialData SUPER_BALL  = MaterialData(eMaterial::SuperBall);
+            const MaterialData PILLOW      = MaterialData(eMaterial::Pillow);
+            const MaterialData STATIC      = MaterialData(eMaterial::Static);
+            const MaterialData CONCRETE    = MaterialData(eMaterial::Concrete);
+            const MaterialData ICE         = MaterialData(eMaterial::Ice);
+            const MaterialData GLASS       = MaterialData(eMaterial::Glass);
+            const MaterialData LUBRICANT   = MaterialData(eMaterial::Lubricant);
+            const MaterialData RUBBER      = MaterialData(eMaterial::Rubber);
+            const MaterialData VELCRO      = MaterialData(eMaterial::Velcro);
         }
     }
 }

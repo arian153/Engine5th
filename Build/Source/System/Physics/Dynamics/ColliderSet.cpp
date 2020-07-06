@@ -11,6 +11,11 @@
 #include "../ColliderPrimitive/ConvexHull3D/ColliderTetrahedron.hpp"
 #include "../ColliderPrimitive/ConvexHull3D/ColliderTruncated.hpp"
 #include "../../../Manager/Component/EngineComponent/ColliderComponent.hpp"
+#include "../ColliderPrimitive/ConvexHull2D/ColliderTriangle.hpp"
+#include "../ColliderPrimitive/ConvexHull2D/ColliderRectangle.hpp"
+#include "../ColliderPrimitive/ConvexHull2D/ColliderCircle.hpp"
+#include "../ColliderPrimitive/ConvexHull2D/ColliderEllipse.hpp"
+#include "../ColliderPrimitive/ConvexHull2D/ColliderPolygon.hpp"
 
 namespace Engine5
 {
@@ -56,6 +61,21 @@ namespace Engine5
         ColliderPrimitive* primitive;
         switch (type)
         {
+        case Engine5::eColliderType::Circle:
+            primitive = new ColliderCircle();
+            break;
+        case Engine5::eColliderType::Ellipse:
+            primitive = new ColliderEllipse();
+            break;
+        case Engine5::eColliderType::Polygon:
+            primitive = new ColliderPolygon();
+            break;
+        case Engine5::eColliderType::Rectangle:
+            primitive = new ColliderRectangle();
+            break;
+        case Engine5::eColliderType::Triangle:
+            primitive = new ColliderTriangle();
+            break;
         case Engine5::eColliderType::Box:
             primitive = new ColliderBox();
             break;
@@ -86,6 +106,8 @@ namespace Engine5
         case Engine5::eColliderType::Truncated:
             primitive = new ColliderTruncated();
             break;
+        case Engine5::eColliderType::InvalidPrimitive:
+            return nullptr;
         default:
             return nullptr;
         }
@@ -161,7 +183,7 @@ namespace Engine5
                 {
                     collider_data->UpdateBoundingVolume();
                 }
-                collider_data->SetMassData(collider_data->m_density);
+                collider_data->SetMassData(collider_data->m_material.density);
             }
             UpdateMassData();
             UpdateBoundingVolume();

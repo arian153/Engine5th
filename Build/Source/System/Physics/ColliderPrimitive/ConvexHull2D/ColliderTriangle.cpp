@@ -210,6 +210,11 @@ namespace Engine5
 
     void ColliderTriangle::SetMassData(Real density)
     {
+        if (Math::IsNotEqual(m_material.density, density))
+        {
+            m_material.density = density;
+            m_material.type    = Physics::eMaterial::UserType;
+        }
         Real area  = 0.0f;
         Real it_xx = 0.0f;
         Real it_yy = 0.0f;
@@ -408,7 +413,6 @@ namespace Engine5
             m_centroid             = triangle->m_centroid;
             m_mass                 = triangle->m_mass;
             m_local_inertia_tensor = triangle->m_local_inertia_tensor;
-            m_density              = triangle->m_density;
             m_material             = triangle->m_material;
             //triangle
             std::memcpy(m_vertices, triangle->m_vertices, sizeof m_vertices);
@@ -418,90 +422,7 @@ namespace Engine5
 
     void ColliderTriangle::Load(const Json::Value& data)
     {
-        if (JsonResource::HasMember(data, "Orientation") && JsonResource::IsQuaternion(data["Orientation"]))
-        {
-            m_orientation = JsonResource::AsQuaternionRIJK(data["Orientation"]);
-        }
-        if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data["Position"]))
-        {
-            m_position = JsonResource::AsVector3(data["Position"]);
-        }
-        if (JsonResource::HasMember(data, "Scale") && data["Scale"].isDouble())
-        {
-            m_scale_factor = data["Scale"].asFloat();
-        }
-        if (JsonResource::HasMember(data, "Centroid") && JsonResource::IsVector3(data["Centroid"]))
-        {
-            m_centroid = JsonResource::AsVector3(data["Centroid"]);
-        }
-        if (JsonResource::HasMember(data, "Mass") && data["Mass"].isDouble())
-        {
-            m_mass = data["Mass"].asFloat();
-        }
-        if (JsonResource::HasMember(data, "Inertia") && JsonResource::IsMatrix33(data["Inertia"]))
-        {
-            m_local_inertia_tensor = JsonResource::AsMatrix33(data["Inertia"]);
-        }
-        if (JsonResource::HasMember(data, "Density") && data["Density"].isDouble())
-        {
-            m_density = data["Density"].asFloat();
-        }
-        if (JsonResource::HasMember(data, "Material") && data["Material"].isString())
-        {
-            std::string material = data["Material"].asString();
-            if (material == "Rock")
-            {
-                m_material = Physics::eMaterial::Rock;
-            }
-            else if (material == "Wood")
-            {
-                m_material = Physics::eMaterial::Wood;
-            }
-            else if (material == "Metal")
-            {
-                m_material = Physics::eMaterial::Metal;
-            }
-            else if (material == "BouncyBall")
-            {
-                m_material = Physics::eMaterial::BouncyBall;
-            }
-            else if (material == "SuperBall")
-            {
-                m_material = Physics::eMaterial::SuperBall;
-            }
-            else if (material == "Pillow")
-            {
-                m_material = Physics::eMaterial::Pillow;
-            }
-            else if (material == "Static")
-            {
-                m_material = Physics::eMaterial::Static;
-            }
-            else if (material == "Concrete")
-            {
-                m_material = Physics::eMaterial::Concrete;
-            }
-            else if (material == "Ice")
-            {
-                m_material = Physics::eMaterial::Ice;
-            }
-            else if (material == "Glass")
-            {
-                m_material = Physics::eMaterial::Glass;
-            }
-            else if (material == "Lubricant")
-            {
-                m_material = Physics::eMaterial::Lubricant;
-            }
-            else if (material == "Rubber")
-            {
-                m_material = Physics::eMaterial::Rubber;
-            }
-            else if (material == "Velcro")
-            {
-                m_material = Physics::eMaterial::Velcro;
-            }
-        }
+        LoadTransform(data);
         //triangle data
         if (JsonResource::HasMember(data, "Vertices") && data["Vertices"].isArray() && data["Vertices"].size() == 3)
         {
@@ -514,6 +435,8 @@ namespace Engine5
                 }
             }
         }
+        LoadMaterial(data);
+        LoadMass(data);
     }
 
     void ColliderTriangle::Save(const Json::Value& data)
