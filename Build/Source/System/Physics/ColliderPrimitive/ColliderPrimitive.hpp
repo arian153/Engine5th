@@ -5,7 +5,8 @@
 #include "../Dynamics/ColliderSet.hpp"
 #include "../Utility/MaterialDef.hpp"
 
-namespace Json {
+namespace Json
+{
     class Value;
 }
 
@@ -42,11 +43,11 @@ namespace Engine5
         ColliderSet*  GetColliderSet() const;
         Real          GetDensity() const;
 
-        Vector3            ConvertBodyWorldPoint(const Vector3& local_point) const;
-        void               SetScale(const Vector3& scale);
-        void               SetMass(Real density);
-        void               SetMaterial(Physics::eMaterial material, Real d = 0.0f, Real r = 0.0f);
-        Physics::eMaterial GetMaterialCode() const;
+        Vector3               ConvertBodyWorldPoint(const Vector3& local_point) const;
+        void                  SetScale(const Vector3& scale);
+        void                  SetMass(Real density);
+        void                  SetMaterial(Physics::eMaterial material, Real d = 0.0f, Real r = 0.0f);
+        Physics::eMaterial    GetMaterialCode() const;
         Physics::MaterialData GetMaterial() const;
 
         eColliderType Type() const;
@@ -69,7 +70,6 @@ namespace Engine5
         virtual void SetUnit() = 0;
         virtual void UpdateBoundingVolume() = 0;
         virtual void Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const = 0;
-
 
     protected:
         void UpdatePrimitive();
@@ -101,9 +101,9 @@ namespace Engine5
 
     protected:
         //collider local space data
-        Quaternion m_orientation;
-        Vector3    m_position;
         Real       m_scale_factor = 1.0f;
+
+        Transform m_collider_transform;
 
         //collider mass data
         Vector3  m_centroid; //center of mass
@@ -111,10 +111,10 @@ namespace Engine5
         Matrix33 m_local_inertia_tensor;
 
         //other data
-        RigidBody*    m_rigid_body      = nullptr;
-        ColliderSet*  m_collider_set    = nullptr;
-        BoundingAABB* m_bounding_volume = nullptr;
-        eColliderType m_type;
+        RigidBody*            m_rigid_body      = nullptr;
+        ColliderSet*          m_collider_set    = nullptr;
+        BoundingAABB*         m_bounding_volume = nullptr;
+        eColliderType         m_type;
         Physics::MaterialData m_material;
     };
 }

@@ -283,12 +283,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
             bounding_factor *= m_scale_factor;
         }
         else
         {
-            pos = m_position;
+            pos = m_collider_transform.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -320,8 +320,8 @@ namespace Engine5
                 vertex_local_pos.x = radius.x * r * c;
                 vertex_local_pos.y = y;
                 vertex_local_pos.z = radius.y * r * s;
-                vertex_local_pos   = m_orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += m_position;
+                vertex_local_pos   = m_collider_transform.orientation.Rotate(vertex_local_pos);
+                vertex_local_pos += m_collider_transform.position;
                 vertex_local_pos = body_orientation.Rotate(vertex_local_pos);
                 vertex_local_pos += body_position;
                 renderer->PushVertex(vertex_local_pos, mode, color);
@@ -414,8 +414,7 @@ namespace Engine5
         {
             ColliderCone* cone = static_cast<ColliderCone*>(origin);
             //collider local space data
-            m_orientation  = cone->m_orientation;
-            m_position     = cone->m_position;
+            m_collider_transform = cone->m_collider_transform;
             m_scale_factor = cone->m_scale_factor;
             //collider mass data
             m_centroid             = cone->m_centroid;

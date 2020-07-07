@@ -233,12 +233,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
             bounding_factor *= m_scale_factor;
         }
         else
         {
-            pos = m_position;
+            pos = m_collider_transform.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -263,8 +263,8 @@ namespace Engine5
         for (auto& vertex : *vertices)
         {
             //collider local space to object space(body local)
-            vertex = m_orientation.Rotate(vertex);
-            vertex += m_position;
+            vertex = m_collider_transform.orientation.Rotate(vertex);
+            vertex += m_collider_transform.position;
             //body local space to world space
             vertex = body_orientation.Rotate(vertex);
             vertex += body_position;
@@ -391,8 +391,7 @@ namespace Engine5
         {
             ColliderPolyhedron* polyhedron = static_cast<ColliderPolyhedron*>(origin);
             //collider local space data
-            m_orientation  = polyhedron->m_orientation;
-            m_position     = polyhedron->m_position;
+            m_collider_transform = polyhedron->m_collider_transform;
             m_scale_factor = polyhedron->m_scale_factor;
             //collider mass data
             m_centroid             = polyhedron->m_centroid;

@@ -121,8 +121,7 @@ namespace Engine5
         {
             ColliderRectangle* rectangle = static_cast<ColliderRectangle*>(origin);
             //collider local space data
-            m_orientation  = rectangle->m_orientation;
-            m_position     = rectangle->m_position;
+            m_collider_transform = rectangle->m_collider_transform;
             m_scale_factor = rectangle->m_scale_factor;
             //collider mass data
             m_centroid             = rectangle->m_centroid;

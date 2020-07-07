@@ -118,32 +118,32 @@ namespace Engine5
 
     Vector3 ColliderPrimitive::LocalToWorldPoint(const Vector3& local_point) const
     {
-        return m_orientation.Rotate(local_point) + m_position;
+        return m_collider_transform.LocalToWorldPoint(local_point);
     }
 
     Vector3 ColliderPrimitive::WorldToLocalPoint(const Vector3& world_point) const
     {
-        return m_orientation.Inverse().Rotate((world_point - m_position));
+        return m_collider_transform.WorldToLocalPoint(world_point);
     }
 
     Vector3 ColliderPrimitive::LocalToWorldVector(const Vector3& local_vector) const
     {
-        return m_orientation.Rotate(local_vector);
+        return m_collider_transform.LocalToWorldVector(local_vector);
     }
 
     Vector3 ColliderPrimitive::WorldToLocalVector(const Vector3& world_vector) const
     {
-        return m_orientation.Inverse().Rotate(world_vector);
+        return m_collider_transform.WorldToLocalVector(world_vector);
     }
 
     Matrix33 ColliderPrimitive::WorldInertia() const
     {
-        return MassData::TranslateInertia(MassData::RotateInertia(m_local_inertia_tensor, m_orientation), m_mass, m_position);
+        return MassData::TranslateInertia(MassData::RotateInertia(m_local_inertia_tensor, m_collider_transform.orientation), m_mass, m_collider_transform.position);
     }
 
     Vector3 ColliderPrimitive::WorldCentroid() const
     {
-        return m_orientation.Rotate(m_centroid) + m_position;
+        return m_collider_transform.LocalToWorldPoint(m_centroid);
     }
 
     Vector3 ColliderPrimitive::GetBodyPosition() const
@@ -186,8 +186,8 @@ namespace Engine5
 
     Vector3 ColliderPrimitive::ConvertBodyWorldPoint(const Vector3& local_point) const
     {
-        Vector3 result = m_orientation.Rotate(local_point);
-        result += m_position;
+        Vector3 result = m_collider_transform.orientation.Rotate(local_point);
+        result += m_collider_transform.position;
         result = GetBodyOrientation().Rotate(result);
         result += GetBodyPosition();
         return result;
@@ -348,11 +348,11 @@ namespace Engine5
     {
         if (JsonResource::HasMember(data, "Orientation") && JsonResource::IsQuaternion(data["Orientation"]))
         {
-            m_orientation = JsonResource::AsQuaternionRIJK(data["Orientation"]);
+            m_collider_transform.orientation = JsonResource::AsQuaternionRIJK(data["Orientation"]);
         }
         if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data["Position"]))
         {
-            m_position = JsonResource::AsVector3(data["Position"]);
+            m_collider_transform.position = JsonResource::AsVector3(data["Position"]);
         }
         if (JsonResource::HasMember(data, "Scale") && data["Scale"].isDouble())
         {

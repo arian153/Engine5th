@@ -279,12 +279,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
             bounding_factor *= m_scale_factor;
         }
         else
         {
-            pos = m_position;
+            pos = m_collider_transform.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -310,8 +310,8 @@ namespace Engine5
         {
             //collider local space to object space(body local)
             Vector3 vertex_v3(vertex);
-            vertex_v3 = m_orientation.Rotate(vertex_v3);
-            vertex_v3 += m_position;
+            vertex_v3 = m_collider_transform.orientation.Rotate(vertex_v3);
+            vertex_v3 += m_collider_transform.position;
             //body local space to world space
             vertex_v3 = body_orientation.Rotate(vertex_v3);
             vertex_v3 += body_position;
@@ -336,8 +336,8 @@ namespace Engine5
         else if (mode == eRenderingMode::Face)
         {
             Vector3 vertex_v3 = Math::Vector3::ORIGIN;
-            vertex_v3         = m_orientation.Rotate(vertex_v3);
-            vertex_v3 += m_position;
+            vertex_v3         = m_collider_transform.orientation.Rotate(vertex_v3);
+            vertex_v3 += m_collider_transform.position;
             vertex_v3 = body_orientation.Rotate(vertex_v3);
             vertex_v3 += body_position;
             renderer->PushVertex(vertex_v3, mode, color);
@@ -377,8 +377,7 @@ namespace Engine5
         {
             ColliderPolygon* polygon = static_cast<ColliderPolygon*>(origin);
             //collider local space data
-            m_orientation  = polygon->m_orientation;
-            m_position     = polygon->m_position;
+            m_collider_transform = polygon->m_collider_transform;
             m_scale_factor = polygon->m_scale_factor;
             //collider mass data
             m_centroid             = polygon->m_centroid;

@@ -163,12 +163,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
             bounding_factor *= m_scale_factor;
         }
         else
         {
-            pos = m_position;
+            pos = m_collider_transform.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -190,8 +190,8 @@ namespace Engine5
         Vector3 top_vertex_local_pos = axis_vector;
         top_vertex_local_pos         = top_vertex_local_pos.HadamardProduct(radius);
         //modify rotation, translation
-        top_vertex_local_pos = m_orientation.Rotate(top_vertex_local_pos);
-        top_vertex_local_pos += m_position;
+        top_vertex_local_pos = m_collider_transform.orientation.Rotate(top_vertex_local_pos);
+        top_vertex_local_pos += m_collider_transform.position;
         top_vertex_local_pos = body_orientation.Rotate(top_vertex_local_pos);
         top_vertex_local_pos += body_position;
         renderer->PushVertex(top_vertex_local_pos, mode, color);
@@ -210,8 +210,8 @@ namespace Engine5
                 vertex_local_pos.y = cosf(phi);
                 vertex_local_pos.z = sinf(phi) * sinf(theta);
                 vertex_local_pos   = vertex_local_pos.HadamardProduct(radius);
-                vertex_local_pos   = m_orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += m_position;
+                vertex_local_pos   = m_collider_transform.orientation.Rotate(vertex_local_pos);
+                vertex_local_pos += m_collider_transform.position;
                 vertex_local_pos = body_orientation.Rotate(vertex_local_pos);
                 vertex_local_pos += body_position;
                 renderer->PushVertex(vertex_local_pos, mode, color);
@@ -288,8 +288,7 @@ namespace Engine5
         {
             ColliderDome* dome = static_cast<ColliderDome*>(origin);
             //collider local space data
-            m_orientation  = dome->m_orientation;
-            m_position     = dome->m_position;
+            m_collider_transform = dome->m_collider_transform;
             m_scale_factor = dome->m_scale_factor;
             //collider mass data
             m_centroid             = dome->m_centroid;

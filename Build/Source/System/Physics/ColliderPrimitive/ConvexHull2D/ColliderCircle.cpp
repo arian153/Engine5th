@@ -76,7 +76,7 @@ namespace Engine5
             Real    plane_t            = pc.DotProduct(normal) / denominator;
             Vector3 plane_intersection = local_ray.position + local_ray.direction * plane_t;
             //define circle.
-            if ((plane_intersection - m_position).LengthSquared() < radius * radius)
+            if ((plane_intersection - m_collider_transform.position).LengthSquared() < radius * radius)
             {
                 minimum_t = maximum_t = plane_t;
             }
@@ -159,12 +159,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_position);
+            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
             bounding_factor *= m_scale_factor;
         }
         else
         {
-            pos = m_position;
+            pos = m_collider_transform.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -183,8 +183,8 @@ namespace Engine5
         {
             Real    angle = static_cast<Real>(i) * radian_step;
             Vector3 vertex(cosf(angle) * radius, sinf(angle) * radius, 0.0f);
-            vertex = m_orientation.Rotate(vertex);
-            vertex += m_position;
+            vertex = m_collider_transform.orientation.Rotate(vertex);
+            vertex += m_collider_transform.position;
             vertex = body_orientation.Rotate(vertex);
             vertex += body_position;
             renderer->PushVertex(vertex, mode, color);
@@ -209,7 +209,7 @@ namespace Engine5
         {
             //add a center pos
             I32     center   = static_cast<I32>(renderer->VerticesSize(mode));
-            Vector3 position = m_position;
+            Vector3 position = m_collider_transform.position;
             position         = body_orientation.Rotate(position);
             position += body_position;
             renderer->PushVertex(position, mode, color);
@@ -242,8 +242,7 @@ namespace Engine5
         {
             ColliderCircle* circle = static_cast<ColliderCircle*>(origin);
             //collider local space data
-            m_orientation  = circle->m_orientation;
-            m_position     = circle->m_position;
+            m_collider_transform = circle->m_collider_transform;
             m_scale_factor = circle->m_scale_factor;
             //collider mass data
             m_centroid             = circle->m_centroid;
