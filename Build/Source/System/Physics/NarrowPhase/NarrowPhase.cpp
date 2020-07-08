@@ -162,7 +162,8 @@ namespace Engine5
 
     bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result)
     {
-        PolytopeFace closest_face = polytope.PickClosestFaceOfPolytopeToOrigin();
+        PolytopeFace closest_face = polytope.PickClosestFace();
+        PolytopeFace prev_face = closest_face;
         for (size_t i = 0; i < m_epa_exit_iteration; ++i)
         {
             if (polytope.faces.empty())
@@ -171,13 +172,12 @@ namespace Engine5
                 result.b_valid = false;
                 return false;
             }
-            closest_face               = polytope.PickClosestFaceOfPolytopeToOrigin();
+            closest_face               = polytope.PickClosestFace();
             SupportPoint support_point = GenerateCSOSupport(a, b, closest_face.normal);
             if (support_point.IsValid() == false)
             {
-                //if any of the invalid value such as nan, infinite, return false.
-                result.b_valid = false;
-                return false;
+                closest_face = prev_face;
+                break;
             }
             Real distance = support_point.global.DotProduct(closest_face.normal);
             if (distance - closest_face.distance < Math::EPSILON)
@@ -186,6 +186,7 @@ namespace Engine5
             }
             polytope.Push(support_point);
             polytope.Expand(support_point);
+            prev_face = closest_face;
         }
         Real u, v, w;
         closest_face.BarycentricCoordinates(closest_face.normal * closest_face.distance, u, v, w, &polytope);

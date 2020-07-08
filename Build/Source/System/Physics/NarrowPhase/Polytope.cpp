@@ -179,7 +179,7 @@ namespace Engine5
     {
     }
 
-    PolytopeFace Polytope::PickClosestFaceOfPolytopeToOrigin()
+    PolytopeFace Polytope::PickClosestFace()
     {
         std::vector<PolytopeFace>::iterator closest_face_iterator = faces.end();
         Real                                closest_face_distance = Math::REAL_POSITIVE_MAX;

@@ -54,7 +54,7 @@ namespace Engine5
         explicit Polytope(const Simplex& simplex);
         ~Polytope();
 
-        PolytopeFace PickClosestFaceOfPolytopeToOrigin();
+        PolytopeFace PickClosestFace();
         Real         PointFaceTest(const Vector3& point, const Vector3& normal, const Vector3& v0);
         void         Push(SupportPoint& vertex);
         void         PushFromSimplex(const SupportPoint& vertex);
