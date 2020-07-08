@@ -36,9 +36,10 @@ namespace Engine5
         Vector3 ellipse_radius(radius.x, 0.0f, radius.y);
         Vector3 ellipse_vector = ellipse_radius.HadamardProduct(ellipse_radius);
         ellipse_vector         = ellipse_vector.HadamardProduct(ellipse_dir);
-        ellipse_vector /= ellipse_radius.HadamardProduct(ellipse_dir).Length();
-        Real top_support = direction.DotProduct(m_ratio * ellipse_vector + axis_vector);
-        Real bot_support = direction.DotProduct(ellipse_vector - axis_vector);
+        Real denom             = ellipse_radius.HadamardProduct(ellipse_dir).Length();
+        ellipse_vector         = Math::IsZero(denom) ? ellipse_vector * 0.0f : ellipse_vector / denom;
+        Real top_support       = direction.DotProduct(m_ratio * ellipse_vector + axis_vector);
+        Real bot_support       = direction.DotProduct(ellipse_vector - axis_vector);
         if (top_support > bot_support)
         {
             result = m_ratio * ellipse_vector + axis_vector;

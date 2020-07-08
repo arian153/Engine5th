@@ -36,9 +36,10 @@ namespace Engine5
         Vector3 ellipse_radius(radius.x, 0.0f, radius.y);
         Vector3 ellipse_vector = ellipse_radius.HadamardProduct(ellipse_radius);
         ellipse_vector         = ellipse_vector.HadamardProduct(ellipse_dir);
-        ellipse_vector /= ellipse_radius.HadamardProduct(ellipse_dir).Length();
-        Real top_support = direction.DotProduct(ellipse_vector + axis_vector);
-        Real bot_support = direction.DotProduct(ellipse_vector - axis_vector);
+        Real denom             = ellipse_radius.HadamardProduct(ellipse_dir).Length();
+        ellipse_vector         = Math::IsZero(denom) ? ellipse_vector * 0.0f : ellipse_vector / denom;
+        Real top_support       = direction.DotProduct(ellipse_vector + axis_vector);
+        Real bot_support       = direction.DotProduct(ellipse_vector - axis_vector);
         if (top_support > bot_support)
         {
             result = ellipse_vector + axis_vector;
@@ -245,8 +246,8 @@ namespace Engine5
     void ColliderCylinder::SetScaleData(const Vector3& scale)
     {
         Vector3 new_scale = scale.HadamardProduct(m_local.scale);
-        m_scaled_height = m_height * new_scale.y;
-        m_scaled_radius = m_radius.HadamardProduct(Vector2(new_scale.x, new_scale.z));
+        m_scaled_height   = m_height * new_scale.y;
+        m_scaled_radius   = m_radius.HadamardProduct(Vector2(new_scale.x, new_scale.z));
     }
 
     void ColliderCylinder::SetUnit()
@@ -422,11 +423,11 @@ namespace Engine5
         LoadTransform(data);
         if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector2(data["Radius"]))
         {
-            m_radius        = JsonResource::AsVector2(data["Radius"]);
+            m_radius = JsonResource::AsVector2(data["Radius"]);
         }
         if (JsonResource::HasMember(data, "Height") && data["Height"].isDouble())
         {
-            m_height        = data["Height"].asFloat();
+            m_height = data["Height"].asFloat();
         }
         SetCylinder(m_height, m_radius);
         LoadMaterial(data);

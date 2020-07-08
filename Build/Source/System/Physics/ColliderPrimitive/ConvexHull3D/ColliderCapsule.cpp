@@ -31,9 +31,10 @@ namespace Engine5
         Vector3 radius = Radius();
         Vector3 result = radius.HadamardProduct(radius);
         result         = result.HadamardProduct(direction);
-        result /= radius.HadamardProduct(direction).Length();
-        Real top = direction.DotProduct(axis_vector);
-        Real bot = direction.DotProduct(-axis_vector);
+        Real denom     = radius.HadamardProduct(direction).Length();
+        result         = Math::IsZero(denom) ? result * 0.0f : result / denom;
+        Real top       = direction.DotProduct(axis_vector);
+        Real bot       = direction.DotProduct(-axis_vector);
         if (top > bot)
         {
             result += axis_vector;

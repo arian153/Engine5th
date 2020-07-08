@@ -29,7 +29,8 @@ namespace Engine5
         Vector3 radius = Radius();
         Vector3 result = radius.HadamardProduct(radius);
         result         = result.HadamardProduct(direction);
-        result /= radius.HadamardProduct(direction).Length();
+        Real denom     = radius.HadamardProduct(direction).Length();
+        result         = Math::IsZero(denom) ? result * 0.0f : result / denom;
         //check hemisphere
         if (result.y <= 0.0f)
         {
@@ -40,7 +41,8 @@ namespace Engine5
             ellipse_radius.y       = 0.0f;
             result                 = ellipse_radius.HadamardProduct(ellipse_radius);
             result                 = result.HadamardProduct(ellipse_dir);
-            result /= ellipse_radius.HadamardProduct(ellipse_dir).Length();
+            denom                  = ellipse_radius.HadamardProduct(ellipse_dir).Length();
+            result                 = Math::IsZero(denom) ? result * 0.0f : result / denom;
         }
         return result;
     }
