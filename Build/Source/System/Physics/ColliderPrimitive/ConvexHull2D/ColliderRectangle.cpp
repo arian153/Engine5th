@@ -121,8 +121,7 @@ namespace Engine5
         {
             ColliderRectangle* rectangle = static_cast<ColliderRectangle*>(origin);
             //collider local space data
-            m_collider_transform = rectangle->m_collider_transform;
-            m_scale_factor = rectangle->m_scale_factor;
+            m_local = rectangle->m_local;
             //collider mass data
             m_centroid             = rectangle->m_centroid;
             m_mass                 = rectangle->m_mass;
@@ -144,11 +143,11 @@ namespace Engine5
             {
                 if (JsonResource::IsVector2(data["Vertices"][i]))
                 {
-                    m_vertices[i]        = JsonResource::AsVector2(data["Vertices"][i]);
-                    m_scaled_vertices[i] = m_scale_factor * m_vertices[i];
+                    m_vertices[i] = JsonResource::AsVector2(data["Vertices"][i]);
                 }
             }
         }
+        //need to set rectangle
         LoadMaterial(data);
         LoadMass(data);
     }

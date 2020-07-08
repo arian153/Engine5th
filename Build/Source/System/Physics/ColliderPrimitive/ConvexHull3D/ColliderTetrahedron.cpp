@@ -154,9 +154,8 @@ namespace Engine5
     {
         for (size_t i = 0; i < 4; ++i)
         {
-            m_scaled_vertices[i] = m_vertices[i].HadamardProduct(scale);
+            m_scaled_vertices[i] = m_vertices[i].HadamardProduct(scale.HadamardProduct(m_local.scale));
         }
-        m_scale_factor = scale.Length();
     }
 
     void ColliderTetrahedron::SetUnit()
@@ -211,12 +210,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
-            bounding_factor *= m_scale_factor;
+            pos = m_rigid_body->LocalToWorldPoint(m_local.position);
+            bounding_factor *= m_local.scale.Length();
         }
         else
         {
-            pos = m_collider_transform.position;
+            pos = m_local.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -240,8 +239,8 @@ namespace Engine5
         for (auto& vertex : vertices)
         {
             //collider local space to object space(body local)
-            vertex = m_collider_transform.orientation.Rotate(vertex);
-            vertex += m_collider_transform.position;
+            vertex = m_local.orientation.Rotate(vertex);
+            vertex += m_local.position;
             //body local space to world space
             vertex = body_orientation.Rotate(vertex);
             vertex += body_position;
@@ -298,8 +297,7 @@ namespace Engine5
         {
             ColliderTetrahedron* tetrahedron = static_cast<ColliderTetrahedron*>(origin);
             //collider local space data
-            m_collider_transform = tetrahedron->m_collider_transform;
-            m_scale_factor = tetrahedron->m_scale_factor;
+            m_local = tetrahedron->m_local;
             //collider mass data
             m_centroid             = tetrahedron->m_centroid;
             m_mass                 = tetrahedron->m_mass;
@@ -321,11 +319,11 @@ namespace Engine5
             {
                 if (JsonResource::IsVector3(data["Vertices"][i]))
                 {
-                    m_vertices[i]        = JsonResource::AsVector3(data["Vertices"][i]);
-                    m_scaled_vertices[i] = m_scale_factor * m_vertices[i];
+                    m_vertices[i] = JsonResource::AsVector3(data["Vertices"][i]);
                 }
             }
         }
+        SetTetrahedron(m_vertices[0], m_vertices[1], m_vertices[2], m_vertices[3]);
         LoadMaterial(data);
         LoadMass(data);
     }

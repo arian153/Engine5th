@@ -22,7 +22,7 @@ namespace Engine5
 
     public:
         Vector3    position;
-        Vector3    scale;
+        Vector3    scale = Vector3(1.0f, 1.0f, 1.0f);
         Quaternion orientation;
     };
 }

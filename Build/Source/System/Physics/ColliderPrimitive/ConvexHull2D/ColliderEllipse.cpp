@@ -159,8 +159,7 @@ namespace Engine5
 
     void ColliderEllipse::SetScaleData(const Vector3& scale)
     {
-        m_scaled_radius = m_radius.HadamardProduct(Vector2(scale));
-        m_scale_factor  = scale.Length();
+        m_scaled_radius = m_radius.HadamardProduct(Vector2(scale.HadamardProduct(m_local.scale)));
     }
 
     void ColliderEllipse::SetUnit()
@@ -175,12 +174,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
-            bounding_factor *= m_scale_factor;
+            pos = m_rigid_body->LocalToWorldPoint(m_local.position);
+            bounding_factor *= m_local.scale.Length();
         }
         else
         {
-            pos = m_collider_transform.position;
+            pos = m_local.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -199,8 +198,8 @@ namespace Engine5
         {
             Real    angle = static_cast<Real>(i) * radian_step;
             Vector3 vertex(cosf(angle) * radius.x, sinf(angle) * radius.y, 0.0f);
-            vertex = m_collider_transform.orientation.Rotate(vertex);
-            vertex += m_collider_transform.position;
+            vertex = m_local.orientation.Rotate(vertex);
+            vertex += m_local.position;
             vertex = body_orientation.Rotate(vertex);
             vertex += body_position;
             renderer->PushVertex(vertex, mode, color);
@@ -225,7 +224,7 @@ namespace Engine5
         {
             //add a center pos
             I32     center   = static_cast<I32>(renderer->VerticesSize(mode));
-            Vector3 position = m_collider_transform.position;
+            Vector3 position = m_local.position;
             position         = body_orientation.Rotate(position);
             position += body_position;
             renderer->PushVertex(position, mode, color);
@@ -258,8 +257,7 @@ namespace Engine5
         {
             ColliderEllipse* ellipse = static_cast<ColliderEllipse*>(origin);
             //collider local space data
-            m_collider_transform = ellipse->m_collider_transform;
-            m_scale_factor = ellipse->m_scale_factor;
+            m_local = ellipse->m_local;
             //collider mass data
             m_centroid             = ellipse->m_centroid;
             m_mass                 = ellipse->m_mass;
@@ -276,9 +274,9 @@ namespace Engine5
         LoadTransform(data);
         if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector2(data["Radius"]))
         {
-            m_radius        = JsonResource::AsVector2(data["Radius"]);
-            m_scaled_radius = m_scale_factor * m_radius;
+            m_radius = JsonResource::AsVector2(data["Radius"]);
         }
+        SetEllipse(m_radius);
         LoadMaterial(data);
         LoadMass(data);
     }

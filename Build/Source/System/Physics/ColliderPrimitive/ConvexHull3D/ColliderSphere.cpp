@@ -81,8 +81,7 @@ namespace Engine5
 
     void ColliderSphere::SetScaleData(const Vector3& scale)
     {
-        m_scaled_radius = m_radius * scale.Length();
-        m_scale_factor  = scale.Length();
+        m_scaled_radius = m_radius * scale.HadamardProduct(m_local.scale).Largest();
     }
 
     void ColliderSphere::SetUnit()
@@ -97,12 +96,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
-            bounding_factor *= m_scale_factor;
+            pos = m_rigid_body->LocalToWorldPoint(m_local.position);
+            bounding_factor *= m_local.scale.Length();
         }
         else
         {
-            pos = m_collider_transform.position;
+            pos = m_local.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -122,16 +121,16 @@ namespace Engine5
         Vector3 top_vertex_local_pos = axis_vector;
         top_vertex_local_pos         = top_vertex_local_pos * radius;
         //modify rotation, translation
-        top_vertex_local_pos = m_collider_transform.orientation.Rotate(top_vertex_local_pos);
-        top_vertex_local_pos += m_collider_transform.position;
+        top_vertex_local_pos = m_local.orientation.Rotate(top_vertex_local_pos);
+        top_vertex_local_pos += m_local.position;
         top_vertex_local_pos = body_orientation.Rotate(top_vertex_local_pos);
         top_vertex_local_pos += body_position;
         //bottom vertex
         Vector3 bottom_vertex_local_pos = -axis_vector;
         bottom_vertex_local_pos         = bottom_vertex_local_pos * radius;
         //modify rotation, translation
-        bottom_vertex_local_pos = m_collider_transform.orientation.Rotate(bottom_vertex_local_pos);
-        bottom_vertex_local_pos += m_collider_transform.position;
+        bottom_vertex_local_pos = m_local.orientation.Rotate(bottom_vertex_local_pos);
+        bottom_vertex_local_pos += m_local.position;
         bottom_vertex_local_pos = body_orientation.Rotate(bottom_vertex_local_pos);
         bottom_vertex_local_pos += body_position;
         renderer->PushVertex(top_vertex_local_pos, mode, color);
@@ -151,8 +150,8 @@ namespace Engine5
                 vertex_local_pos.y = cosf(phi);
                 vertex_local_pos.z = sinf(phi) * sinf(theta);
                 vertex_local_pos   = vertex_local_pos * radius;
-                vertex_local_pos   = m_collider_transform.orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += m_collider_transform.position;
+                vertex_local_pos   = m_local.orientation.Rotate(vertex_local_pos);
+                vertex_local_pos += m_local.position;
                 vertex_local_pos = body_orientation.Rotate(vertex_local_pos);
                 vertex_local_pos += body_position;
                 renderer->PushVertex(vertex_local_pos, mode, color);
@@ -242,8 +241,7 @@ namespace Engine5
         {
             ColliderSphere* sphere = static_cast<ColliderSphere*>(origin);
             //collider local space data
-            m_collider_transform = sphere->m_collider_transform;
-            m_scale_factor = sphere->m_scale_factor;
+            m_local = sphere->m_local;
             //collider mass data
             m_centroid             = sphere->m_centroid;
             m_mass                 = sphere->m_mass;
@@ -260,9 +258,9 @@ namespace Engine5
         LoadTransform(data);
         if (JsonResource::HasMember(data, "Radius") && data["Radius"].isDouble())
         {
-            m_radius        = data["Radius"].asFloat();
-            m_scaled_radius = m_scale_factor * m_radius;
+            m_radius = data["Radius"].asFloat();
         }
+        SetSphere(m_radius);
         LoadMaterial(data);
         LoadMass(data);
     }

@@ -287,8 +287,7 @@ namespace Engine5
     void ColliderCapsule::SetScaleData(const Vector3& scale)
     {
         m_scaled_height = m_height * scale.y;
-        m_scaled_radius = m_radius.HadamardProduct(scale);
-        m_scale_factor  = scale.Length();
+        m_scaled_radius = m_radius.HadamardProduct(scale.HadamardProduct(m_local.scale));
     }
 
     void ColliderCapsule::SetUnit()
@@ -308,12 +307,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
-            bounding_factor *= m_scale_factor;
+            pos = m_rigid_body->LocalToWorldPoint(m_local.position);
+            bounding_factor *= m_local.scale.Length();
         }
         else
         {
-            pos = m_collider_transform.position;
+            pos = m_local.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -335,8 +334,8 @@ namespace Engine5
         top_vertex_local_pos         = top_vertex_local_pos.HadamardProduct(radius);
         top_vertex_local_pos += half_height * axis_vector;
         //modify rotation, translation
-        top_vertex_local_pos = m_collider_transform.orientation.Rotate(top_vertex_local_pos);
-        top_vertex_local_pos += m_collider_transform.position;
+        top_vertex_local_pos = m_local.orientation.Rotate(top_vertex_local_pos);
+        top_vertex_local_pos += m_local.position;
         top_vertex_local_pos = body_orientation.Rotate(top_vertex_local_pos);
         top_vertex_local_pos += body_position;
         //bottom vertex
@@ -344,8 +343,8 @@ namespace Engine5
         bottom_vertex_local_pos         = bottom_vertex_local_pos.HadamardProduct(radius);
         bottom_vertex_local_pos -= half_height * axis_vector;
         //modify rotation, translation
-        bottom_vertex_local_pos = m_collider_transform.orientation.Rotate(bottom_vertex_local_pos);
-        bottom_vertex_local_pos += m_collider_transform.position;
+        bottom_vertex_local_pos = m_local.orientation.Rotate(bottom_vertex_local_pos);
+        bottom_vertex_local_pos += m_local.position;
         bottom_vertex_local_pos = body_orientation.Rotate(bottom_vertex_local_pos);
         bottom_vertex_local_pos += body_position;
         renderer->PushVertex(top_vertex_local_pos, mode, color);
@@ -373,8 +372,8 @@ namespace Engine5
                 {
                     vertex_local_pos -= half_height * axis_vector;
                 }
-                vertex_local_pos = m_collider_transform.orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += m_collider_transform.position;
+                vertex_local_pos = m_local.orientation.Rotate(vertex_local_pos);
+                vertex_local_pos += m_local.position;
                 vertex_local_pos = body_orientation.Rotate(vertex_local_pos);
                 vertex_local_pos += body_position;
                 renderer->PushVertex(vertex_local_pos, mode, color);
@@ -495,8 +494,7 @@ namespace Engine5
         {
             ColliderCapsule* capsule = static_cast<ColliderCapsule*>(origin);
             //collider local space data
-            m_collider_transform = capsule->m_collider_transform;
-            m_scale_factor = capsule->m_scale_factor;
+            m_local = capsule->m_local;
             //collider mass data
             m_centroid             = capsule->m_centroid;
             m_mass                 = capsule->m_mass;
@@ -515,14 +513,13 @@ namespace Engine5
         LoadTransform(data);
         if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector3(data["Radius"]))
         {
-            m_radius        = JsonResource::AsVector3(data["Radius"]);
-            m_scaled_radius = m_scale_factor * m_radius;
+            m_radius = JsonResource::AsVector3(data["Radius"]);
         }
         if (JsonResource::HasMember(data, "Height") && data["Height"].isDouble())
         {
-            m_height        = data["Height"].asFloat();
-            m_scaled_height = m_scale_factor * m_height;
+            m_height = data["Height"].asFloat();
         }
+        SetCapsule(m_height, m_radius);
         LoadMaterial(data);
         LoadMass(data);
     }

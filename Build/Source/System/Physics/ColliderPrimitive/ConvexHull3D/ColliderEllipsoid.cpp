@@ -83,9 +83,8 @@ namespace Engine5
         if (Math::IsNotEqual(m_material.density, density))
         {
             m_material.density = density;
-            m_material.type = Physics::eMaterial::UserType;
+            m_material.type    = Physics::eMaterial::UserType;
         }
-
         Real a, b, c;
         m_mass = density * GetVolume();
         if (m_collider_set != nullptr)
@@ -119,8 +118,7 @@ namespace Engine5
 
     void ColliderEllipsoid::SetScaleData(const Vector3& scale)
     {
-        m_scaled_radius = m_radius.HadamardProduct(scale);
-        m_scale_factor  = scale.Length();
+        m_scaled_radius = m_radius.HadamardProduct(scale.HadamardProduct(m_local.scale));
     }
 
     void ColliderEllipsoid::SetUnit()
@@ -135,12 +133,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
-            bounding_factor *= m_scale_factor;
+            pos = m_rigid_body->LocalToWorldPoint(m_local.position);
+            bounding_factor *= m_local.scale.Length();
         }
         else
         {
-            pos = m_collider_transform.position;
+            pos = m_local.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -160,16 +158,16 @@ namespace Engine5
         Vector3 top_vertex_local_pos = axis_vector;
         top_vertex_local_pos         = top_vertex_local_pos.HadamardProduct(radius);
         //modify rotation, translation
-        top_vertex_local_pos = m_collider_transform.orientation.Rotate(top_vertex_local_pos);
-        top_vertex_local_pos += m_collider_transform.position;
+        top_vertex_local_pos = m_local.orientation.Rotate(top_vertex_local_pos);
+        top_vertex_local_pos += m_local.position;
         top_vertex_local_pos = body_orientation.Rotate(top_vertex_local_pos);
         top_vertex_local_pos += body_position;
         //bottom vertex
         Vector3 bottom_vertex_local_pos = -axis_vector;
         bottom_vertex_local_pos         = bottom_vertex_local_pos.HadamardProduct(radius);
         //modify rotation, translation
-        bottom_vertex_local_pos = m_collider_transform.orientation.Rotate(bottom_vertex_local_pos);
-        bottom_vertex_local_pos += m_collider_transform.position;
+        bottom_vertex_local_pos = m_local.orientation.Rotate(bottom_vertex_local_pos);
+        bottom_vertex_local_pos += m_local.position;
         bottom_vertex_local_pos = body_orientation.Rotate(bottom_vertex_local_pos);
         bottom_vertex_local_pos += body_position;
         renderer->PushVertex(top_vertex_local_pos, mode, color);
@@ -189,8 +187,8 @@ namespace Engine5
                 vertex_local_pos.y = cosf(phi);
                 vertex_local_pos.z = sinf(phi) * sinf(theta);
                 vertex_local_pos   = vertex_local_pos.HadamardProduct(radius);
-                vertex_local_pos   = m_collider_transform.orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += m_collider_transform.position;
+                vertex_local_pos   = m_local.orientation.Rotate(vertex_local_pos);
+                vertex_local_pos += m_local.position;
                 vertex_local_pos = body_orientation.Rotate(vertex_local_pos);
                 vertex_local_pos += body_position;
                 renderer->PushVertex(vertex_local_pos, mode, color);
@@ -280,8 +278,7 @@ namespace Engine5
         {
             ColliderEllipsoid* ellipsoid = static_cast<ColliderEllipsoid*>(origin);
             //collider local space data
-            m_collider_transform = ellipsoid->m_collider_transform;
-            m_scale_factor = ellipsoid->m_scale_factor;
+            m_local = ellipsoid->m_local;
             //collider mass data
             m_centroid             = ellipsoid->m_centroid;
             m_mass                 = ellipsoid->m_mass;
@@ -299,9 +296,9 @@ namespace Engine5
         //ellipsoid data
         if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector3(data["Radius"]))
         {
-            m_radius        = JsonResource::AsVector3(data["Radius"]);
-            m_scaled_radius = m_scale_factor * m_radius;
+            m_radius = JsonResource::AsVector3(data["Radius"]);
         }
+        SetEllipsoid(m_radius);
         LoadMaterial(data);
         LoadMass(data);
     }

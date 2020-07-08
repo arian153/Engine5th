@@ -193,9 +193,8 @@ namespace Engine5
     {
         for (size_t i = 0; i < 8; ++i)
         {
-            m_scaled_vertices[i] = m_vertices[i].HadamardProduct(scale);
+            m_scaled_vertices[i] = m_vertices[i].HadamardProduct(scale.HadamardProduct(m_local.scale));
         }
-        m_scale_factor = scale.Length();
     }
 
     void ColliderBox::SetUnit()
@@ -223,12 +222,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
-            bounding_factor *= m_scale_factor;
+            pos = m_rigid_body->LocalToWorldPoint(m_local.position);
+            bounding_factor *= m_local.scale.Length();
         }
         else
         {
-            pos = m_collider_transform.position;
+            pos = m_local.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -252,8 +251,8 @@ namespace Engine5
         for (auto& vertex : vertices)
         {
             //collider local space to object space(body local)
-            vertex = m_collider_transform.orientation.Rotate(vertex);
-            vertex += m_collider_transform.position;
+            vertex = m_local.orientation.Rotate(vertex);
+            vertex += m_local.position;
             //body local space to world space
             vertex = body_orientation.Rotate(vertex);
             vertex += body_position;
@@ -340,8 +339,7 @@ namespace Engine5
         {
             ColliderBox* box = static_cast<ColliderBox*>(origin);
             //collider local space data
-            m_collider_transform = box->m_collider_transform;
-            m_scale_factor = box->m_scale_factor;
+            m_local = box->m_local;
             //collider mass data
             m_centroid             = box->m_centroid;
             m_mass                 = box->m_mass;
@@ -363,8 +361,7 @@ namespace Engine5
             {
                 if (JsonResource::IsVector3(data["Vertices"][i]))
                 {
-                    m_vertices[i]        = JsonResource::AsVector3(data["Vertices"][i]);
-                    m_scaled_vertices[i] = m_scale_factor * m_vertices[i];
+                    m_vertices[i] = JsonResource::AsVector3(data["Vertices"][i]);
                 }
             }
         }

@@ -287,9 +287,9 @@ namespace Engine5
 
     void ColliderTruncated::SetScaleData(const Vector3& scale)
     {
-        m_scaled_height = m_height * scale.y;
-        m_scaled_radius = m_radius.HadamardProduct(Vector2(scale.x, scale.z));
-        m_scale_factor  = scale.Length();
+        Vector3 new_scale = scale.HadamardProduct(m_local.scale);
+        m_scaled_height   = m_height * new_scale.y;
+        m_scaled_radius   = m_radius.HadamardProduct(Vector2(new_scale.x, new_scale.z));
     }
 
     void ColliderTruncated::SetUnit()
@@ -317,12 +317,12 @@ namespace Engine5
         Vector3 pos;
         if (m_rigid_body != nullptr)
         {
-            pos = m_rigid_body->LocalToWorldPoint(m_collider_transform.position);
-            bounding_factor *= m_scale_factor;
+            pos = m_rigid_body->LocalToWorldPoint(m_local.position);
+            bounding_factor *= m_local.scale.Length();
         }
         else
         {
-            pos = m_collider_transform.position;
+            pos = m_local.position;
         }
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
@@ -354,8 +354,8 @@ namespace Engine5
                 vertex_local_pos.x = radius.x * r * c;
                 vertex_local_pos.y = y;
                 vertex_local_pos.z = radius.y * r * s;
-                vertex_local_pos   = m_collider_transform.orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += m_collider_transform.position;
+                vertex_local_pos   = m_local.orientation.Rotate(vertex_local_pos);
+                vertex_local_pos += m_local.position;
                 vertex_local_pos = body_orientation.Rotate(vertex_local_pos);
                 vertex_local_pos += body_position;
                 renderer->PushVertex(vertex_local_pos, mode, color);
@@ -460,8 +460,7 @@ namespace Engine5
         {
             ColliderTruncated* truncated = static_cast<ColliderTruncated*>(origin);
             //collider local space data
-            m_collider_transform = truncated->m_collider_transform;
-            m_scale_factor = truncated->m_scale_factor;
+            m_local = truncated->m_local;
             //collider mass data
             m_centroid             = truncated->m_centroid;
             m_mass                 = truncated->m_mass;
@@ -481,18 +480,17 @@ namespace Engine5
         LoadTransform(data);
         if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector2(data["Radius"]))
         {
-            m_radius        = JsonResource::AsVector2(data["Radius"]);
-            m_scaled_radius = m_scale_factor * m_radius;
+            m_radius = JsonResource::AsVector2(data["Radius"]);
         }
         if (JsonResource::HasMember(data, "Height") && data["Height"].isDouble())
         {
-            m_height        = data["Height"].asFloat();
-            m_scaled_height = m_scale_factor * m_height;
+            m_height = data["Height"].asFloat();
         }
         if (JsonResource::HasMember(data, "Ratio") && data["Ratio"].isDouble())
         {
             m_ratio = data["Ratio"].asFloat();
         }
+        SetTruncated(m_height, m_radius, m_ratio);
         LoadMaterial(data);
         LoadMass(data);
     }

@@ -101,9 +101,7 @@ namespace Engine5
 
     protected:
         //collider local space data
-        Real       m_scale_factor = 1.0f;
-
-        Transform m_collider_transform;
+        Transform m_local;
 
         //collider mass data
         Vector3  m_centroid; //center of mass

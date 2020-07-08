@@ -119,6 +119,18 @@ namespace Engine5
         return (x * x + y * y + z * z);
     }
 
+    Real Vector3::Smallest() const
+    {
+        Real result = x < y ? x : y;
+        return result < z ? result : z;
+    }
+
+    Real Vector3::Largest() const
+    {
+        Real result = x > y ? x : y;
+        return result > z ? result : z;
+    }
+
     Real Vector3::DistanceTo(const Vector3& rhs) const
     {
         Real _x = rhs.x - this->x;
