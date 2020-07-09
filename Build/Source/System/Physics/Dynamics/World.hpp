@@ -40,8 +40,8 @@ namespace Engine5
         RigidBody*   AddRigidBody(RigidBody* body);
         ColliderSet* AddColliderSet(ColliderSet* set);
         void         AddPrimitive(ColliderPrimitive* collider_primitive) const;
-        void AddConstraint(Constraint* constraint) const;
-        void AddForce(Force* force) const;
+        void         AddConstraint(Constraint* constraint) const;
+        void         AddForce(Force* force) const;
 
         void RemoveRigidBody(RigidBody* body);
         void RemoveColliderSet(ColliderSet* set);

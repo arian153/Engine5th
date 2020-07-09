@@ -1,5 +1,7 @@
 #include "Drag.hpp"
 #include "../../Dynamics/RigidBody.hpp"
+#include "../../../../Manager/Resource/ResourceType/JsonResource.hpp"
+#include "../../../../External/JSONCPP/json/json.h"
 
 namespace Engine5
 {
@@ -21,6 +23,10 @@ namespace Engine5
         linear_drag = drag;
     }
 
+    void Drag::Initialize()
+    {
+    }
+
     void Drag::Update(RigidBody* body, Real dt)
     {
         if (body->GetMotionMode() == eMotionMode::Dynamic)
@@ -37,5 +43,25 @@ namespace Engine5
             body->SetLinearVelocity(body->GetLinearVelocity() * powf(1.0f - linear_drag, dt));
             body->SetAngularVelocity(body->GetAngularVelocity() * powf(1.0f - angular_drag, dt));
         }
+    }
+
+    void Drag::Shutdown()
+    {
+    }
+
+    void Drag::Load(const Json::Value& data)
+    {
+        if (JsonResource::HasMember(data, "Linear Drag") && data["Linear Drag"].isDouble())
+        {
+            linear_drag = data["Linear Drag"].asFloat();
+        }
+        if (JsonResource::HasMember(data, "Angular Drag") && data["Angular Drag"].isDouble())
+        {
+            angular_drag = data["Angular Drag"].asFloat();
+        }
+    }
+
+    void Drag::Save(const Json::Value& data)
+    {
     }
 }

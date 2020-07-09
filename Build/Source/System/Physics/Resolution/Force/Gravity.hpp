@@ -2,6 +2,10 @@
 #include "Force.hpp"
 #include "../../../Math/Math.hpp"
 
+namespace Json {
+    class Value;
+}
+
 namespace Engine5
 {
     class Gravity final : public Force
@@ -10,7 +14,12 @@ namespace Engine5
         Gravity();
         ~Gravity();
 
+        void Initialize() override;
         void Update(RigidBody* body, Real dt) override;
+        void Shutdown() override;
+        void Load(const Json::Value& data) override;
+        void Save(const Json::Value& data) override;
+
         void SetGlobalGravity(const Vector3& dir, Real magnitude);
         void SetLocalGravity(const Vector3& pos, Real mass, Real coefficient);
 

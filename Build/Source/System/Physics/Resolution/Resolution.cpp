@@ -43,6 +43,7 @@ namespace Engine5
         m_constraints.clear();
         for (auto& force : m_forces)
         {
+            force->Shutdown();
             delete force;
             force = nullptr;
         }

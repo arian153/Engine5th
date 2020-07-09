@@ -1,5 +1,7 @@
 #include "Gravity.hpp"
 #include "../../Dynamics/RigidBody.hpp"
+#include "../../../../Manager/Resource/ResourceType/JsonResource.hpp"
+#include "../../../../External/JSONCPP/json/json.h"
 
 namespace Engine5
 {
@@ -8,6 +10,10 @@ namespace Engine5
     }
 
     Gravity::~Gravity()
+    {
+    }
+
+    void Gravity::Initialize()
     {
     }
 
@@ -28,6 +34,19 @@ namespace Engine5
 
             }
         }
+    }
+
+    void Gravity::Shutdown()
+    {
+    }
+
+    void Gravity::Load(const Json::Value& data)
+    {
+
+    }
+
+    void Gravity::Save(const Json::Value& data)
+    {
     }
 
     void Gravity::SetGlobalGravity(const Vector3& dir, Real magnitude)

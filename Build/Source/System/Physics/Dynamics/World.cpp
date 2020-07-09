@@ -9,6 +9,7 @@
 #include "../Resolution/Resolution.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../Core/Utility/CoreUtility.hpp"
+#include "../Resolution/Force/Force.hpp"
 
 namespace Engine5
 {
@@ -226,6 +227,7 @@ namespace Engine5
 
     void World::AddForce(Force* force) const
     {
+        force->Initialize();
         m_resolution_phase->m_forces.push_back(force);
     }
 
@@ -260,6 +262,7 @@ namespace Engine5
                                m_resolution_phase->m_forces.begin(),
                                m_resolution_phase->m_forces.end(), force);
         m_resolution_phase->m_forces.erase(found);
+        force->Shutdown();
     }
 
     void World::SetVelocityIteration(size_t iteration) const
