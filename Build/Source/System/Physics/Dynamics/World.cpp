@@ -224,6 +224,11 @@ namespace Engine5
         m_resolution_phase->m_constraints.push_back(constraint);
     }
 
+    void World::AddForce(Force* force) const
+    {
+        m_resolution_phase->m_forces.push_back(force);
+    }
+
     void World::RemoveRigidBody(RigidBody* body)
     {
         auto found = std::find(m_rigid_bodies.begin(), m_rigid_bodies.end(), body);
@@ -247,6 +252,14 @@ namespace Engine5
                                m_resolution_phase->m_constraints.begin(),
                                m_resolution_phase->m_constraints.end(), constraint);
         m_resolution_phase->m_constraints.erase(found);
+    }
+
+    void World::RemoveForce(Force* force) const
+    {
+        auto found = std::find(
+                               m_resolution_phase->m_forces.begin(),
+                               m_resolution_phase->m_forces.end(), force);
+        m_resolution_phase->m_forces.erase(found);
     }
 
     void World::SetVelocityIteration(size_t iteration) const

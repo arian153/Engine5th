@@ -11,6 +11,7 @@
 
 namespace Engine5
 {
+    class Force;
     class Constraint;
     class ManifoldTable;
     class ConstraintUtility;
@@ -40,11 +41,13 @@ namespace Engine5
         ColliderSet* AddColliderSet(ColliderSet* set);
         void         AddPrimitive(ColliderPrimitive* collider_primitive) const;
         void AddConstraint(Constraint* constraint) const;
+        void AddForce(Force* force) const;
 
         void RemoveRigidBody(RigidBody* body);
         void RemoveColliderSet(ColliderSet* set);
         void RemovePrimitive(ColliderPrimitive* collider_primitive) const;
         void RemoveConstraint(Constraint* constraint) const;
+        void RemoveForce(Force* force) const;
 
         void SetVelocityIteration(size_t iteration) const;
         void SetPositionIteration(size_t iteration) const;
