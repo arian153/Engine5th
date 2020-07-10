@@ -42,7 +42,22 @@ namespace Engine5
 
     void Gravity::Load(const Json::Value& data)
     {
-
+        if (JsonResource::HasMember(data, "Gravity Coefficient") && data[ "Gravity Coefficient" ].isDouble())
+        {
+            gravity_coefficient = data[ "Gravity Coefficient" ].asFloat();
+        }
+        if (JsonResource::HasMember(data, "Local Mass") && data[ "Local Mass" ].isDouble())
+        {
+            local_mass = data[ "Local Mass" ].asFloat();
+        }
+        if (JsonResource::HasMember(data, "Local Position") && JsonResource::IsVector3(data[ "Local Position" ]))
+        {
+            local_position = JsonResource::AsVector3(data[ "Local Position" ]);
+        }
+        if (JsonResource::HasMember(data, "Global Gravity") && JsonResource::IsVector3(data[ "Global Gravity" ]))
+        {
+            global_gravity = JsonResource::AsVector3(data[ "Global Gravity" ]);
+        }
     }
 
     void Gravity::Save(const Json::Value& data)
