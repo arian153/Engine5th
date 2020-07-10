@@ -1,14 +1,33 @@
 #pragma once
 #include "../../../Math/Utility/MathDef.hpp"
 
-namespace Json {
+namespace Json
+{
     class Value;
 }
-
 
 namespace Engine5
 {
     class RigidBody;
+    class Force;
+
+    class ForceFactory
+    {
+    public:
+        ForceFactory()
+        {
+        }
+
+        virtual ~ForceFactory()
+        {
+        }
+
+        virtual Force* Create() = 0;
+
+    protected:
+        friend class Resolution;
+        std::string type;
+    };
 
     class Force
     {
@@ -28,5 +47,6 @@ namespace Engine5
         virtual void Save(const Json::Value& data) = 0;
 
     protected:
+        std::string type;
     };
 }

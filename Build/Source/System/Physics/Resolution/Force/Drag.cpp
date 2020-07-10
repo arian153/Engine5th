@@ -5,8 +5,24 @@
 
 namespace Engine5
 {
+    DragFactory::DragFactory()
+    {
+        type = typeid(Drag).name();
+    }
+
+    DragFactory::~DragFactory()
+    {
+    }
+
+    Force* DragFactory::Create()
+    {
+        auto create = new Drag();
+        return create;
+    }
+
     Drag::Drag()
     {
+        type = typeid(Drag).name();
     }
 
     Drag::~Drag()

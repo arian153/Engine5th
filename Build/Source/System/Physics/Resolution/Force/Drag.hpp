@@ -9,6 +9,14 @@ namespace Json
 
 namespace Engine5
 {
+    class DragFactory final : public ForceFactory
+    {
+    public:
+        DragFactory();
+        ~DragFactory();
+        Force* Create() override;
+    };
+
     class Drag final : public Force
     {
     public:

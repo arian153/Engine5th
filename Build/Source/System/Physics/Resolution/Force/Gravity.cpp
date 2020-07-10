@@ -5,8 +5,24 @@
 
 namespace Engine5
 {
+    GravityFactory::GravityFactory()
+    {
+        type = typeid(Gravity).name();
+    }
+
+    GravityFactory::~GravityFactory()
+    {
+    }
+
+    Force* GravityFactory::Create()
+    {
+        auto created = new Gravity();
+        return created;
+    }
+
     Gravity::Gravity()
     {
+        type = typeid(Gravity).name();
     }
 
     Gravity::~Gravity()
@@ -31,7 +47,6 @@ namespace Engine5
                 Real    r_r      = distance.LengthSquared();
                 Real    force    = r_r > 1.0f ? gravity_coefficient * local_mass * dt / r_r : 0.0f;
                 body->AddLinearVelocity(force * distance.Normalize());
-
             }
         }
     }
@@ -42,21 +57,21 @@ namespace Engine5
 
     void Gravity::Load(const Json::Value& data)
     {
-        if (JsonResource::HasMember(data, "Gravity Coefficient") && data[ "Gravity Coefficient" ].isDouble())
+        if (JsonResource::HasMember(data, "Gravity Coefficient") && data["Gravity Coefficient"].isDouble())
         {
-            gravity_coefficient = data[ "Gravity Coefficient" ].asFloat();
+            gravity_coefficient = data["Gravity Coefficient"].asFloat();
         }
-        if (JsonResource::HasMember(data, "Local Mass") && data[ "Local Mass" ].isDouble())
+        if (JsonResource::HasMember(data, "Local Mass") && data["Local Mass"].isDouble())
         {
-            local_mass = data[ "Local Mass" ].asFloat();
+            local_mass = data["Local Mass"].asFloat();
         }
-        if (JsonResource::HasMember(data, "Local Position") && JsonResource::IsVector3(data[ "Local Position" ]))
+        if (JsonResource::HasMember(data, "Local Position") && JsonResource::IsVector3(data["Local Position"]))
         {
-            local_position = JsonResource::AsVector3(data[ "Local Position" ]);
+            local_position = JsonResource::AsVector3(data["Local Position"]);
         }
-        if (JsonResource::HasMember(data, "Global Gravity") && JsonResource::IsVector3(data[ "Global Gravity" ]))
+        if (JsonResource::HasMember(data, "Global Gravity") && JsonResource::IsVector3(data["Global Gravity"]))
         {
-            global_gravity = JsonResource::AsVector3(data[ "Global Gravity" ]);
+            global_gravity = JsonResource::AsVector3(data["Global Gravity"]);
         }
     }
 

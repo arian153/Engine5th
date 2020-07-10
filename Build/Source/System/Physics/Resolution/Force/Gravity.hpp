@@ -8,6 +8,14 @@ namespace Json {
 
 namespace Engine5
 {
+    class GravityFactory final : public ForceFactory
+    {
+    public:
+        GravityFactory();
+        ~GravityFactory();
+        Force* Create() override;
+    };
+
     class Gravity final : public Force
     {
     public:
