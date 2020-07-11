@@ -1,5 +1,4 @@
 #include "Simplex.hpp"
-#include <algorithm>
 
 namespace Engine5
 {
@@ -77,8 +76,7 @@ namespace Engine5
         if (ab_abc.DotProduct(ao) > 0.0f)
         {
             //change points
-            simplex_vertex_c = simplex_vertex_b;
-            simplex_vertex_b = simplex_vertex_a;
+            simplex_vertex_c = simplex_vertex_a;
             //dir is not ab_abc because it's not point towards the origin
             dir = ab.CrossProductTwice(ao);
             //direction change; can't build tetrahedron
@@ -119,76 +117,41 @@ namespace Engine5
 
     bool Simplex::DoSimplexTetrahedron(Vector3& dir)
     {
-        Vector3 ao  = -simplex_vertex_a.global;
-        Vector3 ab  = simplex_vertex_b.global - simplex_vertex_a.global;
-        Vector3 ac  = simplex_vertex_c.global - simplex_vertex_a.global;
-        Vector3 ad  = simplex_vertex_d.global - simplex_vertex_a.global;
-        Vector3 bcd = (simplex_vertex_c.global - simplex_vertex_b.global).CrossProduct(simplex_vertex_d.global - simplex_vertex_b.global);
-        if (dir.DotProduct(bcd) > 0)
+        Vector3 ao = -simplex_vertex_a.global;
+        Vector3 ab = simplex_vertex_b.global - simplex_vertex_a.global;
+        Vector3 ac = simplex_vertex_c.global - simplex_vertex_a.global;
+        Vector3 ad = simplex_vertex_d.global - simplex_vertex_a.global;
+        dir        = ab.CrossProduct(ac);
+        if (ao.DotProduct(dir) > 0.0f)
         {
-            // A is above BCD. normal of ABC, ADB, ACD are candidates
-            dir = ab.CrossProduct(ac);
-            if (ao.DotProduct(dir) > 0.0f)
-            {
-                simplex_vertex_d = simplex_vertex_c;
-                simplex_vertex_c = simplex_vertex_b;
-                simplex_vertex_b = simplex_vertex_a;
-            }
-            else
-            {
-                dir = ad.CrossProduct(ab);
-                if (ao.DotProduct(dir) > 0.0f)
-                {
-                    simplex_vertex_c = simplex_vertex_b;
-                    simplex_vertex_b = simplex_vertex_a;
-                }
-                else
-                {
-                    dir = ac.CrossProduct(ad);
-                    if (ao.DotProduct(dir) > 0.0f)
-                    {
-                        simplex_vertex_b = simplex_vertex_a;
-                    }
-                    else
-                    {
-                        // origin is in the tetrahedron ABCD
-                        count = 4;
-                        return true;
-                    }
-                }
-            }
+            //in front of abc
+            simplex_vertex_d = simplex_vertex_c;
+            simplex_vertex_c = simplex_vertex_b;
+            simplex_vertex_b = simplex_vertex_a;
         }
         else
         {
-            // A is under BCD. normal of ACB, ABD, ADC are candidates
-            dir = ac.CrossProduct(ab);
+            dir = ad.CrossProduct(ab);
             if (ao.DotProduct(dir) > 0.0f)
             {
-                simplex_vertex_d = simplex_vertex_c;
-                simplex_vertex_c = simplex_vertex_b;
+                //in front of adb
+                simplex_vertex_c = simplex_vertex_d;
+                simplex_vertex_d = simplex_vertex_b;
                 simplex_vertex_b = simplex_vertex_a;
             }
             else
             {
-                dir = ab.CrossProduct(ad);
+                dir = ac.CrossProduct(ad);
                 if (ao.DotProduct(dir) > 0.0f)
                 {
-                    simplex_vertex_c = simplex_vertex_b;
+                    //n front of acd
                     simplex_vertex_b = simplex_vertex_a;
                 }
                 else
                 {
-                    dir = ad.CrossProduct(ac);
-                    if (ao.DotProduct(dir) > 0.0f)
-                    {
-                        simplex_vertex_b = simplex_vertex_a;
-                    }
-                    else
-                    {
-                        // origin is in the tetrahedron ABCD
-                        count = 4;
-                        return true;
-                    }
+                    // origin is in the tetrahedron abcd
+                    count = 4;
+                    return true;
                 }
             }
         }
@@ -196,8 +159,12 @@ namespace Engine5
         return false;
     }
 
-    bool Simplex::IsContainOrigin(Vector3& dir)
+    bool Simplex::DoSimplex(Vector3& dir)
     {
+        if (count == 0)
+        {
+            return DoSimplexPoint(dir);
+        }
         if (count == 1)
         {
             return DoSimplexLine(dir);
@@ -213,13 +180,29 @@ namespace Engine5
         return false;
     }
 
-    void Simplex::Push(const SupportPoint& p)
+    bool Simplex::IsValid()
     {
-        count            = std::min(count + 1, 4);
-        simplex_vertex_d = simplex_vertex_c;
-        simplex_vertex_c = simplex_vertex_b;
-        simplex_vertex_b = simplex_vertex_a;
-        simplex_vertex_a = p;
+        if (simplex_vertex_d.IsValid() == false)
+        {
+            count = 0;
+            return false;
+        }
+        if (simplex_vertex_c.IsValid() == false)
+        {
+            count = 1;
+            return false;
+        }
+        if (simplex_vertex_b.IsValid() == false)
+        {
+            count = 2;
+            return false;
+        }
+        if (simplex_vertex_a.IsValid() == false)
+        {
+            count = 3;
+            return false;
+        }
+        return true;
     }
 
     void Simplex::Set(const SupportPoint& a, const SupportPoint& b, const SupportPoint& c, const SupportPoint& d)
@@ -250,82 +233,5 @@ namespace Engine5
     {
         count                  = 1;
         this->simplex_vertex_a = a;
-    }
-
-    bool Simplex::UpdateSimplexTriangle(Vector3& dir)
-    {
-        //triangle's normal
-        Vector3 n  = (simplex_vertex_b.global - simplex_vertex_a.global).CrossProduct(simplex_vertex_c.global - simplex_vertex_a.global);
-        Vector3 AO = -simplex_vertex_a.global; //direction to origin
-        //Determine which feature is closest to origin, make that the new simplex
-        count = 2;
-        if ((simplex_vertex_b.global - simplex_vertex_a.global).CrossProduct(n).DotProduct(AO) > 0.0f)
-        {
-            //Closest to edge AB
-            simplex_vertex_c = simplex_vertex_a;
-            dir              = (simplex_vertex_b.global - simplex_vertex_a.global).CrossProductTwice(AO);
-            return false;
-        }
-        if (n.CrossProduct(simplex_vertex_c.global - simplex_vertex_a.global).DotProduct(AO) > 0.0f)
-        {
-            //Closest to edge AC
-            simplex_vertex_b = simplex_vertex_a;
-            dir              = (simplex_vertex_c.global - simplex_vertex_a.global).CrossProductTwice(AO);
-            return false;
-        }
-        count = 3;
-        if (n.DotProduct(AO) > 0.0f)
-        {
-            //Above triangle
-            simplex_vertex_d = simplex_vertex_c;
-            simplex_vertex_c = simplex_vertex_b;
-            simplex_vertex_b = simplex_vertex_a;
-            dir              = n;
-            return false;
-        }
-        //Below triangle
-        simplex_vertex_d = simplex_vertex_b;
-        simplex_vertex_b = simplex_vertex_a;
-        dir              = -n;
-        return false;
-    }
-
-    bool Simplex::UpdateSimplexTetrahedron(Vector3& dir)
-    {
-        // a is peak/tip of pyramid, BCD is the base (counterclockwise winding order)
-        //We know a prior that origin is above BCD and below a Get normals of three new faces
-        Vector3 ABC = (simplex_vertex_b.global - simplex_vertex_a.global).CrossProduct(simplex_vertex_c.global - simplex_vertex_a.global);
-        Vector3 ACD = (simplex_vertex_c.global - simplex_vertex_a.global).CrossProduct(simplex_vertex_d.global - simplex_vertex_a.global);
-        Vector3 ADB = (simplex_vertex_d.global - simplex_vertex_a.global).CrossProduct(simplex_vertex_b.global - simplex_vertex_a.global);
-        Vector3 AO  = -simplex_vertex_a.global; //dir to origin
-        count       = 3; //hoisting this just cause
-        //Plane-test origin with 3 faces
-        if (ABC.DotProduct(AO) > 0.0f)
-        {
-            //In front of ABC
-            simplex_vertex_d = simplex_vertex_c;
-            simplex_vertex_c = simplex_vertex_b;
-            simplex_vertex_b = simplex_vertex_a;
-            dir              = ABC;
-            return false;
-        }
-        if (ACD.DotProduct(AO) > 0.0f)
-        {
-            //In front of ACD
-            simplex_vertex_b = simplex_vertex_a;
-            dir              = ACD;
-            return false;
-        }
-        if (ADB.DotProduct(AO) > 0.0f)
-        {
-            //In front of ADB
-            simplex_vertex_c = simplex_vertex_d;
-            simplex_vertex_d = simplex_vertex_b;
-            simplex_vertex_b = simplex_vertex_a;
-            dir              = ADB;
-            return false;
-        }
-        //else inside tetrahedron; enclosed!
-        return true;
     }
 }

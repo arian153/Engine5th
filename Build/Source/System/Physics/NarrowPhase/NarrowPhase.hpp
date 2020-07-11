@@ -33,7 +33,7 @@ namespace Engine5
 
     private:
         size_t FindLeastSignificantComponent(const Vector3& vector3);
-        void   BlowUpSimplexToTetrahedron(ColliderPrimitive* collider_a, ColliderPrimitive* collider_b, const Simplex& simplex);
+        void   BlowUpSimplexToTetrahedron(ColliderPrimitive* collider_a, ColliderPrimitive* collider_b, Simplex& simplex);
 
     private:
         PrimitiveRenderer*    m_primitive_renderer = nullptr;

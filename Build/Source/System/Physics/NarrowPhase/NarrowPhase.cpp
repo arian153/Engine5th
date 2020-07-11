@@ -46,8 +46,12 @@ namespace Engine5
             if (GJKCollisionDetection(pair.first, pair.second, simplex) == true)
             {
                 //collider pair have a collision do epa and create collision.
-                if (simplex.count < 4)
+                if (simplex.IsValid() == false)
                 {
+                    if(simplex.count == 0)
+                    {
+                        continue;
+                    }
                     BlowUpSimplexToTetrahedron(pair.first, pair.second, simplex);
                 }
                 m_simplexes.push_back(simplex);
@@ -137,10 +141,7 @@ namespace Engine5
 
     bool NarrowPhase::GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex)
     {
-        Vector3 direction        = Vector3(0.0f, 1.0f, 0.0f);
-        simplex.simplex_vertex_a = GenerateCSOSupport(a, b, direction);
-        simplex.DoSimplexPoint(direction);
-        //avoid infinite loop
+        Vector3 direction = Vector3(0.0f, 1.0f, 0.0f);
         for (size_t i = 0; i < m_gjk_exit_iteration; ++i)
         {
             if (direction.IsValid() == false)
@@ -152,7 +153,7 @@ namespace Engine5
             {
                 return false;
             }
-            if (simplex.IsContainOrigin(direction) == true)
+            if (simplex.DoSimplex(direction) == true)
             {
                 return true;
             }
@@ -163,7 +164,7 @@ namespace Engine5
     bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result)
     {
         PolytopeFace closest_face = polytope.PickClosestFace();
-        PolytopeFace prev_face = closest_face;
+        PolytopeFace prev_face    = closest_face;
         for (size_t i = 0; i < m_epa_exit_iteration; ++i)
         {
             if (polytope.faces.empty())
@@ -244,19 +245,15 @@ namespace Engine5
         return 2;
     }
 
-    void NarrowPhase::BlowUpSimplexToTetrahedron(ColliderPrimitive* collider_a, ColliderPrimitive* collider_b, const Simplex& simplex)
+    void NarrowPhase::BlowUpSimplexToTetrahedron(ColliderPrimitive* collider_a, ColliderPrimitive* collider_b, Simplex& simplex)
     {
-        Vector3  simplex_global[ 4 ] = {simplex.simplex_vertex_a.global, simplex.simplex_vertex_b.global, simplex.simplex_vertex_c.global, simplex.simplex_vertex_d.global};
-        Vector3  simplex_local1[ 4 ] = {simplex.simplex_vertex_a.local_a, simplex.simplex_vertex_b.local_a, simplex.simplex_vertex_c.local_a, simplex.simplex_vertex_d.local_a};
-        Vector3  simplex_local2[ 4 ] = {simplex.simplex_vertex_a.local_b, simplex.simplex_vertex_b.local_b, simplex.simplex_vertex_c.local_b, simplex.simplex_vertex_d.local_b};
-        unsigned num_vertices        = simplex.count;
+        size_t num_vertices = simplex.count;
         // blow up simplex to tetrahedron
-        Vector3      line_vec_case2;
-        Vector3      search_dir_case2;
-        Vector3      search_dir_case3;
-        Matrix33     rot_case2;
-        size_t       least_significant_axis;
-        SupportPoint temp;
+        Vector3  line_vec_case2;
+        Vector3  search_dir_case2;
+        Vector3  search_dir_case3;
+        Matrix33 rot_case2;
+        size_t   least_significant_axis;
         // intentional omission of "break" statements for case fall-through
         // ReSharper disable CppDefaultCaseNotHandledInSwitchStatement
         switch (num_vertices)
@@ -266,21 +263,17 @@ namespace Engine5
             // iterate until a good search direction is used
             for (auto& search_dir : m_search_dirs)
             {
-                temp              = GenerateCSOSupport(collider_a, collider_b, search_dir);
-                simplex_global[1] = temp.global;
-                simplex_local1[1] = temp.local_a;
-                simplex_local2[1] = temp.local_b;
+                simplex[1] = GenerateCSOSupport(collider_a, collider_b, search_dir);
                 // good search direction used, break
-                if ((simplex_global[1] - simplex_global[0]).LengthSquared() >= Math::EPSILON_SQUARED)
+                if ((simplex[1].global - simplex[0].global).LengthSquared() >= Math::EPSILON_SQUARED)
                 {
                     break;
                 }
             }
         case 2:
             // line direction vector
-            line_vec_case2 = simplex_global[1] - simplex_global[0];
+            line_vec_case2 = simplex[1].global - simplex[0].global;
             // find least significant axis of line direction
-            // 0 = x, 1 = y, 2 = z
             least_significant_axis = FindLeastSignificantComponent(line_vec_case2);
             // initial search direction
             search_dir_case2 = line_vec_case2.CrossProduct(m_axes[least_significant_axis]);
@@ -290,46 +283,35 @@ namespace Engine5
             // until a good search direction is used
             for (int i = 0; i < 6; ++i)
             {
-                temp              = GenerateCSOSupport(collider_a, collider_b, search_dir_case2);
-                simplex_global[2] = temp.global;
-                simplex_local1[2] = temp.local_a;
-                simplex_local2[2] = temp.local_b;
+                simplex[2] = GenerateCSOSupport(collider_a, collider_b, search_dir_case2);
                 // good search direction used, break
-                if (simplex_global[2].LengthSquared() > Math::EPSILON_SQUARED)
+                if (simplex[2].global.LengthSquared() > Math::EPSILON_SQUARED)
                     break;
                 // rotate search direction by 60 degrees
                 search_dir_case2 = rot_case2 * search_dir_case2;
             }
         case 3:
             // use triangle normal as search direction
-            const Vector3 v01 = simplex_global[1] - simplex_global[0];
-            const Vector3 v02 = simplex_global[2] - simplex_global[0];
+            const Vector3 v01 = simplex[1].global - simplex[0].global;
+            const Vector3 v02 = simplex[2].global - simplex[0].global;
             search_dir_case3  = v01.CrossProduct(v02);
-            temp              = GenerateCSOSupport(collider_a, collider_b, search_dir_case3);
-            simplex_global[3] = temp.global;
-            simplex_local1[3] = temp.local_a;
-            simplex_local2[3] = temp.local_b;
+            simplex[3]        = GenerateCSOSupport(collider_a, collider_b, search_dir_case3);
             // search direction not good, use its opposite direction
-            if (simplex_global[3].LengthSquared() < Math::EPSILON_SQUARED)
+            if (simplex[3].global.LengthSquared() < Math::EPSILON_SQUARED)
             {
-                search_dir_case3  = -search_dir_case3;
-                temp              = GenerateCSOSupport(collider_a, collider_b, search_dir_case3);
-                simplex_global[3] = temp.global;
-                simplex_local1[3] = temp.local_a;
-                simplex_local2[3] = temp.local_b;
+                search_dir_case3 = -search_dir_case3;
+                simplex[3]       = GenerateCSOSupport(collider_a, collider_b, search_dir_case3);
             }
         }
         // fix tetrahedron winding
         // so that simplex[0]-simplex[1]-simplex[2] is CCW winding
-        const Vector3 v30 = simplex_global[0] - simplex_global[3];
-        const Vector3 v31 = simplex_global[1] - simplex_global[3];
-        const Vector3 v32 = simplex_global[2] - simplex_global[3];
+        const Vector3 v30 = simplex[0].global - simplex[3].global;
+        const Vector3 v31 = simplex[1].global - simplex[3].global;
+        const Vector3 v32 = simplex[2].global - simplex[3].global;
         const Real    det = v30.DotProduct(v31.CrossProduct(v32));
         if (det > 0.0f)
         {
-            std::swap(simplex_global[0], simplex_global[1]);
-            std::swap(simplex_local1[0], simplex_local1[1]);
-            std::swap(simplex_local2[0], simplex_local2[1]);
+            std::swap(simplex[0], simplex[1]);
         }
     }
 }

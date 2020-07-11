@@ -3,6 +3,8 @@
 
 namespace Engine5
 {
+    class ColliderPrimitive;
+
     class Simplex
     {
     public:
@@ -16,17 +18,13 @@ namespace Engine5
         bool DoSimplexTriangle(Vector3& dir);
         bool DoSimplexTetrahedron(Vector3& dir);
 
-        bool IsContainOrigin(Vector3& dir);
-
-        void Push(const SupportPoint& p);
+        bool DoSimplex(Vector3& dir);
+        bool IsValid();
 
         void Set(const SupportPoint& a, const SupportPoint& b, const SupportPoint& c, const SupportPoint& d);
         void Set(const SupportPoint& a, const SupportPoint& b, const SupportPoint& c);
         void Set(const SupportPoint& a, const SupportPoint& b);
         void Set(const SupportPoint& a);
-
-        bool UpdateSimplexTriangle(Vector3& dir);
-        bool UpdateSimplexTetrahedron(Vector3& dir);
 
     private:
         friend class NarrowPhase;
@@ -41,4 +39,5 @@ namespace Engine5
 
         int count = 0;
     };
+
 }

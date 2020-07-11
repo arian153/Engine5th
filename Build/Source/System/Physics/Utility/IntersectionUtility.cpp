@@ -27,7 +27,7 @@ namespace Engine5
             {
                 return false;
             }
-            if (simplex.IsContainOrigin(direction) == true)
+            if (simplex.DoSimplex(direction) == true)
             {
                 return true;
             }

@@ -44,7 +44,7 @@
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 15, 0 ],
+                        "Position": [ -15, 15, 0 ],
                         "Scale": [ 1, 1, 1 ]
                     }
                 },
@@ -68,9 +68,6 @@
                             }
                         ]
                     }
-                },
-                {
-                    "Type": "class Game::ControllerComponent"
                 }
             ],
             "Name": "Box1"
@@ -81,7 +78,7 @@
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ -15, 15, 0 ],
+                        "Position": [ -5, 15, 0 ],
                         "Scale": [ 1, 1, 1 ]
                     }
                 },
@@ -99,16 +96,19 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [ 2, 3 ],
+                                "Radius": [ 3, 2 ],
                                 "Height": 3,
                                 "Scale": 1,
-                                "Type": "Cone"
+                                "Type": "Ellipse"
                             }
                         ]
                     }
+                },
+                {
+                    "Type": "class Game::ControllerComponent"
                 }
             ],
-            "Name": "Cone"
+            "Name": "Ellipse1"
         },
         {
             "Components": [
@@ -137,14 +137,14 @@
                                 "Radius": [ 2, 3 ],
                                 "Height": 3,
                                 "Scale": 1,
-                                "Type": "Cylinder"
+                                "Type": "Ellipse"
                             }
                         ]
                     }
                 }
 
             ],
-            "Name": "Cylinder"
+            "Name": "Ellipse2"
         },
         {
             "Components": [
