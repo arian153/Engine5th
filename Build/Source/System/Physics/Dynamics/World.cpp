@@ -160,6 +160,14 @@ namespace Engine5
         }
     }
 
+    void World::SetForceFactory(std::unordered_map<std::string, ForceFactory*>* factories)
+    {
+        if (factories != nullptr)
+        {
+            m_factories = factories;
+        }
+    }
+
     void World::SetDrawFlagGJK(bool b_draw, const Color& color)
     {
         m_draw_gjk.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
@@ -198,6 +206,17 @@ namespace Engine5
             AddPrimitive(primitive);
             primitive->Initialize();
             return primitive;
+        }
+        return nullptr;
+    }
+
+    Force* World::CreateForce(const std::string& type) const
+    {
+        auto found = m_factories->find(type);
+        if (found != m_factories->end())
+        {
+            auto created = found->second->Create();
+            return created;
         }
         return nullptr;
     }

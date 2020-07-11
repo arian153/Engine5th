@@ -27,8 +27,6 @@ namespace Engine5
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
         void Render(const ColorFlag& draw_contact_flag);
 
-        //Force* Create(const std::string& type);
-
     private:
         friend class World;
     private:

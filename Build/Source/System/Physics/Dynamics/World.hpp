@@ -11,6 +11,7 @@
 
 namespace Engine5
 {
+    class ForceFactory;
     class Force;
     class Constraint;
     class ManifoldTable;
@@ -29,6 +30,7 @@ namespace Engine5
 
         void SetBroadPhaseMode(eBroadPhaseMode mode);
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
+        void SetForceFactory(std::unordered_map<std::string, ForceFactory*>* factories);
         void SetDrawFlagGJK(bool b_draw, const Color& color = ColorDef::Pure::White);
         void SetDrawFlagEPA(bool b_draw, const Color& color = ColorDef::Pure::White);
         void SetDrawFlagContact(bool b_draw, const Color& color = ColorDef::Pure::White);
@@ -36,6 +38,7 @@ namespace Engine5
         void SetDrawFlagBP(bool b_draw, const Color& color = ColorDef::Pure::White);
 
         ColliderPrimitive* CreateCollider(ColliderSet* collider_set, eColliderType type) const;
+        Force* CreateForce(const std::string& type) const;
 
         RigidBody*   AddRigidBody(RigidBody* body);
         ColliderSet* AddColliderSet(ColliderSet* set);
@@ -67,6 +70,9 @@ namespace Engine5
         std::vector<ColliderSet*> m_collider_sets;
         std::vector<RigidBody*>   m_rigid_bodies;
         std::list<ColliderPair>   m_pairs;
+
+        //factory
+        std::unordered_map<std::string, ForceFactory*>* m_factories = nullptr;
 
         ColorFlag m_draw_gjk;
         ColorFlag m_draw_epa;

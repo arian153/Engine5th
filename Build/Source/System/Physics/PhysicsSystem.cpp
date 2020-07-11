@@ -41,6 +41,7 @@ namespace Engine5
     World* PhysicsSystem::CreateWorld()
     {
         World* world = new World();
+        world->SetForceFactory(&m_factories);
         m_worlds.push_back(world);
         return world;
     }
