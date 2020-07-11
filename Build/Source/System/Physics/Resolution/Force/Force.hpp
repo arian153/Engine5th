@@ -26,6 +26,7 @@ namespace Engine5
 
     protected:
         friend class Resolution;
+        friend class PhysicsSystem;
         std::string type;
     };
 

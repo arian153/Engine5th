@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
+#include <unordered_map>
 
 namespace Engine5
 {
+    class ForceFactory;
     class World;
 
     class PhysicsSystem
@@ -17,7 +19,10 @@ namespace Engine5
         World* CreateWorld();
         void   RemoveWorld(World* world);
 
+        bool AddFactory(ForceFactory* factory);
+
     private:
+        std::unordered_map<std::string, ForceFactory*> m_factories;
         std::vector<World*> m_worlds;
     };
 }

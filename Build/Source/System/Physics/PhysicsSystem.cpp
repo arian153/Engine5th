@@ -1,5 +1,8 @@
 #include "PhysicsSystem.hpp"
 #include "Dynamics/World.hpp"
+#include "Resolution/Force/Force.hpp"
+#include "Resolution/Force/Drag.hpp"
+#include "Resolution/Force/Gravity.hpp"
 
 namespace Engine5
 {
@@ -13,6 +16,8 @@ namespace Engine5
 
     void PhysicsSystem::Initialize()
     {
+        AddFactory(new DragFactory());
+        AddFactory(new GravityFactory());
     }
 
     void PhysicsSystem::Shutdown()
@@ -24,6 +29,13 @@ namespace Engine5
             world = nullptr;
         }
         m_worlds.clear();
+
+        for (auto it = m_factories.begin(); it != m_factories.end(); ++it)
+        {
+            delete it->second;
+            it->second = nullptr;
+        }
+        m_factories.clear();
     }
 
     World* PhysicsSystem::CreateWorld()
@@ -43,5 +55,18 @@ namespace Engine5
             delete world;
             world = nullptr;
         }
+    }
+
+    bool PhysicsSystem::AddFactory(ForceFactory* factory)
+    {
+        if (factory != nullptr)
+        {
+            if (m_factories.find(factory->type) == m_factories.end())
+            {
+                m_factories.emplace(factory->type, factory);
+                return true;
+            }
+        }
+        return false;
     }
 }
