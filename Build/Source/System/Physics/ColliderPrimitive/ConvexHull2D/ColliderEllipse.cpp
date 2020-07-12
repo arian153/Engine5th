@@ -30,7 +30,8 @@ namespace Engine5
         sub_space_direction.SetNormalize();
         Vector2 result = radius.HadamardProduct(radius);
         result         = result.HadamardProduct(sub_space_direction);
-        result /= radius.HadamardProduct(sub_space_direction).Length();
+        Real denom     = radius.HadamardProduct(sub_space_direction).Length();
+        result         = Math::IsZero(denom) ? result * 0.0f : result / denom;
         return Vector3(result.x, result.y, 0.0f);
     }
 
