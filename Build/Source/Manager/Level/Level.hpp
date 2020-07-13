@@ -38,7 +38,7 @@ namespace Engine5
 
     private:
         void UpdateSpace(Real dt, Space* space, eSubsystemFlag flag) const;
-        void DrawSpace(Space* space, eSubsystemFlag flag);
+        void RenderSpace(Space* space, eSubsystemFlag flag);
         
     private:
         Space* m_global_space = nullptr;

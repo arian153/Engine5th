@@ -74,13 +74,13 @@ namespace Engine5
     {
         if (m_global_space->IsSubsystemUpdate(flag) || m_global_space->IsSubsystemFixedUpdate(flag))
         {
-            DrawSpace(m_global_space, flag);
+            RenderSpace(m_global_space, flag);
         }
         for (auto& space : m_spaces)
         {
             if (space->IsSubsystemUpdate(flag) || space->IsSubsystemFixedUpdate(flag))
             {
-                DrawSpace(space, flag);
+                RenderSpace(space, flag);
             }
         }
     }
@@ -110,57 +110,11 @@ namespace Engine5
 
     void Level::UpdateSpace(Real dt, Space* space, eSubsystemFlag flag) const
     {
-        if (flag == eSubsystemFlag::World)
-        {
-            auto world = space->GetWorld();
-            if (world != nullptr)
-            {
-                world->Update(dt);
-            }
-        }
-        if (flag == eSubsystemFlag::Logic)
-        {
-            auto logic = space->GetLogicSubsystem();
-            if (logic != nullptr)
-            {
-                logic->Update(dt);
-            }
-        }
-        if (flag == eSubsystemFlag::Scene)
-        {
-            auto scene = space->GetScene();
-            if (scene != nullptr)
-            {
-                scene->Update(dt);
-            }
-        }
+        space->UpdateSubsystem(dt, flag);
     }
 
-    void Level::DrawSpace(Space* space, eSubsystemFlag flag)
+    void Level::RenderSpace(Space* space, eSubsystemFlag flag)
     {
-        if (flag == eSubsystemFlag::World)
-        {
-            auto world = space->GetWorld();
-            if (world != nullptr)
-            {
-                world->Render();
-            }
-        }
-        if (flag == eSubsystemFlag::Logic)
-        {
-            auto logic = space->GetLogicSubsystem();
-            if (logic != nullptr)
-            {
-                logic->Render();
-            }
-        }
-        if (flag == eSubsystemFlag::Scene)
-        {
-            auto scene = space->GetScene();
-            if (scene != nullptr)
-            {
-                scene->Render();
-            }
-        }
+        space->RenderSubsystem(flag);
     }
 }

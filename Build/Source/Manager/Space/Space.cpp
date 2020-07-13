@@ -60,7 +60,6 @@ namespace Engine5
                 m_logic_subsystem->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
             }
         }
-
     }
 
     void Space::Initialize(JsonResource* space_resource, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry, LogicSystem* logic_system)
@@ -105,7 +104,6 @@ namespace Engine5
                 m_logic_subsystem->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
             }
         }
-
         space_resource->LoadData(this);
     }
 
@@ -140,6 +138,95 @@ namespace Engine5
             m_component_manager->Shutdown();
             delete m_component_manager;
             m_component_manager = nullptr;
+        }
+    }
+
+    void Space::Update(Real dt) const
+    {
+        if (m_logic_subsystem != nullptr)
+        {
+            m_logic_subsystem->Update(dt);
+        }
+        if (m_world != nullptr)
+        {
+            m_world->Update(dt);
+        }
+        //update animation
+        //update sound
+        if (m_scene != nullptr)
+        {
+            m_scene->Update(dt);
+        }
+    }
+
+    void Space::Render() const
+    {
+        if (m_logic_subsystem != nullptr)
+        {
+            m_logic_subsystem->Render();
+        }
+        if (m_world != nullptr)
+        {
+            m_world->Render();
+        }
+        //update animation
+        //update sound
+        if (m_scene != nullptr)
+        {
+            m_scene->Render();
+        }
+    }
+
+    void Space::UpdateSubsystem(Real dt, eSubsystemFlag flag) const
+    {
+        if (flag == eSubsystemFlag::World)
+        {
+            if (m_world != nullptr)
+            {
+                m_world->Update(dt);
+            }
+        }
+        if (flag == eSubsystemFlag::Logic)
+        {
+            if (m_logic_subsystem != nullptr)
+            {
+                m_logic_subsystem->Update(dt);
+            }
+        }
+        if (flag == eSubsystemFlag::Scene)
+        {
+            if (m_scene != nullptr)
+            {
+                m_scene->Update(dt);
+            }
+        }
+    }
+
+    void Space::RenderSubsystem(eSubsystemFlag flag) const
+    {
+        if (flag == eSubsystemFlag::World)
+        {
+            auto world = GetWorld();
+            if (world != nullptr)
+            {
+                world->Render();
+            }
+        }
+        if (flag == eSubsystemFlag::Logic)
+        {
+            auto logic = GetLogicSubsystem();
+            if (logic != nullptr)
+            {
+                logic->Render();
+            }
+        }
+        if (flag == eSubsystemFlag::Scene)
+        {
+            auto scene = GetScene();
+            if (scene != nullptr)
+            {
+                scene->Render();
+            }
         }
     }
 

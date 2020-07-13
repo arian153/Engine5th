@@ -1,5 +1,6 @@
 #pragma once
 #include "SubsystemFlag.hpp"
+#include "../../System/Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -39,6 +40,12 @@ namespace Engine5
                       RenderSystem*  render_system,
                       LogicSystem*   logic_system);
 
+        void Update(Real dt) const;
+        void Render() const;
+
+        void UpdateSubsystem(Real dt, eSubsystemFlag flag) const;
+        void RenderSubsystem(eSubsystemFlag flag) const;
+
         void ConnectSubsystem(ComponentManager* component_manager);
         void ConnectSubsystem(ObjectManager* object_manager);
         void ConnectSubsystem(Scene* scene);
@@ -54,8 +61,6 @@ namespace Engine5
 
         bool IsSubsystemUpdate(eSubsystemFlag flag) const;
         bool IsSubsystemFixedUpdate(eSubsystemFlag flag) const;
-
-    private:
 
     private:
         friend class SpaceManager;
