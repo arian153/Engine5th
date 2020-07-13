@@ -33,8 +33,8 @@
 
 namespace Engine5
 {
-    WString StringToWString(const String& str);
-    String  WStringToString(const WString& wstr);
+    WString ToWString(const String& str);
+    String  ToString(const WString& wstr);
 
     template <typename First, typename... Rest>
     void UnusedParameter(const First& first, const Rest& ...rest);

@@ -56,7 +56,7 @@ namespace Engine5
         if (JsonResource::HasMember(data, "Texture") && data["Texture"].isString())
         {
             std::string texture  = data["Texture"].asString();
-            auto        resource = m_space->GetResourceManager()->GetTextureResource(StringToWString(texture));
+            auto        resource = m_space->GetResourceManager()->GetTextureResource(ToWString(texture));
             m_emitter->SetTexture(resource->GetTexture());
         }
         if (JsonResource::HasMember(data, "Particle Amount") && data["Particle Amount"].isInt())

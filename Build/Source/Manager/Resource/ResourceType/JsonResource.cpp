@@ -321,7 +321,7 @@ namespace Engine5
             {
                 if (it->isString())
                 {
-                    std::wstring path           = m_resource_manager->GetRootPath() + L"/" + StringToWString(it->asString());
+                    std::wstring path           = m_resource_manager->GetRootPath() + L"/" + ToWString(it->asString());
                     auto         space_resource = m_resource_manager->GetJsonResource(path);
                     level->AddSpaceResource(space_resource);
                 }
@@ -368,7 +368,7 @@ namespace Engine5
                         if ((*it)["Archetype"].isString())
                         {
                             auto path     = (*it)["Archetype"].asString();
-                            auto resource = m_resource_manager->GetJsonResource(StringToWString(path));
+                            auto resource = m_resource_manager->GetJsonResource(ToWString(path));
                             archetype_id  = space->m_object_manager->m_object_factory->GetArchetypeID(resource);
                         }
                         else if ((*it)["Archetype"].isUInt())
@@ -493,7 +493,7 @@ namespace Engine5
     void JsonResource::CreateLevelData(const std::wstring& space_path) const
     {
         (*m_root_data)["Type"].append("Level");
-        (*m_root_data)["Spaces"].append(WStringToString(space_path));
+        (*m_root_data)["Spaces"].append(ToString(space_path));
     }
 
     void JsonResource::CreateSpaceData() const

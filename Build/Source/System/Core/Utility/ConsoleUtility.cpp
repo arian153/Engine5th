@@ -52,7 +52,7 @@ namespace Engine5
 
     void Console::MessageOut(const std::string& output_message)
     {
-        MessageBox(nullptr, StringToWString(output_message).c_str(), L"Important Message!", MB_SYSTEMMODAL | MB_SETFOREGROUND | MB_OK | MB_ICONERROR);
+        MessageBox(nullptr, ToWString(output_message).c_str(), L"Important Message!", MB_SYSTEMMODAL | MB_SETFOREGROUND | MB_OK | MB_ICONERROR);
     }
 
     void Console::MessageOut(const std::wstring& output_message)

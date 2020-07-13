@@ -140,7 +140,7 @@ namespace Engine5
         //error = wcstombs(video_card_description, adapter_desc.Description, 128);
         //
         //if (error != 0) return;
-        m_video_card_description = WStringToString(std::wstring(adapter_desc.Description));
+        m_video_card_description = ToString(std::wstring(adapter_desc.Description));
         // Release the display mode list.
         delete[] display_mode_list;
         display_mode_list = nullptr;

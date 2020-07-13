@@ -61,7 +61,7 @@ namespace Engine5
         if (JsonResource::HasMember(data, "Texture") && data["Texture"].isString())
         {
             std::string texture  = data["Texture"].asString();
-            auto        resource = m_space->GetResourceManager()->GetTextureResource(StringToWString(texture));
+            auto        resource = m_space->GetResourceManager()->GetTextureResource(ToWString(texture));
             m_mesh->SetTexture(resource->GetTexture());
         }
         if (JsonResource::HasMember(data, "Texture Array") && data["Texture Array"].isArray())
@@ -71,7 +71,7 @@ namespace Engine5
                 if ((*it).isString())
                 {
                     std::string texture  = (*it).asString();
-                    auto        resource = m_space->GetResourceManager()->GetTextureResource(StringToWString(texture));
+                    auto        resource = m_space->GetResourceManager()->GetTextureResource(ToWString(texture));
                     m_mesh->AddTexture(resource->GetTexture());
                 }
             }
@@ -125,7 +125,7 @@ namespace Engine5
             if (data["Mesh"].isString())
             {
                 std::string mesh     = data["Mesh"].asString();
-                auto        resource = m_space->GetResourceManager()->GetMeshResource(StringToWString(mesh));
+                auto        resource = m_space->GetResourceManager()->GetMeshResource(ToWString(mesh));
                 m_mesh->SetMeshData(resource->GetMeshData());
             }
             else

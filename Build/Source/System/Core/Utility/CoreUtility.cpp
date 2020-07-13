@@ -6,10 +6,10 @@
 
 namespace Engine5
 {
-    WString StringToWString(const String& str)
+    WString ToWString(const String& str)
     {
         WString convertedString;
-        int          requiredSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, 0, 0);
+        int     requiredSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
         if (requiredSize > 0)
         {
             std::vector<wchar_t> buffer(requiredSize);
@@ -19,14 +19,14 @@ namespace Engine5
         return convertedString;
     }
 
-    String WStringToString(const WString& wstr)
+    String ToString(const WString& wstr)
     {
         String convertedString;
-        int         requiredSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, 0, 0, 0, 0);
+        int    requiredSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
         if (requiredSize > 0)
         {
             std::vector<char> buffer(requiredSize);
-            WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &buffer[0], requiredSize, 0, 0);
+            WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &buffer[0], requiredSize, nullptr, nullptr);
             convertedString.assign(buffer.begin(), buffer.end() - 1);
         }
         return convertedString;
@@ -41,7 +41,6 @@ namespace Engine5
         if (!expression)
         {
             std::stringstream ss;
-
             /*Set output message*/
             ss << "ASSERTION FAILURE:";
             ss << "\nFile: ";
@@ -54,10 +53,9 @@ namespace Engine5
             ss << output_message;
             ss << "\n\nYES: Break into the Debugger.";
             ss << "\nNO: Exit immediately";
-
             /*display a message to the user*/
-            WString message      = StringToWString(ss.str());
-            int          return_value = MessageBox(nullptr, message.c_str(), L"ASSERT!", MB_TASKMODAL | MB_SETFOREGROUND | MB_YESNO | MB_ICONERROR);
+            WString message      = ToWString(ss.str());
+            int     return_value = MessageBox(nullptr, message.c_str(), L"ASSERT!", MB_TASKMODAL | MB_SETFOREGROUND | MB_YESNO | MB_ICONERROR);
             if (return_value == IDYES)
             {
                 return true;

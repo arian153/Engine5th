@@ -4,6 +4,7 @@
 
 namespace Engine5
 {
+    class Level;
     class LogicSystem;
     class ResourceManager;
     class JsonResource;
@@ -30,8 +31,8 @@ namespace Engine5
         void Shutdown();
 
         Space* GetGlobalSpace() const;
-        Space* CreateSpace(eSubsystemFlag flag);
-        Space* CreateSpace(JsonResource* resource);
+        Space* CreateSpace(Level* level, eSubsystemFlag flag);
+        Space* CreateSpace(Level* level, JsonResource* resource);
         void   RemoveSpace(Space* space);
 
     private:

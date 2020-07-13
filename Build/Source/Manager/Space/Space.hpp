@@ -4,6 +4,7 @@
 
 namespace Engine5
 {
+    class Level;
     class LogicSystem;
     class LogicSubsystem;
     class ResourceManager;
@@ -61,18 +62,23 @@ namespace Engine5
 
         bool IsSubsystemUpdate(eSubsystemFlag flag) const;
         bool IsSubsystemFixedUpdate(eSubsystemFlag flag) const;
+        bool IsActivated() const;
+
+        std::string GetName() const;
 
     private:
         friend class SpaceManager;
         friend class JsonResource;
 
     private:
-        bool           m_b_activate        = false;
+        std::string    m_name;
+        bool           m_b_activate        = true;
         eSubsystemFlag m_creation_flag     = eSubsystemFlag::None;
         eSubsystemFlag m_update_flag       = eSubsystemFlag::None;
         eSubsystemFlag m_fixed_update_flag = eSubsystemFlag::None;
         JsonResource*  m_space_resource    = nullptr;
 
+        Level*            m_level             = nullptr;
         SpaceManager*     m_space_manager     = nullptr;
         ComponentManager* m_component_manager = nullptr;
         ObjectManager*    m_object_manager    = nullptr;

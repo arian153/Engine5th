@@ -477,7 +477,7 @@ namespace Engine5
 
     std::string KeyboardInput::TypedString() const
     {
-        return WStringToString(*m_string);
+        return ToString(*m_string);
     }
 
     std::wstring* KeyboardInput::TypedWString() const

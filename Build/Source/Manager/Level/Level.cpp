@@ -1,8 +1,5 @@
 #include "Level.hpp"
 #include "../Space/Space.hpp"
-#include "../../System/Physics/Dynamics/World.hpp"
-#include "../../System/Graphics/Element/Scene.hpp"
-#include "../../System/Logic/LogicSubsystem.hpp"
 
 namespace Engine5
 {
@@ -47,6 +44,18 @@ namespace Engine5
     Space* Level::GetSpace(size_t index) const
     {
         return m_spaces.at(index);
+    }
+
+    Space* Level::GetSpace(const std::string& name) const
+    {
+        for (auto& space : m_spaces)
+        {
+            if (space->GetName() == name)
+            {
+                return space;
+            }
+        }
+        return nullptr;
     }
 
     void Level::UpdateSpace(Real dt, size_t index, eSubsystemFlag flag) const
@@ -110,7 +119,10 @@ namespace Engine5
 
     void Level::UpdateSpace(Real dt, Space* space, eSubsystemFlag flag) const
     {
-        space->UpdateSubsystem(dt, flag);
+        if (space->IsActivated())
+        {
+            space->UpdateSubsystem(dt, flag);
+        }
     }
 
     void Level::RenderSpace(Space* space, eSubsystemFlag flag)

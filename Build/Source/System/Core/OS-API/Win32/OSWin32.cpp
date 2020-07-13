@@ -245,7 +245,7 @@ namespace Engine5
         m_b_confine_cursor          = setting.b_confine_cursor;
         //window style option
         m_window_mode         = setting.window_mode;
-        m_application_caption = StringToWString(setting.caption);
+        m_application_caption = ToWString(setting.caption);
         //application window size
         m_curr_client_width  = setting.screen_width;
         m_curr_client_height = setting.screen_height;

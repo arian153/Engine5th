@@ -412,7 +412,7 @@ namespace Engine5
     void TextTextureBufferCommon::SetText(const std::string& string) const
     {
         m_text->reserve(string.size());
-        m_text->assign(StringToWString(string));
+        m_text->assign(ToWString(string));
     }
 
     void TextTextureBufferCommon::SetText(const std::wstring& string) const

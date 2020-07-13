@@ -149,8 +149,8 @@ namespace Engine5
         auto found = m_level_resources.find(level_name);
         if (found == m_level_resources.end())
         {
-            std::wstring  level_path      = m_resource_manager->GetRootPath() + L"/Data/Level/" + StringToWString(level_name) + L".json";
-            std::wstring  space_path      = L"Data/Space/" + StringToWString(level_name) + L"World.json";
+            std::wstring  level_path      = m_resource_manager->GetRootPath() + L"/Data/Level/" + ToWString(level_name) + L".json";
+            std::wstring  space_path      = L"Data/Space/" + ToWString(level_name) + L"World.json";
             JsonResource* level_resource  = m_resource_manager->CreateJsonResource(level_path);
             level_resource->m_b_load_type = false;
             level_resource->Initialize();
@@ -169,7 +169,7 @@ namespace Engine5
 
     void LevelManager::AddLevel(JsonResource* level_resource)
     {
-        std::string level_name = WStringToString(level_resource->FileName());
+        std::string level_name = ToString(level_resource->FileName());
         auto        found      = m_level_resources.find(level_name);
         if (found == m_level_resources.end())
         {
@@ -296,7 +296,7 @@ namespace Engine5
         level->m_global_space = m_space_manager->GetGlobalSpace();
         for (auto& resource : level->m_space_resources)
         {
-            auto space = m_space_manager->CreateSpace(resource);
+            auto space = m_space_manager->CreateSpace(level, resource);
             level->m_spaces.push_back(space);
         }
         level->Initialize();

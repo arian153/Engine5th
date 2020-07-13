@@ -309,4 +309,14 @@ namespace Engine5
     {
         return HasFlag(m_fixed_update_flag, flag);
     }
+
+    bool Space::IsActivated() const
+    {
+        return m_b_activate;
+    }
+
+    std::string Space::GetName() const
+    {
+        return m_name;
+    }
 }

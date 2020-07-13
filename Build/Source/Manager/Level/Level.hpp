@@ -25,6 +25,7 @@ namespace Engine5
 
         Space* GetGlobalSpace() const;
         Space* GetSpace(size_t index) const;
+        Space* GetSpace(const std::string& name) const;
 
         void UpdateSpace(Real dt, size_t index, eSubsystemFlag flag) const;
         void UpdateSubsystem(Real dt, eSubsystemFlag flag) const;

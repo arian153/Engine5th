@@ -2,6 +2,7 @@
 #include "Space.hpp"
 #include "../../System/Physics/PhysicsSystem.hpp"
 #include "../Resource/ResourceType/JsonResource.hpp"
+#include "../../System/Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -56,22 +57,25 @@ namespace Engine5
         return m_global_space;
     }
 
-    Space* SpaceManager::CreateSpace(eSubsystemFlag flag)
+    Space* SpaceManager::CreateSpace(Level* level, eSubsystemFlag flag)
     {
         Space* space = new Space();
         m_spaces.push_back(space);
         space->m_creation_flag    = flag;
         space->m_resource_manager = m_resource_manager;
+        space->m_level            = level;
         space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
         return space;
     }
 
-    Space* SpaceManager::CreateSpace(JsonResource* resource)
+    Space* SpaceManager::CreateSpace(Level* level, JsonResource* resource)
     {
         Space* space           = new Space();
         space->m_space_manager = this;
         m_spaces.push_back(space);
         space->m_resource_manager = m_resource_manager;
+        space->m_level            = level;
+        space->m_name             = ToString(resource->FileName());
         space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
         return space;
     }
