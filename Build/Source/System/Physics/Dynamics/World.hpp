@@ -9,6 +9,10 @@
 #include "../../Graphics/DataType/Color.hpp"
 #include "../Utility/FrictionUtility.hpp"
 
+namespace Json {
+    class Value;
+}
+
 namespace Engine5
 {
     class ForceFactory;
@@ -27,6 +31,9 @@ namespace Engine5
         void Update(Real dt);
         void Shutdown();
         void Render() const;
+
+        void Load(const Json::Value& data);
+        void Save(const Json::Value& data);
 
         void SetBroadPhaseMode(eBroadPhaseMode mode);
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);

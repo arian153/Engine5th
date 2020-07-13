@@ -10,6 +10,8 @@
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "../Resolution/Force/Force.hpp"
+#include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
+#include "../../../External/JSONCPP/json/json.h"
 
 namespace Engine5
 {
@@ -66,6 +68,101 @@ namespace Engine5
         {
             m_resolution_phase->Render(m_draw_contact);
         }
+    }
+
+    void World::Load(const Json::Value& data)
+    {
+        if (JsonResource::HasMember(data, "Draw Broad Phase"))
+        {
+            ColorFlag   flag;
+            Json::Value value = data["Draw Broad Phase"];
+            if (JsonResource::HasMember(value, "Color") && JsonResource::IsColor(value["Color"]))
+            {
+                flag.color = JsonResource::AsColor(value["Color"]);
+            }
+            if (JsonResource::HasMember(value, "Flag") && value["Flag"].isBool())
+            {
+                flag.b_flag = value["Flag"].asBool();
+            }
+            SetDrawFlagBP(flag.b_flag, flag.color);
+        }
+        if (JsonResource::HasMember(data, "Draw Contact"))
+        {
+            ColorFlag   flag;
+            Json::Value value = data["Draw Contact"];
+            if (JsonResource::HasMember(value, "Color") && JsonResource::IsColor(value["Color"]))
+            {
+                flag.color = JsonResource::AsColor(value["Color"]);
+            }
+            if (JsonResource::HasMember(value, "Flag") && value["Flag"].isBool())
+            {
+                flag.b_flag = value["Flag"].asBool();
+            }
+            SetDrawFlagContact(flag.b_flag, flag.color);
+        }
+        if (JsonResource::HasMember(data, "Draw EPA"))
+        {
+            ColorFlag   flag;
+            Json::Value value = data["Draw EPA"];
+            if (JsonResource::HasMember(value, "Color") && JsonResource::IsColor(value["Color"]))
+            {
+                flag.color = JsonResource::AsColor(value["Color"]);
+            }
+            if (JsonResource::HasMember(value, "Flag") && value["Flag"].isBool())
+            {
+                flag.b_flag = value["Flag"].asBool();
+            }
+            SetDrawFlagEPA(flag.b_flag, flag.color);
+        }
+        if (JsonResource::HasMember(data, "Draw GJK"))
+        {
+            ColorFlag   flag;
+            Json::Value value = data["Draw GJK"];
+            if (JsonResource::HasMember(value, "Color") && JsonResource::IsColor(value["Color"]))
+            {
+                flag.color = JsonResource::AsColor(value["Color"]);
+            }
+            if (JsonResource::HasMember(value, "Flag") && value["Flag"].isBool())
+            {
+                flag.b_flag = value["Flag"].asBool();
+            }
+            SetDrawFlagGJK(flag.b_flag, flag.color);
+        }
+        if (JsonResource::HasMember(data, "Draw Primitive"))
+        {
+            ColorFlag   flag;
+            Json::Value value = data["Draw Primitive"];
+            if (JsonResource::HasMember(value, "Color") && JsonResource::IsColor(value["Color"]))
+            {
+                flag.color = JsonResource::AsColor(value["Color"]);
+            }
+            if (JsonResource::HasMember(value, "Flag") && value["Flag"].isBool())
+            {
+                flag.b_flag = value["Flag"].asBool();
+            }
+            SetDrawFlagPrimitive(flag.b_flag, flag.color);
+        }
+        if (JsonResource::HasMember(data, "Forces") && data["Forces"].isArray())
+        {
+            for (auto it = data["Forces"].begin(); it != data["Forces"].end(); ++it)
+            {
+                //Load Components
+                if (JsonResource::HasMember(*it, "Type") && (*it)["Type"].isString())
+                {
+                    std::string type    = (*it)["Type"].asString();
+                    Force*      created = CreateForce(type);
+                    if (created != nullptr)
+                    {
+                        created->Load((*it)["Value"]);
+                        AddForce(created);
+                    }
+                }
+            }
+        }
+    }
+
+    void World::Save(const Json::Value& data)
+    {
     }
 
     void World::Update(Real dt)

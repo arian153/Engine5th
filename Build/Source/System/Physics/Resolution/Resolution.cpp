@@ -6,8 +6,6 @@
 #include "ContactManifold.hpp"
 #include "../../Graphics/DataType/Color.hpp"
 #include "Force/Force.hpp"
-#include "Force/Gravity.hpp"
-#include "Force/Drag.hpp"
 
 namespace Engine5
 {
@@ -22,13 +20,6 @@ namespace Engine5
     void Resolution::Initialize()
     {
         m_friction_utility.Initialize();
-        //Gravity* gravity = new Gravity();
-        //gravity->SetGlobalGravity(Vector3(0, -1.0f, 0), 0.3f);
-        //gravity->SetLocalGravity(Vector3(-3, 8, 0), 100.0f, 1.0f);
-        //m_forces.push_back(gravity);
-        Drag* drag = new Drag();
-        drag->SetLinearDrag(0.25f);
-        m_forces.push_back(drag);
     }
 
     void Resolution::Shutdown()

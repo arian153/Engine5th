@@ -220,25 +220,42 @@
         }
     ],
     "Settings": {
-        "Draw Broad Phase": {
-            "Color": [ 1, 1, 1, 1 ],
-            "Flag": true
-        },
-        "Draw Contact": {
-            "Color": [ 1, 0, 0, 1 ],
-            "Flag": true
-        },
-        "Draw EPA": {
-            "Color": [ 1, 1, 0, 1 ],
-            "Flag": true
-        },
-        "Draw GJK": {
-            "Color": [ 0, 1, 0, 1 ],
-            "Flag": true
-        },
-        "Draw Primitive": {
-            "Color": [ 0, 0, 1, 1 ],
-            "Flag": true
+        "World": {
+            "Draw Broad Phase": {
+                "Color": [ 1, 1, 1, 1 ],
+                "Flag": true
+            },
+            "Draw Contact": {
+                "Color": [ 1, 0, 0, 1 ],
+                "Flag": true
+            },
+            "Draw EPA": {
+                "Color": [ 1, 1, 0, 1 ],
+                "Flag": true
+            },
+            "Draw GJK": {
+                "Color": [ 0, 1, 0, 1 ],
+                "Flag": true
+            },
+            "Draw Primitive": {
+                "Color": [ 0, 0, 1, 1 ],
+                "Flag": true
+            },
+            "Forces": [
+                {
+                    "Type": "class Engine5::Drag",
+                    "Value": {
+                        "Linear Drag": 0.25,
+                        "Angular Drag": 0.25
+                    }
+                },
+                {
+                    "Type": "class Engine5::Gravity",
+                    "Value": {
+                        "Global Gravity": [ 0, -0.1, 0 ]
+                    }
+                }
+            ]
         },
         "ProjectionMatrix": "Perspective"
     },

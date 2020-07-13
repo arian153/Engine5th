@@ -347,76 +347,9 @@ namespace Engine5
                     space->GetScene()->SetProjectionType(eProjectionType::OrthoGraphic);
                 }
             }
-
-            if (HasMember(setting, "Draw Broad Phase"))
+            if (HasMember(setting, "World"))
             {
-                ColorFlag flag;
-                Json::Value value = setting[ "Draw Broad Phase" ];
-                if (HasMember(value, "Color") && IsColor(value["Color"]))
-                {
-                    flag.color = AsColor(value["Color"]);
-                }
-                if (HasMember(value, "Flag") && value["Flag"].isBool())
-                {
-                    flag.b_flag = value["Flag"].asBool();
-                }
-                space->GetWorld()->SetDrawFlagBP(flag.b_flag, flag.color);
-            }
-            if (HasMember(setting, "Draw Contact"))
-            {
-                ColorFlag flag;
-                Json::Value value = setting[ "Draw Contact" ];
-                if (HasMember(value, "Color") && IsColor(value[ "Color" ]))
-                {
-                    flag.color = AsColor(value[ "Color" ]);
-                }
-                if (HasMember(value, "Flag") && value[ "Flag" ].isBool())
-                {
-                    flag.b_flag = value[ "Flag" ].asBool();
-                }
-                space->GetWorld()->SetDrawFlagContact(flag.b_flag, flag.color);
-            }
-            if (HasMember(setting, "Draw EPA"))
-            {
-                ColorFlag flag;
-                Json::Value value = setting[ "Draw EPA" ];
-                if (HasMember(value, "Color") && IsColor(value[ "Color" ]))
-                {
-                    flag.color = AsColor(value[ "Color" ]);
-                }
-                if (HasMember(value, "Flag") && value[ "Flag" ].isBool())
-                {
-                    flag.b_flag = value[ "Flag" ].asBool();
-                }
-                space->GetWorld()->SetDrawFlagEPA(flag.b_flag, flag.color);
-            }
-            if (HasMember(setting, "Draw GJK"))
-            {
-                ColorFlag flag;
-                Json::Value value = setting[ "Draw GJK" ];
-                if (HasMember(value, "Color") && IsColor(value[ "Color" ]))
-                {
-                    flag.color = AsColor(value[ "Color" ]);
-                }
-                if (HasMember(value, "Flag") && value[ "Flag" ].isBool())
-                {
-                    flag.b_flag = value[ "Flag" ].asBool();
-                }
-                space->GetWorld()->SetDrawFlagGJK(flag.b_flag, flag.color);
-            }
-            if (HasMember(setting, "Draw Primitive"))
-            {
-                ColorFlag flag;
-                Json::Value value = setting[ "Draw Primitive" ];
-                if (HasMember(value, "Color") && IsColor(value[ "Color" ]))
-                {
-                    flag.color = AsColor(value[ "Color" ]);
-                }
-                if (HasMember(value, "Flag") && value[ "Flag" ].isBool())
-                {
-                    flag.b_flag = value[ "Flag" ].asBool();
-                }
-                space->GetWorld()->SetDrawFlagPrimitive(flag.b_flag, flag.color);
+                space->GetWorld()->Load(setting["World"]);
             }
         }
         if (HasMember(*m_root_data, "Objects") && (*m_root_data)["Objects"].isArray())
