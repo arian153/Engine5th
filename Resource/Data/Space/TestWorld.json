@@ -248,13 +248,7 @@
                         "Linear Drag": 0.25,
                         "Angular Drag": 0.25
                     }
-                },
-                {
-                    "Type": "class Engine5::Gravity",
-                    "Value": {
-                        "Global Gravity": [ 0, -0.1, 0 ]
-                    }
-                }
+                } 
             ]
         },
         "ProjectionMatrix": "Perspective"

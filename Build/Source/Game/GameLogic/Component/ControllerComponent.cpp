@@ -120,22 +120,37 @@ namespace Game
             }
             else
             {
-                auto body = m_owner->GetComponent<RigidBodyComponent>();
+                /* auto body = m_owner->GetComponent<RigidBodyComponent>();
+                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Left))
+                 {
+                     body->ApplyForceCentroid(Vector3(-100.0f));
+                 }
+                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Right))
+                 {
+                     body->ApplyForceCentroid(Vector3(100.0f));
+                 }
+                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Up))
+                 {
+                     body->ApplyForceCentroid(Vector3(0.0f, 100.0f));
+                 }
+                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Down))
+                 {
+                     body->ApplyForceCentroid(Vector3(0.0f, -100.0f));
+                 }*/
+                auto transform = m_owner->GetComponent<TransformComponent>();
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Left))
                 {
-                    body->ApplyForceCentroid(Vector3(-100.0f));
+                    //transform->SetOrigin(Vector3(-3.0f, 0.0f, 0.0f));
+                    //transform->AddPosition(Vector3(-dt, 0.0f, 0.0f));
+                    transform->AddRotationZ(dt);
+                    //transform->AddPosition(Vector3(1.0f, 0.0f, 0.0f));
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Right))
                 {
-                    body->ApplyForceCentroid(Vector3(100.0f));
-                }
-                if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Up))
-                {
-                    body->ApplyForceCentroid(Vector3(0.0f, 100.0f));
-                }
-                if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Down))
-                {
-                    body->ApplyForceCentroid(Vector3(0.0f, -100.0f));
+                    //transform->SetOrigin(Vector3(-3.0f, 0.0f, 0.0f));
+                    //transform->AddPosition(Vector3(dt, 0.0f, 0.0f));
+                    transform->AddRotationZ(-dt);
+                    //transform->AddPosition(Vector3(1.0f, 0.0f, 0.0f));
                 }
             }
         }

@@ -26,6 +26,7 @@ namespace Engine5
         void SetOrientationAxis(const Vector3& axis);
         void SetScale(const Vector3& scale, eAnchor3D anchor = eAnchor3D::CCC);
         void SetScale(Real x, Real y, Real z, eAnchor3D anchor = eAnchor3D::CCC);
+        void SetOrigin(const Vector3& origin);
 
         //Adder
         void AddPosition(const Vector3& delta_position);
@@ -49,7 +50,6 @@ namespace Engine5
         Vector3 WorldToLocalPoint(const Vector3& world_point) const;
         Vector3 LocalToWorldVector(const Vector3& local_vector) const;
         Vector3 WorldToLocalVector(const Vector3& world_vector) const;
-       
 
     protected:
         bool Load(const Json::Value& data) override;

@@ -21,6 +21,7 @@ namespace Engine5
         Vector3 WorldToLocalVector(const Vector3& world_vector) const;
 
     public:
+        Vector3    origin;
         Vector3    position;
         Vector3    scale = Vector3(1.0f, 1.0f, 1.0f);
         Quaternion orientation;

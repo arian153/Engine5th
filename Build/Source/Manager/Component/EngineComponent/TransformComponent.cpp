@@ -100,6 +100,11 @@ namespace Engine5
         }
     }
 
+    void TransformComponent::SetOrigin(const Vector3& origin)
+    {
+        m_transform.origin = origin;
+    }
+
     void TransformComponent::AddPosition(const Vector3& delta_position)
     {
         m_transform.position += delta_position;
