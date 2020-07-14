@@ -196,7 +196,7 @@ namespace Engine5
             auto linear = data["Linear"];
             if (JsonResource::HasMember(linear, "Position") && JsonResource::IsVector3(linear["Position"]))
             {
-                m_rigid_body->m_position = JsonResource::AsVector3(linear["Position"]);
+                m_rigid_body->m_transform->position = JsonResource::AsVector3(linear["Position"]);
             }
             if (JsonResource::HasMember(linear, "Velocity") && JsonResource::IsVector3(linear["Velocity"]))
             {

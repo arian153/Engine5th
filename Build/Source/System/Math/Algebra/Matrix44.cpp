@@ -727,6 +727,34 @@ namespace Engine5
         return result;
     }
 
+    Vector3 Matrix44::TransformPoint(const Vector3& point)
+    {
+        Vector3 result;
+        result.x = data[0] * point.x + data[4] * point.y + data[8] * point.z + data[12];
+        result.y = data[1] * point.x + data[5] * point.y + data[9] * point.z + data[13];
+        result.z = data[2] * point.x + data[6] * point.y + data[10] * point.z + data[14];
+        return result;
+    }
+
+    Vector3 Matrix44::TransformVector(const Vector3& vector)
+    {
+        Vector3 result;
+        result.x = data[0] * vector.x + data[4] * vector.y + data[8] * vector.z;
+        result.y = data[1] * vector.x + data[5] * vector.y + data[9] * vector.z;
+        result.z = data[2] * vector.x + data[6] * vector.y + data[10] * vector.z;
+        return result;
+    }
+
+    Vector3 Matrix44::TransformVectorOrigin(const Vector3& vector, const Vector3& origin)
+    {
+        Vector3 vec = vector - origin;
+        Vector3 result;
+        result.x = data[0] * vec.x + data[4] * vec.y + data[8] * vec.z;
+        result.y = data[1] * vec.x + data[5] * vec.y + data[9] * vec.z;
+        result.z = data[2] * vec.x + data[6] * vec.y + data[10] * vec.z;
+        return result + origin;
+    }
+
     Matrix44 Inverse(const Matrix44& mat)
     {
         return mat.Inverse();

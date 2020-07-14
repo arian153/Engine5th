@@ -41,15 +41,25 @@ namespace Engine5
 
     Vector3 Transform::WorldToLocalPoint(const Vector3& world_point) const
     {
-        return orientation.Inverse().Rotate(world_point - (origin + position)) + origin;
+        return orientation.Inverse().Rotate(world_point - origin - position) + origin;
     }
 
     Vector3 Transform::LocalToWorldVector(const Vector3& local_vector) const
     {
-        return orientation.Rotate(local_vector - origin) + origin;
+        return orientation.Rotate(local_vector);
     }
 
     Vector3 Transform::WorldToLocalVector(const Vector3& world_vector) const
+    {
+        return orientation.Inverse().Rotate(world_vector);
+    }
+
+    Vector3 Transform::LocalToWorldVectorOrigin(const Vector3& local_vector) const
+    {
+        return orientation.Rotate(local_vector - origin) + origin;
+    }
+
+    Vector3 Transform::WorldToLocalVectorOrigin(const Vector3& world_vector) const
     {
         return orientation.Inverse().Rotate(world_vector - origin) + origin;
     }

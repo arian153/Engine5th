@@ -38,6 +38,7 @@ namespace Engine5
 
         Vector3       GetBodyPosition() const;
         Quaternion    GetBodyOrientation() const;
+        Matrix44      GetBodyTransform() const;
         RigidBody*    GetRigidBody() const;
         BoundingAABB* GetBoundingVolume() const;
         ColliderSet*  GetColliderSet() const;

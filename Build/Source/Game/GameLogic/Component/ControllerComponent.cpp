@@ -140,14 +140,14 @@ namespace Game
                 auto transform = m_owner->GetComponent<TransformComponent>();
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Left))
                 {
-                    //transform->SetOrigin(Vector3(-3.0f, 0.0f, 0.0f));
+                    transform->SetOrigin(Vector3(-3.0f, 0.0f, 0.0f));
                     //transform->AddPosition(Vector3(-dt, 0.0f, 0.0f));
                     transform->AddRotationZ(dt);
                     //transform->AddPosition(Vector3(1.0f, 0.0f, 0.0f));
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Right))
                 {
-                    //transform->SetOrigin(Vector3(-3.0f, 0.0f, 0.0f));
+                    transform->SetOrigin(Vector3(-3.0f, 0.0f, 0.0f));
                     //transform->AddPosition(Vector3(dt, 0.0f, 0.0f));
                     transform->AddRotationZ(-dt);
                     //transform->AddPosition(Vector3(1.0f, 0.0f, 0.0f));
@@ -173,9 +173,22 @@ namespace Game
         }
         else
         {
-            auto transform = m_owner->GetComponent<TransformComponent>();
+            auto       transform = m_owner->GetComponent<TransformComponent>();
+            Transform* t_data    = transform->GetTransform();
+            Vector3    test_data(-3, 4, 5);
+            Matrix44   trans_mat = transform->GetTransformMatrix();
+            Matrix44   inv       = trans_mat.Inverse();
             m_text_renderer->Output(
-                                    Vector2(520, 400), ColorDef::Pure::Red, "O : ", transform->GetOrientation()
+                                    Vector2(520, 400), ColorDef::Pure::Red,
+                                    "Q : ", transform->GetOrientation(),
+                                    "\nLocal To World\n",
+                                    trans_mat.TransformVectorOrigin(test_data, transform->GetOrigin()) ,
+                                    "\n",
+                                    t_data->LocalToWorldVectorOrigin(test_data),
+                                    "\nWorld To Local\n",
+                                    inv.TransformVectorOrigin(test_data, transform->GetOrigin()),
+                                    "\n",
+                                    t_data->WorldToLocalVectorOrigin(test_data)
                                    );
         }
     }

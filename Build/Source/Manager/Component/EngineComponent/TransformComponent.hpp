@@ -41,6 +41,7 @@ namespace Engine5
         //Getter
         Vector3    GetPosition() const;
         Vector3    GetScale() const;
+        Vector3    GetOrigin() const;
         Quaternion GetOrientation() const;
         Matrix33   GetRotationMatrix() const;
         Matrix44   GetTransformMatrix() const;

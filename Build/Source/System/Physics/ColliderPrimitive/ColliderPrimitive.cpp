@@ -150,7 +150,7 @@ namespace Engine5
     {
         if (m_rigid_body != nullptr)
         {
-            return m_rigid_body->m_position;
+            return m_rigid_body->m_local.position;
         }
         return Vector3();
     }
@@ -159,9 +159,18 @@ namespace Engine5
     {
         if (m_rigid_body != nullptr)
         {
-            return m_rigid_body->m_orientation;
+            return m_rigid_body->m_local.orientation;
         }
         return Quaternion();
+    }
+
+    Matrix44 ColliderPrimitive::GetBodyTransform() const
+    {
+        if (m_rigid_body != nullptr)
+        {
+            return m_rigid_body->m_transform->LocalToWorldMatrix();
+        }
+        return Matrix44();
     }
 
     RigidBody* ColliderPrimitive::GetRigidBody() const

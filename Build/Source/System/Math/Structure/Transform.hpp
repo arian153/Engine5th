@@ -19,6 +19,8 @@ namespace Engine5
         Vector3 WorldToLocalPoint(const Vector3& world_point) const;
         Vector3 LocalToWorldVector(const Vector3& local_vector) const;
         Vector3 WorldToLocalVector(const Vector3& world_vector) const;
+        Vector3 LocalToWorldVectorOrigin(const Vector3& local_vector) const;
+        Vector3 WorldToLocalVectorOrigin(const Vector3& world_vector) const;
 
     public:
         Vector3    origin;

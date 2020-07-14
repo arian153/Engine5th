@@ -85,13 +85,11 @@ namespace Engine5
 
     private:
         //linear data
-        Vector3 m_position; //position of rigid body
         Vector3 m_linear_velocity;
         Vector3 m_force_accumulator;
         Vector3 m_constraints_positional = Vector3(1.0f, 1.0f, 1.0f);
 
         //angular data
-        Quaternion m_orientation;
         Quaternion m_inverse_orientation;
         Vector3    m_angular_velocity;
         Vector3    m_torque_accumulator;
@@ -106,6 +104,7 @@ namespace Engine5
         //others
         eMotionMode         m_motion_mode = eMotionMode::Dynamic;
         Transform*          m_transform   = nullptr;
-        RigidBodyComponent* m_component   = nullptr;
+        Transform           m_local;
+        RigidBodyComponent* m_component = nullptr;
     };
 }

@@ -47,7 +47,7 @@ namespace Engine5
         delta_angular_velocity = delta_angular_velocity.HadamardProduct(m_constraints_rotational);
         Vector3 axis           = delta_angular_velocity.Unit();
         Real    radian         = delta_angular_velocity.Length() * dt;
-        m_orientation.AddRotation(axis, radian);
+        m_local.orientation.AddRotation(axis, radian);
         // update physical properties
         UpdateOrientation();
         UpdatePositionFromGlobalCentroid();
@@ -56,24 +56,24 @@ namespace Engine5
 
     void RigidBody::UpdateGlobalCentroidFromPosition()
     {
-        m_global_centroid = m_orientation.Rotate(m_mass_data.local_centroid) + m_position;
+        m_global_centroid = m_local.orientation.Rotate(m_mass_data.local_centroid) + m_local.position;
     }
 
     void RigidBody::UpdatePositionFromGlobalCentroid()
     {
-        m_position = m_orientation.Rotate(-m_mass_data.local_centroid) + m_global_centroid;
+        m_local.position = m_local.orientation.Rotate(-m_mass_data.local_centroid) + m_global_centroid;
     }
 
     void RigidBody::UpdateGlobalInertiaTensor()
     {
-        m_global_inverse_inertia_tensor = m_orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
-        m_global_inertia_tensor         = m_orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
+        m_global_inverse_inertia_tensor = m_local.orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
+        m_global_inertia_tensor         = m_local.orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
     }
 
     void RigidBody::UpdateOrientation()
     {
-        m_orientation.SetNormalize();
-        m_inverse_orientation = m_orientation.Inverse();
+        m_local.orientation.SetNormalize();
+        m_inverse_orientation = m_local.orientation.Inverse();
         m_inverse_orientation.SetNormalize();
     }
 
@@ -105,7 +105,7 @@ namespace Engine5
 
     void RigidBody::SetPosition(const Vector3& position)
     {
-        m_position = position;
+        m_local.position = position;
         UpdateGlobalCentroidFromPosition();
     }
 
@@ -117,13 +117,13 @@ namespace Engine5
 
     void RigidBody::SetOrientation(const Quaternion& orientation)
     {
-        m_orientation = orientation;
+        m_local.orientation = orientation;
         UpdateOrientation();
     }
 
     Vector3 RigidBody::GetPosition() const
     {
-        return m_position;
+        return m_local.position;
     }
 
     Vector3 RigidBody::GetCentroid() const
@@ -138,7 +138,7 @@ namespace Engine5
 
     Quaternion RigidBody::GetOrientation() const
     {
-        return m_orientation;
+        return m_local.orientation;
     }
 
     void RigidBody::SetLinearVelocity(const Vector3& linear)
@@ -229,7 +229,7 @@ namespace Engine5
     void RigidBody::SetInertia(const Matrix33& inertia_tensor)
     {
         m_global_inverse_inertia_tensor          = inertia_tensor.Inverse();
-        m_mass_data.local_inverse_inertia_tensor = m_inverse_orientation * m_global_inverse_inertia_tensor * m_orientation;
+        m_mass_data.local_inverse_inertia_tensor = m_inverse_orientation * m_global_inverse_inertia_tensor * m_local.orientation;
         m_mass_data.local_inertia_tensor         = m_mass_data.local_inverse_inertia_tensor.Inverse();
     }
 
@@ -257,7 +257,7 @@ namespace Engine5
     {
         m_mass_data.local_inertia_tensor         = inertia;
         m_mass_data.local_inverse_inertia_tensor = inertia.Inverse();
-        m_global_inverse_inertia_tensor          = m_orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
+        m_global_inverse_inertia_tensor          = m_local.orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
     }
 
     void RigidBody::SetMotionMode(eMotionMode motion_mode)
@@ -272,30 +272,29 @@ namespace Engine5
 
     Vector3 RigidBody::LocalToWorldPoint(const Vector3& local_point) const
     {
-        return m_orientation.Rotate(local_point) + m_position;
+        return m_local.LocalToWorldPoint(local_point);
     }
 
     Vector3 RigidBody::WorldToLocalPoint(const Vector3& world_point) const
     {
-        return m_inverse_orientation.Rotate(world_point - m_position);
+        return m_local.WorldToLocalPoint(world_point);;
     }
 
     Vector3 RigidBody::LocalToWorldVector(const Vector3& local_vector) const
     {
-        return m_orientation.Rotate(local_vector);
+        return m_local.LocalToWorldVector(local_vector);
     }
 
     Vector3 RigidBody::WorldToLocalVector(const Vector3& world_vector) const
     {
-        return m_inverse_orientation.Rotate(world_vector);
+        return m_local.WorldToLocalVector(world_vector);
     }
 
     void RigidBody::SyncToTransform(Transform* transform) const
     {
         if (transform != nullptr)
         {
-            transform->orientation = m_orientation;
-            transform->position    = m_position;
+            *transform = m_local;
         }
     }
 
@@ -303,10 +302,9 @@ namespace Engine5
     {
         if (transform != nullptr)
         {
-            if (m_position != transform->position || m_orientation != transform->orientation)
+            if (m_local.position != transform->position || m_local.orientation != transform->orientation)
             {
-                m_position    = transform->position;
-                m_orientation = transform->orientation;
+                m_local = *transform;
                 UpdateGlobalCentroidFromPosition();
                 UpdateGlobalInertiaTensor();
             }
@@ -323,12 +321,10 @@ namespace Engine5
         if (origin != this)
         {
             //linear data
-            m_position               = origin->m_position;
             m_linear_velocity        = origin->m_linear_velocity;
             m_force_accumulator      = origin->m_force_accumulator;
             m_constraints_positional = origin->m_constraints_positional;
             //angular data
-            m_orientation            = origin->m_orientation;
             m_inverse_orientation    = origin->m_inverse_orientation;
             m_angular_velocity       = origin->m_angular_velocity;
             m_torque_accumulator     = origin->m_torque_accumulator;
@@ -338,6 +334,7 @@ namespace Engine5
             m_global_centroid               = origin->m_global_centroid;
             m_global_inverse_inertia_tensor = origin->m_global_inverse_inertia_tensor;
             //others
+            m_local       = origin->m_local;
             m_motion_mode = origin->m_motion_mode;
         }
     }
