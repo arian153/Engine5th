@@ -102,7 +102,7 @@ namespace Engine5
 
     void TransformComponent::SetOrigin(const Vector3& origin)
     {
-        m_transform.origin = origin;
+        m_transform.rotating_origin = origin;
     }
 
     void TransformComponent::AddPosition(const Vector3& delta_position)
@@ -180,7 +180,7 @@ namespace Engine5
 
     Vector3 TransformComponent::GetOrigin() const
     {
-        return m_transform.origin;
+        return m_transform.rotating_origin;
     }
 
     Quaternion TransformComponent::GetOrientation() const

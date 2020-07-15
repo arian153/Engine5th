@@ -163,7 +163,7 @@ namespace Game
 
     void ControllerComponent::Render()
     {
-        if (m_owner->HasComponent<CameraComponent>())
+        /*if (m_owner->HasComponent<CameraComponent>())
         {
             auto camera = m_owner->GetComponent<CameraComponent>();
             auto basis  = camera->GetBasis();
@@ -182,15 +182,15 @@ namespace Game
                                     Vector2(520, 400), ColorDef::Pure::Red,
                                     "Q : ", transform->GetOrientation(),
                                     "\nLocal To World\n",
-                                    trans_mat.TransformVectorOrigin(test_data, transform->GetOrigin()),
+                                    trans_mat.TransformVectorRotatingOrigin(test_data, transform->GetOrigin()),
                                     "\n",
-                                    t_data->LocalToWorldVectorOrigin(test_data),
+                                    t_data->LocalToWorldRotatingOrigin(test_data),
                                     "\nWorld To Local\n",
-                                    inv.TransformVectorOrigin(test_data, transform->GetOrigin()),
+                                    inv.TransformVectorRotatingOrigin(test_data, transform->GetOrigin()),
                                     "\n",
-                                    t_data->WorldToLocalVectorOrigin(test_data)
+                                    t_data->WorldToLocalRotatingOrigin(test_data)
                                    );
-        }
+        }*/
     }
 
     bool ControllerComponent::Load(const Json::Value& data)

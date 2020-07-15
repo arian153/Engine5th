@@ -81,7 +81,7 @@ namespace Engine5
 
         Vector3 TransformPoint(const Vector3& point);
         Vector3 TransformVector(const Vector3& vector);
-        Vector3 TransformVectorOrigin(const Vector3& vector, const Vector3& origin);
+        Vector3 TransformVectorRotatingOrigin(const Vector3& vector, const Vector3& origin);
 
     public:
         friend Matrix44 Inverse(const Matrix44& mat);

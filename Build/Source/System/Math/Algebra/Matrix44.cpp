@@ -745,7 +745,7 @@ namespace Engine5
         return result;
     }
 
-    Vector3 Matrix44::TransformVectorOrigin(const Vector3& vector, const Vector3& origin)
+    Vector3 Matrix44::TransformVectorRotatingOrigin(const Vector3& vector, const Vector3& origin)
     {
         Vector3 vec = vector - origin;
         Vector3 result;
