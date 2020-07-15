@@ -191,18 +191,15 @@ namespace Engine5
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = renderer->CIRCULAR_VERTICES_COUNT;
         renderer->ReserveVertices(count, mode);
-        Vector3    body_position    = GetBodyPosition();
-        Quaternion body_orientation = GetBodyOrientation();
+        Transform* body_transform = GetBodyTransform();
         Vector2    radius           = Radius();
         Real       radian_step      = Math::TWO_PI / static_cast<Real>(count);
         for (int i = 0; i < count; ++i)
         {
             Real    angle = static_cast<Real>(i) * radian_step;
             Vector3 vertex(cosf(angle) * radius.x, sinf(angle) * radius.y, 0.0f);
-            vertex = m_local.orientation.Rotate(vertex);
-            vertex += m_local.position;
-            vertex = body_orientation.Rotate(vertex);
-            vertex += body_position;
+            vertex = LocalToWorldPoint(vertex);
+            vertex = body_transform->LocalToWorldPoint(vertex);
             renderer->PushVertex(vertex, mode, color);
         }
         if (mode == eRenderingMode::Dot)
@@ -225,9 +222,10 @@ namespace Engine5
         {
             //add a center pos
             I32     center   = static_cast<I32>(renderer->VerticesSize(mode));
-            Vector3 position = m_local.position;
-            position         = body_orientation.Rotate(position);
-            position += body_position;
+            Vector3 position;
+            position = LocalToWorldPoint(position);
+            position = body_transform->LocalToWorldPoint(position);
+
             renderer->PushVertex(position, mode, color);
             for (int i = 0; i < count - 1; ++i)
             {

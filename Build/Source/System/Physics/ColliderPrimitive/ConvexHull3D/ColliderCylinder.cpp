@@ -294,8 +294,7 @@ namespace Engine5
         renderer->ReserveVertices(renderer->CYLINDRICAL_VERTICES_COUNT, mode);
         Real       height           = Height();
         Vector2    radius           = Radius();
-        Vector3    body_position    = GetBodyPosition();
-        Quaternion body_orientation = GetBodyOrientation();
+        Transform* body_transform = GetBodyTransform();
         Real       stack_height     = height / stack_count;
         I32        ring_count       = stack_count + 1;
         for (I32 i = 0; i < ring_count; ++i)
@@ -310,10 +309,8 @@ namespace Engine5
                 vertex_local_pos.x = radius.x * c;
                 vertex_local_pos.y = y;
                 vertex_local_pos.z = radius.y * s;
-                vertex_local_pos   = m_local.orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += m_local.position;
-                vertex_local_pos = body_orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += body_position;
+                vertex_local_pos = LocalToWorldPoint(vertex_local_pos);
+                vertex_local_pos = body_transform->LocalToWorldPoint(vertex_local_pos);
                 renderer->PushVertex(vertex_local_pos, mode, color);
             }
         }

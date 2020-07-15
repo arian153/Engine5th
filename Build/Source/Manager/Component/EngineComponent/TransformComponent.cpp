@@ -249,6 +249,10 @@ namespace Engine5
                 SetOrientation(JsonResource::AsQuaternionRIJK(data["Orientation"]));
             }
         }
+        if (JsonResource::HasMember(data, "Origin") && JsonResource::IsVector3(data["Origin"]))
+        {
+            SetOrigin(JsonResource::AsVector3(data["Origin"]));
+        }
         return true;
     }
 

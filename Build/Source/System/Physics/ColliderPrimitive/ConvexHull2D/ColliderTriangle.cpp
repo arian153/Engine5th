@@ -347,17 +347,13 @@ namespace Engine5
         I32 index = static_cast<I32>(renderer->VerticesSize(mode));
         I32 count = 3;
         renderer->ReserveVertices(count, mode);
-        Vector3    body_position    = GetBodyPosition();
-        Quaternion body_orientation = GetBodyOrientation();
+        Transform* body_transform = GetBodyTransform();
         for (size_t i = 0; i < 3; ++i)
         {
             //local space to world space
             Vector3 vertex(Vertex(i));
-            vertex = m_local.orientation.Rotate(vertex);
-            vertex += m_local.position;
-            //body local space to world space
-            vertex = body_orientation.Rotate(vertex);
-            vertex += body_position;
+            vertex = LocalToWorldPoint(vertex);
+            vertex = body_transform->LocalToWorldPoint(vertex);
             //push to renderer
             renderer->PushVertex(vertex, mode, color);
         }

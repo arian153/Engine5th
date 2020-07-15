@@ -164,13 +164,13 @@ namespace Engine5
         return Quaternion();
     }
 
-    Matrix44 ColliderPrimitive::GetBodyTransform() const
+    Transform* ColliderPrimitive::GetBodyTransform() const
     {
         if (m_rigid_body != nullptr)
         {
-            return m_rigid_body->m_transform->LocalToWorldMatrix();
+            return m_rigid_body->m_transform;
         }
-        return Matrix44();
+        return nullptr;
     }
 
     RigidBody* ColliderPrimitive::GetRigidBody() const

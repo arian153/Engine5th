@@ -36,9 +36,10 @@ namespace Engine5
         Matrix33 WorldInertia() const;
         Vector3  WorldCentroid() const;
 
-        Vector3       GetBodyPosition() const;
-        Quaternion    GetBodyOrientation() const;
-        Matrix44      GetBodyTransform() const;
+        Vector3    GetBodyPosition() const;
+        Quaternion GetBodyOrientation() const;
+        Transform*  GetBodyTransform() const;
+
         RigidBody*    GetRigidBody() const;
         BoundingAABB* GetBoundingVolume() const;
         ColliderSet*  GetColliderSet() const;

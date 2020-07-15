@@ -22,6 +22,8 @@ namespace Engine5
         Vector3 LocalToWorldVectorOrigin(const Vector3& local_vector) const;
         Vector3 WorldToLocalVectorOrigin(const Vector3& world_vector) const;
 
+        Vector3 GetPosition() const;
+
     public:
         Vector3    origin;
         Vector3    position;

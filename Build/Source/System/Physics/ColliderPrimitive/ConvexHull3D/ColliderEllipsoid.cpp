@@ -151,25 +151,20 @@ namespace Engine5
         int slice_count = renderer->SPHERICAL_SLICE_COUNT;
         renderer->ReserveVertices(renderer->SPHERICAL_VERTICES_COUNT, mode);
         Vector3    axis_vector      = Math::Vector3::Y_AXIS;
-        Vector3    body_position    = GetBodyPosition();
-        Quaternion body_orientation = GetBodyOrientation();
+        Transform* body_transform = GetBodyTransform();
         Vector3    radius           = Radius();
         //top vertex
         Vector3 top_vertex_local_pos = axis_vector;
         top_vertex_local_pos         = top_vertex_local_pos.HadamardProduct(radius);
         //modify rotation, translation
-        top_vertex_local_pos = m_local.orientation.Rotate(top_vertex_local_pos);
-        top_vertex_local_pos += m_local.position;
-        top_vertex_local_pos = body_orientation.Rotate(top_vertex_local_pos);
-        top_vertex_local_pos += body_position;
+        top_vertex_local_pos = LocalToWorldPoint(top_vertex_local_pos);
+        top_vertex_local_pos = body_transform->LocalToWorldPoint(top_vertex_local_pos);
         //bottom vertex
         Vector3 bottom_vertex_local_pos = -axis_vector;
         bottom_vertex_local_pos         = bottom_vertex_local_pos.HadamardProduct(radius);
         //modify rotation, translation
-        bottom_vertex_local_pos = m_local.orientation.Rotate(bottom_vertex_local_pos);
-        bottom_vertex_local_pos += m_local.position;
-        bottom_vertex_local_pos = body_orientation.Rotate(bottom_vertex_local_pos);
-        bottom_vertex_local_pos += body_position;
+        bottom_vertex_local_pos = LocalToWorldPoint(bottom_vertex_local_pos);
+        bottom_vertex_local_pos = body_transform->LocalToWorldPoint(bottom_vertex_local_pos);
         renderer->PushVertex(top_vertex_local_pos, mode, color);
         Real phi_step   = Math::PI / stack_count;
         Real theta_step = Math::TWO_PI / slice_count;
@@ -187,10 +182,8 @@ namespace Engine5
                 vertex_local_pos.y = cosf(phi);
                 vertex_local_pos.z = sinf(phi) * sinf(theta);
                 vertex_local_pos   = vertex_local_pos.HadamardProduct(radius);
-                vertex_local_pos   = m_local.orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += m_local.position;
-                vertex_local_pos = body_orientation.Rotate(vertex_local_pos);
-                vertex_local_pos += body_position;
+                vertex_local_pos = LocalToWorldPoint(vertex_local_pos);
+                vertex_local_pos = body_transform->LocalToWorldPoint(vertex_local_pos);
                 renderer->PushVertex(vertex_local_pos, mode, color);
             }
         }

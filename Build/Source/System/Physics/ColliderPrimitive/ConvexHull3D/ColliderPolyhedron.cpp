@@ -257,16 +257,12 @@ namespace Engine5
         }
         size_t size = vertices->size();
         renderer->ReserveVertices(size, mode);
-        Vector3    body_position    = GetBodyPosition();
-        Quaternion body_orientation = GetBodyOrientation();
+        Transform* body_transform = GetBodyTransform();
         for (auto& vertex : *vertices)
         {
             //collider local space to object space(body local)
-            vertex = m_local.orientation.Rotate(vertex);
-            vertex += m_local.position;
-            //body local space to world space
-            vertex = body_orientation.Rotate(vertex);
-            vertex += body_position;
+            vertex = LocalToWorldPoint(vertex);
+            vertex = body_transform->LocalToWorldPoint(vertex);
             //push to renderer
             renderer->PushVertex(vertex, mode, color);
         }

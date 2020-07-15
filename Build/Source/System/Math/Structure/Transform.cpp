@@ -63,4 +63,9 @@ namespace Engine5
     {
         return orientation.Inverse().Rotate(world_vector - origin) + origin;
     }
+
+    Vector3 Transform::GetPosition() const
+    {
+        return position + origin;
+    }
 }

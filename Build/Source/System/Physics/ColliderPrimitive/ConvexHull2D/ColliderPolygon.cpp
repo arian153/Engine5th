@@ -303,17 +303,13 @@ namespace Engine5
         }
         size_t size = vertices->size();
         renderer->ReserveVertices(size, mode);
-        Vector3    body_position    = GetBodyPosition();
-        Quaternion body_orientation = GetBodyOrientation();
+        Transform* body_transform = GetBodyTransform();
         for (auto& vertex : *vertices)
         {
             //collider local space to object space(body local)
             Vector3 vertex_v3(vertex);
-            vertex_v3 = m_local.orientation.Rotate(vertex_v3);
-            vertex_v3 += m_local.position;
-            //body local space to world space
-            vertex_v3 = body_orientation.Rotate(vertex_v3);
-            vertex_v3 += body_position;
+            vertex_v3 = LocalToWorldPoint(vertex_v3);
+            vertex_v3 = body_transform->LocalToWorldPoint(vertex_v3);
             //push to renderer
             renderer->PushVertex(vertex_v3, mode, color);
         }
@@ -334,12 +330,11 @@ namespace Engine5
         }
         else if (mode == eRenderingMode::Face)
         {
-            Vector3 vertex_v3 = Math::Vector3::ORIGIN;
-            vertex_v3         = m_local.orientation.Rotate(vertex_v3);
-            vertex_v3 += m_local.position;
-            vertex_v3 = body_orientation.Rotate(vertex_v3);
-            vertex_v3 += body_position;
-            renderer->PushVertex(vertex_v3, mode, color);
+            Vector3 position;
+            position = LocalToWorldPoint(position);
+            position = body_transform->LocalToWorldPoint(position);
+
+            renderer->PushVertex(position, mode, color);
             for (auto& edge : *m_edges)
             {
                 renderer->PushFaceIndices(index + (I32)edge.a, index + (I32)edge.b, (I32)size);

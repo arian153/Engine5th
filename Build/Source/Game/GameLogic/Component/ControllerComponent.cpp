@@ -120,37 +120,37 @@ namespace Game
             }
             else
             {
-                /* auto body = m_owner->GetComponent<RigidBodyComponent>();
-                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Left))
-                 {
-                     body->ApplyForceCentroid(Vector3(-100.0f));
-                 }
-                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Right))
-                 {
-                     body->ApplyForceCentroid(Vector3(100.0f));
-                 }
-                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Up))
-                 {
-                     body->ApplyForceCentroid(Vector3(0.0f, 100.0f));
-                 }
-                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Down))
-                 {
-                     body->ApplyForceCentroid(Vector3(0.0f, -100.0f));
-                 }*/
+                auto body      = m_owner->GetComponent<RigidBodyComponent>();
                 auto transform = m_owner->GetComponent<TransformComponent>();
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Left))
                 {
-                    transform->SetOrigin(Vector3(-3.0f, 0.0f, 0.0f));
-                    //transform->AddPosition(Vector3(-dt, 0.0f, 0.0f));
-                    transform->AddRotationZ(dt);
-                    //transform->AddPosition(Vector3(1.0f, 0.0f, 0.0f));
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        transform->AddRotationZ(dt);
+                    }
+                    else
+                    {
+                        body->ApplyForceCentroid(Vector3(-10.0f));
+                    }
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Right))
                 {
-                    transform->SetOrigin(Vector3(-3.0f, 0.0f, 0.0f));
-                    //transform->AddPosition(Vector3(dt, 0.0f, 0.0f));
-                    transform->AddRotationZ(-dt);
-                    //transform->AddPosition(Vector3(1.0f, 0.0f, 0.0f));
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        transform->AddRotationZ(-dt);
+                    }
+                    else
+                    {
+                        body->ApplyForceCentroid(Vector3(10.0f));
+                    }
+                }
+                if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Up))
+                {
+                    body->ApplyForceCentroid(Vector3(0.0f, 10.0f));
+                }
+                if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Down))
+                {
+                    body->ApplyForceCentroid(Vector3(0.0f, -10.0f));
                 }
             }
         }
@@ -182,7 +182,7 @@ namespace Game
                                     Vector2(520, 400), ColorDef::Pure::Red,
                                     "Q : ", transform->GetOrientation(),
                                     "\nLocal To World\n",
-                                    trans_mat.TransformVectorOrigin(test_data, transform->GetOrigin()) ,
+                                    trans_mat.TransformVectorOrigin(test_data, transform->GetOrigin()),
                                     "\n",
                                     t_data->LocalToWorldVectorOrigin(test_data),
                                     "\nWorld To Local\n",
