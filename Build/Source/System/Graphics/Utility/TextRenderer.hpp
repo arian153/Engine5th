@@ -23,21 +23,21 @@ namespace Engine5
         void Print(const Vector2& position, const Color& color, const std::wstring& text);
 
         template <typename... Rest>
-        void Output(const Vector2& position, const Color&  color, const Rest&... rest)
+        void Output(const Vector2& position, const Color& color, const Rest&...rest)
         {
             std::wstringstream stream;
             Output(position, color, stream, rest...);
         }
 
         template <typename First, typename... Rest>
-        void Output(const Vector2& position, const Color&  color, std::wstringstream& stream, const First& first, const Rest&... rest)
+        void Output(const Vector2& position, const Color& color, std::wstringstream& stream, const First& first, const Rest&...rest)
         {
             stream << first;
             Output(position, color, stream, rest...);
         }
 
         template <typename T>
-        void Output(const Vector2& position, const Color&  color, std::wstringstream& stream, const T& t)
+        void Output(const Vector2& position, const Color& color, std::wstringstream& stream, const T& t)
         {
             stream << t;
             auto text = stream.str();
@@ -47,18 +47,17 @@ namespace Engine5
         void Output();
 
     private:
-        RendererCommon* m_renderer = nullptr;
-        MatrixManager* m_matrix_manager = nullptr;
-        TextFormatBufferCommon* m_text_format = nullptr;
+        RendererCommon*         m_renderer       = nullptr;
+        MatrixManager*          m_matrix_manager = nullptr;
+        TextFormatBufferCommon* m_text_format    = nullptr;
 
         std::vector<TextLayoutBufferCommon> m_text_layouts;
     };
 
-
     namespace DebugTools
     {
-        inline extern TextRenderer* s_text_renderer = nullptr;
+        inline extern TextRenderer* g_text_renderer = nullptr;
     }
 
-#define E5_DRAW_TEXT_OUTPUT(pos, color, ...) Engine5::DebugTools::s_text_renderer->Output(pos, color, __VA_ARGS__);
+#define E5_DRAW_TEXT_OUTPUT(pos, color, ...) Engine5::DebugTools::g_text_renderer->Output(pos, color, __VA_ARGS__);
 }

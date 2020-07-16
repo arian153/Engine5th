@@ -13,6 +13,18 @@ namespace Engine5
     {
     }
 
+    Frustum& Frustum::operator=(const Frustum& rhs)
+    {
+        if (&rhs != this)
+        {
+            for (size_t i = 0; i < 6; ++i)
+            {
+                m_planes[i] = rhs.m_planes[i];
+            }
+        }
+        return *this;
+    }
+
     void Frustum::ConstructFrustum(Real depth, const Matrix44& projection, const Matrix44& view)
     {
         Matrix44 proj = projection;
@@ -233,7 +245,23 @@ namespace Engine5
         return Vector3(x, y, z);
     }
 
-   
+    Vector3 Frustum::IntersectRay(const Ray& ray) const
+    {
+        Real min_t = Math::REAL_POSITIVE_MAX;
+        for (size_t i = 0; i < 6; ++i)
+        {
+            Vector3 plane_normal = m_planes[i].Normal();
+            Vector3 nd           = plane_normal.HadamardProduct(ray.direction);
+            Vector3 np           = plane_normal.HadamardProduct(ray.position);
+            Real    t            = -(np.x + np.y + np.z + m_planes[i].d) / (nd.x + nd.y + nd.z);
+            if (t >= 0.0f && min_t > t)
+            {
+                min_t = t;
+            }
+        }
+        return ray.position + (min_t * ray.direction);
+    }
+
     Plane Frustum::operator[](size_t i) const
     {
         return m_planes[i];

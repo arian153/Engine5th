@@ -4,6 +4,7 @@
 #include "../DataType/Color.hpp"
 #include "../DataType/MatrixData.hpp"
 #include "../Vertex/ColorVertexCommon.hpp"
+#include "../DataType/Frustum.hpp"
 
 namespace Engine5
 {
@@ -34,6 +35,7 @@ namespace Engine5
         void DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, eRenderingMode mode, Color color = Color());
         void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
         void DrawBox(const Vector3& position, const Quaternion& orientation, const Vector3& scale, eRenderingMode mode, Color color = Color());
+        void DrawRay(const Ray& ray, Color color = Color());
 
         void Initialize(ColorShaderCommon* color_shader);
         void Render();
@@ -42,6 +44,7 @@ namespace Engine5
 
         void UpdateViewMatrix(const Matrix44& view_matrix);
         void UpdateProjectionMatrix(const Matrix44& projection_matrix);
+        void UpdateFrustum(const Frustum& frustum);
 
         void   PushVertex(const Vector3& pos, eRenderingMode mode, const Color& color = Color());
         void   PushIndex(I32 index, eRenderingMode mode);
@@ -55,18 +58,19 @@ namespace Engine5
         MatrixData         m_mvp_data;
         ColorShaderCommon* m_color_shader = nullptr;
         RendererCommon*    m_renderer     = nullptr;
+        Frustum            m_frustum;
 
         std::vector<ColorVertexCommon> m_dot_vertices;
-        std::vector<U32>         m_dot_indices;
-        MeshBufferCommon*            m_dot_buffer = nullptr;
+        std::vector<U32>               m_dot_indices;
+        MeshBufferCommon*              m_dot_buffer = nullptr;
 
         std::vector<ColorVertexCommon> m_line_vertices;
-        std::vector<U32>         m_line_indices;
-        MeshBufferCommon*            m_line_buffer = nullptr;
+        std::vector<U32>               m_line_indices;
+        MeshBufferCommon*              m_line_buffer = nullptr;
 
         std::vector<ColorVertexCommon> m_face_vertices;
-        std::vector<U32>         m_face_indices;
-        MeshBufferCommon*            m_face_buffer = nullptr;
+        std::vector<U32>               m_face_indices;
+        MeshBufferCommon*              m_face_buffer = nullptr;
 
     public:
         const int CIRCULAR_VERTICES_COUNT    = 100;

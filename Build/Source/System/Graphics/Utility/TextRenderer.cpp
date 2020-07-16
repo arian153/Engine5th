@@ -20,7 +20,7 @@ namespace Engine5
         m_text_format    = new TextFormatBufferCommon();
         m_text_format->Initialize(renderer);
         m_text_format->BuildTextFormats(L"courier new", 36.0f);
-        DebugTools::s_text_renderer = this;
+        DebugTools::g_text_renderer = this;
     }
 
     void TextRenderer::Render()

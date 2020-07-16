@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class Ray;
     class Matrix44;
 
     class Frustum
@@ -10,6 +11,8 @@ namespace Engine5
     public:
         Frustum();
         ~Frustum();
+
+        Frustum& operator=(const Frustum& rhs);
 
         void ConstructFrustum(Real depth, const Matrix44& projection, const Matrix44& view);
 
@@ -19,6 +22,7 @@ namespace Engine5
         bool IntersectionRectangle(Real x, Real y, Real z, Real scale_x, Real scale_y, Real scale_z) const;
 
         Vector3 GetVertex(size_t i);
+        Vector3 IntersectRay(const Ray& ray) const;
 
         Plane  operator[](size_t i) const;
         Plane& operator[](size_t i);
