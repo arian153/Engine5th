@@ -42,6 +42,14 @@ namespace Engine5
         return *this;
     }
 
+    bool Plane::operator==(const Plane& rhs) const
+    {
+        return Math::IsEqual(a, rhs.a)
+                && Math::IsEqual(b, rhs.b)
+                && Math::IsEqual(c, rhs.c)
+                && Math::IsEqual(d, rhs.d);
+    }
+
     void Plane::Set(Real _a, Real _b, Real _c, Real _d)
     {
         Real length_squared = _a * _a + _b * _b + _c * _c;
@@ -124,5 +132,16 @@ namespace Engine5
     Vector3 Plane::Normal() const
     {
         return Vector3(a, b, c).Normalize();
+    }
+
+    void Plane::SetNormalize()
+    {
+        Real length = sqrtf(a * a + b * b + c * c);
+        // Prevent divide by zero
+        length = length > 0.0f ? 1.0f / length : 0.0f;
+        a *= length;
+        b *= length;
+        c *= length;
+        d *= length;
     }
 }

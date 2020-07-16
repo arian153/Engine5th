@@ -53,4 +53,12 @@ namespace Engine5
 
         std::vector<TextLayoutBufferCommon> m_text_layouts;
     };
+
+
+    namespace DebugTools
+    {
+        inline extern TextRenderer* s_text_renderer = nullptr;
+    }
+
+#define E5_DRAW_TEXT_OUTPUT(pos, color, ...) Engine5::DebugTools::s_text_renderer->Output(pos, color, __VA_ARGS__);
 }

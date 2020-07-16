@@ -4,6 +4,7 @@
 #include "Mesh.hpp"
 #include "../DataType/ProjectionType.hpp"
 #include <vector>
+#include "../DataType/Frustum.hpp"
 
 namespace Engine5
 {
@@ -99,6 +100,7 @@ namespace Engine5
         Matrix44        m_view_matrix;
         Matrix44        m_projection_matrix;
         Matrix44        m_orthogonal_matrix;
+        Frustum         m_frustum;
 
         bool m_b_deferred_shading = false;
     };

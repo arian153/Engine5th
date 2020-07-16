@@ -39,7 +39,6 @@ namespace Engine5
         U32 GetScreenWidth() const;
         U32 GetScreenHeight() const;
 
-
         void AddScene(Scene* scene);
         void RemoveScene(Scene* scene);
         void Update();
@@ -52,8 +51,8 @@ namespace Engine5
         Real m_screen_aspect = 1.0f;
         Real m_field_of_view = Math::PI_DIV_4;
 
-        Real m_far_plane     = 1000.f;
-        Real m_near_plane    = 0.001f;
+        Real m_far_plane  = 1000.f;
+        Real m_near_plane = 0.001f;
 
         std::vector<Scene*> m_scenes;
     };

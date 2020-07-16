@@ -41,11 +41,11 @@ namespace Engine5
 
     void Scene::Update(Real dt)
     {
+        MatrixData mvp_data;
+        mvp_data.projection  = m_projection_matrix;
         m_b_deferred_shading = false;
         if (m_deferred_meshes.empty() == false)
         {
-            MatrixData mvp_data;
-            mvp_data.projection  = m_projection_matrix;
             m_b_deferred_shading = true;
             // Set the render buffers to be the render target.
             m_deferred_buffer->SetRenderTargets();
@@ -55,6 +55,7 @@ namespace Engine5
             {
                 camera->Update();
                 mvp_data.view = camera->GetViewMatrix();
+                m_frustum.ConstructFrustum(m_matrix_manager->GetFarPlane(), mvp_data.projection, mvp_data.view);
                 for (auto& mesh : m_deferred_meshes)
                 {
                     mvp_data.model = mesh->GetModelMatrix();
@@ -74,6 +75,15 @@ namespace Engine5
             m_renderer->SetBackBufferRenderTarget();
             // Reset the viewport back to the original.
             m_renderer->ResetViewport();
+        }
+        else
+        {
+            for (auto& camera : m_cameras)
+            {
+                camera->Update();
+                mvp_data.view = camera->GetViewMatrix();
+                m_frustum.ConstructFrustum(m_matrix_manager->GetFarPlane(), mvp_data.projection, mvp_data.view);
+            }
         }
         for (auto& particle : m_particle_emitters)
         {
