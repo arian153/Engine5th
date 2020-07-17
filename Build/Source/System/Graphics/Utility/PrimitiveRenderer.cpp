@@ -180,11 +180,12 @@ namespace Engine5
 
     void PrimitiveRenderer::DrawRay(const Ray& ray, Color color)
     {
-        I32     index    = (I32)m_line_vertices.size();
-        I32     count    = index + 2;
-        Vector3 line_end = m_frustum.IntersectRay(ray);
+        I32     index = (I32)m_line_vertices.size();
+        I32     count = index + 2;
+        Vector3 line_start, line_end;
+        m_frustum.IntersectRay(ray, line_start, line_end);
         m_line_vertices.reserve(static_cast<size_t>(count));
-        m_line_vertices.emplace_back(ray.position, color);
+        m_line_vertices.emplace_back(line_start, color);
         m_line_vertices.emplace_back(line_end, color);
         PushLineIndices(index, index + 1);
     }

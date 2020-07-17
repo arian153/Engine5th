@@ -4,6 +4,8 @@
 
 namespace Engine5
 {
+    class Ray;
+
     class Plane
     {
     public:
@@ -23,6 +25,8 @@ namespace Engine5
         Real    PlaneTest(const Vector3& point) const;
         Vector3 ClosestPoint(const Vector3& point) const;
         Vector3 Normal() const;
+
+        bool IntersectRay(const Ray& ray, Real& t) const;
 
         void SetNormalize();
 

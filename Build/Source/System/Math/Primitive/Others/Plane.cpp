@@ -1,5 +1,6 @@
 #include "Plane.hpp"
 #include "../../Utility/Utility.hpp"
+#include "Ray.hpp"
 
 namespace Engine5
 {
@@ -132,6 +133,18 @@ namespace Engine5
     Vector3 Plane::Normal() const
     {
         return Vector3(a, b, c).Normalize();
+    }
+
+    bool Plane::IntersectRay(const Ray& ray, Real& t) const
+    {
+        Vector3 n     = Normal();
+        Real    denom = DotProduct(n, ray.direction);
+        if (!Math::IsZero(denom))
+        {
+            t = -(DotProduct(n, ray.position) + d) / denom;
+            return true;
+        }
+        return false;
     }
 
     void Plane::SetNormalize()

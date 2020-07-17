@@ -71,9 +71,17 @@ namespace Engine5
         m_planes[5].c = view_proj(2, 3) + view_proj(2, 1);
         m_planes[5].d = view_proj(3, 3) + view_proj(3, 1);
         m_planes[5].SetNormalize();
+        /* E5_DRAW_TEXT_OUTPUT(
+                             Vector2(520, 50), ColorDef::Pure::Blue,
+                             "Near : ", m_planes[ 0 ].Normal(),
+                             "\nFar : ", m_planes[ 1 ].Normal(),
+                             "\nleft : ", m_planes[ 2 ].Normal(),
+                             "\nright : ", m_planes[ 3 ].Normal(),
+                             "\ntop : ", m_planes[ 4 ].Normal(),
+                             "\nbottom : ", m_planes[ 5 ].Normal());*/
     }
 
-    bool Frustum::IntersectionPoint(Real x, Real y, Real z) const
+    bool Frustum::IsContainPoint(Real x, Real y, Real z) const
     {
         // Check if the point is inside all six planes of the view frustum.
         Vector3 point(x, y, z);
@@ -87,7 +95,19 @@ namespace Engine5
         return true;
     }
 
-    bool Frustum::IntersectionCube(Real x, Real y, Real z, Real scale) const
+    bool Frustum::IsContainPoint(const Vector3& position) const
+    {
+        for (size_t i = 0; i < 6; ++i)
+        {
+            if (m_planes[i].PlaneTest(position) < 0.0f)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool Frustum::IsContainCube(Real x, Real y, Real z, Real scale) const
     {
         // Check if any one point of the cube is in the view frustum.
         Vector3 p0(x - scale, y - scale, z - scale);
@@ -137,7 +157,7 @@ namespace Engine5
         return true;
     }
 
-    bool Frustum::IntersectionSphere(Real x, Real y, Real z, Real radius) const
+    bool Frustum::IsContainSphere(Real x, Real y, Real z, Real radius) const
     {
         // Check if the radius of the sphere is inside the view frustum.
         Vector3 point(x, y, z);
@@ -151,7 +171,7 @@ namespace Engine5
         return true;
     }
 
-    bool Frustum::IntersectionRectangle(Real x, Real y, Real z, Real scale_x, Real scale_y, Real scale_z) const
+    bool Frustum::IsContainBox(Real x, Real y, Real z, Real scale_x, Real scale_y, Real scale_z) const
     {
         // Check if any one point of the cube is in the view frustum.
         Vector3 p0(x - scale_x, y - scale_y, z - scale_z);
@@ -245,7 +265,7 @@ namespace Engine5
         return Vector3(x, y, z);
     }
 
-    Vector3 Frustum::IntersectRay(const Ray& ray) const
+    Vector3 Frustum::IntersectRayEndPoint(const Ray& ray) const
     {
         Real min_t = Math::REAL_POSITIVE_MAX;
         for (size_t i = 0; i < 6; ++i)
@@ -260,6 +280,64 @@ namespace Engine5
             }
         }
         return ray.position + (min_t * ray.direction);
+    }
+
+    Vector3 Frustum::InterSectRayStartPoint(const Ray& ray) const
+    {
+        Real min_t = Math::REAL_POSITIVE_MAX;
+        for (size_t i = 0; i < 6; ++i)
+        {
+            Vector3 plane_normal = m_planes[i].Normal();
+            Vector3 nd           = plane_normal.HadamardProduct(ray.direction);
+            Vector3 np           = plane_normal.HadamardProduct(ray.position);
+            Real    t            = -(np.x + np.y + np.z + m_planes[i].d) / (nd.x + nd.y + nd.z);
+            if (t >= 0.0f && min_t > t)
+            {
+                min_t = t;
+            }
+        }
+        return ray.position + (min_t * ray.direction);
+    }
+
+    void Frustum::IntersectRay(const Ray& ray, Vector3& start_point, Vector3& end_point) const
+    {
+        Real minimum_t = -1.0f;
+        Real maximum_t = -1.0f;
+        bool b_first   = true;
+        for (size_t i = 0; i < 6; ++i)
+        {
+            Real t = -1.0f;
+            if (m_planes[i].IntersectRay(ray, t))
+            {
+                if (b_first == true)
+                {
+                    minimum_t = t;
+                    maximum_t = t;
+                    b_first   = false;
+                }
+                else
+                {
+                    if (t > maximum_t)
+                    {
+                        maximum_t = t;
+                    }
+                    if (t < minimum_t)
+                    {
+                        minimum_t = t;
+                    }
+                }
+            }
+        }
+        if (minimum_t < 0.0f && maximum_t < 0.0f)
+        {
+            return;
+        }
+        if (minimum_t <= 0.0f)
+        {
+            minimum_t = 0.0f;
+        }
+        start_point = ray.position + (minimum_t * ray.direction);
+        end_point   = ray.position + (maximum_t * ray.direction);
     }
 
     Plane Frustum::operator[](size_t i) const
