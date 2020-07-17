@@ -21,12 +21,9 @@ namespace Engine5
         bool IsContainCube(Real x, Real y, Real z, Real scale) const;
         bool IsContainSphere(Real x, Real y, Real z, Real radius) const;
         bool IsContainBox(Real x, Real y, Real z, Real scale_x, Real scale_y, Real scale_z) const;
+        void IntersectRay(const Ray& ray, Vector3& start_point, Vector3& end_point) const;
 
         Vector3 GetVertex(size_t i);
-        Vector3 IntersectRayEndPoint(const Ray& ray) const;
-        Vector3 InterSectRayStartPoint(const Ray& position) const;
-
-        void IntersectRay(const Ray& ray, Vector3& start_point, Vector3& end_point) const;
 
         Plane  operator[](size_t i) const;
         Plane& operator[](size_t i);

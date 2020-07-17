@@ -221,6 +221,47 @@ namespace Engine5
         return true;
     }
 
+    void Frustum::IntersectRay(const Ray& ray, Vector3& start_point, Vector3& end_point) const
+    {
+        Real minimum_t = -1.0f;
+        Real maximum_t = -1.0f;
+        bool b_first   = true;
+        for (size_t i = 0; i < 6; ++i)
+        {
+            Real t = -1.0f;
+            if (m_planes[i].IntersectRay(ray, t))
+            {
+                if (b_first == true)
+                {
+                    minimum_t = t;
+                    maximum_t = t;
+                    b_first   = false;
+                }
+                else
+                {
+                    if (t > maximum_t)
+                    {
+                        maximum_t = t;
+                    }
+                    if (t < minimum_t)
+                    {
+                        minimum_t = t;
+                    }
+                }
+            }
+        }
+        if (minimum_t < 0.0f && maximum_t < 0.0f)
+        {
+            return;
+        }
+        if (minimum_t <= 0.0f)
+        {
+            minimum_t = 0.0f;
+        }
+        start_point = ray.position + (minimum_t * ray.direction);
+        end_point   = ray.position + (maximum_t * ray.direction);
+    }
+
     Vector3 Frustum::GetVertex(size_t i)
     {
         //2-----------1
@@ -263,81 +304,6 @@ namespace Engine5
         Real y                 = (-first_step_p2_z * z + first_step_p2_d) / first_step_p2_y;
         Real x                 = -(p1.b * y + p1.c * z + p1.d) / p1.a;
         return Vector3(x, y, z);
-    }
-
-    Vector3 Frustum::IntersectRayEndPoint(const Ray& ray) const
-    {
-        Real min_t = Math::REAL_POSITIVE_MAX;
-        for (size_t i = 0; i < 6; ++i)
-        {
-            Vector3 plane_normal = m_planes[i].Normal();
-            Vector3 nd           = plane_normal.HadamardProduct(ray.direction);
-            Vector3 np           = plane_normal.HadamardProduct(ray.position);
-            Real    t            = -(np.x + np.y + np.z + m_planes[i].d) / (nd.x + nd.y + nd.z);
-            if (t >= 0.0f && min_t > t)
-            {
-                min_t = t;
-            }
-        }
-        return ray.position + (min_t * ray.direction);
-    }
-
-    Vector3 Frustum::InterSectRayStartPoint(const Ray& ray) const
-    {
-        Real min_t = Math::REAL_POSITIVE_MAX;
-        for (size_t i = 0; i < 6; ++i)
-        {
-            Vector3 plane_normal = m_planes[i].Normal();
-            Vector3 nd           = plane_normal.HadamardProduct(ray.direction);
-            Vector3 np           = plane_normal.HadamardProduct(ray.position);
-            Real    t            = -(np.x + np.y + np.z + m_planes[i].d) / (nd.x + nd.y + nd.z);
-            if (t >= 0.0f && min_t > t)
-            {
-                min_t = t;
-            }
-        }
-        return ray.position + (min_t * ray.direction);
-    }
-
-    void Frustum::IntersectRay(const Ray& ray, Vector3& start_point, Vector3& end_point) const
-    {
-        Real minimum_t = -1.0f;
-        Real maximum_t = -1.0f;
-        bool b_first   = true;
-        for (size_t i = 0; i < 6; ++i)
-        {
-            Real t = -1.0f;
-            if (m_planes[i].IntersectRay(ray, t))
-            {
-                if (b_first == true)
-                {
-                    minimum_t = t;
-                    maximum_t = t;
-                    b_first   = false;
-                }
-                else
-                {
-                    if (t > maximum_t)
-                    {
-                        maximum_t = t;
-                    }
-                    if (t < minimum_t)
-                    {
-                        minimum_t = t;
-                    }
-                }
-            }
-        }
-        if (minimum_t < 0.0f && maximum_t < 0.0f)
-        {
-            return;
-        }
-        if (minimum_t <= 0.0f)
-        {
-            minimum_t = 0.0f;
-        }
-        start_point = ray.position + (minimum_t * ray.direction);
-        end_point   = ray.position + (maximum_t * ray.direction);
     }
 
     Plane Frustum::operator[](size_t i) const
