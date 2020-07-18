@@ -68,6 +68,52 @@ namespace Engine5
         {
             m_resolution_phase->Render(m_draw_contact);
         }
+        for (auto& data : m_rays)
+        {
+            Quaternion no_rotation;
+            if (data.option == eRayTestOption::Cast)
+            {
+                RayCastResult result(data.ray);
+                m_broad_phase->CastRay(result, data.max_distance);
+                if (result.hit_data.hit == true)
+                {
+                    m_primitive_renderer->DrawSegment(data.ray.position, result.hit_data.intersection, data.color);
+                }
+                else
+                {
+                    m_primitive_renderer->DrawRay(data.ray, data.color);
+                }
+            }
+            else if (data.option == eRayTestOption::Intersect)
+            {
+                RayIntersectionResult result(data.ray);
+                m_broad_phase->IntersectRay(result, data.max_distance);
+                m_primitive_renderer->DrawRay(data.ray, data.color);
+                for (auto& hit_data : result.hit_list)
+                {
+                    m_primitive_renderer->DrawPrimitive(Sphere(hit_data.intersection, no_rotation, 0.1f), eRenderingMode::Face, data.color);
+                }
+            }
+            else
+            {
+                RayTraceResult result(data.ray);
+                m_broad_phase->TraceRay(result, data.max_distance, data.reflect_count);
+                if (!result.hit_list.empty())
+                {
+                    size_t size = result.hit_list.size();
+                    for (size_t i = 0; i < size; ++i)
+                    {
+                        auto ray = result.GetRayData(i);
+                        auto hit = result.GetHitData(i);
+                        m_primitive_renderer->DrawSegment(ray.position, hit.intersection);
+                    }
+                }
+                else
+                {
+                    m_primitive_renderer->DrawRay(data.ray, data.color);
+                }
+            }
+        }
     }
 
     void World::Load(const Json::Value& data)
@@ -157,6 +203,50 @@ namespace Engine5
                         AddForce(created);
                     }
                 }
+            }
+        }
+        if (JsonResource::HasMember(data, "Rays") && data["Rays"].isArray())
+        {
+            for (auto it = data["Rays"].begin(); it != data["Rays"].end(); ++it)
+            {
+                RayTest ray_test;
+                if (JsonResource::HasMember(*it, "Option") && (*it)["Option"].isString())
+                {
+                    std::string option_data = (*it)["Option"].asString();
+                    if (option_data == "Cast")
+                    {
+                        ray_test.option = eRayTestOption::Cast;
+                    }
+                    if (option_data == "Intersect")
+                    {
+                        ray_test.option = eRayTestOption::Intersect;
+                    }
+                    if (option_data == "Trace")
+                    {
+                        ray_test.option = eRayTestOption::Trace;
+                    }
+                }
+                if (JsonResource::HasMember(*it, "Position") && JsonResource::IsVector3((*it)["Position"]))
+                {
+                    ray_test.ray.position = JsonResource::AsVector3((*it)["Position"]);
+                }
+                if (JsonResource::HasMember(*it, "Direction") && JsonResource::IsVector3((*it)["Direction"]))
+                {
+                    ray_test.ray.direction = JsonResource::AsVector3((*it)["Direction"]).Normalize();
+                }
+                if (JsonResource::HasMember(*it, "Max Distance") && (*it)["Max Distance"].isDouble())
+                {
+                    ray_test.max_distance = (*it)["Max Distance"].asDouble();
+                }
+                if (JsonResource::HasMember(*it, "Reflection Count") && (*it)["Reflection Count"].isUInt())
+                {
+                    ray_test.reflect_count = static_cast<size_t>((*it)["Reflection Count"].asUInt());
+                }
+                if (JsonResource::HasMember(*it, "Color") && JsonResource::IsColor((*it)["Color"]))
+                {
+                    ray_test.color = JsonResource::AsColor((*it)["Color"]);
+                }
+                AddRay(ray_test);
             }
         }
     }
@@ -404,5 +494,40 @@ namespace Engine5
     ConstraintUtility* World::GetConstraintUtility() const
     {
         return &m_resolution_phase->m_constraint_utility;
+    }
+
+    ColliderPrimitive* World::Pick(const Vector3& point) const
+    {
+        return m_broad_phase->Pick(point);
+    }
+
+    void World::Query(const BoundingAABB& aabb, std::vector<ColliderPrimitive*>& output) const
+    {
+        m_broad_phase->Query(aabb, output);
+    }
+
+    void World::CastRay(RayCastResult& result, Real max_distance) const
+    {
+        m_broad_phase->CastRay(result, max_distance);
+    }
+
+    void World::IntersectRay(RayIntersectionResult& result, Real max_distance) const
+    {
+        m_broad_phase->IntersectRay(result, max_distance);
+    }
+
+    void World::TraceRay(RayTraceResult& result, Real max_distance, size_t reflect_count) const
+    {
+        m_broad_phase->TraceRay(result, max_distance, reflect_count);
+    }
+
+    void World::AddRay(const Ray& ray, eRayTestOption option, Real max_distance, size_t reflect_count, const Color& color)
+    {
+        m_rays.emplace_back(ray, option, max_distance, reflect_count, color);
+    }
+
+    void World::AddRay(const RayTest& ray)
+    {
+        m_rays.push_back(ray);
     }
 }

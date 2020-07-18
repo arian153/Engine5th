@@ -44,7 +44,7 @@ namespace Engine5
 
         //Query
         ColliderPrimitive* Pick(const Vector3& point) const override;
-        void               Query(BoundingAABB* aabb, std::vector<ColliderPrimitive*>& output) const override;
+        void               Query(const BoundingAABB& aabb, std::vector<ColliderPrimitive*>& output) const override;
         void               CastRay(RayCastResult& result, Real max_distance = -1.0f) const override;
         void               IntersectRay(RayIntersectionResult& result, Real max_distance = -1.0f) const override;
         void               TraceRay(RayTraceResult& result, Real max_distance = -1.0f, size_t reflect_count = 1) const override;

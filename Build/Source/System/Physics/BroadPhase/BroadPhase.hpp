@@ -29,7 +29,7 @@ namespace Engine5
 
         //Query
         virtual ColliderPrimitive* Pick(const Vector3& point) const = 0;
-        virtual void               Query(BoundingAABB* aabb, std::vector<ColliderPrimitive*>& output) const = 0;
+        virtual void               Query(const BoundingAABB& aabb, std::vector<ColliderPrimitive*>& output) const = 0;
         virtual void               CastRay(RayCastResult& result, Real max_distance = -1.0f) const = 0;
         virtual void               IntersectRay(RayIntersectionResult& result, Real max_distance = -1.0f) const = 0;
         virtual void               TraceRay(RayTraceResult& result, Real max_distance = -1.0f, size_t reflect_count = 1) const = 0;

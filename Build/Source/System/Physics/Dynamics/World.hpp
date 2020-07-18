@@ -8,13 +8,16 @@
 #include <unordered_map>
 #include "../../Graphics/DataType/Color.hpp"
 #include "../Utility/FrictionUtility.hpp"
+#include "../BroadPhase/RayTest.hpp"
 
-namespace Json {
+namespace Json
+{
     class Value;
 }
 
 namespace Engine5
 {
+    class RayTest;
     class ForceFactory;
     class Force;
     class Constraint;
@@ -45,7 +48,7 @@ namespace Engine5
         void SetDrawFlagBP(bool b_draw, const Color& color = ColorDef::Pure::White);
 
         ColliderPrimitive* CreateCollider(ColliderSet* collider_set, eColliderType type) const;
-        Force* CreateForce(const std::string& type) const;
+        Force*             CreateForce(const std::string& type) const;
 
         RigidBody*   AddRigidBody(RigidBody* body);
         ColliderSet* AddColliderSet(ColliderSet* set);
@@ -66,6 +69,17 @@ namespace Engine5
         FrictionUtility*   GetFrictionUtility() const;
         ConstraintUtility* GetConstraintUtility() const;
 
+        //query
+        ColliderPrimitive* Pick(const Vector3& point) const;
+        void               Query(const BoundingAABB& aabb, std::vector<ColliderPrimitive*>& output) const;
+        //ray
+        void CastRay(RayCastResult& result, Real max_distance = -1.0f) const;
+        void IntersectRay(RayIntersectionResult& result, Real max_distance = -1.0f) const;
+        void TraceRay(RayTraceResult& result, Real max_distance = -1.0f, size_t reflect_count = 1) const;
+
+        void AddRay(const Ray& ray, eRayTestOption option, Real max_distance = -1.0f, size_t reflect_count = 0, const Color& color = ColorDef::Pure::White);
+        void AddRay(const RayTest& ray);
+
     private:
         eBroadPhaseMode    m_mode               = eBroadPhaseMode::DynamicBVH;
         BroadPhase*        m_broad_phase        = nullptr;
@@ -77,7 +91,7 @@ namespace Engine5
         std::vector<ColliderSet*> m_collider_sets;
         std::vector<RigidBody*>   m_rigid_bodies;
         std::list<ColliderPair>   m_pairs;
-
+        std::vector<RayTest>      m_rays;
         //factory
         std::unordered_map<std::string, ForceFactory*>* m_factories = nullptr;
 

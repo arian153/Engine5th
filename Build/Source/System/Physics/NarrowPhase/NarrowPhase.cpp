@@ -48,7 +48,7 @@ namespace Engine5
                 //collider pair have a collision do epa and create collision.
                 if (simplex.IsValid() == false)
                 {
-                    if(simplex.count == 0)
+                    if (simplex.count == 0)
                     {
                         continue;
                     }
@@ -169,7 +169,6 @@ namespace Engine5
         {
             if (polytope.faces.empty())
             {
-                //if no face in polytope return false.
                 result.b_valid = false;
                 return false;
             }

@@ -116,7 +116,7 @@ namespace Engine5
         return nullptr;
     }
 
-    void NSquared::Query(BoundingAABB* aabb, std::vector<ColliderPrimitive*>& output) const
+    void NSquared::Query(const BoundingAABB& aabb, std::vector<ColliderPrimitive*>& output) const
     {
         for (auto& collider_aabb : m_aabb_list)
         {

@@ -172,7 +172,6 @@ namespace Engine5
         for (size_t i = 0; i < cell_size; ++i)
         {
             GridCell& cell = m_grid_cell_list[i];
-
             // Loop through all balls in a cell
             size_t aabb_size = cell.aabb_list.size();
             for (size_t j = 0; j < aabb_size; ++j)
@@ -183,7 +182,6 @@ namespace Engine5
                 GridData* grid_data = static_cast<GridData*>(aabb->m_userdata);
                 size_t    a_index   = grid_data->basis_a_index;
                 size_t    b_index   = grid_data->basis_b_index;
-
                 // Update collision with neighbor cells
                 if (a_index > 0)
                 {
@@ -219,11 +217,11 @@ namespace Engine5
         return nullptr;
     }
 
-    void GridPartition::Query(BoundingAABB* aabb, std::vector<ColliderPrimitive*>& output) const
+    void GridPartition::Query(const BoundingAABB& aabb, std::vector<ColliderPrimitive*>& output) const
     {
         size_t min_a, min_b, max_a, max_b;
-        QueryCell(aabb->m_min, min_a, min_b);
-        QueryCell(aabb->m_max, max_a, max_b);
+        QueryCell(aabb.m_min, min_a, min_b);
+        QueryCell(aabb.m_max, max_a, max_b);
         for (size_t i = min_a; i <= max_a; ++i)
         {
             for (size_t j = min_b; j <= max_b; ++j)
@@ -247,7 +245,6 @@ namespace Engine5
         auto    dir_a        = DirectionHelper(ray.position[m_basis_a] + m_center_of_grid[m_basis_a], ray.direction[m_basis_a]);
         auto    dir_b        = DirectionHelper(ray.position[m_basis_b] + m_center_of_grid[m_basis_b], ray.direction[m_basis_b]);
         Real    t            = 0.0f;
-
         //remove perpendicular
         ab_direction[m_axis_normal] = 0.0f;
         if (ab_direction.LengthSquared() > 0.0f)
@@ -423,7 +420,6 @@ namespace Engine5
                 candidate_list.push_back(aabb->GetCollider());
             }
         }
-
         // test actual colliders
         std::vector<HitData> result_list;
         result_list.reserve(candidate_list.size());
@@ -436,7 +432,6 @@ namespace Engine5
                 result_list.push_back(ray_cast_result.hit_data);
             }
         }
-
         // sort the result list
         std::sort(result_list.begin(), result_list.end());
         if (result_list.empty() == false)
@@ -465,7 +460,6 @@ namespace Engine5
                 candidate_list.push_back(aabb->GetCollider());
             }
         }
-
         // test actual colliders
         result.hit_list.reserve(candidate_list.size());
         for (ColliderPrimitive* collider : candidate_list)
@@ -477,7 +471,6 @@ namespace Engine5
                 result.hit_list.push_back(ray_cast_result.hit_data);
             }
         }
-
         // sort the result list
         std::sort(result.hit_list.begin(), result.hit_list.end());
     }

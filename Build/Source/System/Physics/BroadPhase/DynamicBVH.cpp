@@ -205,7 +205,7 @@ namespace Engine5
         return nullptr;
     }
 
-    void DynamicBVH::Query(BoundingAABB* aabb, std::vector<ColliderPrimitive*>& output) const
+    void DynamicBVH::Query(const BoundingAABB& aabb, std::vector<ColliderPrimitive*>& output) const
     {
         std::queue<DynamicBVHNode*> queue;
         if (m_root != nullptr)

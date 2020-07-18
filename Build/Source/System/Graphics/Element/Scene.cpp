@@ -48,12 +48,7 @@ namespace Engine5
         m_frustum.ConstructFrustum(m_matrix_manager->GetFarPlane(), mvp_data.projection, mvp_data.view);
         m_primitive_renderer->UpdateFrustum(m_frustum);
 
-        Ray ray;
-        ray.position = Vector3();
-        ray.direction = Vector3(1.0f, 1.0f, 0.0f).Normalize();
-
-        m_primitive_renderer->DrawRay(ray, ColorDef::Pure::Magenta);
-
+      
         m_b_deferred_shading = false;
         if (m_deferred_meshes.empty() == false)
         {

@@ -236,7 +236,7 @@ namespace Engine5
         return nullptr;
     }
 
-    void Octree::Query(BoundingAABB* aabb, std::vector<ColliderPrimitive*>& output) const
+    void Octree::Query(const BoundingAABB& aabb, std::vector<ColliderPrimitive*>& output) const
     {
         std::queue<OctreeNode*> queue;
         if (m_root != nullptr)
