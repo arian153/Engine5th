@@ -255,7 +255,7 @@
                 {
                     "Option": "Intersect",
                     "Position": [ 0, 0, 0 ],
-                    "Direction": [ -1, 1, 0 ],
+                    "Direction": [ 1, 1, 0 ],
                     "Reflection Count": 4,
                     "Max Distance": -1.0,
                     "Color" : [1, 0, 0, 1]

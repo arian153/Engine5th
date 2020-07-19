@@ -236,7 +236,7 @@ namespace Engine5
                 }
                 if (JsonResource::HasMember(*it, "Max Distance") && (*it)["Max Distance"].isDouble())
                 {
-                    ray_test.max_distance = (*it)["Max Distance"].asDouble();
+                    ray_test.max_distance = (*it)["Max Distance"].asFloat();
                 }
                 if (JsonResource::HasMember(*it, "Reflection Count") && (*it)["Reflection Count"].isUInt())
                 {
