@@ -45,8 +45,10 @@ namespace Engine5
         Real    t_min, t_max, t_y_min, t_y_max, t_z_min, t_z_max;
         Vector3 box_min = Vertex(7);
         Vector3 box_max = Vertex(0);
-        Vector3 inv_dir = local_ray.direction;
-        inv_dir.SetInverse();
+        Vector3 inv_dir;
+        inv_dir.x = 1.0f / local_ray.direction.x;
+        inv_dir.y = 1.0f / local_ray.direction.y;
+        inv_dir.z = 1.0f / local_ray.direction.z;
         if (inv_dir.x >= 0.0f)
         {
             t_min = (box_min.x - local_ray.position.x) * inv_dir.x;

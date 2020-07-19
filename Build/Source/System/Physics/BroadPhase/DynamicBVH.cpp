@@ -81,6 +81,14 @@ namespace Engine5
         {
             if (m_root->IsLeaf())
             {
+                if (m_root->data != nullptr)
+                {
+                    if (m_root->data->GetCollider() != nullptr)
+                    {
+                        m_root->data->GetCollider()->UpdateBoundingVolume();
+                    }
+                }
+               
                 m_root->UpdateAABB(m_margin);
             }
             else

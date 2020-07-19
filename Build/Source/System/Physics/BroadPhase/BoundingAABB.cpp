@@ -74,21 +74,17 @@ namespace Engine5
         // if separated in x direction
         if (m_min.x > aabb->m_max.x || aabb->m_min.x > m_max.x)
             return false;
-
         // if separated in y direction
         if (m_min.y > aabb->m_max.y || aabb->m_min.y > m_max.y)
             return false;
-
         // if separated in z direction
         if (m_min.z > aabb->m_max.z || aabb->m_min.z > m_max.z)
             return false;
-
         // if same collider set, skip intersection
         if (m_collider_set != nullptr && m_collider_set == aabb->m_collider_set)
         {
             return false;
         }
-
         // no separation, must be intersecting
         return true;
     }
@@ -98,15 +94,12 @@ namespace Engine5
         // if separated in x direction
         if (m_min.x > aabb.m_max.x || aabb.m_min.x > m_max.x)
             return false;
-
         // if separated in y direction
         if (m_min.y > aabb.m_max.y || aabb.m_min.y > m_max.y)
             return false;
-
         // if separated in z direction
         if (m_min.z > aabb.m_max.z || aabb.m_min.z > m_max.z)
             return false;
-
         // no separation, must be intersecting
         return true;
     }
@@ -134,9 +127,11 @@ namespace Engine5
         Real    t_min, t_max, t_y_min, t_y_max, t_z_min, t_z_max;
         Vector3 box_min = m_min;
         Vector3 box_max = m_max;
-        Vector3 inv_dir = ray.direction;
-        inv_dir.SetInverse();
-        if (inv_dir.x >= 0.0f)
+        Vector3 inv_dir;
+        inv_dir.x = 1.0f / ray.direction.x;
+        inv_dir.y = 1.0f / ray.direction.y;
+        inv_dir.z = 1.0f / ray.direction.z;
+        if (inv_dir.x > 0.0f)
         {
             t_min = (box_min.x - ray.position.x) * inv_dir.x;
             t_max = (box_max.x - ray.position.x) * inv_dir.x;
@@ -146,7 +141,7 @@ namespace Engine5
             t_min = (box_max.x - ray.position.x) * inv_dir.x;
             t_max = (box_min.x - ray.position.x) * inv_dir.x;
         }
-        if (inv_dir.y >= 0.0f)
+        if (inv_dir.y > 0.0f)
         {
             t_y_min = (box_min.y - ray.position.y) * inv_dir.y;
             t_y_max = (box_max.y - ray.position.y) * inv_dir.y;
@@ -168,7 +163,7 @@ namespace Engine5
         {
             t_max = t_y_max;
         }
-        if (inv_dir.z >= 0.0f)
+        if (inv_dir.z > 0.0f)
         {
             t_z_min = (box_min.z - ray.position.z) * inv_dir.z;
             t_z_max = (box_max.z - ray.position.z) * inv_dir.z;
@@ -190,18 +185,24 @@ namespace Engine5
         {
             t_max = t_z_max;
         }
+        if (t_min < 0.0f && t_max < 0.0f)
+        {
+            return false;
+        }
         t = t_min;
         if (t_min < 0.0f && t_max < 0.0f)
         {
             return false;
         }
-
+        if (t <= 0.0f)
+        {
+            t = 0.0f;
+        }
         // check max distance.
         if (t > max_distance && max_distance >= 0.0f)
         {
             return false;
         }
-
         // done, have intersection
         return true;
     }
