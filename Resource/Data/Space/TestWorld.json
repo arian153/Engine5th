@@ -104,10 +104,8 @@
                             }
                         ]
                     }
-                },
-                {
-                    "Type": "class Game::ControllerComponent"
                 }
+               
             ],
             "Name": "Ellipse1"
         },
@@ -171,14 +169,17 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [ 2, 3 ],
+                                "Radius": [ 2, 3],
                                 "Height": 3,
                                 "Ratio": 1.5,
                                 "Scale": 1,
-                                "Type": "Truncated"
+                                "Type": "Cylinder"
                             }
                         ]
                     }
+                },
+                {
+                    "Type": "class Game::ControllerComponent"
                 }
             ],
             "Name": "Truncated"
@@ -255,7 +256,7 @@
                 {
                     "Option": "Intersect",
                     "Position": [ 0, 0, 0 ],
-                    "Direction": [ -1, 1, 0 ],
+                    "Direction": [ 0, 1, 0 ],
                     "Reflection Count": 4,
                     "Max Distance": -1.0,
                     "Color" : [1, 0, 0, 1]

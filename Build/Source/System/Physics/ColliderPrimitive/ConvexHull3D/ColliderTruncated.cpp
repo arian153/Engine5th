@@ -92,11 +92,7 @@ namespace Engine5
             maximum_t            = truncated_max_t;
             if (min_axis_height > half_height)
             {
-                if (max_axis_height > half_height)
-                {
-                    return false;
-                }
-                Real disc_t = (half_height - local_ray.position.y) / local_ray.direction.y;
+                                Real disc_t = (half_height - local_ray.position.y) / local_ray.direction.y;
                 Real disc_a = local_ray.direction.x * disc_t + local_ray.position.x;
                 Real disc_b = local_ray.direction.z * disc_t + local_ray.position.z;
                 if (disc_a * disc_a * denominator_x + disc_b * disc_b * denominator_z <= m_ratio * m_ratio)
@@ -105,15 +101,16 @@ namespace Engine5
                 }
                 else
                 {
+                    maximum_t = disc_t;
                     //return result;
                 }
             }
             if (max_axis_height < -half_height)
             {
-                if (min_axis_height < -half_height)
+               /* if (min_axis_height < -half_height)
                 {
                     return false;
-                }
+                }*/
                 Real disc_t = (half_height - local_ray.position.y) / local_ray.direction.y;
                 Real disc_a = local_ray.direction.x * disc_t + local_ray.position.x;
                 Real disc_b = local_ray.direction.z * disc_t + local_ray.position.z;
@@ -123,6 +120,7 @@ namespace Engine5
                 }
                 else
                 {
+
                 }
             }
             if (max_axis_height > half_height)
