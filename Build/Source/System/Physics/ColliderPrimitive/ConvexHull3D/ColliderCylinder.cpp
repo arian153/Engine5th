@@ -65,12 +65,6 @@ namespace Engine5
         Real cylinder_min_t, cylinder_max_t;
         if (Math::SolveQuadratic(a, b, c, cylinder_max_t, cylinder_min_t) == true)
         {
-            if (cylinder_min_t > cylinder_max_t)
-            {
-                Real temp      = cylinder_min_t;
-                cylinder_min_t = cylinder_max_t;
-                cylinder_max_t = temp;
-            }
             Real min_axis_height = local_ray.position.y + local_ray.direction.y * cylinder_min_t;
             Real max_axis_height = local_ray.position.y + local_ray.direction.y * cylinder_max_t;
             minimum_t            = cylinder_min_t;
@@ -88,10 +82,6 @@ namespace Engine5
                 {
                     minimum_t = disc_t;
                 }
-                else
-                {
-                    //return result;
-                }
             }
             if (max_axis_height < -half_height)
             {
@@ -99,15 +89,12 @@ namespace Engine5
                 {
                     return false;
                 }
-                Real disc_t = (half_height - local_ray.position.y) / local_ray.direction.y;
+                Real disc_t = (-half_height - local_ray.position.y) / local_ray.direction.y;
                 Real disc_a = local_ray.direction.x * disc_t + local_ray.position.x;
                 Real disc_b = local_ray.direction.z * disc_t + local_ray.position.z;
                 if (disc_a * disc_a * denominator_x + disc_b * disc_b * denominator_z <= 1.0f)
                 {
-                    minimum_t = disc_t;
-                }
-                else
-                {
+                    maximum_t = disc_t;
                 }
             }
             if (max_axis_height > half_height)
@@ -117,12 +104,7 @@ namespace Engine5
                 Real disc_b = local_ray.direction.z * disc_t + local_ray.position.z;
                 if (disc_a * disc_a * denominator_x + disc_b * disc_b * denominator_z <= 1.0f)
                 {
-                    //minimum_t = cylinder_min_t;
                     maximum_t = disc_t;
-                }
-                else
-                {
-                    return false;
                 }
             }
             if (min_axis_height < -half_height)
@@ -133,11 +115,6 @@ namespace Engine5
                 if (disc_a * disc_a * denominator_x + disc_b * disc_b * denominator_z <= 1.0f)
                 {
                     minimum_t = disc_t;
-                    //maximum_t = cylinder_max_t;
-                }
-                else
-                {
-                    return false;
                 }
             }
         }
@@ -292,11 +269,11 @@ namespace Engine5
         int stack_count = renderer->CYLINDRICAL_STACK_COUNT;
         int slice_count = renderer->CYLINDRICAL_SLICE_COUNT;
         renderer->ReserveVertices(renderer->CYLINDRICAL_VERTICES_COUNT, mode);
-        Real       height           = Height();
-        Vector2    radius           = Radius();
+        Real       height         = Height();
+        Vector2    radius         = Radius();
         Transform* body_transform = GetBodyTransform();
-        Real       stack_height     = height / stack_count;
-        I32        ring_count       = stack_count + 1;
+        Real       stack_height   = height / stack_count;
+        I32        ring_count     = stack_count + 1;
         for (I32 i = 0; i < ring_count; ++i)
         {
             Real y       = -0.5f * height + i * stack_height;
@@ -309,8 +286,8 @@ namespace Engine5
                 vertex_local_pos.x = radius.x * c;
                 vertex_local_pos.y = y;
                 vertex_local_pos.z = radius.y * s;
-                vertex_local_pos = LocalToWorldPoint(vertex_local_pos);
-                vertex_local_pos = body_transform->LocalToWorldPoint(vertex_local_pos);
+                vertex_local_pos   = LocalToWorldPoint(vertex_local_pos);
+                vertex_local_pos   = body_transform->LocalToWorldPoint(vertex_local_pos);
                 renderer->PushVertex(vertex_local_pos, mode, color);
             }
         }
