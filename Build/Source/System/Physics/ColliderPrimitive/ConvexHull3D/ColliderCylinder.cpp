@@ -65,6 +65,12 @@ namespace Engine5
         Real cylinder_min_t, cylinder_max_t;
         if (Math::SolveQuadratic(a, b, c, cylinder_max_t, cylinder_min_t) == true)
         {
+            if (cylinder_min_t > cylinder_max_t)
+            {
+                Real temp      = cylinder_min_t;
+                cylinder_min_t = cylinder_max_t;
+                cylinder_max_t = temp;
+            }
             Real min_axis_height = local_ray.position.y + local_ray.direction.y * cylinder_min_t;
             Real max_axis_height = local_ray.position.y + local_ray.direction.y * cylinder_max_t;
             minimum_t            = cylinder_min_t;

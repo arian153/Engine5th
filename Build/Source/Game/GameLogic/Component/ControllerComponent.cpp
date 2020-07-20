@@ -126,7 +126,7 @@ namespace Game
                 {
                     if (keyboard->IsDown(eKeyCodeKeyboard::Space))
                     {
-                        transform->AddRotationZ(dt);
+                        transform->AddRotationZ(dt * 0.1f) ;
                     }
                     else
                     {
