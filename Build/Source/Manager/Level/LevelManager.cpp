@@ -98,15 +98,15 @@ namespace Engine5
                 m_frame_utility->CalculateFrameStatus(m_application_timer->TotalTime());
             }
             Real time_step = m_application_timer->DeltaTime();
-            m_render_system->GetTextRenderer()->Output(
-                                                       Vector2(),
-                                                       ColorDef::Pure::Red,
-                                                       "total time : ",
-                                                       m_application_timer->TotalTime(),
-                                                       "\nFPS : ",
-                                                       m_frame_utility->GetFramePerSecond(),
-                                                       "\nMSPF : ",
-                                                       m_frame_utility->GetMillisecondPerFrame());
+            //m_render_system->GetTextRenderer()->Output(
+            //                                           Vector2(),
+            //                                           ColorDef::Pure::Red,
+            //                                           "total time : ",
+            //                                           m_application_timer->TotalTime(),
+            //                                           "\nFPS : ",
+            //                                           m_frame_utility->GetFramePerSecond(),
+            //                                           "\nMSPF : ",
+            //                                           m_frame_utility->GetMillisecondPerFrame());
             UpdateLevel(m_level, time_step);
             m_elapsed_time += time_step;
             if (m_elapsed_time >= m_fixed_time_step)

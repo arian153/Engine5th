@@ -171,7 +171,7 @@
                                 "Position": [ 0, 0, 0 ],
                                 "Radius": [ 2, 3],
                                 "Height": 3,
-                                "Ratio": 1.5,
+                                "Ratio": 0.5,
                                 "Scale": 1,
                                 "Type": "Truncated"
                             }

@@ -90,30 +90,85 @@ namespace Engine5
         bool b_contain_bot_disc = b_disc_dir ? bot_disc_a * bot_disc_a * denominator_x + bot_disc_b * bot_disc_b * denominator_z <= 1.0f : false;
         if (Math::SolveQuadratic(a, b, c, truncated_max_t, truncated_min_t) == true)
         {
-            E5_DRAW_TEXT_OUTPUT(Vector2(520), ColorDef::Pure::Red, "SolveQuadratic : True");
             if (truncated_min_t > truncated_max_t)
             {
                 Real temp       = truncated_min_t;
                 truncated_min_t = truncated_max_t;
                 truncated_max_t = temp;
             }
-            Real min_axis_height = local_ray.position.y + local_ray.direction.y * truncated_min_t;
-            Real max_axis_height = local_ray.position.y + local_ray.direction.y * truncated_max_t;
+            if (bot_disc_t > top_disc_t)
+            {
+                Real temp          = top_disc_t;
+                top_disc_t         = bot_disc_t;
+                bot_disc_t         = temp;
+                bool temp2         = b_contain_top_disc;
+                b_contain_top_disc = b_contain_bot_disc;
+                b_contain_bot_disc = temp2;
+            }
             minimum_t            = truncated_min_t;
             maximum_t            = truncated_max_t;
+            Real min_axis_height = local_ray.position.y + local_ray.direction.y * truncated_min_t;
+            Real max_axis_height = local_ray.position.y + local_ray.direction.y * truncated_max_t;
             if (min_axis_height > half_height)
             {
                 if (max_axis_height > half_height)
                 {
-                    return false;
+                    if (b_contain_top_disc && b_contain_bot_disc)
+                    {
+                        minimum_t = bot_disc_t;
+                        maximum_t = top_disc_t;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 if (b_contain_top_disc)
                 {
                     minimum_t = top_disc_t;
                 }
+                if (b_contain_bot_disc)
+                {
+                    minimum_t = bot_disc_t;
+                }
             }
-            if (max_axis_height < -half_height)
+            else if (min_axis_height < -half_height)
             {
+                if (max_axis_height < -half_height)
+                {
+                    if (b_contain_top_disc && b_contain_bot_disc)
+                    {
+                        minimum_t = bot_disc_t;
+                        maximum_t = top_disc_t;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (b_contain_top_disc)
+                {
+                    minimum_t = top_disc_t;
+                }
+                if (b_contain_bot_disc)
+                {
+                    minimum_t = bot_disc_t;
+                }
+            }
+            if (max_axis_height > half_height)
+            {
+                if (min_axis_height < -half_height)
+                {
+                    if (b_contain_top_disc && b_contain_bot_disc)
+                    {
+                        minimum_t = bot_disc_t;
+                        maximum_t = top_disc_t;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
                 if (b_contain_bot_disc)
                 {
                     maximum_t = bot_disc_t;
@@ -123,32 +178,32 @@ namespace Engine5
                     maximum_t = top_disc_t;
                 }
             }
-            if (max_axis_height > half_height)
+            else if (max_axis_height < -half_height)
             {
+                if (min_axis_height > half_height)
+                {
+                    if (b_contain_top_disc && b_contain_bot_disc)
+                    {
+                        minimum_t = bot_disc_t;
+                        maximum_t = top_disc_t;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (b_contain_bot_disc)
+                {
+                    maximum_t = bot_disc_t;
+                }
                 if (b_contain_top_disc)
                 {
                     maximum_t = top_disc_t;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            if (min_axis_height < -half_height)
-            {
-                if (b_contain_bot_disc)
-                {
-                    minimum_t = bot_disc_t;
-                }
-                else
-                {
-                    return false;
                 }
             }
         }
         else
         {
-            E5_DRAW_TEXT_OUTPUT(Vector2(520), ColorDef::Pure::Red, "Truncated Max : ", truncated_max_t, ", Truncated Min : ", truncated_min_t);
             if (m_ratio < 1.0f)
             {
                 if (b_contain_bot_disc)
