@@ -220,12 +220,6 @@ namespace Engine5
                             maximum_t = truncated_max_t;
                         }
                     }
-                    if (minimum_t > maximum_t)
-                    {
-                        Real temp = minimum_t;
-                        minimum_t = maximum_t;
-                        maximum_t = temp;
-                    }
                 }
                 else
                 {
@@ -248,18 +242,18 @@ namespace Engine5
                             maximum_t = truncated_max_t;
                         }
                     }
-                    if (minimum_t > maximum_t)
-                    {
-                        Real temp = minimum_t;
-                        minimum_t = maximum_t;
-                        maximum_t = temp;
-                    }
                 }
                 else
                 {
                     return false;
                 }
             }
+        }
+        if (minimum_t > maximum_t)
+        {
+            Real temp = minimum_t;
+            minimum_t = maximum_t;
+            maximum_t = temp;
         }
         if (minimum_t < 0.0f && maximum_t < 0.0f)
         {

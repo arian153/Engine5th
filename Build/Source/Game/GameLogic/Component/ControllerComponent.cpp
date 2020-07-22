@@ -44,12 +44,32 @@ namespace Game
                 Real dy     = static_cast<Real>(curr_y - prev_y);
                 if (mouse->IsDown(eKeyCodeMouse::Right))
                 {
-                    camera->AddDistanceInUpDirection(-dt * dy);
-                    camera->AddDistanceInRightDirection(dt * dx);
+                    //camera->AddDistanceInUpDirection(-dt * dy);
+                    //camera->AddDistanceInRightDirection(dt * dx);
+                    m_theta += dx;
+                    m_phi += dy;
+                    // Restrict the angle phi.
+                    m_phi = Math::Clamp(m_phi, 0.1f, Math::PI - 0.1f);
+                    Vector3 eye_pos;
+                    // Convert Spherical to Cartesian coordinates.
+                    eye_pos.x = m_radius * sinf(m_phi) * cosf(m_theta);
+                    eye_pos.z = m_radius * sinf(m_phi) * sinf(m_theta);
+                    eye_pos.y = m_radius * cosf(m_phi);
+                    camera->LookAt(target_pos + eye_pos, target_pos);
                 }
                 if (m_input->GetMouseInput()->IsWheelRolling())
                 {
                     camera->AddDistanceInLookingDirection(dt * 20.0f * mouse->MouseWheelRollingDirection());
+                    // Update angles based on input to orbit camera around box.
+                    m_radius += 2.0f * mouse->MouseWheelRollingDirection();
+                    // Restrict the radius.
+                    m_radius = Math::Clamp(m_radius, 5.0f, 150.0f);
+                    Vector3 eye_pos;
+                    // Convert Spherical to Cartesian coordinates.
+                    eye_pos.x = m_radius * sinf(m_phi) * cosf(m_theta);
+                    eye_pos.z = m_radius * sinf(m_phi) * sinf(m_theta);
+                    eye_pos.y = m_radius * cosf(m_phi);
+                    camera->LookAt(target_pos + eye_pos, target_pos);
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::W))
                 {
