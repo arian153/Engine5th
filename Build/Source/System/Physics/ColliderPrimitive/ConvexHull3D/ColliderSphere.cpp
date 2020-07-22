@@ -31,24 +31,29 @@ namespace Engine5
 
     bool ColliderSphere::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
-        Real    radius = Radius();
-        Vector3 l      = -local_ray.position;
-        Real    tc     = l.DotProduct(local_ray.direction);
-        if (tc < 0.0f)
+        Real radius = Radius();
+        Real a      = local_ray.direction.x * local_ray.direction.x
+                + local_ray.direction.y * local_ray.direction.y
+                + local_ray.direction.z * local_ray.direction.z;
+        Real b = 2.0f * (local_ray.direction.x * local_ray.position.x
+            + local_ray.direction.y * local_ray.position.y
+            + local_ray.direction.z * local_ray.position.z);
+        Real c = local_ray.position.x * local_ray.position.x
+                + local_ray.position.y * local_ray.position.y
+                + local_ray.position.z * local_ray.position.z - radius * radius;
+        if (Math::SolveQuadratic(a, b, c, maximum_t, minimum_t) == true)
         {
-            return false;
+            if (minimum_t < 0.0f && maximum_t < 0.0f)
+            {
+                return false;
+            }
+            if (minimum_t <= 0.0f)
+            {
+                minimum_t = 0.0f;
+            }
+            return true;
         }
-        Real d2             = tc * tc - l.DotProduct(l);
-        Real radius_squared = radius * radius;
-        if (d2 > radius_squared)
-        {
-            return false;
-        }
-        //solve for t1c
-        Real t1c  = sqrtf(radius_squared - d2);
-        minimum_t = tc - t1c;
-        maximum_t = tc + t1c;
-        return true;
+        return false;
     }
 
     Vector3 ColliderSphere::GetNormal(const Vector3& local_point_on_collider)

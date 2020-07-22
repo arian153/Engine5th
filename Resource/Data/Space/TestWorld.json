@@ -169,11 +169,11 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [ 2, 3, 2],
+                                "Radius": 3,
                                 "Height": 3,
                                 "Ratio": 0.5,
                                 "Scale": 1,
-                                "Type": "Capsule"
+                                "Type": "Sphere"
                             }
                         ]
                     }

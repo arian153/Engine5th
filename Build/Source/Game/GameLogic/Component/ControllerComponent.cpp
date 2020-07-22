@@ -166,11 +166,25 @@ namespace Game
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Up))
                 {
-                    body->ApplyForceCentroid(Vector3(0.0f, 10.0f));
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        transform->AddRotationX(-dt);
+                    }
+                    else
+                    {
+                        body->ApplyForceCentroid(Vector3(0.0f, 10.0f));
+                    }
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Down))
                 {
-                    body->ApplyForceCentroid(Vector3(0.0f, -10.0f));
+                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
+                    {
+                        transform->AddRotationX(dt);
+                    }
+                    else
+                    {
+                        body->ApplyForceCentroid(Vector3(0.0f, -10.0f));
+                    }
                 }
             }
         }
