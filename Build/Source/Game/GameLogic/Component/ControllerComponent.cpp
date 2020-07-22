@@ -40,9 +40,9 @@ namespace Game
                 int  curr_y = mouse->CurrentPosition().y;
                 int  prev_x = mouse->PreviousPosition().x;
                 int  prev_y = mouse->PreviousPosition().y;
-                Real dx     = static_cast<Real>(curr_x - prev_x);
-                Real dy     = static_cast<Real>(curr_y - prev_y);
-                if (mouse->IsDown(eKeyCodeMouse::Right))
+                Real dx     = Math::DegreesToRadians(0.25f * static_cast<Real>(curr_x - prev_x));
+                Real dy     = Math::DegreesToRadians(0.25f * static_cast<Real>(curr_y - prev_y));
+                if (mouse->IsDown(eKeyCodeMouse::Left))
                 {
                     //camera->AddDistanceInUpDirection(-dt * dy);
                     //camera->AddDistanceInRightDirection(dt * dx);
