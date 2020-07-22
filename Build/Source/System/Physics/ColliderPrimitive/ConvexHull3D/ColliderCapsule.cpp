@@ -3,6 +3,7 @@
 #include "../../BroadPhase/BoundingAABB.hpp"
 #include "../../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../../External/JSONCPP/json/json.h"
+#include "../../../Graphics/Utility/TextRenderer.hpp"
 
 namespace Engine5
 {
@@ -61,40 +62,24 @@ namespace Engine5
         Real    c             = local_ray.position.x * local_ray.position.x * denominator_x + local_ray.position.z * local_ray.position.z * denominator_z - 1.0f;
         Vector3 axis_test     = local_ray.direction - local_ray.direction.ProjectionTo(axis);
         Real    cylinder_min_t, cylinder_max_t;
+        Real    sphere_a_min_t, sphere_a_max_t, sphere_b_min_t, sphere_b_max_t;
+        bool    b_sphere_a = TestRayEllipsoid(local_ray, capsule_a, sphere_a_min_t, sphere_a_max_t);
+        bool    b_sphere_b = TestRayEllipsoid(local_ray, capsule_b, sphere_b_min_t, sphere_b_max_t);
         if (Math::IsZero(axis_test.LengthSquared()))
         {
-            Real sphere_a_min_t, sphere_a_max_t, sphere_b_min_t, sphere_b_max_t;
-            if (!this->TestRayEllipsoid(local_ray, capsule_a, sphere_a_min_t, sphere_a_max_t) ||
-                !this->TestRayEllipsoid(local_ray, capsule_b, sphere_b_min_t, sphere_b_max_t))
+            if (!b_sphere_a || !b_sphere_b)
             {
                 return false;
             }
-            if (sphere_a_min_t < sphere_b_min_t)
-            {
-                minimum_t = sphere_a_min_t;
-            }
-            else
-            {
-                minimum_t = sphere_b_min_t;
-            }
-            if (sphere_a_max_t > sphere_b_max_t)
-            {
-                maximum_t = sphere_a_max_t;
-            }
-            else
-            {
-                maximum_t = sphere_b_max_t;
-            }
+            minimum_t = sphere_a_min_t < sphere_b_min_t ? sphere_a_min_t : sphere_b_min_t;
+            maximum_t = sphere_a_max_t > sphere_b_max_t ? sphere_a_max_t : sphere_b_max_t;
         }
         else
         {
             if (Math::SolveQuadratic(a, b, c, cylinder_max_t, cylinder_min_t) == true)
             {
-                minimum_t = cylinder_min_t;
-                maximum_t = cylinder_max_t;
-                Real sphere_a_min_t, sphere_a_max_t, sphere_b_min_t, sphere_b_max_t;
-                bool sphere_a_result       = TestRayEllipsoid(local_ray, capsule_a, sphere_a_min_t, sphere_a_max_t);
-                bool sphere_b_result       = TestRayEllipsoid(local_ray, capsule_b, sphere_b_min_t, sphere_b_max_t);
+                minimum_t                  = cylinder_min_t;
+                maximum_t                  = cylinder_max_t;
                 Real ellipsoid_height      = half_height + m_radius.y;
                 Real cylinder_min_t_height = local_ray.position.y + local_ray.direction.y * cylinder_min_t;
                 Real cylinder_max_t_height = local_ray.position.y + local_ray.direction.y * cylinder_max_t;
@@ -102,12 +87,12 @@ namespace Engine5
                 Real sphere_a_max_t_height = Math::REAL_MAX;
                 Real sphere_b_min_t_height = Math::REAL_MAX;
                 Real sphere_b_max_t_height = Math::REAL_MAX;
-                if (sphere_a_result == true)
+                if (b_sphere_a == true)
                 {
                     sphere_a_min_t_height = local_ray.position.y + local_ray.direction.y * sphere_a_min_t;
                     sphere_a_max_t_height = local_ray.position.y + local_ray.direction.y * sphere_a_max_t;
                 }
-                if (sphere_b_result == true)
+                if (b_sphere_b == true)
                 {
                     sphere_b_min_t_height = local_ray.position.y + local_ray.direction.y * sphere_b_min_t;
                     sphere_b_max_t_height = local_ray.position.y + local_ray.direction.y * sphere_b_max_t;
@@ -122,16 +107,9 @@ namespace Engine5
                 }
                 if (cylinder_min_t_height > half_height)
                 {
-                    if (sphere_b_result == true)
+                    if (b_sphere_b == true)
                     {
-                        if (sphere_b_min_t_height > sphere_b_max_t_height)
-                        {
-                            minimum_t = sphere_b_min_t;
-                        }
-                        else
-                        {
-                            minimum_t = sphere_b_max_t;
-                        }
+                        minimum_t = sphere_b_min_t_height > sphere_b_max_t_height ? sphere_b_min_t : sphere_b_max_t;
                     }
                     else
                     {
@@ -140,16 +118,9 @@ namespace Engine5
                 }
                 if (cylinder_min_t_height < -half_height)
                 {
-                    if (sphere_a_result == true)
+                    if (b_sphere_a == true)
                     {
-                        if (sphere_a_min_t_height < sphere_a_max_t_height)
-                        {
-                            minimum_t = sphere_a_min_t;
-                        }
-                        else
-                        {
-                            minimum_t = sphere_a_max_t;
-                        }
+                        minimum_t = sphere_a_min_t_height < sphere_a_max_t_height ? sphere_a_min_t : sphere_a_max_t;
                     }
                     else
                     {
@@ -158,16 +129,9 @@ namespace Engine5
                 }
                 if (cylinder_max_t_height > half_height)
                 {
-                    if (sphere_b_result == true)
+                    if (b_sphere_b == true)
                     {
-                        if (sphere_b_min_t_height > sphere_b_max_t_height)
-                        {
-                            maximum_t = sphere_b_min_t;
-                        }
-                        else
-                        {
-                            maximum_t = sphere_b_max_t;
-                        }
+                        maximum_t = sphere_b_min_t_height > sphere_b_max_t_height ? sphere_b_min_t : sphere_b_max_t;
                     }
                     else
                     {
@@ -176,23 +140,16 @@ namespace Engine5
                 }
                 if (cylinder_max_t_height < -half_height)
                 {
-                    if (sphere_a_result == true)
+                    if (b_sphere_a == true)
                     {
-                        if (sphere_a_min_t_height < sphere_a_max_t_height)
-                        {
-                            maximum_t = sphere_b_min_t;
-                        }
-                        else
-                        {
-                            maximum_t = sphere_b_max_t;
-                        }
+                        maximum_t = sphere_a_min_t_height < sphere_a_max_t_height ? sphere_a_min_t : sphere_a_max_t;
                     }
                     else
                     {
                         return false;
                     }
                 }
-                if (sphere_a_result == true && sphere_b_result == true)
+                if (b_sphere_a == true && b_sphere_b == true)
                 {
                     minimum_t = Math::Min(Math::Min(Math::Min(sphere_a_min_t, sphere_a_max_t), sphere_b_min_t), sphere_b_max_t);
                     maximum_t = Math::Max(Math::Max(Math::Max(sphere_a_min_t, sphere_a_max_t), sphere_b_min_t), sphere_b_max_t);
@@ -202,6 +159,12 @@ namespace Engine5
             {
                 return false;
             }
+        }
+        if (minimum_t > maximum_t)
+        {
+            Real temp = minimum_t;
+            minimum_t = maximum_t;
+            maximum_t = temp;
         }
         if (minimum_t < 0.0f && maximum_t < 0.0f)
         {
@@ -325,10 +288,10 @@ namespace Engine5
         int stack_count = renderer->SPHERICAL_STACK_COUNT;
         int slice_count = renderer->SPHERICAL_SLICE_COUNT;
         renderer->ReserveVertices(renderer->SPHERICAL_VERTICES_COUNT, mode);
-        Vector3    axis_vector      = Math::Vector3::Y_AXIS;
+        Vector3    axis_vector    = Math::Vector3::Y_AXIS;
         Transform* body_transform = GetBodyTransform();
-        Real       half_height      = HalfHeight();
-        Vector3    radius           = Radius();
+        Real       half_height    = HalfHeight();
+        Vector3    radius         = Radius();
         //top vertex
         Vector3 top_vertex_local_pos = axis_vector;
         top_vertex_local_pos         = top_vertex_local_pos.HadamardProduct(radius);
@@ -343,7 +306,6 @@ namespace Engine5
         //modify rotation, translation
         bottom_vertex_local_pos = LocalToWorldPoint(bottom_vertex_local_pos);
         bottom_vertex_local_pos = body_transform->LocalToWorldPoint(bottom_vertex_local_pos);
-
         renderer->PushVertex(top_vertex_local_pos, mode, color);
         Real phi_step   = Math::PI / stack_count;
         Real theta_step = Math::TWO_PI / slice_count;
@@ -371,7 +333,6 @@ namespace Engine5
                 }
                 vertex_local_pos = LocalToWorldPoint(vertex_local_pos);
                 vertex_local_pos = body_transform->LocalToWorldPoint(vertex_local_pos);
-
                 renderer->PushVertex(vertex_local_pos, mode, color);
             }
         }

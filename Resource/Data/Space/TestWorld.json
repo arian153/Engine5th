@@ -173,7 +173,7 @@
                                 "Height": 3,
                                 "Ratio": 0.5,
                                 "Scale": 1,
-                                "Type": "Dome"
+                                "Type": "Capsule"
                             }
                         ]
                     }
