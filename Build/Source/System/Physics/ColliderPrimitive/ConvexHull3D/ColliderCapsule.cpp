@@ -3,7 +3,7 @@
 #include "../../BroadPhase/BoundingAABB.hpp"
 #include "../../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../../External/JSONCPP/json/json.h"
-#include "../../../Graphics/Utility/TextRenderer.hpp"
+
 
 namespace Engine5
 {

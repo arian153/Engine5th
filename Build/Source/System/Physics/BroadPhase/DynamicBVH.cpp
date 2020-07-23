@@ -88,7 +88,6 @@ namespace Engine5
                         m_root->data->GetCollider()->UpdateBoundingVolume();
                     }
                 }
-               
                 m_root->UpdateAABB(m_margin);
             }
             else
@@ -322,21 +321,23 @@ namespace Engine5
     void DynamicBVH::TraceRay(RayTraceResult& result, Real max_distance, size_t reflect_count) const
     {
         std::queue<DynamicBVHNode*> queue;
-        if (m_root != nullptr)
-        {
-            queue.push(m_root);
-        }
-        else
+        if (m_root == nullptr)
         {
             return;
         }
         result.hit_list.reserve(reflect_count);
         result.ray_list.reserve(reflect_count);
+        Ray prev_ray = result.initial_ray;
         for (size_t i = 0; i < reflect_count; ++i)
         {
-            Ray     ray = result.ray_list.at(i);
+            Ray ray = result.ray_list.at(i);
+            if (i > 0 && prev_ray == ray)
+            {
+                break;
+            }
             HitData hit_data;
             hit_data.t = Math::REAL_POSITIVE_MAX;
+            queue.push(m_root);
             while (!queue.empty())
             {
                 DynamicBVHNode& node = *queue.front();
@@ -378,12 +379,26 @@ namespace Engine5
             }
             if (hit_data.hit == true)
             {
+                if (Math::IsZero(hit_data.t))
+                {
+                    result.hit_list.push_back(hit_data);
+                    break;
+                }
+                if (!result.hit_list.empty())
+                {
+                    if (result.hit_list.back().intersection == hit_data.intersection)
+                    {
+                        break;
+                    }
+                }
                 result.hit_list.push_back(hit_data);
-                result.ray_list.push_back(ray.GetReflectedRay(hit_data.normal, hit_data.intersection));
+                Ray reflected = ray.GetReflectedRay(hit_data.normal, hit_data.intersection);
+                result.ray_list.push_back(reflected);
+                prev_ray = ray;
             }
             else
             {
-                return;
+                break;
             }
         }
     }

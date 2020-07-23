@@ -12,6 +12,7 @@
 #include "../Resolution/Force/Force.hpp"
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
+#include "../../Graphics/Utility/TextRenderer.hpp"
 
 namespace Engine5
 {
@@ -105,8 +106,12 @@ namespace Engine5
                     {
                         auto ray = result.GetRayData(i);
                         auto hit = result.GetHitData(i);
-                        m_primitive_renderer->DrawSegment(ray.position, hit.intersection);
+                        m_primitive_renderer->DrawSegment(ray.position, hit.intersection, data.color);
+                        m_primitive_renderer->DrawPrimitive(Sphere(hit.intersection, no_rotation, 0.1f), eRenderingMode::Face, data.color);
+                        E5_DRAW_TEXT_OUTPUT(Vector2(0, i * 80.0f), data.color, hit.intersection);
                     }
+                    auto ray = result.GetRayData(size);
+                    m_primitive_renderer->DrawRay(ray, data.color);
                 }
                 else
                 {
