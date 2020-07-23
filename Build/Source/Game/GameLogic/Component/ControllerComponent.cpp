@@ -35,13 +35,14 @@ namespace Game
             auto keyboard = m_input->GetKeyboardInput();
             if (m_owner->HasComponent<CameraComponent>())
             {
-                auto camera = m_owner->GetComponent<CameraComponent>();
-                int  curr_x = mouse->CurrentPosition().x;
-                int  curr_y = mouse->CurrentPosition().y;
-                int  prev_x = mouse->PreviousPosition().x;
-                int  prev_y = mouse->PreviousPosition().y;
-                Real dx     = Math::DegreesToRadians(0.25f * static_cast<Real>(curr_x - prev_x));
-                Real dy     = Math::DegreesToRadians(0.25f * static_cast<Real>(curr_y - prev_y));
+                auto  camera = m_owner->GetComponent<CameraComponent>();
+                int   curr_x = mouse->CurrentPosition().x;
+                int   curr_y = mouse->CurrentPosition().y;
+                int   prev_x = mouse->PreviousPosition().x;
+                int   prev_y = mouse->PreviousPosition().y;
+                Real  dx     = Math::DegreesToRadians(0.25f * static_cast<Real>(curr_x - prev_x));
+                Real  dy     = Math::DegreesToRadians(0.25f * static_cast<Real>(curr_y - prev_y));
+                Basis basis  = camera->GetBasis();
                 if (mouse->IsDown(eKeyCodeMouse::Left))
                 {
                     //camera->AddDistanceInUpDirection(-dt * dy);
@@ -50,7 +51,6 @@ namespace Game
                     m_phi += dy;
                     // Restrict the angle phi.
                     m_phi = Math::Clamp(m_phi, 0.1f, Math::PI - 0.1f);
-                    Vector3 eye_pos;
                     // Convert Spherical to Cartesian coordinates.
                     eye_pos.x = m_radius * sinf(m_phi) * cosf(m_theta);
                     eye_pos.z = m_radius * sinf(m_phi) * sinf(m_theta);
@@ -64,7 +64,6 @@ namespace Game
                     m_radius += 2.0f * mouse->MouseWheelRollingDirection();
                     // Restrict the radius.
                     m_radius = Math::Clamp(m_radius, 5.0f, 150.0f);
-                    Vector3 eye_pos;
                     // Convert Spherical to Cartesian coordinates.
                     eye_pos.x = m_radius * sinf(m_phi) * cosf(m_theta);
                     eye_pos.z = m_radius * sinf(m_phi) * sinf(m_theta);
@@ -73,69 +72,33 @@ namespace Game
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::W))
                 {
-                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                    {
-                        camera->AddDistanceInUpDirection(dt * 10.0f);
-                    }
-                    else
-                    {
-                        camera->AddRotationX(-dt);
-                    }
+                    target_pos += basis.j * dt * 10.0f;
+                    camera->LookAt(target_pos + eye_pos, target_pos);
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::S))
                 {
-                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                    {
-                        camera->AddDistanceInUpDirection(-dt * 10.0f);
-                    }
-                    else
-                    {
-                        camera->AddRotationX(dt);
-                    }
+                    target_pos += basis.j * -dt * 10.0f;
+                    camera->LookAt(target_pos + eye_pos, target_pos);
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::A))
                 {
-                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                    {
-                        camera->AddDistanceInRightDirection(-dt * 10.0f);
-                    }
-                    else
-                    {
-                        camera->AddRotationY(-dt);
-                    }
+                    target_pos += basis.i * -dt * 10.0f;
+                    camera->LookAt(target_pos + eye_pos, target_pos);
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::D))
                 {
-                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                    {
-                        camera->AddDistanceInRightDirection(dt * 10.0f);
-                    }
-                    else
-                    {
-                        camera->AddRotationY(dt);
-                    }
+                    target_pos += basis.i * dt * 10.0f;
+                    camera->LookAt(target_pos + eye_pos, target_pos);
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Q))
                 {
-                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                    {
-                        camera->AddDistanceInLookingDirection(dt * 10.0f);
-                    }
-                    else
-                    {
-                        camera->AddRotationZ(-dt);
-                    }
+                    target_pos += basis.k * dt * 10.0f;
+                    camera->LookAt(target_pos + eye_pos, target_pos);
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::E))
                 {
-                    if (keyboard->IsDown(eKeyCodeKeyboard::Space))
-                    {
-                        camera->AddDistanceInLookingDirection(-dt * 10.0f);
-                    }
-                    else
-                    {
-                        camera->AddRotationZ(dt);
-                    }
+                    target_pos += basis.k * -dt * 10.0f;
+                    camera->LookAt(target_pos + eye_pos, target_pos);
                 }
             }
             else
@@ -197,7 +160,7 @@ namespace Game
 
     void ControllerComponent::Render()
     {
-        /*if (m_owner->HasComponent<CameraComponent>())
+        if (m_owner->HasComponent<CameraComponent>())
         {
             auto camera = m_owner->GetComponent<CameraComponent>();
             auto basis  = camera->GetBasis();
@@ -205,26 +168,6 @@ namespace Game
                                     Vector2(520), ColorDef::Pure::Red, "P : ", camera->GetPosition(),
                                     "\nI : ", basis.i, "\nJ : ", basis.j, "\nK : ", basis.k);
         }
-        else
-        {
-            auto       transform = m_owner->GetComponent<TransformComponent>();
-            Transform* t_data    = transform->GetTransform();
-            Vector3    test_data(-3, 4, 5);
-            Matrix44   trans_mat = transform->GetTransformMatrix();
-            Matrix44   inv       = trans_mat.Inverse();
-            m_text_renderer->Output(
-                                    Vector2(520, 400), ColorDef::Pure::Red,
-                                    "Q : ", transform->GetOrientation(),
-                                    "\nLocal To World\n",
-                                    trans_mat.TransformVectorRotatingOrigin(test_data, transform->GetOrigin()),
-                                    "\n",
-                                    t_data->LocalToWorldRotatingOrigin(test_data),
-                                    "\nWorld To Local\n",
-                                    inv.TransformVectorRotatingOrigin(test_data, transform->GetOrigin()),
-                                    "\n",
-                                    t_data->WorldToLocalRotatingOrigin(test_data)
-                                   );
-        }*/
     }
 
     bool ControllerComponent::Load(const Json::Value& data)

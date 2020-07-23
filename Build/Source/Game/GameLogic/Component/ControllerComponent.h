@@ -36,5 +36,6 @@ namespace Game
         Engine5::Real    m_phi    = 0.0f;
         Engine5::Real    m_radius = 60.0f;
         Engine5::Vector3 target_pos;
+        Engine5::Vector3 eye_pos;
     };
 }
