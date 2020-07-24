@@ -40,7 +40,95 @@ namespace Engine5
 
     bool ColliderRectangle::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
-        return false;
+        minimum_t = -1.0f;
+        maximum_t = -1.0f;
+        //plane elements
+        Vector3 normal(0.0f, 0.0f, 1.0f);
+        Vector3 pc          = -local_ray.position;
+        Real    denominator = normal.DotProduct(local_ray.direction);
+        if (Math::IsZero(denominator) == true)
+        {
+            //ray is parallel to plane.
+            if (Math::IsZero(pc.DotProduct(normal)) == true)
+            {
+                //ray is on the plane.
+                Vector2 dir(local_ray.direction.x, local_ray.direction.y);
+                Vector2 pos(local_ray.position.x, local_ray.position.y);
+                Real    t_min, t_max, t_y_min, t_y_max;
+                Vector2 box_min = Vertex(3);
+                Vector2 box_max = Vertex(0);
+                Vector2 inv_dir;
+                inv_dir.x = 1.0f / local_ray.direction.x;
+                inv_dir.y = 1.0f / local_ray.direction.y;
+                if (inv_dir.x >= 0.0f)
+                {
+                    t_min = (box_min.x - local_ray.position.x) * inv_dir.x;
+                    t_max = (box_max.x - local_ray.position.x) * inv_dir.x;
+                }
+                else
+                {
+                    t_min = (box_max.x - local_ray.position.x) * inv_dir.x;
+                    t_max = (box_min.x - local_ray.position.x) * inv_dir.x;
+                }
+                if (inv_dir.y >= 0.0f)
+                {
+                    t_y_min = (box_min.y - local_ray.position.y) * inv_dir.y;
+                    t_y_max = (box_max.y - local_ray.position.y) * inv_dir.y;
+                }
+                else
+                {
+                    t_y_min = (box_max.y - local_ray.position.y) * inv_dir.y;
+                    t_y_max = (box_min.y - local_ray.position.y) * inv_dir.y;
+                }
+                if ((t_min > t_y_max) || (t_y_min > t_max))
+                {
+                    return false;
+                }
+                if (t_y_min > t_min)
+                {
+                    t_min = t_y_min;
+                }
+                if (t_y_max < t_max)
+                {
+                    t_max = t_y_max;
+                }
+                if (t_min < 0.0f && t_max < 0.0f)
+                {
+                    return false;
+                }
+                minimum_t = t_min;
+                maximum_t = t_max;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            //ray-plane intersect one point.
+            Real    plane_t            = pc.DotProduct(normal) / denominator;
+            Vector3 plane_intersection = local_ray.position + local_ray.direction * plane_t;
+            //define ellipse.
+            bool is_rectangle_contain_point = false;
+            if (is_rectangle_contain_point)
+            {
+                minimum_t = maximum_t = plane_t;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (minimum_t < 0.0f && maximum_t < 0.0f)
+        {
+            return false;
+        }
+        if (minimum_t <= 0.0f)
+        {
+            minimum_t = 0.0f;
+        }
+        return true;
     }
 
     Vector3 ColliderRectangle::GetNormal(const Vector3& local_point_on_collider)

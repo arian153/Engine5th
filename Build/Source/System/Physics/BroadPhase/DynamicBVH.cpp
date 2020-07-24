@@ -386,10 +386,12 @@ namespace Engine5
                 }
                 if (!result.hit_list.empty())
                 {
-                    if (result.hit_list.back().intersection == hit_data.intersection)
+                    auto prev_data = result.hit_list.back();
+                    if (prev_data.intersection == hit_data.intersection)
                     {
                         break;
                     }
+                    
                 }
                 result.hit_list.push_back(hit_data);
                 Ray reflected = ray.GetReflectedRay(hit_data.normal, hit_data.intersection);
