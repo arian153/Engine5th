@@ -185,6 +185,49 @@ namespace Engine5
 
     void ColliderRectangle::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
     {
+        I32 index = static_cast<I32>(renderer->VerticesSize(mode));
+        renderer->ReserveVertices(8, mode);
+        Vector2 vertices[ 4 ];
+        if (m_collider_set != nullptr)
+        {
+            std::memcpy(vertices, m_scaled_vertices, sizeof(m_scaled_vertices));
+        }
+        else
+        {
+            std::memcpy(vertices, m_vertices, sizeof(m_vertices));
+        }
+        Transform* body_transform = GetBodyTransform();
+        for (auto& vertex : vertices)
+        {
+            //collider local space to object space(body local)
+            Vector3 vertex3(vertex);
+            vertex3 = LocalToWorldPoint(vertex3);
+            vertex3 = body_transform->LocalToWorldPoint(vertex3);
+            //push to renderer
+            renderer->PushVertex(vertex3, mode, color);
+        }
+        //add indices
+        if (mode == eRenderingMode::Dot)
+        {
+            for (I32 i = 0; i < 4; ++i)
+            {
+                renderer->PushIndex(index + i, mode);
+            }
+        }
+        else if (mode == eRenderingMode::Line)
+        {
+            //front
+            renderer->PushLineIndices(index + 0, index + 1);
+            renderer->PushLineIndices(index + 1, index + 2);
+            renderer->PushLineIndices(index + 2, index + 3);
+            renderer->PushLineIndices(index + 3, index + 0);
+        }
+        else if (mode == eRenderingMode::Face)
+        {
+            //front
+            renderer->PushFaceIndices(index + 0, index + 1, index + 2);
+            renderer->PushFaceIndices(index + 1, index + 3, index + 2);
+        }
     }
 
     Vector2 ColliderRectangle::Vertex(size_t i) const
