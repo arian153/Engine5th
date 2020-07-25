@@ -379,11 +379,6 @@ namespace Engine5
             }
             if (hit_data.hit == true)
             {
-                if (Math::IsZero(hit_data.t))
-                {
-                    result.hit_list.push_back(hit_data);
-                    break;
-                }
                 if (!result.hit_list.empty())
                 {
                     auto prev_data = result.hit_list.back();
@@ -391,10 +386,13 @@ namespace Engine5
                     {
                         break;
                     }
-                    
+                }
+                Ray reflected = ray.GetReflectedRay(hit_data.normal, hit_data.intersection);
+                if (reflected.direction == ray.direction)
+                {
+                    break;
                 }
                 result.hit_list.push_back(hit_data);
-                Ray reflected = ray.GetReflectedRay(hit_data.normal, hit_data.intersection);
                 result.ray_list.push_back(reflected);
                 prev_ray = ray;
             }

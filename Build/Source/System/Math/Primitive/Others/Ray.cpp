@@ -51,8 +51,8 @@ namespace Engine5
     Ray Ray::GetReflectedRay(const Vector3& normal, const Vector3& new_position) const
     {
         Vector3 n                 = normal.Normalize();
-        Vector3 reflect_direction = -2.0f * direction.DotProduct(n) * n + direction;
-        return Ray(new_position, reflect_direction);
+        Vector3 reflect_direction = -2.0f * DotProduct(direction, n) * n + direction;
+        return Ray(new_position, reflect_direction.Normalize());
     }
 
     Vector3 Ray::SymmetricPoint(const Vector3& point) const

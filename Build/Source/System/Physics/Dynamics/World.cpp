@@ -101,8 +101,9 @@ namespace Engine5
                 m_broad_phase->TraceRay(result, data.max_distance, data.reflect_count);
                 if (!result.hit_list.empty())
                 {
-                    size_t size = result.hit_list.size();
-                    for (size_t i = 0; i < size; ++i)
+                    size_t hit_size = result.hit_list.size();
+                    size_t ray_size = result.ray_list.size();
+                    for (size_t i = 0; i < hit_size; ++i)
                     {
                         auto ray = result.GetRayData(i);
                         auto hit = result.GetHitData(i);
@@ -110,8 +111,11 @@ namespace Engine5
                         m_primitive_renderer->DrawPrimitive(Sphere(hit.intersection, no_rotation, 0.1f), eRenderingMode::Face, data.color);
                         E5_DRAW_TEXT_OUTPUT(Vector2(0, i * 80.0f), data.color, hit.intersection);
                     }
-                    auto ray = result.GetRayData(size);
-                    m_primitive_renderer->DrawRay(ray, data.color);
+                    if (ray_size > hit_size)
+                    {
+                        auto ray = result.GetRayData(hit_size);
+                        m_primitive_renderer->DrawRay(ray, data.color);
+                    }
                 }
                 else
                 {
