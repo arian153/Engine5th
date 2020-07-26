@@ -16,29 +16,6 @@ namespace Engine5
         AINode* m_child = nullptr;
     };
 
-    class WhileNode : public DecoratorNode
-    {
-    public:
-        WhileNode();
-        ~WhileNode();
-
-        eAINodeState OnUpdate(Real dt) override final;
-        virtual bool Condition() = 0;
-    protected:
-    };
-
-    class IfNode : public DecoratorNode
-    {
-    public:
-        IfNode();
-        ~IfNode();
-
-        eAINodeState OnUpdate(Real dt) override final;
-        virtual bool Condition() = 0;
-
-    protected:
-    };
-
     class RepeatNode final : public DecoratorNode
     {
     public:

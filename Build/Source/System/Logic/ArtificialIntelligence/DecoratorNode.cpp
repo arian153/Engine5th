@@ -20,49 +20,6 @@ namespace Engine5
         return m_child == nullptr;
     }
 
-    WhileNode::WhileNode()
-    {
-    }
-
-    WhileNode::~WhileNode()
-    {
-    }
-
-    eAINodeState WhileNode::OnUpdate(Real dt)
-    {
-        if (IsEmpty())
-        {
-            return eAINodeState::None;
-        }
-        eAINodeState result = m_child->Invoke(dt);
-        if (Condition())
-        {
-            return eAINodeState::Persist;
-        }
-        return result;
-    }
-
-    IfNode::IfNode()
-    {
-    }
-
-    IfNode::~IfNode()
-    {
-    }
-
-    eAINodeState IfNode::OnUpdate(Real dt)
-    {
-        if (IsEmpty())
-        {
-            return eAINodeState::None;
-        }
-        if (Condition())
-        {
-            return m_child->Invoke(dt);
-        }
-        return eAINodeState::Failure;
-    }
-
     RepeatNode::RepeatNode()
     {
     }
