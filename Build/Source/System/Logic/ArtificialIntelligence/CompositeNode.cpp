@@ -3,7 +3,6 @@
 namespace Engine5
 {
     CompositeNode::CompositeNode()
-        : m_iterator(m_children.begin())
     {
     }
 
@@ -29,8 +28,25 @@ namespace Engine5
     {
     }
 
+    void SelectorNode::OnStart()
+    {
+        m_iterator = m_children.begin();
+    }
+
     eAINodeState SelectorNode::OnUpdate(Real dt)
     {
+        if (IsEmpty())
+        {
+            return eAINodeState::None;
+        }
+        for (; m_iterator != m_children.end(); ++m_iterator)
+        {
+            eAINodeState state = (*m_iterator)->Invoke(dt);
+            if (state != eAINodeState::Failure)
+            {
+                return state;
+            }
+        }
         return eAINodeState::Failure;
     }
 
@@ -42,8 +58,25 @@ namespace Engine5
     {
     }
 
+    void SequenceNode::OnStart()
+    {
+        m_iterator = m_children.begin();
+    }
+
     eAINodeState SequenceNode::OnUpdate(Real dt)
     {
-        return eAINodeState::Failure;
+        if (IsEmpty())
+        {
+            return eAINodeState::None;
+        }
+        for (; m_iterator != m_children.end(); ++m_iterator)
+        {
+            eAINodeState state = (*m_iterator)->Invoke(dt);
+            if (state != eAINodeState::Success)
+            {
+                return state;
+            }
+        }
+        return eAINodeState::Success;
     }
 }

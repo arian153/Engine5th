@@ -23,6 +23,7 @@ namespace Engine5
     public:
         SelectorNode();
         ~SelectorNode();
+        void OnStart() override;
 
         eAINodeState OnUpdate(Real dt) override;
 
@@ -34,6 +35,7 @@ namespace Engine5
     public:
         SequenceNode();
         ~SequenceNode();
+        void OnStart() override;
 
         eAINodeState OnUpdate(Real dt) override;
     private:
