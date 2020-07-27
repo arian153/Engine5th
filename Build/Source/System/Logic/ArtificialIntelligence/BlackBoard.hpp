@@ -13,8 +13,9 @@ namespace Engine5
         BlackBoard();
         ~BlackBoard();
 
-        bool HasKey(const std::string& key);
-        void Clear();
+        bool   HasKey(const std::string& key);
+        void   Clear();
+        size_t Size() const;
 
         void SetBoolean(const std::string& key, bool data);
         void SetInteger(const std::string& key, int data);
@@ -47,6 +48,14 @@ namespace Engine5
         bool HasVector(const std::string& key);
         bool HasQuaternion(const std::string& key);
         bool HasString(const std::string& key);
+
+        size_t SizeOfBoolean() const;
+        size_t SizeOfInteger() const;
+        size_t SizeOfPositive() const;
+        size_t SizeOfReal() const;
+        size_t SizeOfVector() const;
+        size_t SizeOfQuaternion() const;
+        size_t SizeOfString() const;
 
     private:
         std::unordered_map<std::string, bool>        m_booleans;

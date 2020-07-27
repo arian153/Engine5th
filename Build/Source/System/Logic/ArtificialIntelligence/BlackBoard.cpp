@@ -32,6 +32,17 @@ namespace Engine5
         m_strings.clear();
     }
 
+    size_t BlackBoard::Size() const
+    {
+        return m_booleans.size() +
+                m_integers.size() +
+                m_positives.size() +
+                m_reals.size() +
+                m_vectors.size() +
+                m_quaternions.size() +
+                m_strings.size();
+    }
+
     void BlackBoard::SetBoolean(const std::string& key, bool data)
     {
         m_booleans[key] = data;
@@ -226,5 +237,40 @@ namespace Engine5
     bool BlackBoard::HasString(const std::string& key)
     {
         return m_strings.find(key) != m_strings.end();
+    }
+
+    size_t BlackBoard::SizeOfBoolean() const
+    {
+        return m_booleans.size();
+    }
+
+    size_t BlackBoard::SizeOfInteger() const
+    {
+        return m_integers.size();
+    }
+
+    size_t BlackBoard::SizeOfPositive() const
+    {
+        return m_positives.size();
+    }
+
+    size_t BlackBoard::SizeOfReal() const
+    {
+        return m_reals.size();
+    }
+
+    size_t BlackBoard::SizeOfVector() const
+    {
+        return m_vectors.size();
+    }
+
+    size_t BlackBoard::SizeOfQuaternion() const
+    {
+        return m_quaternions.size();
+    }
+
+    size_t BlackBoard::SizeOfString() const
+    {
+        return m_strings.size();
     }
 }
