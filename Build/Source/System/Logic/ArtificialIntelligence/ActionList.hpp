@@ -2,6 +2,8 @@
 
 namespace Engine5
 {
+    class BlackBoard;
+
     class ActionList
     {
     public:
@@ -9,5 +11,6 @@ namespace Engine5
         ~ActionList();
 
     private:
+        BlackBoard* m_black_board = nullptr;
     };
 }
