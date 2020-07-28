@@ -10,6 +10,11 @@ namespace Engine5
 
     RootNode::~RootNode()
     {
+        if (m_child != nullptr)
+        {
+            delete m_child;
+            m_child = nullptr;
+        }
     }
 
     eAINodeState RootNode::OnUpdate(Real dt)
@@ -46,6 +51,11 @@ namespace Engine5
             m_black_board->Clear();
             delete m_black_board;
             m_black_board = nullptr;
+        }
+        if (m_root != nullptr)
+        {
+            delete m_root;
+            m_root = nullptr;
         }
     }
 

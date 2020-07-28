@@ -26,6 +26,11 @@ namespace Engine5
 
     RepeatNode::~RepeatNode()
     {
+        if (m_child != nullptr)
+        {
+            delete m_child;
+            m_child = nullptr;
+        }
     }
 
     void RepeatNode::OnStart()
@@ -53,6 +58,11 @@ namespace Engine5
 
     SucceedNode::~SucceedNode()
     {
+        if (m_child != nullptr)
+        {
+            delete m_child;
+            m_child = nullptr;
+        }
     }
 
     eAINodeState SucceedNode::OnUpdate(Real dt)
@@ -71,6 +81,11 @@ namespace Engine5
 
     FailNode::~FailNode()
     {
+        if (m_child != nullptr)
+        {
+            delete m_child;
+            m_child = nullptr;
+        }
     }
 
     eAINodeState FailNode::OnUpdate(Real dt)
@@ -89,6 +104,11 @@ namespace Engine5
 
     InvertNode::~InvertNode()
     {
+        if (m_child != nullptr)
+        {
+            delete m_child;
+            m_child = nullptr;
+        }
     }
 
     eAINodeState InvertNode::OnUpdate(Real dt)

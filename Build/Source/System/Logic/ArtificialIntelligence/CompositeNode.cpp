@@ -26,6 +26,12 @@ namespace Engine5
 
     SelectorNode::~SelectorNode()
     {
+        for (auto& child : m_children)
+        {
+            delete child;
+            child = nullptr;
+        }
+        m_children.clear();
     }
 
     void SelectorNode::OnStart()
@@ -56,6 +62,12 @@ namespace Engine5
 
     SequenceNode::~SequenceNode()
     {
+        for (auto& child : m_children)
+        {
+            delete child;
+            child = nullptr;
+        }
+        m_children.clear();
     }
 
     void SequenceNode::OnStart()
