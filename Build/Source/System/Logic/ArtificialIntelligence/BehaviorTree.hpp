@@ -29,9 +29,12 @@ namespace Engine5
         void Update(Real dt);
         void Shutdown();
 
+        void SetGlobalBoard(BlackBoard* global_board);
+
     private:
-        eAINodeState  m_state = eAINodeState::None;
-        SequenceNode* m_root        = nullptr;
-        BlackBoard*   m_black_board = nullptr;
+        eAINodeState m_state        = eAINodeState::None;
+        RootNode*    m_root         = nullptr;
+        BlackBoard*  m_black_board  = nullptr;
+        BlackBoard*  m_global_board = nullptr;
     };
 }

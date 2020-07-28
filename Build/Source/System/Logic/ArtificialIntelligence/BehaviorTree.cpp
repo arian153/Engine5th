@@ -1,5 +1,6 @@
 #include "BehaviorTree.hpp"
 #include "CompositeNode.hpp"
+#include "BlackBoard.hpp"
 
 namespace Engine5
 {
@@ -26,6 +27,11 @@ namespace Engine5
 
     void BehaviorTree::Initialize()
     {
+        if (m_black_board == nullptr)
+        {
+            m_black_board = new BlackBoard();
+        }
+        m_black_board->Clear();
     }
 
     void BehaviorTree::Update(Real dt)
@@ -35,5 +41,16 @@ namespace Engine5
 
     void BehaviorTree::Shutdown()
     {
+        if (m_black_board != nullptr)
+        {
+            m_black_board->Clear();
+            delete m_black_board;
+            m_black_board = nullptr;
+        }
+    }
+
+    void BehaviorTree::SetGlobalBoard(BlackBoard* black_board)
+    {
+        m_global_board = black_board;
     }
 }
