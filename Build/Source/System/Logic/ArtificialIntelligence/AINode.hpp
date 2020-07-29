@@ -72,8 +72,6 @@ namespace Engine5
         }
 
     protected:
-        eAINodeState m_state = eAINodeState::None;
+        eAINodeState m_state  = eAINodeState::None;
     };
-
-
 }

@@ -31,8 +31,8 @@ namespace Engine5
         void Shutdown();
 
     private:
-        eAINodeState m_state = eAINodeState::None;
-        RootNode*    m_root  = nullptr;
+        eAINodeState m_state    = eAINodeState::None;
+        RootNode*    m_root     = nullptr;
         BlackBoard   m_black_board;
         BlackBoard&  m_global_board;
     };

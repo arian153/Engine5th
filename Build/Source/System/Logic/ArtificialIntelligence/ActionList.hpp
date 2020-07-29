@@ -1,16 +1,29 @@
 #pragma once
+#include "../../Math/Utility/MathDef.hpp"
+#include "BlackBoard.hpp"
 
 namespace Engine5
 {
+    class Action;
     class BlackBoard;
 
     class ActionList
     {
     public:
-        ActionList();
+        explicit ActionList(BlackBoard& global_board);
         ~ActionList();
 
+        void Initialize();
+        void Update(Real dt);
+        void Shutdown();
+
+        void PushFront(Action* action);
+        void PushBack(Action* action);
+        void PopFront();
+        void PopBack();
+
     private:
-        BlackBoard* m_black_board = nullptr;
+        BlackBoard  m_black_board;
+        BlackBoard& m_global_board;
     };
 }
