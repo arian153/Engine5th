@@ -25,5 +25,7 @@ namespace Engine5
     private:
         BlackBoard  m_black_board;
         BlackBoard& m_global_board;
+
+        std::vector<Action*> m_actions;
     };
 }
