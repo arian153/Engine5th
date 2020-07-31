@@ -100,14 +100,14 @@
                                 "Radius": [ 3, 2 ],
                                 "Height": 3,
                                 "Scale": 1,
-                                "Type": "Ellipse"
+                                "Type": "Cone"
                             }
                         ]
                     }
                 }
                
             ],
-            "Name": "Ellipse1"
+            "Name": "Cone"
         },
         {
             "Components": [
@@ -136,14 +136,14 @@
                                 "Radius": [ 2, 3 ],
                                 "Height": 3,
                                 "Scale": 1,
-                                "Type": "Ellipse"
+                                "Type": "Cylinder"
                             }
                         ]
                     }
                 }
 
             ],
-            "Name": "Ellipse2"
+            "Name": "cylinder"
         },
         {
             "Components": [
@@ -169,11 +169,11 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": 3,
+                                "Radius": [3, 4],
                                 "Height": 3,
                                 "Ratio": 0.5,
                                 "Scale": 1,
-                                "Type": "Sphere"
+                                "Type": "Truncated"
                             }
                         ]
                     }
@@ -183,44 +183,8 @@
                 }
             ],
             "Name": "Truncated"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, -10, 0 ],
-                        "Scale": [ 1, 1, 1 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::RigidBodyComponent",
-                    "Value": {
-                        "Linear": {
-                        },
-                        "Motion": "Static"
-                    }
-                },
-                {
-                    "Type": "class Engine5::ColliderComponent",
-                    "Value": {
-                        "Colliders": [
-                            {
-                                "Material": "Rubber",
-                                "Orientation": [ 1, 0, 0, 0 ],
-                                "Position": [ 0, 0, 0 ],
-                                "Cube": [ 1, 1, 1 ],
-                                "Scale": 1,
-                                "Type": "Box"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "Name": "StaticBox"
         }
-    ],
+           ],
     "Settings": {
         "World": {
             "Draw Broad Phase": {
