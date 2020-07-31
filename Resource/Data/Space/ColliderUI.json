@@ -1,0 +1,18 @@
+{
+    "Create Flag": [
+        "ComponentManager",
+        "ObjectManager",
+        "Scene"
+    ],
+    "Update Flag": [
+    ],
+    "FixedUpdate Flag": [
+    ],
+    "Objects": [
+
+    ],
+    "Settings": {
+        "ProjectionMatrix": "OrthoGraphic"
+    },
+    "Type": "Space"
+}
