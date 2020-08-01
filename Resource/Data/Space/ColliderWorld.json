@@ -169,9 +169,9 @@
                                 "Material": "Rubber",
                                 "Orientation": [ 1, 0, 0, 0 ],
                                 "Position": [ 0, 0, 0 ],
-                                "Radius": [3, 4],
+                                "Radius": [3, 5],
                                 "Height": 3,
-                                "Ratio": 0.5,
+                                "Ratio": 1.5,
                                 "Scale": 1,
                                 "Type": "Truncated"
                             }

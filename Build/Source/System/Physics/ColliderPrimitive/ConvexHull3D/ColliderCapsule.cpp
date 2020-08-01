@@ -4,7 +4,6 @@
 #include "../../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../../External/JSONCPP/json/json.h"
 
-
 namespace Engine5
 {
     ColliderCapsule::ColliderCapsule()
@@ -267,17 +266,8 @@ namespace Engine5
 
     void ColliderCapsule::UpdateBoundingVolume()
     {
-        Real    bounding_factor = (m_radius.Length() + (m_height * 0.5f));
-        Vector3 pos;
-        if (m_rigid_body != nullptr)
-        {
-            pos = m_rigid_body->LocalToWorldPoint(m_local.position);
-            bounding_factor *= m_local.scale.Length();
-        }
-        else
-        {
-            pos = m_local.position;
-        }
+        Real    bounding_factor = m_scaled_radius.Length() + m_scaled_height * 0.5f;
+        Vector3 pos             = m_rigid_body != nullptr ? m_rigid_body->LocalToWorldPoint(m_local.position) : m_local.position;
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
