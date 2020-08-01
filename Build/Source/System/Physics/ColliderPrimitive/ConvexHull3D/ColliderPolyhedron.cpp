@@ -202,13 +202,13 @@ namespace Engine5
             m_scaled_vertices->push_back(m_vertices->at(i).HadamardProduct(scale.HadamardProduct(m_local.scale)));
             for (size_t j = 0; j < 3; ++j)
             {
-                if (m_max_bound[j] < m_vertices->at(i)[j])
+                if (m_max_bound[j] < m_scaled_vertices->at(i)[j])
                 {
-                    m_max_bound[j] = m_vertices->at(i)[j];
+                    m_max_bound[j] = m_scaled_vertices->at(i)[j];
                 }
-                if (m_min_bound[j] > m_vertices->at(i)[j])
+                if (m_min_bound[j] > m_scaled_vertices->at(i)[j])
                 {
-                    m_min_bound[j] = m_vertices->at(i)[j];
+                    m_min_bound[j] = m_scaled_vertices->at(i)[j];
                 }
             }
         }
@@ -221,7 +221,7 @@ namespace Engine5
         size_t size         = m_vertices->size();
         for (size_t i = 0; i < size; ++i)
         {
-            m_vertices->at(i) = m_vertices->at(i).HadamardProduct(scale_factor);
+            m_scaled_vertices->at(i) = m_vertices->at(i).HadamardProduct(scale_factor);
         }
         UpdatePrimitive();
     }
@@ -561,12 +561,12 @@ namespace Engine5
     {
         m_max_bound = Math::REAL_NEGATIVE_MAX;
         m_min_bound = Math::REAL_POSITIVE_MAX;
-        size_t size = m_vertices->size();
+        size_t size = m_scaled_vertices->size();
         for (size_t i = 0; i < size; ++i)
         {
             for (size_t j = 0; j < 3; ++j)
             {
-                Real value = m_vertices->at(i)[j];
+                Real value = m_scaled_vertices->at(i)[j];
                 if (m_max_bound[j] < value)
                 {
                     m_max_bound[j] = value;
