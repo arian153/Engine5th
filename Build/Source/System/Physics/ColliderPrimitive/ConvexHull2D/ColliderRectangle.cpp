@@ -179,8 +179,10 @@ namespace Engine5
 
     void ColliderRectangle::UpdateBoundingVolume()
     {
-        //todo temporary code
-        m_bounding_volume->Set(Math::Vector3::ORIGIN, Math::Vector3::ORIGIN);
+        Real    bounding_factor = m_scaled_vertices[ 0 ].Length();
+        Vector3 pos = m_rigid_body != nullptr ? m_rigid_body->LocalToWorldPoint(m_local.position) : m_local.position;
+        Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
+        m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
 
     void ColliderRectangle::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const

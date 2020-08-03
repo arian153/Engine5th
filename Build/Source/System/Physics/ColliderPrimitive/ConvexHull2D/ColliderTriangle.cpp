@@ -327,17 +327,8 @@ namespace Engine5
                 }
             }
         }
-        Real    bounding_factor = (max_bound - min_bound).Length() * 0.5f;
-        Vector3 pos;
-        if (m_rigid_body != nullptr)
-        {
-            pos = m_rigid_body->LocalToWorldPoint(m_local.position);
-            bounding_factor *= m_local.scale.Length();
-        }
-        else
-        {
-            pos = m_local.position;
-        }
+        Real    bounding_factor = (max_bound - min_bound).Length();
+        Vector3 pos             = m_rigid_body != nullptr ? m_rigid_body->LocalToWorldPoint(m_local.position) : m_local.position;
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
