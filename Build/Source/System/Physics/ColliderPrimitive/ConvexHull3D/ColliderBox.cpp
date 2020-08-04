@@ -299,11 +299,7 @@ namespace Engine5
 
     Vector3 ColliderBox::Vertex(size_t i) const
     {
-        if (m_collider_set != nullptr)
-        {
-            return m_scaled_vertices[i];
-        }
-        return m_vertices[i];
+        return m_collider_set != nullptr ? m_scaled_vertices[i] : m_vertices[i];
     }
 
     void ColliderBox::SetBox(Real width, Real height, Real depth)

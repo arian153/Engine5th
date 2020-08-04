@@ -133,7 +133,32 @@ namespace Engine5
 
     Vector3 ColliderRectangle::GetNormal(const Vector3& local_point_on_collider)
     {
-        return local_point_on_collider;
+        Vector3 normal;
+        Real    w = (Vertex(0) - Vertex(3)).x;
+        Real    h = (Vertex(0) - Vertex(3)).y;
+        Vector3 size(w, h);
+        Real    min      = Math::REAL_POSITIVE_MAX;
+        Real    distance = fabsf(size.x - fabsf(local_point_on_collider.x));
+        if (distance < min)
+        {
+            min = distance;
+            normal.Set(1.0f, 0.0f, 0.0f);
+            normal *= Math::Signum(local_point_on_collider.x);
+        }
+        distance = fabsf(size.y - fabsf(local_point_on_collider.y));
+        if (distance < min)
+        {
+            min = distance;
+            normal.Set(0.0f, 1.0f, 0.0f);
+            normal *= Math::Signum(local_point_on_collider.y);
+        }
+        distance = fabsf(size.z - fabsf(local_point_on_collider.z));
+        if (distance < min)
+        {
+            normal.Set(0.0f, 0.0f, 1.0f);
+            normal *= Math::Signum(local_point_on_collider.z);
+        }
+        return normal;
     }
 
     void ColliderRectangle::SetMassData(Real density)
@@ -166,21 +191,43 @@ namespace Engine5
 
     Real ColliderRectangle::GetVolume()
     {
-        return 0.0f;
+        if (m_collider_set != nullptr)
+        {
+            Real w = (m_scaled_vertices[0] - m_scaled_vertices[3]).x;
+            Real h = (m_scaled_vertices[0] - m_scaled_vertices[3]).y;
+            return w * h;
+        }
+        Real w = (m_vertices[0] - m_vertices[3]).x;
+        Real h = (m_vertices[0] - m_vertices[3]).y;
+        return w * h;
     }
 
     void ColliderRectangle::SetScaleData(const Vector3& scale)
     {
+        for (size_t i = 0; i < 4; ++i)
+        {
+            m_scaled_vertices[i] = m_vertices[i].HadamardProduct(Vector2(scale.HadamardProduct(m_local.scale)));
+        }
     }
 
     void ColliderRectangle::SetUnit()
     {
+        auto min_max      = m_vertices[0] - m_vertices[3];
+        Real scale_factor = min_max.Length();
+        min_max /= scale_factor;
+        Real w = 0.5f * min_max.x;
+        Real h = 0.5f * min_max.y;
+        m_vertices[0].Set(+w, +h);
+        m_vertices[1].Set(+w, -h);
+        m_vertices[2].Set(-w, +h);
+        m_vertices[3].Set(-w, -h);
+        UpdatePrimitive();
     }
 
     void ColliderRectangle::UpdateBoundingVolume()
     {
-        Real    bounding_factor = m_scaled_vertices[ 0 ].Length();
-        Vector3 pos = m_rigid_body != nullptr ? m_rigid_body->LocalToWorldPoint(m_local.position) : m_local.position;
+        Real    bounding_factor = m_scaled_vertices[0].Length();
+        Vector3 pos             = m_rigid_body != nullptr ? m_rigid_body->LocalToWorldPoint(m_local.position) : m_local.position;
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
@@ -234,7 +281,7 @@ namespace Engine5
 
     Vector2 ColliderRectangle::Vertex(size_t i) const
     {
-        return m_vertices[i];
+        return m_collider_set != nullptr ? m_scaled_vertices[i] : m_vertices[i];
     }
 
     void ColliderRectangle::SetRectangle(Real width, Real height)
