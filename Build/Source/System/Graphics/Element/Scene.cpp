@@ -47,8 +47,6 @@ namespace Engine5
         mvp_data.view = m_main_camera->GetViewMatrix();
         m_frustum.ConstructFrustum(m_matrix_manager->GetFarPlane(), mvp_data.projection, mvp_data.view);
         m_primitive_renderer->UpdateFrustum(m_frustum);
-
-      
         m_b_deferred_shading = false;
         if (m_deferred_meshes.empty() == false)
         {
@@ -602,5 +600,10 @@ namespace Engine5
     {
         particle_emitter->SetRenderer(m_renderer);
         particle_emitter->SetBuffer();
+    }
+
+    Basis Scene::GetMainCameraBasis() const
+    {
+        return m_main_camera->GetBasis();
     }
 }

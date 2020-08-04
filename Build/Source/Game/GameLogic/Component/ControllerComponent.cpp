@@ -9,6 +9,7 @@
 #include "../../../System/Core/Input/MouseInput.hpp"
 #include "../../../System/Graphics/Utility/TextRenderer.hpp"
 #include "../../../Manager/Component/EngineComponent/RigidBodyComponent.hpp"
+#include "../../../System/Graphics/Element/Scene.hpp"
 
 namespace Game
 {
@@ -105,48 +106,49 @@ namespace Game
             {
                 auto body      = m_owner->GetComponent<RigidBodyComponent>();
                 auto transform = m_owner->GetComponent<TransformComponent>();
+                auto basis     = m_space->GetScene()->GetMainCameraBasis();
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Left))
                 {
                     if (keyboard->IsDown(eKeyCodeKeyboard::Space))
                     {
-                        transform->AddRotationZ(dt);
+                        transform->AddRotation(AxisRadian(basis.k, dt));
                     }
                     else
                     {
-                        body->ApplyForceCentroid(Vector3(-10.0f));
+                        body->ApplyForceCentroid(basis.i * -10.0f);
                     }
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Right))
                 {
                     if (keyboard->IsDown(eKeyCodeKeyboard::Space))
                     {
-                        transform->AddRotationZ(-dt);
+                        transform->AddRotation(AxisRadian(basis.k, -dt));
                     }
                     else
                     {
-                        body->ApplyForceCentroid(Vector3(10.0f));
+                        body->ApplyForceCentroid(basis.i * 10.0f);
                     }
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Up))
                 {
                     if (keyboard->IsDown(eKeyCodeKeyboard::Space))
                     {
-                        transform->AddRotationX(-dt);
+                        transform->AddRotation(AxisRadian(basis.i, -dt));
                     }
                     else
                     {
-                        body->ApplyForceCentroid(Vector3(0.0f, 10.0f));
+                        body->ApplyForceCentroid(basis.j * 10.0f);
                     }
                 }
                 if (keyboard->IsDown(eKeyCodeKeyboard::Arrow_Down))
                 {
                     if (keyboard->IsDown(eKeyCodeKeyboard::Space))
                     {
-                        transform->AddRotationX(dt);
+                        transform->AddRotation(AxisRadian(basis.i, dt));
                     }
                     else
                     {
-                        body->ApplyForceCentroid(Vector3(0.0f, -10.0f));
+                        body->ApplyForceCentroid(basis.j * -10.0f);
                     }
                 }
             }

@@ -75,6 +75,9 @@ namespace Engine5
         void InitializeTextSprite(TextSprite* text_sprite) const;
         void InitializeParticleEmitter(ParticleEmitter* particle_emitter) const;
 
+
+        Basis GetMainCameraBasis() const;
+
     private:
         RendererCommon*       m_renderer           = nullptr;
         ShaderManagerCommon*  m_shader_manager     = nullptr;
