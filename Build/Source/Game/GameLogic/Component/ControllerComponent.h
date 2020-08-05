@@ -32,8 +32,8 @@ namespace Game
         void     Clone(ControllerComponent* origin);
 
     private:
-        Engine5::Real    m_theta  = 0.0f;
-        Engine5::Real    m_phi    = 0.0f;
+        Engine5::Real    m_theta  = -Engine5::Math::HALF_PI;
+        Engine5::Real    m_phi    = Engine5::Math::HALF_PI;
         Engine5::Real    m_radius = 60.0f;
         Engine5::Vector3 target_pos;
         Engine5::Vector3 eye_pos;

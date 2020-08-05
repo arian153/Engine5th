@@ -26,6 +26,16 @@ namespace Game
             m_space->GetLogicSubsystem()->InitializeLogic(this);
         }
         Subscribe();
+        // Convert Spherical to Cartesian coordinates.
+        if (m_owner->HasComponent<CameraComponent>())
+        {
+            auto camera = m_owner->GetComponent<CameraComponent>();
+            m_phi       = Math::Clamp(m_phi, 0.1f, Math::PI - 0.1f);
+            eye_pos.x   = m_radius * sinf(m_phi) * cosf(m_theta);
+            eye_pos.z   = m_radius * sinf(m_phi) * sinf(m_theta);
+            eye_pos.y   = m_radius * cosf(m_phi);
+            camera->LookAt(target_pos + eye_pos, target_pos);
+        }
     }
 
     void ControllerComponent::Update(Real dt)
@@ -162,14 +172,14 @@ namespace Game
 
     void ControllerComponent::Render()
     {
-        if (m_owner->HasComponent<CameraComponent>())
+        /*if (m_owner->HasComponent<CameraComponent>())
         {
             auto camera = m_owner->GetComponent<CameraComponent>();
             auto basis  = camera->GetBasis();
             m_text_renderer->Output(
                                     Vector2(520), ColorDef::Pure::Red, "P : ", camera->GetPosition(),
                                     "\nI : ", basis.i, "\nJ : ", basis.j, "\nK : ", basis.k);
-        }
+        }*/
     }
 
     bool ControllerComponent::Load(const Json::Value& data)
