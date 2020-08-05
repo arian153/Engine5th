@@ -14,6 +14,9 @@ Under MIT license, or public domain
 * DirectXTex texture processing library        
 Under MIT Lisence
 
+* Dear ImGui
+under MIT License
+
 ## Features
 
 ### Rendering Engine
