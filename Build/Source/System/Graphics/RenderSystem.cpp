@@ -185,4 +185,9 @@ namespace Engine5
     {
         return m_text_renderer;
     }
+
+    RendererCommon* RenderSystem::GetRenderer() const
+    {
+        return m_renderer;
+    }
 }

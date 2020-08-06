@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class GUISystem;
     class LogicSystem;
     class FileUtility;
     class ResourceManager;
@@ -42,6 +43,7 @@ namespace Engine5
         InputCommon*       GetInput() const;
         FileUtility*       GetFileUtility() const;
         ResourceManager*   GetResourceManager() const;
+        GUISystem*         GetGUISystem() const;
 
     private:
         void OnResize(int client_width, int client_height) const;
@@ -62,6 +64,7 @@ namespace Engine5
         RenderSystem*      m_render_system      = nullptr;
         PhysicsSystem*     m_physics_system     = nullptr;
         LogicSystem*       m_logic_system       = nullptr;
+        GUISystem*         m_gui_system         = nullptr;
         TimeUtility*       m_time_utility       = nullptr;
         FrameUtility*      m_frame_utility      = nullptr;
         LevelManager*      m_level_manager      = nullptr;

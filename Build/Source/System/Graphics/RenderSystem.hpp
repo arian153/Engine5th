@@ -39,7 +39,8 @@ namespace Engine5
         Scene* CreateScene();
         void   RemoveScene(Scene* scene);
 
-        TextRenderer* GetTextRenderer() const;
+        TextRenderer*   GetTextRenderer() const;
+        RendererCommon* GetRenderer() const;
 
     private:
         OSCommon*               m_operating_system         = nullptr;

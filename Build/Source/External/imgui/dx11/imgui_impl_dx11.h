@@ -11,7 +11,7 @@
 // https://github.com/ocornut/imgui
 
 #pragma once
-#include "imgui.h"      // IMGUI_IMPL_API
+#include "../imgui.h"      // IMGUI_IMPL_API
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;

@@ -12,6 +12,7 @@
 #include "../../System/Core/Input/InputCommon.hpp"
 #include "../Resource/ResourceManager.hpp"
 #include "../../System/Graphics/Utility/TextRenderer.hpp"
+#include "../../System/GUI/GUISystem.hpp"
 
 namespace Engine5
 {
@@ -33,6 +34,7 @@ namespace Engine5
         m_frame_utility     = application->GetFrameUtility();
         m_input             = application->GetInput();
         m_resource_manager  = application->GetResourceManager();
+        m_gui_system        = application->GetGUISystem();
         for (auto& json : m_resource_manager->m_json_resource_map)
         {
             auto level = json.second;
@@ -98,15 +100,6 @@ namespace Engine5
                 m_frame_utility->CalculateFrameStatus(m_application_timer->TotalTime());
             }
             Real time_step = m_application_timer->DeltaTime();
-            //m_render_system->GetTextRenderer()->Output(
-            //                                           Vector2(),
-            //                                           ColorDef::Pure::Red,
-            //                                           "total time : ",
-            //                                           m_application_timer->TotalTime(),
-            //                                           "\nFPS : ",
-            //                                           m_frame_utility->GetFramePerSecond(),
-            //                                           "\nMSPF : ",
-            //                                           m_frame_utility->GetMillisecondPerFrame());
             UpdateLevel(m_level, time_step);
             m_elapsed_time += time_step;
             if (m_elapsed_time >= m_fixed_time_step)
@@ -310,6 +303,8 @@ namespace Engine5
         //update sound
         level->UpdateSubsystem(dt, eSubsystemFlag::Scene);
         level->Update(dt);
+        m_gui_system->BeginUpdate();
+        m_gui_system->EndUpdate();
     }
 
     void LevelManager::FixedUpdateLevel(Level* level, Real dt) const
@@ -327,8 +322,10 @@ namespace Engine5
         level->DrawSubsystem(eSubsystemFlag::Logic);
         level->DrawSubsystem(eSubsystemFlag::World);
         //render scene
+        m_gui_system->BeginRender();
         m_render_system->BeginUpdate();
         level->DrawSubsystem(eSubsystemFlag::Scene);
+        m_gui_system->EndRender();
         m_render_system->EndUpdate();
     }
 

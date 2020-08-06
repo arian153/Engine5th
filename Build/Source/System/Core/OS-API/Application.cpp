@@ -19,6 +19,7 @@
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../Utility/ConsoleUtility.hpp"
 #include "../../Logic/LogicSystem.hpp"
+#include "../../GUI/GUISystem.hpp"
 
 namespace Engine5
 {
@@ -49,12 +50,12 @@ namespace Engine5
         m_render_system->Initialize(m_initial_setting.screen_width, m_initial_setting.screen_height, m_resource_manager);
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
+        m_gui_system = new GUISystem();
+        m_gui_system->Initialize(this);
         m_logic_system = new LogicSystem();
         m_logic_system->SetInput(m_input);
         m_logic_system->SetTextRenderer(m_render_system->GetTextRenderer());
         m_logic_system->Initialize();
-      
-
         //create managers
         m_component_registry = new ComponentRegistry();
         m_component_registry->Initialize();
@@ -124,6 +125,12 @@ namespace Engine5
         {
             delete m_frame_utility;
             m_frame_utility = nullptr;
+        }
+        if (m_gui_system != nullptr)
+        {
+            m_gui_system->Shutdown();
+            delete m_gui_system;
+            m_gui_system = nullptr;
         }
         if (m_logic_system != nullptr)
         {
@@ -228,11 +235,20 @@ namespace Engine5
         return m_resource_manager;
     }
 
+    GUISystem* Application::GetGUISystem() const
+    {
+        return m_gui_system;
+    }
+
     void Application::OnResize(int client_width, int client_height) const
     {
         if (m_render_system != nullptr)
         {
             m_render_system->OnResize(client_width, client_height);
+            if (m_gui_system != nullptr)
+            {
+                m_gui_system->OnResize(client_width, client_height);
+            }
         }
     }
 
@@ -241,6 +257,10 @@ namespace Engine5
         if (m_render_system != nullptr)
         {
             m_render_system->OnFullscreen();
+            if (m_gui_system != nullptr)
+            {
+                m_gui_system->OnFullscreen();
+            }
         }
     }
 
