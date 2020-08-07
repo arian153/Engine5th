@@ -9,7 +9,7 @@ namespace Engine5
     class GUISystem
     {
     public:
-        GUISystem();
+        explicit GUISystem(ImGuiIO& io);
         ~GUISystem();
 
         void Initialize(Application* application);
@@ -24,9 +24,10 @@ namespace Engine5
         void OnResize(int width, int height);
         void OnFullscreen() const;
 
+        static void CreateContext();
+
     private:
-        ImGuiIO         m_fake_io;
-        ImGuiIO&        m_im_gui_io = m_fake_io;
+        ImGuiIO&        m_im_gui_io;
         RendererCommon* m_renderer  = nullptr;
 
         bool show_demo_window    = true;

@@ -10,6 +10,10 @@
 #include "../../Input/MouseInput.hpp"
 #include "../../Input/KeyboardInput.hpp"
 #include <WindowsX.h>
+#include "../../../../External/imgui/imgui.h"
+
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace
 {
@@ -37,6 +41,11 @@ namespace Engine5
 
     LRESULT OSWin32::ProcessMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) const
     {
+        if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
+        {
+            return true;
+        }
+            
         switch (msg)
         {
             // WM_ACTIVATE is sent when the window is activated or deactivated.  
