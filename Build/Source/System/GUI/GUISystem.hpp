@@ -21,14 +21,13 @@ namespace Engine5
         void BeginRender() const;
         void EndRender() const;
 
-        void OnResize(int width, int height);
-        void OnFullscreen() const;
+        bool IsFocusGUI() const;
 
-        static void CreateContext();
+        static void CreateGUIContext();
 
     private:
         ImGuiIO&        m_im_gui_io;
-        RendererCommon* m_renderer  = nullptr;
+        RendererCommon* m_renderer = nullptr;
 
         bool show_demo_window    = true;
         bool show_another_window = false;

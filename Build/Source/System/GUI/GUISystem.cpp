@@ -23,6 +23,7 @@ namespace Engine5
         (void)m_im_gui_io;
         //m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         //m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
         m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI
         // Setup Dear ImGui style
@@ -96,18 +97,17 @@ namespace Engine5
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     }
 
-    void GUISystem::OnResize(int width, int height)
+    bool GUISystem::IsFocusGUI() const
     {
+        return ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow);
     }
 
-    void GUISystem::OnFullscreen() const
-    {
-    }
-
-    void GUISystem::CreateContext()
+    void GUISystem::CreateGUIContext()
     {
         // Setup Dear ImGui context
+#if defined(E5_WIN32)
         ImGui_ImplWin32_EnableDpiAwareness();
+#endif
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
     }

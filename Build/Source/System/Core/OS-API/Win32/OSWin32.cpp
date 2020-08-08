@@ -45,7 +45,6 @@ namespace Engine5
         {
             return true;
         }
-            
         switch (msg)
         {
             // WM_ACTIVATE is sent when the window is activated or deactivated.  

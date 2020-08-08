@@ -50,7 +50,7 @@ namespace Engine5
         m_render_system->Initialize(m_initial_setting.screen_width, m_initial_setting.screen_height, m_resource_manager);
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
-        GUISystem::CreateContext();
+        GUISystem::CreateGUIContext();
         m_gui_system = new GUISystem(ImGui::GetIO());
         m_gui_system->Initialize(this);
         m_logic_system = new LogicSystem();
@@ -246,10 +246,6 @@ namespace Engine5
         if (m_render_system != nullptr)
         {
             m_render_system->OnResize(client_width, client_height);
-            if (m_gui_system != nullptr)
-            {
-                m_gui_system->OnResize(client_width, client_height);
-            }
         }
     }
 
@@ -258,10 +254,6 @@ namespace Engine5
         if (m_render_system != nullptr)
         {
             m_render_system->OnFullscreen();
-            if (m_gui_system != nullptr)
-            {
-                m_gui_system->OnFullscreen();
-            }
         }
     }
 
