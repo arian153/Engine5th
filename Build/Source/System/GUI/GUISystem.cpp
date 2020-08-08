@@ -97,7 +97,7 @@ namespace Engine5
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     }
 
-    bool GUISystem::IsFocusGUI() const
+    bool GUISystem::IsFocusGUI()
     {
         return ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow);
     }

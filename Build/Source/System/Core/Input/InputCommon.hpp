@@ -19,7 +19,6 @@ namespace Engine5
         MouseInput*    GetMouseInput() const;
         KeyboardInput* GetKeyboardInput() const;
         GamePadInput*  GetGamePadInput() const;
-
     private:
         MouseInput*    m_mouse_input    = nullptr;
         KeyboardInput* m_keyboard_input = nullptr;

@@ -21,8 +21,7 @@ namespace Engine5
         void BeginRender() const;
         void EndRender() const;
 
-        bool IsFocusGUI() const;
-
+        static bool IsFocusGUI();
         static void CreateGUIContext();
 
     private:

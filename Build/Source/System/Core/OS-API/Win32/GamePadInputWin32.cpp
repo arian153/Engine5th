@@ -2,6 +2,7 @@
 #include "../../../Math/Utility/Utility.hpp"
 #include "../../Input/KeyCode.hpp"
 #include "../../Input/GamePadInput.hpp"
+#include "../../../GUI/GUISystem.hpp"
 
 namespace Engine5
 {
@@ -211,16 +212,18 @@ namespace Engine5
 
     bool GamePadInput::IsDown(eKeyCodeGamePad key_code, size_t pad) const
     {
-        return m_game_pad_state[pad].button_state[static_cast<size_t>(key_code)].b_down;
+        return GUISystem::IsFocusGUI() ? false : m_game_pad_state[pad].button_state[static_cast<size_t>(key_code)].b_down;
     }
 
     bool GamePadInput::IsPressed(eKeyCodeGamePad key_code, size_t pad) const
     {
-        return m_game_pad_state[pad].button_state[static_cast<size_t>(key_code)].b_curr_pressed;
+        return GUISystem::IsFocusGUI() ? false : m_game_pad_state[pad].button_state[static_cast<size_t>(key_code)].b_curr_pressed;
     }
 
     bool GamePadInput::IsAnyKeyDown() const
     {
+        if (GUISystem::IsFocusGUI())
+            return false;
         for (size_t j = 0; j < USER_MAX_COUNT; ++j)
         {
             for (size_t i = 0; i < MAXIMUM_GAME_PAD_BUTTON_COUNT; ++i)
@@ -236,6 +239,8 @@ namespace Engine5
 
     bool GamePadInput::IsAnyKeyPressed() const
     {
+        if (GUISystem::IsFocusGUI())
+            return false;
         for (size_t j = 0; j < USER_MAX_COUNT; ++j)
         {
             for (size_t i = 0; i < MAXIMUM_GAME_PAD_BUTTON_COUNT; ++i)
@@ -254,7 +259,7 @@ namespace Engine5
         AnalogStick result;
         result.x = m_game_pad_state[pad].thumb_stick_left_x;
         result.y = m_game_pad_state[pad].thumb_stick_left_y;
-        return result;
+        return GUISystem::IsFocusGUI() ? AnalogStick() : result;
     }
 
     AnalogStick GamePadInput::RightAnalogStick(size_t pad) const
@@ -262,42 +267,42 @@ namespace Engine5
         AnalogStick result;
         result.x = m_game_pad_state[pad].thumb_stick_right_x;
         result.y = m_game_pad_state[pad].thumb_stick_right_y;
-        return result;
+        return GUISystem::IsFocusGUI() ? AnalogStick() : result;
     }
 
     Real GamePadInput::LeftStickAngle_Rad(size_t pad) const
     {
-        return Math::XYToRadian(m_game_pad_state[pad].thumb_stick_left_x, m_game_pad_state[pad].thumb_stick_left_y);
+        return GUISystem::IsFocusGUI() ? 0.0f : Math::XYToRadian(m_game_pad_state[pad].thumb_stick_left_x, m_game_pad_state[pad].thumb_stick_left_y);
     }
 
     Real GamePadInput::RightStickAngle_Rad(size_t pad) const
     {
-        return Math::XYToRadian(m_game_pad_state[pad].thumb_stick_right_x, m_game_pad_state[pad].thumb_stick_right_y);
+        return GUISystem::IsFocusGUI() ? 0.0f : Math::XYToRadian(m_game_pad_state[pad].thumb_stick_right_x, m_game_pad_state[pad].thumb_stick_right_y);
     }
 
     Real GamePadInput::LeftStickAngle_Deg(size_t pad) const
     {
-        return Math::RadiansToDegrees(LeftStickAngle_Rad(pad));
+        return GUISystem::IsFocusGUI() ? 0.0f : Math::RadiansToDegrees(LeftStickAngle_Rad(pad));
     }
 
     Real GamePadInput::RightStickAngle_Deg(size_t pad) const
     {
-        return Math::RadiansToDegrees(RightStickAngle_Rad(pad));
+        return GUISystem::IsFocusGUI() ? 0.0f : Math::RadiansToDegrees(RightStickAngle_Rad(pad));
     }
 
     Real GamePadInput::LeftTrigger(size_t pad) const
     {
-        return m_game_pad_state[pad].trigger_left;
+        return GUISystem::IsFocusGUI() ? 0.0f : m_game_pad_state[pad].trigger_left;
     }
 
     Real GamePadInput::RightTrigger(size_t pad) const
     {
-        return m_game_pad_state[pad].trigger_right;
+        return GUISystem::IsFocusGUI() ? 0.0f : m_game_pad_state[pad].trigger_right;
     }
 
     bool GamePadInput::IsGamePadPluggedIn(size_t pad) const
     {
-        return m_game_pad_state[pad].b_plugged;
+        return GUISystem::IsFocusGUI() ? false : m_game_pad_state[pad].b_plugged;
     }
 
     void GamePadInput::MakeVibration(int left_motor, int right_motor, int pad)

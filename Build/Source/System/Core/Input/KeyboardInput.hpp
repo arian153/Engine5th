@@ -34,7 +34,6 @@ namespace Engine5
         friend class InputCommon;
 
     private:
-        ButtonState   m_keyboard[ MAXIMUM_KEY_COUNT ];
-        
+        ButtonState m_keyboard[ MAXIMUM_KEY_COUNT ];
     };
 }

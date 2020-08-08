@@ -1,6 +1,7 @@
 #include "MouseInputWin32.hpp"
 #include "../../Utility/CoreUtility.hpp"
 #include "../../Input/MouseInput.hpp"
+#include "../../../GUI/GUISystem.hpp"
 
 namespace Engine5
 {
@@ -172,16 +173,18 @@ namespace Engine5
 
     bool MouseInput::IsDown(eKeyCodeMouse key_code) const
     {
-        return m_button_state[static_cast<size_t>(key_code)].b_down;
+        return GUISystem::IsFocusGUI() ? false : m_button_state[static_cast<size_t>(key_code)].b_down;
     }
 
     bool MouseInput::IsPressed(eKeyCodeMouse key_code) const
     {
-        return m_button_state[static_cast<size_t>(key_code)].b_curr_pressed;
+        return GUISystem::IsFocusGUI() ? false : m_button_state[static_cast<size_t>(key_code)].b_curr_pressed;
     }
 
     bool MouseInput::IsAnyKeyDown() const
     {
+        if (GUISystem::IsFocusGUI())
+            return false;
         for (size_t i = 0; i < MAXIMUM_BUTTON_COUNT; ++i)
         {
             if (m_button_state[i].b_down == true)
@@ -192,6 +195,8 @@ namespace Engine5
 
     bool MouseInput::IsAnyKeyPressed() const
     {
+        if (GUISystem::IsFocusGUI())
+            return false;
         for (int i = 0; i < MAXIMUM_BUTTON_COUNT; ++i)
         {
             if (m_button_state[i].b_curr_pressed == true)
@@ -208,32 +213,32 @@ namespace Engine5
 
     MousePosition MouseInput::CurrentPosition() const
     {
-        return m_current_position;
+        return GUISystem::IsFocusGUI() ? MousePosition() : m_current_position;
     }
 
     MousePosition MouseInput::PreviousPosition() const
     {
-        return m_previous_position;
+        return GUISystem::IsFocusGUI() ? MousePosition() : m_previous_position;
     }
 
     int MouseInput::CurrentMouseWheel() const
     {
-        return static_cast<int>(m_current_wheel);
+        return GUISystem::IsFocusGUI() ? 0 : static_cast<int>(m_current_wheel);
     }
 
     int MouseInput::PreviousMouseWheel() const
     {
-        return static_cast<int>(m_previous_wheel);
+        return GUISystem::IsFocusGUI() ? 0 : static_cast<int>(m_previous_wheel);
     }
 
     bool MouseInput::IsWheelRolling() const
     {
-        return m_current_wheel != m_previous_wheel;
+        return GUISystem::IsFocusGUI() ? false : m_current_wheel != m_previous_wheel;
     }
 
     Real MouseInput::MouseWheelRollingDirection() const
     {
         int wheel_value = m_current_wheel - m_previous_wheel;
-        return static_cast<Real>(wheel_value) / fabsf(static_cast<Real>(wheel_value));
+        return GUISystem::IsFocusGUI() ? 0.0f : static_cast<Real>(wheel_value) / fabsf(static_cast<Real>(wheel_value));
     }
 }

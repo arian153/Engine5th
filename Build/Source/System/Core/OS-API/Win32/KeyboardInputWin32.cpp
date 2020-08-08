@@ -1,6 +1,7 @@
 #include "KeyboardInputWin32.hpp"
 #include "../../Utility/CoreUtility.hpp"
 #include "../../Input/KeyboardInput.hpp"
+#include "../../../GUI/GUISystem.hpp"
 
 namespace Engine5
 {
@@ -441,16 +442,18 @@ namespace Engine5
 
     bool KeyboardInput::IsDown(eKeyCodeKeyboard key_code) const
     {
-        return m_keyboard[static_cast<int>(key_code)].b_down;
+        return GUISystem::IsFocusGUI() ? false : m_keyboard[static_cast<int>(key_code)].b_down;
     }
 
     bool KeyboardInput::IsPressed(eKeyCodeKeyboard key_code) const
     {
-        return m_keyboard[static_cast<int>(key_code)].b_curr_pressed;
+        return GUISystem::IsFocusGUI() ? false : m_keyboard[static_cast<int>(key_code)].b_curr_pressed;
     }
 
     bool KeyboardInput::IsAnyKeyDown() const
     {
+        if (GUISystem::IsFocusGUI())
+            return false;
         for (size_t i = 0; i < MAXIMUM_KEY_COUNT; ++i)
         {
             if (m_keyboard[i].b_down == true)
@@ -461,6 +464,8 @@ namespace Engine5
 
     bool KeyboardInput::IsAnyKeyPressed() const
     {
+        if (GUISystem::IsFocusGUI())
+            return false;
         for (int i = 0; i < MAXIMUM_KEY_COUNT; ++i)
         {
             if (m_keyboard[i].b_curr_pressed == true)
