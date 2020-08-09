@@ -21,6 +21,8 @@ namespace Engine5
         void BeginRender() const;
         void EndRender() const;
 
+        void DockSpace();
+
         static bool IsFocusGUI();
         static void CreateGUIContext();
 
@@ -30,5 +32,6 @@ namespace Engine5
 
         bool show_demo_window    = true;
         bool show_another_window = false;
+        bool show_dock_space = true;
     };
 }
