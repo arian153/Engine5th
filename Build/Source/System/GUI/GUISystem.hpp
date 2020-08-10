@@ -1,5 +1,6 @@
 #pragma once
 #include "../../External/imgui/imgui.h"
+#include "Editor/GameEditor.hpp"
 
 namespace Engine5
 {
@@ -21,8 +22,6 @@ namespace Engine5
         void BeginRender() const;
         void EndRender() const;
 
-        void DockSpace();
-
         static bool IsFocusGUI();
         static void CreateGUIContext();
 
@@ -30,8 +29,10 @@ namespace Engine5
         ImGuiIO&        m_im_gui_io;
         RendererCommon* m_renderer = nullptr;
 
+        GameEditor m_game_editor;
+
         bool show_demo_window    = true;
         bool show_another_window = false;
-        bool show_dock_space = true;
+        bool show_dock_space     = true;
     };
 }
