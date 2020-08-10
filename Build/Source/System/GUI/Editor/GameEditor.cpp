@@ -17,7 +17,7 @@ namespace Engine5
 
     void GameEditor::Update()
     {
-        if (m_b_open_editor)
+        if (m_b_open)
         {
             ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
             ImGuiViewport*   viewport     = ImGui::GetMainViewport();
@@ -31,7 +31,7 @@ namespace Engine5
             if (m_dock_space_flags & ImGuiDockNodeFlags_PassthruCentralNode)
                 window_flags |= ImGuiWindowFlags_NoBackground;
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-            ImGui::Begin("Game Editor", &m_b_open_editor, window_flags);
+            ImGui::Begin("Game Editor", &m_b_open, window_flags);
             ImGui::PopStyleVar(3);
             // DockSpace
             ImGuiIO& io = ImGui::GetIO();
@@ -46,14 +46,24 @@ namespace Engine5
                 {
                     if (ImGui::MenuItem("Pass through editor window", "", (m_dock_space_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))
                         m_dock_space_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
+                    m_editor_label = m_level_editor.m_b_open ? "Close Level Editor" : "Open Level Editor";
+                    if (ImGui::MenuItem(m_editor_label.c_str(), ""))
+                        m_level_editor.m_b_open = !m_level_editor.m_b_open;
+                    m_editor_label = m_space_editor.m_b_open ? "Close Space Editor" : "Open Space Editor";
+                    if (ImGui::MenuItem(m_editor_label.c_str(), ""))
+                        m_space_editor.m_b_open = !m_space_editor.m_b_open;
                     ImGui::Separator();
                     if (ImGui::MenuItem("Close Game Editor", nullptr, false))
-                        m_b_open_editor = false;
+                        m_b_open = false;
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenuBar();
             }
             ImGui::End();
+            {
+                m_level_editor.Update();
+                m_space_editor.Update();
+            }
         }
     }
 

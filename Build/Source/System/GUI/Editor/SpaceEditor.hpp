@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../External/imgui/imgui.h"
 
 namespace Engine5
 {
@@ -13,10 +14,13 @@ namespace Engine5
         bool Open(Space* space);
         void Close();
 
-
-
+        void Update();
 
     private:
+        friend class GameEditor;
+
+    private:
+        bool   m_b_open        = false;
         Space* m_editing_space = nullptr;
     };
 }

@@ -20,8 +20,11 @@ namespace Engine5
         LevelEditor m_level_editor;
         SpaceEditor m_space_editor;
 
-    private:
-        bool               m_b_open_editor    = true;
+        //editor flag
+        bool        m_b_open    = true;
+        std::string m_editor_label = "";
+
+        //imgui flag
         ImGuiDockNodeFlags m_dock_space_flags = ImGuiDockNodeFlags_None;
     };
 }

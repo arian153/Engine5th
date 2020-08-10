@@ -24,4 +24,14 @@ namespace Engine5
     {
         m_editing_space = nullptr;
     }
+
+    void SpaceEditor::Update()
+    {
+        if (m_b_open)
+        {
+            ImGui::Begin("Space Editor", &m_b_open);
+            ImGui::Text("Space Editor");
+            ImGui::End();
+        }
+    }
 }
