@@ -193,8 +193,8 @@ namespace Engine5
             DestroyWindow(hwnd);
             break;
         case WM_SYSCOMMAND:
-            if (wparam == SC_KEYMENU && lparam >> 16 <= 0)
-                break;
+            if ((wparam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+                return 0;
         default:
             return DefWindowProc(hwnd, msg, wparam, lparam);
         }

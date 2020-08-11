@@ -56,8 +56,10 @@ namespace Engine5
                     if (ImGui::MenuItem(m_editor_label.c_str(), ""))
                         m_space_editor.m_b_open = !m_space_editor.m_b_open;
                     ImGui::Separator();
-                    if (ImGui::MenuItem("Close Game Editor", nullptr, false))
+                    if (ImGui::MenuItem("Close Game Editor", "Tab+Space"))
+                    {
                         m_b_open = false;
+                    }
                     if (ImGui::MenuItem("Close Application", nullptr, false))
                         m_application->GetLevelManager()->SetQuit();
                     ImGui::EndMenu();
@@ -68,6 +70,17 @@ namespace Engine5
             {
                 m_level_editor.Update();
                 m_space_editor.Update();
+            }
+            if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)) && ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Tab)))
+            {
+                m_b_open = false;
+            }
+        }
+        else
+        {
+            if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)) && ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Tab)))
+            {
+                m_b_open = true;
             }
         }
     }

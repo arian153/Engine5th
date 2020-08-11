@@ -25,6 +25,8 @@ namespace Engine5
         static bool IsFocusGUI();
         static void CreateGUIContext();
 
+        void GenerateGUIKeyMap();
+
     private:
         ImGuiIO&        m_im_gui_io;
         RendererCommon* m_renderer = nullptr;
