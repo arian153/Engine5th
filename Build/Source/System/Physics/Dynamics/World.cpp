@@ -109,7 +109,7 @@ namespace Engine5
                         auto hit = result.GetHitData(i);
                         m_primitive_renderer->DrawSegment(ray.position, hit.intersection, data.color);
                         m_primitive_renderer->DrawPrimitive(Sphere(hit.intersection, no_rotation, 0.1f), eRenderingMode::Face, data.color);
-                        E5_DRAW_TEXT_OUTPUT(Vector2(0, i * 80.0f), data.color, hit.intersection);
+                        //E5_DRAW_TEXT_OUTPUT(Vector2(0, i * 80.0f), data.color, hit.intersection);
                     }
                     if (ray_size > hit_size)
                     {

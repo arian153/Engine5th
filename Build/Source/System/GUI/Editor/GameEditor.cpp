@@ -1,5 +1,7 @@
 #include "GameEditor.hpp"
 #include "../../../External/imgui/imgui.h"
+#include "../../Core/OS-API/Application.hpp"
+#include "../../../Manager/Level/LevelManager.hpp"
 
 namespace Engine5
 {
@@ -11,8 +13,9 @@ namespace Engine5
     {
     }
 
-    void GameEditor::Initialize()
+    void GameEditor::Initialize(Application* application)
     {
+        m_application = application;
     }
 
     void GameEditor::Update()
@@ -55,6 +58,8 @@ namespace Engine5
                     ImGui::Separator();
                     if (ImGui::MenuItem("Close Game Editor", nullptr, false))
                         m_b_open = false;
+                    if (ImGui::MenuItem("Close Application", nullptr, false))
+                        m_application->GetLevelManager()->SetQuit();
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenuBar();

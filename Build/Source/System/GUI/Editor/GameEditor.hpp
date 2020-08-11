@@ -6,19 +6,22 @@
 
 namespace Engine5
 {
+    class Application;
+
     class GameEditor
     {
     public:
         GameEditor();
         ~GameEditor();
 
-        void Initialize();
+        void Initialize(Application* application);
         void Update();
         void Shutdown();
 
     private:
         LevelEditor m_level_editor;
         SpaceEditor m_space_editor;
+        Application* m_application = nullptr;
 
         //editor flag
         bool        m_b_open    = true;

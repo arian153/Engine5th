@@ -38,6 +38,7 @@ namespace Engine5
         m_renderer = application->GetRenderSystem()->GetRenderer();
         ImGui_ImplDX11_Init(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
 #endif
+        m_game_editor.Initialize(application);
     }
 
     void GUISystem::Shutdown()
@@ -57,7 +58,6 @@ namespace Engine5
     void GUISystem::EndUpdate()
     {
         m_game_editor.Update();
-
         //// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         //if (show_demo_window)
         //    ImGui::ShowDemoWindow(&show_demo_window);
@@ -99,7 +99,6 @@ namespace Engine5
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     }
 
-   
     bool GUISystem::IsFocusGUI()
     {
         return ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow);
