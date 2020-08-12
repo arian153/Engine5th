@@ -16,6 +16,8 @@ namespace Engine5
     void GameEditor::Initialize(Application* application)
     {
         m_application = application;
+        m_space_editor.m_game_editor = this;
+        m_space_editor.m_application = application;
     }
 
     void GameEditor::Update()
