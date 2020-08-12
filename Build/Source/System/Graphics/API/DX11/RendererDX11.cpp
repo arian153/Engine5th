@@ -55,6 +55,12 @@ namespace Engine5
         return m_write_factory;
     }
 
+    ID3D11Texture2D* RendererDX11::GetFrameBuffer()
+    {
+        m_swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_frame_buffer));
+        return m_frame_buffer;
+    }
+
     String RendererDX11::GetVideoCardInfo(size_t& memory) const
     {
         memory = m_video_card_memory;

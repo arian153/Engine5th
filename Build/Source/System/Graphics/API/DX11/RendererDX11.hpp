@@ -23,8 +23,9 @@ namespace Engine5
         ID3D11DeviceContext*    GetDeviceContext() const;
         ID3D11DepthStencilView* GetDepthStencilView() const;
         HWND                    GetHwnd() const;
-        ID2D1DeviceContext1* GetD2DDeviceContext() const;
-        IDWriteFactory2* GetDWWriteFactory() const;
+        ID2D1DeviceContext1*    GetD2DDeviceContext() const;
+        IDWriteFactory2*        GetDWWriteFactory() const;
+        ID3D11Texture2D*        GetFrameBuffer();
 
         std::string GetVideoCardInfo(size_t& memory) const;
 
@@ -71,6 +72,7 @@ namespace Engine5
         D3D_FEATURE_LEVEL        m_d3d_feature_level;
         DXGI_FORMAT              m_dxgi_color_format;
         D3D11_VIEWPORT           m_viewport;
+        ID3D11Texture2D*         m_frame_buffer = nullptr;;
 
         UINT   m_back_buffer_count = 1;
         bool   m_enable_msaa       = false;
