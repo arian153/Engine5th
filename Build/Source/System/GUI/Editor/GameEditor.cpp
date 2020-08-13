@@ -17,7 +17,7 @@ namespace Engine5
     {
         m_application = application;
         m_space_editor.m_game_editor = this;
-        m_space_editor.m_application = application;
+        m_space_editor.Initialize(application);
     }
 
     void GameEditor::Update()

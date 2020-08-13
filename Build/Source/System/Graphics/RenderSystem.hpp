@@ -41,6 +41,7 @@ namespace Engine5
 
         TextRenderer*   GetTextRenderer() const;
         RendererCommon* GetRenderer() const;
+        RenderTextureGenerator* GetRenderTextureGenerator() const;
 
     private:
         OSCommon*               m_operating_system         = nullptr;

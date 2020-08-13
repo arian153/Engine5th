@@ -190,4 +190,9 @@ namespace Engine5
     {
         return m_renderer;
     }
+
+    RenderTextureGenerator* RenderSystem::GetRenderTextureGenerator() const
+    {
+        return m_render_texture_generator;
+    }
 }

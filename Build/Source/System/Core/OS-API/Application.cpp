@@ -50,9 +50,11 @@ namespace Engine5
         m_render_system->Initialize(m_initial_setting.screen_width, m_initial_setting.screen_height, m_resource_manager);
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
+        //GUI
         GUISystem::CreateGUIContext();
         m_gui_system = new GUISystem(ImGui::GetIO());
         m_gui_system->Initialize(this);
+        //Logic
         m_logic_system = new LogicSystem();
         m_logic_system->SetInput(m_input);
         m_logic_system->SetTextRenderer(m_render_system->GetTextRenderer());
