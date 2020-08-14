@@ -37,13 +37,14 @@ namespace Engine5
 
     private:
         friend class Space;
+        friend class SpaceEditor;
 
     private:
         eSubsystemFlag m_global_flag = eSubsystemFlag::None;
 
         Space*              m_global_space = nullptr;
         std::vector<Space*> m_spaces;
-        std::vector<Space*> m_active_spaces;
+        //std::vector<Space*> m_active_spaces;
 
         PhysicsSystem*   m_physics_system   = nullptr;
         RenderSystem*    m_render_system    = nullptr;

@@ -20,6 +20,7 @@
 #include "../Utility/ConsoleUtility.hpp"
 #include "../../Logic/LogicSystem.hpp"
 #include "../../GUI/GUISystem.hpp"
+#include "../../GUI/Editor/GameEditor.hpp"
 
 namespace Engine5
 {
@@ -72,6 +73,9 @@ namespace Engine5
         m_operating_system->SetLevelManager(m_level_manager);
         m_operating_system->SetInput(m_input);
         //Console::CreateConsole();
+        m_game_editor = new GameEditor();
+        m_game_editor->Initialize(this);
+        m_gui_system->AddGUI(m_game_editor);
     }
 
     void Application::Update() const
@@ -84,6 +88,12 @@ namespace Engine5
 
     void Application::Shutdown()
     {
+        if (m_game_editor != nullptr)
+        {
+            m_game_editor->Shutdown();
+            delete m_game_editor;
+            m_game_editor = nullptr;
+        }
         if (m_level_manager != nullptr)
         {
             m_level_manager->Shutdown();
@@ -241,6 +251,11 @@ namespace Engine5
     GUISystem* Application::GetGUISystem() const
     {
         return m_gui_system;
+    }
+
+    GameEditor* Application::GetGameEditor() const
+    {
+        return m_game_editor;
     }
 
     void Application::OnResize(int client_width, int client_height) const

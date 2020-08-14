@@ -9,6 +9,7 @@
 #include "../../../Manager/Space/Space.hpp"
 #include "../../../Manager/Level/LevelManager.hpp"
 #include "../../../Manager/Level/Level.hpp"
+#include "../../../Manager/Space/SpaceManager.hpp"
 
 namespace Engine5
 {
@@ -20,24 +21,13 @@ namespace Engine5
     {
     }
 
-    bool SpaceEditor::AddSpace(Space* space)
-    {
-        if (space != nullptr)
-        {
-            m_spaces.push_back(space);
-            return true;
-        }
-        return false;
-    }
-
     void SpaceEditor::Initialize(Application* application)
     {
         m_application              = application;
+        m_resource_manager         = application->GetResourceManager();
         m_render_texture_generator = application->GetRenderSystem()->GetRenderTextureGenerator();
-
-
-
-        //AddSpace(m_application->GetLevelManager()->GetCurrentLevel()->GetSpace(0));
+        m_space_manager            = application->GetSpaceManager();
+        m_spaces                   = &m_space_manager->m_spaces;
     }
 
     void SpaceEditor::Update()
@@ -47,24 +37,8 @@ namespace Engine5
             ImGui::Begin("Space Editor", &m_b_open, ImGuiWindowFlags_MenuBar);
             UpdateMenu();
             ImGui::Text("Space Editor");
-            ImVec2 uv_min     = ImVec2(0.0f, 0.0f);                 // Top-left
-            ImVec2 uv_max     = ImVec2(1.0f, 1.0f);                 // Lower-right
-            ImVec4 tint_col   = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);   // No tint
-            ImVec4 border_col = ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 50% opaque white
-
-           
             UpdateTab();
             CloseTab();
-
-            if (m_editing_space != nullptr)
-            {
-                m_render_texture_generator->BeginRenderToTexture(Color());
-                m_render_texture_generator->Render(m_editing_space->GetScene());
-                m_render_texture_generator->EndRenderToTexture();
-                ImGui::Image(
-                             m_render_texture_generator->GetTexture()->GetTexture(),
-                             ImVec2(512, 512), uv_min, uv_max, tint_col, border_col);
-            }
             ImGui::End();
         }
     }
@@ -76,13 +50,13 @@ namespace Engine5
             if (ImGui::BeginMenu("File"))
             {
                 int open_count = 0;
-                for (size_t i = 0; i < m_spaces.size(); ++i)
-                    open_count += m_spaces[i]->m_b_curr_open ? 1 : 0;
-                if (ImGui::BeginMenu("Open", open_count < m_spaces.size()))
+                for (size_t i = 0; i < m_spaces->size(); ++i)
+                    open_count += m_spaces->at(i)->m_b_curr_open ? 1 : 0;
+                if (ImGui::BeginMenu("Open", open_count < m_spaces->size()))
                 {
-                    for (size_t i = 0; i < m_spaces.size(); ++i)
+                    for (size_t i = 0; i < m_spaces->size(); ++i)
                     {
-                        Space* space = m_spaces[i];
+                        Space* space = m_spaces->at(i);
                         if (!space->m_b_curr_open)
                             if (ImGui::MenuItem(space->m_name.c_str()))
                             {
@@ -92,8 +66,8 @@ namespace Engine5
                     ImGui::EndMenu();
                 }
                 if (ImGui::MenuItem("Close All Documents", nullptr, false, open_count > 0))
-                    for (size_t i = 0; i < m_spaces.size(); ++i)
-                        DoQueueClose(m_spaces[i]);
+                    for (size_t i = 0; i < m_spaces->size(); ++i)
+                        DoQueueClose(m_spaces->at(i));
                 if (ImGui::MenuItem("Exit", "Alt+F4"))
                 {
                 }
@@ -110,9 +84,9 @@ namespace Engine5
         {
             if (m_b_reorderable)
             {
-                for (size_t i = 0; i < m_spaces.size(); ++i)
+                for (size_t i = 0; i < m_spaces->size(); ++i)
                 {
-                    Space* space = m_spaces[i];
+                    Space* space = m_spaces->at(i);
                     if (!space->m_b_curr_open && space->m_b_prev_open)
                     {
                         ImGui::SetTabItemClosed(space->m_name.c_str());
@@ -124,9 +98,9 @@ namespace Engine5
             //if ((ImGui::GetFrameCount() % 30) == 0) docs[1].Open ^= 1;            // [DEBUG] Automatically show/hide a tab. Test various interactions e.g. dragging with this on.
             //if (ImGui::GetIO().KeyCtrl) ImGui::SetTabItemSelected(docs[1].Name);  // [DEBUG] Test SetTabItemSelected(), probably not very useful as-is anyway..
             // Submit Tabs
-            for (size_t i = 0; i < m_spaces.size(); ++i)
+            for (size_t i = 0; i < m_spaces->size(); ++i)
             {
-                Space* space = m_spaces[i];
+                Space* space = m_spaces->at(i);
                 if (!space->m_b_curr_open)
                 {
                     continue;
@@ -143,6 +117,7 @@ namespace Engine5
                 if (visible)
                 {
                     DisplayContents(space);
+                    DisplayScene(space);
                     ImGui::EndTabItem();
                 }
             }
@@ -155,9 +130,9 @@ namespace Engine5
         if (m_close_queue.empty())
         {
             // Close queue is locked once we started a popup
-            for (size_t i = 0; i < m_spaces.size(); ++i)
+            for (size_t i = 0; i < m_spaces->size(); ++i)
             {
-                Space* space = m_spaces[i];
+                Space* space = m_spaces->at(i);
                 if (space->m_b_close)
                 {
                     space->m_b_close = false;
@@ -248,10 +223,10 @@ namespace Engine5
     void SpaceEditor::DisplayContents(Space* space)
     {
         ImGui::PushID(space);
-        ImGui::Text("Document \"%s\"", space->m_name);
+        ImGui::Text(space->m_name.c_str());
         //ImGui::PushStyleColor(ImGuiCol_Text, doc->Color);
         ImGui::TextWrapped("Hello World.");
-        ImGui::PopStyleColor();
+        //ImGui::PopStyleColor();
         if (ImGui::Button("Modify", ImVec2(100, 0)))
             space->m_b_modified = true;
         ImGui::SameLine();
@@ -264,12 +239,23 @@ namespace Engine5
     {
         if (!ImGui::BeginPopupContextItem())
             return;
-        char buf[ 256 ];
-        sprintf(buf, "Save %s", space->m_name.c_str());
-        if (ImGui::MenuItem(buf, "CTRL+S", false, space->m_b_curr_open))
+        if (ImGui::MenuItem(("Save " + space->m_name).c_str(), "CTRL+S", false, space->m_b_curr_open))
             DoSave(space);
         if (ImGui::MenuItem("Close", "CTRL+W", false, space->m_b_curr_open))
             DoQueueClose(space);
         ImGui::EndPopup();
+    }
+
+    void SpaceEditor::DisplayScene(Space* space) const
+    {
+        if (space != nullptr)
+        {
+            m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Black);
+            m_render_texture_generator->Render(space->GetScene());
+            m_render_texture_generator->EndRenderToTexture();
+            ImGui::Image(
+                         m_render_texture_generator->GetTexture()->GetTexture(),
+                         ImVec2(512, 512), m_uv_min, m_uv_max, m_tint_col, m_border_col);
+        }
     }
 }

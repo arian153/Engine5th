@@ -3,6 +3,7 @@
 
 namespace Engine5
 {
+    class GameEditor;
     class GUISystem;
     class LogicSystem;
     class FileUtility;
@@ -44,6 +45,7 @@ namespace Engine5
         FileUtility*       GetFileUtility() const;
         ResourceManager*   GetResourceManager() const;
         GUISystem*         GetGUISystem() const;
+        GameEditor*        GetGameEditor() const;
 
     private:
         void OnResize(int client_width, int client_height) const;
@@ -74,5 +76,6 @@ namespace Engine5
         InputCommon*       m_input              = nullptr;
         FileUtility*       m_file_utility       = nullptr;
         ResourceManager*   m_resource_manager   = nullptr;
+        GameEditor*        m_game_editor        = nullptr;
     };
 }

@@ -4,6 +4,7 @@
 
 namespace Engine5
 {
+    class ResourceManager;
     class SpaceManager;
     class Application;
     class RenderTextureGenerator;
@@ -14,8 +15,6 @@ namespace Engine5
     public:
         SpaceEditor();
         ~SpaceEditor();
-
-        bool AddSpace(Space* space);
 
         void Initialize(Application* application);
         void Update();
@@ -32,6 +31,7 @@ namespace Engine5
         void DoSave(Space* space);
         void DisplayContents(Space* space);
         void DisplayContextMenu(Space* space);
+        void DisplayScene(Space* space) const;
 
     private:
         friend class GameEditor;
@@ -40,14 +40,19 @@ namespace Engine5
         bool             m_b_open        = false;
         bool             m_b_reorderable = true;
         ImGuiTabBarFlags m_fitting_flags = ImGuiTabBarFlags_FittingPolicyDefault_;
+        ImVec2           m_uv_min          = ImVec2(0.0f, 0.0f);                   // Top-left
+        ImVec2           m_uv_max          = ImVec2(1.0f, 1.0f);                   // Lower-right
+        ImVec4           m_tint_col        = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // No tint
+        ImVec4           m_border_col      = ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 50% opaque white
 
     private:
-        Space*        m_editing_space = nullptr;
-        GameEditor*   m_game_editor   = nullptr;
-        Application*  m_application   = nullptr;
-        SpaceManager* m_space_manager = nullptr;
+        //Space*           m_editing_space    = nullptr;
+        GameEditor*      m_game_editor      = nullptr;
+        Application*     m_application      = nullptr;
+        SpaceManager*    m_space_manager    = nullptr;
+        ResourceManager* m_resource_manager = nullptr;
         //tool
-        std::vector<Space*>     m_spaces;
+        std::vector<Space*>*    m_spaces = nullptr;
         std::vector<Space*>     m_close_queue;
         RenderTextureGenerator* m_render_texture_generator = nullptr;
     };

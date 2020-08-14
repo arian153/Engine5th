@@ -1,9 +1,9 @@
 #pragma once
 #include "../../External/imgui/imgui.h"
-#include "Editor/GameEditor.hpp"
 
 namespace Engine5
 {
+    class GameEditor;
     class RendererCommon;
     class Application;
 
@@ -27,11 +27,12 @@ namespace Engine5
 
         void GenerateGUIKeyMap();
 
+        void AddGUI(GameEditor* game_editor);
+
     private:
         ImGuiIO&        m_im_gui_io;
-        RendererCommon* m_renderer = nullptr;
-
-        GameEditor m_game_editor;
+        RendererCommon* m_renderer    = nullptr;
+        GameEditor*     m_game_editor = nullptr;
 
         bool show_demo_window    = true;
         bool show_another_window = false;
