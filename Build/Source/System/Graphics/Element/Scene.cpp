@@ -88,6 +88,7 @@ namespace Engine5
     void Scene::Render() const
     {
         m_primitive_renderer->Render();
+        //m_primitive_renderer->Clear();
         MatrixData mvp_data;
         if (m_b_deferred_shading)
         {
@@ -605,5 +606,10 @@ namespace Engine5
     Basis Scene::GetMainCameraBasis() const
     {
         return m_main_camera->GetBasis();
+    }
+
+    Real Scene::GetAspectRatio() const
+    {
+        return m_matrix_manager->GetAspectRatio();
     }
 }

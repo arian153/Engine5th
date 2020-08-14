@@ -198,7 +198,7 @@ namespace Engine5
         m_face_buffer  = new MeshBufferCommon();
     }
 
-    void PrimitiveRenderer::Render()
+    void PrimitiveRenderer::Render() const
     {
         if (m_dot_vertices.empty() == false)
         {
@@ -218,7 +218,6 @@ namespace Engine5
             m_face_buffer->Render(sizeof(ColorVertexCommon), 0);
             m_color_shader->Render(static_cast<U32>(m_face_indices.size()), m_mvp_data);
         }
-        Clear();
     }
 
     void PrimitiveRenderer::Shutdown()

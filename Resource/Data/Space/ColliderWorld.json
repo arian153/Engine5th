@@ -38,41 +38,7 @@
             ],
             "Name": "Camera"
         },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0, 0, 0 ],
-                        "Position": [ 0, 0, 0 ],
-                        "Scale": [ 1, 1, 1 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::ParticleEmitterComponent",
-                    "Value": {
-                        "Texture": "../../Resource/Texture/white.dds",
-                        "Particle Amount": 10000,
-                        "Emission Amount": 1,
-                        "Emission Rate": 0.0,
-                        "Life Decay Rate": 0.1,
-                        "Scale Decay Rate": 0.1,
-                        "Base Position": [ 0, 0, 0 ],
-                        "Base Velocity": [ 0, 0, 0 ],
-                        "Base Color": [ 1, 1, 0.5, 1.0 ],
-                        "Base Life": 3.0,
-                        "Base Scale": 1,
-                        "Position Variance": [ 0, 0, 0 ],
-                        "Direction Variance": [ 0.5, 1, 1 ],
-                        "Color Variance": [ 0.1, 0.1, 0, 0 ],
-                        "Speed Variance": 5.0,
-                        "Life Variance": 0.1,
-                        "Scale Variance": 0.0
-                    }
-                }
-            ],
-            "Name": "Particle"
-        },
+       
         {
             "Components": [
                 {

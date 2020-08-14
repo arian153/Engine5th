@@ -47,7 +47,6 @@ namespace Engine5
 
     void RenderTextureGenerator::Render(Scene* scene)
     {
-        scene->Update(0.0f);
         scene->Render();
     }
 

@@ -135,6 +135,11 @@ namespace Engine5
         return m_near_plane;
     }
 
+    Real MatrixManager::GetAspectRatio() const
+    {
+        return m_screen_aspect;
+    }
+
     U32 MatrixManager::GetScreenWidth() const
     {
         return static_cast<U32>(m_right - m_left);

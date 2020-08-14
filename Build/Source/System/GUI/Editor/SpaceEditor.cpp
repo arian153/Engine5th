@@ -10,6 +10,7 @@
 #include "../../../Manager/Level/LevelManager.hpp"
 #include "../../../Manager/Level/Level.hpp"
 #include "../../../Manager/Space/SpaceManager.hpp"
+#include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
@@ -250,12 +251,19 @@ namespace Engine5
     {
         if (space != nullptr)
         {
-            m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Black);
-            m_render_texture_generator->Render(space->GetScene());
+            auto scene = space->GetScene();
+
+            m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Gray);
+            m_render_texture_generator->Render(scene);
+            scene->GetPrimitiveRenderer()->Clear();
             m_render_texture_generator->EndRenderToTexture();
+
+            Real ratio = scene->GetAspectRatio();
+
+
             ImGui::Image(
                          m_render_texture_generator->GetTexture()->GetTexture(),
-                         ImVec2(512, 512), m_uv_min, m_uv_max, m_tint_col, m_border_col);
+                         ImVec2(m_scene_scale * ratio, m_scene_scale), m_uv_min, m_uv_max, m_tint_col, m_border_col);
         }
     }
 }

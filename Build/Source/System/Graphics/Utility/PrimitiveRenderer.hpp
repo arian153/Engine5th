@@ -38,7 +38,7 @@ namespace Engine5
         void DrawRay(const Ray& ray, Color color = Color());
 
         void Initialize(ColorShaderCommon* color_shader);
-        void Render();
+        void Render() const;
         void Shutdown();
         void Clear();
 

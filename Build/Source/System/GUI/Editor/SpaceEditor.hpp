@@ -1,6 +1,7 @@
 #pragma once
 #include "../../../External/imgui/imgui.h"
 #include <vector>
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -40,10 +41,11 @@ namespace Engine5
         bool             m_b_open        = false;
         bool             m_b_reorderable = true;
         ImGuiTabBarFlags m_fitting_flags = ImGuiTabBarFlags_FittingPolicyDefault_;
-        ImVec2           m_uv_min          = ImVec2(0.0f, 0.0f);                   // Top-left
-        ImVec2           m_uv_max          = ImVec2(1.0f, 1.0f);                   // Lower-right
-        ImVec4           m_tint_col        = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // No tint
-        ImVec4           m_border_col      = ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 50% opaque white
+        ImVec2           m_uv_min        = ImVec2(0.0f, 0.0f);                   // Top-left
+        ImVec2           m_uv_max        = ImVec2(1.0f, 1.0f);                   // Lower-right
+        ImVec4           m_tint_col      = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // No tint
+        ImVec4           m_border_col    = ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 50% opaque white
+        Real             m_scene_scale   = 1024.0f;
 
     private:
         //Space*           m_editing_space    = nullptr;

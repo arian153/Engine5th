@@ -35,6 +35,7 @@ namespace Engine5
 
         Real GetFarPlane() const;
         Real GetNearPlane() const;
+        Real GetAspectRatio() const;
 
         U32 GetScreenWidth() const;
         U32 GetScreenHeight() const;
