@@ -33,6 +33,8 @@ Index of this file:
 */
 
 #pragma once
+#pragma warning(disable : 26451)
+
 #ifndef IMGUI_DISABLE
 
 //-----------------------------------------------------------------------------

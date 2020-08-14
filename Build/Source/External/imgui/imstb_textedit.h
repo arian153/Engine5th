@@ -276,6 +276,9 @@
 #ifndef INCLUDE_STB_TEXTEDIT_H
 #define INCLUDE_STB_TEXTEDIT_H
 
+#pragma warning(disable : 26451)
+
+
 ////////////////////////////////////////////////////////////////////////
 //
 //     STB_TexteditState

@@ -28,6 +28,12 @@ Index of this file:
 
 */
 
+#pragma warning(disable : 6011)
+#pragma warning(disable : 6031)
+#pragma warning(disable : 26451)
+#pragma warning(disable : 26812)
+
+
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
 #endif

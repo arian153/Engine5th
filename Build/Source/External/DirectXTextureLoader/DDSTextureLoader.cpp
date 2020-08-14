@@ -18,6 +18,9 @@
 // http://go.microsoft.com/fwlink/?LinkId=248929
 //--------------------------------------------------------------------------------------
 
+#pragma warning(disable : 26812)
+
+
 #include "DDSTextureLoader.h"
 
 #include <assert.h>
