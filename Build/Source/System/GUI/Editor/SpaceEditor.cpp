@@ -11,6 +11,7 @@
 #include "../../../Manager/Level/Level.hpp"
 #include "../../../Manager/Space/SpaceManager.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
+#include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 
 namespace Engine5
 {
@@ -28,7 +29,6 @@ namespace Engine5
         m_resource_manager         = application->GetResourceManager();
         m_render_texture_generator = application->GetRenderSystem()->GetRenderTextureGenerator();
         m_space_manager            = application->GetSpaceManager();
-        m_spaces                   = &m_space_manager->m_spaces;
     }
 
     void SpaceEditor::Update()
@@ -51,24 +51,24 @@ namespace Engine5
             if (ImGui::BeginMenu("File"))
             {
                 int open_count = 0;
-                for (size_t i = 0; i < m_spaces->size(); ++i)
-                    open_count += m_spaces->at(i)->m_b_curr_open ? 1 : 0;
-                if (ImGui::BeginMenu("Open", open_count < m_spaces->size()))
+                for (size_t i = 0; i < m_space_resources.size(); ++i)
+                    open_count += m_space_resources.at(i)->IsOpen() ? 1 : 0;
+                if (ImGui::BeginMenu("Open", open_count < m_space_resources.size()))
                 {
-                    for (size_t i = 0; i < m_spaces->size(); ++i)
+                    for (size_t i = 0; i < m_space_resources.size(); ++i)
                     {
-                        Space* space = m_spaces->at(i);
-                        if (!space->m_b_curr_open)
-                            if (ImGui::MenuItem(space->m_name.c_str()))
+                        JsonResource* resource = m_space_resources.at(i);
+                        if (!resource->IsOpen())
+                            if (ImGui::MenuItem(resource->FileName().c_str()))
                             {
-                                DoOpen(space);
+                                DoOpen(resource);
                             }
                     }
                     ImGui::EndMenu();
                 }
                 if (ImGui::MenuItem("Close All Documents", nullptr, false, open_count > 0))
-                    for (size_t i = 0; i < m_spaces->size(); ++i)
-                        DoQueueClose(m_spaces->at(i));
+                    for (size_t i = 0; i < m_space_resources.size(); ++i)
+                        DoQueueClose(m_space_resources.at(i));
                 if (ImGui::MenuItem("Exit", "Alt+F4"))
                 {
                 }
@@ -85,40 +85,40 @@ namespace Engine5
         {
             if (m_b_reorderable)
             {
-                for (size_t i = 0; i < m_spaces->size(); ++i)
+                for (size_t i = 0; i < m_space_resources.size(); ++i)
                 {
-                    Space* space = m_spaces->at(i);
-                    if (!space->m_b_curr_open && space->m_b_prev_open)
+                    JsonResource* resource = m_space_resources.at(i);
+                    if (!resource->IsOpen() && resource->WasOpen())
                     {
-                        ImGui::SetTabItemClosed(space->m_name.c_str());
+                        ImGui::SetTabItemClosed(resource->FileName().c_str());
                     }
-                    space->m_b_prev_open = space->m_b_curr_open;
+                    resource->UpdateOpenState();
                 }
             }
             // [DEBUG] Stress tests
             //if ((ImGui::GetFrameCount() % 30) == 0) docs[1].Open ^= 1;            // [DEBUG] Automatically show/hide a tab. Test various interactions e.g. dragging with this on.
             //if (ImGui::GetIO().KeyCtrl) ImGui::SetTabItemSelected(docs[1].Name);  // [DEBUG] Test SetTabItemSelected(), probably not very useful as-is anyway..
             // Submit Tabs
-            for (size_t i = 0; i < m_spaces->size(); ++i)
+            for (size_t i = 0; i < m_space_resources.size(); ++i)
             {
-                Space* space = m_spaces->at(i);
-                if (!space->m_b_curr_open)
+                JsonResource* resource = m_space_resources.at(i);
+                if (!resource->IsOpen())
                 {
                     continue;
                 }
-                ImGuiTabItemFlags tab_flags = (space->m_b_modified ? ImGuiTabItemFlags_UnsavedDocument : 0);
-                bool              visible   = ImGui::BeginTabItem(space->m_name.c_str(), &space->m_b_curr_open, tab_flags);
+                ImGuiTabItemFlags tab_flags = (resource->IsModified() ? ImGuiTabItemFlags_UnsavedDocument : 0);
+                bool              visible   = ImGui::BeginTabItem(resource->FileName().c_str(), &resource->IsOpen(), tab_flags);
                 // Cancel attempt to close when unsaved add to save queue so we can display a popup.
-                if (!space->m_b_curr_open && space->m_b_modified)
+                if (!resource->IsOpen() && resource->IsModified())
                 {
-                    space->m_b_curr_open = true;
-                    DoQueueClose(space);
+                    resource->IsOpen() = true;
+                    DoQueueClose(resource);
                 }
-                DisplayContextMenu(space);
+                DisplayContextMenu(resource);
                 if (visible)
                 {
-                    DisplayContents(space);
-                    DisplayScene(space);
+                    DisplayContents(resource);
+                    DisplayScene();
                     ImGui::EndTabItem();
                 }
             }
@@ -131,12 +131,12 @@ namespace Engine5
         if (m_close_queue.empty())
         {
             // Close queue is locked once we started a popup
-            for (size_t i = 0; i < m_spaces->size(); ++i)
+            for (size_t i = 0; i < m_space_resources.size(); ++i)
             {
-                Space* space = m_spaces->at(i);
-                if (space->m_b_close)
+                JsonResource* space = m_space_resources.at(i);
+                if (space->IsClose())
                 {
-                    space->m_b_close = false;
+                    space->IsClose() = false;
                     m_close_queue.push_back(space);
                 }
             }
@@ -145,7 +145,7 @@ namespace Engine5
         {
             int close_queue_unsaved_documents = 0;
             for (size_t i = 0; i < m_close_queue.size(); ++i)
-                if (m_close_queue[i]->m_b_modified)
+                if (m_close_queue[i]->IsModified())
                     close_queue_unsaved_documents++;
             if (close_queue_unsaved_documents == 0)
             {
@@ -165,15 +165,15 @@ namespace Engine5
                     if (ImGui::ListBoxHeader("##", close_queue_unsaved_documents, 6))
                     {
                         for (size_t i = 0; i < m_close_queue.size(); ++i)
-                            if (m_close_queue[i]->m_b_modified)
-                                ImGui::Text("%s", m_close_queue[i]->m_name.c_str());
+                            if (m_close_queue[i]->IsModified())
+                                ImGui::Text("%s", m_close_queue[i]->FileName().c_str());
                         ImGui::ListBoxFooter();
                     }
                     if (ImGui::Button("Yes", ImVec2(80, 0)))
                     {
                         for (size_t i = 0; i < m_close_queue.size(); ++i)
                         {
-                            if (m_close_queue[i]->m_b_modified)
+                            if (m_close_queue[i]->IsModified())
                                 DoSave(m_close_queue[i]);
                             DoForceClose(m_close_queue[i]);
                         }
@@ -200,67 +200,59 @@ namespace Engine5
         }
     }
 
-    void SpaceEditor::DoOpen(Space* space)
+    void SpaceEditor::DoOpen(JsonResource* resource)
     {
-        space->m_b_curr_open = true;
+        resource->IsOpen() = true;
     }
 
-    void SpaceEditor::DoQueueClose(Space* space)
+    void SpaceEditor::DoQueueClose(JsonResource* resource)
     {
-        space->m_b_close = true;
+        resource->IsClose() = true;
     }
 
-    void SpaceEditor::DoForceClose(Space* space)
+    void SpaceEditor::DoForceClose(JsonResource* resource)
     {
-        space->m_b_curr_open = false;
-        space->m_b_modified  = false;
+        resource->IsOpen()     = false;
+        resource->IsModified() = false;
     }
 
-    void SpaceEditor::DoSave(Space* space)
+    void SpaceEditor::DoSave(JsonResource* resource)
     {
-        space->m_b_modified = false;
+        resource->IsModified() = false;
     }
 
-    void SpaceEditor::DisplayContents(Space* space)
+    void SpaceEditor::DisplayContents(JsonResource* resource)
     {
-        ImGui::PushID(space);
-        ImGui::Text(space->m_name.c_str());
-        //ImGui::PushStyleColor(ImGuiCol_Text, doc->Color);
-        ImGui::TextWrapped("Hello World.");
-        //ImGui::PopStyleColor();
+        ImGui::PushID(resource);
+        ImGui::Text(resource->FileName().c_str());
         if (ImGui::Button("Modify", ImVec2(100, 0)))
-            space->m_b_modified = true;
+            resource->IsModified() = true;
         ImGui::SameLine();
         if (ImGui::Button("Save", ImVec2(100, 0)))
-            DoSave(space);
+            DoSave(resource);
         ImGui::PopID();
     }
 
-    void SpaceEditor::DisplayContextMenu(Space* space)
+    void SpaceEditor::DisplayContextMenu(JsonResource* resource)
     {
         if (!ImGui::BeginPopupContextItem())
             return;
-        if (ImGui::MenuItem(("Save " + space->m_name).c_str(), "CTRL+S", false, space->m_b_curr_open))
-            DoSave(space);
-        if (ImGui::MenuItem("Close", "CTRL+W", false, space->m_b_curr_open))
-            DoQueueClose(space);
+        if (ImGui::MenuItem(("Save " + resource->FileName()).c_str(), "CTRL+S", false, resource->IsOpen()))
+            DoSave(resource);
+        if (ImGui::MenuItem("Close", "CTRL+W", false, resource->IsOpen()))
+            DoQueueClose(resource);
         ImGui::EndPopup();
     }
 
-    void SpaceEditor::DisplayScene(Space* space) const
+    void SpaceEditor::DisplayScene() const
     {
-        if (space != nullptr)
+        if (m_editing_space != nullptr && m_editing_space->GetScene() != nullptr)
         {
-            auto scene = space->GetScene();
-
+            auto scene = m_editing_space->GetScene();
             m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Gray);
             m_render_texture_generator->Render(scene);
-            scene->GetPrimitiveRenderer()->Clear();
             m_render_texture_generator->EndRenderToTexture();
-
             Real ratio = scene->GetAspectRatio();
-
-
             ImGui::Image(
                          m_render_texture_generator->GetTexture()->GetTexture(),
                          ImVec2(m_scene_scale * ratio, m_scene_scale), m_uv_min, m_uv_max, m_tint_col, m_border_col);

@@ -53,8 +53,8 @@ namespace Engine5
         ID3D10Blob* error_message        = nullptr;
         ID3D10Blob* vertex_shader_buffer = nullptr;
         ID3D10Blob* pixel_shader_buffer  = nullptr;
-        auto        vertex_shader_path   = m_shader_resource->FilePath();
-        auto        pixel_shader_path    = m_shader_resource->FilePath();
+        auto        vertex_shader_path   = m_shader_resource->WFilePath();
+        auto        pixel_shader_path    = m_shader_resource->WFilePath();
         // Compile the vertex shader code.
         HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "VertexShaderEntry", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
         if (FAILED(result))

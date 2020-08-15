@@ -74,11 +74,7 @@ namespace Engine5
     private:
         std::string m_name;
         bool        m_b_activate  = true;
-        bool        m_b_curr_open = true;
-        bool        m_b_prev_open = true;
-        bool        m_b_modified  = false;
-        bool        m_b_close     = false;
-
+       
         eSubsystemFlag m_creation_flag     = eSubsystemFlag::None;
         eSubsystemFlag m_update_flag       = eSubsystemFlag::None;
         eSubsystemFlag m_fixed_update_flag = eSubsystemFlag::None;

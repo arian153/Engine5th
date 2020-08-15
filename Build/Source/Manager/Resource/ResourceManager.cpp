@@ -9,6 +9,7 @@
 #include "ResourceType/JsonResource.hpp"
 #include "ResourceType/UndefinedResource.hpp"
 #include "ResourceType/TextResource.hpp"
+#include "../../System/Core/Utility/CoreUtility.hpp"
 
 namespace Engine5
 {
@@ -68,11 +69,11 @@ namespace Engine5
         for (auto& resource : m_audio_resource_map)
         {
             auto found = resource.second;
-            if (found->FileName() == file_name)
+            if (found->WFileName() == file_name)
             {
                 resources.push_back(found);
             }
-            else if (found->FileName() + found->FileType() == file_name)
+            else if (found->WFileName() + found->WFileType() == file_name)
             {
                 resources.push_back(found);
             }
@@ -80,11 +81,11 @@ namespace Engine5
         for (auto& resource : m_json_resource_map)
         {
             auto found = resource.second;
-            if (found->FileName() == file_name)
+            if (found->WFileName() == file_name)
             {
                 resources.push_back(found);
             }
-            else if (found->FileName() + found->FileType() == file_name)
+            else if (found->WFileName() + found->WFileType() == file_name)
             {
                 resources.push_back(found);
             }
@@ -92,11 +93,11 @@ namespace Engine5
         for (auto& resource : m_mesh_resource_map)
         {
             auto found = resource.second;
-            if (found->FileName() == file_name)
+            if (found->WFileName() == file_name)
             {
                 resources.push_back(found);
             }
-            else if (found->FileName() + found->FileType() == file_name)
+            else if (found->WFileName() + found->WFileType() == file_name)
             {
                 resources.push_back(found);
             }
@@ -104,11 +105,11 @@ namespace Engine5
         for (auto& resource : m_shader_resource_map)
         {
             auto found = resource.second;
-            if (found->FileName() == file_name)
+            if (found->WFileName() == file_name)
             {
                 resources.push_back(found);
             }
-            else if (found->FileName() + found->FileType() == file_name)
+            else if (found->WFileName() + found->WFileType() == file_name)
             {
                 resources.push_back(found);
             }
@@ -116,11 +117,11 @@ namespace Engine5
         for (auto& resource : m_texture_resource_map)
         {
             auto found = resource.second;
-            if (found->FileName() == file_name)
+            if (found->WFileName() == file_name)
             {
                 resources.push_back(found);
             }
-            else if (found->FileName() + found->FileType() == file_name)
+            else if (found->WFileName() + found->WFileType() == file_name)
             {
                 resources.push_back(found);
             }
@@ -128,11 +129,11 @@ namespace Engine5
         for (auto& resource : m_text_resource_map)
         {
             auto found = resource.second;
-            if (found->FileName() == file_name)
+            if (found->WFileName() == file_name)
             {
                 resources.push_back(found);
             }
-            else if (found->FileName() + found->FileType() == file_name)
+            else if (found->WFileName() + found->WFileType() == file_name)
             {
                 resources.push_back(found);
             }
@@ -140,11 +141,11 @@ namespace Engine5
         for (auto& resource : m_undefined_resource_map)
         {
             auto found = resource.second;
-            if (found->FileName() == file_name)
+            if (found->WFileName() == file_name)
             {
                 resources.push_back(found);
             }
-            else if (found->FileName() + found->FileType() == file_name)
+            else if (found->WFileName() + found->WFileType() == file_name)
             {
                 resources.push_back(found);
             }
@@ -209,7 +210,6 @@ namespace Engine5
                 m_texture_resource_map.erase(found_in_texture);
             }
         }
-
         auto found_in_text = m_text_resource_map.find(path);
         if (found_in_text != m_text_resource_map.end())
         {
@@ -256,7 +256,7 @@ namespace Engine5
 
     void ResourceManager::RemoveResource(Resource* resource)
     {
-        RemoveResource(resource->FilePath());
+        RemoveResource(resource->WFilePath());
     }
 
     void ResourceManager::ClearResource()
@@ -270,13 +270,13 @@ namespace Engine5
                 found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
                 if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
@@ -293,13 +293,13 @@ namespace Engine5
                 found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
                 if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
@@ -316,13 +316,13 @@ namespace Engine5
                 found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
                 if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
@@ -339,13 +339,13 @@ namespace Engine5
                 found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
                 if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
@@ -362,13 +362,13 @@ namespace Engine5
                 found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
                 if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
@@ -386,13 +386,13 @@ namespace Engine5
                 found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
                 if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
@@ -401,7 +401,6 @@ namespace Engine5
             }
         }
         m_text_resource_map.clear();
-
         //remove remains
         for (auto& resource : m_undefined_resource_map)
         {
@@ -411,13 +410,13 @@ namespace Engine5
                 found->Shutdown();
                 if (found->IsLoaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't loaded. this file may not used in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
                 if (found->IsUnloaded() == false)
                 {
-                    std::wstring result = found->FileName() + found->FileType();
+                    std::wstring result = found->WFileName() + found->WFileType();
                     result += L" file didn't unloaded. this file may not released in engine. \n";
                     m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
                 }
@@ -459,7 +458,7 @@ namespace Engine5
         for (auto& shader : m_shader_resource_map)
         {
             auto resource = shader.second;
-            if (resource->FileName() + resource->FileType() == file_name)
+            if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 return resource;
             }
@@ -472,11 +471,11 @@ namespace Engine5
         for (auto& shader : m_shader_resource_map)
         {
             auto resource = shader.second;
-            if (resource->FileName() == file_name)
+            if (resource->WFileName() == file_name)
             {
                 resources.push_back(resource);
             }
-            else if (resource->FileName() + resource->FileType() == file_name)
+            else if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 resources.push_back(resource);
             }
@@ -498,7 +497,7 @@ namespace Engine5
         for (auto& texture : m_texture_resource_map)
         {
             auto resource = texture.second;
-            if (resource->FileName() + resource->FileType() == file_name)
+            if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 return resource;
             }
@@ -511,11 +510,11 @@ namespace Engine5
         for (auto& texture : m_texture_resource_map)
         {
             auto resource = texture.second;
-            if (resource->FileName() == file_name)
+            if (resource->WFileName() == file_name)
             {
                 resources.push_back(resource);
             }
-            else if (resource->FileName() + resource->FileType() == file_name)
+            else if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 resources.push_back(resource);
             }
@@ -546,7 +545,7 @@ namespace Engine5
         for (auto& mesh : m_mesh_resource_map)
         {
             auto resource = mesh.second;
-            if (resource->FileName() + resource->FileType() == file_name)
+            if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 return resource;
             }
@@ -559,11 +558,11 @@ namespace Engine5
         for (auto& mesh : m_mesh_resource_map)
         {
             auto resource = mesh.second;
-            if (resource->FileName() == file_name)
+            if (resource->WFileName() == file_name)
             {
                 resources.push_back(resource);
             }
-            else if (resource->FileName() + resource->FileType() == file_name)
+            else if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 resources.push_back(resource);
             }
@@ -585,7 +584,7 @@ namespace Engine5
         for (auto& audio : m_audio_resource_map)
         {
             auto resource = audio.second;
-            if (resource->FileName() + resource->FileType() == file_name)
+            if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 return resource;
             }
@@ -598,11 +597,11 @@ namespace Engine5
         for (auto& audio : m_audio_resource_map)
         {
             auto resource = audio.second;
-            if (resource->FileName() == file_name)
+            if (resource->WFileName() == file_name)
             {
                 resources.push_back(resource);
             }
-            else if (resource->FileName() + resource->FileType() == file_name)
+            else if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 resources.push_back(resource);
             }
@@ -624,7 +623,7 @@ namespace Engine5
         for (auto& json : m_json_resource_map)
         {
             auto resource = json.second;
-            if (resource->FileName() + resource->FileType() == file_name)
+            if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 return resource;
             }
@@ -637,11 +636,11 @@ namespace Engine5
         for (auto& json : m_json_resource_map)
         {
             auto resource = json.second;
-            if (resource->FileName() == file_name)
+            if (resource->WFileName() == file_name)
             {
                 resources.push_back(resource);
             }
-            else if (resource->FileName() + resource->FileType() == file_name)
+            else if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 resources.push_back(resource);
             }
@@ -671,8 +670,8 @@ namespace Engine5
     JsonResource* ResourceManager::CreateJsonResource(const std::wstring& path)
     {
         JsonResource* resource       = new JsonResource(path);
-        resource->m_file_name        = m_file_utility->GetFileNameFromPath(path);
-        resource->m_file_type        = m_file_utility->GetFileTypeFromPath(path);
+        resource->m_file_name_w      = m_file_utility->GetFileNameFromPath(path);
+        resource->m_file_type_w      = m_file_utility->GetFileTypeFromPath(path);
         resource->m_resource_manager = this;
         m_json_resource_map.emplace(path, resource);
         return resource;
@@ -693,7 +692,7 @@ namespace Engine5
         for (auto& json : m_text_resource_map)
         {
             auto resource = json.second;
-            if (resource->FileName() + resource->FileType() == file_name)
+            if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 return resource;
             }
@@ -706,11 +705,11 @@ namespace Engine5
         for (auto& json : m_text_resource_map)
         {
             auto resource = json.second;
-            if (resource->FileName() == file_name)
+            if (resource->WFileName() == file_name)
             {
                 resources.push_back(resource);
             }
-            else if (resource->FileName() + resource->FileType() == file_name)
+            else if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 resources.push_back(resource);
             }
@@ -732,7 +731,7 @@ namespace Engine5
         for (auto& other : m_undefined_resource_map)
         {
             auto resource = other.second;
-            if (resource->FileName() + resource->FileType() == file_name)
+            if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 return resource;
             }
@@ -745,11 +744,11 @@ namespace Engine5
         for (auto& other : m_undefined_resource_map)
         {
             auto resource = other.second;
-            if (resource->FileName() == file_name)
+            if (resource->WFileName() == file_name)
             {
                 resources.push_back(resource);
             }
-            else if (resource->FileName() + resource->FileType() == file_name)
+            else if (resource->WFileName() + resource->WFileType() == file_name)
             {
                 resources.push_back(resource);
             }
@@ -821,8 +820,11 @@ namespace Engine5
             resource = new UndefinedResource(path);
             m_undefined_resource_map.emplace(path, (UndefinedResource*)resource);
         }
-        resource->m_file_name        = name;
-        resource->m_file_type        = type;
+        resource->m_file_name_w      = name;
+        resource->m_file_type_w      = type;
+        resource->m_file_path_m      = ToString(path);
+        resource->m_file_name_m      = ToString(name);
+        resource->m_file_type_m      = ToString(type);
         resource->m_resource_manager = this;
         resource->Initialize();
         return resource;

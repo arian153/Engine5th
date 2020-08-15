@@ -162,7 +162,7 @@ namespace Engine5
 
     void LevelManager::AddLevel(JsonResource* level_resource)
     {
-        std::string level_name = ToString(level_resource->FileName());
+        std::string level_name = ToString(level_resource->WFileName());
         auto        found      = m_level_resources.find(level_name);
         if (found == m_level_resources.end())
         {

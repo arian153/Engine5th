@@ -33,6 +33,7 @@ namespace Engine5
         Space* GetGlobalSpace() const;
         Space* CreateSpace(Level* level, eSubsystemFlag flag);
         Space* CreateSpace(Level* level, JsonResource* resource);
+        Space* CreateSpace(JsonResource* resource);
         void   RemoveSpace(Space* space);
 
     private:

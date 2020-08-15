@@ -75,8 +75,28 @@ namespace Engine5
         m_spaces.push_back(space);
         space->m_resource_manager = m_resource_manager;
         space->m_level            = level;
-        space->m_name             = ToString(resource->FileName());
+        space->m_name             = resource->FileName();
         space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+        return space;
+    }
+
+    Space* SpaceManager::CreateSpace(JsonResource* resource)
+    {
+        Space* space           = new Space();
+        space->m_space_manager = this;
+        m_spaces.push_back(space);
+        space->m_resource_manager = m_resource_manager;
+        if (resource != nullptr)
+        {
+            space->m_name = resource->FileName();
+            space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+        }
+        else
+        {
+            space->Initialize(
+                              eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager,
+                              m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+        }
         return space;
     }
 

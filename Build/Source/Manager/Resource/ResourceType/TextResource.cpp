@@ -25,7 +25,7 @@ namespace Engine5
     bool TextResource::LoadText()
     {
         std::wifstream file;
-        file.open(m_file_path);
+        file.open(m_file_path_w);
         if (file)
         {
             m_text.clear();

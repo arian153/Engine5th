@@ -89,7 +89,7 @@ namespace Engine5
 
     bool JsonResource::LoadJsonType()
     {
-        std::ifstream file(m_file_path, std::ifstream::binary);
+        std::ifstream file(m_file_path_w, std::ifstream::binary);
         std::string   doc;
         std::getline(file, doc, static_cast<char>(EOF));
         bool b_parsing_successful = m_reader->parse(doc.data(), doc.data() + doc.size(), m_root_data, nullptr);
@@ -130,6 +130,46 @@ namespace Engine5
             }
         }
         return false;
+    }
+
+    bool JsonResource::WasOpen() const
+    {
+        return m_b_prev_open;
+    }
+
+    bool JsonResource::IsOpen() const
+    {
+        return m_b_curr_open;
+    }
+
+    bool& JsonResource::IsOpen()
+    {
+        return m_b_curr_open;
+    }
+
+    bool JsonResource::IsModified() const
+    {
+        return m_b_modified;
+    }
+
+    bool& JsonResource::IsModified()
+    {
+        return m_b_modified;
+    }
+
+    bool JsonResource::IsClose() const
+    {
+        return m_b_close;
+    }
+
+    bool& JsonResource::IsClose()
+    {
+        return m_b_close;
+    }
+
+    void JsonResource::UpdateOpenState()
+    {
+        m_b_prev_open = m_b_curr_open;
     }
 
     bool JsonResource::HasMember(const Json::Value& data, const std::string& find)

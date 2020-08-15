@@ -20,7 +20,7 @@ namespace Engine5
             if (m_texture == nullptr)
             {
                 m_texture = new TextureCommon();
-                m_texture->Initialize(m_renderer, m_file_path, m_file_type);
+                m_texture->Initialize(m_renderer, m_file_path_w, m_file_type_w);
                 m_b_loaded = true;
             }
         }

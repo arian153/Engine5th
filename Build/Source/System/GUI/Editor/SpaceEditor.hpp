@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class JsonResource;
     class ResourceManager;
     class SpaceManager;
     class Application;
@@ -26,13 +27,13 @@ namespace Engine5
         void CloseTab();
 
     private:
-        void DoOpen(Space* space);
-        void DoQueueClose(Space* space);
-        void DoForceClose(Space* space);
-        void DoSave(Space* space);
-        void DisplayContents(Space* space);
-        void DisplayContextMenu(Space* space);
-        void DisplayScene(Space* space) const;
+        void DoOpen(JsonResource* resource);
+        void DoQueueClose(JsonResource* resource);
+        void DoForceClose(JsonResource* resource);
+        void DoSave(JsonResource* resource);
+        void DisplayContents(JsonResource* resource);
+        void DisplayContextMenu(JsonResource* resource);
+        void DisplayScene() const;
 
     private:
         friend class GameEditor;
@@ -48,14 +49,15 @@ namespace Engine5
         Real             m_scene_scale   = 1024.0f;
 
     private:
-        //Space*           m_editing_space    = nullptr;
+        Space*           m_editing_space    = nullptr;
         GameEditor*      m_game_editor      = nullptr;
         Application*     m_application      = nullptr;
         SpaceManager*    m_space_manager    = nullptr;
         ResourceManager* m_resource_manager = nullptr;
         //tool
-        std::vector<Space*>*    m_spaces = nullptr;
-        std::vector<Space*>     m_close_queue;
+        std::vector<JsonResource*> m_space_resources;
+        std::vector<JsonResource*> m_close_queue;
+
         RenderTextureGenerator* m_render_texture_generator = nullptr;
     };
 }

@@ -21,7 +21,7 @@ namespace Engine5
     {
         std::ifstream file_stream;
         // Open the model file.
-        file_stream.open(m_file_path);
+        file_stream.open(m_file_path_w);
         // If it could not open the file then exit.
         if (file_stream.fail())
         {
@@ -259,11 +259,11 @@ namespace Engine5
 
     void MeshResource::CheckMeshType()
     {
-        if (m_file_type == L".obj")
+        if (m_file_type_w == L".obj")
         {
             m_mesh_type = eMeshType::WaveFrontOBJ;
         }
-        else if(m_file_type == L".txtmdl")
+        else if(m_file_type_w == L".txtmdl")
         {
             m_mesh_type = eMeshType::CustomTXT;
         }

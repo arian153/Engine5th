@@ -3,7 +3,7 @@
 namespace Engine5
 {
     Resource::Resource(const std::wstring& path)
-        : m_file_path(path)
+        : m_file_path_w(path)
     {
     }
 
@@ -21,18 +21,33 @@ namespace Engine5
         return m_b_unloaded;
     }
 
-    std::wstring Resource::FileName() const
+    std::wstring Resource::WFileName() const
     {
-        return m_file_name;
+        return m_file_name_w;
     }
 
-    std::wstring Resource::FilePath() const
+    std::wstring Resource::WFilePath() const
     {
-        return m_file_path;
+        return m_file_path_w;
     }
 
-    std::wstring Resource::FileType() const
+    std::wstring Resource::WFileType() const
     {
-        return m_file_type;
+        return m_file_type_w;
+    }
+
+    std::string Resource::FileName() const
+    {
+        return m_file_name_m;
+    }
+
+    std::string Resource::FilePath() const
+    {
+        return m_file_path_m;
+    }
+
+    std::string Resource::FileType() const
+    {
+        return m_file_type_m;
     }
 }

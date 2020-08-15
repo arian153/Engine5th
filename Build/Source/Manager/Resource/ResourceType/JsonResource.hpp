@@ -45,6 +45,16 @@ namespace Engine5
         eJsonType GetType() const;
         bool      LoadJsonType();
 
+        bool  WasOpen() const;
+        bool  IsOpen() const;
+        bool& IsOpen();
+        bool  IsModified() const;
+        bool& IsModified();
+        bool  IsClose() const;
+        bool& IsClose();
+
+        void UpdateOpenState();
+
     public:
         static bool HasMember(const Json::Value& data, const std::string& find);
         static bool IsVector2(const Json::Value& data);
@@ -88,5 +98,10 @@ namespace Engine5
         Json::CharReader* m_reader      = nullptr;
         Json::Value*      m_root_data   = nullptr;
         bool              m_b_load_type = true;
+        //editor flag
+        bool m_b_curr_open = false;
+        bool m_b_prev_open = false;
+        bool m_b_modified  = false;
+        bool m_b_close     = false;
     };
 }

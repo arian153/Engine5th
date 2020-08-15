@@ -88,7 +88,7 @@ namespace Engine5
     void Scene::Render() const
     {
         m_primitive_renderer->Render();
-        //m_primitive_renderer->Clear();
+        m_primitive_renderer->Clear();
         MatrixData mvp_data;
         if (m_b_deferred_shading)
         {
