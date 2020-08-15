@@ -28,7 +28,7 @@ namespace Engine5
         m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
         m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI
         // Setup Dear ImGui style
-        ImGui::StyleColorsDark();
+        ImGui::StyleColorsLight();
         //ImGui::StyleColorsClassic();
         ImGuiStyle& style    = ImGui::GetStyle();
         style.WindowRounding = 0.0f;

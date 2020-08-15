@@ -41,6 +41,8 @@ namespace Engine5
 
     void Scene::Update(Real dt)
     {
+        if (m_main_camera == nullptr || m_cameras.empty())
+            return;
         MatrixData mvp_data;
         mvp_data.projection = m_projection_matrix;
         m_main_camera->Update();

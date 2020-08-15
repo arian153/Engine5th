@@ -29,6 +29,7 @@ namespace Engine5
         m_resource_manager         = application->GetResourceManager();
         m_render_texture_generator = application->GetRenderSystem()->GetRenderTextureGenerator();
         m_space_manager            = application->GetSpaceManager();
+        m_resource_manager->GetJsonResources(eJsonType::Space, m_space_resources);
     }
 
     void SpaceEditor::Update()
@@ -36,7 +37,7 @@ namespace Engine5
         if (m_b_open)
         {
             ImGui::Begin("Space Editor", &m_b_open, ImGuiWindowFlags_MenuBar);
-            UpdateMenu();
+            UpdateMenuBar();
             ImGui::Text("Space Editor");
             UpdateTab();
             CloseTab();
@@ -44,37 +45,114 @@ namespace Engine5
         }
     }
 
-    void SpaceEditor::UpdateMenu()
+    void SpaceEditor::UpdateMenuBar()
     {
         if (ImGui::BeginMenuBar())
         {
-            if (ImGui::BeginMenu("File"))
+            UpdateFileTab();
+            UpdateEditTab();
+            UpdateObjectTab();
+            ImGui::EndMenuBar();
+        }
+    }
+
+    void SpaceEditor::UpdateFileTab()
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            int open_count = 0;
+            for (size_t i = 0; i < m_space_resources.size(); ++i)
+                open_count += m_space_resources.at(i)->IsOpen() ? 1 : 0;
+            if (ImGui::BeginMenu("New"))
             {
-                int open_count = 0;
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Open", open_count < m_space_resources.size()))
+            {
                 for (size_t i = 0; i < m_space_resources.size(); ++i)
-                    open_count += m_space_resources.at(i)->IsOpen() ? 1 : 0;
-                if (ImGui::BeginMenu("Open", open_count < m_space_resources.size()))
                 {
-                    for (size_t i = 0; i < m_space_resources.size(); ++i)
-                    {
-                        JsonResource* resource = m_space_resources.at(i);
-                        if (!resource->IsOpen())
-                            if (ImGui::MenuItem(resource->FileName().c_str()))
-                            {
-                                DoOpen(resource);
-                            }
-                    }
-                    ImGui::EndMenu();
-                }
-                if (ImGui::MenuItem("Close All Documents", nullptr, false, open_count > 0))
-                    for (size_t i = 0; i < m_space_resources.size(); ++i)
-                        DoQueueClose(m_space_resources.at(i));
-                if (ImGui::MenuItem("Exit", "Alt+F4"))
-                {
+                    JsonResource* resource = m_space_resources.at(i);
+                    if (!resource->IsOpen())
+                        if (ImGui::MenuItem(resource->FileName().c_str()))
+                        {
+                            DoOpen(resource);
+                        }
                 }
                 ImGui::EndMenu();
             }
-            ImGui::EndMenuBar();
+            ImGui::Separator();
+            if (ImGui::MenuItem("Close", nullptr, false, open_count > 0))
+            {
+            }
+            if (ImGui::MenuItem("Close All", nullptr, false, open_count > 0))
+            {
+                for (size_t i = 0; i < m_space_resources.size(); ++i)
+                {
+                    DoQueueClose(m_space_resources.at(i));
+                }
+            }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Save", nullptr, false, open_count > 0))
+            {
+            }
+            if (ImGui::MenuItem("Save All", nullptr, false, open_count > 0))
+            {
+            }
+            if (ImGui::MenuItem("Exit"))
+            {
+            }
+            ImGui::EndMenu();
+        }
+    }
+
+    void SpaceEditor::UpdateEditTab()
+    {
+        if (ImGui::BeginMenu("Edit"))
+        {
+            if (ImGui::MenuItem("Undo", "Ctrl+Z"))
+            {
+            }
+            if (ImGui::MenuItem("Redo", "Ctrl+Y"))
+            {
+            }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Cut", "Ctrl+X"))
+            {
+            }
+            if (ImGui::MenuItem("Copy", "Ctrl+C"))
+            {
+            }
+            if (ImGui::MenuItem("Paste", "Ctrl+V"))
+            {
+            }
+            if (ImGui::MenuItem("Duplicate", "Ctrl+D"))
+            {
+            }
+            if (ImGui::MenuItem("Delete", "Ctrl+R"))
+            {
+            }
+            ImGui::EndMenu();
+        }
+    }
+
+    void SpaceEditor::UpdateObjectTab()
+    {
+        if (ImGui::BeginMenu("Object"))
+        {
+            if (ImGui::MenuItem("Create Empty"))
+            {
+            }
+            if (ImGui::MenuItem("Create 3D Object"))
+            {
+            }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Create Camera"))
+            {
+            }
+            if (ImGui::MenuItem("Create Light"))
+            {
+            }
+            ImGui::EndMenu();
         }
     }
 
@@ -95,9 +173,6 @@ namespace Engine5
                     resource->UpdateOpenState();
                 }
             }
-            // [DEBUG] Stress tests
-            //if ((ImGui::GetFrameCount() % 30) == 0) docs[1].Open ^= 1;            // [DEBUG] Automatically show/hide a tab. Test various interactions e.g. dragging with this on.
-            //if (ImGui::GetIO().KeyCtrl) ImGui::SetTabItemSelected(docs[1].Name);  // [DEBUG] Test SetTabItemSelected(), probably not very useful as-is anyway..
             // Submit Tabs
             for (size_t i = 0; i < m_space_resources.size(); ++i)
             {
@@ -118,7 +193,7 @@ namespace Engine5
                 if (visible)
                 {
                     DisplayContents(resource);
-                    DisplayScene();
+                    DisplayScene(resource->FileName());
                     ImGui::EndTabItem();
                 }
             }
@@ -203,6 +278,11 @@ namespace Engine5
     void SpaceEditor::DoOpen(JsonResource* resource)
     {
         resource->IsOpen() = true;
+        auto found         = m_editing_spaces.find(resource->FileName());
+        if (found == m_editing_spaces.end())
+        {
+            m_editing_spaces.emplace(resource->FileName(), m_space_manager->CreateSpace(resource));
+        }
     }
 
     void SpaceEditor::DoQueueClose(JsonResource* resource)
@@ -244,22 +324,26 @@ namespace Engine5
         ImGui::EndPopup();
     }
 
-    void SpaceEditor::DisplayScene() const
+    void SpaceEditor::DisplayScene(const std::string& name) const
     {
-        if (m_editing_space != nullptr)
+        auto found = m_editing_spaces.find(name);
+        if (found->second != nullptr)
         {
-            auto scene = m_editing_space->GetScene();
+            auto scene = found->second->GetScene();
             Real ratio = 1.0f;
             m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Gray);
             if (scene != nullptr)
             {
                 m_render_texture_generator->Render(scene);
-                ratio = scene->GetAspectRatio();
+                ratio = 1.0f / scene->GetAspectRatio();
             }
             m_render_texture_generator->EndRenderToTexture();
+            ImVec2 min         = ImGui::GetWindowContentRegionMin();
+            ImVec2 max         = ImGui::GetWindowContentRegionMax();
+            Real   scene_scale = max.x - min.x;
             ImGui::Image(
                          m_render_texture_generator->GetTexture()->GetTexture(),
-                         ImVec2(m_scene_scale * ratio, m_scene_scale), m_uv_min, m_uv_max, m_tint_col, m_border_col);
+                         ImVec2(scene_scale, scene_scale * ratio), m_uv_min, m_uv_max, m_tint_col, m_border_col);
         }
     }
 }
