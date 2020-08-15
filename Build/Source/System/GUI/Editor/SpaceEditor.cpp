@@ -246,13 +246,17 @@ namespace Engine5
 
     void SpaceEditor::DisplayScene() const
     {
-        if (m_editing_space != nullptr && m_editing_space->GetScene() != nullptr)
+        if (m_editing_space != nullptr)
         {
             auto scene = m_editing_space->GetScene();
+            Real ratio = 1.0f;
             m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Gray);
-            m_render_texture_generator->Render(scene);
+            if (scene != nullptr)
+            {
+                m_render_texture_generator->Render(scene);
+                ratio = scene->GetAspectRatio();
+            }
             m_render_texture_generator->EndRenderToTexture();
-            Real ratio = scene->GetAspectRatio();
             ImGui::Image(
                          m_render_texture_generator->GetTexture()->GetTexture(),
                          ImVec2(m_scene_scale * ratio, m_scene_scale), m_uv_min, m_uv_max, m_tint_col, m_border_col);

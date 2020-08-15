@@ -87,6 +87,8 @@ namespace Engine5
 
     void Scene::Render() const
     {
+        if (m_main_camera == nullptr || m_cameras.empty())
+            return;
         m_primitive_renderer->Render();
         m_primitive_renderer->Clear();
         MatrixData mvp_data;
