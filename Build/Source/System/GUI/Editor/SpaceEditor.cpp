@@ -32,14 +32,13 @@ namespace Engine5
         m_resource_manager->GetJsonResources(eJsonType::Space, m_space_resources);
     }
 
-    void SpaceEditor::Update()
+    void SpaceEditor::Update(Real dt)
     {
         if (m_b_open)
         {
             ImGui::Begin("Space Editor", &m_b_open, ImGuiWindowFlags_MenuBar);
             UpdateMenuBar();
-            ImGui::Text("Space Editor");
-            UpdateTab();
+            UpdateSceneTab(dt);
             CloseTab();
             ImGui::End();
         }
@@ -156,7 +155,7 @@ namespace Engine5
         }
     }
 
-    void SpaceEditor::UpdateTab()
+    void SpaceEditor::UpdateSceneTab(Real dt)
     {
         ImGuiTabBarFlags tab_bar_flags = (m_fitting_flags) | (m_b_reorderable ? ImGuiTabBarFlags_Reorderable : 0);
         if (ImGui::BeginTabBar("##tabs", tab_bar_flags))
@@ -193,7 +192,7 @@ namespace Engine5
                 if (visible)
                 {
                     DisplayContents(resource);
-                    DisplayScene(resource->FileName());
+                    DisplayScene(resource->FileName(), dt);
                     ImGui::EndTabItem();
                 }
             }
@@ -283,6 +282,10 @@ namespace Engine5
         {
             m_editing_spaces.emplace(resource->FileName(), m_space_manager->CreateSpace(resource));
         }
+        else
+        {
+            m_space_manager->LoadSpace(found->second, resource);
+        }
     }
 
     void SpaceEditor::DoQueueClose(JsonResource* resource)
@@ -304,7 +307,6 @@ namespace Engine5
     void SpaceEditor::DisplayContents(JsonResource* resource)
     {
         ImGui::PushID(resource);
-        ImGui::Text(resource->FileName().c_str());
         if (ImGui::Button("Modify", ImVec2(100, 0)))
             resource->IsModified() = true;
         ImGui::SameLine();
@@ -324,23 +326,21 @@ namespace Engine5
         ImGui::EndPopup();
     }
 
-    void SpaceEditor::DisplayScene(const std::string& name) const
+    void SpaceEditor::DisplayScene(const std::string& name, Real dt) const
     {
         auto found = m_editing_spaces.find(name);
-        if (found->second != nullptr)
+        auto space = found->second;
+        if (space != nullptr)
         {
-            auto scene = found->second->GetScene();
-            Real ratio = 1.0f;
+            space->Update(dt);
             m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Gray);
-            if (scene != nullptr)
-            {
-                m_render_texture_generator->Render(scene);
-                ratio = 1.0f / scene->GetAspectRatio();
-            }
+            m_render_texture_generator->Render(space);
             m_render_texture_generator->EndRenderToTexture();
             ImVec2 min         = ImGui::GetWindowContentRegionMin();
             ImVec2 max         = ImGui::GetWindowContentRegionMax();
             Real   scene_scale = max.x - min.x;
+            auto   scene       = space->GetScene();
+            Real   ratio       = scene != nullptr ? 1.0f / scene->GetAspectRatio() : 1.0f;
             ImGui::Image(
                          m_render_texture_generator->GetTexture()->GetTexture(),
                          ImVec2(scene_scale, scene_scale * ratio), m_uv_min, m_uv_max, m_tint_col, m_border_col);

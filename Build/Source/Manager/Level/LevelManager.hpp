@@ -5,6 +5,7 @@
 
 namespace Engine5
 {
+    class GameEditor;
     class GUISystem;
     class ResourceManager;
     class InputCommon;
@@ -100,7 +101,8 @@ namespace Engine5
         Application*         m_application       = nullptr;
         InputCommon*         m_input             = nullptr;
         ResourceManager*     m_resource_manager  = nullptr;
-        GUISystem* m_gui_system = nullptr;
+        GUISystem*           m_gui_system        = nullptr;
+        GameEditor*          m_game_editor       = nullptr;
 
         //resource
         std::unordered_map<std::string, JsonResource*> m_level_resources;

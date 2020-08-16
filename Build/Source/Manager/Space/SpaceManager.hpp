@@ -19,12 +19,12 @@ namespace Engine5
     public:
         SpaceManager() = delete;
         explicit SpaceManager(
-            PhysicsSystem* physics_system, 
-            RenderSystem* render_system, 
-            ObjectFactory* object_factory, 
-            ComponentRegistry* component_registry, 
-            ResourceManager* resource_manager, 
-            LogicSystem* logic_system);
+            PhysicsSystem*     physics_system,
+            RenderSystem*      render_system,
+            ObjectFactory*     object_factory,
+            ComponentRegistry* component_registry,
+            ResourceManager*   resource_manager,
+            LogicSystem*       logic_system);
         ~SpaceManager();
 
         void Initialize();
@@ -35,6 +35,7 @@ namespace Engine5
         Space* CreateSpace(Level* level, JsonResource* resource);
         Space* CreateSpace(JsonResource* resource);
         void   RemoveSpace(Space* space);
+        void   LoadSpace(Space* space, JsonResource* resource) const;
 
     private:
         friend class Space;

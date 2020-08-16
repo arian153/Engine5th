@@ -2,6 +2,7 @@
 
 namespace Engine5
 {
+    class Space;
     class ShaderManagerCommon;
     class Camera;
     class MatrixManager;
@@ -27,7 +28,8 @@ namespace Engine5
         void Initialize(RendererCommon* renderer, MatrixManager* matrix_manager, ShaderManagerCommon* shader_manager);
         void Shutdown();
 
-        //render elements 
+        //render elements
+        void Render(Space* space);
         void Render(Scene* scene);
         void Render(Mesh* mesh, Camera* camera, Light* light) const;
         void Render(Sprite* sprite, Camera* camera);

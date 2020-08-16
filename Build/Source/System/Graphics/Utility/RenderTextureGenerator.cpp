@@ -7,6 +7,7 @@
 #include "../DataType/MatrixData.hpp"
 #include "../Shader/ShaderManagerCommon.hpp"
 #include "../Element/TextSprite.hpp"
+#include "../../../Manager/Space/Space.hpp"
 
 namespace Engine5
 {
@@ -45,9 +46,13 @@ namespace Engine5
         }
     }
 
+    void RenderTextureGenerator::Render(Space* space)
+    {
+        space->Render();
+    }
+
     void RenderTextureGenerator::Render(Scene* scene)
     {
-        scene->Update(0.0f);
         scene->Render();
     }
 

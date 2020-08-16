@@ -20,7 +20,7 @@ namespace Engine5
         ~SpaceEditor();
 
         void Initialize(Application* application);
-        void Update();
+        void Update(Real dt);
 
     private:
         void UpdateMenuBar();
@@ -28,7 +28,7 @@ namespace Engine5
         void UpdateEditTab();
         void UpdateObjectTab();
 
-        void UpdateTab();
+        void UpdateSceneTab(Real dt);
         void CloseTab();
 
     private:
@@ -38,7 +38,7 @@ namespace Engine5
         void DoSave(JsonResource* resource);
         void DisplayContents(JsonResource* resource);
         void DisplayContextMenu(JsonResource* resource);
-        void DisplayScene(const std::string& name) const;
+        void DisplayScene(const std::string& name, Real dt) const;
 
     private:
         friend class GameEditor;

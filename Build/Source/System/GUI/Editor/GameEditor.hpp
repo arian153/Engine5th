@@ -15,7 +15,7 @@ namespace Engine5
         ~GameEditor();
 
         void Initialize(Application* application);
-        void Update();
+        void Update(Real dt);
         void Shutdown();
 
     private:

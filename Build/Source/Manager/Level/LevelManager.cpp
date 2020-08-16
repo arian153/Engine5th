@@ -13,6 +13,7 @@
 #include "../Resource/ResourceManager.hpp"
 #include "../../System/Graphics/Utility/TextRenderer.hpp"
 #include "../../System/GUI/GUISystem.hpp"
+#include "../../System/GUI/Editor/GameEditor.hpp"
 
 namespace Engine5
 {
@@ -303,8 +304,7 @@ namespace Engine5
         //update sound
         level->UpdateSubsystem(dt, eSubsystemFlag::Scene);
         level->Update(dt);
-        m_gui_system->BeginUpdate();
-        m_gui_system->EndUpdate();
+        m_gui_system->Update(dt);
     }
 
     void LevelManager::FixedUpdateLevel(Level* level, Real dt) const

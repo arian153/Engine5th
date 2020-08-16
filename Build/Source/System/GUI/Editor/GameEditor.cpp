@@ -20,7 +20,7 @@ namespace Engine5
         m_space_editor.Initialize(application);
     }
 
-    void GameEditor::Update()
+    void GameEditor::Update(Real dt)
     {
         if (m_b_open)
         {
@@ -70,8 +70,8 @@ namespace Engine5
             }
             ImGui::End();
             {
-                m_level_editor.Update();
-                m_space_editor.Update();
+                m_level_editor.Update(dt);
+                m_space_editor.Update(dt);
             }
             if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)) && ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Tab)))
             {

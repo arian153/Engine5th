@@ -114,4 +114,14 @@ namespace Engine5
             space = nullptr;
         }
     }
-}
+
+    void SpaceManager::LoadSpace(Space* space, JsonResource* resource) const
+    {
+        if (resource != nullptr)
+        {
+            space->m_name = resource->FileName();
+            space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+        }
+    }
+
+   }

@@ -25,7 +25,7 @@ namespace Engine5
         m_editing_level = nullptr;
     }
 
-    void LevelEditor::Update()
+    void LevelEditor::Update(Real dt)
     {
         if (m_b_open)
         {

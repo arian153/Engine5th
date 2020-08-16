@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../External/imgui/imgui.h"
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -14,7 +15,7 @@ namespace Engine5
         bool Open(Level* space);
         void Close();
 
-        void Update();
+        void Update(Real dt);
 
     private:
         friend class GameEditor;

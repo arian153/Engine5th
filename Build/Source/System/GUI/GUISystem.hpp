@@ -1,5 +1,6 @@
 #pragma once
 #include "../../External/imgui/imgui.h"
+#include "../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
@@ -16,8 +17,7 @@ namespace Engine5
         void Initialize(Application* application);
         void Shutdown();
 
-        void BeginUpdate() const;
-        void EndUpdate();
+        void Update(Real dt);
 
         void BeginRender() const;
         void EndRender() const;
@@ -33,9 +33,5 @@ namespace Engine5
         ImGuiIO&        m_im_gui_io;
         RendererCommon* m_renderer    = nullptr;
         GameEditor*     m_game_editor = nullptr;
-
-        bool show_demo_window    = true;
-        bool show_another_window = false;
-        bool show_dock_space     = true;
     };
 }
