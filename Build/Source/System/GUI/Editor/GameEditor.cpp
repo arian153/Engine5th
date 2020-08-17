@@ -89,5 +89,11 @@ namespace Engine5
 
     void GameEditor::Shutdown()
     {
+        
+    }
+
+    bool GameEditor::IsOpen() const
+    {
+        return m_b_open;
     }
 }

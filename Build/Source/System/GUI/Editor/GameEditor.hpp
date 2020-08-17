@@ -18,6 +18,7 @@ namespace Engine5
         void Update(Real dt);
         void Shutdown();
 
+        bool IsOpen() const;
     private:
         LevelEditor m_level_editor;
         SpaceEditor m_space_editor;

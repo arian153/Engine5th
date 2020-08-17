@@ -82,12 +82,14 @@ namespace Engine5
         ImGui::CreateContext();
     }
 
-    void GUISystem::GenerateGUIKeyMap()
-    {
-    }
-
+   
     void GUISystem::AddGUI(GameEditor* game_editor)
     {
         m_game_editor = game_editor;
+    }
+
+    bool GUISystem::OnGameEditor() const
+    {
+        return m_game_editor->IsOpen();
     }
 }

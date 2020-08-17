@@ -25,9 +25,8 @@ namespace Engine5
         static bool IsFocusGUI();
         static void CreateGUIContext();
 
-        void GenerateGUIKeyMap();
-
         void AddGUI(GameEditor* game_editor);
+        bool OnGameEditor() const;
 
     private:
         ImGuiIO&        m_im_gui_io;
