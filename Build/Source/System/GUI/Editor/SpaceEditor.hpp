@@ -6,6 +6,7 @@
 
 namespace Engine5
 {
+    class GUISystem;
     class JsonResource;
     class ResourceManager;
     class SpaceManager;

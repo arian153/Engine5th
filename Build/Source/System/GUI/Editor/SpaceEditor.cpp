@@ -12,6 +12,7 @@
 #include "../../../Manager/Space/SpaceManager.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
+#include "../GUISystem.hpp"
 
 namespace Engine5
 {
@@ -344,6 +345,17 @@ namespace Engine5
             ImGui::Image(
                          m_render_texture_generator->GetTexture()->GetTexture(),
                          ImVec2(scene_scale, scene_scale * ratio), m_uv_min, m_uv_max, m_tint_col, m_border_col);
+
+            if(ImGui::IsItemHovered())
+            {
+                GUISystem::SetFocusFree(true);
+            }
+            else
+            {
+                GUISystem::SetFocusFree(false);
+            }
+
+
         }
     }
 }

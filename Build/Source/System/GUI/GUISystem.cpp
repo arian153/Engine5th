@@ -54,6 +54,7 @@ namespace Engine5
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
         m_game_editor->Update(dt);
+       
     }
 
     void GUISystem::BeginRender() const
@@ -69,6 +70,8 @@ namespace Engine5
 
     bool GUISystem::IsFocusGUI()
     {
+        if (m_b_free_focus)
+            return false;
         return ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow);
     }
 
@@ -82,7 +85,11 @@ namespace Engine5
         ImGui::CreateContext();
     }
 
-   
+    void GUISystem::SetFocusFree(bool flag)
+    {
+        m_b_free_focus = flag;
+    }
+
     void GUISystem::AddGUI(GameEditor* game_editor)
     {
         m_game_editor = game_editor;
