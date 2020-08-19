@@ -22,7 +22,7 @@ namespace Engine5
     void GUISystem::Initialize(Application* application)
     {
         (void)m_im_gui_io;
-        m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        //m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         //m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
         m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
@@ -54,7 +54,6 @@ namespace Engine5
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
         m_game_editor->Update(dt);
-       
     }
 
     void GUISystem::BeginRender() const

@@ -23,6 +23,8 @@ namespace Engine5
         void Initialize(Application* application);
         void Update(Real dt);
 
+        void SetStepFrameTime(Real target_frame_per_second);
+
     private:
         void UpdateMenuBar();
         void UpdateFileTab();
@@ -64,5 +66,10 @@ namespace Engine5
         std::unordered_map<std::string, Space*> m_editing_spaces;
 
         RenderTextureGenerator* m_render_texture_generator = nullptr;
+
+        bool m_b_pause = false;
+        bool m_b_step  = false;
+
+        Real m_time_step = 1.0f / 60.0f;
     };
 }

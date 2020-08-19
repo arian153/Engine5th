@@ -45,6 +45,11 @@ namespace Engine5
         }
     }
 
+    void SpaceEditor::SetStepFrameTime(Real target_frame_per_second)
+    {
+        m_time_step = Math::IsZero(target_frame_per_second) ? 0.0f : 1.0f / target_frame_per_second;
+    }
+
     void SpaceEditor::UpdateMenuBar()
     {
         if (ImGui::BeginMenuBar())
@@ -194,6 +199,7 @@ namespace Engine5
                 {
                     DisplayContents(resource);
                     DisplayScene(resource->FileName(), dt);
+                    m_b_step = false;
                     ImGui::EndTabItem();
                 }
             }
@@ -313,6 +319,20 @@ namespace Engine5
         ImGui::SameLine();
         if (ImGui::Button("Save", ImVec2(100, 0)))
             DoSave(resource);
+        if (ImGui::Button("Start", ImVec2(100, 0)))
+        {
+            m_b_pause = false;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Pause", ImVec2(100, 0)))
+        {
+            m_b_pause = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Step", ImVec2(100, 0)))
+        {
+            m_b_step = true;
+        }
         ImGui::PopID();
     }
 
@@ -333,20 +353,26 @@ namespace Engine5
         auto space = found->second;
         if (space != nullptr)
         {
-            space->Update(dt);
+            auto scene = space->GetScene();
+            Real ratio = scene != nullptr ? 1.0f / scene->GetAspectRatio() : 1.0f;
             m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Gray);
-            m_render_texture_generator->Render(space);
+            if (m_b_pause && m_b_step || !m_b_pause)
+            {
+                space->Update(dt);
+                m_render_texture_generator->Render(space);
+            }
+            else
+            {
+                m_render_texture_generator->Render(scene);
+            }
             m_render_texture_generator->EndRenderToTexture();
             ImVec2 min         = ImGui::GetWindowContentRegionMin();
             ImVec2 max         = ImGui::GetWindowContentRegionMax();
             Real   scene_scale = max.x - min.x;
-            auto   scene       = space->GetScene();
-            Real   ratio       = scene != nullptr ? 1.0f / scene->GetAspectRatio() : 1.0f;
             ImGui::Image(
                          m_render_texture_generator->GetTexture()->GetTexture(),
                          ImVec2(scene_scale, scene_scale * ratio), m_uv_min, m_uv_max, m_tint_col, m_border_col);
-
-            if(ImGui::IsItemHovered())
+            if (ImGui::IsItemHovered())
             {
                 GUISystem::SetFocusFree(true);
             }
@@ -354,8 +380,6 @@ namespace Engine5
             {
                 GUISystem::SetFocusFree(false);
             }
-
-
         }
     }
 }
