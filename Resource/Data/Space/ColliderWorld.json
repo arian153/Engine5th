@@ -190,7 +190,7 @@
         "World": {
             "Draw Broad Phase": {
                 "Color": [ 1, 1, 1, 1 ],
-                "Flag": true
+                "Flag": false 
             },
             "Draw Contact": {
                 "Color": [ 1, 0, 0, 1 ],

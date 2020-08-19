@@ -67,8 +67,9 @@ namespace Engine5
 
         RenderTextureGenerator* m_render_texture_generator = nullptr;
 
-        bool m_b_pause = false;
-        bool m_b_step  = false;
+        bool m_b_pause        = false;
+        bool m_b_step         = false;
+        bool m_b_step_hovered = false;
 
         Real m_time_step = 1.0f / 60.0f;
     };

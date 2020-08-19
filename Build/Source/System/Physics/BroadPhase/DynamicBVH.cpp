@@ -579,13 +579,16 @@ namespace Engine5
             {
                 if (node->data != nullptr)
                 {
-                    if (node->data->GetCollider() != nullptr)
+                    if (node->data->GetCollider() != nullptr && primitive_color.b_flag)
                     {
                         node->data->GetCollider()->Draw(primitive_renderer, eRenderingMode::Line, primitive_color.color);
                     }
                 }
             }
-            primitive_renderer->DrawBox(node->aabb.Center(), Quaternion(), node->aabb.Size(), eRenderingMode::Line, broad_phase_color.color);
+            if (broad_phase_color.b_flag)
+            {
+                primitive_renderer->DrawBox(node->aabb.Center(), Quaternion(), node->aabb.Size(), eRenderingMode::Line, broad_phase_color.color);
+            }
             if (node->children[0] != nullptr)
             {
                 RenderNodeRecursive(node->children[0], primitive_renderer, broad_phase_color, primitive_color);

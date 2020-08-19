@@ -199,7 +199,6 @@ namespace Engine5
                 {
                     DisplayContents(resource);
                     DisplayScene(resource->FileName(), dt);
-                    m_b_step = false;
                     ImGui::EndTabItem();
                 }
             }
@@ -319,19 +318,24 @@ namespace Engine5
         ImGui::SameLine();
         if (ImGui::Button("Save", ImVec2(100, 0)))
             DoSave(resource);
-        if (ImGui::Button("Start", ImVec2(100, 0)))
+        std::string label = m_b_pause ? "Resume" : "Pause";
+        if (ImGui::Button(label.c_str(), ImVec2(100, 100)))
         {
-            m_b_pause = false;
+            m_b_pause = !m_b_pause;
         }
-        ImGui::SameLine();
-        if (ImGui::Button("Pause", ImVec2(100, 0)))
+        if (m_b_pause)
         {
-            m_b_pause = true;
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Step", ImVec2(100, 0)))
-        {
-            m_b_step = true;
+            ImGui::SameLine();
+            if (ImGui::Button("Update", ImVec2(100, 100)))
+            {
+                m_b_step = true;
+            }
+            m_b_step = ImGui::IsItemActive();
+            ImGui::SameLine();
+            if (ImGui::Button("Step", ImVec2(100, 100)))
+            {
+                m_b_step = true;
+            }
         }
         ImGui::PopID();
     }
@@ -353,22 +357,21 @@ namespace Engine5
         auto space = found->second;
         if (space != nullptr)
         {
-            auto scene = space->GetScene();
-            Real ratio = scene != nullptr ? 1.0f / scene->GetAspectRatio() : 1.0f;
-            m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Gray);
             if (m_b_pause && m_b_step || !m_b_pause)
             {
                 space->Update(dt);
-                m_render_texture_generator->Render(space);
             }
             else
             {
-                m_render_texture_generator->Render(scene);
             }
+            m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Gray);
+            m_render_texture_generator->Render(space);
             m_render_texture_generator->EndRenderToTexture();
             ImVec2 min         = ImGui::GetWindowContentRegionMin();
             ImVec2 max         = ImGui::GetWindowContentRegionMax();
             Real   scene_scale = max.x - min.x;
+            auto   scene       = space->GetScene();
+            Real   ratio       = scene != nullptr ? 1.0f / scene->GetAspectRatio() : 1.0f;
             ImGui::Image(
                          m_render_texture_generator->GetTexture()->GetTexture(),
                          ImVec2(scene_scale, scene_scale * ratio), m_uv_min, m_uv_max, m_tint_col, m_border_col);
