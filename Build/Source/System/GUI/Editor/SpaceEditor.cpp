@@ -189,9 +189,12 @@ namespace Engine5
                 ImGuiTabItemFlags tab_flags = (resource->IsModified() ? ImGuiTabItemFlags_UnsavedDocument : 0);
                 bool              visible   = ImGui::BeginTabItem(resource->FileName().c_str(), &resource->IsOpen(), tab_flags);
                 // Cancel attempt to close when unsaved add to save queue so we can display a popup.
-                if (!resource->IsOpen() && resource->IsModified())
+                if (!resource->IsOpen())
                 {
-                    resource->IsOpen() = true;
+                    if (resource->IsModified())
+                    {
+                        resource->IsOpen() = true;
+                    }
                     DoQueueClose(resource);
                 }
                 DisplayContextMenu(resource);
@@ -213,11 +216,11 @@ namespace Engine5
             // Close queue is locked once we started a popup
             for (size_t i = 0; i < m_space_resources.size(); ++i)
             {
-                JsonResource* space = m_space_resources.at(i);
-                if (space->IsClose())
+                JsonResource* resource = m_space_resources.at(i);
+                if (resource->IsClose())
                 {
-                    space->IsClose() = false;
-                    m_close_queue.push_back(space);
+                    resource->IsClose() = false;
+                    m_close_queue.push_back(resource);
                 }
             }
         }
@@ -288,10 +291,6 @@ namespace Engine5
         {
             m_editing_spaces.emplace(resource->FileName(), m_space_manager->CreateSpace(resource));
         }
-        else
-        {
-            m_space_manager->LoadSpace(found->second, resource);
-        }
     }
 
     void SpaceEditor::DoQueueClose(JsonResource* resource)
@@ -303,6 +302,12 @@ namespace Engine5
     {
         resource->IsOpen()     = false;
         resource->IsModified() = false;
+        auto found             = m_editing_spaces.find(resource->FileName());
+        if (found != m_editing_spaces.end())
+        {
+            m_space_manager->RemoveSpace(found->second);
+            m_editing_spaces.erase(found);
+        }
     }
 
     void SpaceEditor::DoSave(JsonResource* resource)
