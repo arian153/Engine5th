@@ -100,6 +100,7 @@ namespace Engine5
             ImGui::Separator();
             if (ImGui::MenuItem("Close", nullptr, false, open_count > 0))
             {
+                m_space_editor.CloseSequence();
             }
             if (ImGui::MenuItem("Close All", nullptr, false, open_count > 0))
             {

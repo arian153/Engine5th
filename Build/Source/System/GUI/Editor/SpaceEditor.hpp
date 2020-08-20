@@ -27,6 +27,7 @@ namespace Engine5
         void UpdateSceneWindow(Real dt);
         void OpenSequence();
         void CloseAllSequence();
+        void CloseSequence();
 
         size_t OpenCount() const;
         size_t Size() const;
@@ -40,7 +41,6 @@ namespace Engine5
         void DisplayContextMenu(JsonResource* resource);
         void DisplayScene(const std::string& name, Real dt) const;
 
-
     private:
         friend class GameEditor;
 
@@ -51,7 +51,6 @@ namespace Engine5
         ImVec2           m_uv_max        = ImVec2(1.0f, 1.0f);                   // Lower-right
         ImVec4           m_tint_col      = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // No tint
         ImVec4           m_border_col    = ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 50% opaque white
-
 
     private:
         GameEditor*      m_game_editor      = nullptr;
@@ -65,11 +64,9 @@ namespace Engine5
 
         RenderTextureGenerator* m_render_texture_generator = nullptr;
 
-        bool m_b_pause        = false;
-        bool m_b_step         = false;
-        bool m_b_step_hovered = false;
-        bool m_b_scene_window = true;
-
-        Real m_time_step = 1.0f / 60.0f;
+        bool   m_b_pause       = false;
+        bool   m_b_step        = false;
+        Real   m_time_step     = 1.0f / 60.0f;
+        size_t m_visible_index = 0;
     };
 }

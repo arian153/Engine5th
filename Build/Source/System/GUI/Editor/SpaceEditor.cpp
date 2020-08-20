@@ -78,6 +78,7 @@ namespace Engine5
                 DisplayContextMenu(resource);
                 if (visible)
                 {
+                    m_visible_index = i;
                     DisplayContents(resource);
                     DisplayScene(resource->FileName(), dt);
                     ImGui::EndTabItem();
@@ -86,8 +87,6 @@ namespace Engine5
             ImGui::EndTabBar();
         }
         ImGui::End();
-
-
         if (m_close_queue.empty())
         {
             // Close queue is locked once we started a popup
@@ -105,13 +104,13 @@ namespace Engine5
         {
             int close_queue_unsaved_documents = 0;
             for (size_t i = 0; i < m_close_queue.size(); ++i)
-                if (m_close_queue[ i ]->IsModified())
+                if (m_close_queue[i]->IsModified())
                     close_queue_unsaved_documents++;
             if (close_queue_unsaved_documents == 0)
             {
                 // Close documents when all are unsaved
                 for (size_t i = 0; i < m_close_queue.size(); ++i)
-                    DoForceClose(m_close_queue[ i ]);
+                    DoForceClose(m_close_queue[i]);
                 m_close_queue.clear();
             }
             else
@@ -125,17 +124,17 @@ namespace Engine5
                     if (ImGui::ListBoxHeader("##", close_queue_unsaved_documents, 6))
                     {
                         for (size_t i = 0; i < m_close_queue.size(); ++i)
-                            if (m_close_queue[ i ]->IsModified())
-                                ImGui::Text("%s", m_close_queue[ i ]->FileName().c_str());
+                            if (m_close_queue[i]->IsModified())
+                                ImGui::Text("%s", m_close_queue[i]->FileName().c_str());
                         ImGui::ListBoxFooter();
                     }
                     if (ImGui::Button("Yes", ImVec2(80, 0)))
                     {
                         for (size_t i = 0; i < m_close_queue.size(); ++i)
                         {
-                            if (m_close_queue[ i ]->IsModified())
-                                DoSave(m_close_queue[ i ]);
-                            DoForceClose(m_close_queue[ i ]);
+                            if (m_close_queue[i]->IsModified())
+                                DoSave(m_close_queue[i]);
+                            DoForceClose(m_close_queue[i]);
                         }
                         m_close_queue.clear();
                         ImGui::CloseCurrentPopup();
@@ -144,7 +143,7 @@ namespace Engine5
                     if (ImGui::Button("No", ImVec2(80, 0)))
                     {
                         for (size_t i = 0; i < m_close_queue.size(); ++i)
-                            DoForceClose(m_close_queue[ i ]);
+                            DoForceClose(m_close_queue[i]);
                         m_close_queue.clear();
                         ImGui::CloseCurrentPopup();
                     }
@@ -179,6 +178,11 @@ namespace Engine5
         {
             DoQueueClose(m_resources.at(i));
         }
+    }
+
+    void SpaceEditor::CloseSequence()
+    {
+        DoQueueClose(m_resources.at(m_visible_index));
     }
 
     size_t SpaceEditor::OpenCount() const
