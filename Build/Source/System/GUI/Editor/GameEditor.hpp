@@ -20,6 +20,12 @@ namespace Engine5
         void Shutdown();
 
         bool IsOpen() const;
+
+    private:
+        void UpdateFileTab();
+        void UpdateEditTab();
+        void UpdateObjectTab();
+
     private:
         LevelEditor  m_level_editor;
         SpaceEditor  m_space_editor;
@@ -31,5 +37,6 @@ namespace Engine5
 
         //imgui flag
         ImGuiDockNodeFlags m_dock_space_flags = ImGuiDockNodeFlags_None;
+        ImGuiWindowFlags   m_window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     };
 }

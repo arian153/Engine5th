@@ -30,19 +30,7 @@ namespace Engine5
         m_resource_manager         = application->GetResourceManager();
         m_render_texture_generator = application->GetRenderSystem()->GetRenderTextureGenerator();
         m_space_manager            = application->GetSpaceManager();
-        m_resource_manager->GetJsonResources(eJsonType::Space, m_space_resources);
-    }
-
-    void SpaceEditor::Update(Real dt)
-    {
-        if (m_b_open)
-        {
-            ImGui::Begin("Space Editor", &m_b_open, ImGuiWindowFlags_MenuBar);
-            UpdateMenuBar();
-            UpdateSceneTab(dt);
-            CloseTab();
-            ImGui::End();
-        }
+        m_resource_manager->GetJsonResources(eJsonType::Space, m_resources);
     }
 
     void SpaceEditor::SetStepFrameTime(Real target_frame_per_second)
@@ -50,127 +38,17 @@ namespace Engine5
         m_time_step = Math::IsZero(target_frame_per_second) ? 0.0f : 1.0f / target_frame_per_second;
     }
 
-    void SpaceEditor::UpdateMenuBar()
+    void SpaceEditor::UpdateSceneWindow(Real dt)
     {
-        if (ImGui::BeginMenuBar())
-        {
-            UpdateFileTab();
-            UpdateEditTab();
-            UpdateObjectTab();
-            ImGui::EndMenuBar();
-        }
-    }
-
-    void SpaceEditor::UpdateFileTab()
-    {
-        if (ImGui::BeginMenu("File"))
-        {
-            int open_count = 0;
-            for (size_t i = 0; i < m_space_resources.size(); ++i)
-                open_count += m_space_resources.at(i)->IsOpen() ? 1 : 0;
-            if (ImGui::BeginMenu("New"))
-            {
-                ImGui::EndMenu();
-            }
-            if (ImGui::BeginMenu("Open", open_count < m_space_resources.size()))
-            {
-                for (size_t i = 0; i < m_space_resources.size(); ++i)
-                {
-                    JsonResource* resource = m_space_resources.at(i);
-                    if (!resource->IsOpen())
-                        if (ImGui::MenuItem(resource->FileName().c_str()))
-                        {
-                            DoOpen(resource);
-                        }
-                }
-                ImGui::EndMenu();
-            }
-            ImGui::Separator();
-            if (ImGui::MenuItem("Close", nullptr, false, open_count > 0))
-            {
-            }
-            if (ImGui::MenuItem("Close All", nullptr, false, open_count > 0))
-            {
-                for (size_t i = 0; i < m_space_resources.size(); ++i)
-                {
-                    DoQueueClose(m_space_resources.at(i));
-                }
-            }
-            ImGui::Separator();
-            if (ImGui::MenuItem("Save", nullptr, false, open_count > 0))
-            {
-            }
-            if (ImGui::MenuItem("Save All", nullptr, false, open_count > 0))
-            {
-            }
-            if (ImGui::MenuItem("Exit"))
-            {
-            }
-            ImGui::EndMenu();
-        }
-    }
-
-    void SpaceEditor::UpdateEditTab()
-    {
-        if (ImGui::BeginMenu("Edit"))
-        {
-            if (ImGui::MenuItem("Undo", "Ctrl+Z"))
-            {
-            }
-            if (ImGui::MenuItem("Redo", "Ctrl+Y"))
-            {
-            }
-            ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "Ctrl+X"))
-            {
-            }
-            if (ImGui::MenuItem("Copy", "Ctrl+C"))
-            {
-            }
-            if (ImGui::MenuItem("Paste", "Ctrl+V"))
-            {
-            }
-            if (ImGui::MenuItem("Duplicate", "Ctrl+D"))
-            {
-            }
-            if (ImGui::MenuItem("Delete", "Ctrl+R"))
-            {
-            }
-            ImGui::EndMenu();
-        }
-    }
-
-    void SpaceEditor::UpdateObjectTab()
-    {
-        if (ImGui::BeginMenu("Object"))
-        {
-            if (ImGui::MenuItem("Create Empty"))
-            {
-            }
-            if (ImGui::MenuItem("Create 3D Object"))
-            {
-            }
-            ImGui::Separator();
-            if (ImGui::MenuItem("Create Camera"))
-            {
-            }
-            if (ImGui::MenuItem("Create Light"))
-            {
-            }
-            ImGui::EndMenu();
-        }
-    }
-
-    void SpaceEditor::UpdateSceneTab(Real dt)
-    {
+        ImGui::Begin("Scene");
         ImGuiTabBarFlags tab_bar_flags = (m_fitting_flags) | (m_b_reorderable ? ImGuiTabBarFlags_Reorderable : 0);
         if (ImGui::BeginTabBar("##tabs", tab_bar_flags))
         {
             if (m_b_reorderable)
             {
-                for (size_t i = 0; i < m_space_resources.size(); ++i)
+                for (size_t i = 0; i < m_resources.size(); ++i)
                 {
-                    JsonResource* resource = m_space_resources.at(i);
+                    JsonResource* resource = m_resources.at(i);
                     if (!resource->IsOpen() && resource->WasOpen())
                     {
                         ImGui::SetTabItemClosed(resource->FileName().c_str());
@@ -179,9 +57,9 @@ namespace Engine5
                 }
             }
             // Submit Tabs
-            for (size_t i = 0; i < m_space_resources.size(); ++i)
+            for (size_t i = 0; i < m_resources.size(); ++i)
             {
-                JsonResource* resource = m_space_resources.at(i);
+                JsonResource* resource = m_resources.at(i);
                 if (!resource->IsOpen())
                 {
                     continue;
@@ -207,16 +85,15 @@ namespace Engine5
             }
             ImGui::EndTabBar();
         }
-    }
+        ImGui::End();
 
-    void SpaceEditor::CloseTab()
-    {
+
         if (m_close_queue.empty())
         {
             // Close queue is locked once we started a popup
-            for (size_t i = 0; i < m_space_resources.size(); ++i)
+            for (size_t i = 0; i < m_resources.size(); ++i)
             {
-                JsonResource* resource = m_space_resources.at(i);
+                JsonResource* resource = m_resources.at(i);
                 if (resource->IsClose())
                 {
                     resource->IsClose() = false;
@@ -228,13 +105,13 @@ namespace Engine5
         {
             int close_queue_unsaved_documents = 0;
             for (size_t i = 0; i < m_close_queue.size(); ++i)
-                if (m_close_queue[i]->IsModified())
+                if (m_close_queue[ i ]->IsModified())
                     close_queue_unsaved_documents++;
             if (close_queue_unsaved_documents == 0)
             {
                 // Close documents when all are unsaved
                 for (size_t i = 0; i < m_close_queue.size(); ++i)
-                    DoForceClose(m_close_queue[i]);
+                    DoForceClose(m_close_queue[ i ]);
                 m_close_queue.clear();
             }
             else
@@ -248,17 +125,17 @@ namespace Engine5
                     if (ImGui::ListBoxHeader("##", close_queue_unsaved_documents, 6))
                     {
                         for (size_t i = 0; i < m_close_queue.size(); ++i)
-                            if (m_close_queue[i]->IsModified())
-                                ImGui::Text("%s", m_close_queue[i]->FileName().c_str());
+                            if (m_close_queue[ i ]->IsModified())
+                                ImGui::Text("%s", m_close_queue[ i ]->FileName().c_str());
                         ImGui::ListBoxFooter();
                     }
                     if (ImGui::Button("Yes", ImVec2(80, 0)))
                     {
                         for (size_t i = 0; i < m_close_queue.size(); ++i)
                         {
-                            if (m_close_queue[i]->IsModified())
-                                DoSave(m_close_queue[i]);
-                            DoForceClose(m_close_queue[i]);
+                            if (m_close_queue[ i ]->IsModified())
+                                DoSave(m_close_queue[ i ]);
+                            DoForceClose(m_close_queue[ i ]);
                         }
                         m_close_queue.clear();
                         ImGui::CloseCurrentPopup();
@@ -267,7 +144,7 @@ namespace Engine5
                     if (ImGui::Button("No", ImVec2(80, 0)))
                     {
                         for (size_t i = 0; i < m_close_queue.size(); ++i)
-                            DoForceClose(m_close_queue[i]);
+                            DoForceClose(m_close_queue[ i ]);
                         m_close_queue.clear();
                         ImGui::CloseCurrentPopup();
                     }
@@ -281,6 +158,40 @@ namespace Engine5
                 }
             }
         }
+    }
+
+    void SpaceEditor::OpenSequence()
+    {
+        for (size_t i = 0; i < m_resources.size(); ++i)
+        {
+            JsonResource* resource = m_resources.at(i);
+            if (!resource->IsOpen())
+                if (ImGui::MenuItem(resource->FileName().c_str()))
+                {
+                    DoOpen(resource);
+                }
+        }
+    }
+
+    void SpaceEditor::CloseAllSequence()
+    {
+        for (size_t i = 0; i < m_resources.size(); ++i)
+        {
+            DoQueueClose(m_resources.at(i));
+        }
+    }
+
+    size_t SpaceEditor::OpenCount() const
+    {
+        size_t result = 0;
+        for (size_t i = 0; i < m_resources.size(); ++i)
+            result += m_resources.at(i)->IsOpen() ? 1 : 0;
+        return result;
+    }
+
+    size_t SpaceEditor::Size() const
+    {
+        return m_resources.size();
     }
 
     void SpaceEditor::DoOpen(JsonResource* resource)

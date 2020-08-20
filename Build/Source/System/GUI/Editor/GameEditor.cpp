@@ -2,6 +2,7 @@
 #include "../../../External/imgui/imgui.h"
 #include "../../Core/OS-API/Application.hpp"
 #include "../../../Manager/Level/LevelManager.hpp"
+#include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 
 namespace Engine5
 {
@@ -15,63 +16,45 @@ namespace Engine5
 
     void GameEditor::Initialize(Application* application)
     {
-        m_application = application;
+        m_application                = application;
         m_space_editor.m_game_editor = this;
         m_space_editor.Initialize(application);
+        m_window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+        m_window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        m_window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
     }
 
     void GameEditor::Update(Real dt)
     {
         if (m_b_open)
         {
-            ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-            ImGuiViewport*   viewport     = ImGui::GetMainViewport();
+            ImGuiViewport* viewport = ImGui::GetMainViewport();
             ImGui::SetNextWindowPos(viewport->GetWorkPos());
             ImGui::SetNextWindowSize(viewport->GetWorkSize());
             ImGui::SetNextWindowViewport(viewport->ID);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-            if (m_dock_space_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-                window_flags |= ImGuiWindowFlags_NoBackground;
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-            ImGui::Begin("Game Editor", &m_b_open, window_flags);
+            ImGui::Begin("Engine 5th Editor", &m_b_open, m_window_flags);
             ImGui::PopStyleVar(3);
             // DockSpace
             ImGuiIO& io = ImGui::GetIO();
             if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
             {
-                ImGuiID dock_space_id = ImGui::GetID("Game Editor");
+                ImGuiID dock_space_id = ImGui::GetID("E5-Editor");
                 ImGui::DockSpace(dock_space_id, ImVec2(0.0f, 0.0f), m_dock_space_flags);
             }
             if (ImGui::BeginMenuBar())
             {
-                if (ImGui::BeginMenu("Game Editor"))
-                {
-                    if (ImGui::MenuItem("Pass through editor window", "", (m_dock_space_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))
-                        m_dock_space_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
-                    m_editor_label = m_level_editor.m_b_open ? "Close Level Editor" : "Open Level Editor";
-                    if (ImGui::MenuItem(m_editor_label.c_str(), ""))
-                        m_level_editor.m_b_open = !m_level_editor.m_b_open;
-                    m_editor_label = m_space_editor.m_b_open ? "Close Space Editor" : "Open Space Editor";
-                    if (ImGui::MenuItem(m_editor_label.c_str(), ""))
-                        m_space_editor.m_b_open = !m_space_editor.m_b_open;
-                    ImGui::Separator();
-                    if (ImGui::MenuItem("Close Game Editor", "Tab+Space"))
-                    {
-                        m_b_open = false;
-                    }
-                    if (ImGui::MenuItem("Close Application", nullptr, false))
-                        m_application->GetLevelManager()->SetQuit();
-                    ImGui::EndMenu();
-                }
+                UpdateFileTab();
+                UpdateEditTab();
+                UpdateObjectTab();
                 ImGui::EndMenuBar();
             }
             ImGui::End();
             {
+                m_space_editor.UpdateSceneWindow(dt);
                 m_level_editor.Update(dt);
-                m_space_editor.Update(dt);
             }
             if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)) && ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Tab)))
             {
@@ -89,11 +72,107 @@ namespace Engine5
 
     void GameEditor::Shutdown()
     {
-        
     }
 
     bool GameEditor::IsOpen() const
     {
         return m_b_open;
+    }
+
+    void GameEditor::UpdateFileTab()
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            size_t open_count = m_space_editor.OpenCount();
+            if (ImGui::BeginMenu("New"))
+            {
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Open"))
+            {
+                if (ImGui::BeginMenu("Space",  open_count < m_space_editor.Size()))
+                {
+                    m_space_editor.OpenSequence();
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Close", nullptr, false, open_count > 0))
+            {
+            }
+            if (ImGui::MenuItem("Close All", nullptr, false, open_count > 0))
+            {
+                m_space_editor.CloseAllSequence();
+            }
+            if (ImGui::MenuItem("Close Editor"))
+            {
+                m_b_open = false;
+            }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Save", nullptr, false, open_count > 0))
+            {
+            }
+            if (ImGui::MenuItem("Save All", nullptr, false, open_count > 0))
+            {
+            }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Exit"))
+            {
+                m_application->GetLevelManager()->SetQuit();
+            }
+            ImGui::EndMenu();
+        }
+    }
+
+    void GameEditor::UpdateEditTab()
+    {
+        if (ImGui::BeginMenu("Edit"))
+        {
+            if (ImGui::MenuItem("Undo", "Ctrl+Z"))
+            {
+            }
+            if (ImGui::MenuItem("Redo", "Ctrl+Y"))
+            {
+            }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Cut", "Ctrl+X"))
+            {
+            }
+            if (ImGui::MenuItem("Copy", "Ctrl+C"))
+            {
+            }
+            if (ImGui::MenuItem("Paste", "Ctrl+V"))
+            {
+            }
+            if (ImGui::MenuItem("Duplicate", "Ctrl+D"))
+            {
+            }
+            if (ImGui::MenuItem("Delete", "Ctrl+R"))
+            {
+            }
+            ImGui::EndMenu();
+        }
+    }
+
+    void GameEditor::UpdateObjectTab()
+    {
+        if (ImGui::BeginMenu("Object"))
+        {
+            if (ImGui::MenuItem("Create Empty"))
+            {
+            }
+            if (ImGui::MenuItem("Create 3D Object"))
+            {
+            }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Create Camera"))
+            {
+            }
+            if (ImGui::MenuItem("Create Light"))
+            {
+            }
+            ImGui::EndMenu();
+        }
     }
 }

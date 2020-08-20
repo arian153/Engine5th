@@ -21,18 +21,15 @@ namespace Engine5
         ~SpaceEditor();
 
         void Initialize(Application* application);
-        void Update(Real dt);
-
         void SetStepFrameTime(Real target_frame_per_second);
 
     private:
-        void UpdateMenuBar();
-        void UpdateFileTab();
-        void UpdateEditTab();
-        void UpdateObjectTab();
+        void UpdateSceneWindow(Real dt);
+        void OpenSequence();
+        void CloseAllSequence();
 
-        void UpdateSceneTab(Real dt);
-        void CloseTab();
+        size_t OpenCount() const;
+        size_t Size() const;
 
     private:
         void DoOpen(JsonResource* resource);
@@ -43,11 +40,11 @@ namespace Engine5
         void DisplayContextMenu(JsonResource* resource);
         void DisplayScene(const std::string& name, Real dt) const;
 
+
     private:
         friend class GameEditor;
 
     private:
-        bool             m_b_open        = true;
         bool             m_b_reorderable = true;
         ImGuiTabBarFlags m_fitting_flags = ImGuiTabBarFlags_FittingPolicyDefault_;
         ImVec2           m_uv_min        = ImVec2(0.0f, 0.0f);                   // Top-left
@@ -55,13 +52,14 @@ namespace Engine5
         ImVec4           m_tint_col      = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // No tint
         ImVec4           m_border_col    = ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 50% opaque white
 
+
     private:
         GameEditor*      m_game_editor      = nullptr;
         Application*     m_application      = nullptr;
         SpaceManager*    m_space_manager    = nullptr;
         ResourceManager* m_resource_manager = nullptr;
         //tool
-        std::vector<JsonResource*>              m_space_resources;
+        std::vector<JsonResource*>              m_resources;
         std::vector<JsonResource*>              m_close_queue;
         std::unordered_map<std::string, Space*> m_editing_spaces;
 
@@ -70,6 +68,7 @@ namespace Engine5
         bool m_b_pause        = false;
         bool m_b_step         = false;
         bool m_b_step_hovered = false;
+        bool m_b_scene_window = true;
 
         Real m_time_step = 1.0f / 60.0f;
     };
