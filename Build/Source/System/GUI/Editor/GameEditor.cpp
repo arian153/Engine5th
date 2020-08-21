@@ -54,6 +54,8 @@ namespace Engine5
             ImGui::End();
             {
                 m_space_editor.UpdateSceneWindow(dt);
+                m_space_editor.UpdateHierarchyWindow();
+                m_space_editor.UpdateInspectorWindow();
                 m_level_editor.Update(dt);
             }
             if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)) && ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Tab)))

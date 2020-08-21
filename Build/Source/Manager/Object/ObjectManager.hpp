@@ -46,6 +46,7 @@ namespace Engine5
     private:
         friend class Object;
         friend class JsonResource;
+        friend class SpaceEditor;
 
     private:
         std::unordered_multimap<std::string, Object*> m_object_map;

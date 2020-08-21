@@ -25,6 +25,9 @@ namespace Engine5
 
     private:
         void UpdateSceneWindow(Real dt);
+        void UpdateInspectorWindow();
+        void UpdateHierarchyWindow();
+
         void OpenSequence();
         void CloseAllSequence();
         void CloseSequence();
@@ -33,13 +36,13 @@ namespace Engine5
         size_t Size() const;
 
     private:
-        void DoOpen(JsonResource* resource);
-        void DoQueueClose(JsonResource* resource);
-        void DoForceClose(JsonResource* resource);
-        void DoSave(JsonResource* resource);
-        void DisplayContents(JsonResource* resource);
-        void DisplayContextMenu(JsonResource* resource);
-        void DisplayScene(const std::string& name, Real dt) const;
+        void   DoOpen(JsonResource* resource);
+        void   DoQueueClose(JsonResource* resource);
+        void   DoForceClose(JsonResource* resource);
+        void   DoSave(JsonResource* resource);
+        void   DisplayContents(JsonResource* resource);
+        void   DisplayContextMenu(JsonResource* resource);
+        Space* DisplayScene(const std::string& name, Real dt) const;
 
     private:
         friend class GameEditor;
@@ -57,6 +60,7 @@ namespace Engine5
         Application*     m_application      = nullptr;
         SpaceManager*    m_space_manager    = nullptr;
         ResourceManager* m_resource_manager = nullptr;
+        Space*           m_space            = nullptr;
         //tool
         std::vector<JsonResource*>              m_resources;
         std::vector<JsonResource*>              m_close_queue;

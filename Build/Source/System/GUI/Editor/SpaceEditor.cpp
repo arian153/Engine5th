@@ -13,6 +13,8 @@
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../GUISystem.hpp"
+#include "../../../Manager/Object/ObjectManager.hpp"
+#include "../../../Manager/Object/Object.hpp"
 
 namespace Engine5
 {
@@ -40,7 +42,8 @@ namespace Engine5
 
     void SpaceEditor::UpdateSceneWindow(Real dt)
     {
-        ImGui::Begin("Scene");
+        m_space = nullptr;
+        ImGui::Begin("Space");
         ImGuiTabBarFlags tab_bar_flags = (m_fitting_flags) | (m_b_reorderable ? ImGuiTabBarFlags_Reorderable : 0);
         if (ImGui::BeginTabBar("##tabs", tab_bar_flags))
         {
@@ -80,83 +83,106 @@ namespace Engine5
                 {
                     m_visible_index = i;
                     DisplayContents(resource);
-                    DisplayScene(resource->FileName(), dt);
+                    m_space = DisplayScene(resource->FileName(), dt);
                     ImGui::EndTabItem();
                 }
             }
             ImGui::EndTabBar();
         }
         ImGui::End();
-        if (m_close_queue.empty())
         {
-            // Close queue is locked once we started a popup
-            for (size_t i = 0; i < m_resources.size(); ++i)
+            if (m_close_queue.empty())
             {
-                JsonResource* resource = m_resources.at(i);
-                if (resource->IsClose())
+                // Close queue is locked once we started a popup
+                for (size_t i = 0; i < m_resources.size(); ++i)
                 {
-                    resource->IsClose() = false;
-                    m_close_queue.push_back(resource);
+                    JsonResource* resource = m_resources.at(i);
+                    if (resource->IsClose())
+                    {
+                        resource->IsClose() = false;
+                        m_close_queue.push_back(resource);
+                        m_space = nullptr;
+                    }
                 }
             }
-        }
-        if (!m_close_queue.empty())
-        {
-            int close_queue_unsaved_documents = 0;
-            for (size_t i = 0; i < m_close_queue.size(); ++i)
-                if (m_close_queue[i]->IsModified())
-                    close_queue_unsaved_documents++;
-            if (close_queue_unsaved_documents == 0)
+            if (!m_close_queue.empty())
             {
-                // Close documents when all are unsaved
+                int close_queue_unsaved_documents = 0;
                 for (size_t i = 0; i < m_close_queue.size(); ++i)
-                    DoForceClose(m_close_queue[i]);
-                m_close_queue.clear();
-            }
-            else
-            {
-                if (!ImGui::IsPopupOpen("Save?"))
-                    ImGui::OpenPopup("Save?");
-                if (ImGui::BeginPopupModal("Save?"))
+                    if (m_close_queue[i]->IsModified())
+                        close_queue_unsaved_documents++;
+                if (close_queue_unsaved_documents == 0)
                 {
-                    ImGui::Text("Save change to the following items?");
-                    ImGui::SetNextItemWidth(-1.0f);
-                    if (ImGui::ListBoxHeader("##", close_queue_unsaved_documents, 6))
+                    // Close documents when all are unsaved
+                    for (size_t i = 0; i < m_close_queue.size(); ++i)
+                        DoForceClose(m_close_queue[i]);
+                    m_close_queue.clear();
+                }
+                else
+                {
+                    if (!ImGui::IsPopupOpen("Save?"))
+                        ImGui::OpenPopup("Save?");
+                    if (ImGui::BeginPopupModal("Save?"))
                     {
-                        for (size_t i = 0; i < m_close_queue.size(); ++i)
-                            if (m_close_queue[i]->IsModified())
-                                ImGui::Text("%s", m_close_queue[i]->FileName().c_str());
-                        ImGui::ListBoxFooter();
-                    }
-                    if (ImGui::Button("Yes", ImVec2(80, 0)))
-                    {
-                        for (size_t i = 0; i < m_close_queue.size(); ++i)
+                        ImGui::Text("Save change to the following items?");
+                        ImGui::SetNextItemWidth(-1.0f);
+                        if (ImGui::ListBoxHeader("##", close_queue_unsaved_documents, 6))
                         {
-                            if (m_close_queue[i]->IsModified())
-                                DoSave(m_close_queue[i]);
-                            DoForceClose(m_close_queue[i]);
+                            for (size_t i = 0; i < m_close_queue.size(); ++i)
+                                if (m_close_queue[i]->IsModified())
+                                    ImGui::Text("%s", m_close_queue[i]->FileName().c_str());
+                            ImGui::ListBoxFooter();
                         }
-                        m_close_queue.clear();
-                        ImGui::CloseCurrentPopup();
+                        if (ImGui::Button("Yes", ImVec2(80, 0)))
+                        {
+                            for (size_t i = 0; i < m_close_queue.size(); ++i)
+                            {
+                                if (m_close_queue[i]->IsModified())
+                                    DoSave(m_close_queue[i]);
+                                DoForceClose(m_close_queue[i]);
+                            }
+                            m_close_queue.clear();
+                            ImGui::CloseCurrentPopup();
+                        }
+                        ImGui::SameLine();
+                        if (ImGui::Button("No", ImVec2(80, 0)))
+                        {
+                            for (size_t i = 0; i < m_close_queue.size(); ++i)
+                                DoForceClose(m_close_queue[i]);
+                            m_close_queue.clear();
+                            ImGui::CloseCurrentPopup();
+                        }
+                        ImGui::SameLine();
+                        if (ImGui::Button("Cancel", ImVec2(80, 0)))
+                        {
+                            m_close_queue.clear();
+                            ImGui::CloseCurrentPopup();
+                        }
+                        ImGui::EndPopup();
                     }
-                    ImGui::SameLine();
-                    if (ImGui::Button("No", ImVec2(80, 0)))
-                    {
-                        for (size_t i = 0; i < m_close_queue.size(); ++i)
-                            DoForceClose(m_close_queue[i]);
-                        m_close_queue.clear();
-                        ImGui::CloseCurrentPopup();
-                    }
-                    ImGui::SameLine();
-                    if (ImGui::Button("Cancel", ImVec2(80, 0)))
-                    {
-                        m_close_queue.clear();
-                        ImGui::CloseCurrentPopup();
-                    }
-                    ImGui::EndPopup();
                 }
             }
         }
+    }
+
+    void SpaceEditor::UpdateInspectorWindow()
+    {
+        ImGui::Begin("Inspector");
+        ImGui::End();
+    }
+
+    void SpaceEditor::UpdateHierarchyWindow()
+    {
+        ImGui::Begin("Hierarchy");
+        if (m_space != nullptr)
+        {
+            auto objects = m_space->GetObjectManager();
+            for (auto& object : objects->m_objects)
+            {
+                ImGui::Text(object->GetName().c_str());
+            }
+        }
+        ImGui::End();
     }
 
     void SpaceEditor::OpenSequence()
@@ -187,10 +213,10 @@ namespace Engine5
 
     size_t SpaceEditor::OpenCount() const
     {
-        size_t result = 0;
+        size_t open_count = 0;
         for (size_t i = 0; i < m_resources.size(); ++i)
-            result += m_resources.at(i)->IsOpen() ? 1 : 0;
-        return result;
+            open_count += m_resources.at(i)->IsOpen() ? 1 : 0;
+        return open_count;
     }
 
     size_t SpaceEditor::Size() const
@@ -211,6 +237,7 @@ namespace Engine5
     void SpaceEditor::DoQueueClose(JsonResource* resource)
     {
         resource->IsClose() = true;
+        m_space             = nullptr;
     }
 
     void SpaceEditor::DoForceClose(JsonResource* resource)
@@ -233,26 +260,21 @@ namespace Engine5
     void SpaceEditor::DisplayContents(JsonResource* resource)
     {
         ImGui::PushID(resource);
-        if (ImGui::Button("Modify", ImVec2(100, 0)))
-            resource->IsModified() = true;
-        ImGui::SameLine();
-        if (ImGui::Button("Save", ImVec2(100, 0)))
-            DoSave(resource);
         std::string label = m_b_pause ? "Resume" : "Pause";
-        if (ImGui::Button(label.c_str(), ImVec2(100, 100)))
+        if (ImGui::Button(label.c_str(), ImVec2(100, 0)))
         {
             m_b_pause = !m_b_pause;
         }
         if (m_b_pause)
         {
             ImGui::SameLine();
-            if (ImGui::Button("Update", ImVec2(100, 100)))
+            if (ImGui::Button("Update", ImVec2(100, 0)))
             {
                 m_b_step = true;
             }
             m_b_step = ImGui::IsItemActive();
             ImGui::SameLine();
-            if (ImGui::Button("Step", ImVec2(100, 100)))
+            if (ImGui::Button("Step", ImVec2(100, 0)))
             {
                 m_b_step = true;
             }
@@ -271,7 +293,7 @@ namespace Engine5
         ImGui::EndPopup();
     }
 
-    void SpaceEditor::DisplayScene(const std::string& name, Real dt) const
+    Space* SpaceEditor::DisplayScene(const std::string& name, Real dt) const
     {
         auto found = m_editing_spaces.find(name);
         auto space = found->second;
@@ -304,5 +326,6 @@ namespace Engine5
                 GUISystem::SetFocusFree(false);
             }
         }
+        return space;
     }
 }
