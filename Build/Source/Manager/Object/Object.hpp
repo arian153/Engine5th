@@ -25,6 +25,7 @@ namespace Engine5
         size_t GetID() const;
 
         std::string GetName() const;
+        const char* GetNameChar() const;
         void        SetName(const std::string& name);
 
         Object* Clone(const std::string& name = "", Space* space = nullptr);

@@ -171,15 +171,27 @@ namespace Engine5
         ImGui::End();
     }
 
+    static bool Items_ObjectGetter(void* data, int idx, const char** out_text)
+    {
+        auto& objects = *static_cast<std::vector<Object*>*>(data);
+        if (idx < 0 || idx >= static_cast<int>(objects.size()))
+        {
+            return false;
+        }
+        *out_text = objects[idx]->GetNameChar();
+        return true;
+    }
+
     void SpaceEditor::UpdateHierarchyWindow()
     {
         ImGui::Begin("Hierarchy");
         if (m_space != nullptr)
         {
-            auto objects = m_space->GetObjectManager();
-            for (auto& object : objects->m_objects)
+            auto objects = m_space->GetObjectManager()->m_objects;
+            if (ImGui::ListBox(
+                               "##list", &m_object_index, Items_ObjectGetter,
+                               static_cast<void*>(&objects), static_cast<int>(objects.size()), 20))
             {
-                ImGui::Text(object->GetName().c_str());
             }
         }
         ImGui::End();

@@ -28,6 +28,11 @@ namespace Engine5
         return m_name;
     }
 
+    const char* Object::GetNameChar() const
+    {
+        return m_name.c_str();
+    }
+
     void Object::SetName(const std::string& name)
     {
         if (m_name != name)

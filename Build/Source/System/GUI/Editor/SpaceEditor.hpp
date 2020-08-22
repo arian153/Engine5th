@@ -6,6 +6,7 @@
 
 namespace Engine5
 {
+    class Object;
     class GUISystem;
     class JsonResource;
     class ResourceManager;
@@ -60,7 +61,8 @@ namespace Engine5
         Application*     m_application      = nullptr;
         SpaceManager*    m_space_manager    = nullptr;
         ResourceManager* m_resource_manager = nullptr;
-        Space*           m_space            = nullptr;
+        Space*           m_editing_space    = nullptr;
+        Object*          m_editing_object   = nullptr;
         //tool
         std::vector<JsonResource*>              m_resources;
         std::vector<JsonResource*>              m_close_queue;
@@ -68,9 +70,10 @@ namespace Engine5
 
         RenderTextureGenerator* m_render_texture_generator = nullptr;
 
-        bool   m_b_pause       = false;
-        bool   m_b_step        = false;
-        Real   m_time_step     = 1.0f / 60.0f;
-        size_t m_visible_index = 0;
+        bool   m_b_pause      = false;
+        bool   m_b_step       = false;
+        Real   m_time_step    = 1.0f / 60.0f;
+        size_t m_space_index  = 0;
+        int    m_object_index = 0;
     };
 }
