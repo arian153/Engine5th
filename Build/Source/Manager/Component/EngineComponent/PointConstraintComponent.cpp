@@ -147,6 +147,11 @@ namespace Engine5
     {
     }
 
+    void PointConstraintComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void PointConstraintComponent::Subscribe()
     {
         if (m_space != nullptr && m_point_constraint != nullptr)

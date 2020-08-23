@@ -260,6 +260,11 @@ namespace Engine5
     {
     }
 
+    void TransformComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void TransformComponent::Subscribe()
     {
     }

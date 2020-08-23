@@ -263,6 +263,11 @@ namespace Engine5
     {
     }
 
+    void RigidBodyComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void RigidBodyComponent::Subscribe()
     {
         if (m_space != nullptr && m_rigid_body != nullptr)

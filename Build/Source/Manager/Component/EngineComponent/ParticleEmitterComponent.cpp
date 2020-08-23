@@ -146,6 +146,11 @@ namespace Engine5
     {
     }
 
+    void ParticleEmitterComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void ParticleEmitterComponent::Subscribe()
     {
         if (m_space != nullptr && m_emitter != nullptr)

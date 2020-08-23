@@ -175,6 +175,11 @@ namespace Engine5
     {
     }
 
+    void CameraComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void CameraComponent::Subscribe()
     {
         if (m_space != nullptr && m_camera != nullptr)

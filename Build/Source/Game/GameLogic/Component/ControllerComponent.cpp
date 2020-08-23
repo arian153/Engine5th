@@ -191,6 +191,11 @@ namespace Game
     {
     }
 
+    void ControllerComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void ControllerComponent::Subscribe()
     {
         if (m_space != nullptr)

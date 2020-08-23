@@ -194,6 +194,11 @@ namespace Engine5
     {
     }
 
+    void LightComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void LightComponent::Subscribe()
     {
         if (m_space != nullptr && m_light != nullptr)

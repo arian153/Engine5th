@@ -1,6 +1,8 @@
 #pragma once
 #include "../../System/Math/Utility/MathDef.hpp"
 #include "../../System/Core/Utility/CoreDef.hpp"
+// ReSharper disable once CppUnusedIncludeDirective
+#include "../../External/imgui/imgui.h"
 
 namespace Json
 {
@@ -44,6 +46,7 @@ namespace Engine5
         bool    m_b_loaded   = false;
         bool    m_b_unloaded = false;
 
+        
     private:
         friend class ComponentManager;
     };

@@ -203,6 +203,11 @@ namespace Engine5
     {
     }
 
+    void ColliderComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void ColliderComponent::Subscribe()
     {
         if (m_space != nullptr && m_collider_set != nullptr)

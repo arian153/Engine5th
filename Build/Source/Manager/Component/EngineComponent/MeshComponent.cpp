@@ -140,6 +140,11 @@ namespace Engine5
     {
     }
 
+    void MeshComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void MeshComponent::Subscribe()
     {
         if (m_space != nullptr && m_mesh != nullptr)

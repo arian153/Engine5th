@@ -78,6 +78,11 @@ namespace Engine5
     {
     }
 
+    void TextSpriteComponent::Edit()
+    {
+        ImGui::CollapsingHeader(m_type.c_str());
+    }
+
     void TextSpriteComponent::Subscribe()
     {
         if (m_space != nullptr && m_text_sprite != nullptr)
