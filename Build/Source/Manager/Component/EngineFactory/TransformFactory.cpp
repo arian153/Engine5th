@@ -15,6 +15,7 @@ namespace Engine5
     Component* TransformFactory::Create(Object* owner, Space* space)
     {
         auto create = new TransformComponent(owner);
+        create->m_type = type;
         create->SetSpace(space);
         return create;
     }

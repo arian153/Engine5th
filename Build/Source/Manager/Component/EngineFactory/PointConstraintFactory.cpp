@@ -15,6 +15,7 @@ namespace Engine5
     Component* PointConstraintFactory::Create(Object* owner, Space* space)
     {
         auto create = new PointConstraintComponent(owner);
+        create->m_type = type;
         create->SetSpace(space);
         return create;
     }

@@ -15,6 +15,7 @@ namespace Engine5
     Component* CameraFactory::Create(Object* owner, Space* space)
     {
         auto create = new CameraComponent(owner);
+        create->m_type = type;
         create->SetSpace(space);
         return create;
     }

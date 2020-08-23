@@ -15,6 +15,7 @@ namespace Engine5
     Component* MeshFactory::Create(Object* owner, Space* space)
     {
         auto create = new MeshComponent(owner);
+        create->m_type = type;
         create->SetSpace(space);
         return create;
     }

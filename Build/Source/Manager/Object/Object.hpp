@@ -87,6 +87,7 @@ namespace Engine5
         friend class ComponentManager;
         friend class ObjectManager;
         friend class ObjectFactory;
+        friend class SpaceEditor;
 
     private:
         //identifier

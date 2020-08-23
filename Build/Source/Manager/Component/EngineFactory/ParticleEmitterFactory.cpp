@@ -15,6 +15,7 @@ namespace Engine5
     Component* ParticleEmitterFactory::Create(Object* owner, Space* space)
     {
         auto create = new ParticleEmitterComponent(owner);
+        create->m_type = type;
         create->SetSpace(space);
         return create;
     }

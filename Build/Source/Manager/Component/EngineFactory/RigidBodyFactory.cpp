@@ -15,6 +15,7 @@ namespace Engine5
     Component* RigidBodyFactory::Create(Object* owner, Space* space)
     {
         auto create = new RigidBodyComponent(owner);
+        create->m_type = type;
         create->SetSpace(space);
         return create;
     }

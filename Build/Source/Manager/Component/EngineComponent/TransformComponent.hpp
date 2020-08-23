@@ -55,6 +55,7 @@ namespace Engine5
     protected:
         bool Load(const Json::Value& data) override;
         void Save(Json::Value& data) const override;
+        void Edit() override;
         void Subscribe() override;
         void Unsubscribe() override;
 

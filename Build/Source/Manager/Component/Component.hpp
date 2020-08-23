@@ -23,13 +23,15 @@ namespace Engine5
         virtual void Shutdown() = 0;
         virtual bool Load(const Json::Value& data) = 0;
         virtual void Save(Json::Value& data) const = 0;
+        virtual void Edit() = 0;
 
-        String  Type() const;
-        bool    IsLoaded() const;
-        bool    IsUnloaded() const;
-        Object* GetOwner() const;
-        Space*  GetSpace() const;
-        void    SetSpace(Space* space);
+        String      Type() const;
+        const char* TypeCStr() const;
+        bool        IsLoaded() const;
+        bool        IsUnloaded() const;
+        Object*     GetOwner() const;
+        Space*      GetSpace() const;
+        void        SetSpace(Space* space);
 
     protected:
         virtual void Subscribe() = 0;

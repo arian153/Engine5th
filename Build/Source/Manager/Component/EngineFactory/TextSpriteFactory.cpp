@@ -15,6 +15,7 @@ namespace Engine5
     Component* TextSpriteFactory::Create(Object* owner, Space* space)
     {
         auto create = new TextSpriteComponent(owner);
+        create->m_type = type;
         create->SetSpace(space);
         return create;
     }

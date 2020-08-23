@@ -15,6 +15,7 @@
 #include "../GUISystem.hpp"
 #include "../../../Manager/Object/ObjectManager.hpp"
 #include "../../../Manager/Object/Object.hpp"
+#include "../../../Manager/Component/Component.hpp"
 
 namespace Engine5
 {
@@ -42,7 +43,7 @@ namespace Engine5
 
     void SpaceEditor::UpdateSceneWindow(Real dt)
     {
-        m_space = nullptr;
+        m_editing_space = nullptr;
         ImGui::Begin("Space");
         ImGuiTabBarFlags tab_bar_flags = (m_fitting_flags) | (m_b_reorderable ? ImGuiTabBarFlags_Reorderable : 0);
         if (ImGui::BeginTabBar("##tabs", tab_bar_flags))
@@ -81,9 +82,9 @@ namespace Engine5
                 DisplayContextMenu(resource);
                 if (visible)
                 {
-                    m_visible_index = i;
+                    m_space_index = i;
                     DisplayContents(resource);
-                    m_space = DisplayScene(resource->FileName(), dt);
+                    m_editing_space = DisplayScene(resource->FileName(), dt);
                     ImGui::EndTabItem();
                 }
             }
@@ -101,7 +102,7 @@ namespace Engine5
                     {
                         resource->IsClose() = false;
                         m_close_queue.push_back(resource);
-                        m_space = nullptr;
+                        m_editing_space = nullptr;
                     }
                 }
             }
@@ -168,6 +169,13 @@ namespace Engine5
     void SpaceEditor::UpdateInspectorWindow()
     {
         ImGui::Begin("Inspector");
+        if (m_editing_object != nullptr)
+        {
+            for (auto& component : m_editing_object->m_components)
+            {
+                ImGui::CollapsingHeader(component.second->TypeCStr());
+            }
+        }
         ImGui::End();
     }
 
@@ -185,13 +193,14 @@ namespace Engine5
     void SpaceEditor::UpdateHierarchyWindow()
     {
         ImGui::Begin("Hierarchy");
-        if (m_space != nullptr)
+        if (m_editing_space != nullptr)
         {
-            auto objects = m_space->GetObjectManager()->m_objects;
+            auto objects = m_editing_space->GetObjectManager()->m_objects;
             if (ImGui::ListBox(
                                "##list", &m_object_index, Items_ObjectGetter,
                                static_cast<void*>(&objects), static_cast<int>(objects.size()), 20))
             {
+                m_editing_object = objects[m_object_index];
             }
         }
         ImGui::End();
@@ -220,7 +229,7 @@ namespace Engine5
 
     void SpaceEditor::CloseSequence()
     {
-        DoQueueClose(m_resources.at(m_visible_index));
+        DoQueueClose(m_resources.at(m_space_index));
     }
 
     size_t SpaceEditor::OpenCount() const
@@ -249,7 +258,7 @@ namespace Engine5
     void SpaceEditor::DoQueueClose(JsonResource* resource)
     {
         resource->IsClose() = true;
-        m_space             = nullptr;
+        m_editing_space     = nullptr;
     }
 
     void SpaceEditor::DoForceClose(JsonResource* resource)

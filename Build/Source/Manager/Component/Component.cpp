@@ -16,6 +16,11 @@ namespace Engine5
         return m_type;
     }
 
+    const char* Component::TypeCStr() const
+    {
+        return m_type.c_str();
+    }
+
     bool Component::IsLoaded() const
     {
         return m_b_loaded;

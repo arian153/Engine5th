@@ -15,6 +15,7 @@ namespace Engine5
     Component* LightFactory::Create(Object* owner, Space* space)
     {
         auto create = new LightComponent(owner);
+        create->m_type = type;
         create->SetSpace(space);
         return create;
     }
