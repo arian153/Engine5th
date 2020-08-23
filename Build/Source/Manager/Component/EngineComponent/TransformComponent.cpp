@@ -262,7 +262,23 @@ namespace Engine5
 
     void TransformComponent::Edit()
     {
-        ImGui::CollapsingHeader(m_type.c_str());
+        if (ImGui::CollapsingHeader(m_type.c_str()))
+        {
+            float position[ 3 ] = {m_transform.position.x, m_transform.position.y, m_transform.position.z};
+            float scale[ 3 ]    = {m_transform.scale.x, m_transform.scale.y, m_transform.scale.z};
+            ImGui::Text("Position");
+            ImGui::InputFloat3("##TransformEdit0", position, 3);
+            if (ImGui::IsItemActive())
+            {
+                m_transform.position.Set(position[0], position[1], position[2]);
+            }
+            ImGui::Text("Scale");
+            ImGui::InputFloat3("##TransformEdit1", scale, 3);
+            if (ImGui::IsItemActive() == true)
+            {
+                m_transform.scale.Set(scale[ 0 ], scale[ 1 ], scale[ 2 ]);
+            }
+        }
     }
 
     void TransformComponent::Subscribe()

@@ -173,7 +173,7 @@ namespace Engine5
         {
             for (auto& component : m_editing_object->m_components)
             {
-                ImGui::CollapsingHeader(component.second->TypeCStr());
+                component.second->Edit();
             }
         }
         ImGui::End();
