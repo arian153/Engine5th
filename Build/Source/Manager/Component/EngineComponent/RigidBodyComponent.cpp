@@ -265,7 +265,7 @@ namespace Engine5
 
     void RigidBodyComponent::Edit()
     {
-        ImGui::CollapsingHeader(m_type.c_str());
+        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
     }
 
     void RigidBodyComponent::Subscribe()

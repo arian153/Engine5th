@@ -80,7 +80,7 @@ namespace Engine5
 
     void TextSpriteComponent::Edit()
     {
-        ImGui::CollapsingHeader(m_type.c_str());
+        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
     }
 
     void TextSpriteComponent::Subscribe()

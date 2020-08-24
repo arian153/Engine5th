@@ -149,7 +149,7 @@ namespace Engine5
 
     void PointConstraintComponent::Edit()
     {
-        ImGui::CollapsingHeader(m_type.c_str());
+        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
     }
 
     void PointConstraintComponent::Subscribe()

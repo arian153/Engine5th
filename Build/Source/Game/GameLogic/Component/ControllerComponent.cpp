@@ -193,7 +193,7 @@ namespace Game
 
     void ControllerComponent::Edit()
     {
-        ImGui::CollapsingHeader(m_type.c_str());
+        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
     }
 
     void ControllerComponent::Subscribe()

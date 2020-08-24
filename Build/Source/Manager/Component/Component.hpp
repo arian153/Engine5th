@@ -45,8 +45,8 @@ namespace Engine5
         String  m_type;
         bool    m_b_loaded   = false;
         bool    m_b_unloaded = false;
+        bool    m_b_open     = true;
 
-        
     private:
         friend class ComponentManager;
     };
