@@ -23,7 +23,7 @@ namespace Engine5
     {
         for (auto& object : m_objects)
         {
-            object->m_components.clear();
+            object->m_component_map.clear();
             object->ClearObjectHierarchy();
             delete object;
             object = nullptr;

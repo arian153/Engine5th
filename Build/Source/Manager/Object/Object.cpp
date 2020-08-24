@@ -191,7 +191,7 @@ namespace Engine5
     void Object::ClearComponents()
     {
         m_component_manager->Remove(this);
-        m_components.clear();
+        m_component_map.clear();
     }
 
     bool Object::Load(const Json::Value& data)
@@ -254,10 +254,11 @@ namespace Engine5
     Component* Object::AddComponent(Component* component)
     {
         auto type  = component->Type();
-        auto found = m_components.find(type);
-        if (found == m_components.end())
+        auto found = m_component_map.find(type);
+        if (found == m_component_map.end())
         {
-            m_components.emplace(type, component);
+            m_component_map.emplace(type, component);
+            m_components.push_back(component);
             return component;
         }
         return nullptr;
@@ -266,11 +267,12 @@ namespace Engine5
     //Create and add new component
     Component* Object::AddComponent(const std::string& type)
     {
-        auto found = m_components.find(type);
-        if (found == m_components.end())
+        auto found = m_component_map.find(type);
+        if (found == m_component_map.end())
         {
             auto created = m_component_manager->Create(type, this);
-            m_components.emplace(type, created);
+            m_component_map.emplace(type, created);
+            m_components.push_back(created);
             created->Initialize();
             return created;
         }
@@ -279,8 +281,8 @@ namespace Engine5
 
     Component* Object::GetComponent(const std::string& type)
     {
-        auto found = m_components.find(type);
-        if (found != m_components.end())
+        auto found = m_component_map.find(type);
+        if (found != m_component_map.end())
         {
             return found->second;
         }
@@ -289,8 +291,8 @@ namespace Engine5
 
     bool Object::HasComponent(const std::string& type)
     {
-        auto found = m_components.find(type);
-        if (found != m_components.end())
+        auto found = m_component_map.find(type);
+        if (found != m_component_map.end())
         {
             return true;
         }
@@ -300,21 +302,23 @@ namespace Engine5
     void Object::RemoveComponent(Component* component)
     {
         auto type  = component->Type();
-        auto found = m_components.find(type);
-        if (found != m_components.end())
+        auto found = m_component_map.find(type);
+        if (found != m_component_map.end())
         {
+            m_components.erase(std::find(m_components.begin(), m_components.end(), component));
             m_component_manager->Remove(component, this);
-            m_components.erase(found);
+            m_component_map.erase(found);
         }
     }
 
     void Object::RemoveComponent(const std::string& type)
     {
-        auto found = m_components.find(type);
-        if (found != m_components.end())
+        auto found = m_component_map.find(type);
+        if (found != m_component_map.end())
         {
+            m_components.erase(std::find(m_components.begin(), m_components.end(), found->second));
             m_component_manager->Remove(found->second, this);
-            m_components.erase(found);
+            m_component_map.erase(found);
         }
     }
 
@@ -365,7 +369,7 @@ namespace Engine5
 
     bool Object::CloneComponents(Object* cloned_object, ComponentManager* manager) const
     {
-        for (auto& compo : m_components)
+        for (auto& compo : m_component_map)
         {
             auto cloned_compo = manager->Clone(compo.second, cloned_object);
             auto result       = cloned_object->AddComponent(cloned_compo);

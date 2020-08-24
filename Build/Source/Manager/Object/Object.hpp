@@ -4,7 +4,8 @@
 #include <vector>
 #include "../../System/Core/Utility/CoreDef.hpp"
 
-namespace Json {
+namespace Json
+{
     class Value;
 }
 
@@ -98,10 +99,11 @@ namespace Engine5
         Object*               m_ancestor = nullptr;
         Object*               m_parent   = nullptr;
         std::vector<Object*>* m_children = nullptr;
-        std::vector<Object*>* m_siblings  = nullptr;
+        std::vector<Object*>* m_siblings = nullptr;
 
         //components
-        std::unordered_map<std::string, Component*> m_components;
+        std::unordered_map<std::string, Component*> m_component_map;
+        std::vector<Component*>                     m_components;
 
         //others
         ObjectManager*    m_object_manager    = nullptr;

@@ -173,7 +173,7 @@ namespace Engine5
         {
             for (auto& component : m_editing_object->m_components)
             {
-                component.second->Edit();
+                component->Edit();
             }
         }
         ImGui::End();
@@ -193,11 +193,14 @@ namespace Engine5
     void SpaceEditor::UpdateHierarchyWindow()
     {
         ImGui::Begin("Hierarchy");
+        ImVec2 min = ImGui::GetWindowContentRegionMin();
+        ImVec2 max = ImGui::GetWindowContentRegionMax();
+        ImGui::PushItemWidth(max.x - min.x);
         if (m_editing_space != nullptr)
         {
             auto objects = m_editing_space->GetObjectManager()->m_objects;
             if (ImGui::ListBox(
-                               "##list", &m_object_index, Items_ObjectGetter,
+                               "##ObjectList", &m_object_index, Items_ObjectGetter,
                                static_cast<void*>(&objects), static_cast<int>(objects.size()), 20))
             {
                 m_editing_object = objects[m_object_index];

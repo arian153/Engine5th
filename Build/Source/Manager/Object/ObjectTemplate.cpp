@@ -4,12 +4,13 @@ namespace Engine5
     T* Object::AddComponent()
     {
         auto type = typeid(T).name();
-        auto found = m_components.find(type);
+        auto found = m_component_map.find(type);
 
-        if (found == m_components.end())
+        if (found == m_component_map.end())
         {
             auto created = m_component_manager->Create(type, this);
-            m_components.emplace(type, created);
+            m_component_map.emplace(type, created);
+            m_components.push_back(created);
             created->Initialize();
 
             return static_cast<T*>(created);
@@ -22,9 +23,9 @@ namespace Engine5
     bool Object::HasComponent() const
     {
         auto type = typeid(T).name();
-        auto found = m_components.find(type);
+        auto found = m_component_map.find(type);
 
-        if (found != m_components.end())
+        if (found != m_component_map.end())
             return true;
 
         return false;
@@ -34,9 +35,9 @@ namespace Engine5
     T* Object::GetComponent() const
     {
         auto type = typeid(T).name();
-        auto found = m_components.find(type);
+        auto found = m_component_map.find(type);
 
-        if (found != m_components.end())
+        if (found != m_component_map.end())
             return static_cast<T*>(found->second);
 
         return nullptr;
@@ -46,12 +47,13 @@ namespace Engine5
     void Object::RemoveComponent()
     {
         auto type = typeid(T).name();
-        auto found = m_components.find(type);
+        auto found = m_component_map.find(type);
 
-        if (found != m_components.end())
+        if (found != m_component_map.end())
         {
+            m_components.erase(std::find(m_components.begin(), m_components.end(), found->second));
             m_component_manager->Remove(found->second, this);
-            m_components.erase(found);
+            m_component_map.erase(found);
         }
     }
 }

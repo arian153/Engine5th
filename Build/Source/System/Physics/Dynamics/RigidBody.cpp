@@ -302,7 +302,9 @@ namespace Engine5
     {
         if (transform != nullptr)
         {
-            if (m_local.position != transform->position || m_local.orientation != transform->orientation)
+            if (m_local.position != transform->position 
+                || m_local.orientation != transform->orientation
+                || m_local.rotating_origin != transform->rotating_origin)
             {
                 m_local = *transform;
                 UpdateGlobalCentroidFromPosition();
