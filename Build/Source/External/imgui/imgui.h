@@ -2688,10 +2688,17 @@ struct ImGuiViewport
     ImVec2              GetWorkSize()           { return ImVec2(Size.x - WorkOffsetMin.x + WorkOffsetMax.x, Size.y - WorkOffsetMin.y + WorkOffsetMax.y); } // This not clamped
 };
 
+
+
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #elif defined(__GNUC__)
 #pragma GCC diagnostic pop
+#endif
+
+#define IMGUI_STDLIB_H
+#ifdef IMGUI_STDLIB_H
+#include "imgui_stdlib.h"
 #endif
 
 // Include imgui_user.h at the end of imgui.h (convenient for user to only explicitly include vanilla imgui.h)

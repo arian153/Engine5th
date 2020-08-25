@@ -171,6 +171,19 @@ namespace Engine5
         ImGui::Begin("Inspector");
         if (m_editing_object != nullptr)
         {
+            //edit name
+            std::string name = m_editing_object->GetName();
+            ImGui::Text("Name      : ");
+            ImGui::SameLine();
+            ImVec2 min = ImGui::GetWindowContentRegionMin();
+            ImVec2 max = ImGui::GetWindowContentRegionMax();
+            ImGui::PushItemWidth(max.x - min.x);
+            ImGui::InputText("##ObjectName", &name);
+            if (ImGui::IsItemEdited() == true)
+            {
+                m_editing_object->SetName(name);
+            }
+            //edit component
             for (auto& component : m_editing_object->m_components)
             {
                 component->Edit();
