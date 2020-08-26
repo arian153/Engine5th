@@ -142,6 +142,8 @@ namespace Engine5
         m_particles.resize(m_max_amount);
         m_instances.resize(m_max_amount);
         m_buffer->BuildInstanceBuffer(m_instances);
+        m_active_amount = 0;
+        m_free_particle = 0;
     }
 
     void ParticleEmitter::SetEmissionAmount(size_t amount)
@@ -164,10 +166,7 @@ namespace Engine5
 
     void ParticleEmitter::SetScaleDecayRate(Real rate)
     {
-        if (rate >= 0.0f)
-        {
-            m_scale_decay_rate = rate;
-        }
+        m_scale_decay_rate = rate;
     }
 
     void ParticleEmitter::SetBaseParticle(const Particle& particle)
@@ -205,19 +204,14 @@ namespace Engine5
         m_position_variance = variance;
     }
 
-    void ParticleEmitter::SetDirectionVariance(const Vector3& variance)
+    void ParticleEmitter::SetVelocityVariance(const Vector3& variance)
     {
-        m_direction_variance = variance;
+        m_velocity_variance = variance;
     }
 
     void ParticleEmitter::SetColorVariance(const Color& variance)
     {
         m_color_variance = variance;
-    }
-
-    void ParticleEmitter::SetSpeedVariance(Real variance)
-    {
-        m_speed_variance = variance;
     }
 
     void ParticleEmitter::SetScaleVariance(Real variance)
@@ -291,12 +285,9 @@ namespace Engine5
             particle.position.y = random.GetRangedRandomReal(-m_position_variance.y, m_position_variance.y);
             particle.position.z = random.GetRangedRandomReal(-m_position_variance.z, m_position_variance.z);
             //velocity
-            Vector3 random_dir;
-            random_dir.x      = random.GetRangedRandomReal(-m_direction_variance.x, m_direction_variance.x);
-            random_dir.y      = random.GetRangedRandomReal(-m_direction_variance.y, m_direction_variance.y);
-            random_dir.z      = random.GetRangedRandomReal(-m_direction_variance.z, m_direction_variance.z);
-            Real random_speed = random.GetRangedRandomReal(0.0f, m_speed_variance);
-            particle.velocity = random_speed * random_dir.Normalize();
+            particle.velocity.x = random.GetRangedRandomReal(-m_velocity_variance.x, m_velocity_variance.x);
+            particle.velocity.y = random.GetRangedRandomReal(-m_velocity_variance.y, m_velocity_variance.y);
+            particle.velocity.z = random.GetRangedRandomReal(-m_velocity_variance.z, m_velocity_variance.z);
             //color
             particle.color.r = random.GetRangedRandomReal(0.0f, m_color_variance.r);
             particle.color.g = random.GetRangedRandomReal(0.0f, m_color_variance.g);
@@ -334,6 +325,10 @@ namespace Engine5
             else
             {
                 ++i;
+            }
+            if (i >= m_max_amount)
+            {
+                break;
             }
             Vector3 position      = (transform * Vector4(m_particles[i].position, 1.0f)).GrepVec3(0, 1, 2);
             m_particles[i].factor = position.DistanceTo(m_billboard_position);

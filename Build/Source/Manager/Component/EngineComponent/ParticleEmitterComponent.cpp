@@ -114,20 +114,15 @@ namespace Engine5
             auto variance = JsonResource::AsVector3(data["Position Variance"]);
             m_emitter->SetPositionVariance(variance);
         }
-        if (JsonResource::HasMember(data, "Direction Variance") && JsonResource::IsVector3(data["Direction Variance"]))
+        if (JsonResource::HasMember(data, "Velocity Variance") && JsonResource::IsVector3(data["Velocity Variance"]))
         {
-            auto variance = JsonResource::AsVector3(data["Direction Variance"]);
-            m_emitter->SetDirectionVariance(variance);
+            auto variance = JsonResource::AsVector3(data["Velocity Variance"]);
+            m_emitter->SetVelocityVariance(variance);
         }
         if (JsonResource::HasMember(data, "Color Variance") && JsonResource::IsColor(data["Color Variance"]))
         {
             auto variance = JsonResource::AsColor(data["Color Variance"]);
             m_emitter->SetColorVariance(variance);
-        }
-        if (JsonResource::HasMember(data, "Speed Variance") && data["Speed Variance"].isDouble())
-        {
-            Real variance = data["Speed Variance"].asFloat();
-            m_emitter->SetSpeedVariance(variance);
         }
         if (JsonResource::HasMember(data, "Life Variance") && data["Life Variance"].isDouble())
         {
@@ -148,7 +143,157 @@ namespace Engine5
 
     void ParticleEmitterComponent::Edit()
     {
-        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
+        if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
+        {
+            ImGui::Separator();
+            ImGui::Text("Texture");
+            ImGui::Separator();
+            ImGui::Text("Particle Amount");
+            int particle_amount = (int)m_emitter->m_max_amount;
+            int emission_amount = (int)m_emitter->m_emission_amount;
+            ImGui::SliderInt("##ParticleEdit1", &particle_amount, emission_amount, 100000);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetParticleAmount((size_t)particle_amount);
+            }
+            ImGui::InputInt("##ParticleEdit2", &particle_amount, 1, 100);
+            particle_amount = Math::Clamp(particle_amount, emission_amount, 100000);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetParticleAmount((size_t)particle_amount);
+            }
+            ImGui::Separator();
+            ImGui::Text("Emission Amount");
+            ImGui::SliderInt("##ParticleEdit3", &emission_amount, 0, 10000);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetEmissionAmount((size_t)emission_amount);
+            }
+            ImGui::InputInt("##ParticleEdit4", &emission_amount, 1, 100);
+            emission_amount = Math::Clamp(emission_amount, 0, 10000);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetEmissionAmount((size_t)emission_amount);
+            }
+            ImGui::Separator();
+            ImGui::Text("Emission Rate");
+            Real emission_rate = m_emitter->m_emission_rate;
+            ImGui::InputFloat("##ParticleEdit5", &emission_rate, 0.01f, 1.0f);
+            emission_rate = Math::Max(emission_rate, 0.0f);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetEmissionRate(emission_rate);
+            }
+            ImGui::Separator();
+            ImGui::Text("Life Decay Rate");
+            Real life_decay_rate = m_emitter->m_life_decay_rate;
+            ImGui::InputFloat("##ParticleEdit6", &life_decay_rate, 0.01f, 1.0f);
+            life_decay_rate = Math::Max(life_decay_rate, 0.0f);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetLifeDecayRate(life_decay_rate);
+            }
+            ImGui::Separator();
+            ImGui::Text("Scale Decay Rate");
+            Real scale_decay_rate = m_emitter->m_scale_decay_rate;
+            ImGui::InputFloat("##ParticleEdit7", &scale_decay_rate, 0.01f, 1.0f);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetScaleDecayRate(scale_decay_rate);
+            }
+            ImGui::Separator();
+            Particle base = m_emitter->m_base_particle;
+            ImGui::Text("Base Position");
+            float base_position[ 3 ] = {base.position.x, base.position.y, base.position.z};
+            ImGui::InputFloat3("##ParticleEdit8", base_position, 3);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetBasePosition(Vector3(base_position));
+            }
+            ImGui::Separator();
+            ImGui::Text("Base Velocity");
+            float base_velocity[ 3 ] = {base.velocity.x, base.velocity.y, base.velocity.z};
+            ImGui::InputFloat3("##ParticleEdit9", base_velocity, 3);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetBaseVelocity(Vector3(base_velocity));
+            }
+            ImGui::Separator();
+            ImGui::Text("Base Color");
+            float base_color[ 4 ] = {base.color.r, base.color.g, base.color.b, base.color.a};
+            ImGui::ColorEdit4("##ParticleEdit10", base_color);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetBaseColor(Color(base_color[0], base_color[1], base_color[2], base_color[3]));
+            }
+            ImGui::Separator();
+            ImGui::Text("Base Life");
+            Real base_life = base.life;
+            ImGui::InputFloat("##ParticleEdit11", &base_life, 0.01f, 1.0f);
+            base_life = Math::Max(0.0f, base_life);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetBaseLife(base_life);
+            }
+            ImGui::Separator();
+            ImGui::Text("Base Scale");
+            Real base_scale = base.scale;
+            ImGui::InputFloat("##ParticleEdit12", &base_scale, 0.01f, 1.0f);
+            base_scale = Math::Max(0.0f, base_scale);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetBaseScale(base_scale);
+            }
+            ImGui::Separator();
+            ImGui::Text("Position Variance");
+            float position_variance[ 3 ] = {
+                m_emitter->m_position_variance.x, m_emitter->m_position_variance.y, m_emitter->m_position_variance.z
+            };
+            ImGui::InputFloat3("##ParticleEdit13", position_variance, 3);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetPositionVariance(Vector3(position_variance));
+            }
+            ImGui::Separator();
+            ImGui::Text("Velocity Variance");
+            float velocity_variance[ 3 ] = {
+                m_emitter->m_velocity_variance.x, m_emitter->m_velocity_variance.y, m_emitter->m_velocity_variance.z
+            };
+            ImGui::InputFloat3("##ParticleEdit14", velocity_variance, 3);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetVelocityVariance(Vector3(velocity_variance));
+            }
+            ImGui::Separator();
+            ImGui::Text("Color Variance");
+            float color_variance[ 4 ] = {
+                m_emitter->m_color_variance.r, m_emitter->m_color_variance.g, m_emitter->m_color_variance.b, m_emitter->m_color_variance.a
+            };
+            ImGui::ColorEdit4("##ParticleEdit15", color_variance);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetColorVariance(Color(color_variance[0], color_variance[1], color_variance[2], color_variance[3]));
+            }
+            ImGui::Separator();
+            ImGui::Text("Life Variance");
+            Real life_variance = m_emitter->m_life_variance;
+            ImGui::InputFloat("##ParticleEdit16", &life_variance, 0.01f, 1.0f);
+            life_variance = Math::Max(0.0f, life_variance);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetLifeVariance(life_variance);
+            }
+            ImGui::Separator();
+            ImGui::Text("Scale Variance");
+            Real scale_variance = m_emitter->m_scale_variance;
+            ImGui::InputFloat("##ParticleEdit17", &scale_variance, 0.01f, 1.0f);
+            scale_variance = Math::Max(0.0f, scale_variance);
+            if (ImGui::IsItemEdited())
+            {
+                m_emitter->SetScaleVariance(scale_variance);
+            }
+            ImGui::Separator();
+        }
     }
 
     void ParticleEmitterComponent::Subscribe()

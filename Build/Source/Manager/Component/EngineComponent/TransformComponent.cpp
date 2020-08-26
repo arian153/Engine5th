@@ -271,6 +271,7 @@ namespace Engine5
             float radian               = m_axis_holder.radian;
             float quaternion[4]        = {m_transform.orientation.r, m_transform.orientation.i, m_transform.orientation.j, m_transform.orientation.k};
             float rotating_origin[ 3 ] = {m_transform.rotating_origin.x, m_transform.rotating_origin.y, m_transform.rotating_origin.z};
+            ImGui::Separator();
             ImGui::Text("Position");
             ImGui::InputFloat3("##TransformEdit0", position, 3);
             if (ImGui::IsItemActive())
@@ -320,6 +321,7 @@ namespace Engine5
             {
                 m_transform.rotating_origin.Set(rotating_origin[ 0 ], rotating_origin[ 1 ], rotating_origin[ 2 ]);
             }
+            ImGui::Separator();
         }
     }
 

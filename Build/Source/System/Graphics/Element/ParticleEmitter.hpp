@@ -45,9 +45,8 @@ namespace Engine5
         void SetBaseLife(Real life_time);
         void SetBaseScale(Real scale);
         void SetPositionVariance(const Vector3& variance);
-        void SetDirectionVariance(const Vector3& variance);
+        void SetVelocityVariance(const Vector3& variance);
         void SetColorVariance(const Color& variance);
-        void SetSpeedVariance(Real variance);
         void SetScaleVariance(Real variance);
         void SetLifeVariance(Real variance);
 
@@ -91,9 +90,8 @@ namespace Engine5
 
         //particle variance
         Vector3 m_position_variance;
-        Vector3 m_direction_variance;
+        Vector3 m_velocity_variance;
         Color   m_color_variance;
-        Real    m_speed_variance = 0.0f;
         Real    m_life_variance  = 0.0f;
         Real    m_scale_variance = 0.0f;
     };
