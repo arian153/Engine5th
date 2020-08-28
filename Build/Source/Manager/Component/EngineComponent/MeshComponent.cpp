@@ -140,7 +140,7 @@ namespace Engine5
     {
     }
 
-    void MeshComponent::Edit()
+    void MeshComponent::Edit(CommandRegistry* command_registry)
     {
         ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
     }

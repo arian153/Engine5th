@@ -11,6 +11,7 @@ namespace Json
 
 namespace Engine5
 {
+    class CommandRegistry;
     class Space;
     class Object;
 
@@ -25,7 +26,7 @@ namespace Engine5
         virtual void Shutdown() = 0;
         virtual bool Load(const Json::Value& data) = 0;
         virtual void Save(Json::Value& data) const = 0;
-        virtual void Edit() = 0;
+        virtual void Edit(CommandRegistry* command_registry) = 0;
 
         String      Type() const;
         const char* TypeCStr() const;

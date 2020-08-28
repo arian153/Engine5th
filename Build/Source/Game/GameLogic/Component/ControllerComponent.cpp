@@ -191,7 +191,7 @@ namespace Game
     {
     }
 
-    void ControllerComponent::Edit()
+    void ControllerComponent::Edit(CommandRegistry* command_registry)
     {
         ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
     }

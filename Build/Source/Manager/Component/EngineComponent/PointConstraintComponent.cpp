@@ -147,7 +147,7 @@ namespace Engine5
     {
     }
 
-    void PointConstraintComponent::Edit()
+    void PointConstraintComponent::Edit(CommandRegistry* command_registry)
     {
         ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
     }

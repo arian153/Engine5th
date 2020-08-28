@@ -186,7 +186,7 @@ namespace Engine5
             //edit component
             for (auto& component : m_editing_object->m_components)
             {
-                component->Edit();
+                component->Edit(m_command_registry);
             }
         }
         ImGui::End();

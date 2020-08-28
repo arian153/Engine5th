@@ -2,6 +2,8 @@
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
+#include "../../../System/GUI/Editor/Command/CommandRegistry.hpp"
+#include "../../../System/GUI/Editor/Command/EditorCommand.hpp"
 
 namespace Engine5
 {
@@ -261,7 +263,7 @@ namespace Engine5
     {
     }
 
-    void TransformComponent::Edit()
+    void TransformComponent::Edit(CommandRegistry* command_registry)
     {
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
@@ -274,9 +276,9 @@ namespace Engine5
             ImGui::Separator();
             ImGui::Text("Position");
             ImGui::InputFloat3("##TransformEdit0", position, 3);
-            if (ImGui::IsItemActive())
+            if (ImGui::IsItemEdited())
             {
-                m_transform.position.Set(position[0], position[1], position[2]);
+                command_registry->PushCommand(new EditData<Vector3>(m_transform.position, Vector3(position)));
             }
             ImGui::Separator();
             ImGui::Text("Scale");
@@ -313,13 +315,12 @@ namespace Engine5
             ImGui::Text("I : %.3f [sin(%.f) * %.3fi]", quaternion[1], degree, axis[0]);
             ImGui::Text("J : %.3f [sin(%.f) * %.3fj]", quaternion[2], degree, axis[1]);
             ImGui::Text("K : %.3f [sin(%.f) * %.3fk]", quaternion[3], degree, axis[2]);
-
             ImGui::Separator();
             ImGui::Text("Rotating Origin");
             ImGui::InputFloat3("##TransformEdit5", rotating_origin, 3);
             if (ImGui::IsItemActive())
             {
-                m_transform.rotating_origin.Set(rotating_origin[ 0 ], rotating_origin[ 1 ], rotating_origin[ 2 ]);
+                m_transform.rotating_origin.Set(rotating_origin[0], rotating_origin[1], rotating_origin[2]);
             }
             ImGui::Separator();
         }

@@ -78,7 +78,7 @@ namespace Engine5
     {
     }
 
-    void TextSpriteComponent::Edit()
+    void TextSpriteComponent::Edit(CommandRegistry* command_registry)
     {
         ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
     }

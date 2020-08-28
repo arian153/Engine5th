@@ -141,7 +141,7 @@ namespace Engine5
     {
     }
 
-    void ParticleEmitterComponent::Edit()
+    void ParticleEmitterComponent::Edit(CommandRegistry* command_registry)
     {
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
