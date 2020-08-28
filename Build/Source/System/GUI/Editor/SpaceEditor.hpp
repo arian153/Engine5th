@@ -6,6 +6,7 @@
 
 namespace Engine5
 {
+    class CommandRegistry;
     class Object;
     class GUISystem;
     class JsonResource;
@@ -63,6 +64,7 @@ namespace Engine5
         ResourceManager* m_resource_manager = nullptr;
         Space*           m_editing_space    = nullptr;
         Object*          m_editing_object   = nullptr;
+        CommandRegistry* m_command_registry = nullptr;
         //tool
         std::vector<JsonResource*>              m_resources;
         std::vector<JsonResource*>              m_close_queue;

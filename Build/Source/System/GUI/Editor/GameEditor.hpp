@@ -3,6 +3,7 @@
 #include "LevelEditor.hpp"
 #include "SpaceEditor.hpp"
 #include "../../../External/imgui/imgui.h"
+#include "Command/CommandRegistry.hpp"
 
 namespace Engine5
 {
@@ -27,9 +28,10 @@ namespace Engine5
         void UpdateObjectTab();
 
     private:
-        LevelEditor  m_level_editor;
-        SpaceEditor  m_space_editor;
-        Application* m_application = nullptr;
+        LevelEditor     m_level_editor;
+        SpaceEditor     m_space_editor;
+        Application*    m_application = nullptr;
+        CommandRegistry m_command_registry;
 
         //editor flag
         bool        m_b_open       = true;
@@ -37,6 +39,6 @@ namespace Engine5
 
         //imgui flag
         ImGuiDockNodeFlags m_dock_space_flags = ImGuiDockNodeFlags_None;
-        ImGuiWindowFlags   m_window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+        ImGuiWindowFlags   m_window_flags     = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     };
 }

@@ -22,6 +22,8 @@ namespace Engine5
         m_window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
         m_window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
         m_window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+        m_command_registry.Initialize();
+        m_space_editor.m_command_registry = &m_command_registry;
     }
 
     void GameEditor::Update(Real dt)
@@ -74,6 +76,7 @@ namespace Engine5
 
     void GameEditor::Shutdown()
     {
+        m_command_registry.Shutdown();
     }
 
     bool GameEditor::IsOpen() const
@@ -92,7 +95,7 @@ namespace Engine5
             }
             if (ImGui::BeginMenu("Open"))
             {
-                if (ImGui::BeginMenu("Space",  open_count < m_space_editor.Size()))
+                if (ImGui::BeginMenu("Space", open_count < m_space_editor.Size()))
                 {
                     m_space_editor.OpenSequence();
                     ImGui::EndMenu();
@@ -134,9 +137,11 @@ namespace Engine5
         {
             if (ImGui::MenuItem("Undo", "Ctrl+Z"))
             {
+                m_command_registry.UndoCommand();
             }
             if (ImGui::MenuItem("Redo", "Ctrl+Y"))
             {
+                m_command_registry.RedoCommand();
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Cut", "Ctrl+X"))
