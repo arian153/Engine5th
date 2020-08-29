@@ -51,4 +51,45 @@ namespace Engine5
         T  m_prev;
         T  m_next;
     };
+
+    template <typename T, typename I, void(I::*F)(const T&)>
+    class EditFunction final : public EditorCommand
+    {
+    private:
+        using Function = void(*)(void*, const T&);
+    public:
+        EditFunction(void* instance, const T& prev, const T& next)
+            : m_instance(instance), m_prev(prev), m_next(next)
+        {
+            m_function = &MemberFunction<I, F>;
+            m_type     = "Edit Function";
+        }
+
+        ~EditFunction()
+        {
+        }
+
+        void Execute() override
+        {
+            m_function(m_instance, m_next);
+        }
+
+        void UnExecute() override
+        {
+            m_function(m_instance, m_prev);
+        }
+
+    private: //template
+        template <typename Inst, void(Inst::*Func)(const T&)>
+        static void MemberFunction(void* instance, const T& data)
+        {
+            (static_cast<Inst*>(instance)->*Func)(data);
+        }
+
+    private:
+        void*    m_instance;
+        Function m_function;
+        T        m_prev;
+        T        m_next;
+    };
 }

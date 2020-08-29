@@ -24,7 +24,8 @@ namespace Engine5
         void SetOrientation(const AxisRadian& axis_radian);
         void SetOrientation(const EulerAngle& rotation);
         void SetOrientationAxis(const Vector3& axis);
-        void SetScale(const Vector3& scale, eAnchor3D anchor = eAnchor3D::CCC);
+        void SetScale(const Vector3& scale);
+        void SetScale(const Vector3& scale, eAnchor3D anchor);
         void SetScale(Real x, Real y, Real z, eAnchor3D anchor = eAnchor3D::CCC);
         void SetOrigin(const Vector3& origin);
 

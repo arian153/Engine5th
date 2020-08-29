@@ -72,6 +72,11 @@ namespace Engine5
         UpdateChildrenOrientationRecursive(m_transform.orientation);
     }
 
+    void TransformComponent::SetScale(const Vector3& scale)
+    {
+        m_transform.scale = scale;
+    }
+
     void TransformComponent::SetScale(const Vector3& scale, eAnchor3D anchor)
     {
         if (anchor == eAnchor3D::CCC)
@@ -278,37 +283,67 @@ namespace Engine5
             ImGui::InputFloat3("##TransformEdit0", position, 3);
             if (ImGui::IsItemEdited())
             {
-                command_registry->PushCommand(new EditData<Vector3>(m_transform.position, Vector3(position)));
+                Vector3 prev = m_transform.position;
+                Vector3 next(position);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  TransformComponent,
+                                                  &TransformComponent::SetPosition>(this, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Scale");
             ImGui::InputFloat3("##TransformEdit1", scale, 3);
-            if (ImGui::IsItemActive() == true)
+            if (ImGui::IsItemEdited() == true)
             {
-                m_transform.scale.Set(scale[0], scale[1], scale[2]);
+                Vector3 prev = m_transform.scale;
+                Vector3 next(scale);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  TransformComponent,
+                                                  &TransformComponent::SetScale>(this, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Orientation");
             ImGui::Text("Axis");
             ImGui::InputFloat3("##TransformEdit2", axis, 3);
-            if (ImGui::IsItemActive() == true)
+            if (ImGui::IsItemEdited() == true)
             {
-                m_axis_holder.axis.Set(axis[0], axis[1], axis[2]);
-                m_axis_holder.axis.SetNormalize();
-                SetOrientation(m_axis_holder);
+                AxisRadian prev = m_axis_holder;
+                AxisRadian next = prev;
+                next.axis.Set(axis[0], axis[1], axis[2]);
+                next.axis.SetNormalize();
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  AxisRadian,
+                                                  TransformComponent,
+                                                  &TransformComponent::SetOrientation>(this, prev, next));
             }
             ImGui::Text("Radian");
             ImGui::SliderAngle("##TransformEdit3", &radian);
-            if (ImGui::IsItemActive() == true)
+            if (ImGui::IsItemEdited() == true)
             {
-                m_axis_holder.radian = radian;
-                SetOrientation(m_axis_holder);
+                AxisRadian prev = m_axis_holder;
+                AxisRadian next = prev;
+                next.radian     = radian;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  AxisRadian,
+                                                  TransformComponent,
+                                                  &TransformComponent::SetOrientation>(this, prev, next));
             }
             ImGui::Text("Quaternion");
             ImGui::SliderFloat4("##TransformEdit4", quaternion, -1.0f, 1.0f);
-            if (ImGui::IsItemActive() == true)
+            if (ImGui::IsItemEdited() == true)
             {
-                SetOrientation(Quaternion(quaternion[0], quaternion[1], quaternion[2], quaternion[3]));
+                Quaternion prev = m_transform.orientation;
+                Quaternion next(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Quaternion,
+                                                  TransformComponent,
+                                                  &TransformComponent::SetOrientation>(this, prev, next));
             }
             Real degree = Math::RadiansToDegrees(radian);
             ImGui::Text("R : %.3f [cos(%.f)]", quaternion[0], degree);
@@ -318,9 +353,15 @@ namespace Engine5
             ImGui::Separator();
             ImGui::Text("Rotating Origin");
             ImGui::InputFloat3("##TransformEdit5", rotating_origin, 3);
-            if (ImGui::IsItemActive())
+            if (ImGui::IsItemEdited())
             {
-                m_transform.rotating_origin.Set(rotating_origin[0], rotating_origin[1], rotating_origin[2]);
+                Vector3 prev = m_transform.rotating_origin;
+                Vector3 next(rotating_origin);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  TransformComponent,
+                                                  &TransformComponent::SetOrigin>(this, prev, next));
             }
             ImGui::Separator();
         }
