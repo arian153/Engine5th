@@ -9,6 +9,8 @@
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../Resource/ResourceManager.hpp"
 #include "../../Resource/ResourceType/TextureResource.hpp"
+#include "../../../System/GUI/Editor/Command/EditorCommand.hpp"
+#include "../../../System/GUI/Editor/Command/CommandRegistry.hpp"
 
 namespace Engine5
 {
@@ -154,26 +156,50 @@ namespace Engine5
             ImGui::SliderInt("##ParticleEdit1", &particle_amount, emission_amount, 100000);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetParticleAmount((size_t)particle_amount);
+                size_t prev = m_emitter->m_max_amount;
+                size_t next = particle_amount;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  size_t,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetParticleAmount>(m_emitter, prev, next));
             }
             ImGui::InputInt("##ParticleEdit2", &particle_amount, 1, 100);
             particle_amount = Math::Clamp(particle_amount, emission_amount, 100000);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetParticleAmount((size_t)particle_amount);
+                size_t prev = m_emitter->m_max_amount;
+                size_t next = particle_amount;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  size_t,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetParticleAmount>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Emission Amount");
             ImGui::SliderInt("##ParticleEdit3", &emission_amount, 0, 10000);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetEmissionAmount((size_t)emission_amount);
+                size_t prev = m_emitter->m_emission_amount;
+                size_t next = emission_amount;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  size_t,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetEmissionAmount>(m_emitter, prev, next));
             }
             ImGui::InputInt("##ParticleEdit4", &emission_amount, 1, 100);
             emission_amount = Math::Clamp(emission_amount, 0, 10000);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetEmissionAmount((size_t)emission_amount);
+                size_t prev = m_emitter->m_emission_amount;
+                size_t next = emission_amount;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  size_t,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetEmissionAmount>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Emission Rate");
@@ -182,7 +208,13 @@ namespace Engine5
             emission_rate = Math::Max(emission_rate, 0.0f);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetEmissionRate(emission_rate);
+                Real prev = m_emitter->m_emission_rate;
+                Real next = emission_rate;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Real,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetEmissionRate>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Life Decay Rate");
@@ -191,7 +223,13 @@ namespace Engine5
             life_decay_rate = Math::Max(life_decay_rate, 0.0f);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetLifeDecayRate(life_decay_rate);
+                Real prev = m_emitter->m_life_decay_rate;
+                Real next = life_decay_rate;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Real,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetLifeDecayRate>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Scale Decay Rate");
@@ -199,7 +237,13 @@ namespace Engine5
             ImGui::InputFloat("##ParticleEdit7", &scale_decay_rate, 0.01f, 1.0f);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetScaleDecayRate(scale_decay_rate);
+                Real prev = m_emitter->m_scale_decay_rate;
+                Real next = scale_decay_rate;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Real,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetScaleDecayRate>(m_emitter, prev, next));
             }
             ImGui::Separator();
             Particle base = m_emitter->m_base_particle;
@@ -208,7 +252,13 @@ namespace Engine5
             ImGui::InputFloat3("##ParticleEdit8", base_position, 3);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetBasePosition(Vector3(base_position));
+                Vector3 prev = base.position;
+                Vector3 next = Vector3(base_position);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetBasePosition>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Base Velocity");
@@ -216,7 +266,13 @@ namespace Engine5
             ImGui::InputFloat3("##ParticleEdit9", base_velocity, 3);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetBaseVelocity(Vector3(base_velocity));
+                Vector3 prev = base.velocity;
+                Vector3 next = Vector3(base_velocity);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetBaseVelocity>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Base Color");
@@ -224,7 +280,13 @@ namespace Engine5
             ImGui::ColorEdit4("##ParticleEdit10", base_color);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetBaseColor(Color(base_color[0], base_color[1], base_color[2], base_color[3]));
+                Color prev = base.color;
+                Color next = Color(base_color[0], base_color[1], base_color[2], base_color[3]);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Color,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetBaseColor>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Base Life");
@@ -233,7 +295,13 @@ namespace Engine5
             base_life = Math::Max(0.0f, base_life);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetBaseLife(base_life);
+                Real prev = base.life;
+                Real next = base_life;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Real,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetBaseLife>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Base Scale");
@@ -242,7 +310,13 @@ namespace Engine5
             base_scale = Math::Max(0.0f, base_scale);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetBaseScale(base_scale);
+                Real prev = base.scale;
+                Real next = base_scale;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Real,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetBaseScale>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Position Variance");
@@ -252,7 +326,13 @@ namespace Engine5
             ImGui::InputFloat3("##ParticleEdit13", position_variance, 3);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetPositionVariance(Vector3(position_variance));
+                Vector3 prev = m_emitter->m_position_variance;
+                Vector3 next = Vector3(position_variance);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetPositionVariance>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Velocity Variance");
@@ -262,7 +342,13 @@ namespace Engine5
             ImGui::InputFloat3("##ParticleEdit14", velocity_variance, 3);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetVelocityVariance(Vector3(velocity_variance));
+                Vector3 prev = m_emitter->m_velocity_variance;
+                Vector3 next = Vector3(velocity_variance);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetVelocityVariance>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Color Variance");
@@ -272,7 +358,13 @@ namespace Engine5
             ImGui::ColorEdit4("##ParticleEdit15", color_variance);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetColorVariance(Color(color_variance[0], color_variance[1], color_variance[2], color_variance[3]));
+                Color prev = m_emitter->m_color_variance;
+                Color next = Color(color_variance[0], color_variance[1], color_variance[2], color_variance[3]);
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Color,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetColorVariance>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Life Variance");
@@ -281,7 +373,13 @@ namespace Engine5
             life_variance = Math::Max(0.0f, life_variance);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetLifeVariance(life_variance);
+                Real prev = m_emitter->m_life_variance;
+                Real next = life_variance;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Real,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetLifeVariance>(m_emitter, prev, next));
             }
             ImGui::Separator();
             ImGui::Text("Scale Variance");
@@ -290,7 +388,13 @@ namespace Engine5
             scale_variance = Math::Max(0.0f, scale_variance);
             if (ImGui::IsItemEdited())
             {
-                m_emitter->SetScaleVariance(scale_variance);
+                Real prev = m_emitter->m_scale_variance;
+                Real next = scale_variance;
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Real,
+                                                  ParticleEmitter,
+                                                  &ParticleEmitter::SetScaleVariance>(m_emitter, prev, next));
             }
             ImGui::Separator();
         }

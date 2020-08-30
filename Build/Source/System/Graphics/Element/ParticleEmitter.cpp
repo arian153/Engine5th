@@ -135,7 +135,7 @@ namespace Engine5
         m_billboard_position = position;
     }
 
-    void ParticleEmitter::SetParticleAmount(size_t amount)
+    void ParticleEmitter::SetParticleAmount(const size_t& amount)
     {
         m_max_amount = amount;
         m_particles.clear();
@@ -146,17 +146,17 @@ namespace Engine5
         m_free_particle = 0;
     }
 
-    void ParticleEmitter::SetEmissionAmount(size_t amount)
+    void ParticleEmitter::SetEmissionAmount(const size_t& amount)
     {
         m_emission_amount = amount;
     }
 
-    void ParticleEmitter::SetEmissionRate(Real rate)
+    void ParticleEmitter::SetEmissionRate(const Real& rate)
     {
         m_emission_rate = rate;
     }
 
-    void ParticleEmitter::SetLifeDecayRate(Real rate)
+    void ParticleEmitter::SetLifeDecayRate(const Real& rate)
     {
         if (rate >= 0.0f)
         {
@@ -164,7 +164,7 @@ namespace Engine5
         }
     }
 
-    void ParticleEmitter::SetScaleDecayRate(Real rate)
+    void ParticleEmitter::SetScaleDecayRate(const Real& rate)
     {
         m_scale_decay_rate = rate;
     }
@@ -189,12 +189,12 @@ namespace Engine5
         m_base_particle.color = color;
     }
 
-    void ParticleEmitter::SetBaseLife(Real life_time)
+    void ParticleEmitter::SetBaseLife(const Real& life_time)
     {
         m_base_particle.life = life_time;
     }
 
-    void ParticleEmitter::SetBaseScale(Real scale)
+    void ParticleEmitter::SetBaseScale(const Real& scale)
     {
         m_base_particle.scale = scale;
     }
@@ -214,12 +214,12 @@ namespace Engine5
         m_color_variance = variance;
     }
 
-    void ParticleEmitter::SetScaleVariance(Real variance)
+    void ParticleEmitter::SetScaleVariance(const Real& variance)
     {
         m_scale_variance = variance;
     }
 
-    void ParticleEmitter::SetLifeVariance(Real variance)
+    void ParticleEmitter::SetLifeVariance(const Real& variance)
     {
         m_life_variance = variance;
     }

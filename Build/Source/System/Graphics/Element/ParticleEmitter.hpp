@@ -33,22 +33,22 @@ namespace Engine5
         void SetTexture(TextureCommon* texture);
         void SetTransform(Transform* transform);
         void SetBillboardPosition(const Vector3& position);
-        void SetParticleAmount(size_t amount);
-        void SetEmissionAmount(size_t amount);
-        void SetEmissionRate(Real rate);
-        void SetLifeDecayRate(Real rate);
-        void SetScaleDecayRate(Real rate);
+        void SetParticleAmount(const size_t& amount);
+        void SetEmissionAmount(const size_t& amount);
+        void SetEmissionRate(const Real& rate);
+        void SetLifeDecayRate(const Real& rate);
+        void SetScaleDecayRate(const Real& rate);
         void SetBaseParticle(const Particle& particle);
         void SetBasePosition(const Vector3& position);
         void SetBaseVelocity(const Vector3& velocity);
         void SetBaseColor(const Color& color);
-        void SetBaseLife(Real life_time);
-        void SetBaseScale(Real scale);
+        void SetBaseLife(const Real& life_time);
+        void SetBaseScale(const Real& scale);
         void SetPositionVariance(const Vector3& variance);
         void SetVelocityVariance(const Vector3& variance);
         void SetColorVariance(const Color& variance);
-        void SetScaleVariance(Real variance);
-        void SetLifeVariance(Real variance);
+        void SetScaleVariance(const Real& variance);
+        void SetLifeVariance(const Real& variance);
 
         //getter
         size_t         GetIndexCount() const;
