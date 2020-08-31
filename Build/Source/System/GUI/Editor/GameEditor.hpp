@@ -26,6 +26,7 @@ namespace Engine5
         void UpdateFileTab();
         void UpdateEditTab();
         void UpdateObjectTab();
+        void UpdateCommandWindow();
 
     private:
         LevelEditor     m_level_editor;
@@ -34,8 +35,9 @@ namespace Engine5
         CommandRegistry m_command_registry;
 
         //editor flag
-        bool        m_b_open       = true;
-        std::string m_editor_label = "";
+        bool        m_b_open        = true;
+        std::string m_editor_label  = "";
+        int         m_command_index = 0;
 
         //imgui flag
         ImGuiDockNodeFlags m_dock_space_flags = ImGuiDockNodeFlags_None;

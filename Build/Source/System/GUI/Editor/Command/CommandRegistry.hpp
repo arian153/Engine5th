@@ -21,6 +21,8 @@ namespace Engine5
         void ClearUndoCommands();
 
     private:
+        friend class GameEditor;
+    private:
         std::vector<EditorCommand*> m_command_registry;
         std::vector<EditorCommand*> m_undo_registry;
 

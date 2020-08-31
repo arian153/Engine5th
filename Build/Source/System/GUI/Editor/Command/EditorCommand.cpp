@@ -19,4 +19,9 @@ namespace Engine5
     {
         return m_type;
     }
+
+    const char* EditorCommand::TypeCStr() const
+    {
+        return m_type.c_str();
+    }
 }

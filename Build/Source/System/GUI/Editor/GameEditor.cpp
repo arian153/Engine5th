@@ -3,6 +3,7 @@
 #include "../../Core/OS-API/Application.hpp"
 #include "../../../Manager/Level/LevelManager.hpp"
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
+#include "Command/EditorCommand.hpp"
 
 namespace Engine5
 {
@@ -58,6 +59,7 @@ namespace Engine5
                 m_space_editor.UpdateSceneWindow(dt);
                 m_space_editor.UpdateHierarchyWindow();
                 m_space_editor.UpdateInspectorWindow();
+                UpdateCommandWindow();
                 m_level_editor.Update(dt);
             }
             if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)) && ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Tab)))
@@ -182,5 +184,32 @@ namespace Engine5
             }
             ImGui::EndMenu();
         }
+    }
+
+    static bool Items_CommandGetter(void* data, int idx, const char** out_text)
+    {
+        auto& commands = *static_cast<std::vector<EditorCommand*>*>(data);
+        if (idx < 0 || idx >= static_cast<int>(commands.size()))
+        {
+            return false;
+        }
+        *out_text = commands[ idx ]->TypeCStr();
+        return true;
+    }
+
+    void GameEditor::UpdateCommandWindow()
+    {
+        ImGui::Begin("Commands");
+        ImVec2 min = ImGui::GetWindowContentRegionMin();
+        ImVec2 max = ImGui::GetWindowContentRegionMax();
+        ImGui::PushItemWidth(max.x - min.x);
+        auto commands = m_command_registry.m_command_registry;
+            if (ImGui::ListBox(
+                "##ObjectList", &m_command_index, Items_CommandGetter,
+                static_cast<void*>(&commands), static_cast<int>(commands.size()), 20))
+            {
+                
+            }
+        ImGui::End();
     }
 }

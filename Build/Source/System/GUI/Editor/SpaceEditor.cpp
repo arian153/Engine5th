@@ -222,6 +222,7 @@ namespace Engine5
         ImGui::End();
     }
 
+   
     void SpaceEditor::OpenSequence()
     {
         for (size_t i = 0; i < m_resources.size(); ++i)

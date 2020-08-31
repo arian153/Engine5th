@@ -15,6 +15,7 @@ namespace Engine5
         virtual void UnExecute() = 0;
         void         SetRegistry(CommandRegistry* registry);
         std::string  Type() const;
+        const char*  TypeCStr() const;
 
     protected:
         CommandRegistry* m_registry = nullptr;
