@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vcruntime_typeinfo.h>
 
 namespace Engine5
 {
@@ -30,7 +31,8 @@ namespace Engine5
         EditData(T& data, const T& changed)
             : m_data(data), m_prev(data), m_next(changed)
         {
-            m_type = "Edit Data";
+            m_type = "Edit Data : ";
+            m_type += typeid(T).name();
         }
 
         ~EditData()
@@ -63,7 +65,8 @@ namespace Engine5
             : m_instance(instance), m_prev(prev), m_next(next)
         {
             m_function = &MemberFunction<I, F>;
-            m_type     = "Edit Function";
+            m_type = "Edit Data : ";
+            m_type += typeid(T).name();
         }
 
         ~EditFunction()
