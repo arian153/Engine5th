@@ -1,5 +1,6 @@
 #pragma once
 #include "../Component.hpp"
+#include "../../../System/Graphics/DataType/Color.hpp"
 
 namespace Engine5
 {
@@ -35,5 +36,10 @@ namespace Engine5
     private:
         ParticleEmitter* m_emitter   = nullptr;
         Transform*       m_transform = nullptr;
+
+        size_t m_edit_slider_particle_amount = 0;
+        size_t m_edit_slider_emission_amount = 0;
+        Color  m_edit_color_base;
+        Color  m_edit_color_variance;
     };
 }
