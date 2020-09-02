@@ -322,28 +322,32 @@ namespace Engine5
             }
             ImGui::Text("Radian");
             ImGui::SliderAngle("##TransformEdit3", &radian);
-            if (ImGui::IsItemEdited() == true)
+            if (ImGui::IsItemEdited())
             {
-                AxisRadian prev = m_axis_holder;
-                AxisRadian next = prev;
-                next.radian     = radian;
+                m_edit_radian.axis   = m_axis_holder.axis;
+                m_edit_radian.radian = radian;
+            }
+            if (ImGui::IsItemDeactivatedAfterEdit())
+            {
                 command_registry->PushCommand(
                                               new EditFunction<
                                                   AxisRadian,
                                                   TransformComponent,
-                                                  &TransformComponent::SetOrientation>(this, prev, next));
+                                                  &TransformComponent::SetOrientation>(this, m_axis_holder, m_edit_radian));
             }
             ImGui::Text("Quaternion");
             ImGui::SliderFloat4("##TransformEdit4", quaternion, -1.0f, 1.0f);
-            if (ImGui::IsItemEdited() == true)
+            if (ImGui::IsItemEdited())
             {
-                Quaternion prev = m_transform.orientation;
-                Quaternion next(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
+                m_edit_quaternion = Quaternion(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
+            }
+            if (ImGui::IsItemDeactivatedAfterEdit())
+            {
                 command_registry->PushCommand(
                                               new EditFunction<
                                                   Quaternion,
                                                   TransformComponent,
-                                                  &TransformComponent::SetOrientation>(this, prev, next));
+                                                  &TransformComponent::SetOrientation>(this, m_transform.orientation, m_edit_quaternion));
             }
             Real degree = Math::RadiansToDegrees(radian);
             ImGui::Text("R : %.3f [cos(%.f)]", quaternion[0], degree);

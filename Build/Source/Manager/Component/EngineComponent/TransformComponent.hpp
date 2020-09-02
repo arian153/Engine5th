@@ -73,5 +73,8 @@ namespace Engine5
     private:
         Transform  m_transform;
         AxisRadian m_axis_holder;
+
+        Quaternion m_edit_quaternion;
+        AxisRadian m_edit_radian;
     };
 }
