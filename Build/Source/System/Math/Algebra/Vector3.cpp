@@ -131,6 +131,12 @@ namespace Engine5
         return result > z ? result : z;
     }
 
+    Real* Vector3::GetArray() const
+    {
+        Real result[3] = { x, y, z };
+        return result;
+    }
+
     Real Vector3::DistanceTo(const Vector3& rhs) const
     {
         Real _x = rhs.x - this->x;

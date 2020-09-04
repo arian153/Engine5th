@@ -6,6 +6,8 @@
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
+#include "../../../System/GUI/Editor/Command/EditorCommand.hpp"
+#include "../../../System/GUI/Editor/Command/CommandRegistry.hpp"
 
 namespace Engine5
 {
@@ -17,7 +19,7 @@ namespace Engine5
     {
         if (m_rigid_body == nullptr)
         {
-            m_rigid_body = new RigidBody();
+            m_rigid_body              = new RigidBody();
             m_rigid_body->m_component = this;
             Subscribe();
         }
@@ -265,7 +267,29 @@ namespace Engine5
 
     void RigidBodyComponent::Edit(CommandRegistry* command_registry)
     {
-        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
+        if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
+        {
+            ImGui::Separator();
+            ImGui::Text("Linear Velocity");
+            Vector3 linear_velocity            = m_rigid_body->GetLinearVelocity();
+            Real    linear_velocity_array[ 3 ] = {linear_velocity.x, linear_velocity.y, linear_velocity.z};
+            ImGui::InputFloat3("##RigidBodyEdit0", linear_velocity_array, 3);
+            if (ImGui::IsItemEdited())
+            {
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  RigidBody,
+                                                  &RigidBody::SetLinearVelocity>
+                                              (
+                                               m_rigid_body,
+                                               linear_velocity,
+                                               Vector3(linear_velocity_array)
+                                              )
+                                             );
+            }
+            ImGui::Separator();
+        }
     }
 
     void RigidBodyComponent::Subscribe()
