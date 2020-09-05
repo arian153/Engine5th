@@ -269,26 +269,88 @@ namespace Engine5
     {
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
-            ImGui::Separator();
-            ImGui::Text("Linear Velocity");
-            Vector3 linear_velocity            = m_rigid_body->GetLinearVelocity();
-            Real    linear_velocity_array[ 3 ] = {linear_velocity.x, linear_velocity.y, linear_velocity.z};
-            ImGui::InputFloat3("##RigidBodyEdit0", linear_velocity_array, 3);
-            if (ImGui::IsItemEdited())
+            //Apply
             {
-                command_registry->PushCommand(
-                                              new EditFunction<
-                                                  Vector3,
-                                                  RigidBody,
-                                                  &RigidBody::SetLinearVelocity>
-                                              (
-                                               m_rigid_body,
-                                               linear_velocity,
-                                               Vector3(linear_velocity_array)
-                                              )
-                                             );
+                ImGui::Text("Apply Velocity");
+                ImGui::Separator();
+                ImGui::Text("Linear Velocity");
+                Vector3 linear_velocity            = m_rigid_body->GetLinearVelocity();
+                Real    linear_velocity_array[ 3 ] = {linear_velocity.x, linear_velocity.y, linear_velocity.z};
+                ImGui::InputFloat3("##RigidBodyEdit0", linear_velocity_array, 3);
+                if (ImGui::IsItemEdited())
+                {
+                    command_registry->PushCommand(
+                                                  new EditFunction<
+                                                      Vector3,
+                                                      RigidBody,
+                                                      &RigidBody::SetLinearVelocity>
+                                                  (
+                                                   m_rigid_body,
+                                                   linear_velocity,
+                                                   Vector3(linear_velocity_array)
+                                                  )
+                                                 );
+                }
+                ImGui::Text("Angular Velocity");
+                ImGui::Separator();
+                ImGui::Text("Apply Force");
+                ImGui::Separator();
+                ImGui::Text("Force");
+                ImGui::Text("Torque");
+                ImGui::Separator();
             }
-            ImGui::Separator();
+            //Mass
+            {
+                ImGui::Separator();
+                ImGui::Text("Mass Data");
+                ImGui::Separator();
+                ImGui::Text("Mass");
+                ImGui::Separator();
+                ImGui::Text("Local Inertia");
+                ImGui::Separator();
+                ImGui::Text("Global Inertia");
+                ImGui::Separator();
+                ImGui::Text("Local Centroid");
+                ImGui::Separator();
+                ImGui::Text("Global Centroid");
+                ImGui::Separator();
+            }
+            //Effect
+            {
+                ImGui::Separator();
+                ImGui::Text("Effect");
+                ImGui::Separator();
+                ImGui::Text("Drag");
+                ImGui::Text("Linear Drag");
+                ImGui::Text("Angular Drag");
+                ImGui::Separator();
+                ImGui::Text("Constraints");
+                ImGui::Text("Linear Constraints");
+                ImGui::Text("Angular Constraints");
+                ImGui::Separator();
+            }
+            //Option
+            {
+                ImGui::Separator();
+                ImGui::Text("Option");
+                ImGui::Separator();
+                ImGui::Text("Motion Mode");
+                ImGui::Separator();
+                ImGui::Text("Detection Mode");
+                ImGui::Separator();
+            }
+            //local
+            {
+                ImGui::Separator();
+                ImGui::Text("Local Transform Data");
+                ImGui::Separator();
+                ImGui::Text("Position");
+                ImGui::Separator();
+                ImGui::Text("Orientation");
+                ImGui::Separator();
+                ImGui::Text("Rotating Origin");
+                ImGui::Separator();
+            }
         }
     }
 
