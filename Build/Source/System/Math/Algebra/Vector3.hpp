@@ -41,7 +41,7 @@ namespace Engine5
         Real LengthSquared() const;
         Real Smallest() const;
         Real Largest() const;
-        Real* GetArray() const;
+        Real* GetData();
 
         Real    DistanceTo(const Vector3& rhs) const;
         Real    DistanceSquaredTo(const Vector3& rhs) const;

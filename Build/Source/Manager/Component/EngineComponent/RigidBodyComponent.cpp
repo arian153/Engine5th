@@ -274,9 +274,8 @@ namespace Engine5
                 ImGui::Text("Apply Velocity");
                 ImGui::Separator();
                 ImGui::Text("Linear Velocity");
-                Vector3 linear_velocity            = m_rigid_body->GetLinearVelocity();
-                Real    linear_velocity_array[ 3 ] = {linear_velocity.x, linear_velocity.y, linear_velocity.z};
-                ImGui::InputFloat3("##RigidBodyEdit0", linear_velocity_array, 3);
+                Vector3 linear_velocity = m_rigid_body->m_linear_velocity;
+                ImGui::InputFloat3("##RigidBodyEdit0", linear_velocity.GetData(), 3);
                 if (ImGui::IsItemEdited())
                 {
                     command_registry->PushCommand(
@@ -286,17 +285,65 @@ namespace Engine5
                                                       &RigidBody::SetLinearVelocity>
                                                   (
                                                    m_rigid_body,
-                                                   linear_velocity,
-                                                   Vector3(linear_velocity_array)
+                                                      m_rigid_body->m_linear_velocity,
+                                                      linear_velocity
                                                   )
                                                  );
                 }
                 ImGui::Text("Angular Velocity");
+                Vector3 angular_velocity = m_rigid_body->m_angular_velocity;
+                ImGui::InputFloat3("##RigidBodyEdit1", angular_velocity.GetData(), 3);
+                if (ImGui::IsItemEdited())
+                {
+                    command_registry->PushCommand(
+                        new EditFunction<
+                        Vector3,
+                        RigidBody,
+                        &RigidBody::SetAngularVelocity>
+                        (
+                            m_rigid_body,
+                            m_rigid_body->m_angular_velocity,
+                            angular_velocity
+                            )
+                    );
+                }
                 ImGui::Separator();
                 ImGui::Text("Apply Force");
                 ImGui::Separator();
                 ImGui::Text("Force");
+                Vector3 force_accumulator = m_rigid_body->m_force_accumulator;
+                ImGui::InputFloat3("##RigidBodyEdit2", force_accumulator.GetData(), 3);
+                if (ImGui::IsItemEdited())
+                {
+                    command_registry->PushCommand(
+                        new EditFunction<
+                        Vector3,
+                        RigidBody,
+                        &RigidBody::ApplyForceCentroid>
+                        (
+                            m_rigid_body,
+                            m_rigid_body->m_force_accumulator,
+                            force_accumulator
+                            )
+                    );
+                }
                 ImGui::Text("Torque");
+                Vector3 torque_accumulator = m_rigid_body->m_torque_accumulator;
+                ImGui::InputFloat3("##RigidBodyEdit3", torque_accumulator.GetData(), 3);
+                if (ImGui::IsItemEdited())
+                {
+                    command_registry->PushCommand(
+                        new EditFunction<
+                        Vector3,
+                        RigidBody,
+                        &RigidBody::ApplyTorque>
+                        (
+                            m_rigid_body,
+                            m_rigid_body->m_torque_accumulator,
+                            torque_accumulator
+                            )
+                    );
+                }
                 ImGui::Separator();
             }
             //Mass
