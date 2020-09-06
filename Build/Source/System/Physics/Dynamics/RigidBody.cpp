@@ -24,9 +24,10 @@ namespace Engine5
     void RigidBody::IntegrateVelocity(Real dt)
     {
         // integrate linear velocity
-        m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * dt;
+        Real scale = GetInverseMassScale();
+        m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * scale * dt;
         // integrate angular velocity
-        m_angular_velocity += m_global_inverse_inertia_tensor * m_torque_accumulator * dt;
+        m_angular_velocity += m_global_inverse_inertia * m_torque_accumulator * scale * dt;
         // zero out accumulated force and torque
         m_force_accumulator.SetZero();
         m_torque_accumulator.SetZero();
@@ -36,15 +37,15 @@ namespace Engine5
     {
         SyncFromTransform(m_transform);
         Vector3 delta_linear_velocity = m_linear_velocity * dt;
-        delta_linear_velocity         = delta_linear_velocity.HadamardProduct(m_constraints_positional);
+        delta_linear_velocity         = delta_linear_velocity.HadamardProduct(m_linear_constraints);
         m_global_centroid += delta_linear_velocity;
         // integrate orientation
         Vector3 delta_angular_velocity = m_angular_velocity;
-  /*      Vector3 delta_angular_velocity(
-                                       Math::DegreesToRadians(m_angular_velocity.x),
-                                       Math::DegreesToRadians(m_angular_velocity.y),
-                                       Math::DegreesToRadians(m_angular_velocity.z));*/
-        delta_angular_velocity = delta_angular_velocity.HadamardProduct(m_constraints_rotational);
+        /*      Vector3 delta_angular_velocity(
+                                             Math::DegreesToRadians(m_angular_velocity.x),
+                                             Math::DegreesToRadians(m_angular_velocity.y),
+                                             Math::DegreesToRadians(m_angular_velocity.z));*/
+        delta_angular_velocity = delta_angular_velocity.HadamardProduct(m_angular_constraints);
         Vector3 axis           = delta_angular_velocity.Unit();
         Real    radian         = delta_angular_velocity.Length() * dt;
         m_local.orientation.AddRotation(axis, radian);
@@ -66,8 +67,8 @@ namespace Engine5
 
     void RigidBody::UpdateGlobalInertiaTensor()
     {
-        m_global_inverse_inertia_tensor = m_local.orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
-        m_global_inertia_tensor         = m_local.orientation * m_mass_data.local_inertia_tensor * m_inverse_orientation;
+        m_global_inverse_inertia = m_local.orientation * m_mass_data.local_inverse_inertia * m_inverse_orientation;
+        m_global_inertia         = m_local.orientation * m_mass_data.local_inertia * m_inverse_orientation;
     }
 
     void RigidBody::UpdateOrientation()
@@ -122,6 +123,11 @@ namespace Engine5
         UpdateOrientation();
     }
 
+    void RigidBody::SetMassScale(const Real& scale)
+    {
+        m_mass_scale = scale;
+    }
+
     Vector3 RigidBody::GetPosition() const
     {
         return m_local.position;
@@ -140,6 +146,16 @@ namespace Engine5
     Quaternion RigidBody::GetOrientation() const
     {
         return m_local.orientation;
+    }
+
+    Real RigidBody::GetMassScale() const
+    {
+        return m_mass_scale;
+    }
+
+    Real RigidBody::GetInverseMassScale() const
+    {
+        return Math::IsZero(m_mass_scale) ? 0.0f : 1.0f / m_mass_scale;
     }
 
     void RigidBody::SetLinearVelocity(const Vector3& linear)
@@ -174,12 +190,12 @@ namespace Engine5
 
     void RigidBody::SetPositionalConstraints(const Vector3& linear)
     {
-        m_constraints_positional = linear;
+        m_linear_constraints = linear;
     }
 
     void RigidBody::SetRotationalConstraints(const Vector3& angular)
     {
-        m_constraints_rotational = angular;
+        m_angular_constraints = angular;
     }
 
     void RigidBody::SetMassInfinite()
@@ -222,43 +238,43 @@ namespace Engine5
 
     void RigidBody::SetInertiaInfinite()
     {
-        m_global_inverse_inertia_tensor.SetZero();
-        m_mass_data.local_inertia_tensor.SetZero();
-        m_mass_data.local_inverse_inertia_tensor.SetZero();
+        m_global_inverse_inertia.SetZero();
+        m_mass_data.local_inertia.SetZero();
+        m_mass_data.local_inverse_inertia.SetZero();
     }
 
     void RigidBody::SetInertia(const Matrix33& inertia_tensor)
     {
-        m_global_inverse_inertia_tensor          = inertia_tensor.Inverse();
-        m_mass_data.local_inverse_inertia_tensor = m_inverse_orientation * m_global_inverse_inertia_tensor * m_local.orientation;
-        m_mass_data.local_inertia_tensor         = m_mass_data.local_inverse_inertia_tensor.Inverse();
+        m_global_inverse_inertia          = inertia_tensor.Inverse();
+        m_mass_data.local_inverse_inertia = m_inverse_orientation * m_global_inverse_inertia * m_local.orientation;
+        m_mass_data.local_inertia         = m_mass_data.local_inverse_inertia.Inverse();
     }
 
     Matrix33 RigidBody::Inertia() const
     {
-        return m_global_inertia_tensor;
+        return m_global_inertia;
     }
 
     Matrix33 RigidBody::InverseInertia() const
     {
-        return m_global_inverse_inertia_tensor;
+        return m_global_inverse_inertia;
     }
 
     Matrix33 RigidBody::LocalInertia() const
     {
-        return m_mass_data.local_inertia_tensor;
+        return m_mass_data.local_inertia;
     }
 
     Matrix33 RigidBody::InverseLocalInertia() const
     {
-        return m_mass_data.local_inverse_inertia_tensor;
+        return m_mass_data.local_inverse_inertia;
     }
 
     void RigidBody::SetLocalInertia(const Matrix33& inertia)
     {
-        m_mass_data.local_inertia_tensor         = inertia;
-        m_mass_data.local_inverse_inertia_tensor = inertia.Inverse();
-        m_global_inverse_inertia_tensor          = m_local.orientation * m_mass_data.local_inverse_inertia_tensor * m_inverse_orientation;
+        m_mass_data.local_inertia         = inertia;
+        m_mass_data.local_inverse_inertia = inertia.Inverse();
+        m_global_inverse_inertia          = m_local.orientation * m_mass_data.local_inverse_inertia * m_inverse_orientation;
     }
 
     void RigidBody::SetMotionMode(eMotionMode motion_mode)
@@ -303,7 +319,7 @@ namespace Engine5
     {
         if (transform != nullptr)
         {
-            if (m_local.position != transform->position 
+            if (m_local.position != transform->position
                 || m_local.orientation != transform->orientation
                 || m_local.rotating_origin != transform->rotating_origin)
             {
@@ -324,18 +340,18 @@ namespace Engine5
         if (origin != this)
         {
             //linear data
-            m_linear_velocity        = origin->m_linear_velocity;
-            m_force_accumulator      = origin->m_force_accumulator;
-            m_constraints_positional = origin->m_constraints_positional;
+            m_linear_velocity    = origin->m_linear_velocity;
+            m_force_accumulator  = origin->m_force_accumulator;
+            m_linear_constraints = origin->m_linear_constraints;
             //angular data
-            m_inverse_orientation    = origin->m_inverse_orientation;
-            m_angular_velocity       = origin->m_angular_velocity;
-            m_torque_accumulator     = origin->m_torque_accumulator;
-            m_constraints_rotational = origin->m_constraints_rotational;
+            m_inverse_orientation = origin->m_inverse_orientation;
+            m_angular_velocity    = origin->m_angular_velocity;
+            m_torque_accumulator  = origin->m_torque_accumulator;
+            m_angular_constraints = origin->m_angular_constraints;
             //mass data
-            m_mass_data                     = origin->m_mass_data;
-            m_global_centroid               = origin->m_global_centroid;
-            m_global_inverse_inertia_tensor = origin->m_global_inverse_inertia_tensor;
+            m_mass_data              = origin->m_mass_data;
+            m_global_centroid        = origin->m_global_centroid;
+            m_global_inverse_inertia = origin->m_global_inverse_inertia;
             //others
             m_local       = origin->m_local;
             m_motion_mode = origin->m_motion_mode;

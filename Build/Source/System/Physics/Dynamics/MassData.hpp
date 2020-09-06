@@ -25,7 +25,7 @@ namespace Engine5
         Vector3 local_centroid;
 
         //inertia
-        Matrix33 local_inertia_tensor;
-        Matrix33 local_inverse_inertia_tensor;
+        Matrix33 local_inertia;
+        Matrix33 local_inverse_inertia;
     };
 }

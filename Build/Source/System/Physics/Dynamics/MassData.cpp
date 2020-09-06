@@ -18,8 +18,8 @@ namespace Engine5
             mass                         = rhs.mass;
             inverse_mass                 = rhs.inverse_mass;
             local_centroid               = rhs.local_centroid;
-            local_inertia_tensor         = rhs.local_inertia_tensor;
-            local_inverse_inertia_tensor = rhs.local_inverse_inertia_tensor;
+            local_inertia         = rhs.local_inertia;
+            local_inverse_inertia = rhs.local_inverse_inertia;
         }
         return *this;
     }

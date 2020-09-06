@@ -210,7 +210,7 @@ namespace Engine5
             }
             if (JsonResource::HasMember(linear, "Constraints") && JsonResource::IsVector3(linear["Constraints"]))
             {
-                m_rigid_body->m_constraints_positional = JsonResource::AsVector3(linear["Constraints"]);
+                m_rigid_body->m_linear_constraints = JsonResource::AsVector3(linear["Constraints"]);
             }
         }
         //angular data
@@ -231,7 +231,7 @@ namespace Engine5
             }
             if (JsonResource::HasMember(angular, "Constraints") && JsonResource::IsVector3(angular["Constraints"]))
             {
-                m_rigid_body->m_constraints_rotational = JsonResource::AsVector3(angular["Constraints"]);
+                m_rigid_body->m_angular_constraints = JsonResource::AsVector3(angular["Constraints"]);
             }
         }
         //mass data
@@ -348,6 +348,22 @@ namespace Engine5
             {
                 ImGui::Separator();
                 ImGui::Text("Scale Factor");
+                Real mass_scale = m_rigid_body->m_mass_scale;
+                ImGui::InputFloat("##RigidBodyEdit4", &mass_scale, 0.1f);
+                if (ImGui::IsItemEdited())
+                {
+                    command_registry->PushCommand(
+                                                  new EditFunction<
+                                                      Real,
+                                                      RigidBody,
+                                                      &RigidBody::SetMassScale>
+                                                  (
+                                                   m_rigid_body,
+                                                   m_rigid_body->m_mass_scale,
+                                                   mass_scale
+                                                  )
+                                                 );
+                }
                 ImGui::Separator();
                 ImGui::Text("Mass Data");
                 ImGui::Text("Mass");
@@ -360,22 +376,22 @@ namespace Engine5
                 c = m_rigid_body->m_global_centroid;
                 ImGui::Text("Centroid - Global");
                 ImGui::Text("[%.1f, %.1f, %.1f]", c[0], c[1], c[2]);
-                Matrix33 i = m_rigid_body->m_mass_data.local_inertia_tensor;
+                Matrix33 i = m_rigid_body->m_mass_data.local_inertia;
                 ImGui::Text("Inertia - Local");
                 ImGui::Text("|%.1f, %.1f, %.1f|", i[0], i[1], i[2]);
                 ImGui::Text("|%.1f, %.1f, %.1f|", i[3], i[4], i[5]);
                 ImGui::Text("|%.1f, %.1f, %.1f|", i[6], i[7], i[8]);
-                i = m_rigid_body->m_global_inertia_tensor;
+                i = m_rigid_body->m_global_inertia;
                 ImGui::Text("Inertia - Global");
                 ImGui::Text("|%.1f, %.1f, %.1f|", i[0], i[1], i[2]);
                 ImGui::Text("|%.1f, %.1f, %.1f|", i[3], i[4], i[5]);
                 ImGui::Text("|%.1f, %.1f, %.1f|", i[6], i[7], i[8]);
-                i = m_rigid_body->m_mass_data.local_inverse_inertia_tensor;
+                i = m_rigid_body->m_mass_data.local_inverse_inertia;
                 ImGui::Text("Inverse Inertia - Local");
                 ImGui::Text("|%f, %f, %f|", i[0], i[1], i[2]);
                 ImGui::Text("|%f, %f, %f|", i[3], i[4], i[5]);
                 ImGui::Text("|%f, %f, %f|", i[6], i[7], i[8]);
-                i = m_rigid_body->m_global_inverse_inertia_tensor;
+                i = m_rigid_body->m_global_inverse_inertia;
                 ImGui::Text("Inverse Inertia - Global");
                 ImGui::Text("|%f, %f, %f|", i[0], i[1], i[2]);
                 ImGui::Text("|%f, %f, %f|", i[3], i[4], i[5]);

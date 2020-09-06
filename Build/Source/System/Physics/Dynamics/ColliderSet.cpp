@@ -239,18 +239,18 @@ namespace Engine5
             m_mass_data.local_centroid *= m_mass_data.inverse_mass;
             // compute local inertia tensor
             m_colliders->empty()
-                ? m_mass_data.local_inertia_tensor.SetIdentity()
-                : m_mass_data.local_inertia_tensor.SetZero();
+                ? m_mass_data.local_inertia.SetIdentity()
+                : m_mass_data.local_inertia.SetZero();
             for (auto& collider_data : *m_colliders)
             {
                 Vector3  r       = m_mass_data.local_centroid - collider_data->WorldCentroid();
                 Real     r_dot_r = r.DotProduct(r);
                 Matrix33 r_out_r = r.OuterProduct(r);
                 // accumulate local inertia tensor contribution, using Parallel Axis Theorem
-                m_mass_data.local_inertia_tensor += collider_data->WorldInertia() + collider_data->m_mass * (r_dot_r * Matrix33::Identity() - r_out_r);
+                m_mass_data.local_inertia += collider_data->WorldInertia() + collider_data->m_mass * (r_dot_r * Matrix33::Identity() - r_out_r);
             }
             // compute inverse inertia tensor
-            m_mass_data.local_inverse_inertia_tensor = m_mass_data.local_inertia_tensor.Inverse();
+            m_mass_data.local_inverse_inertia = m_mass_data.local_inertia.Inverse();
         }
         if (m_rigid_body != nullptr)
         {

@@ -30,11 +30,14 @@ namespace Engine5
         void SetPosition(const Vector3& position);
         void SetCentroid(const Vector3& centroid);
         void SetOrientation(const Quaternion& orientation);
+        void SetMassScale(const Real& scale);
 
         Vector3    GetPosition() const;
         Vector3    GetCentroid() const;
         Vector3    GetLocalCentroid() const;
         Quaternion GetOrientation() const;
+        Real       GetMassScale() const;
+        Real       GetInverseMassScale() const;
 
         void SetLinearVelocity(const Vector3& linear);
         void SetAngularVelocity(const Vector3& angular);
@@ -87,19 +90,20 @@ namespace Engine5
         //linear data
         Vector3 m_linear_velocity;
         Vector3 m_force_accumulator;
-        Vector3 m_constraints_positional = Vector3(1.0f, 1.0f, 1.0f);
+        Vector3 m_linear_constraints = Vector3(1.0f, 1.0f, 1.0f);
 
         //angular data
         Quaternion m_inverse_orientation;
         Vector3    m_angular_velocity;
         Vector3    m_torque_accumulator;
-        Vector3    m_constraints_rotational = Vector3(1.0f, 1.0f, 1.0f);
+        Vector3    m_angular_constraints = Vector3(1.0f, 1.0f, 1.0f);
 
         //mass data
         MassData m_mass_data;
         Vector3  m_global_centroid; //center of mass
-        Matrix33 m_global_inertia_tensor;
-        Matrix33 m_global_inverse_inertia_tensor;
+        Matrix33 m_global_inertia;
+        Matrix33 m_global_inverse_inertia;
+        Real     m_mass_scale = 1.0f;
 
         //others
         eMotionMode         m_motion_mode = eMotionMode::Dynamic;
