@@ -269,9 +269,8 @@ namespace Engine5
     {
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
-            //Apply
+            if (ImGui::TreeNode("Movement"))
             {
-                ImGui::Text("Apply Velocity");
                 ImGui::Separator();
                 ImGui::Text("Linear Velocity");
                 Vector3 linear_velocity = m_rigid_body->m_linear_velocity;
@@ -285,8 +284,8 @@ namespace Engine5
                                                       &RigidBody::SetLinearVelocity>
                                                   (
                                                    m_rigid_body,
-                                                      m_rigid_body->m_linear_velocity,
-                                                      linear_velocity
+                                                   m_rigid_body->m_linear_velocity,
+                                                   linear_velocity
                                                   )
                                                  );
                 }
@@ -296,19 +295,17 @@ namespace Engine5
                 if (ImGui::IsItemEdited())
                 {
                     command_registry->PushCommand(
-                        new EditFunction<
-                        Vector3,
-                        RigidBody,
-                        &RigidBody::SetAngularVelocity>
-                        (
-                            m_rigid_body,
-                            m_rigid_body->m_angular_velocity,
-                            angular_velocity
-                            )
-                    );
+                                                  new EditFunction<
+                                                      Vector3,
+                                                      RigidBody,
+                                                      &RigidBody::SetAngularVelocity>
+                                                  (
+                                                   m_rigid_body,
+                                                   m_rigid_body->m_angular_velocity,
+                                                   angular_velocity
+                                                  )
+                                                 );
                 }
-                ImGui::Separator();
-                ImGui::Text("Apply Force");
                 ImGui::Separator();
                 ImGui::Text("Force");
                 Vector3 force_accumulator = m_rigid_body->m_force_accumulator;
@@ -316,16 +313,16 @@ namespace Engine5
                 if (ImGui::IsItemEdited())
                 {
                     command_registry->PushCommand(
-                        new EditFunction<
-                        Vector3,
-                        RigidBody,
-                        &RigidBody::ApplyForceCentroid>
-                        (
-                            m_rigid_body,
-                            m_rigid_body->m_force_accumulator,
-                            force_accumulator
-                            )
-                    );
+                                                  new EditFunction<
+                                                      Vector3,
+                                                      RigidBody,
+                                                      &RigidBody::ApplyForceCentroid>
+                                                  (
+                                                   m_rigid_body,
+                                                   m_rigid_body->m_force_accumulator,
+                                                   force_accumulator
+                                                  )
+                                                 );
                 }
                 ImGui::Text("Torque");
                 Vector3 torque_accumulator = m_rigid_body->m_torque_accumulator;
@@ -333,47 +330,61 @@ namespace Engine5
                 if (ImGui::IsItemEdited())
                 {
                     command_registry->PushCommand(
-                        new EditFunction<
-                        Vector3,
-                        RigidBody,
-                        &RigidBody::ApplyTorque>
-                        (
-                            m_rigid_body,
-                            m_rigid_body->m_torque_accumulator,
-                            torque_accumulator
-                            )
-                    );
+                                                  new EditFunction<
+                                                      Vector3,
+                                                      RigidBody,
+                                                      &RigidBody::ApplyTorque>
+                                                  (
+                                                   m_rigid_body,
+                                                   m_rigid_body->m_torque_accumulator,
+                                                   torque_accumulator
+                                                  )
+                                                 );
                 }
                 ImGui::Separator();
+                ImGui::TreePop();
             }
-            //Mass
+            if (ImGui::TreeNode("Mass Data"))
             {
+                ImGui::Separator();
+                ImGui::Text("Scale Factor");
                 ImGui::Separator();
                 ImGui::Text("Mass Data");
-                ImGui::Separator();
-                ImGui::Text("Mass Scale");
-                ImGui::Separator();
                 ImGui::Text("Mass");
-               
-                ImGui::Text("Local Centroid");
-                ImGui::Text("Global Centroid");
-
+                ImGui::Text("%.1f", m_rigid_body->m_mass_data.mass);
+                ImGui::Text("Inverse Mass");
+                ImGui::Text("%f", m_rigid_body->m_mass_data.inverse_mass);
+                Vector3 c = m_rigid_body->m_mass_data.local_centroid;
+                ImGui::Text("Centroid - Local");
+                ImGui::Text("[%.1f, %.1f, %.1f]", c[0], c[1], c[2]);
+                c = m_rigid_body->m_global_centroid;
+                ImGui::Text("Centroid - Global");
+                ImGui::Text("[%.1f, %.1f, %.1f]", c[0], c[1], c[2]);
                 Matrix33 i = m_rigid_body->m_mass_data.local_inertia_tensor;
-                ImGui::Text("Local Inertia");
-                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 0 ], i[ 1 ], i[ 2 ]);
-                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 3 ], i[ 4 ], i[ 5 ]);
-                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 6 ], i[ 7 ], i[ 8 ]);
+                ImGui::Text("Inertia - Local");
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[0], i[1], i[2]);
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[3], i[4], i[5]);
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[6], i[7], i[8]);
                 i = m_rigid_body->m_global_inertia_tensor;
-                ImGui::Text("Global Inertia");
-                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 0 ], i[ 1 ], i[ 2 ]);
-                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 3 ], i[ 4 ], i[ 5 ]);
-                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 6 ], i[ 7 ], i[ 8 ]);
+                ImGui::Text("Inertia - Global");
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[0], i[1], i[2]);
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[3], i[4], i[5]);
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[6], i[7], i[8]);
+                i = m_rigid_body->m_mass_data.local_inverse_inertia_tensor;
+                ImGui::Text("Inverse Inertia - Local");
+                ImGui::Text("|%f, %f, %f|", i[0], i[1], i[2]);
+                ImGui::Text("|%f, %f, %f|", i[3], i[4], i[5]);
+                ImGui::Text("|%f, %f, %f|", i[6], i[7], i[8]);
+                i = m_rigid_body->m_global_inverse_inertia_tensor;
+                ImGui::Text("Inverse Inertia - Global");
+                ImGui::Text("|%f, %f, %f|", i[0], i[1], i[2]);
+                ImGui::Text("|%f, %f, %f|", i[3], i[4], i[5]);
+                ImGui::Text("|%f, %f, %f|", i[6], i[7], i[8]);
                 ImGui::Separator();
+                ImGui::TreePop();
             }
-            //Effect
+            if (ImGui::TreeNode("Effect"))
             {
-                ImGui::Separator();
-                ImGui::Text("Effect");
                 ImGui::Separator();
                 ImGui::Text("Drag");
                 ImGui::Text("Linear Drag");
@@ -383,21 +394,19 @@ namespace Engine5
                 ImGui::Text("Linear Constraints");
                 ImGui::Text("Angular Constraints");
                 ImGui::Separator();
+                ImGui::TreePop();
             }
-            //Option
+            if (ImGui::TreeNode("Option"))
             {
-                ImGui::Separator();
-                ImGui::Text("Option");
                 ImGui::Separator();
                 ImGui::Text("Motion Mode");
                 ImGui::Separator();
                 ImGui::Text("Detection Mode");
                 ImGui::Separator();
+                ImGui::TreePop();
             }
-            //local
+            if (ImGui::TreeNode("Local Transform"))
             {
-                ImGui::Separator();
-                ImGui::Text("Local Transform Data");
                 ImGui::Separator();
                 ImGui::Text("Position");
                 ImGui::Separator();
@@ -405,6 +414,7 @@ namespace Engine5
                 ImGui::Separator();
                 ImGui::Text("Rotating Origin");
                 ImGui::Separator();
+                ImGui::TreePop();
             }
         }
     }
