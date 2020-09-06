@@ -39,11 +39,11 @@ namespace Engine5
         delta_linear_velocity         = delta_linear_velocity.HadamardProduct(m_constraints_positional);
         m_global_centroid += delta_linear_velocity;
         // integrate orientation
-        //Vector3 delta_angular_velocity = m_angular_velocity;
-        Vector3 delta_angular_velocity(
+        Vector3 delta_angular_velocity = m_angular_velocity;
+  /*      Vector3 delta_angular_velocity(
                                        Math::DegreesToRadians(m_angular_velocity.x),
                                        Math::DegreesToRadians(m_angular_velocity.y),
-                                       Math::DegreesToRadians(m_angular_velocity.z));
+                                       Math::DegreesToRadians(m_angular_velocity.z));*/
         delta_angular_velocity = delta_angular_velocity.HadamardProduct(m_constraints_rotational);
         Vector3 axis           = delta_angular_velocity.Unit();
         Real    radian         = delta_angular_velocity.Length() * dt;
@@ -75,6 +75,7 @@ namespace Engine5
         m_local.orientation.SetNormalize();
         m_inverse_orientation = m_local.orientation.Inverse();
         m_inverse_orientation.SetNormalize();
+        UpdateGlobalInertiaTensor();
     }
 
     void RigidBody::SetMassData(const MassData& mass_data)

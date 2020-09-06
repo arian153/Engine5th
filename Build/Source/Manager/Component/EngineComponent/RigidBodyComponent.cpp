@@ -351,15 +351,23 @@ namespace Engine5
                 ImGui::Separator();
                 ImGui::Text("Mass Data");
                 ImGui::Separator();
+                ImGui::Text("Mass Scale");
+                ImGui::Separator();
                 ImGui::Text("Mass");
-                ImGui::Separator();
-                ImGui::Text("Local Inertia");
-                ImGui::Separator();
-                ImGui::Text("Global Inertia");
-                ImGui::Separator();
+               
                 ImGui::Text("Local Centroid");
-                ImGui::Separator();
                 ImGui::Text("Global Centroid");
+
+                Matrix33 i = m_rigid_body->m_mass_data.local_inertia_tensor;
+                ImGui::Text("Local Inertia");
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 0 ], i[ 1 ], i[ 2 ]);
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 3 ], i[ 4 ], i[ 5 ]);
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 6 ], i[ 7 ], i[ 8 ]);
+                i = m_rigid_body->m_global_inertia_tensor;
+                ImGui::Text("Global Inertia");
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 0 ], i[ 1 ], i[ 2 ]);
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 3 ], i[ 4 ], i[ 5 ]);
+                ImGui::Text("|%.1f, %.1f, %.1f|", i[ 6 ], i[ 7 ], i[ 8 ]);
                 ImGui::Separator();
             }
             //Effect
