@@ -62,6 +62,7 @@ namespace Engine5
         ColliderSet* m_collider_set = nullptr;
         Transform*   m_transform    = nullptr;
 
-        bool m_b_init = false;
+        Matrix33 m_prev_inertia;
+        bool     m_b_init = false;
     };
 }

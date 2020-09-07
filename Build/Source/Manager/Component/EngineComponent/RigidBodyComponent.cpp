@@ -100,19 +100,18 @@ namespace Engine5
         m_rigid_body->SetLocalInertia(new_inertia);
     }
 
-    // ReSharper disable once CppMemberFunctionMayBeConst
     void RigidBodyComponent::SetMass(const Real& mass)
     {
         if (mass > 0.0f)
         {
-            auto prev_inertia  = m_rigid_body->LocalInertia();
-            auto prev_inv_mass = m_rigid_body->InverseMass();
-            auto new_inertia   = (mass * prev_inv_mass) * prev_inertia;
+            Real     prev_inv_mass = m_rigid_body->InverseMass();
+            Matrix33 new_inertia   = Math::IsZero(prev_inv_mass) ? mass * m_prev_inertia : (mass * prev_inv_mass) * m_rigid_body->LocalInertia();
             m_rigid_body->SetMass(mass);
             m_rigid_body->SetLocalInertia(new_inertia);
         }
         else
         {
+            m_prev_inertia = m_rigid_body->InverseMass() * m_rigid_body->LocalInertia();
             m_rigid_body->SetMassInfinite();
             m_rigid_body->SetInertiaInfinite();
         }
@@ -287,104 +286,108 @@ namespace Engine5
     {
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
-            if (ImGui::TreeNode("Movement"))
+            ImGui::Text("Movement");
+            ImGui::Separator();
+            ImGui::Text("Linear Velocity");
+            Vector3 linear_velocity = m_rigid_body->m_linear_velocity;
+            ImGui::InputFloat3("##RigidBodyEdit0", linear_velocity.GetData(), 3);
+            if (ImGui::IsItemEdited())
             {
-                ImGui::Text("Movement");
-                ImGui::Separator();
-                ImGui::Text("Linear Velocity");
-                Vector3 linear_velocity = m_rigid_body->m_linear_velocity;
-                ImGui::InputFloat3("##RigidBodyEdit0", linear_velocity.GetData(), 3);
-                if (ImGui::IsItemEdited())
-                {
-                    command_registry->PushCommand(
-                                                  new EditFunction<
-                                                      Vector3,
-                                                      RigidBody,
-                                                      &RigidBody::SetLinearVelocity>
-                                                  (
-                                                   m_rigid_body,
-                                                   m_rigid_body->m_linear_velocity,
-                                                   linear_velocity
-                                                  )
-                                                 );
-                }
-                ImGui::Text("Angular Velocity");
-                Vector3 angular_velocity = m_rigid_body->m_angular_velocity;
-                ImGui::InputFloat3("##RigidBodyEdit1", angular_velocity.GetData(), 3);
-                if (ImGui::IsItemEdited())
-                {
-                    command_registry->PushCommand(
-                                                  new EditFunction<
-                                                      Vector3,
-                                                      RigidBody,
-                                                      &RigidBody::SetAngularVelocity>
-                                                  (
-                                                   m_rigid_body,
-                                                   m_rigid_body->m_angular_velocity,
-                                                   angular_velocity
-                                                  )
-                                                 );
-                }
-                ImGui::Separator();
-                ImGui::Text("Force");
-                Vector3 force_accumulator = m_rigid_body->m_force_accumulator;
-                ImGui::InputFloat3("##RigidBodyEdit2", force_accumulator.GetData(), 3);
-                if (ImGui::IsItemEdited())
-                {
-                    command_registry->PushCommand(
-                                                  new EditFunction<
-                                                      Vector3,
-                                                      RigidBody,
-                                                      &RigidBody::ApplyForceCentroid>
-                                                  (
-                                                   m_rigid_body,
-                                                   m_rigid_body->m_force_accumulator,
-                                                   force_accumulator
-                                                  )
-                                                 );
-                }
-                ImGui::Text("Torque");
-                Vector3 torque_accumulator = m_rigid_body->m_torque_accumulator;
-                ImGui::InputFloat3("##RigidBodyEdit3", torque_accumulator.GetData(), 3);
-                if (ImGui::IsItemEdited())
-                {
-                    command_registry->PushCommand(
-                                                  new EditFunction<
-                                                      Vector3,
-                                                      RigidBody,
-                                                      &RigidBody::ApplyTorque>
-                                                  (
-                                                   m_rigid_body,
-                                                   m_rigid_body->m_torque_accumulator,
-                                                   torque_accumulator
-                                                  )
-                                                 );
-                }
-                ImGui::Separator();
-                ImGui::TreePop();
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  RigidBody,
+                                                  &RigidBody::SetLinearVelocity>
+                                              (
+                                               m_rigid_body,
+                                               m_rigid_body->m_linear_velocity,
+                                               linear_velocity
+                                              )
+                                             );
             }
+            ImGui::Text("Angular Velocity");
+            Vector3 angular_velocity = m_rigid_body->m_angular_velocity;
+            ImGui::InputFloat3("##RigidBodyEdit1", angular_velocity.GetData(), 3);
+            if (ImGui::IsItemEdited())
+            {
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  RigidBody,
+                                                  &RigidBody::SetAngularVelocity>
+                                              (
+                                               m_rigid_body,
+                                               m_rigid_body->m_angular_velocity,
+                                               angular_velocity
+                                              )
+                                             );
+            }
+            ImGui::Separator();
+            ImGui::Text("Force");
+            Vector3 force_accumulator = m_rigid_body->m_force_accumulator;
+            ImGui::InputFloat3("##RigidBodyEdit2", force_accumulator.GetData(), 3);
+            if (ImGui::IsItemEdited())
+            {
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  RigidBody,
+                                                  &RigidBody::ApplyForceCentroid>
+                                              (
+                                               m_rigid_body,
+                                               m_rigid_body->m_force_accumulator,
+                                               force_accumulator
+                                              )
+                                             );
+            }
+            ImGui::Text("Torque");
+            Vector3 torque_accumulator = m_rigid_body->m_torque_accumulator;
+            ImGui::InputFloat3("##RigidBodyEdit3", torque_accumulator.GetData(), 3);
+            if (ImGui::IsItemEdited())
+            {
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Vector3,
+                                                  RigidBody,
+                                                  &RigidBody::ApplyTorque>
+                                              (
+                                               m_rigid_body,
+                                               m_rigid_body->m_torque_accumulator,
+                                               torque_accumulator
+                                              )
+                                             );
+            }
+            ImGui::Separator();
+            ImGui::Text("Physics Coefficient");
+            ImGui::Separator();
+            ImGui::Text("Drag");
+            ImGui::Text("Linear Drag");
+            ImGui::Text("Angular Drag");
+            ImGui::Separator();
+            ImGui::Text("Constraints");
+            ImGui::Text("Linear Constraints");
+            ImGui::Text("Angular Constraints");
+            ImGui::Separator();
+            ImGui::Text("Mass");
+            Real mass = m_rigid_body->m_mass_data.mass;
+            ImGui::InputFloat("##RigidBodyEdit4", &mass, 0.1f);
+            if (ImGui::IsItemEdited())
+            {
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  Real,
+                                                  RigidBodyComponent,
+                                                  &RigidBodyComponent::SetMass>
+                                              (
+                                               this,
+                                               m_rigid_body->m_mass_data.mass,
+                                               mass
+                                              )
+                                             );
+            }
+            ImGui::Separator();
             if (ImGui::TreeNode("Mass Data"))
             {
-                ImGui::Separator();
-                ImGui::Text("Mass");
-                Real mass = m_rigid_body->m_mass_data.mass;
-                ImGui::InputFloat("##RigidBodyEdit4", &mass, 0.1f);
-                if (ImGui::IsItemEdited())
-                {
-                    command_registry->PushCommand(
-                                                  new EditFunction<
-                                                      Real,
-                                                      RigidBodyComponent,
-                                                      &RigidBodyComponent::SetMass>
-                                                  (
-                                                   this,
-                                                   m_rigid_body->m_mass_data.mass,
-                                                   mass
-                                                  )
-                                                 );
-                }
-                ImGui::Separator();
-                ImGui::Text("Mass Data");
                 ImGui::Text("Mass");
                 ImGui::Text("%.1f", m_rigid_body->m_mass_data.mass);
                 ImGui::Text("Inverse Mass");
@@ -418,39 +421,20 @@ namespace Engine5
                 ImGui::Separator();
                 ImGui::TreePop();
             }
-            if (ImGui::TreeNode("Effect"))
-            {
-                ImGui::Separator();
-                ImGui::Text("Drag");
-                ImGui::Text("Linear Drag");
-                ImGui::Text("Angular Drag");
-                ImGui::Separator();
-                ImGui::Text("Constraints");
-                ImGui::Text("Linear Constraints");
-                ImGui::Text("Angular Constraints");
-                ImGui::Separator();
-                ImGui::TreePop();
-            }
-            if (ImGui::TreeNode("Option"))
-            {
-                ImGui::Separator();
-                ImGui::Text("Motion Mode");
-                ImGui::Separator();
-                ImGui::Text("Detection Mode");
-                ImGui::Separator();
-                ImGui::TreePop();
-            }
-            if (ImGui::TreeNode("Local Transform"))
-            {
-                ImGui::Separator();
-                ImGui::Text("Position");
-                ImGui::Separator();
-                ImGui::Text("Orientation");
-                ImGui::Separator();
-                ImGui::Text("Rotating Origin");
-                ImGui::Separator();
-                ImGui::TreePop();
-            }
+            ImGui::Separator();
+            ImGui::Text("Motion Mode");
+            ImGui::Separator();
+            ImGui::Text("Detection Mode");
+            ImGui::Separator();
+            ImGui::Separator();
+            ImGui::Text("Local Transform");
+            ImGui::Separator();
+            ImGui::Text("Position");
+            ImGui::Separator();
+            ImGui::Text("Orientation");
+            ImGui::Separator();
+            ImGui::Text("Rotating Origin");
+            ImGui::Separator();
         }
     }
 
