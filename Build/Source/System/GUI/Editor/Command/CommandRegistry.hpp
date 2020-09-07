@@ -19,6 +19,7 @@ namespace Engine5
         void RedoCommand();
         void CopyCommand(void* data);
         void ClearUndoCommands();
+        void Clear();
 
     private:
         friend class GameEditor;

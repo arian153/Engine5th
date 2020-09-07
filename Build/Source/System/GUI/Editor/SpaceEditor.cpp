@@ -222,7 +222,6 @@ namespace Engine5
         ImGui::End();
     }
 
-   
     void SpaceEditor::OpenSequence()
     {
         for (size_t i = 0; i < m_resources.size(); ++i)
@@ -276,6 +275,8 @@ namespace Engine5
     {
         resource->IsClose() = true;
         m_editing_space     = nullptr;
+        m_editing_object    = nullptr;
+        m_command_registry->Clear();
     }
 
     void SpaceEditor::DoForceClose(JsonResource* resource)
@@ -288,6 +289,7 @@ namespace Engine5
             m_space_manager->RemoveSpace(found->second);
             m_editing_spaces.erase(found);
         }
+        m_editing_object = nullptr;
     }
 
     void SpaceEditor::DoSave(JsonResource* resource)

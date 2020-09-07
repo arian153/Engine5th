@@ -82,4 +82,27 @@ namespace Engine5
             m_undo_registry.clear();
         }
     }
+
+    void CommandRegistry::Clear()
+    {
+        if (!m_undo_registry.empty())
+        {
+            for (auto& undo_command : m_undo_registry)
+            {
+                delete undo_command;
+                undo_command = nullptr;
+            }
+            m_undo_registry.clear();
+        }
+
+        if (!m_command_registry.empty())
+        {
+            for (auto& command : m_command_registry)
+            {
+                delete command;
+                command = nullptr;
+            }
+            m_command_registry.clear();
+        }
+    }
 }
