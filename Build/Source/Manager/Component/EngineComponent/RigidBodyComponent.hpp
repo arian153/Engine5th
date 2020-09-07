@@ -23,6 +23,7 @@ namespace Engine5
         void SetAngularVelocity(const Vector3& angular) const;
         void SetMassInfinite() const;
         void SetMass(Real mass = 1.0f) const;
+        void SetMass(const Real& mass);
         void SetPositionalConstraints(const Vector3& linear) const;
         void SetRotationalConstraints(const Vector3& angular) const;
         void SetMotionMode(eMotionMode motion_mode) const;
@@ -38,7 +39,7 @@ namespace Engine5
         Matrix33    GetInertia() const;
         Matrix33    GetInverseInertia() const;
         eMotionMode GetMotionMode() const;
-        RigidBody* GetRigidBody() const;
+        RigidBody*  GetRigidBody() const;
 
     protected:
         bool Load(const Json::Value& data) override;

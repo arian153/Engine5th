@@ -36,8 +36,6 @@ namespace Engine5
         Vector3    GetCentroid() const;
         Vector3    GetLocalCentroid() const;
         Quaternion GetOrientation() const;
-        Real       GetMassScale() const;
-        Real       GetInverseMassScale() const;
 
         void SetLinearVelocity(const Vector3& linear);
         void SetAngularVelocity(const Vector3& angular);
@@ -103,7 +101,6 @@ namespace Engine5
         Vector3  m_global_centroid; //center of mass
         Matrix33 m_global_inertia;
         Matrix33 m_global_inverse_inertia;
-        Real     m_mass_scale = 1.0f;
 
         //others
         eMotionMode         m_motion_mode = eMotionMode::Dynamic;

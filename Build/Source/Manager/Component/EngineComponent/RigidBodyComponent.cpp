@@ -100,6 +100,24 @@ namespace Engine5
         m_rigid_body->SetLocalInertia(new_inertia);
     }
 
+    // ReSharper disable once CppMemberFunctionMayBeConst
+    void RigidBodyComponent::SetMass(const Real& mass)
+    {
+        if (mass > 0.0f)
+        {
+            auto prev_inertia  = m_rigid_body->LocalInertia();
+            auto prev_inv_mass = m_rigid_body->InverseMass();
+            auto new_inertia   = (mass * prev_inv_mass) * prev_inertia;
+            m_rigid_body->SetMass(mass);
+            m_rigid_body->SetLocalInertia(new_inertia);
+        }
+        else
+        {
+            m_rigid_body->SetMassInfinite();
+            m_rigid_body->SetInertiaInfinite();
+        }
+    }
+
     void RigidBodyComponent::SetPositionalConstraints(const Vector3& linear) const
     {
         m_rigid_body->SetPositionalConstraints(linear);
@@ -271,6 +289,7 @@ namespace Engine5
         {
             if (ImGui::TreeNode("Movement"))
             {
+                ImGui::Text("Movement");
                 ImGui::Separator();
                 ImGui::Text("Linear Velocity");
                 Vector3 linear_velocity = m_rigid_body->m_linear_velocity;
@@ -347,20 +366,20 @@ namespace Engine5
             if (ImGui::TreeNode("Mass Data"))
             {
                 ImGui::Separator();
-                ImGui::Text("Scale Factor");
-                Real mass_scale = m_rigid_body->m_mass_scale;
-                ImGui::InputFloat("##RigidBodyEdit4", &mass_scale, 0.1f);
+                ImGui::Text("Mass");
+                Real mass = m_rigid_body->m_mass_data.mass;
+                ImGui::InputFloat("##RigidBodyEdit4", &mass, 0.1f);
                 if (ImGui::IsItemEdited())
                 {
                     command_registry->PushCommand(
                                                   new EditFunction<
                                                       Real,
-                                                      RigidBody,
-                                                      &RigidBody::SetMassScale>
+                                                      RigidBodyComponent,
+                                                      &RigidBodyComponent::SetMass>
                                                   (
-                                                   m_rigid_body,
-                                                   m_rigid_body->m_mass_scale,
-                                                   mass_scale
+                                                   this,
+                                                   m_rigid_body->m_mass_data.mass,
+                                                   mass
                                                   )
                                                  );
                 }

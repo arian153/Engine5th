@@ -24,10 +24,9 @@ namespace Engine5
     void RigidBody::IntegrateVelocity(Real dt)
     {
         // integrate linear velocity
-        Real scale = GetInverseMassScale();
-        m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * scale * dt;
+        m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * dt;
         // integrate angular velocity
-        m_angular_velocity += m_global_inverse_inertia * m_torque_accumulator * scale * dt;
+        m_angular_velocity += m_global_inverse_inertia * m_torque_accumulator * dt;
         // zero out accumulated force and torque
         m_force_accumulator.SetZero();
         m_torque_accumulator.SetZero();
@@ -123,11 +122,6 @@ namespace Engine5
         UpdateOrientation();
     }
 
-    void RigidBody::SetMassScale(const Real& scale)
-    {
-        m_mass_scale = scale;
-    }
-
     Vector3 RigidBody::GetPosition() const
     {
         return m_local.position;
@@ -146,16 +140,6 @@ namespace Engine5
     Quaternion RigidBody::GetOrientation() const
     {
         return m_local.orientation;
-    }
-
-    Real RigidBody::GetMassScale() const
-    {
-        return m_mass_scale;
-    }
-
-    Real RigidBody::GetInverseMassScale() const
-    {
-        return Math::IsZero(m_mass_scale) ? 0.0f : 1.0f / m_mass_scale;
     }
 
     void RigidBody::SetLinearVelocity(const Vector3& linear)
