@@ -30,7 +30,6 @@ namespace Engine5
         void SetPosition(const Vector3& position);
         void SetCentroid(const Vector3& centroid);
         void SetOrientation(const Quaternion& orientation);
-        void SetMassScale(const Real& scale);
 
         Vector3    GetPosition() const;
         Vector3    GetCentroid() const;

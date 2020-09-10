@@ -366,11 +366,43 @@ namespace Engine5
             ImGui::Separator();
             ImGui::Text("Constraints");
             ImGui::Text("Linear Constraints");
+            Vector3 linear_constraints = m_rigid_body->m_linear_constraints;
+            ImGui::InputFloat3("##RigidBodyEdit6", linear_constraints.GetData(), 3);
+            if (ImGui::IsItemEdited())
+            {
+                command_registry->PushCommand(
+                    new EditFunction<
+                    Vector3,
+                    RigidBody,
+                    &RigidBody::SetPositionalConstraints>
+                    (
+                        m_rigid_body,
+                        m_rigid_body->m_linear_constraints,
+                        linear_constraints
+                        )
+                );
+            }
             ImGui::Text("Angular Constraints");
+            Vector3 angular_constraints = m_rigid_body->m_angular_constraints;
+            ImGui::InputFloat3("##RigidBodyEdit7", angular_constraints.GetData(), 3);
+            if (ImGui::IsItemEdited())
+            {
+                command_registry->PushCommand(
+                    new EditFunction<
+                    Vector3,
+                    RigidBody,
+                    &RigidBody::SetRotationalConstraints>
+                    (
+                        m_rigid_body,
+                        m_rigid_body->m_angular_constraints,
+                        angular_constraints
+                        )
+                );
+            }
             ImGui::Separator();
             ImGui::Text("Mass");
             Real mass = m_rigid_body->m_mass_data.mass;
-            ImGui::InputFloat("##RigidBodyEdit4", &mass, 0.1f);
+            ImGui::InputFloat("##RigidBodyEdit8", &mass, 0.1f);
             if (ImGui::IsItemEdited())
             {
                 command_registry->PushCommand(
