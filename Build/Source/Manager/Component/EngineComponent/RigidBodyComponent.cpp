@@ -371,16 +371,16 @@ namespace Engine5
             if (ImGui::IsItemEdited())
             {
                 command_registry->PushCommand(
-                    new EditFunction<
-                    Vector3,
-                    RigidBody,
-                    &RigidBody::SetPositionalConstraints>
-                    (
-                        m_rigid_body,
-                        m_rigid_body->m_linear_constraints,
-                        linear_constraints
-                        )
-                );
+                                              new EditFunction<
+                                                  Vector3,
+                                                  RigidBody,
+                                                  &RigidBody::SetPositionalConstraints>
+                                              (
+                                               m_rigid_body,
+                                               m_rigid_body->m_linear_constraints,
+                                               linear_constraints
+                                              )
+                                             );
             }
             ImGui::Text("Angular Constraints");
             Vector3 angular_constraints = m_rigid_body->m_angular_constraints;
@@ -388,16 +388,16 @@ namespace Engine5
             if (ImGui::IsItemEdited())
             {
                 command_registry->PushCommand(
-                    new EditFunction<
-                    Vector3,
-                    RigidBody,
-                    &RigidBody::SetRotationalConstraints>
-                    (
-                        m_rigid_body,
-                        m_rigid_body->m_angular_constraints,
-                        angular_constraints
-                        )
-                );
+                                              new EditFunction<
+                                                  Vector3,
+                                                  RigidBody,
+                                                  &RigidBody::SetRotationalConstraints>
+                                              (
+                                               m_rigid_body,
+                                               m_rigid_body->m_angular_constraints,
+                                               angular_constraints
+                                              )
+                                             );
             }
             ImGui::Separator();
             ImGui::Text("Mass");
@@ -455,17 +455,25 @@ namespace Engine5
             }
             ImGui::Separator();
             ImGui::Text("Motion Mode");
+            //9
             ImGui::Separator();
             ImGui::Text("Detection Mode");
+            //10
             ImGui::Separator();
             ImGui::Separator();
             ImGui::Text("Local Transform");
             ImGui::Separator();
             ImGui::Text("Position");
+            Vector3 p = m_rigid_body->m_local.position;
+            ImGui::Text("[%.3f, %.3f, %.3f]", p[0], p[1], p[2]);
             ImGui::Separator();
             ImGui::Text("Orientation");
+            Quaternion o = m_rigid_body->m_local.orientation;
+            ImGui::Text("[%.3f, %.3f, %.3f, %.3f]", o.r, o.i, o.j, o.k);
             ImGui::Separator();
             ImGui::Text("Rotating Origin");
+            Vector3 r = m_rigid_body->m_local.rotating_origin;
+            ImGui::Text("[%.3f, %.3f, %.3f]", r[0], r[1], r[2]);
             ImGui::Separator();
         }
     }
