@@ -455,9 +455,18 @@ namespace Engine5
             }
             ImGui::Separator();
             ImGui::Text("Motion Mode");
-            //9
+            const char* motion_modes[] = {"Dynamic", "Kinematic", "Static"};
+            static int  motion_idx     = 0;
+            if (ImGui::Combo("##RigidBodyEdit9", &motion_idx, motion_modes, 3))
+            {
+            }
             ImGui::Separator();
             ImGui::Text("Detection Mode");
+            const char* detection_modes[] = {"Discrete", "Continuous"};
+            static int  detection_idx     = 0;
+            if (ImGui::Combo("##RigidBodyEdit10", &detection_idx, detection_modes, 2))
+            {
+            }
             //10
             ImGui::Separator();
             ImGui::Separator();
@@ -466,11 +475,9 @@ namespace Engine5
             ImGui::Text("Position");
             Vector3 p = m_rigid_body->m_local.position;
             ImGui::Text("[%.3f, %.3f, %.3f]", p[0], p[1], p[2]);
-            ImGui::Separator();
             ImGui::Text("Orientation");
             Quaternion o = m_rigid_body->m_local.orientation;
             ImGui::Text("[%.3f, %.3f, %.3f, %.3f]", o.r, o.i, o.j, o.k);
-            ImGui::Separator();
             ImGui::Text("Rotating Origin");
             Vector3 r = m_rigid_body->m_local.rotating_origin;
             ImGui::Text("[%.3f, %.3f, %.3f]", r[0], r[1], r[2]);
