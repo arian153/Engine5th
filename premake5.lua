@@ -14,7 +14,7 @@ project "Engine5"
     objdir "Build/Obj/%{cfg.buildcfg}-X64"
     systemversion "10.0"
     flags {"MultiProcessorCompile", "NoMinimalRebuild", "NoBufferSecurityCheck"}
-
+    warnings "Extra"
     includedirs {"Include"}
     libdirs {"Lib"}
     
