@@ -1,7 +1,6 @@
 echo Clear
 @echo off
 
-cd Build
 for %%i in (*.vcxproj) do (
  del *.vcxproj
 )
@@ -26,5 +25,4 @@ if exist Obj (
 rmdir Obj /s /q
 )
 
-cd..
 echo Done

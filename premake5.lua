@@ -2,16 +2,16 @@ workspace "Project-E5"
     configurations {"Debug", "Release"}
     platforms {"Win64"}
     warnings "Extra"
-    location "Build"
+    location ""
     
 
 project "Engine5"
     kind "WindowedApp"
     language "C++"
-    location "Build"
+    location ""
     targetname ("Engine5")
     targetdir "Bin/%{cfg.buildcfg}-X64"
-    objdir "Build/Obj/%{cfg.buildcfg}-X64"
+    objdir "/Obj/%{cfg.buildcfg}-X64"
     systemversion "10.0"
     flags {"MultiProcessorCompile", "NoMinimalRebuild", "NoBufferSecurityCheck"}
     warnings "Extra"
