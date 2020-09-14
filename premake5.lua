@@ -1,17 +1,21 @@
 workspace "Project-E5"
     configurations {"Debug", "Release"}
-    platforms {"Win64"}
     warnings "Extra"
     location ""
-    
+    platforms { "x64" }
+    filter { "platforms:x64" }
+        system "Windows"
+        architecture "x64"
+    filter { }
 
 project "Engine5"
     kind "WindowedApp"
     language "C++"
     location ""
     targetname ("Engine5")
-    targetdir "Bin/%{cfg.buildcfg}-X64"
-    objdir "/Obj/%{cfg.buildcfg}-X64"
+    targetdir "Bin/%{cfg.buildcfg}"
+    objdir "Obj/%{cfg.buildcfg}"
+    debugdir "Bin/%{cfg.buildcfg}"
     systemversion "10.0"
     flags {"MultiProcessorCompile", "NoMinimalRebuild", "NoBufferSecurityCheck"}
     warnings "Extra"
@@ -22,7 +26,7 @@ project "Engine5"
     files {"**.h", "**.hpp", "**.cpp", "**.inl"}
     removefiles {"**Template.cpp"}
 
-    filter "platforms:Win64"
+    filter "platforms:x64"
         system "Windows"
         architecture "x64"
         defines {"_CRT_SECURE_NO_WARNINGS", "E5_WIN32", "E5_DIRECTX11"}
@@ -33,10 +37,12 @@ project "Engine5"
     filter "configurations:Debug"
         defines {"DEBUG"}
         symbols "On"
-        debugdir "Bin/Debug-X64"
+   
 
     filter "configurations:Release"
         defines {"NDEBUG"}
         optimize "On"
-        debugdir "Bin/Release-X64"
+     
+
+     
 

@@ -36,5 +36,5 @@
 *.vcxproj
 *.suo
 Bin/
-Build/Obj
-Build/.vs/
+Obj/
+.vs/
