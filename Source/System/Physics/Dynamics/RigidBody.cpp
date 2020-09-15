@@ -23,6 +23,10 @@ namespace Engine5
 
     void RigidBody::IntegrateVelocity(Real dt)
     {
+        if (m_motion_mode != eMotionMode::Dynamic)
+        {
+            return;
+        }
         // integrate linear velocity
         m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * dt;
         // integrate angular velocity
@@ -34,19 +38,19 @@ namespace Engine5
 
     void RigidBody::IntegratePosition(Real dt)
     {
+        if (m_motion_mode != eMotionMode::Dynamic)
+        {
+            return;
+        }
         SyncFromTransform(m_transform);
         Vector3 delta_linear_velocity = m_linear_velocity * dt;
         delta_linear_velocity         = delta_linear_velocity.HadamardProduct(m_linear_constraints);
         m_global_centroid += delta_linear_velocity;
         // integrate orientation
         Vector3 delta_angular_velocity = m_angular_velocity;
-        /*      Vector3 delta_angular_velocity(
-                                             Math::DegreesToRadians(m_angular_velocity.x),
-                                             Math::DegreesToRadians(m_angular_velocity.y),
-                                             Math::DegreesToRadians(m_angular_velocity.z));*/
-        delta_angular_velocity = delta_angular_velocity.HadamardProduct(m_angular_constraints);
-        Vector3 axis           = delta_angular_velocity.Unit();
-        Real    radian         = delta_angular_velocity.Length() * dt;
+        delta_angular_velocity         = delta_angular_velocity.HadamardProduct(m_angular_constraints);
+        Vector3 axis                   = delta_angular_velocity.Unit();
+        Real    radian                 = delta_angular_velocity.Length() * dt;
         m_local.orientation.AddRotation(axis, radian);
         // update physical properties
         UpdateOrientation();

@@ -26,7 +26,7 @@ namespace Engine5
         void SetMass(const Real& mass);
         void SetPositionalConstraints(const Vector3& linear) const;
         void SetRotationalConstraints(const Vector3& angular) const;
-        void SetMotionMode(eMotionMode motion_mode) const;
+        void SetMotionMode(const eMotionMode& motion_mode);
         void SetTransform(Transform* transform);
 
         //getter
@@ -64,5 +64,8 @@ namespace Engine5
 
         Matrix33 m_prev_inertia;
         bool     m_b_init = false;
+
+        int m_motion_index    = 0;
+        int m_detection_index = 0;
     };
 }

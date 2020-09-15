@@ -1,3 +1,4 @@
+// ReSharper disable CppMemberFunctionMayBeConst
 #include "RigidBodyComponent.hpp"
 #include "../../Space/Space.hpp"
 #include "../../Object/Object.hpp"
@@ -127,7 +128,7 @@ namespace Engine5
         m_rigid_body->SetRotationalConstraints(angular);
     }
 
-    void RigidBodyComponent::SetMotionMode(eMotionMode motion_mode) const
+    void RigidBodyComponent::SetMotionMode(const eMotionMode& motion_mode)
     {
         m_rigid_body->SetMotionMode(motion_mode);
     }
@@ -456,16 +457,27 @@ namespace Engine5
             ImGui::Separator();
             ImGui::Text("Motion Mode");
             const char* motion_modes[] = {"Dynamic", "Kinematic", "Static"};
-            static int  motion_idx     = 0;
-            if (ImGui::Combo("##RigidBodyEdit9", &motion_idx, motion_modes, 3))
+            m_motion_index             = (int)m_rigid_body->m_motion_mode;
+            if (ImGui::Combo("##RigidBodyEdit9", &m_motion_index, motion_modes, 3))
             {
+                command_registry->PushCommand(
+                                              new EditFunction<
+                                                  eMotionMode,
+                                                  RigidBodyComponent,
+                                                  &RigidBodyComponent::SetMotionMode>
+                                              (
+                                               this,
+                                               m_rigid_body->m_motion_mode,
+                                               (eMotionMode)m_motion_index
+                                              )
+                                             );
             }
             ImGui::Separator();
             ImGui::Text("Detection Mode");
             const char* detection_modes[] = {"Discrete", "Continuous"};
-            static int  detection_idx     = 0;
-            if (ImGui::Combo("##RigidBodyEdit10", &detection_idx, detection_modes, 2))
+            if (ImGui::Combo("##RigidBodyEdit10", &m_detection_index, detection_modes, 2))
             {
+                //do nothing yet.
             }
             //10
             ImGui::Separator();
