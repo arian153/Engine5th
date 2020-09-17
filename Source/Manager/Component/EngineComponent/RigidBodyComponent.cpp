@@ -273,7 +273,7 @@ namespace Engine5
             if (JsonResource::HasMember(mass_data, "Centroid") && JsonResource::IsVector3(mass_data["Centroid"]))
             {
                 m_rigid_body->m_mass_data.local_centroid = JsonResource::AsVector3(mass_data["Centroid"]);
-                m_rigid_body->UpdateGlobalCentroidFromPosition();
+                m_rigid_body->UpdateCentroid();
             }
         }
         return true;

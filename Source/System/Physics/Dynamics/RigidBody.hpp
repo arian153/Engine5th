@@ -16,11 +16,11 @@ namespace Engine5
         void IntegrateVelocity(Real dt);
         void IntegratePosition(Real dt);
 
-        void UpdateGlobalCentroidFromPosition();
-        void UpdatePositionFromGlobalCentroid();
-        void UpdateGlobalInertiaTensor();
-
+        void UpdateCentroid();
+        void UpdatePosition();
+        void UpdateInertia();
         void UpdateOrientation();
+
         void SetMassData(const MassData& mass_data);
 
         void ApplyForce(const Vector3& force, const Vector3& at);

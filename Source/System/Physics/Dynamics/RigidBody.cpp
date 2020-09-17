@@ -54,21 +54,21 @@ namespace Engine5
         m_local.orientation.AddRotation(axis, radian);
         // update physical properties
         UpdateOrientation();
-        UpdatePositionFromGlobalCentroid();
+        UpdatePosition();
         SyncToTransform(m_transform);
     }
 
-    void RigidBody::UpdateGlobalCentroidFromPosition()
+    void RigidBody::UpdateCentroid()
     {
         m_global_centroid = m_local.orientation.Rotate(m_mass_data.local_centroid) + m_local.position;
     }
 
-    void RigidBody::UpdatePositionFromGlobalCentroid()
+    void RigidBody::UpdatePosition()
     {
         m_local.position = m_local.orientation.Rotate(-m_mass_data.local_centroid) + m_global_centroid;
     }
 
-    void RigidBody::UpdateGlobalInertiaTensor()
+    void RigidBody::UpdateInertia()
     {
         m_global_inverse_inertia = m_local.orientation * m_mass_data.local_inverse_inertia * m_inverse_orientation;
         m_global_inertia         = m_local.orientation * m_mass_data.local_inertia * m_inverse_orientation;
@@ -79,7 +79,7 @@ namespace Engine5
         m_local.orientation.SetNormalize();
         m_inverse_orientation = m_local.orientation.Inverse();
         m_inverse_orientation.SetNormalize();
-        UpdateGlobalInertiaTensor();
+        UpdateInertia();
     }
 
     void RigidBody::SetMassData(const MassData& mass_data)
@@ -111,13 +111,13 @@ namespace Engine5
     void RigidBody::SetPosition(const Vector3& position)
     {
         m_local.position = position;
-        UpdateGlobalCentroidFromPosition();
+        UpdateCentroid();
     }
 
     void RigidBody::SetCentroid(const Vector3& centroid)
     {
         m_global_centroid = centroid;
-        UpdatePositionFromGlobalCentroid();
+        UpdatePosition();
     }
 
     void RigidBody::SetOrientation(const Quaternion& orientation)
@@ -312,8 +312,8 @@ namespace Engine5
                 || m_local.rotating_origin != transform->rotating_origin)
             {
                 m_local = *transform;
-                UpdateGlobalCentroidFromPosition();
-                UpdateGlobalInertiaTensor();
+                UpdateCentroid();
+                UpdateInertia();
             }
         }
     }
