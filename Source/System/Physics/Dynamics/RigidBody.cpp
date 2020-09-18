@@ -54,6 +54,7 @@ namespace Engine5
         m_local.orientation.AddRotation(axis, radian);
         // update physical properties
         UpdateOrientation();
+        UpdateInertia();
         UpdatePosition();
         SyncToTransform(m_transform);
     }
@@ -79,7 +80,6 @@ namespace Engine5
         m_local.orientation.SetNormalize();
         m_inverse_orientation = m_local.orientation.Inverse();
         m_inverse_orientation.SetNormalize();
-        UpdateInertia();
     }
 
     void RigidBody::SetMassData(const MassData& mass_data)
@@ -124,6 +124,8 @@ namespace Engine5
     {
         m_local.orientation = orientation;
         UpdateOrientation();
+        UpdateCentroid();
+        UpdateInertia();
     }
 
     Vector3 RigidBody::GetPosition() const
@@ -312,6 +314,7 @@ namespace Engine5
                 || m_local.rotating_origin != transform->rotating_origin)
             {
                 m_local = *transform;
+                UpdateOrientation();
                 UpdateCentroid();
                 UpdateInertia();
             }
