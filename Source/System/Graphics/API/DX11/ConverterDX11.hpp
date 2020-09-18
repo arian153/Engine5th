@@ -39,5 +39,6 @@ namespace Engine5
         DirectX::XMFLOAT4 ToXMFloat4(const Color& color);
 
         DirectX::XMFLOAT4X4 ToXMFloat4X4(const Matrix44& matrix);
+        DirectX::XMFLOAT3X3 ToXMFloat3X3(const Matrix33& matrix);
     }
 }

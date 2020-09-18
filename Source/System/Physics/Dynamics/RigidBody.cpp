@@ -1,6 +1,8 @@
 #include "RigidBody.hpp"
 #include "World.hpp"
 #include "../../../Manager/Component/EngineComponent/RigidBodyComponent.hpp"
+#include <directxmath.h>
+#include "../../Graphics/API/DX11/ConverterDX11.hpp"
 
 namespace Engine5
 {

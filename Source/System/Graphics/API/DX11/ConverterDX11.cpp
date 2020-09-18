@@ -5,6 +5,7 @@
 #include "../../../Math/Algebra/Quaternion.hpp"
 #include "../../../Math/Algebra/Matrix44.hpp"
 #include "../../DataType/Color.hpp"
+#include "../../../Math/Algebra/Matrix33.hpp"
 
 namespace Engine5
 {
@@ -115,6 +116,15 @@ namespace Engine5
                                        matrix.data[4], matrix.data[5], matrix.data[6], matrix.data[7],
                                        matrix.data[8], matrix.data[9], matrix.data[10], matrix.data[11],
                                        matrix.data[12], matrix.data[13], matrix.data[14], matrix.data[15]);
+            return result;
+        }
+
+        DirectX::XMFLOAT3X3 ToXMFloat3X3(const Matrix33& matrix)
+        {
+            DirectX::XMFLOAT3X3 result(
+                                       matrix.data[0], matrix.data[1], matrix.data[2],
+                                       matrix.data[3], matrix.data[4], matrix.data[5],
+                                       matrix.data[6], matrix.data[7], matrix.data[8]);
             return result;
         }
 
