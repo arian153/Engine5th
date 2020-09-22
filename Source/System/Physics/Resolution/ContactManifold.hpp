@@ -43,7 +43,6 @@ namespace Engine5
         Real    persistent_threshold_squared = Physics::Collision::PERSISTENT_THRESHOLD_SQUARED;
         bool    is_collide                   = false;
         Vector3 manifold_normal;
-        size_t  prev_count = 0;
 
         //data
         ColliderSet* m_set_a = nullptr;

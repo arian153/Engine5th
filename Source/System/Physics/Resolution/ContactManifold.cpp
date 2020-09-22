@@ -222,7 +222,6 @@ namespace Engine5
         contacts.clear();
         is_collide = false;
         manifold_normal.SetZero();
-        prev_count = 0;
     }
 
     Real ContactManifold::DistanceFromPoint(const ContactPoint& contact, ContactPoint* p0)

@@ -70,7 +70,6 @@ namespace Engine5
             m_manifold->contacts[i].bitangent_lambda = m_bitangent[i].total_lambda;
             m_manifold->contacts[i].normal_lambda    = m_normal[i].total_lambda;
         }
-        m_manifold->prev_count = m_count;
         if (m_body_a->GetMotionMode() == eMotionMode::Dynamic)
         {
             m_body_a->SetLinearVelocity(m_velocity_term.v_a);
@@ -92,24 +91,24 @@ namespace Engine5
 
     void ContactConstraint::SolvePositionConstraints(Real dt)
     {
-        bool motion_a = m_body_a->GetMotionMode() == eMotionMode::Dynamic;
-        bool motion_b = m_body_b->GetMotionMode() == eMotionMode::Dynamic;
-        for (auto& contact : m_manifold->contacts)
-        {
-            Vector3 local_to_global_a = m_body_a->LocalToWorldPoint(contact.collider_a->LocalToWorldPoint(contact.local_position_a));
-            Vector3 local_to_global_b = m_body_b->LocalToWorldPoint(contact.collider_b->LocalToWorldPoint(contact.local_position_b));
-            Real    separation        = DotProduct(local_to_global_b - local_to_global_a, contact.normal) - Physics::Collision::SEPARATION_SLOP;
-            Real    constraints       = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
-            Vector3 ra_n              = CrossProduct(local_to_global_a - m_body_a->GetCentroid(), contact.normal);
-            Vector3 rb_n              = CrossProduct(local_to_global_b - m_body_b->GetCentroid(), contact.normal);
-            Real    k
-                    = (motion_a ? m_mass_term.m_a + ra_n * m_mass_term.i_a * ra_n : 0.0f)
-                    + (motion_b ? m_mass_term.m_b + rb_n * m_mass_term.i_b * rb_n : 0.0f);
-            Real    impulse = k > 0.0f ? -constraints / k : 0.0f;
-            Vector3 p       = impulse * contact.normal;
-            m_position_term.p_a -= m_mass_term.m_a * p;
-            m_position_term.p_b += m_mass_term.m_b * p;
-        }
+        /* bool motion_a = m_body_a->GetMotionMode() == eMotionMode::Dynamic;
+         bool motion_b = m_body_b->GetMotionMode() == eMotionMode::Dynamic;
+         for (auto& contact : m_manifold->contacts)
+         {
+             Vector3 local_to_global_a = m_body_a->LocalToWorldPoint(contact.collider_a->LocalToWorldPoint(contact.local_position_a));
+             Vector3 local_to_global_b = m_body_b->LocalToWorldPoint(contact.collider_b->LocalToWorldPoint(contact.local_position_b));
+             Real    separation        = DotProduct(local_to_global_b - local_to_global_a, contact.normal) - Physics::Collision::SEPARATION_SLOP;
+             Real    constraints       = Math::Clamp(Physics::Dynamics::BAUMGRATE * (separation + Physics::Collision::LINEAR_SLOP), -Physics::Collision::MAX_LINEAR_CORRECTION, 0.0f);
+             Vector3 ra_n              = CrossProduct(local_to_global_a - m_body_a->GetCentroid(), contact.normal);
+             Vector3 rb_n              = CrossProduct(local_to_global_b - m_body_b->GetCentroid(), contact.normal);
+             Real    k
+                     = (motion_a ? m_mass_term.m_a + ra_n * m_mass_term.i_a * ra_n : 0.0f)
+                     + (motion_b ? m_mass_term.m_b + rb_n * m_mass_term.i_b * rb_n : 0.0f);
+             Real    impulse = k > 0.0f ? -constraints / k : 0.0f;
+             Vector3 p       = impulse * contact.normal;
+             m_position_term.p_a -= m_mass_term.m_a * p;
+             m_position_term.p_b += m_mass_term.m_b * p;
+         }*/
     }
 
     void ContactConstraint::ApplyPositionConstraints()
@@ -134,24 +133,22 @@ namespace Engine5
 
     void ContactConstraint::WarmStart()
     {
-        size_t count = m_manifold->contacts.size();
-        if (m_manifold->prev_count <= count && count > 2)
+        //apply previous data
+        Basis normal_basis;
+        for (size_t i = 0; i < m_count; ++i)
         {
-            Basis normal_basis;
-            normal_basis.CalculateBasisApprox(m_manifold->manifold_normal);
-            Vector3 normal    = normal_basis.i;
-            Vector3 tangent   = normal_basis.j;
-            Vector3 bitangent = normal_basis.k;
-            for (size_t i = 0; i < m_manifold->prev_count; ++i)
-            {
-                Vector3 p = m_manifold->contacts[i].normal_lambda * normal
-                        + m_manifold->contacts[i].tangent_lambda * tangent
-                        + m_manifold->contacts[i].bitangent_lambda * bitangent;
-                m_velocity_term.v_a -= m_mass_term.m_a * p;
-                m_velocity_term.w_a -= m_mass_term.i_a * CrossProduct(m_manifold->contacts[i].r_a, p);
-                m_velocity_term.v_b += m_mass_term.m_b * p;
-                m_velocity_term.w_b += m_mass_term.i_b * CrossProduct(m_manifold->contacts[i].r_b, p);
-            }
+            ContactPoint& contact_point = m_manifold->contacts[i];
+            normal_basis.CalculateBasisApprox(contact_point.normal);
+            Vector3 p = contact_point.normal_lambda * normal_basis.i
+                    + contact_point.tangent_lambda * normal_basis.j
+                    + contact_point.bitangent_lambda * normal_basis.k;
+            m_velocity_term.v_a -= m_mass_term.m_a * p;
+            m_velocity_term.w_a -= m_mass_term.i_a * CrossProduct(contact_point.r_a, p);
+            m_velocity_term.v_b += m_mass_term.m_b * p;
+            m_velocity_term.w_b += m_mass_term.i_b * CrossProduct(contact_point.r_b, p);
+            m_normal[i].total_lambda += contact_point.normal_lambda;
+            m_tangent[i].total_lambda += contact_point.tangent_lambda;
+            m_bitangent[i].total_lambda += contact_point.bitangent_lambda;
         }
     }
 
