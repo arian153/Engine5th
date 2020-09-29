@@ -31,7 +31,7 @@ disablewarnings {
     "4505", "4456", "4201", "4100", "4189", "4458", "4819", "4127", "4701",
     "4291", "6385"
 }
-defines {"_CRT_SECURE_NO_WARNINGS", "E5_WIN32", "E5_DIRECTX11"}
+defines {"_CRT_SECURE_NO_WARNINGS", "WIN32_LEAN_AND_MEAN", "E5_WIN32", "E5_DIRECTX11"}
 
 filter "configurations:Debug"
 defines {"DEBUG"}
