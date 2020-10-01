@@ -214,7 +214,7 @@ namespace Engine5
         Real it_yy = 0.25f * m_mass * (a * a + b * b);
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
-        m_centroid = Vector3(0.0f, 0.5f * h, 0.0f) - HalfHeight();
+        m_centroid = Vector3(0.0f, 0.5f * h - HalfHeight(), 0.0f) ;
     }
 
     Real ColliderCylinder::GetVolume()

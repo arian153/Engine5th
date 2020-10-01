@@ -233,7 +233,7 @@ namespace Engine5
         Real it_yy   = multi_a * 0.4f * (a * a + b * b) + multi_b * 0.25f * (a * a + b * b);
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
-        m_centroid         = Vector3(0.0f, 0.5f * h, 0.0f) - HalfHeight();
+        m_centroid         = Vector3(0.0f, 0.0f, 0.0f);
         m_material.density = density;
         m_material.type    = Physics::eMaterial::UserType;
     }

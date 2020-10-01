@@ -326,7 +326,7 @@ namespace Engine5
         Real it_yy = 0.15f * m_mass * (a * a + b * b) * ratio_multi_a;
         m_local_inertia_tensor.SetZero();
         m_local_inertia_tensor.SetDiagonal(it_xx, it_yy, it_zz);
-        m_centroid = Vector3(0.0f, (3.0f * m_ratio * m_ratio + 2.0f * m_ratio + 1.0f) * h / (4.0f * ratio), 0.0f) - HalfHeight();
+        m_centroid = Vector3(0.0f, ((3.0f * m_ratio * m_ratio + 2.0f * m_ratio + 1.0f) * h / (4.0f * ratio)) - HalfHeight(), 0.0f);
     }
 
     Real ColliderTruncated::GetVolume()

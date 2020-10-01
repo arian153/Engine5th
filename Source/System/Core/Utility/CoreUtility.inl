@@ -20,7 +20,7 @@ namespace Engine5
 
     inline constexpr U64 GB(U64 n)
     {
-        return GB(n) * 1000LL;
+        return MB(n) * 1000LL;
     }
 
     template<typename T>
