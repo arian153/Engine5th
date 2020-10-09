@@ -254,7 +254,7 @@ namespace Engine5
     {
         Vector3 v01    = vertices[face.b].global - vertices[face.a].global;
         Vector3 v02    = vertices[face.c].global - vertices[face.a].global;
-        Vector3 normal = v01.CrossProduct(v02);
+        Vector3 normal = v01.CrossProduct(v02).Normalize();
         return (normal.DotProduct(vertex.global - vertices[face.a].global)) > 0.0f;
     }
 

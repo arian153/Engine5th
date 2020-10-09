@@ -49,7 +49,7 @@ namespace Engine5
 
     bool ContactPoint::operator==(const ContactPoint& rhs) const
     {
-        return (normal == rhs.normal && depth == rhs.depth && global_position_a == rhs.global_position_a);
+        return (normal == rhs.normal && depth == rhs.depth && local_position_a == rhs.local_position_a && local_position_b == rhs.local_position_b);
     }
 
     void ContactPoint::Swap()

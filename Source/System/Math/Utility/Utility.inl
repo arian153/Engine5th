@@ -12,7 +12,7 @@ namespace Engine5
 
         inline bool IsInfinite(Real rhs)
         {
-            return isfinite(rhs);
+            return !isfinite(rhs);
         }
 
         inline bool IsZero(Real rhs)
