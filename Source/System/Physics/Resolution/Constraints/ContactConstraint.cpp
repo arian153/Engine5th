@@ -176,6 +176,7 @@ namespace Engine5
                     + m_velocity_term.v_b
                     + CrossProduct(m_velocity_term.w_b, contact.r_b);
             Real closing_velocity = DotProduct(relative_velocity, direction);
+            //Real depth = -DotProduct((contact.global_position_b - contact.global_position_a), contact.normal);
             jacobian.bias         = -(beta / dt) * contact.depth + restitution * closing_velocity;
         }
         else
@@ -217,6 +218,8 @@ namespace Engine5
             jacobian.total_lambda = Math::Clamp(jacobian.total_lambda + lambda, -max_friction, max_friction);
         }
         lambda = (jacobian.total_lambda - old_total_lambda);
+
+
         // velocity correction
         m_velocity_term.v_a += m_mass_term.m_a * jacobian.v_a * lambda;
         m_velocity_term.w_a += m_mass_term.i_a * jacobian.w_a * lambda;

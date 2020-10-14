@@ -71,7 +71,6 @@ namespace Engine5
                     data_table->SendHasCollision(set_a, set_b, found->is_collide);
                     found->UpdateCurrentManifold(new_contact_data);
                     found->CutDownManifold();
-                    found->CalculateNormal();
                     found->is_collide = true;
                 }
                 else
@@ -269,6 +268,7 @@ namespace Engine5
                     break;
                 }
             }
+            [[fallthrough]];
         case 2:
             // line direction vector
             line_vec_case2 = simplex[1].global - simplex[0].global;
@@ -289,6 +289,7 @@ namespace Engine5
                 // rotate search direction by 60 degrees
                 search_dir_case2 = rot_case2 * search_dir_case2;
             }
+            [[fallthrough]];
         case 3:
             // use triangle normal as search direction
             const Vector3 v01 = simplex[1].global - simplex[0].global;

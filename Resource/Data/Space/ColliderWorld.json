@@ -38,7 +38,7 @@
             ],
             "Name": "Camera"
         },
-       
+
         {
             "Components": [
                 {
@@ -184,6 +184,41 @@
                 }
             ],
             "Name": "Truncated"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, -10, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::RigidBodyComponent",
+                    "Value": {
+                        "Motion" : "Static"
+                    }
+                },
+                {
+                    "Type": "class Engine5::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Cube": [ 40, 3, 40 ],
+                                "Scale": 1,
+                                "Type": "Box"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Platform"
         }
     ],
     "Settings": {

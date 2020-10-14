@@ -31,7 +31,6 @@ namespace Engine5
         Real DistanceFromLineSegment(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1);
         Real DistanceFromTriangle(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2);
         bool OnTriangle(ContactPoint* point, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2);
-        void CalculateNormal();
 
     private:
         friend class Resolution;
@@ -42,7 +41,6 @@ namespace Engine5
     private:
         Real    persistent_threshold_squared = Physics::Collision::PERSISTENT_THRESHOLD_SQUARED;
         bool    is_collide                   = false;
-        Vector3 manifold_normal;
 
         //data
         ColliderSet* m_set_a = nullptr;

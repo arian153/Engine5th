@@ -86,6 +86,9 @@ namespace Engine5
             {
                 // contact persistent, keep
                 contact.b_persistent = true;
+               /* contact.global_position_a = local_to_global_a;
+                contact.global_position_b = local_to_global_b;
+                contact.depth = contact.normal.DotProduct(r_ab);*/
             }
             else
             {
@@ -221,7 +224,6 @@ namespace Engine5
     {
         contacts.clear();
         is_collide = false;
-        manifold_normal.SetZero();
     }
 
     Real ContactManifold::DistanceFromPoint(const ContactPoint& contact, ContactPoint* p0)
@@ -294,20 +296,5 @@ namespace Engine5
             return false;
         }
         return true;
-    }
-
-    void ContactManifold::CalculateNormal()
-    {
-        size_t contact_size = contacts.size();
-        if (contact_size == 3)
-        {
-            manifold_normal = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(2).global_position_a);
-        }
-        else if (contact_size == 4)
-        {
-            Vector3 n_a     = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(2).global_position_a);
-            Vector3 n_b     = Triangle::Normal(contacts.at(0).global_position_a, contacts.at(1).global_position_a, contacts.at(3).global_position_a);
-            manifold_normal = (n_a + n_b).Normalize();
-        }
     }
 }
