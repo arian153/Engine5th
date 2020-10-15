@@ -177,7 +177,7 @@ namespace Engine5
                     + CrossProduct(m_velocity_term.w_b, contact.r_b);
             Real closing_velocity = DotProduct(relative_velocity, direction);
             //Real depth = -DotProduct((contact.global_position_b - contact.global_position_a), contact.normal);
-            jacobian.bias         = -(beta / dt) * contact.depth + restitution * closing_velocity;
+            jacobian.bias         = -(beta / dt) * Math::Max(contact.depth, 0.0f) + restitution * closing_velocity;
         }
         else
         {
