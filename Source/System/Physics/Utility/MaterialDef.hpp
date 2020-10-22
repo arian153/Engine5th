@@ -90,7 +90,7 @@ namespace Engine5
                 break;
             case eMaterial::Velcro:
                 density = 1.52f;
-                restitution = 0.4f;
+                restitution = 0.0f;
                 break;
             case eMaterial::UserType:
                 density = user_density;

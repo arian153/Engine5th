@@ -39,14 +39,14 @@ namespace Engine5
         {
             if (b_global)
             {
-                body->AddLinearVelocity(global_gravity);
+                body->ApplyForceCentroid(global_gravity * body->Mass());
             }
             else
             {
                 Vector3 distance = local_position - body->GetCentroid();
                 Real    r_r      = distance.LengthSquared();
-                Real    force    = r_r > 1.0f ? gravity_coefficient * local_mass * dt / r_r : 0.0f;
-                body->AddLinearVelocity(force * distance.Normalize());
+                Real    force    = r_r > 1.0f ? gravity_coefficient * local_mass * body->Mass() * dt / r_r : 0.0f;
+                body->ApplyForceCentroid(force * distance.Normalize());
             }
         }
     }
