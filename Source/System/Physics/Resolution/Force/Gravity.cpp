@@ -39,7 +39,7 @@ namespace Engine5
         {
             if (b_global)
             {
-                body->ApplyForceCentroid(global_gravity * body->Mass());
+                body->AddLinearVelocity(global_gravity * dt);
             }
             else
             {
