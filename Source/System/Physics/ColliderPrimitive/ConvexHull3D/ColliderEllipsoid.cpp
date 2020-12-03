@@ -281,7 +281,6 @@ namespace Engine5
         if (JsonResource::HasMember(data, "Radius") && JsonResource::IsVector3(data["Radius"]))
         {
             m_radius = JsonResource::AsVector3(data["Radius"]);
-            m_collider_set->GetRigidBody()->SetLocalPoint(Vector3(m_radius.x));
         }
         SetEllipsoid(m_radius);
         LoadMaterial(data);

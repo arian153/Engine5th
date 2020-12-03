@@ -74,19 +74,6 @@ namespace Engine5
         {
             auto vel = body->GetLinearVelocity();
             auto pos = body->GetCentroid();
-            m_primitive_renderer->DrawArrow(pos, pos + vel, ColorDef::Pure::Magenta);
-
-            size_t size = body->m_position_track.size();
-            for(size_t i = 0; i < size-1; ++i)
-            {
-                m_primitive_renderer->DrawSegment(body->m_position_track[i], body->m_position_track[i+1], ColorDef::Pure::Magenta);
-            }
-
-             size = body->m_rotation_track.size();
-            for (size_t i = 0; i < size - 1; ++i)
-            {
-                m_primitive_renderer->DrawSegment(body->m_rotation_track[i], body->m_rotation_track[i + 1], ColorDef::Pure::Blue);
-            }
         }
 
         for (auto& data : m_rays)

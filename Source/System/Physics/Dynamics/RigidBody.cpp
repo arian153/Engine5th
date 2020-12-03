@@ -1,8 +1,6 @@
 #include "RigidBody.hpp"
 #include "World.hpp"
 #include "../../../Manager/Component/EngineComponent/RigidBodyComponent.hpp"
-#include <directxmath.h>
-#include "../../Graphics/API/DX11/ConverterDX11.hpp"
 
 namespace Engine5
 {
@@ -59,8 +57,6 @@ namespace Engine5
         UpdateInertia();
         UpdatePosition();
         SyncToTransform(m_transform);
-        m_position_track.push_back(m_global_centroid);
-        m_rotation_track.push_back(LocalToWorldPoint(m_local_point));
     }
 
     void RigidBody::UpdateCentroid()
@@ -351,10 +347,5 @@ namespace Engine5
             m_local       = origin->m_local;
             m_motion_mode = origin->m_motion_mode;
         }
-    }
-
-    void RigidBody::SetLocalPoint(const Vector3& point)
-    {
-        m_local_point = point;
     }
 }
