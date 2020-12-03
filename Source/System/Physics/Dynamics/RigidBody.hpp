@@ -76,6 +76,8 @@ namespace Engine5
         void SetTransform(Transform* transform);
         void Clone(RigidBody* origin);
 
+        void SetLocalPoint(const Vector3& point);
+
     private:
         friend class Resolution;
         friend class ColliderPrimitive;
@@ -106,5 +108,9 @@ namespace Engine5
         Transform*          m_transform   = nullptr;
         Transform           m_local;
         RigidBodyComponent* m_component = nullptr;
+
+        Vector3 m_local_point;
+        std::vector<Vector3> m_position_track;
+        std::vector<Vector3> m_rotation_track;
     };
 }

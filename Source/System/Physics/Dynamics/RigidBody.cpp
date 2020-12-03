@@ -59,6 +59,8 @@ namespace Engine5
         UpdateInertia();
         UpdatePosition();
         SyncToTransform(m_transform);
+        m_position_track.push_back(m_global_centroid);
+        m_rotation_track.push_back(LocalToWorldPoint(m_local_point));
     }
 
     void RigidBody::UpdateCentroid()
@@ -349,5 +351,10 @@ namespace Engine5
             m_local       = origin->m_local;
             m_motion_mode = origin->m_motion_mode;
         }
+    }
+
+    void RigidBody::SetLocalPoint(const Vector3& point)
+    {
+        m_local_point = point;
     }
 }

@@ -115,7 +115,7 @@ namespace Engine5
         I32 count = 8;
         ReserveVertices(count, mode);
         Vector3 dim = scale.Half();
-        Vector3 vertices[ 8 ];
+        Vector3 vertices[8];
         vertices[0].Set(+dim.x, +dim.y, +dim.z);
         vertices[1].Set(+dim.x, +dim.y, -dim.z);
         vertices[2].Set(+dim.x, -dim.y, +dim.z);
@@ -188,6 +188,18 @@ namespace Engine5
         m_line_vertices.emplace_back(line_start, color);
         m_line_vertices.emplace_back(line_end, color);
         PushLineIndices(index, index + 1);
+    }
+
+    void PrimitiveRenderer::DrawArrow(const Vector3& start, const Vector3& end, Color color)
+    {
+        Quaternion no_rotation;
+        DrawPrimitive(Sphere(start, no_rotation, 0.1f), eRenderingMode::Face, color);
+        if (end.LengthSquared() > Math::EPSILON)
+        {
+            Quaternion rotation(Vector3(0.0f, 1.0f, 0.0f), (end - start).Normalize());
+            DrawPrimitive(Cone(end, rotation, 0.1f, 0.2f), eRenderingMode::Face, color);
+            DrawSegment(start, end, color);
+        }
     }
 
     void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader)

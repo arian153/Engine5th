@@ -27,10 +27,10 @@ namespace Engine5
         m_body_a = m_manifold->m_set_a->GetRigidBody();
         m_body_b = m_manifold->m_set_b->GetRigidBody();
         //set mass
-        m_mass_term.m_a = m_body_a->Mass();
-        m_mass_term.i_a = m_body_a->Inertia();
-        m_mass_term.m_b = m_body_b->Mass();
-        m_mass_term.i_b = m_body_b->Inertia();
+        m_mass_term.m_a = m_body_a->InverseMass();
+        m_mass_term.i_a = m_body_a->InverseInertia();
+        m_mass_term.m_b = m_body_b->InverseMass();
+        m_mass_term.i_b = m_body_b->InverseInertia();
         //velocity term
         m_velocity_term.v_a = m_body_a->GetLinearVelocity();
         m_velocity_term.w_a = m_body_a->GetAngularVelocity();

@@ -41,8 +41,8 @@ namespace Engine5
             switch (type)
             {
             case eMaterial::Rock:
-                density = 0.6f;
-                restitution = 0.4f;
+                density = 1.0f;
+                restitution = 1.0f;
                 break;
             case eMaterial::Wood:
                 density = 0.3f;

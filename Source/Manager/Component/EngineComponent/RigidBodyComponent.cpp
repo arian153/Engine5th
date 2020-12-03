@@ -1,5 +1,8 @@
 // ReSharper disable CppMemberFunctionMayBeConst
 #include "RigidBodyComponent.hpp"
+
+#include <iostream>
+
 #include "../../Space/Space.hpp"
 #include "../../Object/Object.hpp"
 #include "ColliderComponent.hpp"
@@ -274,8 +277,10 @@ namespace Engine5
             {
                 m_rigid_body->m_mass_data.local_centroid = JsonResource::AsVector3(mass_data["Centroid"]);
                 m_rigid_body->UpdateCentroid();
+         
             }
         }
+        m_rigid_body->UpdateInertia();
         return true;
     }
 
@@ -417,6 +422,27 @@ namespace Engine5
                                                mass
                                               )
                                              );
+            }
+
+          
+
+            ImGui::Separator();
+            if (ImGui::TreeNode("Momentum & Kinetic Energy"))
+            {
+                Vector3 p = m_rigid_body->m_mass_data.mass * m_rigid_body->m_linear_velocity;
+                ImGui::Text("Linear Momentum");
+                ImGui::Text("[%.3f, %.3f, %.3f]", p[0], p[1], p[2]);
+
+                Vector3 l = m_rigid_body->m_mass_data.local_inertia * m_rigid_body->m_angular_velocity;
+                ImGui::Text("Angular Momentum");
+                ImGui::Text("[%.3f, %.3f, %.3f]", l[0], l[1], l[2]);
+
+                ImGui::Text("Linear Kinetic Energy");
+                ImGui::Text("%.3f", 0.5f * m_rigid_body->m_mass_data.mass * m_rigid_body->m_linear_velocity * m_rigid_body->m_linear_velocity);
+
+                ImGui::Text("Angular Kinetic Energy");
+                ImGui::Text("%.3f", 0.5f * m_rigid_body->m_mass_data.local_inertia * m_rigid_body->m_angular_velocity * m_rigid_body->m_angular_velocity);
+                ImGui::TreePop();
             }
             ImGui::Separator();
             if (ImGui::TreeNode("Mass Data"))

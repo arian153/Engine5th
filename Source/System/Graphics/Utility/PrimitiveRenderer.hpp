@@ -36,6 +36,7 @@ namespace Engine5
         void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
         void DrawBox(const Vector3& position, const Quaternion& orientation, const Vector3& scale, eRenderingMode mode, Color color = Color());
         void DrawRay(const Ray& ray, Color color = Color());
+        void DrawArrow(const Vector3& start, const Vector3& end, Color color = Color());
 
         void Initialize(ColorShaderCommon* color_shader);
         void Render() const;

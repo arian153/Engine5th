@@ -383,6 +383,8 @@ namespace Engine5
         {
             m_local_inertia_tensor = JsonResource::AsMatrix33(data["Inertia"]);
         }
+
+        m_rigid_body->UpdateInertia();
     }
 
     void ColliderPrimitive::UpdateRigidBody()

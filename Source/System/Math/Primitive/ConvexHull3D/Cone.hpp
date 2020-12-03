@@ -9,6 +9,7 @@ namespace Engine5
     {
     public:
         Cone();
+        explicit Cone(const Vector3& position, const Quaternion& orientation, Real radius, Real height);
         ~Cone();
 
         void Initialize() override;

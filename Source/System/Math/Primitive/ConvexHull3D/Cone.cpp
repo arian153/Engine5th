@@ -10,6 +10,12 @@ namespace Engine5
         type = ePrimitiveType::Cone;
     }
 
+    Cone::Cone(const Vector3& position, const Quaternion& orientation, Real radius, Real height)
+        : Primitive(position, orientation), radius(radius), height(height)
+    {
+        type = ePrimitiveType::Cone;
+    }
+
     Cone::~Cone()
     {
     }
@@ -25,7 +31,7 @@ namespace Engine5
     void Cone::SetUnit()
     {
         Real division;
-        if(radius * 2.0f > height)
+        if (radius * 2.0f > height)
         {
             division = radius * 2.0f;
         }
@@ -34,12 +40,11 @@ namespace Engine5
             division = height;
         }
 
-        if( division > 0.0f)
+        if (division > 0.0f)
         {
             radius /= division;
             height /= division;
         }
-
     }
 
     Vector3 Cone::Support(const Vector3& direction)
