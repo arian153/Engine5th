@@ -28,7 +28,7 @@ namespace Engine5
 
         void AddGUI(GameEditor* game_editor);
         bool OnGameEditor() const;
-       
+        void StyleVisualStudio();
 
     private:
         ImGuiIO&           m_im_gui_io;
