@@ -44,7 +44,7 @@ namespace Engine5
         void   DoSave(JsonResource* resource);
         void   DisplayContents(JsonResource* resource);
         void   DisplayContextMenu(JsonResource* resource);
-        Space* DisplayScene(const std::string& name, Real dt) const;
+        Space* DisplayScene(const std::string& name, Real dt);
 
     private:
         friend class GameEditor;
@@ -56,6 +56,7 @@ namespace Engine5
         ImVec2           m_uv_max        = ImVec2(1.0f, 1.0f);                   // Lower-right
         ImVec4           m_tint_col      = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // No tint
         ImVec4           m_border_col    = ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 50% opaque white
+        ImVec2           m_mouse_pos     = ImVec2(0.0f, 0.0f);
 
     private:
         GameEditor*      m_game_editor      = nullptr;

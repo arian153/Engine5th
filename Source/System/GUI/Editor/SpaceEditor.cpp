@@ -333,7 +333,7 @@ namespace Engine5
         ImGui::EndPopup();
     }
 
-    Space* SpaceEditor::DisplayScene(const std::string& name, Real dt) const
+    Space* SpaceEditor::DisplayScene(const std::string& name, Real dt)
     {
         auto found = m_editing_spaces.find(name);
         auto space = found->second;
@@ -365,6 +365,11 @@ namespace Engine5
             {
                 GUISystem::SetFocusFree(false);
             }
+
+            ImVec2 region = ImGui::GetItemRectMin();
+            m_mouse_pos = ImVec2(ImGui::GetMousePos().x - region.x, ImGui::GetMousePos().y - region.y);
+            ImGui::Text("Mouse Pos : (%.3f, %.3f)", m_mouse_pos.x, m_mouse_pos.y);
+            ImGui::Text("Region Pos : (%.3f, %.3f)", region.x, region.y);
         }
         return space;
     }
