@@ -229,7 +229,7 @@ namespace Engine5
     void ColliderPolyhedron::UpdateBoundingVolume()
     {
         Real    bounding_factor = (m_max_bound - m_min_bound).Length();
-        Vector3 pos = m_rigid_body != nullptr ? m_rigid_body->LocalToWorldPoint(m_local.position) : m_local.position;
+        Vector3 pos             = m_rigid_body != nullptr ? m_rigid_body->LocalToWorldPoint(m_local.position) : m_local.position;
         Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
         m_bounding_volume->Set(-min_max + pos, min_max + pos);
     }
@@ -663,6 +663,8 @@ namespace Engine5
         m_faces->emplace_back(1, 2, 3);
         m_faces->emplace_back(2, 3, 0);
         m_faces->emplace_back(3, 0, 1);
+
+
         return 3;
     }
 
@@ -705,7 +707,7 @@ namespace Engine5
         }
     }
 
-    void ColliderPolyhedron::CalculateHorizon()
+    void ColliderPolyhedron::CalculateHorizon(const Vector3& eye_point)
     {
         //If the currFace is not on the convex hull
         //Mark the crossedEdge as not on the convex hull and return.

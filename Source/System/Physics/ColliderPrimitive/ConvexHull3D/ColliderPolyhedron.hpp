@@ -61,7 +61,7 @@ namespace Engine5
 
         size_t CreateSimplex(const std::vector<Vector3>& vertices) const;
         void AddToOutsideSet(std::vector<Vector3>& vertices, OutsideSetFace& result) const;
-        void CalculateHorizon();
+        void CalculateHorizon(const Vector3& eye_point);
 
     private:
         std::vector<Vector3>*      m_vertices        = nullptr;
