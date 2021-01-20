@@ -76,6 +76,8 @@ namespace Engine5
         m_game_editor = new GameEditor();
         m_game_editor->Initialize(this);
         m_gui_system->AddGUI(m_game_editor);
+        m_level_manager->SetInitialLevel(m_initial_setting.initial_level);
+        m_game_editor->SetOpen(m_initial_setting.initial_level == "");
     }
 
     void Application::Update() const

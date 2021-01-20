@@ -348,6 +348,10 @@ namespace Engine5
             {
                 app_setting.caption = setting["Window Caption"].asString();
             }
+            if (HasMember(setting, "Initial Level") && setting["Initial Level"].isString())
+            {
+                app_setting.initial_level = setting["Initial Level"].asString();
+            }
             return true;
         }
         return false;

@@ -62,17 +62,6 @@ namespace Engine5
                 m_level_editor.Update(dt);
                 UpdateCommandWindow();
             }
-            if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)) && ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Tab)))
-            {
-                m_b_open = false;
-            }
-        }
-        else
-        {
-            if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)) && ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Tab)))
-            {
-                m_b_open = true;
-            }
         }
     }
 
@@ -84,6 +73,11 @@ namespace Engine5
     bool GameEditor::IsOpen() const
     {
         return m_b_open;
+    }
+
+    void GameEditor::SetOpen(bool is_open)
+    {
+        m_b_open = is_open;
     }
 
     void GameEditor::UpdateFileTab()

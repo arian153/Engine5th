@@ -21,6 +21,7 @@ namespace Engine5
         void Shutdown();
 
         bool IsOpen() const;
+        void SetOpen(bool is_open);
 
     private:
         void UpdateFileTab();

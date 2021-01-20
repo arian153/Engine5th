@@ -16,7 +16,8 @@ namespace Engine5
         int  screen_height = 720;
         Real screen_scale  = 1.0f;
 
-        std::string caption     = "";
-        eWindowMode window_mode = eWindowMode::Windowed;
+        std::string caption       = "";
+        std::string initial_level = "";
+        eWindowMode window_mode   = eWindowMode::Windowed;
     };
 }

@@ -5,7 +5,8 @@
         "Show Cursor": true,
         "V-Sync": false,
         "Window Caption": "Engine 5th - Testbed",
-        "Window Mode": "Windowed"
+        "Window Mode": "Windowed",
+        "Initial Level": ""
     },
     "Type": "Setting"
 }

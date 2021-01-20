@@ -27,7 +27,6 @@ namespace Engine5
         static void SetFocusFree(bool flag);
 
         void AddGUI(GameEditor* game_editor);
-        bool OnGameEditor() const;
         void StyleVisualStudio();
 
     private:

@@ -51,6 +51,24 @@ namespace Engine5
         //early quit
         if (m_b_set_initial_level == false)
         {
+            while (m_b_quit_state_machine == false && m_b_restart == false && m_b_reload == false && m_current == m_next)
+            {
+                m_application_timer->Tick();
+                m_operating_system->DispatchMessagePump();
+                m_input->Update();
+                if (m_operating_system->IsPaused() == false)
+                {
+                    m_frame_utility->CalculateFrameStatus(m_application_timer->TotalTime());
+                }
+                Real time_step = m_application_timer->DeltaTime();
+                m_gui_system->Update(time_step);
+                m_gui_system->BeginRender();
+                m_render_system->BeginUpdate();
+                m_gui_system->EndRender();
+                m_render_system->EndUpdate();
+            }
+
+            m_operating_system->SetQuit(m_b_quit_state_machine);
             return;
         }
         //load phase
@@ -173,6 +191,11 @@ namespace Engine5
 
     void LevelManager::SetInitialLevel(const std::string& level_name)
     {
+        if (level_name == "")
+        {
+            return;
+        }
+
         m_b_set_initial_level = true;
         m_current             = level_name;
         m_next                = level_name;
@@ -298,55 +321,35 @@ namespace Engine5
 
     void LevelManager::UpdateLevel(Level* level, Real dt) const
     {
-        if (m_gui_system->OnGameEditor())
-        {
-            m_gui_system->Update(dt);
-        }
-        else
-        {
-            level->UpdateSubsystem(dt, eSubsystemFlag::Logic);
-            level->UpdateSubsystem(dt, eSubsystemFlag::World);
-            //update animation
-            //update sound
-            level->UpdateSubsystem(dt, eSubsystemFlag::Scene);
-            level->Update(dt);
-            m_gui_system->Update(dt);
-        }
+        level->UpdateSubsystem(dt, eSubsystemFlag::Logic);
+        level->UpdateSubsystem(dt, eSubsystemFlag::World);
+        //update animation
+        //update sound
+        level->UpdateSubsystem(dt, eSubsystemFlag::Scene);
+        level->Update(dt);
+        m_gui_system->Update(dt);
     }
 
     void LevelManager::FixedUpdateLevel(Level* level, Real dt) const
     {
-        if (!m_gui_system->OnGameEditor())
-        {
-            level->FixedUpdateSubsystem(dt, eSubsystemFlag::Logic);
-            level->FixedUpdateSubsystem(dt, eSubsystemFlag::World);
-            //update animation
-            //update sound
-            level->FixedUpdateSubsystem(dt, eSubsystemFlag::Scene);
-            level->FixedUpdate(dt);
-        }
+        level->FixedUpdateSubsystem(dt, eSubsystemFlag::Logic);
+        level->FixedUpdateSubsystem(dt, eSubsystemFlag::World);
+        //update animation
+        //update sound
+        level->FixedUpdateSubsystem(dt, eSubsystemFlag::Scene);
+        level->FixedUpdate(dt);
     }
 
     void LevelManager::RenderLevel(Level* level, Real dt) const
     {
-        if (m_gui_system->OnGameEditor())
-        {
-            m_gui_system->BeginRender();
-            m_render_system->BeginUpdate();
-            m_gui_system->EndRender();
-            m_render_system->EndUpdate();
-        }
-        else
-        {
-            level->DrawSubsystem(eSubsystemFlag::Logic);
-            level->DrawSubsystem(eSubsystemFlag::World);
-            //render scene
-            m_gui_system->BeginRender();
-            m_render_system->BeginUpdate();
-            level->DrawSubsystem(eSubsystemFlag::Scene);
-            m_gui_system->EndRender();
-            m_render_system->EndUpdate();
-        }
+        level->DrawSubsystem(eSubsystemFlag::Logic);
+        level->DrawSubsystem(eSubsystemFlag::World);
+        //render scene
+        m_gui_system->BeginRender();
+        m_render_system->BeginUpdate();
+        level->DrawSubsystem(eSubsystemFlag::Scene);
+        m_gui_system->EndRender();
+        m_render_system->EndUpdate();
     }
 
     void LevelManager::ShutdownLevel(Level* level) const

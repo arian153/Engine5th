@@ -95,11 +95,6 @@ namespace Engine5
         m_game_editor = game_editor;
     }
 
-    bool GUISystem::OnGameEditor() const
-    {
-        return m_game_editor->IsOpen();
-    }
-
     void GUISystem::StyleVisualStudio()
     {
         constexpr auto ColorFromBytes = [](uint8_t r, uint8_t g, uint8_t b)
