@@ -32,6 +32,7 @@ namespace Engine5
         explicit Matrix33(const EulerAngle& euler_angle);
         explicit Matrix33(const AxisRadian& axis_radian);
         explicit Matrix33(const Vector3& axis, Real radian);
+        explicit Matrix33(const Matrix44& matrix);
 
         ~Matrix33();
 
@@ -89,6 +90,7 @@ namespace Engine5
 
     public:
         Matrix33&            operator=(const Matrix33& rhs);
+        Matrix33&            operator=(const Matrix44& rhs);
         Real                 operator()(size_t i, size_t j) const;
         Real&                operator()(size_t i, size_t j);
         Real                 operator[](size_t i) const;

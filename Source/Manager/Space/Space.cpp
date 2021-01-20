@@ -159,6 +159,24 @@ namespace Engine5
         }
     }
 
+    void Space::Update(Real dt, eSubsystemFlag flag) const
+    {
+        if (m_logic_subsystem != nullptr && HasFlag(flag, eSubsystemFlag::Logic))
+        {
+            m_logic_subsystem->Update(dt);
+        }
+
+        if (m_world != nullptr && HasFlag(flag, eSubsystemFlag::World))
+        {
+            m_world->Update(dt);
+        }
+
+        if (m_scene != nullptr && HasFlag(flag, eSubsystemFlag::Scene))
+        {
+            m_scene->Update(dt);
+        }
+    }
+
     void Space::Render() const
     {
         if (m_logic_subsystem != nullptr)

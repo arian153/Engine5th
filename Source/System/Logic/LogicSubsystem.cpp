@@ -64,4 +64,14 @@ namespace Engine5
     {
         m_primitive_renderer = primitive_renderer;
     }
+
+    void LogicSubsystem::SetPickingRay(const Ray& ray)
+    {
+        m_picking_ray = ray;
+    }
+
+    void LogicSubsystem::SetMouseOrtho(const Vector2& pos)
+    {
+        m_mouse_ortho = pos;
+    }
 }

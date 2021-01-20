@@ -3,6 +3,8 @@
 #include <vector>
 #include "../../Math/Utility/MathDef.hpp"
 #include <unordered_map>
+#include "../../Math/Algebra/Vector2.hpp"
+#include "../../Math/Primitive/Others/Ray.hpp"
 
 namespace Engine5
 {
@@ -57,7 +59,8 @@ namespace Engine5
         ImVec4           m_tint_col      = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // No tint
         ImVec4           m_border_col    = ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 50% opaque white
         ImVec2           m_mouse_pos     = ImVec2(0.0f, 0.0f);
-
+        Vector2          m_ortho_pos;
+        Ray              m_picking_ray;
     private:
         GameEditor*      m_game_editor      = nullptr;
         Application*     m_application      = nullptr;

@@ -77,6 +77,7 @@ namespace Engine5
 
         Basis GetMainCameraBasis() const;
         Real  GetAspectRatio() const;
+        Ray GetPickingRay(const Vector2& pos) const;
 
     private:
         RendererCommon*       m_renderer           = nullptr;

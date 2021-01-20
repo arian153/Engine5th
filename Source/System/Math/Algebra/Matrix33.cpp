@@ -15,6 +15,7 @@
 #include <ostream>
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "../Utility/VectorDef.hpp"
+#include "Matrix44.hpp"
 
 namespace Engine5
 {
@@ -62,6 +63,21 @@ namespace Engine5
     Matrix33::Matrix33(const Vector3& axis, Real radian)
     {
         SetRotation(axis, radian);
+    }
+
+    Matrix33::Matrix33(const Matrix44& matrix)
+    {
+        data[0] = matrix.data[0];
+        data[1] = matrix.data[1];
+        data[2] = matrix.data[2];
+
+        data[3] = matrix.data[4];
+        data[4] = matrix.data[5];
+        data[5] = matrix.data[6];
+
+        data[6] = matrix.data[8];
+        data[7] = matrix.data[9];
+        data[8] = matrix.data[10];
     }
 
     Matrix33::~Matrix33()
@@ -623,6 +639,22 @@ namespace Engine5
                 this->data[i] = rhs.data[i];
             }
         }
+        return *this;
+    }
+
+    Matrix33& Matrix33::operator=(const Matrix44& rhs)
+    {
+        data[0] = rhs.data[0];
+        data[1] = rhs.data[1];
+        data[2] = rhs.data[2];
+
+        data[3] = rhs.data[4];
+        data[4] = rhs.data[5];
+        data[5] = rhs.data[6];
+
+        data[6] = rhs.data[8];
+        data[7] = rhs.data[9];
+        data[8] = rhs.data[10];
         return *this;
     }
 

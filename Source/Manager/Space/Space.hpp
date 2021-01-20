@@ -42,6 +42,7 @@ namespace Engine5
                       LogicSystem*   logic_system);
 
         void Update(Real dt) const;
+        void Update(Real dt, eSubsystemFlag flag) const;
         void Render() const;
 
         void UpdateSubsystem(Real dt, eSubsystemFlag flag) const;

@@ -34,6 +34,8 @@ namespace Engine5
         void SyncToTransform() const;
         bool SyncFromTransform();
         void UpdateViewMatrix();
+
+        Transform* GetTransform() const;
     private:
         friend class CameraComponent;
 

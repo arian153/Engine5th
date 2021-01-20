@@ -157,4 +157,9 @@ namespace Engine5
             m_scene->UpdateView();
         }
     }
+
+    Transform* Camera::GetTransform() const
+    {
+        return m_transform;
+    }
 }
