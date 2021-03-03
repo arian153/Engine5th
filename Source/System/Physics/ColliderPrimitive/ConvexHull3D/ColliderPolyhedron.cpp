@@ -575,22 +575,26 @@ namespace Engine5
         //1. For each principle direction(X - axis, Y - axis, Z - axis)
         Vector3 min_vertex, max_vertex;
         bool    b_succeed = false;
+
+        size_t size = vertices.size();
+
         for (size_t i = 0; i < 3; ++i)
         {
             //  1. Find the minimum and maximum point in that dimension
-            Real min = Math::REAL_POSITIVE_MAX;
-            Real max = Math::REAL_NEGATIVE_MAX;
-            for (auto& vertex : vertices)
+            Real min = vertices[0][i];
+            Real max = vertices[0][i];
+
+            for (size_t j = 1; j < size; ++i)
             {
-                if (vertex[i] < min)
+                if (vertices[j][i] < min)
                 {
-                    min        = vertex[i];
-                    min_vertex = vertex;
+                    min        = vertices[j][i];
+                    min_vertex = vertices[j];
                 }
-                if (vertex[i] > max)
+                if (vertices[j][i] > max)
                 {
-                    max        = vertex[i];
-                    max_vertex = vertex;
+                    max        = vertices[j][i];
+                    max_vertex = vertices[j];
                 }
             }
             //  2. If min != max then break out of loop with success
@@ -663,7 +667,6 @@ namespace Engine5
         m_faces->emplace_back(1, 2, 3);
         m_faces->emplace_back(2, 3, 0);
         m_faces->emplace_back(3, 0, 1);
-
 
         return 3;
     }
