@@ -38,24 +38,10 @@ namespace Game
             eye_pos.y   = m_radius * cosf(m_phi);
             camera->LookAt(target_pos + eye_pos, target_pos);
         }
-
-   /*     std::vector<Vector3> control_points = {
-            Vector3(-46.0474243f, -22.8241711f, 0.0f),
-            Vector3(-41.4631424f, 21.8725243f, 0.0f),
-            Vector3(10.1099663f, 19.9078350f, 0.0f),
-            Vector3(14.6942415f, -25.9349289f, 0.0f),
-            Vector3(52.6782455f, 5.66383266f, 0.0f)
-        };
-        curve1 = CurveGenerator::GenerateBezierCurve(control_points);
-        curve2 = CurveGenerator::GeneratePolynomialCurve(control_points);
-        curve3 = CurveGenerator::GenerateSplineCurve(control_points);*/
     }
 
     void ControllerComponent::Update(Real dt)
     {
-      /*  m_primitive_renderer->DrawCurveLine(curve1, Color(1, 0, 0, 1));
-        m_primitive_renderer->DrawCurveLine(curve2, Color(0, 0.7f, 0, 1));
-        m_primitive_renderer->DrawCurveLine(curve3, Color(0, 0, 1, 1));*/
         if (m_input != nullptr)
         {
             auto mouse    = m_input->GetMouseInput();

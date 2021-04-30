@@ -39,8 +39,5 @@ namespace Game
         Engine5::Real    m_radius = 60.0f;
         Engine5::Vector3 target_pos;
         Engine5::Vector3 eye_pos;
-        //Engine5::Curve   curve1;
-        //Engine5::Curve   curve2;
-        //Engine5::Curve   curve3;
     };
 }
