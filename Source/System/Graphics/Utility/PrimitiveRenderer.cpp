@@ -2,6 +2,7 @@
 #include "../Renderer/RendererCommon.hpp"
 #include "../Shader/Forward/ColorShaderCommon.hpp"
 #include "MatrixManager.hpp"
+#include "../../Math/Curve/Curve.hpp"
 #include "../DataType/MatrixData.hpp"
 #include "../DataType/TopologyDef.hpp"
 #include "../Buffer/MeshBufferCommon.hpp"
@@ -229,9 +230,40 @@ namespace Engine5
     {
         if (end.DistanceSquaredTo(start) > Math::EPSILON)
         {
+            Real scale = start.DistanceTo(end);
             Quaternion rotation(Vector3(0.0f, 1.0f, 0.0f), (end - start).Normalize());
-            DrawPrimitive(Cone(end, rotation, 0.1f, 0.2f), eRenderingMode::Face, color);
+            DrawPrimitive(Cone(end, rotation, scale * 0.1f, scale * 0.2f), eRenderingMode::Face, color);
             DrawSegment(start, end, color);
+        }
+    }
+
+    void PrimitiveRenderer::DrawCurveLine(const Curve& curve, Color color)
+    {
+        size_t curve_size = curve.points.size() - 1;
+        size_t index = m_line_vertices.size();
+
+        m_line_vertices.reserve(index + 2 * curve_size);
+        m_line_indices.reserve(m_line_indices.size() + 2 * curve_size);
+
+        for (size_t i = 0; i < curve_size; i++)
+        {
+            m_line_vertices.emplace_back(curve.points[i], color);
+            PushLineIndices((I32)(index + i), (I32)(index + i + 1));
+        }
+        m_line_vertices.emplace_back(curve.points[curve_size], color);
+    }
+
+    void PrimitiveRenderer::DrawDashedLineSegment(const Vector3& start, const Vector3& end, Real length, Color color)
+    {
+        Real    distance = start.DistanceTo(end);
+        Vector3 dir = (end - start).Unit();
+        int     count = static_cast<int>(distance / length);
+
+        for (int i = 0; i < count; i += 2)
+        {
+            Vector3 a = start + static_cast<Real>(i) * length * dir;
+            Vector3 b = start + static_cast<Real>(i + 1) * length * dir;
+            DrawSegment(a, b, color);
         }
     }
 

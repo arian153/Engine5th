@@ -41,24 +41,47 @@ namespace Engine5
 
     bool Sphere::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
     {
-        Vector3 l  = -local_ray.position;
-        Real    tc = l.DotProduct(local_ray.direction);
-        if (tc < 0.0f)
-        {
-            return false;
-        }
-        Real d2             = (tc * tc) - (l.DotProduct(l));
-        Real radius_squared = radius * radius;
-        if (d2 > radius_squared)
-        {
-            return false;
-        }
+        //Vector3 l  = -local_ray.position;
+        //Real    tc = l.DotProduct(local_ray.direction);
+        //if (tc < 0.0f)
+        //{
+        //    return false;
+        //}
+        //Real d2             = (tc * tc) - (l.DotProduct(l));
+        //Real radius_squared = radius * radius;
+        //if (d2 > radius_squared)
+        //{
+        //    return false;
+        //}
 
-        //solve for t1c
-        Real t1c  = sqrtf(radius_squared - d2);
-        minimum_t = tc - t1c;
-        maximum_t = tc + t1c;
-        return true;
+        ////solve for t1c
+        //Real t1c  = sqrtf(radius_squared - d2);
+        //minimum_t = tc - t1c;
+        //maximum_t = tc + t1c;
+        //return true;
+
+        Real a = (local_ray.direction.x * local_ray.direction.x / (radius * radius))
+                + (local_ray.direction.y * local_ray.direction.y / (radius * radius))
+                + (local_ray.direction.z * local_ray.direction.z / (radius * radius));
+        Real b = (2.0f * local_ray.direction.x * local_ray.position.x / (radius * radius))
+                + (2.0f * local_ray.direction.y * local_ray.position.y / (radius * radius))
+                + (2.0f * local_ray.direction.z * local_ray.position.z / (radius * radius));
+        Real c = (local_ray.position.x * local_ray.position.x / (radius * radius))
+                + (local_ray.position.y * local_ray.position.y / (radius * radius))
+                + (local_ray.position.z * local_ray.position.z / (radius * radius)) - 1.0f;
+        if (Math::SolveQuadratic(a, b, c, maximum_t, minimum_t) == true)
+        {
+            if (minimum_t < 0.0f && maximum_t < 0.0f)
+            {
+                return false;
+            }
+            if (minimum_t <= 0.0f)
+            {
+                minimum_t = 0.0f;
+            }
+            return true;
+        }
+        return false;
     }
 
     Vector3 Sphere::GetNormal(const Vector3& local_point_on_primitive)

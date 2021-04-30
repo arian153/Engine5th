@@ -300,7 +300,7 @@ namespace Engine5
             vertex_center_pos.x = 0.0f;
             vertex_center_pos.y = -0.5f * height;
             vertex_center_pos.z = 0.0f;
-            vertex_center_pos = orientation.Rotate(vertex_center_pos);
+            vertex_center_pos   = orientation.Rotate(vertex_center_pos);
             vertex_center_pos += position;
             I32 center_index = static_cast<I32>(renderer->VerticesSize(mode));
             renderer->PushVertex(vertex_center_pos, mode, color);
