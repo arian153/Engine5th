@@ -296,6 +296,19 @@ namespace Engine5
                     renderer->PushFaceIndices(index + (i * ring + j), index + ((i + 1) * ring + j + 1), index + (i * ring + j + 1));
                 }
             }
+            Vector3 vertex_center_pos;
+            vertex_center_pos.x = 0.0f;
+            vertex_center_pos.y = -0.5f * height;
+            vertex_center_pos.z = 0.0f;
+            vertex_center_pos = orientation.Rotate(vertex_center_pos);
+            vertex_center_pos += position;
+            I32 center_index = static_cast<I32>(renderer->VerticesSize(mode));
+            renderer->PushVertex(vertex_center_pos, mode, color);
+
+            for (I32 i = 0; i < slice_count; ++i)
+            {
+                renderer->PushFaceIndices(center_index, index + i, index + i + 1);
+            }
         }
     }
 

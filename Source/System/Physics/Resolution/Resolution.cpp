@@ -5,6 +5,7 @@
 // ReSharper disable once CppUnusedIncludeDirective
 #include "ContactManifold.hpp"
 #include "../../Graphics/DataType/Color.hpp"
+#include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "Force/Force.hpp"
 
 namespace Engine5
@@ -41,35 +42,57 @@ namespace Engine5
         m_forces.clear();
     }
 
-    void Resolution::SolveConstraints(ManifoldTable* manifold_table, std::vector<RigidBody*>* rigid_bodies, Real dt)
+    void Resolution::ApplyForces(std::vector<RigidBody*>* rigid_bodies, Real dt)
     {
         for (auto& force : m_forces)
         {
+            force->Clear();
             for (auto& body : *rigid_bodies)
             {
                 force->Update(body, dt);
             }
         }
+    }
+
+    void Resolution::ProcessContactConstraints(ManifoldTable* manifold_table)
+    {
         m_contact_constraints.clear();
+        for (auto& [key, manifold] : manifold_table->m_manifold_table)
+        {
+            if (manifold.is_collide)
+            {
+                m_contact_constraints.emplace_back(&manifold, &m_friction_utility, m_b_enable_baumgarte);
+            }
+        }
+    }
+
+    void Resolution::SolveVelocityConstraints(Real dt)
+    {
         if (m_velocity_iteration > 0)
         {
             for (auto& constraint : m_constraints)
             {
                 constraint->GenerateVelocityConstraints(dt);
             }
-            for (auto& manifold : manifold_table->m_manifold_table)
-            {
-                auto& contact = m_contact_constraints.emplace_back(&manifold.second, &m_friction_utility);
-                contact.GenerateVelocityConstraints(dt);
-            }
+
             if (m_b_warm_starting == true)
             {
                 for (auto& contact_constraint : m_contact_constraints)
                 {
+                    contact_constraint.GenerateVelocityConstraints(dt);
                     contact_constraint.WarmStart();
+                    contact_constraint.AwakeState();
                 }
             }
-            for (size_t i = 0; i < m_velocity_iteration; ++i)
+            else
+            {
+                for (auto& contact_constraint : m_contact_constraints)
+                {
+                    contact_constraint.GenerateVelocityConstraints(dt);
+                    contact_constraint.AwakeState();
+                }
+            }
+            for (int i = 0; i < m_velocity_iteration; ++i)
             {
                 for (auto& constraint : m_constraints)
                 {
@@ -89,12 +112,30 @@ namespace Engine5
                 contact.ApplyVelocityConstraints();
             }
         }
-        for (auto& body : *rigid_bodies)
+    }
+
+    void Resolution::IntegrateRigidBodies(std::vector<RigidBody*>* rigid_bodies, Real dt) const
+    {
+        if (m_b_enable_sleep)
         {
-            body->IntegrateVelocity(dt);
-            body->IntegratePosition(dt);
+            for (auto& body : *rigid_bodies)
+            {
+                body->Integrate(dt);
+                body->UpdateSleepState();
+            }
         }
-        if (m_position_iteration > 0)
+        else
+        {
+            for (auto& body : *rigid_bodies)
+            {
+                body->Integrate(dt);
+            }
+        }
+    }
+
+    void Resolution::SolvePositionConstraints(Real dt)
+    {
+        if (m_position_iteration > 0 && m_velocity_iteration > 0)
         {
             for (auto& constraint : m_constraints)
             {
@@ -104,7 +145,7 @@ namespace Engine5
             {
                 contact.GeneratePositionConstraints(dt);
             }
-            for (size_t i = 0; i < m_position_iteration; ++i)
+            for (int i = 0; i < m_position_iteration; ++i)
             {
                 for (auto& constraint : m_constraints)
                 {
@@ -139,6 +180,25 @@ namespace Engine5
             {
                 contact.Render(m_primitive_renderer, draw_contact_flag.color);
             }
+        }
+
+        for (auto& force : m_forces)
+        {
+            if (force->draw_force.b_flag)
+            {
+                for (auto& draw : force->applied_forces)
+                {
+                    m_primitive_renderer->DrawArrow(draw.a, draw.a + draw.b, force->draw_force.color);
+                }
+            }
+        }
+    }
+
+    void Resolution::Edit(CommandRegistry* registry)
+    {
+        for (auto& force : m_forces)
+        {
+            force->Edit(registry);
         }
     }
 }

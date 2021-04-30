@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class ObjectFactory;
     class GUISystem;
     class Application;
 
@@ -34,6 +35,11 @@ namespace Engine5
         SpaceEditor     m_space_editor;
         Application*    m_application = nullptr;
         CommandRegistry m_command_registry;
+
+        ObjectFactory*   m_object_factory   = nullptr;
+        ResourceManager* m_resource_manager = nullptr;
+
+        std::vector<std::string> m_archetype_names;
 
         //editor flag
         bool        m_b_open        = true;

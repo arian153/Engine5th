@@ -62,7 +62,6 @@ namespace Engine5
     }
 
     DynamicBVH::DynamicBVH()
-        : m_margin(0.2f)
     {
     }
 
@@ -88,7 +87,7 @@ namespace Engine5
                         m_root->data->GetCollider()->UpdateBoundingVolume();
                     }
                 }
-                m_root->UpdateAABB(m_margin);
+                m_root->UpdateAABB(Physics::Collision::BROAD_PHASE_MARGIN);
             }
             else
             {
@@ -113,7 +112,7 @@ namespace Engine5
                     *parent_link    = sibling;
                     delete parent;
                     // re-insert node
-                    node->UpdateAABB(m_margin);
+                    node->UpdateAABB(Physics::Collision::BROAD_PHASE_MARGIN);
                     InsertNodeRecursive(node, &m_root);
                 }
                 m_invalid_nodes.clear();
@@ -138,7 +137,7 @@ namespace Engine5
             // not first node, insert node to tree
             DynamicBVHNode* node = new DynamicBVHNode();
             node->SetLeaf(aabb);
-            node->UpdateAABB(m_margin);
+            node->UpdateAABB(Physics::Collision::BROAD_PHASE_MARGIN);
             InsertNodeRecursive(node, &m_root);
         }
         else
@@ -146,7 +145,7 @@ namespace Engine5
             // first node, make root
             m_root = new DynamicBVHNode();
             m_root->SetLeaf(aabb);
-            m_root->UpdateAABB(m_margin);
+            m_root->UpdateAABB(Physics::Collision::BROAD_PHASE_MARGIN);
         }
     }
 
@@ -456,7 +455,7 @@ namespace Engine5
             }
         }
         // update parent AABB (propagates back up the recursion stack)
-        (*parent)->UpdateAABB(m_margin);
+        (*parent)->UpdateAABB(Physics::Collision::BROAD_PHASE_MARGIN);
     }
 
     void DynamicBVH::RemoveNodeRecursive(DynamicBVHNode* node)
@@ -581,7 +580,14 @@ namespace Engine5
                 {
                     if (node->data->GetCollider() != nullptr && primitive_color.b_flag)
                     {
-                        node->data->GetCollider()->Draw(primitive_renderer, eRenderingMode::Line, primitive_color.color);
+                        if (node->data->GetCollider()->GetRigidBody()->IsSleep())
+                        {
+                            node->data->GetCollider()->Draw(primitive_renderer, eRenderingMode::Line, Color(0.23f, 0.23f, 0.23f, 1.0f));
+                        }
+                        else
+                        {
+                            node->data->GetCollider()->Draw(primitive_renderer, eRenderingMode::Line, primitive_color.color);
+                        }
                     }
                 }
             }

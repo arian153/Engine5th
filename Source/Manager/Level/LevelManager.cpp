@@ -61,7 +61,9 @@ namespace Engine5
                     m_frame_utility->CalculateFrameStatus(m_application_timer->TotalTime());
                 }
                 Real time_step = m_application_timer->DeltaTime();
+
                 m_gui_system->Update(time_step);
+
                 m_gui_system->BeginRender();
                 m_render_system->BeginUpdate();
                 m_gui_system->EndRender();

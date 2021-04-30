@@ -14,6 +14,7 @@ namespace Engine5
         ContactPoint& operator=(const ContactPoint& rhs);
         bool          operator==(const ContactPoint& rhs) const;
         void          Swap();
+        void          UpdateContactPoint(const ContactPoint& rhs);
         ContactPoint  SwappedContactPoint() const;
     public:
         //Two contact points in world space, each representing the deepest penetrating point of one collider.

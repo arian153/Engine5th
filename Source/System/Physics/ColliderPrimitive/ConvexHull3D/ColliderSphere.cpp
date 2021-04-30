@@ -257,4 +257,8 @@ namespace Engine5
     void ColliderSphere::Save(const Json::Value& data)
     {
     }
+
+    void ColliderSphere::EditPrimitive(CommandRegistry* registry)
+    {
+    }
 }

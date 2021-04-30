@@ -8,6 +8,7 @@ namespace Engine5
 {
     ColliderCircle::ColliderCircle()
     {
+        m_is_2D = true;
     }
 
     ColliderCircle::~ColliderCircle()
@@ -154,10 +155,54 @@ namespace Engine5
 
     void ColliderCircle::UpdateBoundingVolume()
     {
-        Real bounding_factor = m_scaled_radius;
-        Vector3 pos = m_rigid_body != nullptr ? m_rigid_body->LocalToWorldPoint(m_local.position) : m_local.position;
-        Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
-        m_bounding_volume->Set(-min_max + pos, min_max + pos);
+        Vector3 obb_vertices[8];
+        Real    w = m_scaled_radius;
+        Real    h = m_scaled_radius;
+        Real    d = Physics::Primitive::BOUNDING_VOLUME_MARGIN;
+        obb_vertices[0].Set(+w, +h, +d);
+        obb_vertices[1].Set(+w, +h, -d);
+        obb_vertices[2].Set(+w, -h, +d);
+        obb_vertices[3].Set(+w, -h, -d);
+        obb_vertices[4].Set(-w, +h, +d);
+        obb_vertices[5].Set(-w, +h, -d);
+        obb_vertices[6].Set(-w, -h, +d);
+        obb_vertices[7].Set(-w, -h, -d);
+
+        bool has_body = m_rigid_body != nullptr;
+
+        Vector3 min = has_body
+            ? m_rigid_body->LocalToWorldPoint(m_local.LocalToWorldPoint(obb_vertices[0]))
+            : m_local.LocalToWorldPoint(obb_vertices[0]);
+        Vector3 max = min;
+
+        if (has_body)
+        {
+            for (int i = 1; i < 8; ++i)
+            {
+                Vector3 vertex = m_rigid_body->LocalToWorldPoint(m_local.LocalToWorldPoint(obb_vertices[i]));
+                min.x = Math::Min(min.x, vertex.x);
+                min.y = Math::Min(min.y, vertex.y);
+                min.z = Math::Min(min.z, vertex.z);
+                max.x = Math::Max(max.x, vertex.x);
+                max.y = Math::Max(max.y, vertex.y);
+                max.z = Math::Max(max.z, vertex.z);
+            }
+        }
+        else
+        {
+            for (int i = 1; i < 8; ++i)
+            {
+                Vector3 vertex = m_local.LocalToWorldPoint(obb_vertices[i]);
+                min.x = Math::Min(min.x, vertex.x);
+                min.y = Math::Min(min.y, vertex.y);
+                min.z = Math::Min(min.z, vertex.z);
+                max.x = Math::Max(max.x, vertex.x);
+                max.y = Math::Max(max.y, vertex.y);
+                max.z = Math::Max(max.z, vertex.z);
+            }
+        }
+
+        m_bounding_volume->Set(min, max);
     }
 
     void ColliderCircle::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
@@ -195,7 +240,7 @@ namespace Engine5
         else if (mode == eRenderingMode::Face)
         {
             //add a center pos
-            I32     center   = static_cast<I32>(renderer->VerticesSize(mode));
+            I32     center = static_cast<I32>(renderer->VerticesSize(mode));
             Vector3 position;
             position = LocalToWorldPoint(position);
             position = body_transform->LocalToWorldPoint(position);
@@ -254,6 +299,10 @@ namespace Engine5
     }
 
     void ColliderCircle::Save(const Json::Value& data)
+    {
+    }
+
+    void ColliderCircle::EditPrimitive(CommandRegistry* registry)
     {
     }
 }

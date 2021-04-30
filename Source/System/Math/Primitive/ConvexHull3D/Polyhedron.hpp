@@ -2,13 +2,8 @@
 #include "../Primitive.hpp"
 #include <vector>
 
-#include "../../../Physics/ColliderPrimitive/ColliderEdge.hpp"
-#include "../../../Physics/ColliderPrimitive/ColliderFace.hpp"
-
 namespace Engine5
 {
-    class OutsideSetFace;
-
     class Polyhedron final : public Primitive
     {
     public:
@@ -33,14 +28,9 @@ namespace Engine5
 
         void UpdateMinMaxPoint();
 
-        size_t CreateSimplex(const std::vector<Vector3>& vertices) const;
-        void   AddToOutsideSet(std::vector<Vector3>& vertices, OutsideSetFace& result) const;
-        void   CalculateHorizon();
-
     public:
-        std::vector<Vector3>*      m_vertices = nullptr;
-        std::vector<ColliderEdge>* m_edges    = nullptr;
-        std::vector<ColliderFace>* m_faces    = nullptr;
+        std::vector<Vector3>* vertices = nullptr;
+
     private:
         //max x, max y, max z among vertices
         Vector3 max_point;

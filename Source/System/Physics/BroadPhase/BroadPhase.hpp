@@ -34,6 +34,6 @@ namespace Engine5
         virtual void               IntersectRay(RayIntersectionResult& result, Real max_distance = -1.0f) const = 0;
         virtual void               TraceRay(RayTraceResult& result, Real max_distance = -1.0f, size_t reflect_count = 1) const = 0;
 
-    private:
+    public:
     };
 }

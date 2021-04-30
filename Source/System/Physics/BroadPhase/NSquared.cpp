@@ -75,11 +75,15 @@ namespace Engine5
     {
         for (auto& aabb : m_aabb_list)
         {
-            if (aabb->GetCollider() != nullptr)
+            if (aabb->GetCollider() != nullptr && primitive_color.b_flag)
             {
                 aabb->GetCollider()->Draw(primitive_renderer, eRenderingMode::Line, primitive_color.color);
             }
-            primitive_renderer->DrawBox(aabb->Center(), Quaternion(), aabb->Size(), eRenderingMode::Line, broad_phase_color.color);
+
+            if (broad_phase_color.b_flag)
+            {
+                primitive_renderer->DrawBox(aabb->Center(), Quaternion(), aabb->Size(), eRenderingMode::Line, broad_phase_color.color);
+            }
         }
     }
 
@@ -90,15 +94,18 @@ namespace Engine5
         for (auto it = m_aabb_list.begin(); it != aabb_end; ++it)
         {
             auto jt_begin = it;
-            for (auto jt = ++jt_begin; jt != aabb_end; ++jt)
+            for (auto jt = jt_begin; jt != aabb_end; ++jt)
             {
-                BoundingAABB*      aabb_a     = (*it);
-                BoundingAABB*      aabb_b     = (*jt);
-                ColliderPrimitive* collider_a = aabb_a->GetCollider();
-                ColliderPrimitive* collider_b = aabb_b->GetCollider();
-                if (aabb_a->Intersect(aabb_b))
+                if (it != jt)
                 {
-                    result.emplace_back(collider_a, collider_b);
+                    BoundingAABB*      aabb_a     = (*it);
+                    BoundingAABB*      aabb_b     = (*jt);
+                    ColliderPrimitive* collider_a = aabb_a->GetCollider();
+                    ColliderPrimitive* collider_b = aabb_b->GetCollider();
+                    if (aabb_a->Intersect(aabb_b))
+                    {
+                        result.emplace_back(collider_a, collider_b);
+                    }
                 }
             }
         }

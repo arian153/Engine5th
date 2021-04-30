@@ -17,6 +17,7 @@ namespace Json
 
 namespace Engine5
 {
+    class CommandRegistry;
     class RayTest;
     class ForceFactory;
     class Force;
@@ -37,6 +38,7 @@ namespace Engine5
 
         void Load(const Json::Value& data);
         void Save(const Json::Value& data);
+        void Edit(CommandRegistry* registry);
 
         void SetBroadPhaseMode(eBroadPhaseMode mode);
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
@@ -46,6 +48,8 @@ namespace Engine5
         void SetDrawFlagContact(bool b_draw, const Color& color = ColorDef::Pure::White);
         void SetDrawFlagPrimitive(bool b_draw, const Color& color = ColorDef::Pure::White);
         void SetDrawFlagBP(bool b_draw, const Color& color = ColorDef::Pure::White);
+        void SetDrawFlagVelocity(bool b_draw, const Color& color = ColorDef::Pure::White);
+        void SetDrawFlagPositionTrace(bool b_draw, const Color& color = ColorDef::Pure::White);
 
         ColliderPrimitive* CreateCollider(ColliderSet* collider_set, eColliderType type) const;
         Force*             CreateForce(const std::string& type) const;
@@ -62,8 +66,8 @@ namespace Engine5
         void RemoveConstraint(Constraint* constraint) const;
         void RemoveForce(Force* force) const;
 
-        void SetVelocityIteration(size_t iteration) const;
-        void SetPositionIteration(size_t iteration) const;
+        void SetVelocityIteration(int iteration) const;
+        void SetPositionIteration(int iteration) const;
         void SetWarmStarting(bool b_warm_starting) const;
 
         FrictionUtility*   GetFrictionUtility() const;
@@ -80,6 +84,14 @@ namespace Engine5
         void AddRay(const Ray& ray, eRayTestOption option, Real max_distance = -1.0f, size_t reflect_count = 0, const Color& color = ColorDef::Pure::White);
         void AddRay(const RayTest& ray);
 
+        void SetPickingRay(const Ray& ray);
+
+        ColliderSet* PickColliderSet(const Ray& ray) const;
+
+    private:
+        void DrawPotentialPair() const;
+        void UpdateResolutionPhase();
+
     private:
         eBroadPhaseMode    m_mode               = eBroadPhaseMode::DynamicBVH;
         BroadPhase*        m_broad_phase        = nullptr;
@@ -92,13 +104,25 @@ namespace Engine5
         std::vector<RigidBody*>   m_rigid_bodies;
         std::list<ColliderPair>   m_pairs;
         std::vector<RayTest>      m_rays;
+        Ray                       m_picking_ray;
+
         //factory
         std::unordered_map<std::string, ForceFactory*>* m_factories = nullptr;
 
+        ColorFlag m_draw_broad_phase;
+        ColorFlag m_draw_primitive;
         ColorFlag m_draw_gjk;
         ColorFlag m_draw_epa;
         ColorFlag m_draw_contact;
-        ColorFlag m_draw_primitive;
-        ColorFlag m_draw_broad_phase;
+        ColorFlag m_draw_potential_pair;
+
+        ColorFlag m_draw_velocity;
+        ColorFlag m_draw_position;
+
+        bool m_do_broad_phase    = true;
+        bool m_do_narrow_phase   = true;
+        bool m_do_resolution     = true;
+        bool m_solve_constraints = true;
+        int  m_broad_phase_mode  = 1;
     };
 }

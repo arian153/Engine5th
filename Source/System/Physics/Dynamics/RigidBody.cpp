@@ -21,12 +21,14 @@ namespace Engine5
         }
     }
 
-    void RigidBody::IntegrateVelocity(Real dt)
+    void RigidBody::Integrate(Real dt)
     {
-        if (m_motion_mode != eMotionMode::Dynamic)
-        {
+        if (m_motion_mode == eMotionMode::Static)
             return;
-        }
+
+        if (m_b_sleep)
+            return;
+
         // integrate linear velocity
         m_linear_velocity += m_mass_data.inverse_mass * m_force_accumulator * dt;
         // integrate angular velocity
@@ -34,14 +36,7 @@ namespace Engine5
         // zero out accumulated force and torque
         m_force_accumulator.SetZero();
         m_torque_accumulator.SetZero();
-    }
 
-    void RigidBody::IntegratePosition(Real dt)
-    {
-        if (m_motion_mode != eMotionMode::Dynamic)
-        {
-            return;
-        }
         SyncFromTransform(m_transform);
         Vector3 delta_linear_velocity = m_linear_velocity * dt;
         delta_linear_velocity         = delta_linear_velocity.HadamardProduct(m_linear_constraints);
@@ -52,7 +47,7 @@ namespace Engine5
         Vector3 axis                   = delta_angular_velocity.Unit();
         Real    radian                 = delta_angular_velocity.Length() * dt;
         m_local.orientation.AddRotation(axis, radian);
-        // update physical properties
+        // update remain properties
         UpdateOrientation();
         UpdateInertia();
         UpdatePosition();
@@ -94,17 +89,20 @@ namespace Engine5
 
     void RigidBody::ApplyForce(const Vector3& force, const Vector3& at)
     {
+        SetAwake();
         m_force_accumulator += force;
         m_torque_accumulator += (at - m_global_centroid).CrossProduct(force);
     }
 
     void RigidBody::ApplyForceCentroid(const Vector3& force)
     {
+        SetAwake();
         m_force_accumulator += force;
     }
 
     void RigidBody::ApplyTorque(const Vector3& torque)
     {
+        SetAwake();
         m_torque_accumulator += torque;
     }
 
@@ -178,6 +176,16 @@ namespace Engine5
         return m_angular_velocity;
     }
 
+    Vector3 RigidBody::GetForce() const
+    {
+        return m_force_accumulator;
+    }
+
+    Vector3 RigidBody::GetTorque() const
+    {
+        return m_torque_accumulator;
+    }
+
     void RigidBody::SetPositionalConstraints(const Vector3& linear)
     {
         m_linear_constraints = linear;
@@ -186,6 +194,39 @@ namespace Engine5
     void RigidBody::SetRotationalConstraints(const Vector3& angular)
     {
         m_angular_constraints = angular;
+    }
+
+    void RigidBody::SetAwake()
+    {
+        if (m_motion_mode != eMotionMode::Static)
+        {
+            m_b_sleep        = false;
+            m_sleep_momentum = Physics::Collision::SLEEP_AWAKE;
+        }
+    }
+
+    void RigidBody::UpdateSleepState()
+    {
+        if (m_motion_mode == eMotionMode::Kinematic)
+        {
+            return;
+        }
+
+        Real current_momentum = (m_linear_velocity.LengthSquared() + m_angular_velocity.LengthSquared()) * m_mass_data.inverse_mass;
+        m_sleep_momentum      = Physics::Collision::SLEEP_BIAS * m_sleep_momentum + (1.0f - Physics::Collision::SLEEP_BIAS) * current_momentum;
+
+        if (m_sleep_momentum < Physics::Collision::SLEEP_THRESHOLD)
+        {
+            //set sleep
+            m_linear_velocity.SetZero();
+            m_angular_velocity.SetZero();
+            m_b_sleep = true;
+        }
+        else
+        {
+            if (m_sleep_momentum > Physics::Collision::SLEEP_THRESHOLD_EXTREME)
+                m_sleep_momentum = Physics::Collision::SLEEP_THRESHOLD_EXTREME;
+        }
     }
 
     void RigidBody::SetMassInfinite()
@@ -311,7 +352,7 @@ namespace Engine5
         {
             if (m_local.position != transform->position
                 || m_local.orientation != transform->orientation
-                || m_local.rotating_origin != transform->rotating_origin)
+            )
             {
                 m_local = *transform;
                 UpdateOrientation();
@@ -347,5 +388,10 @@ namespace Engine5
             m_local       = origin->m_local;
             m_motion_mode = origin->m_motion_mode;
         }
+    }
+
+    bool RigidBody::IsSleep() const
+    {
+        return m_b_sleep;
     }
 }

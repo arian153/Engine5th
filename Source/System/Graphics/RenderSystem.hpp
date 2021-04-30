@@ -20,7 +20,7 @@ namespace Engine5
         explicit RenderSystem(OSCommon* operating_system);
         ~RenderSystem();
 
-        void Initialize(int rendering_width, int rendering_height, ResourceManager* resource_manager);
+        void Initialize(int rendering_width, int rendering_height, bool v_sync, ResourceManager* resource_manager);
         void Shutdown();
 
         void BeginUpdate() const;

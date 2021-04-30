@@ -21,6 +21,11 @@ namespace Engine5
         bool DoSimplex(Vector3& dir);
         bool IsValid();
 
+        bool DoSimplex2DPoint(Vector3& dir);
+        bool DoSimplex2DLine(Vector3& dir);
+        bool DoSimplex2DTriangle(Vector3& dir);
+        bool DoSimplex2D(Vector3& dir);
+
         void Set(const SupportPoint& a, const SupportPoint& b, const SupportPoint& c, const SupportPoint& d);
         void Set(const SupportPoint& a, const SupportPoint& b, const SupportPoint& c);
         void Set(const SupportPoint& a, const SupportPoint& b);

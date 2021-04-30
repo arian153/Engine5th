@@ -38,8 +38,8 @@ namespace Engine5
         Real denom             = ellipse_radius.HadamardProduct(ellipse_dir).Length();
         ellipse_vector         = Math::IsZero(denom) ? ellipse_vector * 0.0f : ellipse_vector / denom;
         Real point_support     = direction.DotProduct(axis_vector);
-        Real ellipse_support   = direction.DotProduct(ellipse_vector);
-        return point_support > ellipse_support ? axis_vector : ellipse_vector - axis_vector;
+        Real ellipse_support   = direction.DotProduct(ellipse_vector - axis_vector);
+        return point_support >= ellipse_support ? axis_vector : ellipse_vector - axis_vector;
     }
 
     bool ColliderCone::TestRayIntersection(const Ray& local_ray, Real& minimum_t, Real& maximum_t) const
@@ -280,10 +280,54 @@ namespace Engine5
 
     void ColliderCone::UpdateBoundingVolume()
     {
-        Real bounding_factor = Vector3(m_scaled_radius.x, m_scaled_height * 0.5f, m_scaled_radius.y).Length();
-        Vector3 pos = m_rigid_body != nullptr ? m_rigid_body->LocalToWorldPoint(m_local.position) : m_local.position;
-        Vector3 min_max(bounding_factor, bounding_factor, bounding_factor);
-        m_bounding_volume->Set(-min_max + pos, min_max + pos);
+        Vector3 obb_vertices[8];
+        Real    w = m_scaled_radius.x;
+        Real    h = m_scaled_height * 0.5f;
+        Real    d = m_scaled_radius.y;
+        obb_vertices[0].Set(+w, +h, +d);
+        obb_vertices[1].Set(+w, +h, -d);
+        obb_vertices[2].Set(+w, -h, +d);
+        obb_vertices[3].Set(+w, -h, -d);
+        obb_vertices[4].Set(-w, +h, +d);
+        obb_vertices[5].Set(-w, +h, -d);
+        obb_vertices[6].Set(-w, -h, +d);
+        obb_vertices[7].Set(-w, -h, -d);
+
+        bool has_body = m_rigid_body != nullptr;
+
+        Vector3 min = has_body
+                          ? m_rigid_body->LocalToWorldPoint(m_local.LocalToWorldPoint(obb_vertices[0]))
+                          : m_local.LocalToWorldPoint(obb_vertices[0]);
+        Vector3 max = min;
+
+        if (has_body)
+        {
+            for (int i = 1; i < 8; ++i)
+            {
+                Vector3 vertex = m_rigid_body->LocalToWorldPoint(m_local.LocalToWorldPoint(obb_vertices[i]));
+                min.x          = Math::Min(min.x, vertex.x);
+                min.y          = Math::Min(min.y, vertex.y);
+                min.z          = Math::Min(min.z, vertex.z);
+                max.x          = Math::Max(max.x, vertex.x);
+                max.y          = Math::Max(max.y, vertex.y);
+                max.z          = Math::Max(max.z, vertex.z);
+            }
+        }
+        else
+        {
+            for (int i = 1; i < 8; ++i)
+            {
+                Vector3 vertex = m_local.LocalToWorldPoint(obb_vertices[i]);
+                min.x          = Math::Min(min.x, vertex.x);
+                min.y          = Math::Min(min.y, vertex.y);
+                min.z          = Math::Min(min.z, vertex.z);
+                max.x          = Math::Max(max.x, vertex.x);
+                max.y          = Math::Max(max.y, vertex.y);
+                max.z          = Math::Max(max.z, vertex.z);
+            }
+        }
+
+        m_bounding_volume->Set(min, max);
     }
 
     void ColliderCone::Draw(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const
@@ -292,12 +336,12 @@ namespace Engine5
         int stack_count = renderer->CYLINDRICAL_STACK_COUNT;
         int slice_count = renderer->CYLINDRICAL_SLICE_COUNT;
         renderer->ReserveVertices(renderer->CYLINDRICAL_VERTICES_COUNT, mode);
-        Real       height           = Height();
-        Vector2    radius           = Radius();
+        Real       height         = Height();
+        Vector2    radius         = Radius();
         Transform* body_transform = GetBodyTransform();
-        Real       stack_height     = height / stack_count;
-        Real       radius_step      = - 1.0f / stack_count;
-        I32        ring_count       = stack_count + 1;
+        Real       stack_height   = height / stack_count;
+        Real       radius_step    = - 1.0f / stack_count;
+        I32        ring_count     = stack_count + 1;
         for (I32 i = 0; i < ring_count; ++i)
         {
             Real y       = -0.5f * height + i * stack_height;
@@ -311,8 +355,8 @@ namespace Engine5
                 vertex_local_pos.x = radius.x * r * c;
                 vertex_local_pos.y = y;
                 vertex_local_pos.z = radius.y * r * s;
-                vertex_local_pos = LocalToWorldPoint(vertex_local_pos);
-                vertex_local_pos = body_transform->LocalToWorldPoint(vertex_local_pos);
+                vertex_local_pos   = LocalToWorldPoint(vertex_local_pos);
+                vertex_local_pos   = body_transform->LocalToWorldPoint(vertex_local_pos);
                 renderer->PushVertex(vertex_local_pos, mode, color);
             }
         }
@@ -434,6 +478,10 @@ namespace Engine5
     }
 
     void ColliderCone::Save(const Json::Value& data)
+    {
+    }
+
+    void ColliderCone::EditPrimitive(CommandRegistry* registry)
     {
     }
 }

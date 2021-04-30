@@ -12,6 +12,12 @@ namespace Engine5
 
     class ColliderSet
     {
+    private:
+        friend class World;
+        friend class RigidBody;
+        friend class ColliderComponent;
+        friend class ManifoldTable;
+        friend class ContactManifold;
     public:
         explicit ColliderSet(World* world);
         ~ColliderSet();
@@ -40,17 +46,11 @@ namespace Engine5
         void SyncToTransform(Transform* transform) const;
         void SyncFromTransform(Transform* transform);
         void UpdateBoundingVolume();
+        void UpdateUnitScale();
 
         void Clone(ColliderSet* origin, RigidBody* body, World* world);
 
-    private:
-
-    private:
-        friend class World;
-        friend class RigidBody;
-        friend class ColliderComponent;
-        friend class ManifoldTable;
-        friend class ContactManifold;
+        ColliderComponent* GetComponent() const;
 
     private:
         RigidBody*         m_rigid_body = nullptr;

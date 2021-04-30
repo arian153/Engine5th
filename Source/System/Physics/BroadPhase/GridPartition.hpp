@@ -32,9 +32,8 @@ namespace Engine5
         size_t                     basis_a_index;
         size_t                     basis_b_index;
         BoundingAABB               cell_boundary;
-        std::vector<BoundingAABB*> aabb_list;
+        std::vector<GridData> data_list;
     };
-
 
     class GridPartition final : public BroadPhase
     {
@@ -78,20 +77,24 @@ namespace Engine5
         const GridCell* QueryCell(const Vector3& point, size_t& a_index, size_t& b_index) const;
         const GridCell* QueryCell(size_t a, size_t b) const;
 
+        void    PointToIndex(const Vector3& point, size_t& a_index, size_t& b_index) const;
+        Vector3 IndexToPoint(size_t a, size_t b) const;
+
         GridDirection DirectionHelper(Real pos, Real dir) const;
         void          CastRayCell(const GridCell* cell, RayCastResult& result, Real max_distance) const;
         void          IntersectRayCell(const GridCell* cell, RayIntersectionResult& result, Real max_distance) const;
     private:
 
-        size_t                     m_size_of_cell = 10;
-        size_t                     m_width        = 400;
-        size_t                     m_height       = 400;
-        size_t                     m_a_count      = 0;
-        size_t                     m_b_count      = 0;
-        size_t                     m_axis_normal  = 1;
-        size_t                     m_basis_a      = 3;
-        size_t                     m_basis_b      = 3;
-        Vector3                    m_center_of_grid;
+        size_t  m_cell_scale  = 50;
+        size_t  m_extent_a = 400;
+        size_t  m_extent_b = 400;
+        size_t  m_a_count       = 0;
+        size_t  m_b_count       = 0;
+        size_t  m_axis_normal   = 1;
+        size_t  m_basis_a       = 2;
+        size_t  m_basis_b       = 0;
+        Vector3 m_center_of_grid;
+
         std::vector<GridCell>      m_grid_cell_list;
         std::vector<BoundingAABB*> m_invalid_nodes;
     };

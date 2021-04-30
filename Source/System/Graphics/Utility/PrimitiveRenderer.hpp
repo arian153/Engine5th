@@ -16,9 +16,9 @@ namespace Engine5
 
     enum class eRenderingMode
     {
-        Dot
-      , Line
-      , Face
+        Dot,
+        Line,
+        Face
     };
 
     class PrimitiveRenderer
@@ -33,6 +33,7 @@ namespace Engine5
         void DrawPoint(const Vector3& point, Color color = Color());
         void DrawSegment(const Vector3& start, const Vector3& end, Color color = Color());
         void DrawTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, eRenderingMode mode, Color color = Color());
+        void DrawRectangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
         void DrawTetrahedron(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, eRenderingMode mode, Color color = Color());
         void DrawBox(const Vector3& position, const Quaternion& orientation, const Vector3& scale, eRenderingMode mode, Color color = Color());
         void DrawRay(const Ray& ray, Color color = Color());

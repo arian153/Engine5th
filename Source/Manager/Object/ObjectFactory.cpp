@@ -5,6 +5,8 @@
 #include "../Resource/ResourceType/JsonResource.hpp"
 #include "../../External/JSONCPP/json/json.h"
 #include "../Component/Component.hpp"
+#include "../Resource/ResourceManager.hpp"
+#include "../Space/Space.hpp"
 
 namespace Engine5
 {
@@ -18,18 +20,11 @@ namespace Engine5
 
     void ObjectFactory::Initialize(ComponentRegistry* component_registry)
     {
-        m_archetype_component_manager = new ComponentManager();
-        m_archetype_component_manager->Initialize(component_registry, nullptr);
     }
 
     void ObjectFactory::Shutdown()
     {
-        if (m_archetype_component_manager != nullptr)
-        {
-            m_archetype_component_manager->Shutdown();
-            delete m_archetype_component_manager;
-            m_archetype_component_manager = nullptr;
-        }
+        ClearArchetypes();
     }
 
     Object* ObjectFactory::CreateRawObject(const std::string& name)
@@ -58,13 +53,25 @@ namespace Engine5
         return nullptr;
     }
 
+    void ObjectFactory::LoadArchetype(ResourceManager* resource_manager)
+    {
+        std::vector<JsonResource*> resources;
+        resource_manager->GetJsonResources(eJsonType::Archetype, resources);
+
+        for (auto& resource : resources)
+        {
+            AddArchetype(resource);
+        }
+    }
+
     void ObjectFactory::AddArchetype(Object* object)
     {
         Object* archetype = CreateRawObject("", nullptr);
-        object->CloneComponents(archetype, m_archetype_component_manager);
+        object->CloneComponents(archetype, m_archetype_space->GetComponentManager());
         if (object->m_children != nullptr)
         {
-            object->CloneChildrenRecursive(archetype, this, m_archetype_component_manager);
+            object->CloneChildrenRecursive(archetype, this, m_archetype_space->GetComponentManager());
+            m_archetypes.push_back(object);
         }
     }
 
@@ -77,7 +84,8 @@ namespace Engine5
             {
                 std::string name   = data["Name"].asString();
                 Object*     object = CreateRawObject(name);
-                object->Load(data, this);
+                object->LoadArchetype(data, this, m_archetype_space);
+                m_archetypes.push_back(object);
             }
         }
     }
@@ -102,11 +110,23 @@ namespace Engine5
         return m_archetypes.size() + 1;
     }
 
+    void ObjectFactory::SetArchetypeSpace(Space* space)
+    {
+        m_archetype_space = space;
+    }
+
+    void ObjectFactory::GetArchetypeName(std::vector<std::string>& names)
+    {
+        for (auto& archetype : m_archetypes)
+        {
+            names.push_back(archetype->GetName());
+        }
+    }
+
     void ObjectFactory::ClearArchetypes()
     {
         for (auto& archetype : m_archetypes)
         {
-            archetype->ClearComponents();
             archetype->RemoveObjectHierarchy();
             delete archetype;
             archetype = nullptr;

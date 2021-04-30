@@ -18,13 +18,15 @@ namespace Engine5
     {
     }
 
-    void RenderSystem::Initialize(int rendering_width, int rendering_height, ResourceManager* resource_manager)
+    void RenderSystem::Initialize(int rendering_width, int rendering_height, bool v_sync, ResourceManager* resource_manager)
     {
         //renderer
         m_renderer = new RendererCommon();
         m_renderer->SetHwnd(m_operating_system->AppHWnd());
+        m_renderer->SetVSync(v_sync);
         m_renderer->Initialize(rendering_width, rendering_height, m_operating_system->IsFullscreen());
         m_renderer->SetAlphaBlending(true);
+        m_b_vsync = v_sync;
         //texture
         m_resource_manager = resource_manager;
         m_resource_manager->InitializeTextureResources(m_renderer);

@@ -1,4 +1,6 @@
 #include "Drag.hpp"
+
+#include "../../../../External/imgui/imgui.h"
 #include "../../Dynamics/RigidBody.hpp"
 #include "../../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../../External/JSONCPP/json/json.h"
@@ -56,8 +58,17 @@ namespace Engine5
             //drag_torque *= (drag_multiplier * an_speed);
             //body->ApplyForceCentroid(drag_force);
             //body->ApplyTorque(drag_torque);
-            body->SetLinearVelocity(body->GetLinearVelocity() * powf(1.0f - linear_drag, dt));
+
+            Vector3 vel     = body->GetLinearVelocity();
+            Vector3 changed = vel * powf(1.0f - linear_drag, dt);
+
+            body->SetLinearVelocity(changed);
             body->SetAngularVelocity(body->GetAngularVelocity() * powf(1.0f - angular_drag, dt));
+
+            if (draw_force.b_flag)
+            {
+                applied_forces.emplace_back(body->GetPosition(), (changed - vel) * body->Mass() * dt);
+            }
         }
     }
 
@@ -75,9 +86,39 @@ namespace Engine5
         {
             angular_drag = data["Angular Drag"].asFloat();
         }
+        if (JsonResource::HasMember(data, "Draw Force"))
+        {
+            Json::Value value = data["Draw Force"];
+            if (JsonResource::HasMember(value, "Color") && JsonResource::IsColor(value["Color"]))
+            {
+                draw_force.color = JsonResource::AsColor(value["Color"]);
+            }
+            if (JsonResource::HasMember(value, "Flag") && value["Flag"].isBool())
+            {
+                draw_force.b_flag = value["Flag"].asBool();
+            }
+        }
     }
 
     void Drag::Save(const Json::Value& data)
     {
+    }
+
+    void Drag::Edit(CommandRegistry* registry)
+    {
+        if (ImGui::TreeNode("Drag Force"))
+        {
+            ImGui::Text("Linear Drag");
+            ImGui::SliderFloat(("##Linear edit" + std::to_string(unique_id)).c_str(), &linear_drag, 0.0f, 1.0f);
+            ImGui::Text("Angular Drag");
+            ImGui::SliderFloat(("##Angular edit" + std::to_string(unique_id)).c_str(), &angular_drag, 0.0f, 1.0f);
+
+            ImGui::Text("Show Force");
+            ImGui::SameLine();
+            ImGui::Checkbox(("##Show Drag Force" + std::to_string(unique_id)).c_str(), &draw_force.b_flag);
+            ImGui::ColorEdit4(("##Edit Color Drag Force" + std::to_string(unique_id)).c_str(), &draw_force.color.r);
+            ImGui::TreePop();
+            ImGui::Separator();
+        }
     }
 }

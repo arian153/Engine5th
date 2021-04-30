@@ -272,16 +272,41 @@ namespace Engine5
     {
         if (m_colliders != nullptr)
         {
-            m_bounding_volume.Set(Math::Vector3::ORIGIN, Math::Vector3::ORIGIN);
-            for (auto& collider_data : *m_colliders)
+            if (!m_colliders->empty())
             {
-                if (collider_data->m_bounding_volume != nullptr)
+                auto collider_data = m_colliders->at(0);
+                collider_data->UpdateBoundingVolume();
+                m_bounding_volume.Set(collider_data->m_bounding_volume->Min(), collider_data->m_bounding_volume->Max());
+
+                for (size_t i = 1; i < m_colliders->size(); ++i)
                 {
+                    collider_data = m_colliders->at(i);
                     collider_data->UpdateBoundingVolume();
                     m_bounding_volume = collider_data->m_bounding_volume->Union(m_bounding_volume);
                 }
+
+                m_bounding_volume.ExpandMargin(Physics::Collision::BROAD_PHASE_MARGIN * 2);
             }
         }
+    }
+
+    void ColliderSet::UpdateUnitScale()
+    {
+        /* if (m_colliders != nullptr)
+         {
+             size_t size = m_colliders->size();
+             if (size > 0)
+             {
+                 Vector3Pair result_min_max = (*m_colliders)[0]->GetMinMax();
+ 
+                 for (size_t i = 1; i < size; ++i)
+                 {
+                     Vector3Pair min_max = (*m_colliders)[i]->GetMinMax();
+                     if (min_max.a.x < result_min_max.a.x)
+                         result_min_max.a.x = min_max.a.x;
+                 }
+             }
+         }*/
     }
 
     void ColliderSet::Clone(ColliderSet* origin, RigidBody* body, World* world)
@@ -297,6 +322,20 @@ namespace Engine5
                 auto created = this->AddCollider(collider->m_type);
                 created->Clone(collider);
             }
+
+            m_rigid_body = body;
+            m_world      = world;
+            m_mass_data  = origin->m_mass_data;
+            m_scale      = origin->m_scale;
+            if (m_rigid_body != nullptr)
+            {
+                m_rigid_body->SetMassData(m_mass_data);
+            }
         }
+    }
+
+    ColliderComponent* ColliderSet::GetComponent() const
+    {
+        return m_component;
     }
 }

@@ -6,7 +6,6 @@
 #include "BroadPhase/GridPartition.hpp"
 #include "BroadPhase/NSquared.hpp"
 #include "BroadPhase/RayCast.hpp"
-#include "BroadPhase/StaticBVH.hpp"
 
 //Collider Primitive
 #include "ColliderPrimitive/ColliderIncludes.hpp"

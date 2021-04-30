@@ -5,6 +5,11 @@
 #include "../../../System/GUI/Editor/Command/CommandRegistry.hpp"
 #include "../../../System/GUI/Editor/Command/EditorCommand.hpp"
 
+namespace
+{
+    Engine5::Random random;
+}
+
 namespace Engine5
 {
     TransformComponent::~TransformComponent()
@@ -108,11 +113,6 @@ namespace Engine5
         }
     }
 
-    void TransformComponent::SetOrigin(const Vector3& origin)
-    {
-        m_transform.rotating_origin = origin;
-    }
-
     void TransformComponent::AddPosition(const Vector3& delta_position)
     {
         m_transform.position += delta_position;
@@ -186,11 +186,6 @@ namespace Engine5
         return m_transform.scale;
     }
 
-    Vector3 TransformComponent::GetOrigin() const
-    {
-        return m_transform.rotating_origin;
-    }
-
     Quaternion TransformComponent::GetOrientation() const
     {
         return m_transform.orientation;
@@ -233,9 +228,21 @@ namespace Engine5
 
     bool TransformComponent::Load(const Json::Value& data)
     {
-        if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data["Position"]))
+        if (JsonResource::HasMember(data, "Position"))
         {
-            SetPosition(JsonResource::AsVector3(data["Position"]));
+            if (JsonResource::IsVector3(data["Position"]))
+            {
+                SetPosition(JsonResource::AsVector3(data["Position"]));
+            }
+            if (data["Position"].isString())
+            {
+                m_b_random_pos = true;
+                SetPosition(
+                            Vector3(
+                                    random.GetRangedRandomReal(-50.0f, 50.0f),
+                                    random.GetRangedRandomReal(-20.0f, 20.0f),
+                                    random.GetRangedRandomReal(-50.0f, 50.0f)));
+            }
         }
         if (JsonResource::HasMember(data, "Scale") && JsonResource::IsVector3(data["Scale"]))
         {
@@ -256,10 +263,19 @@ namespace Engine5
             {
                 SetOrientation(JsonResource::AsQuaternionRIJK(data["Orientation"]));
             }
-        }
-        if (JsonResource::HasMember(data, "Origin") && JsonResource::IsVector3(data["Origin"]))
-        {
-            SetOrigin(JsonResource::AsVector3(data["Origin"]));
+
+            if (data["Orientation"].isString())
+            {
+                m_b_random_rot        = true;
+                Quaternion random_rot = Quaternion(
+                                                   random.GetRangedRandomReal(-1.0f, 1.0f),
+                                                   random.GetRangedRandomReal(-1.0f, 1.0f),
+                                                   random.GetRangedRandomReal(-1.0f, 1.0f),
+                                                   random.GetRangedRandomReal(-1.0f, 1.0f));
+
+                random_rot.SetNormalize();
+                SetOrientation(random_rot);
+            }
         }
         return true;
     }
@@ -272,12 +288,11 @@ namespace Engine5
     {
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
-            float position[ 3 ]        = {m_transform.position.x, m_transform.position.y, m_transform.position.z};
-            float scale[ 3 ]           = {m_transform.scale.x, m_transform.scale.y, m_transform.scale.z};
-            float axis[ 3 ]            = {m_axis_holder.axis.x, m_axis_holder.axis.y, m_axis_holder.axis.z};
-            float radian               = m_axis_holder.radian;
-            float quaternion[4]        = {m_transform.orientation.r, m_transform.orientation.i, m_transform.orientation.j, m_transform.orientation.k};
-            float rotating_origin[ 3 ] = {m_transform.rotating_origin.x, m_transform.rotating_origin.y, m_transform.rotating_origin.z};
+            float position[3]   = {m_transform.position.x, m_transform.position.y, m_transform.position.z};
+            float scale[3]      = {m_transform.scale.x, m_transform.scale.y, m_transform.scale.z};
+            float axis[3]       = {m_axis_holder.axis.x, m_axis_holder.axis.y, m_axis_holder.axis.z};
+            float radian        = m_axis_holder.radian;
+            float quaternion[4] = {m_transform.orientation.r, m_transform.orientation.i, m_transform.orientation.j, m_transform.orientation.k};
             ImGui::Separator();
             ImGui::Text("Position");
             ImGui::InputFloat3("##TransformEdit0", position, 3);
@@ -355,19 +370,6 @@ namespace Engine5
             ImGui::Text("J : %.3f [sin(%.f) * %.3fj]", quaternion[2], degree, axis[1]);
             ImGui::Text("K : %.3f [sin(%.f) * %.3fk]", quaternion[3], degree, axis[2]);
             ImGui::Separator();
-            ImGui::Text("Rotating Origin");
-            ImGui::InputFloat3("##TransformEdit5", rotating_origin, 3);
-            if (ImGui::IsItemEdited())
-            {
-                Vector3 prev = m_transform.rotating_origin;
-                Vector3 next(rotating_origin);
-                command_registry->PushCommand(
-                                              new EditFunction<
-                                                  Vector3,
-                                                  TransformComponent,
-                                                  &TransformComponent::SetOrigin>(this, prev, next));
-            }
-            ImGui::Separator();
         }
     }
 
@@ -391,6 +393,27 @@ namespace Engine5
             //copy data
             m_transform   = origin->m_transform;
             m_axis_holder = origin->m_axis_holder;
+
+            if (origin->m_b_random_pos)
+            {
+                SetPosition(
+                            Vector3(
+                                    random.GetRangedRandomReal(-50.0f, 50.0f),
+                                    random.GetRangedRandomReal(-20.0f, 20.0f),
+                                    random.GetRangedRandomReal(-50.0f, 50.0f)));
+            }
+
+            if (origin->m_b_random_rot)
+            {
+                Quaternion random_rot = Quaternion(
+                                                   random.GetRangedRandomReal(-1.0f, 1.0f),
+                                                   random.GetRangedRandomReal(-1.0f, 1.0f),
+                                                   random.GetRangedRandomReal(-1.0f, 1.0f),
+                                                   random.GetRangedRandomReal(-1.0f, 1.0f));
+
+                random_rot.SetNormalize();
+                SetOrientation(random_rot);
+            }
         }
     }
 

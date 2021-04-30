@@ -19,12 +19,11 @@ namespace Engine5
         ContactManifold& operator=(const ContactManifold& rhs);
 
         void   Set(const ContactManifold& manifold);
-        void   SetPersistentThreshold(Real threshold);
         void   UpdateInvalidContact();
         void   UpdateCurrentManifold(const ContactPoint& new_contact);
         void   CutDownManifold();
         size_t ContactsCount() const;
-        void ClearContacts();
+        void   ClearContacts();
 
     private:
         Real DistanceFromPoint(const ContactPoint& contact, ContactPoint* p0);
@@ -39,8 +38,7 @@ namespace Engine5
         friend class ManifoldTable;
 
     private:
-        Real    persistent_threshold_squared = Physics::Collision::PERSISTENT_THRESHOLD_SQUARED;
-        bool    is_collide                   = false;
+        bool is_collide = false;
 
         //data
         ColliderSet* m_set_a = nullptr;

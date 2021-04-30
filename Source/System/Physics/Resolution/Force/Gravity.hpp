@@ -2,12 +2,15 @@
 #include "Force.hpp"
 #include "../../../Math/Math.hpp"
 
-namespace Json {
+namespace Json
+{
     class Value;
 }
 
 namespace Engine5
 {
+    class CommandRegistry;
+
     class GravityFactory final : public ForceFactory
     {
     public:
@@ -27,6 +30,7 @@ namespace Engine5
         void Shutdown() override;
         void Load(const Json::Value& data) override;
         void Save(const Json::Value& data) override;
+        void Edit(CommandRegistry* registry) override;
 
         void SetGlobalGravity(const Vector3& dir, Real magnitude);
         void SetLocalGravity(const Vector3& pos, Real mass, Real coefficient);
@@ -36,6 +40,6 @@ namespace Engine5
         Vector3 local_position;
         Real    local_mass          = 1.0f;
         Real    gravity_coefficient = 1.0f;
-        bool    b_global            = true;
+        int     gravity_type            = 0;
     };
 }

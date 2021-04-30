@@ -3,11 +3,13 @@
 #include <vector>
 #include "../../Math/Utility/MathDef.hpp"
 #include <unordered_map>
+
 #include "../../Math/Algebra/Vector2.hpp"
 #include "../../Math/Primitive/Others/Ray.hpp"
 
 namespace Engine5
 {
+    class FrameUtility;
     class CommandRegistry;
     class Object;
     class GUISystem;
@@ -31,6 +33,7 @@ namespace Engine5
         void UpdateSceneWindow(Real dt);
         void UpdateInspectorWindow();
         void UpdateHierarchyWindow();
+        void UpdateSpaceSetting();
 
         void OpenSequence();
         void CloseAllSequence();
@@ -61,6 +64,7 @@ namespace Engine5
         ImVec2           m_mouse_pos     = ImVec2(0.0f, 0.0f);
         Vector2          m_ortho_pos;
         Ray              m_picking_ray;
+
     private:
         GameEditor*      m_game_editor      = nullptr;
         Application*     m_application      = nullptr;
@@ -69,6 +73,7 @@ namespace Engine5
         Space*           m_editing_space    = nullptr;
         Object*          m_editing_object   = nullptr;
         CommandRegistry* m_command_registry = nullptr;
+        FrameUtility*    m_frame_utility    = nullptr;
         //tool
         std::vector<JsonResource*>              m_resources;
         std::vector<JsonResource*>              m_close_queue;

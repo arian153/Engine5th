@@ -1,5 +1,8 @@
 #include "LogicSubsystem.hpp"
 #include "../../Manager/Component/GameComponent/LogicComponent.hpp"
+#include "../Core/Input/InputCommon.hpp"
+#include "../Core/Input/MouseInput.hpp"
+#include "../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {

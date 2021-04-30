@@ -33,10 +33,12 @@ namespace Engine5
 
         Vector2 Radius() const;
         void SetEllipse(const Vector2& radius);
+
     protected:
         void Clone(ColliderPrimitive* origin) override;
         void Load(const Json::Value& data) override;
         void Save(const Json::Value& data) override;
+        void EditPrimitive(CommandRegistry* registry) override;
 
     private:
         Vector2 m_radius;

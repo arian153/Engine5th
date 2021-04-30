@@ -83,7 +83,7 @@ namespace Engine5
         void CloneChildrenRecursive(Object* cloned_object, ObjectManager* obj, ComponentManager* cmp) const;
         void CloneChildrenRecursive(Object* cloned_object, ObjectFactory* obj, ComponentManager* cmp) const;
 
-        bool Load(const Json::Value& data, ObjectFactory* obj_factory);
+        bool LoadArchetype(const Json::Value& data, ObjectFactory* obj_factory, Space* archetype_space);
     private:
         friend class ComponentManager;
         friend class ObjectManager;

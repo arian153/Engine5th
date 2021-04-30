@@ -53,7 +53,7 @@ namespace Engine5
         };
 
     public:
-        explicit ContactConstraint(ContactManifold* input, FrictionUtility* friction_utility, Real tangent_speed = 0.0f);
+        explicit ContactConstraint(ContactManifold* input, FrictionUtility* friction_utility, bool enable_baum, Real tangent_speed = 0.0f);
         ~ContactConstraint();
 
         void Shutdown() override;
@@ -69,8 +69,9 @@ namespace Engine5
         void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const;
         void WarmStart();
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
-        void InitializeJacobian(const ContactPoint& contact, const Vector3& direction, Jacobian& jacobian, Real dt, bool b_normal = false) const;
+        void InitializeJacobian(const ContactPoint& contact, const Vector3& direction, Jacobian& jacobian) const;
         void SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, Real dt, bool b_normal = false);
+        void AwakeState() const;
 
     private:
         FrictionUtility* m_friction_utility = nullptr;
@@ -78,14 +79,18 @@ namespace Engine5
         RigidBody*       m_body_a           = nullptr;
         RigidBody*       m_body_b           = nullptr;
 
+        eMotionMode m_motion_a;
+        eMotionMode m_motion_b;
+        bool        m_b_enable_baumgarte = true;
+
         PositionTerm m_position_term;
         VelocityTerm m_velocity_term;
         MassTerm     m_mass_term;
-        Jacobian     m_normal[ Physics::Collision::MAX_MANIFOLD_POINT_COUNT ];
-        Jacobian     m_tangent[ Physics::Collision::MAX_MANIFOLD_POINT_COUNT ];
-        Jacobian     m_bitangent[ Physics::Collision::MAX_MANIFOLD_POINT_COUNT ];
+        Jacobian     m_normal[Physics::Collision::MAX_MANIFOLD_POINT_COUNT];
+        Jacobian     m_tangent[Physics::Collision::MAX_MANIFOLD_POINT_COUNT];
+        Jacobian     m_bitangent[Physics::Collision::MAX_MANIFOLD_POINT_COUNT];
         Real         m_tangent_speed = 0.0f;
-        Real         m_beta          = 0.25f;
         size_t       m_count         = 0;
+        bool         m_b_init        = false;
     };
 }

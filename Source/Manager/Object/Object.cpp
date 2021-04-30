@@ -259,6 +259,7 @@ namespace Engine5
         {
             m_component_map.emplace(type, component);
             m_components.push_back(component);
+            component->Initialize();
             return component;
         }
         return nullptr;
@@ -373,7 +374,7 @@ namespace Engine5
         {
             auto cloned_compo = manager->Clone(compo.second, cloned_object);
             auto result       = cloned_object->AddComponent(cloned_compo);
-            E5_ASSERT(result == nullptr, "ERROR : Clone " + compo.first + " Failed!");
+            E5_ASSERT(result != nullptr, "ERROR : Clone " + compo.first + " Failed!");
         }
         return true;
     }
@@ -423,7 +424,7 @@ namespace Engine5
         }
     }
 
-    bool Object::Load(const Json::Value& data, ObjectFactory* obj_factory)
+    bool Object::LoadArchetype(const Json::Value& data, ObjectFactory* obj_factory, Space* archetype_space)
     {
         //Add Components
         if (JsonResource::HasMember(data, "Components") && data["Components"].isArray())
@@ -433,9 +434,18 @@ namespace Engine5
                 //Load Components
                 if (JsonResource::HasMember(*it, "Type") && (*it)["Type"].isString())
                 {
-                    auto created = obj_factory->m_archetype_component_manager->Create((*it)["Type"].asString(), this);
+                    auto created = archetype_space->GetComponentManager()->Create((*it)["Type"].asString(), this);
                     if (created != nullptr)
                     {
+                        auto type = created->Type();
+                        auto found = m_component_map.find(type);
+                        if (found == m_component_map.end())
+                        {
+                            m_component_map.emplace(type, created);
+                            m_components.push_back(created);
+                        }
+
+                        created->Initialize();
                         created->Load((*it)["Value"]);
                     }
                 }
@@ -450,7 +460,7 @@ namespace Engine5
                 if (JsonResource::HasMember(*it, "Name") && (*it)["Name"].isString())
                 {
                     auto child = obj_factory->CreateRawObject((*it)["Name"].asString());
-                    child->Load(*it, obj_factory);
+                    child->LoadArchetype(*it, obj_factory, archetype_space);
                     this->AddChild(child);
                 }
             }

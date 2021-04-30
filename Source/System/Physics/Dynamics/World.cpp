@@ -5,6 +5,7 @@
 #include "../NarrowPhase/NarrowPhase.hpp"
 #include "../NarrowPhase/ManifoldTable.hpp"
 #include "ColliderSet.hpp"
+#include "../../../External/imgui/imgui.h"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "../Resolution/Resolution.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
@@ -33,9 +34,6 @@ namespace Engine5
             case eBroadPhaseMode::DynamicBVH:
                 m_broad_phase = new DynamicBVH();
                 break;
-            case eBroadPhaseMode::StaticBVH:
-                //m_broad_phase = new StaticBVH();
-                break;
             case eBroadPhaseMode::NSquared:
                 m_broad_phase = new NSquared();
                 break;
@@ -57,28 +55,39 @@ namespace Engine5
 
     void World::Render() const
     {
+        if (m_draw_potential_pair.b_flag)
+        {
+            DrawPotentialPair();
+        }
+
         if (m_draw_primitive.b_flag || m_draw_broad_phase.b_flag)
         {
             m_broad_phase->Render(m_primitive_renderer, m_draw_broad_phase, m_draw_primitive);
         }
+
         if (m_draw_gjk.b_flag || m_draw_epa.b_flag)
         {
             m_narrow_phase->Render(m_draw_gjk, m_draw_epa);
         }
-        if (m_draw_contact.b_flag)
-        {
-            m_resolution_phase->Render(m_draw_contact);
-        }
-
+        m_resolution_phase->Render(m_draw_contact);
+        Quaternion no_rotation;
         for (auto& body : m_rigid_bodies)
         {
-            auto vel = body->GetLinearVelocity();
-            auto pos = body->GetCentroid();
+            Vector3 vel = body->GetLinearVelocity();
+            Vector3 pos = body->GetCentroid();
+
+            if (m_draw_velocity.b_flag)
+            {
+                m_primitive_renderer->DrawArrow(pos, pos + vel, m_draw_velocity.color);
+            }
+            if (m_draw_position.b_flag)
+            {
+                m_primitive_renderer->DrawPrimitive(Sphere(pos, no_rotation, 0.05f), eRenderingMode::Face, m_draw_position.color);
+            }
         }
 
         for (auto& data : m_rays)
         {
-            Quaternion no_rotation;
             if (data.option == eRayTestOption::Cast)
             {
                 RayCastResult result(data.ray);
@@ -204,6 +213,57 @@ namespace Engine5
             }
             SetDrawFlagPrimitive(flag.b_flag, flag.color);
         }
+
+        if (JsonResource::HasMember(data, "Draw Velocity"))
+        {
+            ColorFlag   flag;
+            Json::Value value = data["Draw Velocity"];
+            if (JsonResource::HasMember(value, "Color") && JsonResource::IsColor(value["Color"]))
+            {
+                flag.color = JsonResource::AsColor(value["Color"]);
+            }
+            if (JsonResource::HasMember(value, "Flag") && value["Flag"].isBool())
+            {
+                flag.b_flag = value["Flag"].asBool();
+            }
+            SetDrawFlagVelocity(flag.b_flag, flag.color);
+        }
+
+        if (JsonResource::HasMember(data, "Draw Position"))
+        {
+            ColorFlag   flag;
+            Json::Value value = data["Draw Position"];
+            if (JsonResource::HasMember(value, "Color") && JsonResource::IsColor(value["Color"]))
+            {
+                flag.color = JsonResource::AsColor(value["Color"]);
+            }
+            if (JsonResource::HasMember(value, "Flag") && value["Flag"].isBool())
+            {
+                flag.b_flag = value["Flag"].asBool();
+            }
+            SetDrawFlagPositionTrace(flag.b_flag, flag.color);
+        }
+
+        if (JsonResource::HasMember(data, "Do Broad Phase"))
+        {
+            m_do_broad_phase = data["Do Broad Phase"].asBool();
+        }
+
+        if (JsonResource::HasMember(data, "Do Narrow Phase"))
+        {
+            m_do_narrow_phase = data["Do Narrow Phase"].asBool();
+        }
+
+        if (JsonResource::HasMember(data, "Do Resolution"))
+        {
+            m_do_resolution = data["Do Resolution"].asBool();
+        }
+
+        if (JsonResource::HasMember(data, "Solve Constraints"))
+        {
+            m_solve_constraints = data["Solve Constraints"].asBool();
+        }
+
         if (JsonResource::HasMember(data, "Forces") && data["Forces"].isArray())
         {
             for (auto it = data["Forces"].begin(); it != data["Forces"].end(); ++it)
@@ -271,15 +331,161 @@ namespace Engine5
     {
     }
 
+    void World::Edit(CommandRegistry* registry)
+    {
+        if (ImGui::CollapsingHeader("Space-World"))
+        {
+            ImGui::Text("Object Count : %i", m_rigid_bodies.size());
+
+            if (ImGui::TreeNode("Broad Phase"))
+            {
+                ImGui::Text("Broad Phase Type");
+                const char* broad_phase_types[] = {"N-Squared", "Dynamic-BVH"};
+                if (ImGui::Combo("##CalculateMethod", &m_broad_phase_mode, broad_phase_types, 2))
+                {
+                    if (m_broad_phase_mode == 0)
+                    {
+                        SetBroadPhaseMode(eBroadPhaseMode::NSquared);
+                    }
+                    else if (m_broad_phase_mode == 1)
+                    {
+                        SetBroadPhaseMode(eBroadPhaseMode::DynamicBVH);
+                    }
+                }
+
+                ImGui::Text("Execute Broad Phase");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Do Broad Phase", &m_do_broad_phase);
+                ImGui::Text("Show Broad Phase");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Show Broad Phase", &m_draw_broad_phase.b_flag);
+                ImGui::ColorEdit4("##Edit Color Broad Phase", &m_draw_broad_phase.color.r);
+
+                ImGui::Text("Show Primitive");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Show Primitive", &m_draw_primitive.b_flag);
+                ImGui::ColorEdit4("##Edit Color Primitive", &m_draw_primitive.color.r);
+
+                ImGui::Text("Show Potential Pair");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Show Potential Pair", &m_draw_potential_pair.b_flag);
+                ImGui::ColorEdit4("##Edit Color Potential Pair", &m_draw_potential_pair.color.r);
+
+                ImGui::TreePop();
+                ImGui::Separator();
+            }
+
+            if (ImGui::TreeNode("Narrow Phase"))
+            {
+                ImGui::Text("Execute Narrow Phase");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Do Narrow Phase", &m_do_narrow_phase);
+
+                ImGui::Text("Show GJK");
+                ImGui::ColorEdit4("##Edit Color GJK", &m_draw_gjk.color.r);
+                ImGui::SameLine();
+                ImGui::Checkbox("##Show GJK", &m_draw_gjk.b_flag);
+
+                ImGui::Text("Show EPA");
+                ImGui::ColorEdit4("##Edit Color EPA", &m_draw_epa.color.r);
+                ImGui::SameLine();
+                ImGui::Checkbox("##Show EPA", &m_draw_epa.b_flag);
+                ImGui::TreePop();
+                ImGui::Separator();
+            }
+
+            if (ImGui::TreeNode("Resolution Phase"))
+            {
+                ImGui::Text("Execute Resolution Phase");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Do Resolution Phase", &m_do_resolution);
+
+                ImGui::Text("Solve Constraints");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Solve Constraints", &m_solve_constraints);
+
+                ImGui::Text("Enable Sleep");
+                ImGui::SameLine();
+                if (ImGui::Checkbox("##Enable Sleep", &m_resolution_phase->m_b_enable_sleep))
+                {
+                    if (m_resolution_phase->m_b_enable_sleep == false)
+                    {
+                        for (auto& body : m_rigid_bodies)
+                        {
+                            body->SetAwake();
+                        }
+                    }
+                }
+
+                ImGui::Text("Enable Baumgarte");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Enable Baumgarte", &m_resolution_phase->m_b_enable_baumgarte);
+
+                ImGui::Text("Enable Warm Start");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Enable Warm Start", &m_resolution_phase->m_b_warm_starting);
+
+                ImGui::Text("Velocity Iteration");
+                ImGui::SliderInt("##Velocity Iteration", &m_resolution_phase->m_velocity_iteration, 1, 10);
+
+                ImGui::Text("Position Iteration");
+                ImGui::SliderInt("##Position Iteration", &m_resolution_phase->m_position_iteration, 0, 5);
+
+                ImGui::Text("Show Contact");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Show Contact", &m_draw_contact.b_flag);
+                ImGui::ColorEdit4("##Edit Color Contact", &m_draw_contact.color.r);
+
+                ImGui::Text("Show Velocity");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Show Velocity", &m_draw_velocity.b_flag);
+                ImGui::ColorEdit4("##Edit Color Velocity", &m_draw_velocity.color.r);
+
+                ImGui::Text("Show Position");
+                ImGui::SameLine();
+                ImGui::Checkbox("##Show Position", &m_draw_position.b_flag);
+                ImGui::ColorEdit4("##Edit Color Position", &m_draw_position.color.r);
+
+                ImGui::TreePop();
+                ImGui::Separator();
+            }
+
+            ImGui::NewLine();
+            ImGui::Text("Forces");
+            m_resolution_phase->Edit(registry);
+        }
+    }
+
     void World::Update(Real dt)
     {
-        //broad phase
-        m_broad_phase->Update(dt);
-        m_broad_phase->ComputePairs(m_pairs);
-        //narrow phase
-        m_narrow_phase->GenerateContact(m_pairs, m_manifold_table);
-        //resolution
-        m_resolution_phase->SolveConstraints(m_manifold_table, &m_rigid_bodies, dt);
+        if (m_do_broad_phase)
+        {
+            m_broad_phase->Update(dt);
+            m_broad_phase->ComputePairs(m_pairs);
+        }
+
+        if (m_do_narrow_phase)
+        {
+            m_manifold_table->FilteringManifolds();
+            m_narrow_phase->GenerateContact(m_pairs, m_manifold_table);
+        }
+
+        if (m_do_resolution)
+        {
+            m_resolution_phase->ApplyForces(&m_rigid_bodies, dt);
+            m_resolution_phase->ProcessContactConstraints(m_manifold_table);
+
+            if (m_solve_constraints)
+            {
+                m_resolution_phase->SolveVelocityConstraints(dt);
+            }
+
+            m_resolution_phase->IntegrateRigidBodies(&m_rigid_bodies, dt);
+            if (m_solve_constraints)
+            {
+                m_resolution_phase->SolvePositionConstraints(dt);
+            }
+        }
     }
 
     void World::Shutdown()
@@ -340,6 +546,7 @@ namespace Engine5
                 break;
             case eBroadPhaseMode::GridPartition:
                 broad_phase = new GridPartition();
+                broad_phase->Initialize();
                 break;
             default:
                 broad_phase = new DynamicBVH();
@@ -399,6 +606,18 @@ namespace Engine5
     {
         m_draw_broad_phase.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
         m_draw_broad_phase.color  = color;
+    }
+
+    void World::SetDrawFlagVelocity(bool b_draw, const Color& color)
+    {
+        m_draw_velocity.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
+        m_draw_velocity.color  = color;
+    }
+
+    void World::SetDrawFlagPositionTrace(bool b_draw, const Color& color)
+    {
+        m_draw_position.b_flag = m_primitive_renderer != nullptr ? b_draw : false;
+        m_draw_position.color  = color;
     }
 
     ColliderPrimitive* World::CreateCollider(ColliderSet* collider_set, eColliderType type) const
@@ -487,12 +706,12 @@ namespace Engine5
         force->Shutdown();
     }
 
-    void World::SetVelocityIteration(size_t iteration) const
+    void World::SetVelocityIteration(int iteration) const
     {
         m_resolution_phase->m_velocity_iteration = iteration;
     }
 
-    void World::SetPositionIteration(size_t iteration) const
+    void World::SetPositionIteration(int iteration) const
     {
         m_resolution_phase->m_position_iteration = iteration;
     }
@@ -545,5 +764,38 @@ namespace Engine5
     void World::AddRay(const RayTest& ray)
     {
         m_rays.push_back(ray);
+    }
+
+    void World::SetPickingRay(const Ray& ray)
+    {
+        m_picking_ray = ray;
+    }
+
+    ColliderSet* World::PickColliderSet(const Ray& ray) const
+    {
+        RayCastResult result(ray);
+        m_broad_phase->CastRay(result);
+
+        if (result.hit_data.hit)
+        {
+            return result.hit_data.collider->GetColliderSet();
+        }
+
+        return nullptr;
+    }
+
+    void World::DrawPotentialPair() const
+    {
+        for (auto& pair : m_pairs)
+        {
+            auto a = pair.first->GetBoundingVolume();
+            auto b = pair.second->GetBoundingVolume();
+            m_primitive_renderer->DrawBox(a->Center(), Quaternion(), a->Size(), eRenderingMode::Line, m_draw_potential_pair.color);
+            m_primitive_renderer->DrawBox(b->Center(), Quaternion(), b->Size(), eRenderingMode::Line, m_draw_potential_pair.color);
+        }
+    }
+
+    void World::UpdateResolutionPhase()
+    {
     }
 }

@@ -12,6 +12,7 @@ namespace Json
 
 namespace Engine5
 {
+    class CommandRegistry;
     class Color;
     enum class eRenderingMode;
     class PrimitiveRenderer;
@@ -38,7 +39,7 @@ namespace Engine5
 
         Vector3    GetBodyPosition() const;
         Quaternion GetBodyOrientation() const;
-        Transform*  GetBodyTransform() const;
+        Transform* GetBodyTransform() const;
 
         RigidBody*    GetRigidBody() const;
         BoundingAABB* GetBoundingVolume() const;
@@ -53,6 +54,9 @@ namespace Engine5
         Physics::MaterialData GetMaterial() const;
 
         eColliderType Type() const;
+
+        bool Is2DPrimitive() const;
+        Vector3 PlaneNormal2D() const;
 
     public: //virtual methods
         virtual void Initialize() = 0;
@@ -80,6 +84,7 @@ namespace Engine5
         void LoadMaterial(const Json::Value& data);
         void LoadTransform(const Json::Value& data);
         void LoadMass(const Json::Value& data);
+        void EditCollider(CommandRegistry* registry);
 
     protected:
         virtual void SetMassData(Real density) = 0;
@@ -88,6 +93,7 @@ namespace Engine5
 
         virtual void Load(const Json::Value& data) = 0;
         virtual void Save(const Json::Value& data) = 0;
+        virtual void EditPrimitive(CommandRegistry* registry) = 0;
 
     private:
         void UpdateRigidBody();
@@ -104,6 +110,7 @@ namespace Engine5
     protected:
         //collider local space data
         Transform m_local;
+        bool m_is_2D = false;
 
         //collider mass data
         Vector3  m_centroid; //center of mass

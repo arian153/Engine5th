@@ -1,5 +1,8 @@
 #pragma once
+#include <vector>
+#include "../../../Graphics/DataType/Color.hpp"
 #include "../../../Math/Utility/MathDef.hpp"
+#include "../../../Math/Structure/Vector3Pair.hpp"
 
 namespace Json
 {
@@ -10,6 +13,7 @@ namespace Engine5
 {
     class RigidBody;
     class Force;
+    class CommandRegistry;
 
     class ForceFactory
     {
@@ -35,6 +39,7 @@ namespace Engine5
     public:
         Force()
         {
+            unique_id++;
         }
 
         virtual ~Force()
@@ -46,8 +51,17 @@ namespace Engine5
         virtual void Shutdown() = 0;
         virtual void Load(const Json::Value& data) = 0;
         virtual void Save(const Json::Value& data) = 0;
+        virtual void Edit(CommandRegistry* registry) = 0;
 
-    protected:
-        std::string type;
+        void Clear()
+        {
+            applied_forces.clear();
+        }
+
+    public:
+        std::string              type;
+        ColorFlag                draw_force;
+        std::vector<Vector3Pair> applied_forces;
+        inline static int        unique_id = 0;
     };
 }

@@ -3,6 +3,7 @@
 #include "../../System/Physics/PhysicsSystem.hpp"
 #include "../Resource/ResourceType/JsonResource.hpp"
 #include "../../System/Core/Utility/CoreUtility.hpp"
+#include "../Object/ObjectFactory.hpp"
 
 namespace Engine5
 {
@@ -33,6 +34,14 @@ namespace Engine5
             m_global_flag  = eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager | eSubsystemFlag::Scene | eSubsystemFlag::World | eSubsystemFlag::Logic;
             m_global_space->Initialize(m_global_flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
         }
+
+        if(m_archetype_space == nullptr)
+        {
+            m_archetype_space = new Space();
+            eSubsystemFlag flag = eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager | eSubsystemFlag::Scene | eSubsystemFlag::World | eSubsystemFlag::Logic;
+            m_archetype_space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+            m_object_factory->SetArchetypeSpace(m_archetype_space);
+        }
     }
 
     void SpaceManager::Shutdown()
@@ -49,6 +58,12 @@ namespace Engine5
             m_global_space->Shutdown(m_physics_system, m_render_system, m_logic_system);
             delete m_global_space;
             m_global_space = nullptr;
+        }
+        if (m_archetype_space != nullptr)
+        {
+            m_archetype_space->Shutdown(m_physics_system, m_render_system, m_logic_system);
+            delete m_archetype_space;
+            m_archetype_space = nullptr;
         }
     }
 

@@ -28,8 +28,8 @@ namespace Engine5
         m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
         m_im_gui_io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI
         // Setup Dear ImGui style
-        //ImGui::StyleColorsLight();
         StyleVisualStudio();
+        //ImGui::StyleColorsLight();
         //ImGui::StyleColorsClassic();
         ImGuiStyle& style    = ImGui::GetStyle();
         style.WindowRounding = 0.0f;
@@ -77,7 +77,6 @@ namespace Engine5
 
     void GUISystem::CreateGUIContext()
     {
-        // Setup Dear ImGui context
 #if defined(E5_WIN32)
         ImGui_ImplWin32_EnableDpiAwareness();
 #endif
@@ -105,65 +104,65 @@ namespace Engine5
         auto&   style  = ImGui::GetStyle();
         ImVec4* colors = style.Colors;
 
-        const ImVec4 bgColor          = ColorFromBytes(37, 37, 38);
-        const ImVec4 lightBgColor     = ColorFromBytes(82, 82, 85);
-        const ImVec4 veryLightBgColor = ColorFromBytes(90, 90, 95);
+        const ImVec4 bg_color            = ColorFromBytes(37, 37, 38);
+        const ImVec4 light_bg_color      = ColorFromBytes(82, 82, 85);
+        const ImVec4 very_light_bg_color = ColorFromBytes(90, 90, 95);
 
-        const ImVec4 panelColor       = ColorFromBytes(51, 51, 55);
-        const ImVec4 panelHoverColor  = ColorFromBytes(29, 151, 236);
-        const ImVec4 panelActiveColor = ColorFromBytes(0, 119, 200);
+        const ImVec4 panel_color        = ColorFromBytes(51, 51, 55);
+        const ImVec4 panel_hover_color  = ColorFromBytes(29, 151, 236);
+        const ImVec4 panel_active_color = ColorFromBytes(0, 119, 200);
 
-        const ImVec4 textColor         = ColorFromBytes(255, 255, 255);
-        const ImVec4 textDisabledColor = ColorFromBytes(151, 151, 151);
-        const ImVec4 borderColor       = ColorFromBytes(78, 78, 78);
+        const ImVec4 text_color          = ColorFromBytes(255, 255, 255);
+        const ImVec4 text_disabled_color = ColorFromBytes(151, 151, 151);
+        const ImVec4 border_color        = ColorFromBytes(78, 78, 78);
 
-        colors[ImGuiCol_Text]                 = textColor;
-        colors[ImGuiCol_TextDisabled]         = textDisabledColor;
-        colors[ImGuiCol_TextSelectedBg]       = panelActiveColor;
-        colors[ImGuiCol_WindowBg]             = bgColor;
-        colors[ImGuiCol_ChildBg]              = bgColor;
-        colors[ImGuiCol_PopupBg]              = bgColor;
-        colors[ImGuiCol_Border]               = borderColor;
-        colors[ImGuiCol_BorderShadow]         = borderColor;
-        colors[ImGuiCol_FrameBg]              = panelColor;
-        colors[ImGuiCol_FrameBgHovered]       = panelHoverColor;
-        colors[ImGuiCol_FrameBgActive]        = panelActiveColor;
-        colors[ImGuiCol_TitleBg]              = bgColor;
-        colors[ImGuiCol_TitleBgActive]        = bgColor;
-        colors[ImGuiCol_TitleBgCollapsed]     = bgColor;
-        colors[ImGuiCol_MenuBarBg]            = panelColor;
-        colors[ImGuiCol_ScrollbarBg]          = panelColor;
-        colors[ImGuiCol_ScrollbarGrab]        = lightBgColor;
-        colors[ImGuiCol_ScrollbarGrabHovered] = veryLightBgColor;
-        colors[ImGuiCol_ScrollbarGrabActive]  = veryLightBgColor;
-        colors[ImGuiCol_CheckMark]            = panelActiveColor;
-        colors[ImGuiCol_SliderGrab]           = panelHoverColor;
-        colors[ImGuiCol_SliderGrabActive]     = panelActiveColor;
-        colors[ImGuiCol_Button]               = panelColor;
-        colors[ImGuiCol_ButtonHovered]        = panelHoverColor;
-        colors[ImGuiCol_ButtonActive]         = panelHoverColor;
-        colors[ImGuiCol_Header]               = panelColor;
-        colors[ImGuiCol_HeaderHovered]        = panelHoverColor;
-        colors[ImGuiCol_HeaderActive]         = panelActiveColor;
-        colors[ImGuiCol_Separator]            = borderColor;
-        colors[ImGuiCol_SeparatorHovered]     = borderColor;
-        colors[ImGuiCol_SeparatorActive]      = borderColor;
-        colors[ImGuiCol_ResizeGrip]           = bgColor;
-        colors[ImGuiCol_ResizeGripHovered]    = panelColor;
-        colors[ImGuiCol_ResizeGripActive]     = lightBgColor;
-        colors[ImGuiCol_PlotLines]            = panelActiveColor;
-        colors[ImGuiCol_PlotLinesHovered]     = panelHoverColor;
-        colors[ImGuiCol_PlotHistogram]        = panelActiveColor;
-        colors[ImGuiCol_PlotHistogramHovered] = panelHoverColor;
-        colors[ImGuiCol_ModalWindowDarkening] = bgColor;
-        colors[ImGuiCol_DragDropTarget]       = bgColor;
-        colors[ImGuiCol_NavHighlight]         = bgColor;
-        colors[ImGuiCol_DockingPreview]       = panelActiveColor;
-        colors[ImGuiCol_Tab]                  = bgColor;
-        colors[ImGuiCol_TabActive]            = panelActiveColor;
-        colors[ImGuiCol_TabUnfocused]         = bgColor;
-        colors[ImGuiCol_TabUnfocusedActive]   = panelActiveColor;
-        colors[ImGuiCol_TabHovered]           = panelHoverColor;
+        colors[ImGuiCol_Text]                 = text_color;
+        colors[ImGuiCol_TextDisabled]         = text_disabled_color;
+        colors[ImGuiCol_TextSelectedBg]       = panel_active_color;
+        colors[ImGuiCol_WindowBg]             = bg_color;
+        colors[ImGuiCol_ChildBg]              = bg_color;
+        colors[ImGuiCol_PopupBg]              = bg_color;
+        colors[ImGuiCol_Border]               = border_color;
+        colors[ImGuiCol_BorderShadow]         = border_color;
+        colors[ImGuiCol_FrameBg]              = panel_color;
+        colors[ImGuiCol_FrameBgHovered]       = panel_hover_color;
+        colors[ImGuiCol_FrameBgActive]        = panel_active_color;
+        colors[ImGuiCol_TitleBg]              = bg_color;
+        colors[ImGuiCol_TitleBgActive]        = bg_color;
+        colors[ImGuiCol_TitleBgCollapsed]     = bg_color;
+        colors[ImGuiCol_MenuBarBg]            = panel_color;
+        colors[ImGuiCol_ScrollbarBg]          = panel_color;
+        colors[ImGuiCol_ScrollbarGrab]        = light_bg_color;
+        colors[ImGuiCol_ScrollbarGrabHovered] = very_light_bg_color;
+        colors[ImGuiCol_ScrollbarGrabActive]  = very_light_bg_color;
+        colors[ImGuiCol_CheckMark]            = panel_active_color;
+        colors[ImGuiCol_SliderGrab]           = panel_hover_color;
+        colors[ImGuiCol_SliderGrabActive]     = panel_active_color;
+        colors[ImGuiCol_Button]               = panel_color;
+        colors[ImGuiCol_ButtonHovered]        = panel_hover_color;
+        colors[ImGuiCol_ButtonActive]         = panel_hover_color;
+        colors[ImGuiCol_Header]               = panel_color;
+        colors[ImGuiCol_HeaderHovered]        = panel_hover_color;
+        colors[ImGuiCol_HeaderActive]         = panel_active_color;
+        colors[ImGuiCol_Separator]            = border_color;
+        colors[ImGuiCol_SeparatorHovered]     = border_color;
+        colors[ImGuiCol_SeparatorActive]      = border_color;
+        colors[ImGuiCol_ResizeGrip]           = bg_color;
+        colors[ImGuiCol_ResizeGripHovered]    = panel_color;
+        colors[ImGuiCol_ResizeGripActive]     = light_bg_color;
+        colors[ImGuiCol_PlotLines]            = panel_active_color;
+        colors[ImGuiCol_PlotLinesHovered]     = panel_hover_color;
+        colors[ImGuiCol_PlotHistogram]        = panel_active_color;
+        colors[ImGuiCol_PlotHistogramHovered] = panel_hover_color;
+        colors[ImGuiCol_ModalWindowDarkening] = bg_color;
+        colors[ImGuiCol_DragDropTarget]       = bg_color;
+        colors[ImGuiCol_NavHighlight]         = bg_color;
+        colors[ImGuiCol_DockingPreview]       = panel_active_color;
+        colors[ImGuiCol_Tab]                  = bg_color;
+        colors[ImGuiCol_TabActive]            = panel_active_color;
+        colors[ImGuiCol_TabUnfocused]         = bg_color;
+        colors[ImGuiCol_TabUnfocusedActive]   = panel_active_color;
+        colors[ImGuiCol_TabHovered]           = panel_hover_color;
 
         style.WindowRounding    = 0.0f;
         style.ChildRounding     = 0.0f;

@@ -13,52 +13,6 @@ namespace Engine5
         }
     }
 
-    BoundingAABB::BoundingAABB(const BoundingAABB& a, const BoundingAABB& b)
-    {
-        Vector3 offset      = b.Center() - a.Center();
-        Real    a_half_size = 0.5f * (a.Size().Length());
-        Real    b_half_size = 0.5f * (b.Size().Length());
-        Real    size_diff   = b_half_size - a_half_size;
-        if (size_diff * size_diff >= offset.LengthSquared())
-        {
-            if (a_half_size > b_half_size)
-            {
-                this->m_min = a.m_min; //a.Center() - a.HalfSize();
-                this->m_max = a.m_max; //a.Center() + a.HalfSize();
-            }
-            else
-            {
-                this->m_min = b.m_min; //b.Center() - b.HalfSize();
-                this->m_max = b.m_max; //b.Center() + b.HalfSize();
-            }
-        }
-        else
-        {
-            Real    distance    = offset.Length();
-            Vector3 offset_size = offset;
-            if (offset.x < 0.0f)
-            {
-                offset_size.x = -offset.x;
-            }
-            if (offset.y < 0.0f)
-            {
-                offset_size.y = -offset.y;
-            }
-            if (offset.z < 0.0f)
-            {
-                offset_size.z = -offset.z;
-            }
-            Vector3 half_size = (a.HalfSize() + b.HalfSize() + offset_size) * 0.5f;
-            Vector3 center    = a.Center();
-            if (distance > 0.0f)
-            {
-                center += offset * ((half_size.Length() - a_half_size) / distance);
-            }
-            this->m_min = center - half_size;
-            this->m_max = center + half_size;
-        }
-    }
-
     BoundingAABB::~BoundingAABB()
     {
     }
@@ -67,6 +21,12 @@ namespace Engine5
     {
         m_min = min;
         m_max = max;
+    }
+
+    void BoundingAABB::ExpandMargin(Real margin)
+    {
+        m_min -= margin;
+        m_max += margin;
     }
 
     bool BoundingAABB::Intersect(BoundingAABB* aabb) const
@@ -233,12 +193,7 @@ namespace Engine5
         return (m_max.x - m_min.x) * (m_max.y - m_min.y) * (m_max.z - m_min.z);
     }
 
-    Real BoundingAABB::Growth(const BoundingAABB& aabb) const
-    {
-        BoundingAABB new_bounding_volume(*this, aabb);
-        return new_bounding_volume.HalfSize().LengthSquared() - this->HalfSize().LengthSquared();
-    }
-
+   
     Vector3 BoundingAABB::Center() const
     {
         return 0.5f * (m_max + m_min);
@@ -252,6 +207,16 @@ namespace Engine5
     Vector3 BoundingAABB::HalfSize() const
     {
         return 0.5f * (m_max - m_min);
+    }
+
+    Vector3 BoundingAABB::Min() const
+    {
+        return m_min;
+    }
+
+    Vector3 BoundingAABB::Max() const
+    {
+        return m_max;
     }
 
     BoundingAABB BoundingAABB::Union(const BoundingAABB& aabb) const

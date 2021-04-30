@@ -44,7 +44,8 @@ namespace Engine5
     private:
         eSubsystemFlag m_global_flag = eSubsystemFlag::None;
 
-        Space*              m_global_space = nullptr;
+        Space*              m_global_space    = nullptr;
+        Space*              m_archetype_space = nullptr;
         std::vector<Space*> m_spaces;
         //std::vector<Space*> m_active_spaces;
 

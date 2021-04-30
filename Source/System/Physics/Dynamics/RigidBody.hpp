@@ -13,9 +13,7 @@ namespace Engine5
 
         void Shutdown() const;
 
-        void IntegrateVelocity(Real dt);
-        void IntegratePosition(Real dt);
-
+        void Integrate(Real dt);
         void UpdateCentroid();
         void UpdatePosition();
         void UpdateInertia();
@@ -43,9 +41,13 @@ namespace Engine5
 
         Vector3 GetLinearVelocity() const;
         Vector3 GetAngularVelocity() const;
+        Vector3 GetForce() const;
+        Vector3 GetTorque() const;
 
         void SetPositionalConstraints(const Vector3& linear);
         void SetRotationalConstraints(const Vector3& angular);
+        void SetAwake();
+        void UpdateSleepState();
 
         void     SetMassInfinite();
         void     SetMass(Real mass = 1.0f);
@@ -75,6 +77,7 @@ namespace Engine5
         void SyncFromTransform(Transform* transform);
         void SetTransform(Transform* transform);
         void Clone(RigidBody* origin);
+        bool IsSleep() const;
 
     private:
         friend class Resolution;
@@ -105,6 +108,8 @@ namespace Engine5
         eMotionMode         m_motion_mode = eMotionMode::Dynamic;
         Transform*          m_transform   = nullptr;
         Transform           m_local;
-        RigidBodyComponent* m_component = nullptr;
+        RigidBodyComponent* m_component      = nullptr;
+        bool                m_b_sleep        = false;
+        Real                m_sleep_momentum = Physics::Collision::SLEEP_AWAKE;
     };
 }

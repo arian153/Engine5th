@@ -27,7 +27,6 @@ namespace Engine5
         void SetScale(const Vector3& scale);
         void SetScale(const Vector3& scale, eAnchor3D anchor);
         void SetScale(Real x, Real y, Real z, eAnchor3D anchor = eAnchor3D::CCC);
-        void SetOrigin(const Vector3& origin);
 
         //Adder
         void AddPosition(const Vector3& delta_position);
@@ -42,7 +41,6 @@ namespace Engine5
         //Getter
         Vector3    GetPosition() const;
         Vector3    GetScale() const;
-        Vector3    GetOrigin() const;
         Quaternion GetOrientation() const;
         Matrix33   GetRotationMatrix() const;
         Matrix44   GetTransformMatrix() const;
@@ -76,5 +74,8 @@ namespace Engine5
 
         Quaternion m_edit_quaternion;
         AxisRadian m_edit_radian;
+        bool       m_b_random_pos = false;
+        bool       m_b_random_rot = false;
+        bool       m_b_random_scl = false;
     };
 }

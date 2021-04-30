@@ -5,6 +5,11 @@
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "ManifoldTable.hpp"
 
+namespace
+{
+    Engine5::Random random;
+}
+
 namespace Engine5
 {
     NarrowPhase::NarrowPhase()
@@ -32,7 +37,7 @@ namespace Engine5
 
     void NarrowPhase::GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table)
     {
-        data_table->FilteringManifolds();
+       
         size_t count = potential_list.size();
         m_simplexes.clear();
         m_simplexes.reserve(count);
@@ -45,15 +50,7 @@ namespace Engine5
             ColliderSet* set_b = pair.second->m_collider_set;
             if (GJKCollisionDetection(pair.first, pair.second, simplex) == true)
             {
-                //collider pair have a collision do epa and create collision.
-                if (simplex.IsValid() == false)
-                {
-                    if (simplex.count == 0)
-                    {
-                        continue;
-                    }
-                    BlowUpSimplexToTetrahedron(pair.first, pair.second, simplex);
-                }
+                ////collider pair have a collision do epa and create collision.
                 m_simplexes.push_back(simplex);
                 Polytope polytope = Polytope(simplex);
                 //draw gjk result simplex
@@ -99,14 +96,24 @@ namespace Engine5
     {
         if (draw_gjk_flag.b_flag)
         {
+            if (!m_simplexes.empty())
+                m_primitive_renderer->DrawPrimitive(Sphere(Vector3(), Quaternion(), 0.1f), eRenderingMode::Face, draw_gjk_flag.color);
+
             for (auto& simplex : m_simplexes)
             {
-                m_primitive_renderer->DrawTetrahedron(
-                                                      simplex.simplex_vertex_a.global,
-                                                      simplex.simplex_vertex_b.global,
-                                                      simplex.simplex_vertex_c.global,
-                                                      simplex.simplex_vertex_d.global,
-                                                      eRenderingMode::Line, draw_gjk_flag.color);
+                if (simplex.count == 4)
+                    m_primitive_renderer->DrawTetrahedron(
+                                                          simplex.simplex_vertex_a.global,
+                                                          simplex.simplex_vertex_b.global,
+                                                          simplex.simplex_vertex_c.global,
+                                                          simplex.simplex_vertex_d.global,
+                                                          eRenderingMode::Line, draw_gjk_flag.color);
+                else
+                    m_primitive_renderer->DrawTriangle(
+                                                       simplex.simplex_vertex_b.global,
+                                                       simplex.simplex_vertex_c.global,
+                                                       simplex.simplex_vertex_d.global,
+                                                       eRenderingMode::Line, draw_gjk_flag.color);
             }
         }
         if (draw_epa_flag.b_flag)
@@ -140,7 +147,36 @@ namespace Engine5
 
     bool NarrowPhase::GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex)
     {
-        Vector3 direction = Vector3(0.0f, 1.0f, 0.0f);
+        if (a->Is2DPrimitive() && b->Is2DPrimitive())
+        {
+            if (CrossProduct(a->PlaneNormal2D(), b->PlaneNormal2D()).IsZero())
+            {
+                Vector3 direction = a->m_local.orientation.Rotate(Vector3(0, 1, 0));
+
+                for (size_t i = 0; i < m_gjk_exit_iteration; ++i)
+                {
+                    if (direction.IsValid() == false)
+                    {
+                        return false;
+                    }
+                    simplex.simplex_vertex_a = GenerateCSOSupport(a, b, direction);
+                    if (simplex.simplex_vertex_a.global.DotProduct(direction) < 0.0f)
+                    {
+                        return false;
+                    }
+                    if (simplex.DoSimplex2D(direction) == true)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        Vector3 direction = Vector3(
+                                    random.GetRangedRandomReal(-10.0f, 10.0f),
+                                    random.GetRangedRandomReal(-10.0f, 10.0f),
+                                    random.GetRangedRandomReal(-10.0f, 10.0f)).Unit();
         for (size_t i = 0; i < m_gjk_exit_iteration; ++i)
         {
             if (direction.IsValid() == false)
@@ -226,6 +262,11 @@ namespace Engine5
         return true;
     }
 
+    bool NarrowPhase::EPAContactGeneration2D(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result)
+    {
+        return false;
+    }
+
     size_t NarrowPhase::FindLeastSignificantComponent(const Vector3& vector3)
     {
         Real    abs_x = fabsf(vector3.x);
@@ -267,8 +308,7 @@ namespace Engine5
                 {
                     break;
                 }
-            }
-            [[fallthrough]];
+            }[[fallthrough]];
         case 2:
             // line direction vector
             line_vec_case2 = simplex[1].global - simplex[0].global;
@@ -288,8 +328,7 @@ namespace Engine5
                     break;
                 // rotate search direction by 60 degrees
                 search_dir_case2 = rot_case2 * search_dir_case2;
-            }
-            [[fallthrough]];
+            }[[fallthrough]];
         case 3:
             // use triangle normal as search direction
             const Vector3 v01 = simplex[1].global - simplex[0].global;

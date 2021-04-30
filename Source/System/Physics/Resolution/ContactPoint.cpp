@@ -60,6 +60,18 @@ namespace Engine5
         normal = -normal;
     }
 
+    void ContactPoint::UpdateContactPoint(const ContactPoint& rhs)
+    {
+        normal            = rhs.normal;
+        depth             = rhs.depth;
+        global_position_a = rhs.global_position_a;
+        global_position_b = rhs.global_position_b;
+        local_position_a  = rhs.local_position_a;
+        local_position_b  = rhs.local_position_b;
+        b_valid           = rhs.b_valid;
+        b_persistent      = true;
+    }
+
     ContactPoint ContactPoint::SwappedContactPoint() const
     {
         ContactPoint result;

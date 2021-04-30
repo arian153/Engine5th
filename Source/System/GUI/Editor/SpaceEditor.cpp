@@ -1,4 +1,7 @@
 #include "SpaceEditor.hpp"
+
+#include <iostream>
+
 #include "GameEditor.hpp"
 #include "../../Core/OS-API/Application.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
@@ -16,7 +19,11 @@
 #include "../../../Manager/Object/ObjectManager.hpp"
 #include "../../../Manager/Object/Object.hpp"
 #include "../../../Manager/Component/Component.hpp"
+#include "../../../Manager/Component/EngineComponent/ColliderComponent.hpp"
+#include "../../Core/Utility/FrameUtility.hpp"
 #include "../../Logic/LogicSubsystem.hpp"
+#include "../../Physics/Dynamics/ColliderSet.hpp"
+#include "../../Physics/Dynamics/World.hpp"
 
 namespace Engine5
 {
@@ -34,6 +41,7 @@ namespace Engine5
         m_resource_manager         = application->GetResourceManager();
         m_render_texture_generator = application->GetRenderSystem()->GetRenderTextureGenerator();
         m_space_manager            = application->GetSpaceManager();
+        m_frame_utility            = application->GetFrameUtility();
         m_resource_manager->GetJsonResources(eJsonType::Space, m_resources);
     }
 
@@ -83,6 +91,10 @@ namespace Engine5
                 DisplayContextMenu(resource);
                 if (visible)
                 {
+                    if (m_space_index != i)
+                    {
+                        m_editing_object = nullptr;
+                    }
                     m_space_index = i;
                     DisplayContents(resource);
                     m_editing_space = DisplayScene(resource->FileName(), dt);
@@ -223,6 +235,24 @@ namespace Engine5
         ImGui::End();
     }
 
+    void SpaceEditor::UpdateSpaceSetting()
+    {
+        ImGui::Begin("Space Setting");
+        Real fps  = m_frame_utility->GetFramePerSecond();
+        Real mspf = m_frame_utility->GetMillisecondPerFrame();
+        ImGui::Text("FPS : %.1f, ms/f : %.3f", fps, mspf);
+
+        if (m_editing_space != nullptr)
+        {
+            World* world = m_editing_space->GetWorld();
+            if (world != nullptr)
+            {
+                world->Edit(m_command_registry);
+            }
+        }
+        ImGui::End();
+    }
+
     void SpaceEditor::OpenSequence()
     {
         for (size_t i = 0; i < m_resources.size(); ++i)
@@ -356,11 +386,14 @@ namespace Engine5
             Real   scene_scale = max.x - min.x;
             auto   scene       = space->GetScene();
             Real   ratio       = scene != nullptr ? 1.0f / scene->GetAspectRatio() : 1.0f;
-            ImVec2 size = ImVec2(scene_scale, scene_scale * ratio);
+            ImVec2 size        = ImVec2(scene_scale, scene_scale * ratio);
             ImGui::Image(
-                         m_render_texture_generator->GetTexture()->GetTexture(),
-                size, m_uv_min, m_uv_max, m_tint_col, m_border_col);
-            if (ImGui::IsItemHovered())
+                         m_render_texture_generator->GetTexture()->GetTexture(), size
+                       , m_uv_min, m_uv_max, m_tint_col, m_border_col);
+
+            bool is_space_hovered = ImGui::IsItemHovered();
+
+            if (is_space_hovered)
             {
                 GUISystem::SetFocusFree(true);
             }
@@ -370,20 +403,44 @@ namespace Engine5
             }
 
             ImVec2 region = ImGui::GetItemRectMin();
-            m_mouse_pos = ImVec2(ImGui::GetMousePos().x - region.x, ImGui::GetMousePos().y - region.y);
-            ImGui::Text("Mouse Pos : (%.3f, %.3f)", m_mouse_pos.x, m_mouse_pos.y);
+            m_mouse_pos   = ImVec2(ImGui::GetMousePos().x - region.x, ImGui::GetMousePos().y - region.y);
+            //ImGui::Text("Mouse Pos : (%.3f, %.3f)", m_mouse_pos.x, m_mouse_pos.y);
             m_ortho_pos.x = ((2.0f * m_mouse_pos.x) / size.x) - 1.0f;
             m_ortho_pos.y = (((2.0f * m_mouse_pos.y) / size.y) - 1.0f) * -1.0f;
-            ImGui::Text("Ortho Pos : (%.3f, %.3f)", m_ortho_pos.x, m_ortho_pos.y);
+            //ImGui::Text("Ortho Pos : (%.3f, %.3f)", m_ortho_pos.x, m_ortho_pos.y);
 
             m_picking_ray = scene != nullptr ? scene->GetPickingRay(m_ortho_pos) : m_picking_ray;
 
             space->GetLogicSubsystem()->SetPickingRay(m_picking_ray);
             space->GetLogicSubsystem()->SetMouseOrtho(m_ortho_pos);
 
-            ImGui::Text("Ray Pos : (%.3f, %.3f, %.3f)", m_picking_ray.position.x, m_picking_ray.position.y, m_picking_ray.position.z);
-            ImGui::Text("Ray Dir : (%.3f, %.3f, %.3f)", m_picking_ray.direction.x, m_picking_ray.direction.y, m_picking_ray.direction.z);
+            if (space->GetWorld() != nullptr)
+            {
+                if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && is_space_hovered)
+                {
+                    space->GetWorld()->SetPickingRay(m_picking_ray);
+                    auto found_collider = space->GetWorld()->PickColliderSet(m_picking_ray);
+                    if (found_collider != nullptr)
+                    {
+                        m_editing_object = found_collider->GetComponent()->GetOwner();
+                    }
+                    /*else
+                    {
+                        m_editing_object = nullptr;
+                    }*/
+                }
 
+                if (m_editing_object != nullptr)
+                {
+                    if (m_editing_object->HasComponent<ColliderComponent>() && scene != nullptr)
+                    {
+                        m_editing_object->GetComponent<ColliderComponent>()->RenderBoundingVolume(scene->GetPrimitiveRenderer(), Color(1.0f, 0.0f, 0.0f, 1.0f));
+                    }
+                }
+            }
+
+            //ImGui::Text("Ray Pos : (%.3f, %.3f, %.3f)", m_picking_ray.position.x, m_picking_ray.position.y, m_picking_ray.position.z);
+            //ImGui::Text("Ray Dir : (%.3f, %.3f, %.3f)", m_picking_ray.direction.x, m_picking_ray.direction.y, m_picking_ray.direction.z);
         }
         return space;
     }

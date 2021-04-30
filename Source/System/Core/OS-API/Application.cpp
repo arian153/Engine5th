@@ -48,7 +48,7 @@ namespace Engine5
         m_input = new InputCommon();
         m_input->Initialize();
         m_render_system = new RenderSystem(m_operating_system);
-        m_render_system->Initialize(m_initial_setting.screen_width, m_initial_setting.screen_height, m_resource_manager);
+        m_render_system->Initialize(m_initial_setting.screen_width, m_initial_setting.screen_height, m_initial_setting.b_v_sync, m_resource_manager);
         m_physics_system = new PhysicsSystem();
         m_physics_system->Initialize();
         //GUI
@@ -65,8 +65,12 @@ namespace Engine5
         m_component_registry->Initialize();
         m_object_factory = new ObjectFactory();
         m_object_factory->Initialize(m_component_registry);
+
         m_space_manager = new SpaceManager(m_physics_system, m_render_system, m_object_factory, m_component_registry, m_resource_manager, m_logic_system);
         m_space_manager->Initialize();
+
+        m_object_factory->LoadArchetype(m_resource_manager);
+
         m_level_manager = new LevelManager();
         m_level_manager->Initialize(this);
         //setup missing system parameters
@@ -102,18 +106,20 @@ namespace Engine5
             delete m_level_manager;
             m_level_manager = nullptr;
         }
-        if (m_space_manager != nullptr)
-        {
-            m_space_manager->Shutdown();
-            delete m_space_manager;
-            m_space_manager = nullptr;
-        }
         if (m_object_factory != nullptr)
         {
             m_object_factory->Shutdown();
             delete m_object_factory;
             m_object_factory = nullptr;
         }
+
+        if (m_space_manager != nullptr)
+        {
+            m_space_manager->Shutdown();
+            delete m_space_manager;
+            m_space_manager = nullptr;
+        }
+
         if (m_component_registry != nullptr)
         {
             m_component_registry->Shutdown();
@@ -294,6 +300,7 @@ namespace Engine5
             m_initial_setting.screen_width     = 1280;
             m_initial_setting.screen_scale     = 1.0f;
             m_initial_setting.window_mode      = eWindowMode::Windowed;
+            m_initial_setting.initial_level    = "";
         }
         else
         {

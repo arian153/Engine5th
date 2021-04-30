@@ -301,6 +301,8 @@ namespace Engine5
     {
         for (auto it = m_manifold_table.begin(); it != m_manifold_table.end();)
         {
+            it->second.m_set_a->UpdateBoundingVolume();
+            it->second.m_set_b->UpdateBoundingVolume();
             //if sets don't intersect each other, remove previous frame's manifolds.
             if (it->second.m_set_a->m_bounding_volume.Intersect(it->second.m_set_b->m_bounding_volume) == false)
             {

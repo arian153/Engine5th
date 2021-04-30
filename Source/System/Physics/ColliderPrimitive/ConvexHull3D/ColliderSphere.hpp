@@ -38,6 +38,7 @@ namespace Engine5
         void Clone(ColliderPrimitive* origin) override;
         void Load(const Json::Value& data) override;
         void Save(const Json::Value& data) override;
+        void EditPrimitive(CommandRegistry* registry) override;
 
     private:
         Real m_radius             = 1.0f;

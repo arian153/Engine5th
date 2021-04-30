@@ -1,6 +1,8 @@
 #include "GridPartition.hpp"
 #include "..//Dynamics/RigidBody.hpp"
 #include <algorithm>
+
+#include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 
 namespace Engine5
@@ -9,7 +11,7 @@ namespace Engine5
         : aabb_data(bounding_aabb), owner_cell(owner_cell), basis_a_index(a), basis_b_index(b)
     {
         bounding_aabb->m_userdata = this;
-        cell_index                = owner_cell->aabb_list.size();
+        cell_index                = owner_cell->data_list.size();
     }
 
     GridData::~GridData()
@@ -35,33 +37,35 @@ namespace Engine5
 
     void GridPartition::Initialize()
     {
-        m_a_count = (size_t)ceil((Real)m_width / m_size_of_cell);
-        m_b_count = (size_t)ceil((Real)m_height / m_size_of_cell);
-        m_grid_cell_list.resize(m_a_count * m_b_count);
-        m_center_of_grid[m_axis_normal] = 0.0f;
-        m_center_of_grid[m_basis_a]     = static_cast<Real>(m_width) * 0.5f;
-        m_center_of_grid[m_basis_b]     = static_cast<Real>(m_height) * 0.5f;
-        size_t  size                    = m_grid_cell_list.size();
-        Vector3 cell_start(-m_center_of_grid);
-        Real    size_of_cell = static_cast<Real>(m_size_of_cell);
-        for (size_t i = 0; i < size; i++)
+        m_a_count    = (size_t)ceil((Real)m_extent_a / m_cell_scale);
+        m_b_count    = (size_t)ceil((Real)m_extent_b / m_cell_scale);
+        size_t count = m_a_count * m_b_count;
+        m_grid_cell_list.resize(count);
+
+        Vector3 cell_start;
+        cell_start[m_basis_a] = -(Real)m_extent_a * 0.5f;
+        cell_start[m_basis_b] = -(Real)m_extent_b * 0.5f;
+        Real size_of_cell     = static_cast<Real>(m_cell_scale);
+
+        for (size_t i = 0; i < count; i++)
         {
+            size_t a_index = i % m_b_count;
+            size_t b_index = i / m_b_count;
+
             m_grid_cell_list[i].grid_index    = i;
-            size_t a_index                    = i % m_b_count;
-            size_t b_index                    = i / m_b_count;
             m_grid_cell_list[i].basis_a_index = a_index;
             m_grid_cell_list[i].basis_b_index = b_index;
-            m_grid_cell_list[i].aabb_list.reserve(20);
+            m_grid_cell_list[i].data_list.reserve(20);
             Vector3 cell_min;
-            cell_min[m_basis_a] = static_cast<Real>(a_index) * size_of_cell;
-            cell_min[m_basis_b] = static_cast<Real>(b_index) * size_of_cell;
+            cell_min[m_basis_a]     = static_cast<Real>(a_index) * size_of_cell;
+            cell_min[m_basis_b]     = static_cast<Real>(b_index) * size_of_cell;
+            cell_min[m_axis_normal] = -size_of_cell;// Math::REAL_MAX + 1.0f;
             Vector3 cell_max;
-            cell_max[m_basis_a] = static_cast<Real>(a_index + 1) * size_of_cell;
-            cell_max[m_basis_b] = static_cast<Real>(b_index + 1) * size_of_cell;
+            cell_max[m_basis_a]     = static_cast<Real>(a_index + 1) * size_of_cell;
+            cell_max[m_basis_b]     = static_cast<Real>(b_index + 1) * size_of_cell;
+            cell_max[m_axis_normal] = +size_of_cell;// Math::REAL_MAX - 1.0f;
             m_grid_cell_list[i].cell_boundary.Set(cell_start + cell_min, cell_start + cell_max);
         }
-        m_basis_a = (m_axis_normal % 3) + 1;
-        m_basis_b = (m_axis_normal % 3) + 2;
     }
 
     void GridPartition::Update(Real dt)
@@ -70,12 +74,12 @@ namespace Engine5
         m_invalid_nodes.clear();
         for (auto& cell : m_grid_cell_list)
         {
-            for (auto& aabb : cell.aabb_list)
+            for (auto& grid_data : cell.data_list)
             {
-                if (cell.cell_boundary.Contains(aabb->Center()) == false)
+                if (cell.cell_boundary.Contains(grid_data.aabb_data->Center()) == false)
                 {
                     //invalid aabb
-                    m_invalid_nodes.push_back(aabb);
+                    m_invalid_nodes.push_back(grid_data.aabb_data);
                 }
             }
         }
@@ -90,15 +94,15 @@ namespace Engine5
     {
         for (auto& cell : m_grid_cell_list)
         {
-            for (auto& aabb : cell.aabb_list)
+            for (auto& grid_data : cell.data_list)
             {
-                if (aabb != nullptr)
+                if (grid_data.aabb_data != nullptr)
                 {
-                    delete aabb;
-                    aabb = nullptr;
+                    delete grid_data.aabb_data;
+                    grid_data.aabb_data = nullptr;
                 }
             }
-            cell.aabb_list.clear();
+            cell.data_list.clear();
         }
         m_grid_cell_list.clear();
     }
@@ -107,9 +111,9 @@ namespace Engine5
     {
         for (auto& cell : m_grid_cell_list)
         {
-            for (auto& aabb : cell.aabb_list)
+            for (auto& grid_data : cell.data_list)
             {
-                other->Add(aabb);
+                other->Add(grid_data.aabb_data);
             }
         }
     }
@@ -118,21 +122,20 @@ namespace Engine5
     {
         size_t    a_index, b_index;
         GridCell* cell = QueryCell(aabb->Center(), a_index, b_index);
-        GridData  data(aabb, cell, a_index, b_index);
-        cell->aabb_list.push_back(aabb);
+        cell->data_list.emplace_back(aabb, cell, a_index, b_index);
     }
 
     void GridPartition::Remove(BoundingAABB* aabb)
     {
         if (aabb->m_userdata != nullptr)
         {
-            GridData*                   grid_data = static_cast<GridData*>(aabb->m_userdata);
-            std::vector<BoundingAABB*>& aabb_list = grid_data->owner_cell->aabb_list;
-            aabb_list[grid_data->cell_index]      = aabb_list.back();
+            GridData*              grid_data = static_cast<GridData*>(aabb->m_userdata);
+            std::vector<GridData>& aabb_list = grid_data->owner_cell->data_list;
+            aabb_list[grid_data->cell_index] = aabb_list.back();
             aabb_list.pop_back();
             if (grid_data->cell_index < aabb_list.size())
             {
-                static_cast<GridData*>(aabb_list[grid_data->cell_index]->m_userdata)->cell_index = grid_data->cell_index;
+                static_cast<GridData*>(aabb_list[grid_data->cell_index].aabb_data->m_userdata)->cell_index = grid_data->cell_index;
             }
             aabb->m_userdata = nullptr;
         }
@@ -142,7 +145,7 @@ namespace Engine5
     {
         for (auto& cell : m_grid_cell_list)
         {
-            cell.aabb_list.clear();
+            cell.data_list.clear();
         }
         m_grid_cell_list.clear();
     }
@@ -151,12 +154,12 @@ namespace Engine5
     {
         for (auto& cell : m_grid_cell_list)
         {
-            for (auto& aabb : cell.aabb_list)
+            for (auto& aabb : cell.data_list)
             {
-                if (aabb != nullptr)
+                if (aabb.aabb_data != nullptr)
                 {
-                    delete aabb;
-                    aabb = nullptr;
+                    delete aabb.aabb_data;
+                    aabb.aabb_data = nullptr;
                 }
             }
         }
@@ -164,6 +167,23 @@ namespace Engine5
 
     void GridPartition::Render(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
     {
+        for (auto& cell : m_grid_cell_list)
+        {
+            primitive_renderer->DrawBox(
+                                        cell.cell_boundary.Center(), Quaternion(),
+                                        cell.cell_boundary.Size(), eRenderingMode::Line, broad_phase_color.color);
+            for (auto& aabb : cell.data_list)
+            {
+                primitive_renderer->DrawBox(
+                                            aabb.aabb_data->Center(), Quaternion(),
+                                            aabb.aabb_data->Size(), eRenderingMode::Line, broad_phase_color.color);
+
+                if (aabb.aabb_data->GetCollider() != nullptr && primitive_color.b_flag)
+                {
+                    aabb.aabb_data->GetCollider()->Draw(primitive_renderer, eRenderingMode::Line, primitive_color.color);
+                }
+            }
+        }
     }
 
     void GridPartition::ComputePairs(std::list<ColliderPair>& result)
@@ -173,10 +193,10 @@ namespace Engine5
         {
             GridCell& cell = m_grid_cell_list[i];
             // Loop through all balls in a cell
-            size_t aabb_size = cell.aabb_list.size();
+            size_t aabb_size = cell.data_list.size();
             for (size_t j = 0; j < aabb_size; ++j)
             {
-                BoundingAABB* aabb = cell.aabb_list[j];
+                BoundingAABB* aabb = cell.data_list[j].aabb_data;
                 // Update with the residing cell
                 IntersectAABB(aabb, &cell, j + 1, result);
                 GridData* grid_data = static_cast<GridData*>(aabb->m_userdata);
@@ -207,11 +227,11 @@ namespace Engine5
     {
         size_t a_index, b_index;
         auto   cell = QueryCell(point, a_index, b_index);
-        for (auto& aabb : cell->aabb_list)
+        for (auto& aabb : cell->data_list)
         {
-            if (aabb->Contains(point) == true)
+            if (aabb.aabb_data->Contains(point) == true)
             {
-                return aabb->GetCollider();
+                return aabb.aabb_data->GetCollider();
             }
         }
         return nullptr;
@@ -227,11 +247,11 @@ namespace Engine5
             for (size_t j = min_b; j <= max_b; ++j)
             {
                 auto cell = QueryCell(i, j);
-                for (auto& collider_aabb : cell->aabb_list)
+                for (auto& collider_aabb : cell->data_list)
                 {
-                    if (collider_aabb->Intersect(aabb) == true)
+                    if (collider_aabb.aabb_data->Intersect(aabb) == true)
                     {
-                        output.push_back(collider_aabb->GetCollider());
+                        output.push_back(collider_aabb.aabb_data->GetCollider());
                     }
                 }
             }
@@ -242,42 +262,76 @@ namespace Engine5
     {
         Ray     ray          = result.ray;
         Vector3 ab_direction = ray.direction;
-        auto    dir_a        = DirectionHelper(ray.position[m_basis_a] + m_center_of_grid[m_basis_a], ray.direction[m_basis_a]);
-        auto    dir_b        = DirectionHelper(ray.position[m_basis_b] + m_center_of_grid[m_basis_b], ray.direction[m_basis_b]);
-        Real    t            = 0.0f;
+        //  auto    dir_a        = DirectionHelper(ray.position[m_basis_a] + m_center_of_grid[m_basis_a], ray.direction[m_basis_a]);
+        //auto    dir_b        = DirectionHelper(ray.position[m_basis_b] + m_center_of_grid[m_basis_b], ray.direction[m_basis_b]);
+        // Real    t            = 0.0f;
         //remove perpendicular
         ab_direction[m_axis_normal] = 0.0f;
+        Vector3 ray_unit_step, ray_length;
+
+        int    step_a, step_b;
+        size_t cell_a, cell_b;
+
+        PointToIndex(ray.position, cell_a, cell_b);
+
+        int grid_a = (int)ray.position[m_basis_a];
+        int grid_b = (int)ray.position[m_basis_b];
+
+        ray_unit_step[m_basis_a] = sqrtf(1.0f + ((ray.direction[m_basis_b] / ray.direction[m_basis_a]) * (ray.direction[m_basis_b] / ray.direction[m_basis_a])));
+        ray_unit_step[m_basis_b] = sqrtf(1.0f + ((ray.direction[m_basis_a] / ray.direction[m_basis_b]) * (ray.direction[m_basis_a] / ray.direction[m_basis_b])));
+
+        if (ray_unit_step[m_basis_a] < 0)
+        {
+            step_a                = -1;
+            ray_length[m_basis_a] = (ray.position[m_basis_a] - (Real)grid_a) * ray_unit_step[m_basis_a];
+        }
+        else
+        {
+            step_a                = 1;
+            ray_length[m_basis_a] = ((Real)(grid_a + 1) - ray.position[m_basis_a]) * ray_unit_step[m_basis_a];
+        }
+        if (ray_unit_step[m_basis_b] < 0)
+        {
+            step_b                = -1;
+            ray_length[m_basis_b] = (ray.position[m_basis_b] - (Real)grid_b) * ray_unit_step[m_basis_b];
+        }
+        else
+        {
+            step_b                = 1;
+            ray_length[m_basis_b] = ((Real)(grid_b + 1) - ray.position[m_basis_b]) * ray_unit_step[m_basis_b];
+        }
+
         if (ab_direction.LengthSquared() > 0.0f)
         {
-            while (dir_a.cell > 0 && dir_a.cell <= m_width && dir_b.cell > 0 && dir_b.cell <= m_height)
+            float t = 0.0f;
+
+            while ((cell_a > 0 && cell_a <= m_extent_a && cell_b > 0 && cell_b <= m_extent_b))
             {
-                CastRayCell(QueryCell(dir_a.cell, dir_b.cell), result, max_distance);
-                if (result.hit_data.hit == true)
+                CastRayCell(QueryCell(cell_a, cell_b), result, max_distance);
+                if (result.hit_data.hit)
                 {
                     break;
                 }
-                if (dir_a.delta_t < dir_b.delta_t)
+                if (ray_length[m_basis_a] < ray_length[m_basis_b])
                 {
-                    dir_a.cell += dir_a.delta_cell;
-                    auto dt = dir_a.delta_t;
-                    t += dt;
-                    dir_a.delta_t = dir_a.delta_t + dir_a.delta_dir_t - dt;
-                    dir_b.delta_t -= dt;
+                    grid_a += step_a;
+                    cell_a += step_a;
+                    t = ray_length[m_basis_a];
+                    ray_length[m_basis_a] += ray_unit_step[m_basis_a];
                 }
                 else
                 {
-                    dir_b.cell += dir_b.delta_cell;
-                    auto dt = dir_b.delta_t;
-                    t += dt;
-                    dir_a.delta_t -= dt;
-                    dir_b.delta_t = dir_b.delta_t + dir_b.delta_dir_t - dt;
+                    grid_b += step_b;
+                    cell_b += step_b;
+                    t = ray_length[m_basis_b];
+                    ray_length[m_basis_b] += ray_unit_step[m_basis_b];
                 }
             }
         }
         else
         {
             //ray direction is perpendicular to grid plane
-            CastRayCell(QueryCell(dir_a.cell, dir_b.cell), result, max_distance);
+            CastRayCell(QueryCell(grid_a, grid_b), result, max_distance);
         }
     }
 
@@ -291,12 +345,12 @@ namespace Engine5
 
     void GridPartition::IntersectAABB(BoundingAABB* aabb, GridCell* cell, size_t index, std::list<ColliderPair>& result)
     {
-        size_t size = cell->aabb_list.size();
+        size_t size = cell->data_list.size();
         for (size_t i = index; i < size; i++)
         {
             ColliderPrimitive* collider_a = aabb->GetCollider();
-            ColliderPrimitive* collider_b = cell->aabb_list[i]->GetCollider();
-            if (aabb->Intersect(cell->aabb_list[i]))
+            ColliderPrimitive* collider_b = cell->data_list[i].aabb_data->GetCollider();
+            if (aabb->Intersect(cell->data_list[i].aabb_data))
             {
                 result.emplace_back(collider_a, collider_b);
             }
@@ -306,8 +360,8 @@ namespace Engine5
     GridCell* GridPartition::QueryCell(const Vector3& point, size_t& a_index, size_t& b_index)
     {
         //translate point position
-        Real   a_pos  = (point[m_basis_a] + m_center_of_grid[m_basis_a]) / (Real)m_size_of_cell;
-        Real   b_pos  = (point[m_basis_b] + m_center_of_grid[m_basis_b]) / (Real)m_size_of_cell;
+        Real   a_pos  = (point[m_basis_a] + m_center_of_grid[m_basis_a]) / (Real)m_cell_scale;
+        Real   b_pos  = (point[m_basis_b] + m_center_of_grid[m_basis_b]) / (Real)m_cell_scale;
         size_t cell_a = static_cast<size_t>(a_pos);
         size_t cell_b = static_cast<size_t>(b_pos);
         if (a_pos < 0.0f)
@@ -348,8 +402,8 @@ namespace Engine5
 
     const GridCell* GridPartition::QueryCell(const Vector3& point, size_t& a_index, size_t& b_index) const
     {
-        Real   a_pos  = (point[m_basis_a] + m_center_of_grid[m_basis_a]) / (Real)m_size_of_cell;
-        Real   b_pos  = (point[m_basis_b] + m_center_of_grid[m_basis_b]) / (Real)m_size_of_cell;
+        Real   a_pos  = (point[m_basis_a] + m_center_of_grid[m_basis_a]) / (Real)m_cell_scale;
+        Real   b_pos  = (point[m_basis_b] + m_center_of_grid[m_basis_b]) / (Real)m_cell_scale;
         size_t cell_a = static_cast<size_t>(a_pos);
         size_t cell_b = static_cast<size_t>(b_pos);
         if (a_pos < 0.0f)
@@ -388,21 +442,62 @@ namespace Engine5
         return &m_grid_cell_list[a_index + b_index];
     }
 
+    void GridPartition::PointToIndex(const Vector3& point, size_t& a_index, size_t& b_index) const
+    {
+        Real   a_pos  = (point[m_basis_a] + m_center_of_grid[m_basis_a]) / (Real)m_cell_scale;
+        Real   b_pos  = (point[m_basis_b] + m_center_of_grid[m_basis_b]) / (Real)m_cell_scale;
+        size_t cell_a = static_cast<size_t>(a_pos);
+        size_t cell_b = static_cast<size_t>(b_pos);
+        if (a_pos < 0.0f)
+        {
+            cell_a = 0;
+        }
+        else if (cell_a >= m_a_count)
+        {
+            cell_a = m_a_count - 1;
+        }
+        if (b_pos < 0.0f)
+        {
+            cell_b = 0;
+        }
+        else if (cell_b >= m_b_count)
+        {
+            cell_b = m_b_count - 1;
+        }
+        a_index = cell_a;
+        b_index = m_a_count * cell_b;
+    }
+
+    Vector3 GridPartition::IndexToPoint(size_t a, size_t b) const
+    {
+        if (a >= m_a_count)
+        {
+            a = m_a_count - 1;
+        }
+        if (b >= m_b_count)
+        {
+            b = m_b_count - 1;
+        }
+        size_t a_index = a;
+        size_t b_index = m_a_count * b;
+        return m_grid_cell_list[a_index + b_index].cell_boundary.m_min;
+    }
+
     GridPartition::GridDirection GridPartition::DirectionHelper(Real pos, Real dir) const
     {
         GridDirection result;
-        result.cell = static_cast<int>(std::floorf(pos / (Real)m_size_of_cell)) + 1;
+        result.cell = static_cast<int>(std::floorf(pos / (Real)m_cell_scale)) + 1;
         if (Math::IsGreatorThanZero(dir) == true)
         {
             result.delta_cell = 1;
-            result.delta_t    = (result.cell * m_size_of_cell - pos) / dir;
+            result.delta_t    = (result.cell * m_cell_scale - pos) / dir;
         }
         else
         {
             result.delta_cell = -1;
-            result.delta_t    = ((result.cell - 1) * m_size_of_cell - pos) / dir;
+            result.delta_t    = ((result.cell - 1) * m_cell_scale - pos) / dir;
         }
-        result.delta_dir_t = result.delta_cell * m_size_of_cell / dir;
+        result.delta_dir_t = result.delta_cell * m_cell_scale / dir;
         return result;
     }
 
@@ -411,13 +506,13 @@ namespace Engine5
         Ray ray = result.ray;
         // test AABBs for candidates
         std::vector<ColliderPrimitive*> candidate_list;
-        candidate_list.reserve(cell->aabb_list.size());
+        candidate_list.reserve(cell->data_list.size());
         Real t = Math::REAL_POSITIVE_MAX;
-        for (auto& aabb : cell->aabb_list)
+        for (auto& aabb : cell->data_list)
         {
-            if (aabb->TestRayIntersection(ray, t, max_distance) == true)
+            if (aabb.aabb_data->TestRayIntersection(ray, t, max_distance) == true)
             {
-                candidate_list.push_back(aabb->GetCollider());
+                candidate_list.push_back(aabb.aabb_data->GetCollider());
             }
         }
         // test actual colliders
@@ -451,13 +546,13 @@ namespace Engine5
         Ray ray = result.ray;
         // test AABBs for candidates
         std::vector<ColliderPrimitive*> candidate_list;
-        candidate_list.reserve(cell->aabb_list.size());
+        candidate_list.reserve(cell->data_list.size());
         Real t = Math::REAL_POSITIVE_MAX;
-        for (auto& aabb : cell->aabb_list)
+        for (auto& aabb : cell->data_list)
         {
-            if (aabb->TestRayIntersection(ray, t, max_distance) == true)
+            if (aabb.aabb_data->TestRayIntersection(ray, t, max_distance) == true)
             {
-                candidate_list.push_back(aabb->GetCollider());
+                candidate_list.push_back(aabb.aabb_data->GetCollider());
             }
         }
         // test actual colliders

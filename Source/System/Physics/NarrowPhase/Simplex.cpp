@@ -180,6 +180,24 @@ namespace Engine5
         return false;
     }
 
+    bool Simplex::DoSimplex2D(Vector3& dir)
+    {
+        if (count == 0)
+        {
+            return DoSimplex2DPoint(dir);
+        }
+        if (count == 1)
+        {
+            return DoSimplex2DLine(dir);
+        }
+        if (count == 2)
+        {
+            return DoSimplex2DTriangle(dir);
+        }
+
+        return false;
+    }
+
     bool Simplex::IsValid()
     {
         if (simplex_vertex_d.IsValid() == false)
@@ -202,6 +220,74 @@ namespace Engine5
             count = 3;
             return false;
         }
+        return true;
+    }
+
+    bool Simplex::DoSimplex2DPoint(Vector3& dir)
+    {
+        dir = -simplex_vertex_a.global;
+        simplex_vertex_b = simplex_vertex_a;
+        count = 1;
+        return false;
+    }
+
+    bool Simplex::DoSimplex2DLine(Vector3& dir)
+    {
+        Vector3 ab = simplex_vertex_b.global - simplex_vertex_a.global;
+        Vector3 ao = -simplex_vertex_a.global;
+        dir = ab.CrossProductTwice(ao);
+        simplex_vertex_c = simplex_vertex_b;
+        simplex_vertex_b = simplex_vertex_a;
+        count = 2;
+        return false;
+    }
+
+    bool Simplex::DoSimplex2DTriangle(Vector3& dir)
+    {
+        Vector3 ao = -simplex_vertex_a.global;
+        Vector3 ab = simplex_vertex_b.global - simplex_vertex_a.global;
+        Vector3 ac = simplex_vertex_c.global - simplex_vertex_a.global;
+        Vector3 abc = ab.CrossProduct(ac);
+        //point is can't be behind/in the direction of B,C or BC
+        Vector3 ab_abc = ab.CrossProduct(abc);
+        // is the origin away from ab edge? in the same plane
+        //if a0 is in that direction than
+        if (ab_abc.DotProduct(ao) > 0.0f)
+        {
+            //change points
+            simplex_vertex_c = simplex_vertex_a;
+            //dir is not ab_abc because it's not point towards the origin
+            dir = ab.CrossProductTwice(ao);
+            //direction change; can't build tetrahedron
+            return false;
+        }
+        Vector3 abc_ac = abc.CrossProduct(ac);
+        // is the origin away from ac edge? or it is in abc?
+        //if a0 is in that direction than
+        if (abc_ac.DotProduct(ao) > 0.0f)
+        {
+            //keep c the same
+            simplex_vertex_b = simplex_vertex_a;
+            //dir is not abc_ac because it's not point towards the origin
+            dir = ac.CrossProductTwice(ao);
+            //direction change; can't build tetrahedron
+            return false;
+        }
+
+        if (abc.DotProduct(ao) > 0.0f)
+        {
+            simplex_vertex_d = simplex_vertex_c;
+            simplex_vertex_c = simplex_vertex_b;
+            simplex_vertex_b = simplex_vertex_a;
+            dir = abc;
+        }
+        else
+        {
+            simplex_vertex_d = simplex_vertex_b;
+            simplex_vertex_b = simplex_vertex_a;
+            dir = -abc;
+        }
+        count = 3;
         return true;
     }
 

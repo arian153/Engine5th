@@ -42,6 +42,7 @@ namespace Engine5
         void Clone(ColliderPrimitive* origin) override;
         void Load(const Json::Value& data) override;
         void Save(const Json::Value& data) override;
+        void EditPrimitive(CommandRegistry* registry) override;
 
     private:
         class SubMassData
@@ -61,7 +62,7 @@ namespace Engine5
 
         size_t CreateSimplex(const std::vector<Vector3>& vertices) const;
         void AddToOutsideSet(std::vector<Vector3>& vertices, OutsideSetFace& result) const;
-        void CalculateHorizon(const Vector3& eye_point);
+        void CalculateHorizon();
 
     private:
         std::vector<Vector3>*      m_vertices        = nullptr;

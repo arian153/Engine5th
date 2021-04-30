@@ -6,6 +6,7 @@
 #include "TransformComponent.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
+#include "../../../System/Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5
 {
@@ -113,6 +114,14 @@ namespace Engine5
     {
         m_rigid_body = rigid_body;
         m_collider_set->SetRigidBody(m_rigid_body);
+    }
+
+    void ColliderComponent::RenderBoundingVolume(PrimitiveRenderer* renderer, const Color& color) const
+    {
+        m_collider_set->UpdateBoundingVolume();
+        renderer->DrawBox(
+                          m_collider_set->m_bounding_volume.Center(), Quaternion(),
+                          m_collider_set->m_bounding_volume.Size(), eRenderingMode::Line, color);
     }
 
     bool ColliderComponent::Load(const Json::Value& data)

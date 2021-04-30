@@ -28,6 +28,7 @@ namespace Engine5
 
         void SetTransform(Transform* transform);
         void SetRigidBody(RigidBody* rigid_body);
+        void RenderBoundingVolume(PrimitiveRenderer* renderer, const Color& color) const;
         
     protected:
         bool Load(const Json::Value& data) override;

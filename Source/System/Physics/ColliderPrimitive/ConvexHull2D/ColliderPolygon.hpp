@@ -36,10 +36,12 @@ namespace Engine5
 
         bool SetPolygon(const std::vector<Vector2>& vertices);
 
+
     protected:
         void Clone(ColliderPrimitive* origin) override;
         void Load(const Json::Value& data) override;
         void Save(const Json::Value& data) override;
+        void EditPrimitive(CommandRegistry* registry) override;
 
     private:
         void CreateSimplex();
