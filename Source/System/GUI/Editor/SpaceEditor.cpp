@@ -411,8 +411,11 @@ namespace Engine5
 
             m_picking_ray = scene != nullptr ? scene->GetPickingRay(m_ortho_pos) : m_picking_ray;
 
-            space->GetLogicSubsystem()->SetPickingRay(m_picking_ray);
-            space->GetLogicSubsystem()->SetMouseOrtho(m_ortho_pos);
+            if (space->GetLogicSubsystem() != nullptr)
+            {
+                space->GetLogicSubsystem()->SetPickingRay(m_picking_ray);
+                space->GetLogicSubsystem()->SetMouseOrtho(m_ortho_pos);
+            }
 
             if (space->GetWorld() != nullptr)
             {

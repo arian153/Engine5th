@@ -24,14 +24,14 @@ links {
     "winmm", "Xinput9_1_0"
 }
 libdirs {"Lib/%{cfg.buildcfg}"}
-files {"**.h", "**.hpp", "**.cpp", "**.inl"}
+files {"**.h", "**.hpp", "**.cpp", "**.inl", "./Resource/**.json", "./Resource/**.shader"}
 buildoptions {"-std:c++17"}
 removefiles {"**Template.cpp"}
 disablewarnings {
     "4505", "4456", "4201", "4100", "4189", "4458", "4819", "4127", "4701",
     "4291", "6385"
 }
-defines {"_CRT_SECURE_NO_WARNINGS", "WIN32_LEAN_AND_MEAN", "E5_WIN32", "E5_DIRECTX11"}
+defines {"_CRT_SECURE_NO_WARNINGS", "WIN32_LEAN_AND_MEAN", "E5_WIN32", "E5_DIRECTX11", "IMGUI_INCLUDE_IMGUI_USER_H"}
 
 filter "configurations:Debug"
 defines {"DEBUG"}
