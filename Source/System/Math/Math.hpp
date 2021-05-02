@@ -2,6 +2,7 @@
 
 //Utility
 #include "Utility/MathDef.hpp"
+#include "Utility/MatrixUtility.hpp"
 #include "Utility/Random.hpp"
 #include "Utility/Utility.hpp"
 #include "Utility/VectorDef.hpp"
@@ -15,6 +16,10 @@
 #include "Algebra/Vector2.hpp"
 #include "Algebra/Vector3.hpp"
 #include "Algebra/Vector4.hpp"
+
+//Curve
+#include "Curve/Curve.hpp"
+#include "Curve/CurveGenerator.hpp"
 
 //Primitive
 #include "Primitive/Primitive.hpp"

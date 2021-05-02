@@ -7,7 +7,7 @@ system "Windows"
 architecture "x64"
 filter {}
 
-project "Engine5"
+project "Engine5-WinDX11"
 kind "WindowedApp"
 language "C++"
 location ""
