@@ -5,7 +5,7 @@
 #include "../Core/OS-API/Application.hpp"
 #include "../Core/OS-API/OSCommon.hpp"
 #include "../Graphics/RenderSystem.hpp"
-#include "../Graphics/Renderer/RendererCommon.hpp"
+#include "../Graphics/Common/Renderer/RendererCommon.hpp"
 #include "Editor/GameEditor.hpp"
 
 namespace Engine5

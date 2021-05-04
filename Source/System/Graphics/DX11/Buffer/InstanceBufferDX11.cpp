@@ -1,6 +1,6 @@
 #include "InstanceBufferDX11.hpp"
-#include "../../../Buffer/InstanceBufferCommon.hpp"
-#include "../../../Renderer/RendererCommon.hpp"
+#include "../../Common/Buffer/InstanceBufferCommon.hpp"
+#include "../../Common/Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {

@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Math/Math.hpp"
-#include "../Buffer/TextLayoutBufferCommon.hpp"
+#include "../Common/Buffer/TextLayoutBufferCommon.hpp"
 #include <sstream>
 
 namespace Engine5

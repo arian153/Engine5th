@@ -13,6 +13,15 @@
 #define InstanceBufferAPI InstanceBufferDX11
 #define DynamicMeshBufferAPI DynamicMeshBufferDX11
 
+//buffer2
+#define CameraBufferAPI CameraBufferDX11
+#define ColorBufferAPI ColorBufferDX11
+#define GammaBufferAPI GammaBufferDX11
+#define IndexBufferAPI IndexBufferDX11
+#define LightBufferAPI LightBufferDX11
+#define MatrixBufferAPI MatrixBufferDX11
+#define VertexBufferAPI VertexBufferDX11
+
 //others
 #define TextureAPI TextureDX11
 #define TextureArrayAPI TextureArrayDX11
@@ -34,13 +43,31 @@
 #define NormalMappingShaderAPI NormalMappingShaderDX11
 #define SpecularMappingShaderAPI SpecularMappingShaderDX11
 
-
 //deferred shader
 #define DeferredDirectionalLightShaderAPI DeferredDirectionalLightShaderDX11
 #define DeferredBufferShaderAPI DeferredBufferShaderDX11
 
 //includes
 #define IncludeRendererAPI "../../DX11/RendererDX11.hpp"
+#define IncludeMeshBufferAPI "../../DX11/Buffer/MeshBufferDX11.hpp"
+#define IncludeDeferredBufferAPI "../../DX11/Buffer/DeferredBufferDX11.hpp"
+#define IncludeRenderTextureBufferAPI "../../DX11/Buffer/RenderTextureBufferDX11.hpp"
+#define IncludeTextTextureBufferAPI "../../DX11/Buffer/TextTextureBufferDX11.hpp"
+#define IncludeTextLayoutBufferAPI "../../DX11/Buffer/TextLayoutBufferDX11.hpp"
+#define IncludeTextFormatBufferAPI "../../DX11/Buffer/TextFormatBufferDX11.hpp"
+#define IncludeInstanceBufferAPI "../../DX11/Buffer/InstanceBufferDX11.hpp"
+#define IncludeDynamicMeshBufferAPI "../../DX11/Buffer/DynamicMeshBufferDX11.hpp"
+
+//buffer2
+#define IncludeCameraBufferAPI "../../DX11/Buffer2/CameraBufferDX11.hpp"
+#define IncludeColorBufferAPI  "../../DX11/Buffer2/ColorBufferDX11.hpp"
+#define IncludeGammaBufferAPI  "../../DX11/Buffer2/GammaBufferDX11.hpp"
+#define IncludeIndexBufferAPI  "../../DX11/Buffer2/IndexBufferDX11.hpp"
+#define IncludeLightBufferAPI  "../../DX11/Buffer2/LightBufferDX11.hpp"
+#define IncludeMatrixBufferAPI "../../DX11/Buffer2/MatrixBufferDX11.hpp"
+#define IncludeVertexBufferAPI "../../DX11/Buffer2/VertexBufferDX11.hpp"
+
+
 #define IncludeMeshBufferAPI "../../DX11/Buffer/MeshBufferDX11.hpp"
 #define IncludeDeferredBufferAPI "../../DX11/Buffer/DeferredBufferDX11.hpp"
 #define IncludeRenderTextureBufferAPI "../../DX11/Buffer/RenderTextureBufferDX11.hpp"

@@ -4,7 +4,7 @@
 #include <vector>
 // ReSharper disable once CppUnusedIncludeDirective
 #include "ContactManifold.hpp"
-#include "../../Graphics/DataType/Color.hpp"
+#include "../../Graphics/Common/DataType/Color.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "Force/Force.hpp"
 

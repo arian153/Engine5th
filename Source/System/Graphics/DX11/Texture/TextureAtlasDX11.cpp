@@ -1,5 +1,5 @@
 #include "TextureAtlasDX11.hpp"
-#include "../../../Texture/TextureAtlasCommon.hpp"
+#include "../../Common/Texture/TextureAtlasCommon.hpp"
 
 namespace Engine5
 {

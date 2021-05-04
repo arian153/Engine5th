@@ -5,12 +5,12 @@
 #include "../ResourceManager.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../Space/Space.hpp"
-#include "../../../System/Graphics/Element/Scene.hpp"
+#include "../../../System/Graphics/Common/Element/Scene.hpp"
 #include "../../../System/Core/OS-API/ApplicationSetting.hpp"
 #include "../../Object/Object.hpp"
 #include "../../Object/ObjectManager.hpp"
 #include "../../Object/ObjectFactory.hpp"
-#include "../../../System/Graphics/DataType/Color.hpp"
+#include "../../../System/Graphics/Common/DataType/Color.hpp"
 #include "../../../System/Physics/Dynamics/World.hpp"
 
 namespace Engine5

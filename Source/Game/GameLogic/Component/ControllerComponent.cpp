@@ -9,7 +9,7 @@
 #include "../../../System/Core/Input/MouseInput.hpp"
 #include "../../../System/Graphics/Utility/TextRenderer.hpp"
 #include "../../../Manager/Component/EngineComponent/RigidBodyComponent.hpp"
-#include "../../../System/Graphics/Element/Scene.hpp"
+#include "../../../System/Graphics/Common/Element/Scene.hpp"
 #include "../../../System/Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../../System/Math/Curve/CurveGenerator.hpp"
 

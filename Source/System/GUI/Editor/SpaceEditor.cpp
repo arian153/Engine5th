@@ -6,7 +6,7 @@
 #include "../../Core/OS-API/Application.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
 #include "../../../Manager/Resource/ResourceType/TextureResource.hpp"
-#include "../../Graphics/Texture/TextureCommon.hpp"
+#include "../../Graphics/Common/Texture/TextureCommon.hpp"
 #include "../../Graphics/RenderSystem.hpp"
 #include "../../Graphics/Utility/RenderTextureGenerator.hpp"
 #include "../../../Manager/Space/Space.hpp"

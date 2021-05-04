@@ -2,8 +2,9 @@
 
 #include "../../GraphicsAPI.hpp"
 #include IncludeDynamicMeshBufferAPI
-#include "../../Core/Utility/CoreDef.hpp"
 #include <vector>
+
+#include "../../../Core/Utility/CoreDef.hpp"
 #include "../Vertex/NormalVertexCommon.hpp"
 #include "../Vertex/ColorVertexCommon.hpp"
 #include "../Vertex/TextureVertexCommon.hpp"

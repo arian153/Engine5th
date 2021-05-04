@@ -1,5 +1,5 @@
 #include "InstanceDataDX11.hpp"
-#include "../../../Vertex/InstanceDataCommon.hpp"
+#include "../../Common/Vertex/InstanceDataCommon.hpp"
 #include "../ConverterDX11.hpp"
 
 namespace Engine5

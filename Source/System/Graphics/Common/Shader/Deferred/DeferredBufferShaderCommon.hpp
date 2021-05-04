@@ -1,7 +1,8 @@
 #pragma once
 #include "../../../GraphicsAPI.hpp"
+#include "../../../../Core/Utility/CoreDef.hpp"
+
 #include IncludeDeferredBufferShaderAPI
-#include "../../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {

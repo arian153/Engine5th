@@ -5,8 +5,8 @@
 #include <d2d1_2.h>
 #include <dwrite_2.h>
 #include <string>
-#include "../../../Math/Utility/MathDef.hpp"
-#include "../../../Core/Utility/CoreDef.hpp"
+#include "../../Math/Utility/MathDef.hpp"
+#include "../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {

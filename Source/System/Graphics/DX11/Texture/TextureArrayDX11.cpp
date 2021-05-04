@@ -1,6 +1,6 @@
 #include "TextureArrayDX11.hpp"
-#include "../../../Texture/TextureArrayCommon.hpp"
-#include "../../../Texture/TextureCommon.hpp"
+#include "../../Common/Texture/TextureArrayCommon.hpp"
+#include "../../Common/Texture/TextureCommon.hpp"
 
 namespace Engine5
 {

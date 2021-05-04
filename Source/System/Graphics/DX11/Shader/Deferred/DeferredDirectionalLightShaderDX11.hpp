@@ -1,7 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include <directxmath.h>
-#include "../../../../../Math/Utility/MathDef.hpp"
+#include "../../../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {

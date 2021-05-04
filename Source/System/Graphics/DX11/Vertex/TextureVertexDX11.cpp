@@ -1,7 +1,7 @@
 #include "TextureVertexDX11.hpp"
-#include "../../../Vertex/TextureVertexCommon.hpp"
-#include "../../../../Math/Algebra/Vector2.hpp"
-#include "../../../../Math/Algebra/Vector3.hpp"
+#include "../../Common/Vertex/TextureVertexCommon.hpp"
+#include "../../../Math/Algebra/Vector2.hpp"
+#include "../../../Math/Algebra/Vector3.hpp"
 #include "../ConverterDX11.hpp"
 
 namespace Engine5

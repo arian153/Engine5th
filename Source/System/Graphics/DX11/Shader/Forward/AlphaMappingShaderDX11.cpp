@@ -1,11 +1,12 @@
 #include "AlphaMappingShaderDX11.hpp"
-#include "../../../../Shader/Forward/AlphaMappingShaderCommon.hpp"
-#include "../../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
+#include "../../../Common/Shader/Forward/AlphaMappingShaderCommon.hpp"
+#include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 #include <d3dcompiler.h>
-#include "../../../../Shader/ShaderManagerCommon.hpp"
+#include "../../../Common/Shader/ShaderManagerCommon.hpp"
 #include "../../ConverterDX11.hpp"
-#include "../../../../DataType/MatrixData.hpp"
-#include "../../../../Texture/TextureArrayCommon.hpp"
+#include "../../../../Math/Algebra/Matrix44.hpp"
+#include "../../../Common/DataType/MatrixData.hpp"
+#include "../../../Common/Texture/TextureArrayCommon.hpp"
 
 namespace Engine5
 {

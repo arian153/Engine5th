@@ -1,15 +1,15 @@
 #include "DeferredDirectionalLightShaderDX11.hpp"
-#include "../../../../Shader/Deferred/DeferredDirectionalLightShaderCommon.hpp"
-#include "../../../../../Core/Utility/CoreUtility.hpp"
+#include "../../../Common/Shader/Deferred/DeferredDirectionalLightShaderCommon.hpp"
+#include "../../../../Core/Utility/CoreUtility.hpp"
 #include "../../ConverterDX11.hpp"
-#include "../../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
-#include "../../../../Shader/ShaderManagerCommon.hpp"
+#include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
+#include "../../../Common/Shader/ShaderManagerCommon.hpp"
 #include <d3dcompiler.h>
-#include "../../../../Element/Camera.hpp"
-#include "../../../../DataType/MatrixData.hpp"
-#include "../../../../Light/DirectionalLight.hpp"
-#include "../../../../Texture/TextureCommon.hpp"
-#include "../../../../Buffer/DeferredBufferCommon.hpp"
+#include "../../../Common/Element/Camera.hpp"
+#include "../../../Common/DataType/MatrixData.hpp"
+#include "../../../Common/Light/DirectionalLight.hpp"
+#include "../../../Common/Texture/TextureCommon.hpp"
+#include "../../../Common/Buffer/DeferredBufferCommon.hpp"
 
 namespace Engine5
 {

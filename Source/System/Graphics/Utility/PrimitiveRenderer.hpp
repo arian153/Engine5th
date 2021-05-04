@@ -1,10 +1,10 @@
 #pragma once
 #include "../../Math/Math.hpp"
 #include <vector>
-#include "../DataType/Color.hpp"
-#include "../DataType/MatrixData.hpp"
-#include "../Vertex/ColorVertexCommon.hpp"
-#include "../DataType/Frustum.hpp"
+#include "../Common/DataType/Color.hpp"
+#include "../Common/DataType/MatrixData.hpp"
+#include "../Common/Vertex/ColorVertexCommon.hpp"
+#include "../Common/DataType/Frustum.hpp"
 
 namespace Engine5
 {

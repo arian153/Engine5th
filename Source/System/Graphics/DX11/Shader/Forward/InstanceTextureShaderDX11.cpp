@@ -1,11 +1,11 @@
 #include "InstanceTextureShaderDX11.hpp"
-#include "../../../../Shader/Forward/InstanceTextureShaderCommon.hpp"
+#include "../../../Common/Shader/Forward/InstanceTextureShaderCommon.hpp"
 #include "../../ConverterDX11.hpp"
-#include "../../../../Texture/TextureCommon.hpp"
-#include "../../../../DataType/MatrixData.hpp"
+#include "../../../Common/Texture/TextureCommon.hpp"
+#include "../../../Common/DataType/MatrixData.hpp"
 #include <d3dcompiler.h>
-#include "../../../../Shader/ShaderManagerCommon.hpp"
-#include "../../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
+#include "../../../Common/Shader/ShaderManagerCommon.hpp"
+#include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 
 namespace Engine5
 {

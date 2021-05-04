@@ -1,6 +1,6 @@
 #include "DynamicMeshBufferDX11.hpp"
-#include "../../../Buffer/DynamicMeshBufferCommon.hpp"
-#include "../../../Renderer/RendererCommon.hpp"
+#include "../../Common/Buffer/DynamicMeshBufferCommon.hpp"
+#include "../../Common/Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {

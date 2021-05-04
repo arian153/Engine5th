@@ -1,12 +1,13 @@
 #include "MultiTextureShaderDX11.hpp"
-#include "../../../../Shader/Forward/MultiTextureShaderCommon.hpp"
+#include "../../../Common/Shader/Forward/MultiTextureShaderCommon.hpp"
 #include "../../ConverterDX11.hpp"
-#include "../../../../Texture/TextureCommon.hpp"
-#include "../../../../DataType/MatrixData.hpp"
+#include "../../../Common/Texture/TextureCommon.hpp"
+#include "../../../Common/DataType/MatrixData.hpp"
 #include <d3dcompiler.h>
-#include "../../../../Shader/ShaderManagerCommon.hpp"
-#include "../../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
-#include "../../../../Texture/TextureArrayCommon.hpp"
+#include "../../../Common/Shader/ShaderManagerCommon.hpp"
+#include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
+#include "../../../../Math/Algebra/Matrix44.hpp"
+#include "../../../Common/Texture/TextureArrayCommon.hpp"
 
 namespace Engine5
 {

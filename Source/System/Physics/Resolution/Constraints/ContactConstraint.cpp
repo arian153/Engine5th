@@ -4,7 +4,7 @@
 #include "../ContactPoint.hpp"
 #include "../../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "../../../Core/Utility/CoreUtility.hpp"
-#include "../../../Graphics/DataType/Color.hpp"
+#include "../../../Graphics/Common/DataType/Color.hpp"
 #include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace Engine5

@@ -1,10 +1,10 @@
 #include "TextureDX11.hpp"
-#include "../../../Texture/TextureCommon.hpp"
-#include "../../../../../External/DirectXTextureLoader/DDSTextureLoader.h"
-#include "../../../../../External/DirectXTextureLoader/WICTextureLoader.h"
-#include "../../../Renderer/RendererCommon.hpp"
-#include "../../../Buffer/TextTextureBufferCommon.hpp"
-#include "../../../Buffer/RenderTextureBufferCommon.hpp"
+#include "../../Common/Texture/TextureCommon.hpp"
+#include "../../../../External/DirectXTextureLoader/DDSTextureLoader.h"
+#include "../../../../External/DirectXTextureLoader/WICTextureLoader.h"
+#include "../../Common/Renderer/RendererCommon.hpp"
+#include "../../Common/Buffer/TextTextureBufferCommon.hpp"
+#include "../../Common/Buffer/RenderTextureBufferCommon.hpp"
 
 namespace Engine5
 {

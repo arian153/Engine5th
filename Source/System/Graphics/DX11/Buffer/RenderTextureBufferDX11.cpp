@@ -1,8 +1,8 @@
 #include "RenderTextureBufferDX11.hpp"
-#include "../../../Buffer/RenderTextureBufferCommon.hpp"
-#include "../../../Vertex/TextureVertexCommon.hpp"
-#include "../../../Renderer/RendererCommon.hpp"
-#include "../../../DataType/Color.hpp"
+#include "../../Common/Buffer/RenderTextureBufferCommon.hpp"
+#include "../../Common/Vertex/TextureVertexCommon.hpp"
+#include "../../Common/Renderer/RendererCommon.hpp"
+#include "../../Common/DataType/Color.hpp"
 
 namespace Engine5
 {

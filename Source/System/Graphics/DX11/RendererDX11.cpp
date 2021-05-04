@@ -1,11 +1,11 @@
 #pragma warning( disable : 26812)
 
 #include "RendererDX11.hpp"
-#include "../../../Core/Utility/CoreUtility.hpp"
-#include "../../../Math/Math.hpp"
-#include "../../DataType/Color.hpp"
+#include "../../Core/Utility/CoreUtility.hpp"
+#include "../../Math/Math.hpp"
+#include "../Common/DataType/Color.hpp"
 #include <cassert>
-#include "../../Renderer/RendererCommon.hpp"
+#include "../Common/Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {

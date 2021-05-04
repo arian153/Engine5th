@@ -1,9 +1,9 @@
 #pragma once
-#include "Element/Scene.hpp"
+#include "Common/Element/Scene.hpp"
 #include <vector>
 #include "../Math/Utility/MathDef.hpp"
 #include "Utility/MatrixManager.hpp"
-#include "DataType/Color.hpp"
+#include "Common/DataType/Color.hpp"
 
 namespace Engine5
 {

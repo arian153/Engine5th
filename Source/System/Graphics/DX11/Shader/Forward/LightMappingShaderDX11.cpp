@@ -1,11 +1,11 @@
 #include "LightMappingShaderDX11.hpp"
-#include "../../../../Shader/Forward/LightMappingShaderCommon.hpp"
+#include "../../../Common/Shader/Forward/LightMappingShaderCommon.hpp"
 #include <d3dcompiler.h>
-#include "../../../../Shader/ShaderManagerCommon.hpp"
-#include "../../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
+#include "../../../Common/Shader/ShaderManagerCommon.hpp"
+#include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 #include "../../ConverterDX11.hpp"
-#include "../../../../Texture/TextureArrayCommon.hpp"
-#include "../../../../DataType/MatrixData.hpp"
+#include "../../../Common/Texture/TextureArrayCommon.hpp"
+#include "../../../Common/DataType/MatrixData.hpp"
 
 namespace Engine5
 {

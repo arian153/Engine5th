@@ -1,11 +1,11 @@
 #include "ConverterDX11.hpp"
-#include "../../../Math/Algebra/Vector2.hpp"
-#include "../../../Math/Algebra/Vector3.hpp"
-#include "../../../Math/Algebra/Vector4.hpp"
-#include "../../../Math/Algebra/Quaternion.hpp"
-#include "../../../Math/Algebra/Matrix44.hpp"
-#include "../../DataType/Color.hpp"
-#include "../../../Math/Algebra/Matrix33.hpp"
+#include "../../Math/Algebra/Vector2.hpp"
+#include "../../Math/Algebra/Vector3.hpp"
+#include "../../Math/Algebra/Vector4.hpp"
+#include "../../Math/Algebra/Quaternion.hpp"
+#include "../../Math/Algebra/Matrix44.hpp"
+#include "../Common/DataType/Color.hpp"
+#include "../../Math/Algebra/Matrix33.hpp"
 
 namespace Engine5
 {

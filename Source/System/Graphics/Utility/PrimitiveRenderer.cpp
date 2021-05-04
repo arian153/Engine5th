@@ -1,11 +1,11 @@
 #include "PrimitiveRenderer.hpp"
-#include "../Renderer/RendererCommon.hpp"
-#include "../Shader/Forward/ColorShaderCommon.hpp"
+#include "../Common/Renderer/RendererCommon.hpp"
+#include "../Common/Shader/Forward/ColorShaderCommon.hpp"
 #include "MatrixManager.hpp"
 #include "../../Math/Curve/Curve.hpp"
-#include "../DataType/MatrixData.hpp"
-#include "../DataType/TopologyDef.hpp"
-#include "../Buffer/MeshBufferCommon.hpp"
+#include "../Common/DataType/MatrixData.hpp"
+#include "../Common/DataType/TopologyDef.hpp"
+#include "../Common/Buffer/MeshBufferCommon.hpp"
 
 namespace Engine5
 {

@@ -1,8 +1,8 @@
 #include "ColorVertexDX11.hpp"
-#include "../../../../Math/Math.hpp"
-#include "../../../DataType/Color.hpp"
+#include "../../../Math/Math.hpp"
+#include "../../Common/DataType/Color.hpp"
 #include "../ConverterDX11.hpp"
-#include "../../../Vertex/ColorVertexCommon.hpp"
+#include "../../Common/Vertex/ColorVertexCommon.hpp"
 
 namespace Engine5
 {

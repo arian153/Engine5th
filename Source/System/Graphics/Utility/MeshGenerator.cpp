@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "../../Math/Algebra/Vector3.hpp"
-#include "../DataType/MeshData.hpp"
+#include "../Common/DataType/MeshData.hpp"
 #include "../../Math/Algebra/Vector2.hpp"
 #include "../../Math/Utility/VectorDef.hpp"
 

@@ -1,6 +1,6 @@
 #include "TextRenderer.hpp"
-#include "../Buffer/TextFormatBufferCommon.hpp"
-#include "../Renderer/RendererCommon.hpp"
+#include "../Common/Buffer/TextFormatBufferCommon.hpp"
+#include "../Common/Renderer/RendererCommon.hpp"
 #include "MatrixManager.hpp"
 
 namespace Engine5

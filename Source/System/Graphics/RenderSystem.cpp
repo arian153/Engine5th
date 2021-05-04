@@ -1,6 +1,6 @@
 #include "RenderSystem.hpp"
-#include "Renderer/RendererCommon.hpp"
-#include "Shader/ShaderManagerCommon.hpp"
+#include "Common/Renderer/RendererCommon.hpp"
+#include "Common/Shader/ShaderManagerCommon.hpp"
 #include "../Core/OS-API/OSCommon.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
 #include "../../Manager/Resource/ResourceManager.hpp"

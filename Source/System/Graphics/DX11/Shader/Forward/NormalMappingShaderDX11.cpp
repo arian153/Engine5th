@@ -1,12 +1,12 @@
 #include "NormalMappingShaderDX11.hpp"
-#include "../../../../Shader/Forward/NormalMappingShaderCommon.hpp"
-#include "../../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
+#include "../../../Common/Shader/Forward/NormalMappingShaderCommon.hpp"
+#include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 #include <d3dcompiler.h>
-#include "../../../../Shader/ShaderManagerCommon.hpp"
+#include "../../../Common/Shader/ShaderManagerCommon.hpp"
 #include "../../ConverterDX11.hpp"
-#include "../../../../Texture/TextureArrayCommon.hpp"
-#include "../../../../DataType/MatrixData.hpp"
-#include "../../../../Light/DirectionalLight.hpp"
+#include "../../../Common/Texture/TextureArrayCommon.hpp"
+#include "../../../Common/DataType/MatrixData.hpp"
+#include "../../../Common/Light/DirectionalLight.hpp"
 
 namespace Engine5
 {

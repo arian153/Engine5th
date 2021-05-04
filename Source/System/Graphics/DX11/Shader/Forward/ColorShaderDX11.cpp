@@ -1,11 +1,11 @@
 #include "ColorShaderDX11.hpp"
-#include "../../../../Shader/Forward/ColorShaderCommon.hpp"
-#include "../../../../../Core/Utility/CoreUtility.hpp"
+#include "../../../Common/Shader/Forward/ColorShaderCommon.hpp"
+#include "../../../../Core/Utility/CoreUtility.hpp"
 #include "../../ConverterDX11.hpp"
-#include "../../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
-#include "../../../../Shader/ShaderManagerCommon.hpp"
+#include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
+#include "../../../Common/Shader/ShaderManagerCommon.hpp"
 #include <d3dcompiler.h>
-#include "../../../../DataType/MatrixData.hpp"
+#include "../../../Common/DataType/MatrixData.hpp"
 
 namespace Engine5
 {

@@ -6,7 +6,8 @@
 #include "../BroadPhase/BroadPhase.hpp"
 #include "../Resolution/ContactManifold.hpp"
 #include <unordered_map>
-#include "../../Graphics/DataType/Color.hpp"
+
+#include "../../Graphics/Common/DataType/Color.hpp"
 #include "../Utility/FrictionUtility.hpp"
 #include "../BroadPhase/RayTest.hpp"
 
