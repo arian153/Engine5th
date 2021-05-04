@@ -1,6 +1,6 @@
 #pragma once
 #include "../Resource.hpp"
-#include "../../../System/Graphics/DataType/MeshData.hpp"
+#include "../../../System/Graphics/Common/DataType/MeshData.hpp"
 
 namespace Engine5
 {

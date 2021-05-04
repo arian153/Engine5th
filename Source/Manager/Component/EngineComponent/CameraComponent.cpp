@@ -1,6 +1,6 @@
 #include "CameraComponent.hpp"
 #include "../../Space/Space.hpp"
-#include "../../../System/Graphics/Element/Scene.hpp"
+#include "../../../System/Graphics/Common/Element/Scene.hpp"
 #include "TransformComponent.hpp"
 #include "../../Object/Object.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"

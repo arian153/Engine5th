@@ -1,6 +1,6 @@
 #pragma once
 #include "../Component.hpp"
-#include "../../../System/Graphics/DataType/Color.hpp"
+#include "../../../System/Graphics/Common/DataType/Color.hpp"
 
 namespace Engine5
 {

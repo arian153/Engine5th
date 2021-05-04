@@ -1,6 +1,6 @@
 #include "MeshResource.hpp"
 #include <fstream>
-#include "../../../System/Graphics/DataType/MeshFace.hpp"
+#include "../../../System/Graphics/Common/DataType/MeshFace.hpp"
 #include "../../../System/Math/Algebra/Vector3.hpp"
 #include "../../../System/Math/Algebra/Vector2.hpp"
 #include "../../../System/Math/Primitive/ConvexHull2D/Triangle.hpp"
