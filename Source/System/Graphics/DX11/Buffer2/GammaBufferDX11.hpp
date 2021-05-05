@@ -19,6 +19,6 @@ namespace Engine5
         GammaBufferDX11();
         ~GammaBufferDX11();
 
-    private:
+    protected:
     };
 }

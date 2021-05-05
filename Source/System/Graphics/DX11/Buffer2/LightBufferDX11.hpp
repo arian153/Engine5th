@@ -22,6 +22,6 @@ namespace Engine5
         LightBufferDX11();
         ~LightBufferDX11();
 
-    private:
+    protected:
     };
 }

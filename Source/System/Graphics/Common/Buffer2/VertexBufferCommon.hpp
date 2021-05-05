@@ -15,6 +15,7 @@ namespace Engine5
         VertexBufferCommon();
         ~VertexBufferCommon();
 
+        void SetPrimitiveTopology(eTopologyType type);
     private:
     };
 

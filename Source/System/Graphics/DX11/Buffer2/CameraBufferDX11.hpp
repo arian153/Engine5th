@@ -18,6 +18,6 @@ namespace Engine5
         CameraBufferDX11();
         ~CameraBufferDX11();
 
-    private:
+    protected:
     };
 }

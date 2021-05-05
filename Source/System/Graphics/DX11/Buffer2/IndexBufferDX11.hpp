@@ -10,6 +10,8 @@ namespace Engine5
         IndexBufferDX11();
         ~IndexBufferDX11();
 
-    private:
+    protected:
+        ID3D11Buffer*        m_index_buffer   = nullptr;
+        ID3D11DeviceContext* m_device_context = nullptr;
     };
 }

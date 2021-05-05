@@ -16,6 +16,6 @@ namespace Engine5
         ColorBufferDX11();
         ~ColorBufferDX11();
 
-    private:
+    protected:
     };
 }

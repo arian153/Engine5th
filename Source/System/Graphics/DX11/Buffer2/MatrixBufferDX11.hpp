@@ -17,6 +17,6 @@ namespace Engine5
         MatrixBufferDX11();
         ~MatrixBufferDX11();
 
-    private:
+    protected:
     };
 }
