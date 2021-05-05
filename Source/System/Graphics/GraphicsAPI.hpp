@@ -29,6 +29,7 @@
 #define ColorVertexAPI ColorVertexDX11
 #define NormalVertexAPI NormalVertexDX11
 #define TextureVertexAPI TextureVertexDX11
+#define GeneralVertexAPI GeneralVertexDX11
 #define InstanceDataAPI InstanceDataDX11
 
 //forward shader
@@ -83,6 +84,7 @@
 #define IncludeColorVertexAPI "../../DX11/Vertex/ColorVertexDX11.hpp"
 #define IncludeNormalVertexAPI "../../DX11/Vertex/NormalVertexDX11.hpp"
 #define IncludeTextureVertexAPI "../../DX11/Vertex/TextureVertexDX11.hpp"
+#define IncludeGeneralVertexAPI "../../DX11/Vertex/GeneralVertexDX11.hpp"
 #define IncludeShaderManagerAPI "../../DX11/Shader/ShaderManagerDX11.hpp"
 #define IncludeInstanceDataAPI "../../DX11/Vertex/InstanceDataDX11.hpp"
 

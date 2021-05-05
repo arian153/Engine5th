@@ -10,7 +10,7 @@ namespace Engine5
         ~GeneralVertexDX11();
 
     public:
-        DirectX::XMFLOAT3 pos;
+        DirectX::XMFLOAT3 position;
         DirectX::XMFLOAT2 tex;
         DirectX::XMFLOAT3 normal;
         DirectX::XMFLOAT3 tangent;
