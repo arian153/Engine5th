@@ -18,5 +18,7 @@ namespace Engine5
         ~MatrixBufferDX11();
 
     protected:
+        ID3D11Buffer*        m_matrix_buffer  = nullptr;
+        ID3D11DeviceContext* m_device_context = nullptr;
     };
 }
