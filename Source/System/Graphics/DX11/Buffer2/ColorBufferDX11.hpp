@@ -17,5 +17,7 @@ namespace Engine5
         ~ColorBufferDX11();
 
     protected:
+        ID3D11Buffer*        m_color_buffer   = nullptr;
+        ID3D11DeviceContext* m_device_context = nullptr;
     };
 }

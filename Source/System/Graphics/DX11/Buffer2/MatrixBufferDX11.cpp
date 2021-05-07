@@ -55,9 +55,9 @@ namespace Engine5
         HRESULT                  result = m_device_context->Map(m_matrix_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
         if (FAILED(result))
             return;
-        MatrixBufferType* matrix_data_ptr = (MatrixBufferType*)mapped_resource.pData;
-        matrix_data_ptr->mvp              = DirectX::XMMatrixTranspose(ConverterDX11::ToXMMatrix(matrix_data.GetMVPMatrix()));
-        matrix_data_ptr->world            = DirectX::XMMatrixTranspose(ConverterDX11::ToXMMatrix(matrix_data.model));
+        MatrixBufferType* data_ptr = (MatrixBufferType*)mapped_resource.pData;
+        data_ptr->mvp              = DirectX::XMMatrixTranspose(ConverterDX11::ToXMMatrix(matrix_data.GetMVPMatrix()));
+        data_ptr->world            = DirectX::XMMatrixTranspose(ConverterDX11::ToXMMatrix(matrix_data.model));
         m_device_context->Unmap(m_matrix_buffer, 0);
     }
 

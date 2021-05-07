@@ -19,5 +19,7 @@ namespace Engine5
         ~CameraBufferDX11();
 
     protected:
+        ID3D11Buffer*        m_camera_buffer  = nullptr;
+        ID3D11DeviceContext* m_device_context = nullptr;
     };
 }

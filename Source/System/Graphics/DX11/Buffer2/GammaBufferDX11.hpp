@@ -20,5 +20,7 @@ namespace Engine5
         ~GammaBufferDX11();
 
     protected:
+        ID3D11Buffer*        m_gamma_buffer   = nullptr;
+        ID3D11DeviceContext* m_device_context = nullptr;
     };
 }

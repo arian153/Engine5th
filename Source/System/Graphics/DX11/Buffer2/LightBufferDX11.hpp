@@ -23,5 +23,7 @@ namespace Engine5
         ~LightBufferDX11();
 
     protected:
+        ID3D11Buffer* m_light_buffer = nullptr;
+        ID3D11DeviceContext* m_device_context = nullptr;
     };
 }
