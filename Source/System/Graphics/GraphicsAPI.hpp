@@ -21,6 +21,7 @@
 #define LightBufferAPI LightBufferDX11
 #define MatrixBufferAPI MatrixBufferDX11
 #define VertexBufferAPI VertexBufferDX11
+#define VertexLayoutAPI VertexLayoutDX11
 
 //others
 #define TextureAPI TextureDX11
@@ -67,6 +68,7 @@
 #define IncludeLightBufferAPI  "../../DX11/Buffer2/LightBufferDX11.hpp"
 #define IncludeMatrixBufferAPI "../../DX11/Buffer2/MatrixBufferDX11.hpp"
 #define IncludeVertexBufferAPI "../../DX11/Buffer2/VertexBufferDX11.hpp"
+#define IncludeVertexLayoutAPI "../../DX11/Buffer2/VertexLayoutDX11.hpp"
 
 
 #define IncludeMeshBufferAPI "../../DX11/Buffer/MeshBufferDX11.hpp"
