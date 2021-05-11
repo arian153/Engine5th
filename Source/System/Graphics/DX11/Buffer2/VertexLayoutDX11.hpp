@@ -10,6 +10,7 @@ namespace Engine5
         ~VertexLayoutDX11();
 
     protected:
-        ID3D11InputLayout* m_layout = nullptr;
+        ID3D11InputLayout*   m_layout         = nullptr;
+        ID3D11DeviceContext* m_device_context = nullptr;
     };
 }

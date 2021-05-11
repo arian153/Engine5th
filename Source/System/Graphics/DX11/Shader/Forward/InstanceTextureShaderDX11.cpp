@@ -105,7 +105,7 @@ namespace Engine5
         polygon_layout[0].SemanticIndex        = 0;
         polygon_layout[0].Format               = DXGI_FORMAT_R32G32B32_FLOAT;
         polygon_layout[0].InputSlot            = 0;
-        polygon_layout[0].AlignedByteOffset    = 0;
+        polygon_layout[0].AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
         polygon_layout[0].InputSlotClass       = D3D11_INPUT_PER_VERTEX_DATA;
         polygon_layout[0].InstanceDataStepRate = 0;
         // texture
@@ -122,7 +122,7 @@ namespace Engine5
         polygon_layout[2].SemanticIndex        = 0;
         polygon_layout[2].Format               = DXGI_FORMAT_R32G32B32A32_FLOAT;
         polygon_layout[2].InputSlot            = 1;
-        polygon_layout[2].AlignedByteOffset    = 0;
+        polygon_layout[2].AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
         polygon_layout[2].InputSlotClass       = D3D11_INPUT_PER_INSTANCE_DATA;
         polygon_layout[2].InstanceDataStepRate = 1;
         //second
@@ -130,7 +130,7 @@ namespace Engine5
         polygon_layout[3].SemanticIndex        = 1;
         polygon_layout[3].Format               = DXGI_FORMAT_R32G32B32A32_FLOAT;
         polygon_layout[3].InputSlot            = 1;
-        polygon_layout[3].AlignedByteOffset    = 16;
+        polygon_layout[3].AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
         polygon_layout[3].InputSlotClass       = D3D11_INPUT_PER_INSTANCE_DATA;
         polygon_layout[3].InstanceDataStepRate = 1;
         //third
@@ -138,7 +138,7 @@ namespace Engine5
         polygon_layout[4].SemanticIndex        = 2;
         polygon_layout[4].Format               = DXGI_FORMAT_R32G32B32A32_FLOAT;
         polygon_layout[4].InputSlot            = 1;
-        polygon_layout[4].AlignedByteOffset    = 32;
+        polygon_layout[4].AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
         polygon_layout[4].InputSlotClass       = D3D11_INPUT_PER_INSTANCE_DATA;
         polygon_layout[4].InstanceDataStepRate = 1;
         //fourth
@@ -146,7 +146,7 @@ namespace Engine5
         polygon_layout[5].SemanticIndex        = 3;
         polygon_layout[5].Format               = DXGI_FORMAT_R32G32B32A32_FLOAT;
         polygon_layout[5].InputSlot            = 1;
-        polygon_layout[5].AlignedByteOffset    = 48;
+        polygon_layout[5].AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
         polygon_layout[5].InputSlotClass       = D3D11_INPUT_PER_INSTANCE_DATA;
         polygon_layout[5].InstanceDataStepRate = 1;
         //color
@@ -154,7 +154,7 @@ namespace Engine5
         polygon_layout[6].SemanticIndex        = 0;
         polygon_layout[6].Format               = DXGI_FORMAT_R32G32B32A32_FLOAT;
         polygon_layout[6].InputSlot            = 1;
-        polygon_layout[6].AlignedByteOffset    = 64;
+        polygon_layout[6].AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
         polygon_layout[6].InputSlotClass       = D3D11_INPUT_PER_INSTANCE_DATA;
         polygon_layout[6].InstanceDataStepRate = 1;
         // Get a count of the elements in the layout.
