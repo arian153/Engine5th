@@ -1,4 +1,5 @@
 #pragma once
+#include <d3d11.h>
 
 namespace Engine5
 {
@@ -8,8 +9,7 @@ namespace Engine5
         VertexLayoutDX11();
         ~VertexLayoutDX11();
 
-    private:
+    protected:
+        ID3D11InputLayout* m_layout = nullptr;
     };
-
-
 }
