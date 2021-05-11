@@ -36,10 +36,8 @@ namespace Engine5
 
         for (size_t i = 0; i < size; ++i)
         {
-            vertex_layout[i].SemanticName  = m_attributes[i].name.c_str();
-            vertex_layout[i].SemanticIndex = 0;
-
-            vertex_layout[i].Format               = DXGI_FORMAT_R32G32B32_FLOAT;
+            vertex_layout[i].SemanticName         = m_attributes[i].name.c_str();
+            vertex_layout[i].SemanticIndex        = 0;
             vertex_layout[i].InputSlot            = 0;
             vertex_layout[i].AlignedByteOffset    = 0;
             vertex_layout[i].InputSlotClass       = D3D11_INPUT_PER_VERTEX_DATA;
@@ -47,26 +45,42 @@ namespace Engine5
 
             size_t count = m_attributes[i].count;
             auto   type  = m_attributes[i].type;
+
+            int format;
+            switch (count)
+            {
+            case 2:
+                format = (int)DXGI_FORMAT_R32G32_TYPELESS;
+                break;
+            case 3:
+                format = (int)DXGI_FORMAT_R32G32B32_TYPELESS;
+                break;
+            case 4:
+                format = (int)DXGI_FORMAT_R32G32B32A32_TYPELESS;
+                break;
+            default:
+                format = (int)DXGI_FORMAT_UNKNOWN;
+                break;
+            }
+
             switch (type)
             {
-            case Engine5::eAttributeType::R32:
-                vertex_layout[i].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+            case eAttributeType::T32:
                 break;
-            case Engine5::eAttributeType::I8:
+            case eAttributeType::F32:
+                format += 1;
                 break;
-            case Engine5::eAttributeType::I16:
+            case eAttributeType::I32:
+                format += 3;
                 break;
-            case Engine5::eAttributeType::I32:
-                break;
-            case Engine5::eAttributeType::U8:
-                break;
-            case Engine5::eAttributeType::U16:
-                break;
-            case Engine5::eAttributeType::U32:
+            case eAttributeType::U32:
+                format += 2;
                 break;
             default:
                 break;
             }
+
+            vertex_layout[i].Format = (DXGI_FORMAT)format;
         }
 
         return true;

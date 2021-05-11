@@ -10,12 +10,9 @@ namespace Engine5
 {
     enum class eAttributeType : int
     {
-        R32,
-        I8,
-        I16,
+        T32,
+        F32,
         I32,
-        U8,
-        U16,
         U32
     };
 
@@ -28,7 +25,7 @@ namespace Engine5
 
     public:
         std::string    name         = "";
-        eAttributeType type         = eAttributeType::R32;
+        eAttributeType type         = eAttributeType::F32;
         size_t         count        = 0;
         bool           b_normalized = false;
     };
