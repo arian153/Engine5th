@@ -21,6 +21,7 @@
 #define LightBufferAPI LightBufferDX11
 #define MatrixBufferAPI MatrixBufferDX11
 #define VertexBufferAPI VertexBufferDX11
+#define VertexAttributeAPI VertexAttributeDX11
 #define VertexLayoutAPI VertexLayoutDX11
 
 //others
@@ -48,6 +49,8 @@
 //deferred shader
 #define DeferredDirectionalLightShaderAPI DeferredDirectionalLightShaderDX11
 #define DeferredBufferShaderAPI DeferredBufferShaderDX11
+
+#define ShaderProgramAPI ShaderProgramDX11
 
 //includes
 #define IncludeRendererAPI "../../DX11/RendererDX11.hpp"
@@ -87,7 +90,7 @@
 #define IncludeNormalVertexAPI "../../DX11/Vertex/NormalVertexDX11.hpp"
 #define IncludeTextureVertexAPI "../../DX11/Vertex/TextureVertexDX11.hpp"
 #define IncludeGeneralVertexAPI "../../DX11/Vertex/GeneralVertexDX11.hpp"
-#define IncludeShaderManagerAPI "../../DX11/Shader/ShaderManagerDX11.hpp"
+
 #define IncludeInstanceDataAPI "../../DX11/Vertex/InstanceDataDX11.hpp"
 
 //forward
@@ -104,6 +107,9 @@
 //deferred
 #define IncludeDeferredBufferShaderAPI "../../../DX11/Shader/Deferred/DeferredBufferShaderDX11.hpp"
 #define IncludeDeferredDirectionalLightShaderAPI "../../../DX11/Shader/Deferred/DeferredDirectionalLightShaderDX11.hpp"
+
+#define IncludeShaderManagerAPI "../../DX11/Shader/ShaderManagerDX11.hpp"
+#define IncludeShaderProgramAPI "../../DX11/Shader/ShaderProgramDX11.hpp"
 
 #elif defined(E5_DIRECTX12)
 #elif defined(E5_OPENGL4)

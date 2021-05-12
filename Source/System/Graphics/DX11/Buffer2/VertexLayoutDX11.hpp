@@ -1,16 +1,33 @@
 #pragma once
-#include <d3d11.h>
+#include "../../../Core/Utility/CoreDef.hpp"
+#include "../../Common/DataType/VertexAttributeDef.hpp"
 
 namespace Engine5
 {
+    class VertexAttributeDX11
+    {
+    public:
+        VertexAttributeDX11()  = default;
+        ~VertexAttributeDX11() = default;
+
+    public:
+        std::string    sem_name   = "";
+        U32            sem_idx    = 0;
+        eInputSlotType slot_type  = eInputSlotType::VERTEX_DATA;
+        U32            input_slot = 0;
+        U32            step_rate  = 0;
+    };
+
     class VertexLayoutDX11
     {
     public:
         VertexLayoutDX11();
         ~VertexLayoutDX11();
 
+        void Push(eAttributeType type, U32 count, const std::string& semantic_name, U32 semantic_idx);
+        void Push(eAttributeType type, U32 count, const std::string& semantic_name, U32 semantic_idx, eInputSlotType slot_type, U32 input_slot, U32 step_rate);
+
     protected:
-        ID3D11InputLayout*   m_layout         = nullptr;
-        ID3D11DeviceContext* m_device_context = nullptr;
+      
     };
 }
