@@ -1,5 +1,7 @@
 #include "ShaderProgramDX11.hpp"
 
+#include <d3dcompiler.h>
+
 #include "../../Common/Buffer2/VertexLayoutCommon.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
 #include "../../Common/Shader/ShaderProgramCommon.hpp"
@@ -29,7 +31,56 @@ namespace Engine5
         ID3D10Blob* pixel_shader_buffer  = nullptr;
         //Initialize vertex shader
 
+        std::wstring vertex_shader_path;
+        // Compile the vertex shader code.
+        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "VertexShaderEntry", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
+        if (FAILED(result))
+        {
+            // If the shader failed to compile it should have written something to the error message.
+            if (error_message)
+            {
+                //m_shader_manager->OutputShaderErrorMessage(error_message, m_hwnd, vertex_shader_path);
+            }
+                // If there was  nothing in the error message then it simply could not find the shader file itself.
+            else
+            {
+                MessageBox(m_hwnd, vertex_shader_path.c_str(), L"Missing Shader File", MB_OK);
+            }
+            return false;
+        }
+
+        // Create the vertex shader from the buffer.
+        result = m_device->CreateVertexShader(vertex_shader_buffer->GetBufferPointer(), vertex_shader_buffer->GetBufferSize(), nullptr, &m_vertex_shader);
+        if (FAILED(result))
+        {
+            return false;
+        }
+
         //Initialize pixel shader
+        std::wstring pixel_shader_path;
+        // Compile the pixel shader code.
+        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "PixelShaderEntry", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
+        if (FAILED(result))
+        {
+            // If the shader failed to compile it should have written something to the error message.
+            if (error_message)
+            {
+                //m_shader_manager->OutputShaderErrorMessage(error_message, m_hwnd, pixel_shader_path);
+            }
+                // If there was nothing in the error message then it simply could not find the file itself.
+            else
+            {
+                MessageBox(m_hwnd, pixel_shader_path.c_str(), L"Missing Shader File", MB_OK);
+            }
+            return false;
+        }
+
+        // Create the pixel shader from the buffer.
+        result = m_device->CreatePixelShader(pixel_shader_buffer->GetBufferPointer(), pixel_shader_buffer->GetBufferSize(), nullptr, &m_pixel_shader);
+        if (FAILED(result))
+        {
+            return false;
+        }
 
         //Initialize input layout
         if (m_vertex_layout == nullptr)
@@ -92,10 +143,10 @@ namespace Engine5
             vertex_layout[i].Format = (DXGI_FORMAT)format;
         }
 
-        HRESULT result = renderer->GetDevice()->CreateInputLayout(
-                                                                  vertex_layout.data(), (UINT)vertex_layout.size(),
-                                                                  vertex_shader_buffer->GetBufferPointer(),
-                                                                  vertex_shader_buffer->GetBufferSize(), &m_layout);
+        result = renderer->GetDevice()->CreateInputLayout(
+                                                          vertex_layout.data(), (UINT)vertex_layout.size(),
+                                                          vertex_shader_buffer->GetBufferPointer(),
+                                                          vertex_shader_buffer->GetBufferSize(), &m_layout);
         if (FAILED(result))
         {
             return false;
