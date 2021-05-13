@@ -16,11 +16,5 @@ namespace Engine5
         SpecularMapping
     };
 
-    enum class eShaderStage : int
-    {
-        IntegratedShader = -1,
-        VertexShader,
-        PixelShader,
-        InvalidShader
-    };
+   
 }

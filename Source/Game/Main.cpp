@@ -18,3 +18,4 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR cmd_line, 
     delete app;
     return 0;
 }
+

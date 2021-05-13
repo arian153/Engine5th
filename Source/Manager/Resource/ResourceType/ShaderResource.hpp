@@ -1,9 +1,16 @@
 #pragma once
 #include "../Resource.hpp"
-#include "../../../System/Graphics/Common/Shader/ShaderType.hpp"
 
 namespace Engine5
 {
+    enum class eShaderStage : int
+    {
+        IntegratedShader = -1,
+        VertexShader,
+        PixelShader,
+        InvalidShader
+    };
+
     class ShaderResource final : public Resource
     {
     public:
