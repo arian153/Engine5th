@@ -4,6 +4,7 @@
 
 #include "../../Common/Buffer2/VertexLayoutCommon.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
+#include "../../Common/Shader/ShaderManagerCommon.hpp"
 #include "../../Common/Shader/ShaderProgramCommon.hpp"
 
 namespace Engine5
@@ -16,7 +17,23 @@ namespace Engine5
     {
     }
 
-    ShaderProgramCommon::ShaderProgramCommon()
+    void ShaderProgramDX11::SetHWnd(HWND hwnd)
+    {
+        m_hwnd = hwnd;
+    }
+
+    void ShaderProgramDX11::SetDevice(ID3D11Device* device)
+    {
+        m_device = device;
+    }
+
+    void ShaderProgramDX11::SetDeviceContext(ID3D11DeviceContext* device_context)
+    {
+        m_device_context = device_context;
+    }
+
+    ShaderProgramCommon::ShaderProgramCommon(ShaderManagerCommon* shader_manager)
+        : m_shader_manager(shader_manager)
     {
     }
 
@@ -29,19 +46,17 @@ namespace Engine5
         ID3D10Blob* error_message        = nullptr;
         ID3D10Blob* vertex_shader_buffer = nullptr;
         ID3D10Blob* pixel_shader_buffer  = nullptr;
-        //Initialize vertex shader
 
+        //Initialize vertex shader
         std::wstring vertex_shader_path;
         // Compile the vertex shader code.
         HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "VertexShaderEntry", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
         if (FAILED(result))
         {
-            // If the shader failed to compile it should have written something to the error message.
             if (error_message)
             {
-                //m_shader_manager->OutputShaderErrorMessage(error_message, m_hwnd, vertex_shader_path);
+                m_shader_manager->OutputShaderErrorMessage(error_message, m_hwnd, vertex_shader_path);
             }
-                // If there was  nothing in the error message then it simply could not find the shader file itself.
             else
             {
                 MessageBox(m_hwnd, vertex_shader_path.c_str(), L"Missing Shader File", MB_OK);
@@ -62,12 +77,10 @@ namespace Engine5
         result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "PixelShaderEntry", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
         if (FAILED(result))
         {
-            // If the shader failed to compile it should have written something to the error message.
             if (error_message)
             {
-                //m_shader_manager->OutputShaderErrorMessage(error_message, m_hwnd, pixel_shader_path);
+                m_shader_manager->OutputShaderErrorMessage(error_message, m_hwnd, pixel_shader_path);
             }
-                // If there was nothing in the error message then it simply could not find the file itself.
             else
             {
                 MessageBox(m_hwnd, pixel_shader_path.c_str(), L"Missing Shader File", MB_OK);
@@ -143,22 +156,74 @@ namespace Engine5
             vertex_layout[i].Format = (DXGI_FORMAT)format;
         }
 
-        result = renderer->GetDevice()->CreateInputLayout(
-                                                          vertex_layout.data(), (UINT)vertex_layout.size(),
-                                                          vertex_shader_buffer->GetBufferPointer(),
-                                                          vertex_shader_buffer->GetBufferSize(), &m_layout);
+        result = m_device->CreateInputLayout(
+                                             vertex_layout.data(), (UINT)vertex_layout.size(),
+                                             vertex_shader_buffer->GetBufferPointer(),
+                                             vertex_shader_buffer->GetBufferSize(), &m_layout);
         if (FAILED(result))
         {
             return false;
         }
 
-        m_device_context = renderer->GetDeviceContext();
+        // Release all shader buffers.
+        vertex_shader_buffer->Release();
+        vertex_shader_buffer = nullptr;
+
+        pixel_shader_buffer->Release();
+        pixel_shader_buffer = nullptr;
+
+        // Create a texture sampler state description.
+        D3D11_SAMPLER_DESC sampler_desc;
+        sampler_desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_WRAP;
+        sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_WRAP;
+        sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_WRAP;
+        sampler_desc.MipLODBias     = 0.0f;
+        sampler_desc.MaxAnisotropy  = 1;
+        sampler_desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+        sampler_desc.BorderColor[0] = 0;
+        sampler_desc.BorderColor[1] = 0;
+        sampler_desc.BorderColor[2] = 0;
+        sampler_desc.BorderColor[3] = 0;
+        sampler_desc.MinLOD         = 0;
+        sampler_desc.MaxLOD         = D3D11_FLOAT32_MAX;
+        // Create the texture sampler state.
+        result = m_device->CreateSamplerState(&sampler_desc, &m_sampler_state);
+        if (FAILED(result))
+        {
+            return false;
+        }
+
         return true;
     }
 
     void ShaderProgramCommon::Shutdown()
     {
         m_vertex_layout = nullptr;
+        // Release the sampler state.
+        if (m_sampler_state != nullptr)
+        {
+            m_sampler_state->Release();
+            m_sampler_state = nullptr;
+        }
+        // Release the layout.
+        if (m_layout != nullptr)
+        {
+            m_layout->Release();
+            m_layout = nullptr;
+        }
+        // Release the pixel shader.
+        if (m_pixel_shader != nullptr)
+        {
+            m_pixel_shader->Release();
+            m_pixel_shader = nullptr;
+        }
+        // Release the vertex shader.
+        if (m_vertex_shader != nullptr)
+        {
+            m_vertex_shader->Release();
+            m_vertex_shader = nullptr;
+        }
     }
 
     void ShaderProgramCommon::Bind()
@@ -168,5 +233,10 @@ namespace Engine5
     void ShaderProgramCommon::SetVertexLayout(VertexLayoutCommon* layout)
     {
         m_vertex_layout = layout;
+    }
+
+    void ShaderProgramCommon::SetShader(ShaderResource* shader)
+    {
+        m_shader_resource = shader;
     }
 }

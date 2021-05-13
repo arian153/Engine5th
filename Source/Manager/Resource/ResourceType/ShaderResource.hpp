@@ -1,5 +1,6 @@
 #pragma once
 #include "../Resource.hpp"
+#include "../../../System/Graphics/Common/Shader/ShaderType.hpp"
 
 namespace Engine5
 {
@@ -13,5 +14,7 @@ namespace Engine5
         void Shutdown() override;
 
     private:
+        bool         m_b_integrated_shader = false;
+        eShaderStage m_stage;
     };
 }

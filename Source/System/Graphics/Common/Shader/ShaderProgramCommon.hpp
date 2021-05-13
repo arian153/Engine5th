@@ -8,13 +8,15 @@
 
 namespace Engine5
 {
+    class ShaderResource;
+    class ShaderManagerCommon;
     class RendererCommon;
     class VertexLayoutCommon;
 
     class ShaderProgramCommon : public ShaderProgramAPI
     {
     public:
-        ShaderProgramCommon();
+        explicit ShaderProgramCommon(ShaderManagerCommon* shader_manager);
         ~ShaderProgramCommon();
 
         bool Init(RendererCommon* renderer);
@@ -23,9 +25,11 @@ namespace Engine5
 
         void SetVertexLayout(VertexLayoutCommon* layout);
 
-    private:
-        VertexLayoutCommon* m_vertex_layout = nullptr;
-    };
+        void SetShader(ShaderResource* shader);
 
-    
+    private:
+        ShaderManagerCommon* m_shader_manager  = nullptr;
+        ShaderResource*      m_shader_resource = nullptr;
+        VertexLayoutCommon*  m_vertex_layout   = nullptr;
+    };
 }

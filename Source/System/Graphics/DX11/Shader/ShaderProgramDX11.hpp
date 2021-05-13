@@ -11,6 +11,10 @@ namespace Engine5
         ShaderProgramDX11();
         ~ShaderProgramDX11();
 
+        void SetHWnd(HWND hwnd);
+        void SetDevice(ID3D11Device* device);
+        void SetDeviceContext(ID3D11DeviceContext* device_context);
+
     protected:
         ID3D11VertexShader*  m_vertex_shader  = nullptr;
         ID3D11PixelShader*   m_pixel_shader   = nullptr;
