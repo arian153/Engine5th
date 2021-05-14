@@ -73,9 +73,11 @@ namespace Engine5
     {
         for (size_t i = 0; i < m_count; ++i)
         {
-            // Solve tangent constraints first because non-penetration is more important than friction.
             SolveJacobian(m_manifold->contacts[i], m_tangent[i], i, dt);
             SolveJacobian(m_manifold->contacts[i], m_bitangent[i], i, dt);
+        }
+        for (size_t i = 0; i < m_count; ++i)
+        {
             // Solve normal constraints
             SolveJacobian(m_manifold->contacts[i], m_normal[i], i, dt, true);
         }
@@ -153,19 +155,19 @@ namespace Engine5
         if (contact_size == 3)
         {
             primitive_renderer->DrawTriangle(
-                m_manifold->contacts[0].global_position_a,
-                m_manifold->contacts[1].global_position_a,
-                m_manifold->contacts[2].global_position_a,
-                eRenderingMode::Face, color);
+                                             m_manifold->contacts[0].global_position_a,
+                                             m_manifold->contacts[1].global_position_a,
+                                             m_manifold->contacts[2].global_position_a,
+                                             eRenderingMode::Face, color);
         }
         if (contact_size == 4)
         {
             primitive_renderer->DrawRectangle(
-                m_manifold->contacts[0].global_position_a,
-                m_manifold->contacts[1].global_position_a,
-                m_manifold->contacts[2].global_position_a,
-                m_manifold->contacts[3].global_position_a,
-                eRenderingMode::Face, color);
+                                              m_manifold->contacts[0].global_position_a,
+                                              m_manifold->contacts[1].global_position_a,
+                                              m_manifold->contacts[2].global_position_a,
+                                              m_manifold->contacts[3].global_position_a,
+                                              eRenderingMode::Face, color);
         }
     }
 

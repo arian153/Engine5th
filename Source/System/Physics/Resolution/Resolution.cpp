@@ -103,6 +103,7 @@ namespace Engine5
                     contact.SolveVelocityConstraints(dt);
                 }
             }
+
             for (auto& constraint : m_constraints)
             {
                 constraint->ApplyVelocityConstraints();
