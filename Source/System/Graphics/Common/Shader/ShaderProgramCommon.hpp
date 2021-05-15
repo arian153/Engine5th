@@ -8,6 +8,7 @@
 
 namespace Engine5
 {
+    class ConstantBufferCommon;
     class ShaderResource;
     class ShaderManagerCommon;
     class RendererCommon;
@@ -25,10 +26,13 @@ namespace Engine5
 
         void SetVertexLayout(VertexLayoutCommon* layout);
         void SetShaderResource(ShaderResource* resource);
+        void AddConstantBuffer(ConstantBufferCommon* buffer);
 
     private:
         ShaderManagerCommon* m_shader_manager = nullptr;
         ShaderResource*      m_resource       = nullptr;
         VertexLayoutCommon*  m_vertex_layout  = nullptr;
+
+        std::vector<ConstantBufferCommon*> m_constant_buffers;
     };
 }

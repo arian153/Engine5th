@@ -21,7 +21,7 @@ namespace Engine5
     {
     }
 
-    bool ConstantBufferCommon::Init(RendererCommon* renderer, eBindingStage type, size_t buffer_size)
+    bool ConstantBufferCommon::Init(RendererCommon* renderer, eBindingStage type, size_t buffer_size, U32 slot)
     {
         if (m_constant_buffer != nullptr)
         {
@@ -29,7 +29,8 @@ namespace Engine5
             m_constant_buffer = nullptr;
         }
 
-        m_binding_type = type;
+        m_stage        = type;
+        m_slot         = slot;
         U32 byte_width = (buffer_size + 255) & ~255;
 
         D3D11_BUFFER_DESC buffer_desc;
@@ -60,13 +61,13 @@ namespace Engine5
         m_device_context->Unmap(m_constant_buffer, 0);
     }
 
-    void ConstantBufferCommon::Bind(U32 slot) const
+    void ConstantBufferCommon::Bind() const
     {
-        if (m_binding_type == eBindingStage::VertexShader)
-            m_device_context->VSSetConstantBuffers(slot, 1, &m_constant_buffer);
+        if (m_stage == eBindingStage::VertexShader)
+            m_device_context->VSSetConstantBuffers(m_slot, 1, &m_constant_buffer);
 
-        if (m_binding_type == eBindingStage::PixelShader)
-            m_device_context->PSSetConstantBuffers(slot, 1, &m_constant_buffer);
+        if (m_stage == eBindingStage::PixelShader)
+            m_device_context->PSSetConstantBuffers(m_slot, 1, &m_constant_buffer);
     }
 
     void ConstantBufferCommon::Shutdown()

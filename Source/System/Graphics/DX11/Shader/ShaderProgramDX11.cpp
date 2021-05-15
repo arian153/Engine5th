@@ -3,6 +3,7 @@
 #include <d3dcompiler.h>
 
 #include "../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
+#include "../../Common/Buffer2/ConstantBufferCommon.hpp"
 #include "../../Common/Buffer2/VertexLayoutCommon.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
 #include "../../Common/Shader/ShaderManagerCommon.hpp"
@@ -189,7 +190,14 @@ namespace Engine5
 
     void ShaderProgramCommon::Shutdown()
     {
-        m_vertex_layout = nullptr;
+        for (auto& buffer : m_constant_buffers)
+        {
+            buffer->Shutdown();
+            delete buffer;
+            buffer = nullptr;
+        }
+        m_constant_buffers.clear();
+
         // Release the sampler state.
         if (m_sampler_state != nullptr)
         {
@@ -197,6 +205,7 @@ namespace Engine5
             m_sampler_state = nullptr;
         }
         // Release the layout.
+        m_vertex_layout = nullptr;
         if (m_layout != nullptr)
         {
             m_layout->Release();
@@ -218,6 +227,18 @@ namespace Engine5
 
     void ShaderProgramCommon::Bind()
     {
+        for (auto& buffer : m_constant_buffers)
+        {
+            buffer->Bind();
+        }
+
+        // Set the vertex input layout.
+        m_device_context->IASetInputLayout(m_layout);
+        // Set the vertex shader and pixel shader.
+        m_device_context->VSSetShader(m_vertex_shader, nullptr, 0);
+        m_device_context->PSSetShader(m_pixel_shader, nullptr, 0);
+        // Set the sampler state in the pixel shader.
+        m_device_context->PSSetSamplers(0, 1, &m_sampler_state);
     }
 
     void ShaderProgramCommon::SetVertexLayout(VertexLayoutCommon* layout)
@@ -228,5 +249,10 @@ namespace Engine5
     void ShaderProgramCommon::SetShaderResource(ShaderResource* resource)
     {
         m_resource = resource;
+    }
+
+    void ShaderProgramCommon::AddConstantBuffer(ConstantBufferCommon* buffer)
+    {
+        m_constant_buffers.push_back(buffer);
     }
 }

@@ -17,13 +17,12 @@ namespace Engine5
         ConstantBufferCommon();
         ~ConstantBufferCommon();
 
-        bool Init(RendererCommon* renderer, eBindingStage type, size_t buffer_size);
+        bool Init(RendererCommon* renderer, eBindingStage type, size_t buffer_size, U32 slot);
         void Update(void* data) const;
-        void Bind(U32 slot) const;
+        void Bind() const;
         void Shutdown();
     private:
-        eBindingStage m_binding_type = eBindingStage::PixelShader;
+        U32           m_slot         = 0;
+        eBindingStage m_stage = eBindingStage::PixelShader;
     };
-
-    
 }
