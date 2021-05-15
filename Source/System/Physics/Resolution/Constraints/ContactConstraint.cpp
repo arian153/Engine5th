@@ -182,14 +182,14 @@ namespace Engine5
             Vector3 p = contact_point.normal_lambda * normal_basis.i
                     + contact_point.tangent_lambda * normal_basis.j
                     + contact_point.bitangent_lambda * normal_basis.k;
-            m_velocity_term.v_a -= m_mass_term.m_a * p;
-            m_velocity_term.w_a -= m_mass_term.i_a * CrossProduct(contact_point.r_a, p);
-            m_velocity_term.v_b += m_mass_term.m_b * p;
-            m_velocity_term.w_b += m_mass_term.i_b * CrossProduct(contact_point.r_b, p);
+            m_velocity_term.v_a -= m_mass_term.m_a * p * 0.8f;
+            m_velocity_term.w_a -= m_mass_term.i_a * CrossProduct(contact_point.r_a, p) * 0.8f;
+            m_velocity_term.v_b += m_mass_term.m_b * p * 0.8f;
+            m_velocity_term.w_b += m_mass_term.i_b * CrossProduct(contact_point.r_b, p) * 0.8f;
 
-            m_normal[i].total_lambda += contact_point.normal_lambda;
-            m_tangent[i].total_lambda += contact_point.tangent_lambda;
-            m_bitangent[i].total_lambda += contact_point.bitangent_lambda;
+            m_normal[i].total_lambda    = contact_point.normal_lambda * 0.8f;
+            m_tangent[i].total_lambda   = contact_point.tangent_lambda * 0.8f;
+            m_bitangent[i].total_lambda = contact_point.bitangent_lambda * 0.8f;
         }
     }
 

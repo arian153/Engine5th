@@ -95,7 +95,7 @@
                                 "Density": 0.1,
                                 "Orientation": [1, 0, 0, 0],
                                 "Position": [0, 0, 0],
-                                "Cube": [4, 4, 4],
+                                "Cube": [6, 4, 6],
                                 "Scale": 1,
                                 "Type": "Box"
                             }
@@ -128,7 +128,7 @@
                                 "Density": 0.1,
                                 "Orientation": [1, 0, 0, 0],
                                 "Position": [0, 0, 0],
-                                "Cube": [4, 4, 4],
+                                "Cube": [5, 4, 5],
                                 "Scale": 1,
                                 "Type": "Box"
                             }

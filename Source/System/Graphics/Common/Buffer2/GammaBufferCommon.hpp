@@ -18,11 +18,11 @@ namespace Engine5
         GammaBufferCommon();
         ~GammaBufferCommon();
 
-        bool Init(RendererCommon* renderer, eBufferBindType type);
+        bool Init(RendererCommon* renderer, eBindingStage type);
         void Update(Real gamma = 2.2f) const;
         void Bind(U32 slot) const;
         void Shutdown();
     private:
-        eBufferBindType m_binding_type = eBufferBindType::PixelShader;
+        eBindingStage m_binding_type = eBindingStage::PixelShader;
     };
 }

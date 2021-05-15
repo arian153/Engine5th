@@ -23,7 +23,7 @@ namespace Engine5
     {
     }
 
-    bool MatrixBufferCommon::Init(RendererCommon* renderer, eBufferBindType type)
+    bool MatrixBufferCommon::Init(RendererCommon* renderer, eBindingStage type)
     {
         if (m_matrix_buffer != nullptr)
         {
@@ -63,10 +63,10 @@ namespace Engine5
 
     void MatrixBufferCommon::Bind(U32 slot) const
     {
-        if (m_binding_type == eBufferBindType::VertexShader)
+        if (m_binding_type == eBindingStage::VertexShader)
             m_device_context->VSSetConstantBuffers(slot, 1, &m_matrix_buffer);
 
-        if (m_binding_type == eBufferBindType::PixelShader)
+        if (m_binding_type == eBindingStage::PixelShader)
             m_device_context->PSSetConstantBuffers(slot, 1, &m_matrix_buffer);
     }
 

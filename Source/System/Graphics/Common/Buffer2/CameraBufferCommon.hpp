@@ -19,12 +19,12 @@ namespace Engine5
         CameraBufferCommon();
         ~CameraBufferCommon();
 
-        bool Init(RendererCommon* renderer, eBufferBindType type);
+        bool Init(RendererCommon* renderer, eBindingStage type);
         void Update(Camera* camera) const;
         void Bind(U32 slot) const;
         void Shutdown();
     private:
-        eBufferBindType m_binding_type = eBufferBindType::VertexShader;
+        eBindingStage m_binding_type = eBindingStage::VertexShader;
     };
 
   

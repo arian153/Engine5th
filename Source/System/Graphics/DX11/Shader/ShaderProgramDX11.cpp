@@ -2,6 +2,7 @@
 
 #include <d3dcompiler.h>
 
+#include "../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 #include "../../Common/Buffer2/VertexLayoutCommon.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
 #include "../../Common/Shader/ShaderManagerCommon.hpp"
@@ -17,21 +18,6 @@ namespace Engine5
     {
     }
 
-    void ShaderProgramDX11::SetHWnd(HWND hwnd)
-    {
-        m_hwnd = hwnd;
-    }
-
-    void ShaderProgramDX11::SetDevice(ID3D11Device* device)
-    {
-        m_device = device;
-    }
-
-    void ShaderProgramDX11::SetDeviceContext(ID3D11DeviceContext* device_context)
-    {
-        m_device_context = device_context;
-    }
-
     ShaderProgramCommon::ShaderProgramCommon(ShaderManagerCommon* shader_manager)
         : m_shader_manager(shader_manager)
     {
@@ -43,12 +29,15 @@ namespace Engine5
 
     bool ShaderProgramCommon::Init(RendererCommon* renderer)
     {
-        ID3D10Blob* error_message        = nullptr;
-        ID3D10Blob* vertex_shader_buffer = nullptr;
-        ID3D10Blob* pixel_shader_buffer  = nullptr;
+        m_hwnd           = renderer->GetHwnd();
+        m_device         = renderer->GetDevice();
+        m_device_context = renderer->GetDeviceContext();
 
         //Initialize vertex shader
-        std::wstring vertex_shader_path;
+        ID3D10Blob*  error_message        = nullptr;
+        ID3D10Blob*  vertex_shader_buffer = nullptr;
+        std::wstring vertex_shader_path   = m_resource->WFilePath();
+
         // Compile the vertex shader code.
         HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "VertexShaderEntry", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
         if (FAILED(result))
@@ -72,7 +61,8 @@ namespace Engine5
         }
 
         //Initialize pixel shader
-        std::wstring pixel_shader_path;
+        ID3D10Blob*  pixel_shader_buffer = nullptr;
+        std::wstring pixel_shader_path   = m_resource->WFilePath();;
         // Compile the pixel shader code.
         result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "PixelShaderEntry", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
         if (FAILED(result))
@@ -235,8 +225,8 @@ namespace Engine5
         m_vertex_layout = layout;
     }
 
-    void ShaderProgramCommon::SetShader(ShaderResource* shader)
+    void ShaderProgramCommon::SetShaderResource(ShaderResource* resource)
     {
-        m_shader_resource = shader;
+        m_resource = resource;
     }
 }

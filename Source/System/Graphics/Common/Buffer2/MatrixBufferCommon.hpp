@@ -19,12 +19,12 @@ namespace Engine5
         MatrixBufferCommon();
         ~MatrixBufferCommon();
 
-        bool Init(RendererCommon* renderer, eBufferBindType type);
+        bool Init(RendererCommon* renderer, eBindingStage type);
         void Update(const MatrixData& matrix_data) const;
         void Bind(U32 slot) const;
         void Shutdown();
     private:
-        eBufferBindType m_binding_type = eBufferBindType::VertexShader;
+        eBindingStage m_binding_type = eBindingStage::VertexShader;
     };
 
    

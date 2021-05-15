@@ -24,12 +24,11 @@ namespace Engine5
         void Bind();
 
         void SetVertexLayout(VertexLayoutCommon* layout);
-
-        void SetShader(ShaderResource* shader);
+        void SetShaderResource(ShaderResource* resource);
 
     private:
-        ShaderManagerCommon* m_shader_manager  = nullptr;
-        ShaderResource*      m_shader_resource = nullptr;
-        VertexLayoutCommon*  m_vertex_layout   = nullptr;
+        ShaderManagerCommon* m_shader_manager = nullptr;
+        ShaderResource*      m_resource       = nullptr;
+        VertexLayoutCommon*  m_vertex_layout  = nullptr;
     };
 }

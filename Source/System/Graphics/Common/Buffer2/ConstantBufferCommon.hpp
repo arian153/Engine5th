@@ -1,10 +1,7 @@
 #pragma once
 
 #include "../../GraphicsAPI.hpp"
-#include IncludeColorBufferAPI
-#include "../DataType/TopologyDef.hpp"
-#include <vector>
-
+#include IncludeConstantBufferAPI
 
 #include "../../../Core/Utility/CoreDef.hpp"
 #include "../DataType/BufferBindType.hpp"
@@ -14,14 +11,14 @@ namespace Engine5
     class Color;
     class RendererCommon;
 
-    class ColorBufferCommon : public ColorBufferAPI
+    class ConstantBufferCommon : public ConstantBufferAPI
     {
     public:
-        ColorBufferCommon();
-        ~ColorBufferCommon();
+        ConstantBufferCommon();
+        ~ConstantBufferCommon();
 
-        bool Init(RendererCommon* renderer, eBindingStage type);
-        void Update(const Color& color) const;
+        bool Init(RendererCommon* renderer, eBindingStage type, size_t buffer_size);
+        void Update(void* data) const;
         void Bind(U32 slot) const;
         void Shutdown();
     private:

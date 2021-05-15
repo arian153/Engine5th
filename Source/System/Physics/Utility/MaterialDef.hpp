@@ -7,20 +7,20 @@ namespace Engine5
     {
         enum class eMaterial
         {
-            Rock = 1
-          , Wood = 2
-          , Metal = 4
-          , BouncyBall = 8
-          , SuperBall = 16
-          , Pillow = 32
-          , Static = 64
-          , Concrete = 128
-          , Ice = 256
-          , Glass = 512
-          , Lubricant = 1024
-          , Rubber = 2048
-          , Velcro = 4096
-          , UserType = 8192
+            Rock = 1,
+            Wood = 2,
+            Metal = 4,
+            BouncyBall = 8,
+            SuperBall = 16,
+            Pillow = 32,
+            Static = 64,
+            Concrete = 128,
+            Ice = 256,
+            Glass = 512,
+            Lubricant = 1024,
+            Rubber = 2048,
+            Velcro = 4096,
+            UserType = 8192
         };
 
         class MaterialData

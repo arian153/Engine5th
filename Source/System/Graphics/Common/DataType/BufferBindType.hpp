@@ -2,7 +2,7 @@
 
 namespace Engine5
 {
-    enum class eBufferBindType
+    enum class eBindingStage
     {
         VertexShader,
         PixelShader
