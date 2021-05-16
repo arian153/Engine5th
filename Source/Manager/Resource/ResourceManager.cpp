@@ -778,9 +778,22 @@ namespace Engine5
         Resource*    resource;
         std::wstring type = m_file_utility->GetFileTypeFromPath(path);
         std::wstring name = m_file_utility->GetFileNameFromPath(path);
-        if (type == L".fx" || type == L".ps" || type == L".vs")
+        if (type == L".fx" || type == L".hlsl" || type == L".shader")
         {
             resource = new ShaderResource(path);
+            ((ShaderResource*)resource)->SetStage(eShaderStage::IntegratedShader);
+            m_shader_resource_map.emplace(path, (ShaderResource*)resource);
+        }
+        else if( type == L".ps")
+        {
+            resource = new ShaderResource(path);
+            ((ShaderResource*)resource)->SetStage(eShaderStage::PixelShader);
+            m_shader_resource_map.emplace(path, (ShaderResource*)resource);
+        }
+        else if( type == L".vs")
+        {
+            resource = new ShaderResource(path);
+            ((ShaderResource*)resource)->SetStage(eShaderStage::VertexShader);
             m_shader_resource_map.emplace(path, (ShaderResource*)resource);
         }
         else if (

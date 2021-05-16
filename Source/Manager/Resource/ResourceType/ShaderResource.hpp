@@ -20,6 +20,8 @@ namespace Engine5
         void Initialize() override;
         void Shutdown() override;
 
+        void SetStage(eShaderStage stage);
+
     private:
         bool         m_b_integrated_shader = false;
         eShaderStage m_stage;

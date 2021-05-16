@@ -21,4 +21,9 @@ namespace Engine5
     {
         m_b_unloaded = true;
     }
+
+    void ShaderResource::SetStage(eShaderStage stage)
+    {
+        m_stage = stage;
+    }
 }
