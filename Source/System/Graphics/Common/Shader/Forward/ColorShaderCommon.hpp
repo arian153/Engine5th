@@ -21,6 +21,7 @@ namespace Engine5
 
         bool Initialize();
         void Render(U32 indices_count, const MatrixData& mvp_data) const;
+        void Bind(const MatrixData& mvp_data) const;
         void Shutdown();
 
     private:

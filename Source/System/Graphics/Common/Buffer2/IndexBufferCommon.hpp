@@ -20,6 +20,7 @@ namespace Engine5
         void Bind( U32 offset) const;
         void Shutdown();
     private:
+        U32 m_indices_count = 0;
     };
 
     

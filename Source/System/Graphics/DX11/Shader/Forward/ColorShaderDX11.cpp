@@ -97,7 +97,7 @@ namespace Engine5
         {
             return false;
         }
-        D3D11_INPUT_ELEMENT_DESC polygon_layout[ 2 ];
+        D3D11_INPUT_ELEMENT_DESC polygon_layout[2];
         // Create the vertex input layout description.
         polygon_layout[0].SemanticName         = "POSITION";
         polygon_layout[0].SemanticIndex        = 0;
@@ -170,6 +170,31 @@ namespace Engine5
         m_device_context->PSSetShader(m_pixel_shader, nullptr, 0);
         // Render the triangle.
         m_device_context->DrawIndexed(indices_count, 0, 0);
+    }
+
+    void ColorShaderCommon::Bind(const MatrixData& mvp_data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        // Lock the constant buffer so it can be written to.
+        HRESULT result = m_device_context->Map(m_matrix_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+        if (FAILED(result))
+            return;
+        // Get a pointer to the data in the constant buffer.
+        MatrixBufferType* data_ptr = (MatrixBufferType*)mapped_resource.pData;
+        // Transpose the matrices to prepare them for the shader.
+        // Copy the matrices into the constant buffer.
+        data_ptr->mvp = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.GetMVPMatrix()));
+        // Unlock the constant buffer.
+        m_device_context->Unmap(m_matrix_buffer, 0);
+        // Set the position of the constant buffer in the vertex shader.
+        unsigned int buffer_number = 0;
+        // Finally set the constant buffer in the vertex shader with the updated values.
+        m_device_context->VSSetConstantBuffers(buffer_number, 1, &m_matrix_buffer);
+        // Set the vertex input layout.
+        m_device_context->IASetInputLayout(m_layout);
+        // Set the vertex shader and pixel shader that will be used to render this triangle.
+        m_device_context->VSSetShader(m_vertex_shader, nullptr, 0);
+        m_device_context->PSSetShader(m_pixel_shader, nullptr, 0);
     }
 
     void ColorShaderCommon::Shutdown()

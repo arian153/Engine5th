@@ -26,7 +26,8 @@ namespace Engine5
         if (m_index_buffer != nullptr)
         {
             m_index_buffer->Release();
-            m_index_buffer = nullptr;
+            m_index_buffer  = nullptr;
+            m_indices_count = 0;
         }
 
         D3D11_BUFFER_DESC index_buffer_desc;
@@ -41,6 +42,7 @@ namespace Engine5
         index_data.pSysMem          = indices.data();
         index_data.SysMemPitch      = 0;
         index_data.SysMemSlicePitch = 0;
+        m_indices_count             = static_cast<U32>(indices.size());
         // Create the index buffer.
         HRESULT result = renderer->GetDevice()->CreateBuffer(&index_buffer_desc, &index_data, &m_index_buffer);
         if (FAILED(result))
@@ -53,6 +55,8 @@ namespace Engine5
     {
         // Set the index buffer to active in the input assembler so it can be rendered.
         m_device_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, offset);
+        // Render the triangle.
+        m_device_context->DrawIndexed(m_indices_count, 0, 0);
     }
 
     void IndexBufferCommon::Shutdown()

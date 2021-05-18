@@ -286,8 +286,11 @@ namespace Engine5
         if (m_line_vertices.empty() == false)
         {
             m_line_buffer->BuildBuffer(m_renderer, m_line_vertices, m_line_indices);
-            m_line_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::LineList);
-            m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_mvp_data);
+            //m_line_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::LineList);
+            //m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_mvp_data);
+
+            m_color_shader->Bind(m_mvp_data);
+            m_line_buffer->Render(sizeof(ColorVertexCommon), 0, static_cast<U32>(m_line_indices.size()), eTopologyType::LineList);
         }
         if (m_face_vertices.empty() == false)
         {

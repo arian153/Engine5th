@@ -283,6 +283,7 @@ namespace Engine5
 
         // Set the type of primitive that should be rendered from this vertex buffer.
         m_device_context->IASetPrimitiveTopology(m_topology);
+
     }
 
     void VertexBufferCommon::Shutdown()

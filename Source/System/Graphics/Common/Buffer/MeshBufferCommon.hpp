@@ -20,6 +20,7 @@ namespace Engine5
         ~MeshBufferCommon();
 
         void Render(U32 stride, U32 offset, eTopologyType topology) const;
+        void Render(U32 stride, U32 offset, U32 indices_count, eTopologyType topology) const;
         void Render(U32 stride, U32 offset) const;
         void Shutdown();
 
