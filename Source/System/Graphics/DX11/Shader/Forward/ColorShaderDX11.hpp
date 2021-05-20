@@ -2,6 +2,8 @@
 #include <d3d11.h>
 #include <directxmath.h>
 
+#include "../../../../Math/Algebra/Matrix44.hpp"
+
 namespace Engine5
 {
     class ColorShaderDX11
@@ -9,7 +11,7 @@ namespace Engine5
     protected:
         struct MatrixBufferType
         {
-            DirectX::XMMATRIX mvp;
+            Matrix44 mvp;
         };
 
     public:

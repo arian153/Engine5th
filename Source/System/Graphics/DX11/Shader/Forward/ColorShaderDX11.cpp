@@ -156,7 +156,7 @@ namespace Engine5
         MatrixBufferType* data_ptr = (MatrixBufferType*)mapped_resource.pData;
         // Transpose the matrices to prepare them for the shader.
         // Copy the matrices into the constant buffer.
-        data_ptr->mvp = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.GetMVPMatrix()));
+        data_ptr->mvp = mvp_data.GetMVPMatrix().Transpose();//XMMatrixTranspose(ConverterDX11::ToXMMatrix());
         // Unlock the constant buffer.
         m_device_context->Unmap(m_matrix_buffer, 0);
         // Set the position of the constant buffer in the vertex shader.
@@ -183,7 +183,7 @@ namespace Engine5
         MatrixBufferType* data_ptr = (MatrixBufferType*)mapped_resource.pData;
         // Transpose the matrices to prepare them for the shader.
         // Copy the matrices into the constant buffer.
-        data_ptr->mvp = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.GetMVPMatrix()));
+        data_ptr->mvp = mvp_data.GetMVPMatrix().Transpose(); //XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.GetMVPMatrix()));
         // Unlock the constant buffer.
         m_device_context->Unmap(m_matrix_buffer, 0);
         // Set the position of the constant buffer in the vertex shader.
