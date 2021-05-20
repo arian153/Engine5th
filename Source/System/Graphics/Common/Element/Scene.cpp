@@ -177,8 +177,8 @@ namespace Engine5
             mvp_data.view = camera->GetViewMatrix();
 
             MatrixBufferData data;
-            data.proj = m_projection_matrix.Transpose();
-            data.view = camera->GetViewMatrix().Transpose();
+            data.proj = m_projection_matrix;
+            data.view = camera->GetViewMatrix();
             data.model = Matrix44();
             m_matrix_buffer->Update(data);
 
