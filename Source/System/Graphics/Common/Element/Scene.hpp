@@ -8,6 +8,10 @@
 
 namespace Engine5
 {
+    class VertexLayoutCommon;
+    class ConstantBufferCommon;
+    class ShaderProgramCommon;
+    class Mesh2;
     class TextRenderer;
     class ResourceManager;
     class ParticleEmitter;
@@ -77,7 +81,7 @@ namespace Engine5
 
         Basis GetMainCameraBasis() const;
         Real  GetAspectRatio() const;
-        Ray GetPickingRay(const Vector2& pos) const;
+        Ray   GetPickingRay(const Vector2& pos) const;
 
     private:
         RendererCommon*       m_renderer           = nullptr;
@@ -107,5 +111,10 @@ namespace Engine5
         Frustum         m_frustum;
 
         bool m_b_deferred_shading = false;
+
+        Mesh2*                m_test_mesh;
+        ShaderProgramCommon*  m_new_color_shader    = nullptr;
+        ConstantBufferCommon* m_matrix_buffer       = nullptr;
+        VertexLayoutCommon*   m_color_vertex_layout = nullptr;
     };
 }

@@ -11,7 +11,12 @@
 #include "TextSprite.hpp"
 #include "ParticleEmitter.hpp"
 #include "../../../../Manager/Resource/ResourceManager.hpp"
+#include "../../Element/Mesh2.hpp"
 #include "../../Utility/TextRenderer.hpp"
+#include "../Buffer2/ConstantBufferCommon.hpp"
+#include "../Buffer2/ConstantBufferData.h"
+#include "../Buffer2/VertexLayoutCommon.hpp"
+#include "../Shader/ShaderProgramCommon.hpp"
 
 namespace Engine5
 {
@@ -37,6 +42,24 @@ namespace Engine5
                                       m_matrix_manager->GetScreenHeight());
         UpdateView();
         UpdateProjection();
+
+        m_matrix_buffer = new ConstantBufferCommon();
+        m_matrix_buffer->Init(m_renderer, eBindingStage::VertexShader, sizeof(MatrixBufferData), 0);
+
+        m_color_vertex_layout = new VertexLayoutCommon();
+        m_color_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+
+        m_new_color_shader = new ShaderProgramCommon(m_shader_manager);
+        m_new_color_shader->SetShaderResource(m_resource_manager->GetShaderResourceFileName(L"Color.hlsl"));
+        m_new_color_shader->SetVertexLayout(m_color_vertex_layout);
+        m_new_color_shader->AddConstantBuffer(m_matrix_buffer);
+        m_new_color_shader->Init(m_renderer);
+
+        m_test_mesh = new Mesh2();
+        m_test_mesh->Initialize();
+        m_test_mesh->SetRenderer(m_renderer);
+        m_test_mesh->BuildBuffer();
     }
 
     void Scene::Update(Real dt)
@@ -152,6 +175,16 @@ namespace Engine5
         {
             camera->Update();
             mvp_data.view = camera->GetViewMatrix();
+
+            MatrixBufferData data;
+            data.proj = m_projection_matrix.Transpose();
+            data.view = camera->GetViewMatrix().Transpose();
+            data.model = Matrix44();
+            m_matrix_buffer->Update(data);
+
+            m_new_color_shader->Bind();
+            m_test_mesh->RenderBuffer();
+
             for (auto& mesh : m_other_meshes)
             {
                 mvp_data.model = mesh->GetModelMatrix();
@@ -252,6 +285,24 @@ namespace Engine5
 
     void Scene::Shutdown()
     {
+        {
+            m_matrix_buffer->Shutdown();
+            delete m_matrix_buffer;
+            m_matrix_buffer = nullptr;
+
+            m_color_vertex_layout->Clear();
+            delete m_color_vertex_layout;
+            m_color_vertex_layout = nullptr;
+
+            m_new_color_shader->Shutdown();
+            delete m_new_color_shader;
+            m_new_color_shader = nullptr;
+
+            m_test_mesh->Shutdown();
+            delete m_test_mesh;
+            m_test_mesh = nullptr;
+        }
+
         m_matrix_manager->RemoveScene(this);
         if (m_primitive_renderer != nullptr)
         {
@@ -625,14 +676,13 @@ namespace Engine5
         point.y = pos.y / proj(1, 1);
 
         Matrix33 inv_view(m_main_camera->GetViewMatrix().Inverse());
-        Vector3 origin(m_main_camera->GetPosition());
-        Vector3 dir;
+        Vector3  origin(m_main_camera->GetPosition());
+        Vector3  dir;
         dir.x = (point.x * inv_view(0, 0)) + (point.y * inv_view(1, 0)) + inv_view(2, 0);
         dir.y = (point.x * inv_view(0, 1)) + (point.y * inv_view(1, 1)) + inv_view(2, 1);
         dir.z = (point.x * inv_view(0, 2)) + (point.y * inv_view(1, 2)) + inv_view(2, 2);
 
         //m_main_camera->GetTransform()->LocalToWorldMatrix();
-
 
         dir.SetNormalize();
 

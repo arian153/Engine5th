@@ -22,7 +22,7 @@ namespace Engine5
         U32            format_count = 0;
     };
 
-    class VertexLayoutCommon : public VertexLayoutAPI
+    class VertexLayoutCommon final : public VertexLayoutAPI
     {
     public:
         VertexLayoutCommon();

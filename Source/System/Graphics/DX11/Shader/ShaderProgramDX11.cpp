@@ -190,12 +190,6 @@ namespace Engine5
 
     void ShaderProgramCommon::Shutdown()
     {
-        for (auto& buffer : m_constant_buffers)
-        {
-            buffer->Shutdown();
-            delete buffer;
-            buffer = nullptr;
-        }
         m_constant_buffers.clear();
 
         // Release the sampler state.

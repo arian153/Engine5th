@@ -1,6 +1,7 @@
 #include "ConstantBufferDX11.hpp"
 
 #include "../../Common/Buffer2/ConstantBufferCommon.hpp"
+#include "../../Common/Buffer2/ConstantBufferData.h"
 #include "../../Common/Renderer/RendererCommon.hpp"
 
 namespace Engine5
@@ -58,6 +59,23 @@ namespace Engine5
             return;
 
         mapped_resource.pData = data;
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
+    void ConstantBufferCommon::Update(const MatrixBufferData& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        MatrixBufferData* data_ptr = (MatrixBufferData*)mapped_resource.pData;
+        data_ptr->model = data.model;
+        data_ptr->view = data.view;
+        data_ptr->proj = data.proj;
+
+        //mapped_resource.pData = data;
         m_device_context->Unmap(m_constant_buffer, 0);
     }
 

@@ -8,6 +8,7 @@
 
 namespace Engine5
 {
+    struct MatrixBufferData;
     class Color;
     class RendererCommon;
 
@@ -19,10 +20,12 @@ namespace Engine5
 
         bool Init(RendererCommon* renderer, eBindingStage type, size_t buffer_size, U32 slot);
         void Update(void* data) const;
+        void Update(const MatrixBufferData& data) const;
+
         void Bind() const;
         void Shutdown();
     private:
-        U32           m_slot         = 0;
+        U32           m_slot  = 0;
         eBindingStage m_stage = eBindingStage::PixelShader;
     };
 }

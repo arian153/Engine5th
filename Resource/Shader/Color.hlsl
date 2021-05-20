@@ -1,7 +1,9 @@
 //global
 cbuffer MatrixBuffer
 {
-    matrix mvp;
+    matrix model;
+    matrix view;
+    matrix proj;
 };
 
 //defs
@@ -23,7 +25,9 @@ PixelInputType VertexShaderEntry(VertexInputType input)
     input.position.w = 1.0f;
 
     PixelInputType output;
-    output.position = mul(input.position, mvp);
+    output.position = mul(input.position, model);
+    output.position = mul(output.position, view);
+    output.position = mul(output.position, proj);
     output.color = input.color;
 
     return output;

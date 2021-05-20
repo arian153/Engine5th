@@ -30,7 +30,7 @@ namespace Engine5
     {
     }
 
-    void VertexLayoutDX11::Push(eAttributeType type, U32 count, const std::string& semantic_name, U32 semantic_idx)
+    void VertexLayoutDX11::PushDX11(eAttributeType type, U32 count, const std::string& semantic_name, U32 semantic_idx)
     {
         VertexLayoutCommon* layout = (VertexLayoutCommon*)this;
 
@@ -44,7 +44,7 @@ namespace Engine5
         layout->m_stride += VertexAttributeCommon::SizeOf(type) * count;
     }
 
-    void VertexLayoutDX11::Push(eAttributeType type, U32 count, const std::string& semantic_name, U32 semantic_idx, eInputSlotType slot_type, U32 input_slot, U32 step_rate)
+    void VertexLayoutDX11::PushDX11(eAttributeType type, U32 count, const std::string& semantic_name, U32 semantic_idx, eInputSlotType slot_type, U32 input_slot, U32 step_rate)
     {
         VertexLayoutCommon* layout = (VertexLayoutCommon*)this;
 
