@@ -79,6 +79,22 @@ namespace Engine5
         m_device_context->Unmap(m_constant_buffer, 0);
     }
 
+    void* ConstantBufferCommon::Map() const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return nullptr;
+
+        return mapped_resource.pData;
+    }
+
+    void ConstantBufferCommon::UnMap() const
+    {
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
     void ConstantBufferCommon::Bind() const
     {
         if (m_stage == eBindingStage::VertexShader)

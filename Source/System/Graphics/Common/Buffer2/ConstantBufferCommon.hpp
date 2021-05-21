@@ -22,6 +22,9 @@ namespace Engine5
         void Update(void* data) const;
         void Update(const MatrixBufferData& data) const;
 
+        void* Map() const;
+        void  UnMap() const;
+
         void Bind() const;
         void Shutdown();
     private:

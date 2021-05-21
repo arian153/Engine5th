@@ -180,6 +180,12 @@ namespace Engine5
             data.proj = m_projection_matrix;
             data.view = camera->GetViewMatrix();
             data.model = Matrix44();
+
+           /* MatrixBufferData* mapped_data = (MatrixBufferData*)m_matrix_buffer->Map();
+            mapped_data->model = Matrix44();
+            mapped_data->view = camera->GetViewMatrix().Transpose();
+            mapped_data->proj = m_projection_matrix.Transpose();
+            m_matrix_buffer->UnMap();*/
             m_matrix_buffer->Update(data);
 
             m_new_color_shader->Bind();
