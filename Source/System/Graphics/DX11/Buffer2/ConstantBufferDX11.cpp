@@ -1,7 +1,7 @@
 #include "ConstantBufferDX11.hpp"
 
 #include "../../Common/Buffer2/ConstantBufferCommon.hpp"
-#include "../../Common/Buffer2/ConstantBufferData.h"
+#include "../../Common/Buffer2/ConstantBufferData.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
 
 namespace Engine5

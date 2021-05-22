@@ -14,12 +14,6 @@
 #define DynamicMeshBufferAPI DynamicMeshBufferDX11
 
 //buffer2
-#define CameraBufferAPI CameraBufferDX11
-#define ColorBufferAPI ColorBufferDX11
-#define GammaBufferAPI GammaBufferDX11
-#define LightBufferAPI LightBufferDX11
-#define MatrixBufferAPI MatrixBufferDX11
-
 #define ConstantBufferAPI ConstantBufferDX11
 #define IndexBufferAPI IndexBufferDX11
 #define VertexBufferAPI VertexBufferDX11
@@ -66,16 +60,12 @@
 #define IncludeDynamicMeshBufferAPI "../../DX11/Buffer/DynamicMeshBufferDX11.hpp"
 
 //buffer2
-#define IncludeCameraBufferAPI "../../DX11/Buffer2/CameraBufferDX11.hpp"
-#define IncludeColorBufferAPI  "../../DX11/Buffer2/ColorBufferDX11.hpp"
-#define IncludeGammaBufferAPI  "../../DX11/Buffer2/GammaBufferDX11.hpp"
-#define IncludeLightBufferAPI  "../../DX11/Buffer2/LightBufferDX11.hpp"
-#define IncludeMatrixBufferAPI "../../DX11/Buffer2/MatrixBufferDX11.hpp"
-
 #define IncludeConstantBufferAPI "../../DX11/Buffer2/ConstantBufferDX11.hpp"
 #define IncludeIndexBufferAPI  "../../DX11/Buffer2/IndexBufferDX11.hpp"
+#define IncludeInstanceBufferAPI "../../DX11/Buffer2/InstanceBufferDX11.hpp"
 #define IncludeVertexBufferAPI "../../DX11/Buffer2/VertexBufferDX11.hpp"
 #define IncludeVertexLayoutAPI "../../DX11/Buffer2/VertexLayoutDX11.hpp"
+
 
 
 #define IncludeMeshBufferAPI "../../DX11/Buffer/MeshBufferDX11.hpp"
@@ -84,7 +74,6 @@
 #define IncludeTextTextureBufferAPI "../../DX11/Buffer/TextTextureBufferDX11.hpp"
 #define IncludeTextLayoutBufferAPI "../../DX11/Buffer/TextLayoutBufferDX11.hpp"
 #define IncludeTextFormatBufferAPI "../../DX11/Buffer/TextFormatBufferDX11.hpp"
-#define IncludeInstanceBufferAPI "../../DX11/Buffer/InstanceBufferDX11.hpp"
 #define IncludeDynamicMeshBufferAPI "../../DX11/Buffer/DynamicMeshBufferDX11.hpp"
 
 #define IncludeTextureAPI "../../DX11/Texture/TextureDX11.hpp"

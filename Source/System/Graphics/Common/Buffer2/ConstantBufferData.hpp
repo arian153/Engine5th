@@ -4,12 +4,13 @@
 #include "../../../Math/Algebra/Vector3.hpp"
 #include "../../../Math/Algebra/Vector4.hpp"
 #include "../../../Math/Utility/MathDef.hpp"
+#include "../DataType/Color.hpp"
 
 namespace Engine5
 {
     struct ColorBufferData
     {
-        Vector4 color;
+        Color color;
     };
 
     struct CameraBufferData
@@ -26,9 +27,9 @@ namespace Engine5
 
     struct LightBufferData
     {
-        Vector4 ambient_color;
-        Vector4 diffuse_color;
-        Vector4 specular_color;
+        Color   ambient_color;
+        Color   diffuse_color;
+        Color   specular_color;
         Real    specular_power;
         Vector3 light_direction;
     };
@@ -38,5 +39,11 @@ namespace Engine5
         Matrix44 model;
         Matrix44 view;
         Matrix44 proj;
+    };
+
+    struct InstanceBufferData
+    {
+        Matrix44 model;
+        Color    color;
     };
 }

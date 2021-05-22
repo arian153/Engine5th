@@ -14,7 +14,7 @@
 #include "../../Element/Mesh2.hpp"
 #include "../../Utility/TextRenderer.hpp"
 #include "../Buffer2/ConstantBufferCommon.hpp"
-#include "../Buffer2/ConstantBufferData.h"
+#include "../Buffer2/ConstantBufferData.hpp"
 #include "../Buffer2/VertexLayoutCommon.hpp"
 #include "../Shader/ShaderProgramCommon.hpp"
 
