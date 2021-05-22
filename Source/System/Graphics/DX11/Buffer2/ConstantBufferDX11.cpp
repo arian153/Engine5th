@@ -62,6 +62,65 @@ namespace Engine5
         m_device_context->Unmap(m_constant_buffer, 0);
     }
 
+    void ConstantBufferCommon::Update(const ColorBufferData& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        ColorBufferData* data_ptr = (ColorBufferData*)mapped_resource.pData;
+        data_ptr->color           = data.color;
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
+    void ConstantBufferCommon::Update(const CameraBufferData& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        CameraBufferData* data_ptr = (CameraBufferData*)mapped_resource.pData;
+        data_ptr->camera_position  = data.camera_position;
+
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
+    void ConstantBufferCommon::Update(const GammaBufferData& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        GammaBufferData* data_ptr  = (GammaBufferData*)mapped_resource.pData;
+        data_ptr->gamma_correction = data.gamma_correction;
+
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
+    void ConstantBufferCommon::Update(const LightBufferData& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        LightBufferData* data_ptr = (LightBufferData*)mapped_resource.pData;
+        data_ptr->ambient_color   = data.ambient_color;
+        data_ptr->diffuse_color   = data.diffuse_color;
+        data_ptr->specular_color  = data.specular_color;
+        data_ptr->light_direction = data.light_direction;
+        data_ptr->specular_power  = data.specular_power;
+
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
     void ConstantBufferCommon::Update(const MatrixBufferData& data) const
     {
         D3D11_MAPPED_SUBRESOURCE mapped_resource;

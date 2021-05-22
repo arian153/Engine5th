@@ -8,6 +8,10 @@
 
 namespace Engine5
 {
+    struct ColorBufferData;
+    struct CameraBufferData;
+    struct GammaBufferData;
+    struct LightBufferData;
     struct MatrixBufferData;
     class Color;
     class RendererCommon;
@@ -20,6 +24,10 @@ namespace Engine5
 
         bool Init(RendererCommon* renderer, eBindingStage type, size_t buffer_size, U32 slot);
         void Update(void* data) const;
+        void Update(const ColorBufferData& data) const;
+        void Update(const CameraBufferData& data) const;
+        void Update(const GammaBufferData& data) const;
+        void Update(const LightBufferData& data) const;
         void Update(const MatrixBufferData& data) const;
 
         void* Map() const;
