@@ -2,10 +2,14 @@
 #include "../../../Math/Algebra/Vector3.hpp"
 #include "../DataType/Particle.hpp"
 #include <vector>
+
+#include "../Buffer2/ConstantBufferData.hpp"
 #include "../Vertex/InstanceDataCommon.hpp"
 
 namespace Engine5
 {
+    class IndexBufferCommon;
+    class VertexBufferCommon;
     class RendererCommon;
     class Transform;
     class InstanceBufferCommon;
@@ -51,8 +55,6 @@ namespace Engine5
         void SetLifeVariance(const Real& variance);
 
         //getter
-        size_t         GetIndexCount() const;
-        size_t         GetInstanceCount() const;
         TextureCommon* GetTexture() const;
         Matrix44       GetModelMatrix() const;
     private:
@@ -67,14 +69,16 @@ namespace Engine5
 
     private:
         //Particle*                       m_particles = nullptr;
-        RendererCommon*                 m_renderer  = nullptr;
-        TextureCommon*                  m_texture   = nullptr;
-        InstanceBufferCommon*           m_buffer    = nullptr;
-        Transform*                      m_transform = nullptr;
-        ParticleEmitterComponent*       m_component = nullptr;
+        RendererCommon*                 m_renderer        = nullptr;
+        TextureCommon*                  m_texture         = nullptr;
+        VertexBufferCommon*             m_vertex_buffer   = nullptr;
+        IndexBufferCommon*              m_index_buffer    = nullptr;
+        InstanceBufferCommon*           m_instance_buffer = nullptr;
+        Transform*                      m_transform       = nullptr;
+        ParticleEmitterComponent*       m_component       = nullptr;
         std::vector<Particle>           m_particles;
-        std::vector<InstanceDataCommon> m_instances;
-        size_t                          m_index_count = 0;
+        std::vector<InstanceBufferData> m_instances;
+        U32                             m_stride = 0;
         Vector3                         m_billboard_position;
 
         //particle data

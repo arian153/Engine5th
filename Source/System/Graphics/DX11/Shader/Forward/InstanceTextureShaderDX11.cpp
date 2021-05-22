@@ -274,6 +274,55 @@ namespace Engine5
         m_device_context->DrawIndexedInstanced(index_count, instance_count, 0, 0, 0);
     }
 
+    void InstanceTextureShaderCommon::Render(const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        // Lock the constant buffer so it can be written to.
+        HRESULT result = m_device_context->Map(m_matrix_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+        if (FAILED(result))
+        {
+            return;
+        }
+        // Get a pointer to the data in the constant buffer.
+        MatrixBufferType* matrix_data_ptr = (MatrixBufferType*)mapped_resource.pData;
+        // Transpose the matrices to prepare them for the shader.
+        // Copy the matrices into the constant buffer.
+        matrix_data_ptr->mvp = XMMatrixTranspose(ConverterDX11::ToXMMatrix(mvp_data.GetMVPMatrix()));
+        // Unlock the constant buffer.
+        m_device_context->Unmap(m_matrix_buffer, 0);
+        // Set the position of the constant buffer in the vertex shader.
+        unsigned int buffer_number = 0;
+        // Finally set the constant buffer in the vertex shader with the updated values.
+        m_device_context->VSSetConstantBuffers(buffer_number, 1, &m_matrix_buffer);
+        // Set shader texture resource in the pixel shader
+        auto texture_view = texture->GetTexture();
+        m_device_context->PSSetShaderResources(0, 1, &texture_view);
+        // Lock the light constant buffer so it can be written to.
+        result = m_device_context->Map(m_color_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+        if (FAILED(result))
+        {
+            return;
+        }
+        // Get a pointer to the data in the constant buffer.
+        ColorBufferType* color_data_ptr = (ColorBufferType*)mapped_resource.pData;
+        // Copy the lighting variables into the constant buffer.
+        color_data_ptr->color = ConverterDX11::ToXMFloat4(color);
+        // Unlock the constant buffer.
+        m_device_context->Unmap(m_color_buffer, 0);
+        // Set the position of the light constant buffer in the pixel shader.
+        buffer_number = 0;
+        // Finally set the light constant buffer in the pixel shader with the updated values.
+        m_device_context->PSSetConstantBuffers(buffer_number, 1, &m_color_buffer);
+        // Set the vertex input layout.
+        m_device_context->IASetInputLayout(m_layout);
+        // Set the vertex shader and pixel shader that will be used to render this triangle.
+        m_device_context->VSSetShader(m_vertex_shader, nullptr, 0);
+        m_device_context->PSSetShader(m_pixel_shader, nullptr, 0);
+        // Set the sampler state in the pixel shader.
+        m_device_context->PSSetSamplers(0, 1, &m_sampler_state);
+
+    }
+
     void InstanceTextureShaderCommon::Shutdown()
     {
         // Release the sampler state.

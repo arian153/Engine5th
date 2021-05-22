@@ -44,6 +44,7 @@ namespace Engine5
         void RenderDeferredBufferShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
 
         void RenderInstanceTextureShader(U32 index_count, U32 instance_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
+        void RenderInstanceTextureShader(const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
         void RenderMultiTextureShader(U32 index_count, const MatrixData& mvp_data, TextureArrayCommon* texture, const Color& color, Real gamma = 2.2f) const;
 
         void RenderAlphaMappingShader(U32 index_count, const MatrixData& mvp_data, TextureArrayCommon* texture, const Color& color) const;

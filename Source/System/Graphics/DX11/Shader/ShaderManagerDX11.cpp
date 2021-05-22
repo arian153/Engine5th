@@ -256,6 +256,11 @@ namespace Engine5
         m_instance_texture_shader->Render(index_count, instance_count, mvp_data, texture, color);
     }
 
+    void ShaderManagerCommon::RenderInstanceTextureShader(const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
+    {
+        m_instance_texture_shader->Render(mvp_data, texture, color);
+    }
+
     void ShaderManagerCommon::RenderMultiTextureShader(U32 index_count, const MatrixData& mvp_data, TextureArrayCommon* texture, const Color& color, Real gamma) const
     {
         m_multi_texture_shader->Render(index_count, mvp_data, texture, color, gamma);

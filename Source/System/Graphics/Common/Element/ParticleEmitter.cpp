@@ -1,13 +1,16 @@
 #include "ParticleEmitter.hpp"
 #include "../DataType/Particle.hpp"
 #include "../../../Math/Utility/Random.hpp"
-#include "../Buffer/InstanceBufferCommon.hpp"
 #include "../../../Math/Algebra/Matrix44.hpp"
 #include "../../../../Manager/Component/EngineComponent/ParticleEmitterComponent.hpp"
 #include "../../../Math/Structure/Transform.hpp"
 #include "../../../Math/Utility/Utility.hpp"
 #include "../../../Math/Utility/MatrixUtility.hpp"
 #include <algorithm>
+
+#include "../Buffer2/IndexBufferCommon.hpp"
+#include "../Buffer2/InstanceBufferCommon.hpp"
+#include "../Buffer2/VertexBufferCommon.hpp"
 
 namespace Engine5
 {
@@ -43,17 +46,15 @@ namespace Engine5
             m_particles[i].life -= m_base_particle.life * m_life_decay_rate * dt;
             m_particles[i].scale -= m_base_particle.scale * m_scale_decay_rate * dt;
             auto world = ParticleToWorldMatrix(m_particles[i], orientation);
-            m_instances.emplace_back(world, m_particles[i].color);
+            m_instances.push_back({ world, m_particles[i].color });
         }
-        m_buffer->UpdateInstanceBuffer(m_instances);
+        m_instance_buffer->Update(m_instances);
     }
 
     void ParticleEmitter::Render() const
     {
-        if (m_buffer != nullptr)
-        {
-            m_buffer->Render(sizeof(TextureVertexCommon), 0);
-        }
+        m_vertex_buffer->Bind(m_stride, 0, m_instance_buffer);
+        m_index_buffer->Bind(0, (U32)m_active_amount);
     }
 
     void ParticleEmitter::Shutdown()
@@ -62,12 +63,27 @@ namespace Engine5
         {
             m_component->m_emitter = nullptr;
         }
-        if (m_buffer != nullptr)
+        if (m_instance_buffer != nullptr)
         {
-            m_buffer->Shutdown();
-            delete m_buffer;
-            m_buffer = nullptr;
+            m_instance_buffer->Shutdown();
+            delete m_instance_buffer;
+            m_instance_buffer = nullptr;
         }
+
+        if (m_vertex_buffer != nullptr)
+        {
+            m_vertex_buffer->Shutdown();
+            delete m_vertex_buffer;
+            m_vertex_buffer = nullptr;
+        }
+
+        if (m_index_buffer != nullptr)
+        {
+            m_index_buffer->Shutdown();
+            delete m_index_buffer;
+            m_index_buffer = nullptr;
+        }
+
         m_instances.clear();
         m_particles.clear();
     }
@@ -96,27 +112,39 @@ namespace Engine5
 
     void ParticleEmitter::SetBuffer()
     {
-        if (m_buffer == nullptr)
+        if (m_vertex_buffer == nullptr)
         {
-            m_buffer = new InstanceBufferCommon();
+            m_vertex_buffer = new VertexBufferCommon();
             //vertices
             std::vector<TextureVertexCommon> vertices;
             vertices.emplace_back(-0.5f, 0.5f, 0.0f, 0.0f, 0.0f);
             vertices.emplace_back(0.5f, -0.5f, 0.0f, 1.0f, 1.0f);
             vertices.emplace_back(-0.5f, -0.5f, 0.0f, 0.0f, 1.0f);
             vertices.emplace_back(0.5f, 0.5f, 0.0f, 1.0f, 0.0f);
+
+            m_vertex_buffer->Init(m_renderer, vertices, false);
+
+            m_stride = sizeof(TextureVertexCommon);
+        }
+
+        if (m_index_buffer == nullptr)
+        {
+            m_index_buffer = new IndexBufferCommon();
+
             //indices
-            std::vector<U32> indices;
-            indices.push_back(0);
-            indices.push_back(1);
-            indices.push_back(2);
-            indices.push_back(0);
-            indices.push_back(3);
-            indices.push_back(1);
-            m_buffer->BuildBuffer(m_renderer, vertices, indices);
-            m_index_count = 6;
-            vertices.clear();
-            indices.clear();
+            std::vector<U32> indices = {
+                0, 1, 2,
+                0, 3, 1,
+                0, 2, 1,
+                0, 1, 3
+            };
+
+            m_index_buffer->Init(m_renderer, indices);
+        }
+
+        if (m_instance_buffer == nullptr)
+        {
+            m_instance_buffer = new InstanceBufferCommon();
         }
     }
 
@@ -141,7 +169,7 @@ namespace Engine5
         m_particles.clear();
         m_particles.resize(m_max_amount);
         m_instances.resize(m_max_amount);
-        m_buffer->BuildInstanceBuffer(m_instances);
+        m_instance_buffer->Init(m_renderer, m_instances);
         m_active_amount = 0;
         m_free_particle = 0;
     }
@@ -222,16 +250,6 @@ namespace Engine5
     void ParticleEmitter::SetLifeVariance(const Real& variance)
     {
         m_life_variance = variance;
-    }
-
-    size_t ParticleEmitter::GetIndexCount() const
-    {
-        return m_index_count;
-    }
-
-    size_t ParticleEmitter::GetInstanceCount() const
-    {
-        return m_active_amount;
     }
 
     TextureCommon* ParticleEmitter::GetTexture() const

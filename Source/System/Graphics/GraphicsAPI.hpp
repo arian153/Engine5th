@@ -56,7 +56,6 @@
 #define IncludeTextTextureBufferAPI "../../DX11/Buffer/TextTextureBufferDX11.hpp"
 #define IncludeTextLayoutBufferAPI "../../DX11/Buffer/TextLayoutBufferDX11.hpp"
 #define IncludeTextFormatBufferAPI "../../DX11/Buffer/TextFormatBufferDX11.hpp"
-#define IncludeInstanceBufferAPI "../../DX11/Buffer/InstanceBufferDX11.hpp"
 #define IncludeDynamicMeshBufferAPI "../../DX11/Buffer/DynamicMeshBufferDX11.hpp"
 
 //buffer2

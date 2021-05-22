@@ -1,5 +1,6 @@
 #include "VertexBufferDX11.hpp"
 
+#include "../../Common/Buffer2/InstanceBufferCommon.hpp"
 #include "../../Common/Buffer2/VertexBufferCommon.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
 
@@ -283,7 +284,30 @@ namespace Engine5
 
         // Set the type of primitive that should be rendered from this vertex buffer.
         m_device_context->IASetPrimitiveTopology(m_topology);
+    }
 
+    void VertexBufferCommon::Bind(U32 stride, U32 offset, InstanceBufferCommon* instance_buffer) const
+    {
+        // Set the buffer strides.
+        U32 strides[2];
+        strides[0] = stride;
+        strides[1] = instance_buffer->m_stride;
+
+        // Set the buffer offsets.
+        U32 offsets[2];
+        offsets[0] = offset;
+        offsets[1] = 0;
+
+        // Set the array of pointers to the vertex and instance buffers.
+        ID3D11Buffer* buffers[2];
+        buffers[0] = m_vertex_buffer;
+        buffers[1] = instance_buffer->m_instance_buffer;
+
+        // Set the vertex and instance buffer to active in the input assembler so it can be rendered.
+        m_device_context->IASetVertexBuffers(0, 2, buffers, strides, offsets);
+
+        // Set the type of primitive that should be rendered from this vertex buffer.
+        m_device_context->IASetPrimitiveTopology(m_topology);
     }
 
     void VertexBufferCommon::Shutdown()

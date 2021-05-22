@@ -177,15 +177,15 @@ namespace Engine5
             mvp_data.view = camera->GetViewMatrix();
 
             MatrixBufferData data;
-            data.proj = m_projection_matrix;
-            data.view = camera->GetViewMatrix();
+            data.proj  = m_projection_matrix;
+            data.view  = camera->GetViewMatrix();
             data.model = Matrix44();
 
-           /* MatrixBufferData* mapped_data = (MatrixBufferData*)m_matrix_buffer->Map();
-            mapped_data->model = Matrix44();
-            mapped_data->view = camera->GetViewMatrix().Transpose();
-            mapped_data->proj = m_projection_matrix.Transpose();
-            m_matrix_buffer->UnMap();*/
+            /* MatrixBufferData* mapped_data = (MatrixBufferData*)m_matrix_buffer->Map();
+             mapped_data->model = Matrix44();
+             mapped_data->view = camera->GetViewMatrix().Transpose();
+             mapped_data->proj = m_projection_matrix.Transpose();
+             m_matrix_buffer->UnMap();*/
             m_matrix_buffer->Update(data);
 
             m_new_color_shader->Bind();
@@ -278,13 +278,12 @@ namespace Engine5
             {
                 mvp_data.model = particle->GetModelMatrix();
                 particle->SetBillboardPosition(camera->GetPosition());
-                particle->Render();
                 m_shader_manager->RenderInstanceTextureShader(
-                                                              (U32)particle->GetIndexCount(),
-                                                              (U32)particle->GetInstanceCount(),
-                                                              mvp_data,
-                                                              particle->GetTexture(),
-                                                              ColorDef::Pure::White);
+                    mvp_data,
+                    particle->GetTexture(),
+                    ColorDef::Pure::White);
+                particle->Render();
+             
             }
         }
     }

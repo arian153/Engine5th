@@ -13,6 +13,7 @@
 
 namespace Engine5
 {
+    class InstanceBufferCommon;
     class RendererCommon;
 
     class VertexBufferCommon : public VertexBufferAPI
@@ -34,6 +35,7 @@ namespace Engine5
         bool Init(RendererCommon* renderer, void* data, size_t vertex_size, size_t vertex_count, bool is_dynamic = false);
         void Update(void* data, size_t vertex_size, size_t vertex_count) const;
         void Bind(U32 stride, U32 offset) const;
+        void Bind(U32 stride, U32 offset, InstanceBufferCommon* instance_buffer) const;
         void Shutdown();
         void SetPrimitiveTopology(eTopologyType type);
 
@@ -41,4 +43,3 @@ namespace Engine5
         bool m_b_dynamic = false;
     };
 }
-

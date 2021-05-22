@@ -23,6 +23,7 @@ namespace Engine5
 
         bool Initialize();
         void Render(U32 index_count, U32 instance_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
+        void Render(const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
         void Shutdown();
 
     private:
