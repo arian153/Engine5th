@@ -36,7 +36,6 @@ namespace Engine5
 
     struct MatrixBufferData
     {
-        Matrix44 model;
         Matrix44 view;
         Matrix44 proj;
     };

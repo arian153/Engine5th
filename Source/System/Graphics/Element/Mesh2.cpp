@@ -1,6 +1,7 @@
 #include "Mesh2.hpp"
 
 #include "../../Math/Algebra/Vector3.hpp"
+#include "../../Math/Structure/Transform.hpp"
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
 #include "../Common/Buffer2/InstanceBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
@@ -56,8 +57,8 @@ namespace Engine5
 
     void Mesh2::Render() const
     {
-        m_vertex_buffer->Bind(m_stride, 0);
-        m_index_buffer->Bind(0);
+        m_vertex_buffer->Bind(m_stride, 0, m_instance_buffer);
+        m_index_buffer->Bind(0, m_instance_count);
     }
 
     void Mesh2::BuildBuffer()
@@ -88,6 +89,46 @@ namespace Engine5
         m_index_buffer->Init(m_renderer, indices);
         m_vertex_buffer->Init(m_renderer, vertices, false);
         m_stride = sizeof(ColorVertexCommon);
+
+        Transform transform;
+        transform.position = Vector3(0, 0, 0);
+        transform.scale    = Vector3(1, 1, 1);
+        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6));
+
+        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color()});
+
+        transform.position = Vector3(3, 3, 3);
+        transform.scale    = Vector3(1, 1, 1);
+        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 2.0f));
+
+        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0, 0, 0, 1)});
+
+        transform.position = Vector3(-3, 3, 3);
+        transform.scale    = Vector3(1, 1, 1);
+        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 3.0f));
+
+        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(1, 1, 0, 1)});
+
+        transform.position = Vector3(3, -3, 3);
+        transform.scale    = Vector3(1, 1, 1);
+        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 4.0f));
+
+        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.5, 0.5, 0.5, 1)});
+
+        transform.position = Vector3(3, 3, -3);
+        transform.scale    = Vector3(1, 1, 1);
+        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 5.0f));
+
+        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.3, 0.3, 0.3, 1)});
+
+        transform.position = Vector3(-3, -3, 3);
+        transform.scale    = Vector3(1, 1, 1);
+        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 6.0f));
+
+        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.7, 0.7, 0.7, 1)});
+
+        m_instance_buffer->Init(m_renderer, m_instances);
+        m_instance_count = (U32)m_instances.size();
     }
 
     void Mesh2::AddInstance(const InstanceBufferData& data)

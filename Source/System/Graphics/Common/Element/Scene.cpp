@@ -50,6 +50,13 @@ namespace Engine5
         m_color_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
         m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::VERTEX_DATA, 0, 0);
 
+        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
+        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
+        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+
+
         m_new_color_shader = new ShaderProgramCommon(m_shader_manager);
         m_new_color_shader->SetShaderResource(m_resource_manager->GetShaderResourceFileName(L"Color.hlsl"));
         m_new_color_shader->SetVertexLayout(m_color_vertex_layout);
@@ -179,7 +186,6 @@ namespace Engine5
             MatrixBufferData data;
             data.proj  = m_projection_matrix;
             data.view  = camera->GetViewMatrix();
-            data.model = Matrix44();
 
             /* MatrixBufferData* mapped_data = (MatrixBufferData*)m_matrix_buffer->Map();
              mapped_data->model = Matrix44();
@@ -189,7 +195,7 @@ namespace Engine5
             m_matrix_buffer->Update(data);
 
             m_new_color_shader->Bind();
-            m_test_mesh->RenderBuffer();
+            m_test_mesh->Render();
 
             for (auto& mesh : m_other_meshes)
             {

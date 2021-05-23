@@ -1,7 +1,6 @@
 //global
 cbuffer MatrixBuffer
 {
-    matrix model;
     matrix view;
     matrix proj;
 };
@@ -11,6 +10,8 @@ struct VertexInputType
 {
     float4 position : POSITION;
     float4 color : COLOR;
+    float4x4 world : WORLD;
+    float4 ins_color : COLOR;
 };
 
 struct PixelInputType
@@ -25,10 +26,10 @@ PixelInputType VertexShaderEntry(VertexInputType input)
     input.position.w = 1.0f;
 
     PixelInputType output;
-    output.position = mul(input.position, model);
+    output.position = mul(input.position, input.world);
     output.position = mul(output.position, view);
     output.position = mul(output.position, proj);
-    output.color = input.color;
+    output.color = input.color * input.ins_color;
 
     return output;
 }

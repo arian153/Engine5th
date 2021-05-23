@@ -130,7 +130,6 @@ namespace Engine5
             return;
 
         MatrixBufferData* data_ptr = (MatrixBufferData*)mapped_resource.pData;
-        data_ptr->model            = data.model.Transpose();
         data_ptr->view             = data.view.Transpose();
         data_ptr->proj             = data.proj.Transpose();
 
