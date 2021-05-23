@@ -2,6 +2,7 @@
 
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
+#include "../Common/Buffer2/InstanceBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
 #include "../Common/DataType/Color.hpp"
 #include "../Common/DataType/MeshData.hpp"
@@ -36,6 +37,13 @@ namespace Engine5
             m_vertex_buffer = nullptr;
         }
 
+        if (m_instance_buffer != nullptr)
+        {
+            m_instance_buffer->Shutdown();
+            delete m_instance_buffer;
+            m_instance_buffer = nullptr;
+        }
+
         if (m_mesh_data != nullptr && m_mesh_data->b_resource == false)
         {
             m_mesh_data->indices.clear();
@@ -46,7 +54,7 @@ namespace Engine5
         m_texture_array.Clear();
     }
 
-    void Mesh2::RenderBuffer() const
+    void Mesh2::Render() const
     {
         m_vertex_buffer->Bind(m_stride, 0);
         m_index_buffer->Bind(0);
@@ -64,6 +72,11 @@ namespace Engine5
             m_vertex_buffer = new VertexBufferCommon();
         }
 
+        if (m_instance_buffer == nullptr)
+        {
+            m_instance_buffer = new InstanceBufferCommon();
+        }
+
         //temp code
         std::vector<ColorVertexCommon> vertices(3);
 
@@ -75,6 +88,18 @@ namespace Engine5
         m_index_buffer->Init(m_renderer, indices);
         m_vertex_buffer->Init(m_renderer, vertices, false);
         m_stride = sizeof(ColorVertexCommon);
+    }
+
+    void Mesh2::AddInstance(const InstanceBufferData& data)
+    {
+        if (m_instances.size() == m_max_count)
+        {
+            m_max_count = (m_max_count + 1) * 2;
+            //then resize instance buffer.
+            ResizeInstanceBuffer(m_max_count);
+        }
+
+        m_instances.push_back(data);
     }
 
     void Mesh2::SetModelData(MeshData* data)
@@ -106,5 +131,12 @@ namespace Engine5
     void Mesh2::SetRenderer(RendererCommon* renderer)
     {
         m_renderer = renderer;
+    }
+
+    void Mesh2::ResizeInstanceBuffer(U32 count)
+    {
+        m_max_count = count;
+        m_instances.resize(count);
+        m_instance_buffer->Init(m_renderer, m_instances);
     }
 }
