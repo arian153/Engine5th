@@ -1,13 +1,13 @@
 #pragma once
-#include "../../../Math/Utility/MathDef.hpp"
+#include "../../Math/Utility/MathDef.hpp"
 #include "Camera.hpp"
-#include "Mesh.hpp"
 #include "../DataType/ProjectionType.hpp"
 #include <vector>
 #include "../DataType/Frustum.hpp"
 
 namespace Engine5
 {
+    class Mesh;
     class VertexLayoutCommon;
     class ConstantBufferCommon;
     class ShaderProgramCommon;

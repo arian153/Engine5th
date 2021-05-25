@@ -1,6 +1,6 @@
 #pragma once
 #include "../../../Core/Utility/CoreDef.hpp"
-#include "../../Common/DataType/VertexAttributeDef.hpp"
+#include "../../DataType/VertexAttributeDef.hpp"
 
 namespace Engine5
 {

@@ -3,11 +3,13 @@
 #include "MatrixManager.hpp"
 #include "../Common/Texture/TextureCommon.hpp"
 #include "../Common/Renderer/RendererCommon.hpp"
-#include "../Common/Element/Scene.hpp"
-#include "../Common/DataType/MatrixData.hpp"
+#include "../Element/Scene.hpp"
+#include "../DataType/MatrixData.hpp"
 #include "../Common/Shader/ShaderManagerCommon.hpp"
 #include "../Common/Element/TextSprite.hpp"
 #include "../../../Manager/Space/Space.hpp"
+#include "../Common/Element/Mesh.hpp"
+#include "../Common/Shader/ShaderType.hpp"
 
 namespace Engine5
 {

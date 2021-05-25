@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Math/Utility/MathDef.hpp"
 #include "../../Math/Primitive/Others/Ray.hpp"
-#include "../../Graphics/Common/DataType/Color.hpp"
+#include "../../Graphics/DataType/Color.hpp"
 
 namespace Engine5
 {

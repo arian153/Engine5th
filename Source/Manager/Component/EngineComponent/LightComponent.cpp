@@ -7,7 +7,7 @@
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../Space/Space.hpp"
-#include "../../../System/Graphics/Common/Element/Scene.hpp"
+#include "../../../System/Graphics/Element/Scene.hpp"
 #include "TransformComponent.hpp"
 #include "../../Object/Object.hpp"
 

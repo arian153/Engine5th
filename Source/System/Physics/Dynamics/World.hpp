@@ -7,7 +7,7 @@
 #include "../Resolution/ContactManifold.hpp"
 #include <unordered_map>
 
-#include "../../Graphics/Common/DataType/Color.hpp"
+#include "../../Graphics/DataType/Color.hpp"
 #include "../Utility/FrictionUtility.hpp"
 #include "../BroadPhase/RayTest.hpp"
 

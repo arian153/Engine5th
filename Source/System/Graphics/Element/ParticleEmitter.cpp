@@ -1,16 +1,16 @@
 #include "ParticleEmitter.hpp"
 #include "../DataType/Particle.hpp"
-#include "../../../Math/Utility/Random.hpp"
-#include "../../../Math/Algebra/Matrix44.hpp"
-#include "../../../../Manager/Component/EngineComponent/ParticleEmitterComponent.hpp"
-#include "../../../Math/Structure/Transform.hpp"
-#include "../../../Math/Utility/Utility.hpp"
-#include "../../../Math/Utility/MatrixUtility.hpp"
+#include "../../Math/Utility/Random.hpp"
+#include "../../Math/Algebra/Matrix44.hpp"
+#include "../../../Manager/Component/EngineComponent/ParticleEmitterComponent.hpp"
+#include "../../Math/Structure/Transform.hpp"
+#include "../../Math/Utility/Utility.hpp"
+#include "../../Math/Utility/MatrixUtility.hpp"
 #include <algorithm>
 
-#include "../Buffer2/IndexBufferCommon.hpp"
-#include "../Buffer2/InstanceBufferCommon.hpp"
-#include "../Buffer2/VertexBufferCommon.hpp"
+#include "../Common/Buffer2/IndexBufferCommon.hpp"
+#include "../Common/Buffer2/InstanceBufferCommon.hpp"
+#include "../Common/Buffer2/VertexBufferCommon.hpp"
 
 namespace Engine5
 {
@@ -46,7 +46,7 @@ namespace Engine5
             m_particles[i].life -= m_base_particle.life * m_life_decay_rate * dt;
             m_particles[i].scale -= m_base_particle.scale * m_scale_decay_rate * dt;
             auto world = ParticleToWorldMatrix(m_particles[i], orientation);
-            m_instances.push_back({ world, m_particles[i].color });
+            m_instances.push_back({world, m_particles[i].color});
         }
         m_instance_buffer->Update(m_instances);
     }

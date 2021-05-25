@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "../../GraphicsAPI.hpp"
-#include "../DataType/VertexAttributeDef.hpp"
+#include "../../DataType/VertexAttributeDef.hpp"
 
 #include IncludeVertexLayoutAPI
 

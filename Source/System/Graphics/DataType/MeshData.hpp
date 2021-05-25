@@ -1,7 +1,8 @@
 #pragma once
-#include "../../../Core/Utility/CoreDef.hpp"
+#include "../../Core/Utility/CoreDef.hpp"
 #include <vector>
-#include "../Vertex/NormalVertexCommon.hpp"
+
+#include "../Common/Vertex/NormalVertexCommon.hpp"
 
 namespace Engine5
 {

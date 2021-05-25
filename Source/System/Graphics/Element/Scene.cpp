@@ -1,22 +1,25 @@
 #include "Scene.hpp"
-#include "../Renderer/RendererCommon.hpp"
-#include "../Shader/ShaderManagerCommon.hpp"
-#include "../../Utility/MatrixManager.hpp"
-#include "../../Utility/PrimitiveRenderer.hpp"
-#include "../Light/DirectionalLight.hpp"
-#include "../Buffer/DeferredBufferCommon.hpp"
-#include "../Light/PointLight.hpp"
-#include "../Light/SpotLight.hpp"
-#include "../Light/CapsuleLight.hpp"
-#include "TextSprite.hpp"
+#include "../Common/Renderer/RendererCommon.hpp"
+#include "../Common/Shader/ShaderManagerCommon.hpp"
+#include "../Utility/MatrixManager.hpp"
+#include "../Utility/PrimitiveRenderer.hpp"
+#include "../Common/Light/DirectionalLight.hpp"
+#include "../Common/Buffer/DeferredBufferCommon.hpp"
+#include "../Common/Light/PointLight.hpp"
+#include "../Common/Light/SpotLight.hpp"
+#include "../Common/Light/CapsuleLight.hpp"
 #include "ParticleEmitter.hpp"
-#include "../../../../Manager/Resource/ResourceManager.hpp"
-#include "../../Element/Mesh2.hpp"
-#include "../../Utility/TextRenderer.hpp"
-#include "../Buffer2/ConstantBufferCommon.hpp"
-#include "../Buffer2/ConstantBufferData.hpp"
-#include "../Buffer2/VertexLayoutCommon.hpp"
-#include "../Shader/ShaderProgramCommon.hpp"
+#include "../../../Manager/Resource/ResourceManager.hpp"
+#include "Mesh2.hpp"
+#include "../Utility/TextRenderer.hpp"
+#include "../Common/Buffer2/ConstantBufferCommon.hpp"
+#include "../Common/Buffer2/ConstantBufferData.hpp"
+#include "../Common/Buffer2/VertexLayoutCommon.hpp"
+#include "../Common/Element/Mesh.hpp"
+#include "../Common/Element/TextSprite.hpp"
+#include "../Common/Light/LightDef.hpp"
+#include "../Common/Shader/ShaderProgramCommon.hpp"
+#include "../DataType/MatrixData.hpp"
 
 namespace Engine5
 {
@@ -55,7 +58,6 @@ namespace Engine5
         m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
         m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
         m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
-
 
         m_new_color_shader = new ShaderProgramCommon(m_shader_manager);
         m_new_color_shader->SetShaderResource(m_resource_manager->GetShaderResourceFileName(L"Color.hlsl"));
@@ -184,8 +186,8 @@ namespace Engine5
             mvp_data.view = camera->GetViewMatrix();
 
             MatrixBufferData data;
-            data.proj  = m_projection_matrix;
-            data.view  = camera->GetViewMatrix();
+            data.proj = m_projection_matrix;
+            data.view = camera->GetViewMatrix();
 
             /* MatrixBufferData* mapped_data = (MatrixBufferData*)m_matrix_buffer->Map();
              mapped_data->model = Matrix44();
@@ -285,11 +287,10 @@ namespace Engine5
                 mvp_data.model = particle->GetModelMatrix();
                 particle->SetBillboardPosition(camera->GetPosition());
                 m_shader_manager->RenderInstanceTextureShader(
-                    mvp_data,
-                    particle->GetTexture(),
-                    ColorDef::Pure::White);
+                                                              mvp_data,
+                                                              particle->GetTexture(),
+                                                              ColorDef::Pure::White);
                 particle->Render();
-             
             }
         }
     }

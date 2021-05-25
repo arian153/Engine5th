@@ -1,8 +1,8 @@
 #pragma once
-#include "../../../Math/Algebra/Vector3.hpp"
-#include "../../../Math/Algebra/Quaternion.hpp"
-#include "../../../Math/Structure/Basis.hpp"
-#include "../../../Math/Algebra/Matrix44.hpp"
+#include "../../Math/Algebra/Vector3.hpp"
+#include "../../Math/Algebra/Quaternion.hpp"
+#include "../../Math/Structure/Basis.hpp"
+#include "../../Math/Algebra/Matrix44.hpp"
 
 namespace Engine5
 {

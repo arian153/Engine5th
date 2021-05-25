@@ -1,8 +1,8 @@
 #include "Camera.hpp"
-#include "../../../Math/Math.hpp"
-#include "../../../Math/Utility/MatrixUtility.hpp"
+#include "../../Math/Math.hpp"
+#include "../../Math/Utility/MatrixUtility.hpp"
 #include "Scene.hpp"
-#include "../../../../Manager/Component/EngineComponent/CameraComponent.hpp"
+#include "../../../Manager/Component/EngineComponent/CameraComponent.hpp"
 
 namespace Engine5
 {

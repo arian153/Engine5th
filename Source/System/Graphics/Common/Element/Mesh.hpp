@@ -2,12 +2,13 @@
 #include "../../../Math/Algebra/Matrix44.hpp"
 #include "../Shader/ShaderType.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
-#include "../DataType/Color.hpp"
+#include "../../DataType/Color.hpp"
 #include "../Texture/TextureArrayCommon.hpp"
 #include "../Light/LightDef.hpp"
 
 namespace Engine5
 {
+    class Color;
     class TextureArrayCommon;
     class Transform;
     class TextureCommon;

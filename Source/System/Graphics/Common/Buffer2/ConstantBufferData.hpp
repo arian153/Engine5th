@@ -4,7 +4,7 @@
 #include "../../../Math/Algebra/Vector3.hpp"
 #include "../../../Math/Algebra/Vector4.hpp"
 #include "../../../Math/Utility/MathDef.hpp"
-#include "../DataType/Color.hpp"
+#include "../../DataType/Color.hpp"
 
 namespace Engine5
 {

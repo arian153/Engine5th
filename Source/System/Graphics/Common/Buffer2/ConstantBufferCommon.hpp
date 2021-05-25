@@ -4,10 +4,11 @@
 #include IncludeConstantBufferAPI
 
 #include "../../../Core/Utility/CoreDef.hpp"
-#include "../DataType/BufferBindType.hpp"
+#include "../../DataType/BufferBindType.hpp"
 
 namespace Engine5
 {
+    enum class eBindingStage;
     struct ColorBufferData;
     struct CameraBufferData;
     struct GammaBufferData;

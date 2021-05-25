@@ -1,7 +1,7 @@
 #include "MatrixManager.hpp"
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../../Math/Utility/MatrixUtility.hpp"
-#include "../Common/Element/Scene.hpp"
+#include "../Element/Scene.hpp"
 
 namespace Engine5
 {

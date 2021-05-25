@@ -2,7 +2,7 @@
 #include "../../Common/Buffer/RenderTextureBufferCommon.hpp"
 #include "../../Common/Vertex/TextureVertexCommon.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
-#include "../../Common/DataType/Color.hpp"
+#include "../../DataType/Color.hpp"
 
 namespace Engine5
 {

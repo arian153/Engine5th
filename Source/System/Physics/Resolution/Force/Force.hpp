@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "../../../Graphics/Common/DataType/Color.hpp"
+#include "../../../Graphics/DataType/Color.hpp"
 #include "../../../Math/Utility/MathDef.hpp"
 #include "../../../Math/Structure/Vector3Pair.hpp"
 

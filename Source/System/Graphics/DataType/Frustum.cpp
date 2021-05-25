@@ -1,7 +1,7 @@
 #include "Frustum.hpp"
-#include "../../../Math/Algebra/Matrix44.hpp"
-#include "../../../Math/Algebra/Vector3.hpp"
-#include "../../Utility/TextRenderer.hpp"
+#include "../../Math/Algebra/Matrix44.hpp"
+#include "../../Math/Algebra/Vector3.hpp"
+#include "../Utility/TextRenderer.hpp"
 
 namespace Engine5
 {

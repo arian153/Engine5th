@@ -1,6 +1,6 @@
 #pragma once
-#include "../../../Core/Utility/CoreDef.hpp"
-#include "../../../Math/Utility/MathDef.hpp"
+#include "../../Core/Utility/CoreDef.hpp"
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {

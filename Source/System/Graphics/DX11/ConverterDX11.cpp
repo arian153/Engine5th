@@ -4,7 +4,7 @@
 #include "../../Math/Algebra/Vector4.hpp"
 #include "../../Math/Algebra/Quaternion.hpp"
 #include "../../Math/Algebra/Matrix44.hpp"
-#include "../Common/DataType/Color.hpp"
+#include "../DataType/Color.hpp"
 #include "../../Math/Algebra/Matrix33.hpp"
 
 namespace Engine5

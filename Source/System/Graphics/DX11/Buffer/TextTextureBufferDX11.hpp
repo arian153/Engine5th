@@ -3,7 +3,7 @@
 #include <dwrite_2.h>
 #include <d2d1_2.h>
 #include <string>
-#include "../../Common/DataType/Color.hpp"
+#include "../../DataType/Color.hpp"
 #include "../../../Math/Algebra/Vector3.hpp"
 
 namespace Engine5

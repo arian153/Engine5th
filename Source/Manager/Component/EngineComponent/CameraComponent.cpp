@@ -1,11 +1,12 @@
 #include "CameraComponent.hpp"
 #include "../../Space/Space.hpp"
-#include "../../../System/Graphics/Common/Element/Scene.hpp"
 #include "TransformComponent.hpp"
 #include "../../Object/Object.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
+#include "../../../System/Graphics/Element/Camera.hpp"
+#include "../../../System/Graphics/Element/Scene.hpp"
 
 namespace Engine5
 {

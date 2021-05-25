@@ -5,7 +5,7 @@
 #include "../Vertex/ColorVertexCommon.hpp"
 #include "../Vertex/TextureVertexCommon.hpp"
 #include "../Vertex/NormalVertexCommon.hpp"
-#include "../DataType/TopologyDef.hpp"
+#include "../../DataType/TopologyDef.hpp"
 #include <vector>
 
 

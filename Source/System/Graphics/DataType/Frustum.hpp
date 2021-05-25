@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../Math/Primitive/Others/Plane.hpp"
+#include "../../Math/Primitive/Others/Plane.hpp"
 
 namespace Engine5
 {

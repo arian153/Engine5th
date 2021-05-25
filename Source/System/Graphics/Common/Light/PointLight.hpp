@@ -1,7 +1,7 @@
 #pragma once
 #include "../../../Math/Algebra/Vector3.hpp"
-#include "../DataType/Color.hpp"
 #include "Light.hpp"
+#include "../../DataType/Color.hpp"
 
 namespace Engine5
 {

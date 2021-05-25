@@ -5,8 +5,8 @@
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
 #include "../Common/Buffer2/InstanceBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
-#include "../Common/DataType/Color.hpp"
-#include "../Common/DataType/MeshData.hpp"
+#include "../DataType/Color.hpp"
+#include "../DataType/MeshData.hpp"
 
 namespace Engine5
 {
@@ -113,19 +113,19 @@ namespace Engine5
         transform.scale    = Vector3(1, 1, 1);
         transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 4.0f));
 
-        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.5, 0.5, 0.5, 1)});
+        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.5f, 0.5f, 0.5f, 1)});
 
         transform.position = Vector3(3, 3, -3);
         transform.scale    = Vector3(1, 1, 1);
         transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 5.0f));
 
-        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.3, 0.3, 0.3, 1)});
+        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.3f, 0.3f, 0.3f, 1)});
 
         transform.position = Vector3(-3, -3, 3);
         transform.scale    = Vector3(1, 1, 1);
         transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 6.0f));
 
-        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.7, 0.7, 0.7, 1)});
+        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.7f, 0.7f, 0.7f, 1)});
 
         m_instance_buffer->Init(m_renderer, m_instances);
         m_instance_count = (U32)m_instances.size();

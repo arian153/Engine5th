@@ -2,7 +2,7 @@
 #include "../../Common/Buffer/TextLayoutBufferCommon.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
 #include "../../Common/Buffer/TextFormatBufferCommon.hpp"
-#include "../../Common/DataType/Color.hpp"
+#include "../../DataType/Color.hpp"
 
 namespace Engine5
 {

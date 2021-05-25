@@ -5,7 +5,7 @@
 #include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 #include "../../../Common/Shader/ShaderManagerCommon.hpp"
 #include <d3dcompiler.h>
-#include "../../../Common/DataType/MatrixData.hpp"
+#include "../../../DataType/MatrixData.hpp"
 
 namespace Engine5
 {

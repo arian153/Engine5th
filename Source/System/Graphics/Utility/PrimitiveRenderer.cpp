@@ -3,8 +3,8 @@
 #include "../Common/Shader/Forward/ColorShaderCommon.hpp"
 #include "MatrixManager.hpp"
 #include "../../Math/Curve/Curve.hpp"
-#include "../Common/DataType/MatrixData.hpp"
-#include "../Common/DataType/TopologyDef.hpp"
+#include "../DataType/MatrixData.hpp"
+#include "../DataType/TopologyDef.hpp"
 #include "../Common/Buffer/MeshBufferCommon.hpp"
 
 namespace Engine5

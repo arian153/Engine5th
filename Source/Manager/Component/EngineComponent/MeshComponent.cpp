@@ -3,7 +3,7 @@
 #include "TransformComponent.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../Space/Space.hpp"
-#include "../../../System/Graphics/Common/Element/Scene.hpp"
+#include "../../../System/Graphics/Element/Scene.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../../System/Graphics/Common/Element/Mesh.hpp"

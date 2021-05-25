@@ -5,8 +5,8 @@
 #include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 #include "../../../Common/Shader/ShaderManagerCommon.hpp"
 #include <d3dcompiler.h>
-#include "../../../Common/Element/Camera.hpp"
-#include "../../../Common/DataType/MatrixData.hpp"
+#include "../../../Element/Camera.hpp"
+#include "../../../DataType/MatrixData.hpp"
 #include "../../../Common/Light/DirectionalLight.hpp"
 #include "../../../Common/Texture/TextureCommon.hpp"
 #include "../../../Common/Buffer/DeferredBufferCommon.hpp"

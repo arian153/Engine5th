@@ -1,10 +1,9 @@
 #pragma once
-#include "../../../Math/Algebra/Vector3.hpp"
+#include "../../Math/Algebra/Vector3.hpp"
 #include "../DataType/Particle.hpp"
 #include <vector>
-
-#include "../Buffer2/ConstantBufferData.hpp"
-#include "../Vertex/InstanceDataCommon.hpp"
+#include "../../Core/Utility/CoreDef.hpp"
+#include "../Common/Buffer2/ConstantBufferData.hpp"
 
 namespace Engine5
 {

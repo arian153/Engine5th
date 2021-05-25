@@ -1,6 +1,6 @@
 #pragma once
 #include "Color.hpp"
-#include "../../../Math/Algebra/Vector3.hpp"
+#include "../../Math/Algebra/Vector3.hpp"
 
 namespace Engine5
 {

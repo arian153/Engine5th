@@ -3,7 +3,7 @@
 #include "RendererDX11.hpp"
 #include "../../Core/Utility/CoreUtility.hpp"
 #include "../../Math/Math.hpp"
-#include "../Common/DataType/Color.hpp"
+#include "../DataType/Color.hpp"
 #include <cassert>
 #include "../Common/Renderer/RendererCommon.hpp"
 

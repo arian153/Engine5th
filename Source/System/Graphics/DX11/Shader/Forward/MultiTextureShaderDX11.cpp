@@ -2,7 +2,7 @@
 #include "../../../Common/Shader/Forward/MultiTextureShaderCommon.hpp"
 #include "../../ConverterDX11.hpp"
 #include "../../../Common/Texture/TextureCommon.hpp"
-#include "../../../Common/DataType/MatrixData.hpp"
+#include "../../../DataType/MatrixData.hpp"
 #include <d3dcompiler.h>
 #include "../../../Common/Shader/ShaderManagerCommon.hpp"
 #include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"

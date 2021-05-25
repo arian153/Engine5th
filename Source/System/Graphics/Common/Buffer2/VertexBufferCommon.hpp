@@ -2,7 +2,7 @@
 
 #include "../../GraphicsAPI.hpp"
 #include IncludeVertexBufferAPI
-#include "../DataType/TopologyDef.hpp"
+#include "../../DataType/TopologyDef.hpp"
 #include <vector>
 
 #include "../../../Core/Utility/CoreDef.hpp"

@@ -5,7 +5,7 @@
 #include "../../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
 #include "../../ConverterDX11.hpp"
 #include "../../../Common/Texture/TextureArrayCommon.hpp"
-#include "../../../Common/DataType/MatrixData.hpp"
+#include "../../../DataType/MatrixData.hpp"
 
 namespace Engine5
 {

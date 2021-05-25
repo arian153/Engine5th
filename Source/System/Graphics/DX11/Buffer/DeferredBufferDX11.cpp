@@ -1,7 +1,7 @@
 #include "DeferredBufferDX11.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
 #include "../../../Math/Utility/MathDef.hpp"
-#include "../../Common/DataType/Color.hpp"
+#include "../../DataType/Color.hpp"
 #include "../../Common/Buffer/DeferredBufferCommon.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
 #include "../../Common/Vertex/TextureVertexCommon.hpp"

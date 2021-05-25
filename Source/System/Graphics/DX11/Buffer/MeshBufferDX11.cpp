@@ -1,6 +1,6 @@
 #include "MeshBufferDX11.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
-#include "../../Common/DataType/TopologyDef.hpp"
+#include "../../DataType/TopologyDef.hpp"
 #include "../../Common/Buffer/MeshBufferCommon.hpp"
 #include "../../Common/Renderer/RendererCommon.hpp"
 
