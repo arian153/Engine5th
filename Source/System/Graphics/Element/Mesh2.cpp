@@ -52,7 +52,7 @@ namespace Engine5
             delete m_mesh_data;
             m_mesh_data = nullptr;
         }
-        m_texture_array.Clear();
+        m_diffuse_maps.Clear();
     }
 
     void Mesh2::Render() const
@@ -151,22 +151,17 @@ namespace Engine5
 
     void Mesh2::AddTexture(TextureCommon* texture)
     {
-        m_texture_array.PushBack(texture);
+        m_diffuse_maps.PushBack(texture);
     }
 
     void Mesh2::ClearTexture()
     {
-        m_texture_array.Clear();
+        m_diffuse_maps.Clear();
     }
 
     void Mesh2::RemoveTexture(TextureCommon* texture)
     {
-        m_texture_array.Erase(texture);
-    }
-
-    void Mesh2::SetTransform(Transform* transform)
-    {
-        m_transform = transform;
+        m_diffuse_maps.Erase(texture);
     }
 
     void Mesh2::SetRenderer(RendererCommon* renderer)
