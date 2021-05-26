@@ -60,4 +60,37 @@ namespace Engine5
     {
         m_spot = s;
     }
+
+    LightBufferData Light2::GetLightBuffer() const
+    {
+        LightBufferData result;
+        result.ambient_color  = m_ambient_color;
+        result.diffuse_color  = m_diffuse_color;
+        result.specular_color = m_specular_color;
+        result.specular_power = m_specular_power;
+        result.direction      = m_direction;
+        result.position       = m_position;
+        result.range          = m_range;
+        result.attenuation    = m_attenuation;
+        result.length         = m_length;
+        result.spot           = m_spot;
+        result.type           = (int)m_type;
+        return result;
+    }
+
+    void Light2::GetLightBuffer(void* data) const
+    {
+        LightBufferData* result = (LightBufferData*)data;
+        result->ambient_color   = m_ambient_color;
+        result->diffuse_color   = m_diffuse_color;
+        result->specular_color  = m_specular_color;
+        result->specular_power  = m_specular_power;
+        result->direction       = m_direction;
+        result->position        = m_position;
+        result->range           = m_range;
+        result->attenuation     = m_attenuation;
+        result->length          = m_length;
+        result->spot            = m_spot;
+        result->type            = (int)m_type;
+    }
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Math/Algebra/Vector3.hpp"
+#include "../Common/Buffer2/ConstantBufferData.hpp"
 #include "../DataType/Color.hpp"
 #include "../Common/Light/LightDef.hpp"
 
@@ -22,6 +23,8 @@ namespace Engine5
         void SetRange(Real rng);
         void SetSpot(Real s);
 
+        LightBufferData GetLightBuffer() const;
+        void GetLightBuffer(void* data) const;
     private:
         eLightType m_type = eLightType::PointLight;
         Color      m_ambient_color;
