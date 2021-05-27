@@ -1,10 +1,14 @@
 struct DynamicLight
 {
+    float4 AmbientDown;
+    float4 AmbientRange;
+
 };
 
 struct DirectionalLight
 {
-    float4 Ambient;
+    float4 AmbientDown;
+    float4 AmbientRange;
     float4 Diffuse;
     float4 Specular;
     float3 Direction;
@@ -13,7 +17,8 @@ struct DirectionalLight
 
 struct PointLight
 {
-    float4 Ambient;
+    float4 AmbientDown;
+    float4 AmbientRange;
     float4 Diffuse;
     float4 Specular;
 
@@ -26,7 +31,8 @@ struct PointLight
 
 struct SpotLight
 {
-    float4 Ambient;
+    float4 AmbientDown;
+    float4 AmbientRange;
     float4 Diffuse;
     float4 Specular;
 
@@ -42,14 +48,19 @@ struct SpotLight
 
 struct CapsuleLight
 {
+    float4 AmbientDown;
+    float4 AmbientRange;
+    float4 Diffuse;
+    float4 Specular;
+
+    float3 pos;
+    float range;
+
+    float3 dir;
+    float len;
 
 };
 
-struct AmbientLight
-{
-    float3 AmbientDown;
-    float3 AmbientRange;
-};
 
 struct Material
 {
