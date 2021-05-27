@@ -37,3 +37,5 @@ struct PixelInputType
     float3 view_direction : TEXCOORD1;
 };
 
+
+
