@@ -27,9 +27,10 @@ namespace Engine5
 
     struct LightBufferData
     {
-        Color   ambient_color;
-        Color   diffuse_color;
-        Color   specular_color;
+        Color ambient_color;
+        Color ambient_range;
+        Color diffuse_color;
+        Color specular_color;
         Real    specular_power;
         Vector3 direction;
         Vector3 position;

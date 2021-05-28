@@ -28,6 +28,7 @@ namespace Engine5
     private:
         eLightType m_type = eLightType::PointLight;
         Color      m_ambient_color;
+        Color      m_ambient_range;
         Color      m_diffuse_color;
         Color      m_specular_color;
         Real       m_specular_power = 1.0f;

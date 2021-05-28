@@ -4,6 +4,7 @@ namespace Engine5
 {
     enum class eLightType
     {
+        AmbientLight,
         DirectionalLight,
         PointLight,
         SpotLight,
