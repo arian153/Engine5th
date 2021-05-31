@@ -65,23 +65,41 @@ float4 PS(VSOut input)
     {
         if (dynamic_light[i].type == 0)
         {
-            CalculateAmbient(material, dynamic_light[i], ...);
+            CalculateAmbient(material, dynamic_light[i], normal_world, A);
+            ambient += A;
         }
         else if (dynamic_light[i].type == 1)
         {
-            CalculateDirectional(material, dynamic_light[i], ...);
+            CalculateDirectional(material, dynamic_light[i], normal_world, to_eye, A, D, S);
+            ambient += A;
+            diffuse += D;
+            specular += S;
+
         }
         else if (dynamic_light[i].type == 2)
         {
-            CalculatePoint(material, dynamic_light[i], ...);
+            CalculatePoint(material, dynamic_light[i], input.pos_world, normal_world, to_eye, A, D, S);
+
+            ambient += A;
+            diffuse += D;
+            specular += S;
+
         }
         else if (dynamic_light[i].type == 3)
         {
-            CalculateSpot(material, dynamic_light[i], ...);
+            CalculateSpot(material, dynamic_light[i], input.pos_world, normal_world, to_eye, A, D, S);
+
+            ambient += A;
+            diffuse += D;
+            specular += S;
         }
         else if (dynamic_light[i].type == 4)
         {
-            CalculateCapsule(material, dynamic_light[i], ...);
+            CalculateCapsule(material, dynamic_light[i], input.pos_world, normal_world, to_eye, A, D, S);
+
+            ambient += A;
+            diffuse += D;
+            specular += S;
         }
 
     }
