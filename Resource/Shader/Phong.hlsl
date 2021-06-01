@@ -28,6 +28,8 @@ struct VSIn
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
+    float4x4 world : WORLD;
+    float4 ins_color : COLOR;
 };
 
 struct VSOut
@@ -41,16 +43,20 @@ struct VSOut
 };
 
 
-VSOut VS(VSIn input)
+VSOut VertexShaderEntry(VSIn input)
 {
     VSOut output;
+    input.position.w = 1.0f;
 
-    output.position = mul();
+    output.position = mul(input.position, input.world);
+    output.position = mul(output.position, view);
+    output.position = mul(output.position, proj);
+    output.color = input.color * input.ins_color;
 
     return output;
 }
 
-float4 PS(VSOut input)
+float4 PixelShaderEntry(VSOut input)
 {
     float3 normal_world = normalize(input.normal);
     float3 to_eye_world = normalize(cam_pos - input.pos_world);

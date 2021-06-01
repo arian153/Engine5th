@@ -115,7 +115,7 @@ namespace Engine5
         data_ptr->ambient_color   = data.ambient_color;
         data_ptr->diffuse_color   = data.diffuse_color;
         data_ptr->specular_color  = data.specular_color;
-        data_ptr->light_direction = data.light_direction;
+        //data_ptr->light_direction = data.light_direction;
         data_ptr->specular_power  = data.specular_power;
 
         m_device_context->Unmap(m_constant_buffer, 0);
