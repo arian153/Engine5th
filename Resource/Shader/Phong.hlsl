@@ -1,8 +1,6 @@
 #include "LightHelper.hlsl"
 
-Texture2D diffuse_map[2];
-Texture2D specular_map;
-Texture2D normal_map;
+Texture2D shader_texture[5];
 
 cbuffer MatrixBuffer
 {
