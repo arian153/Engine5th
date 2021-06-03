@@ -22,6 +22,13 @@ float4 SpecularMapping(float2 tex, int specular_map_id)
     return shader_texture[specular_map_id].Sample(sample_type, tex);
 }
 
+float3 LightMapping(float2 tex, int diffuse_id, int light_map_id)
+{
+    float4 diffuse = shader_texture[diffuse_id].Sample(sample_type, tex);
+    float4 light_map = shader_texture[light_map_id].Sample(sample_type, tex);
+    return diffuse * light_map;
+}
+
 float4 BlendTexture(float2 tex, int diffuse1_id, int diffuse2_id, float gamma)
 {
     float4 diffuse1 = shader_texture[diffuse1_id].Sample(sample_type, tex);
