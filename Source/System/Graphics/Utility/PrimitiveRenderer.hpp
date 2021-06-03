@@ -8,6 +8,9 @@
 
 namespace Engine5
 {
+    class VertexBufferCommon;
+    class IndexBufferCommon;
+    class ShaderProgramCommon;
     class Curve;
     class MatrixManager;
     class MeshBufferCommon;
@@ -43,7 +46,6 @@ namespace Engine5
         void DrawCurveLine(const Curve& curve, Color color = Color());
         void DrawDashedLineSegment(const Vector3& start, const Vector3& end, Real length, Color color = Color());
 
-
         void Initialize(ColorShaderCommon* color_shader);
         void Render() const;
         void Shutdown();
@@ -62,22 +64,26 @@ namespace Engine5
         size_t VerticesSize(eRenderingMode mode) const;
         size_t IndicesSize(eRenderingMode mode) const;
     private:
-        MatrixData         m_mvp_data;
-        ColorShaderCommon* m_color_shader = nullptr;
-        RendererCommon*    m_renderer     = nullptr;
-        Frustum            m_frustum;
+        MatrixData           m_mvp_data;
+        ColorShaderCommon*   m_color_shader = nullptr;
+        RendererCommon*      m_renderer     = nullptr;
+        Frustum              m_frustum;
+        ShaderProgramCommon* m_shader = nullptr;
 
         std::vector<ColorVertexCommon> m_dot_vertices;
         std::vector<U32>               m_dot_indices;
-        MeshBufferCommon*              m_dot_buffer = nullptr;
+        VertexBufferCommon*            m_dot_vertex_buffer = nullptr;
+        IndexBufferCommon*             m_dot_index_buffer  = nullptr;
 
         std::vector<ColorVertexCommon> m_line_vertices;
         std::vector<U32>               m_line_indices;
-        MeshBufferCommon*              m_line_buffer = nullptr;
+        VertexBufferCommon*            m_line_vertex_buffer = nullptr;
+        IndexBufferCommon*             m_line_index_buffer  = nullptr;
 
         std::vector<ColorVertexCommon> m_face_vertices;
         std::vector<U32>               m_face_indices;
-        MeshBufferCommon*              m_face_buffer = nullptr;
+        VertexBufferCommon*            m_face_vertex_buffer = nullptr;
+        IndexBufferCommon*             m_face_index_buffer  = nullptr;
 
     public:
         const int CIRCULAR_VERTICES_COUNT    = 100;

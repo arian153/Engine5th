@@ -6,6 +6,8 @@
 #include "../DataType/MatrixData.hpp"
 #include "../DataType/TopologyDef.hpp"
 #include "../Common/Buffer/MeshBufferCommon.hpp"
+#include "../Common/Buffer2/IndexBufferCommon.hpp"
+#include "../Common/Buffer2/VertexBufferCommon.hpp"
 
 namespace Engine5
 {
@@ -270,56 +272,86 @@ namespace Engine5
     void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader)
     {
         m_color_shader = color_shader;
-        m_dot_buffer   = new MeshBufferCommon();
-        m_line_buffer  = new MeshBufferCommon();
-        m_face_buffer  = new MeshBufferCommon();
+
+        m_dot_vertex_buffer = new VertexBufferCommon();
+        m_line_vertex_buffer = new VertexBufferCommon();
+        m_face_vertex_buffer = new VertexBufferCommon();
+
+        m_dot_index_buffer = new IndexBufferCommon();
+        m_line_index_buffer = new IndexBufferCommon();
+        m_face_index_buffer = new IndexBufferCommon();
     }
 
     void PrimitiveRenderer::Render() const
     {
         if (m_dot_vertices.empty() == false)
         {
-            m_dot_buffer->BuildBuffer(m_renderer, m_dot_vertices, m_dot_indices);
+            m_dot_index_buffer->Init(m_renderer, m_dot_indices);
+            m_dot_vertex_buffer->Init(m_renderer, m_dot_vertices);
+
+
+
+        /*    m_dot_buffer->BuildBuffer(m_renderer, m_dot_vertices, m_dot_indices);
             m_dot_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::PointList);
             m_color_shader->Render(static_cast<U32>(m_dot_indices.size()), m_mvp_data);
-        }
+  */      }
         if (m_line_vertices.empty() == false)
         {
-            m_line_buffer->BuildBuffer(m_renderer, m_line_vertices, m_line_indices);
-            //m_line_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::LineList);
-            //m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_mvp_data);
+            //    m_line_buffer->BuildBuffer(m_renderer, m_line_vertices, m_line_indices);
+            //    //m_line_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::LineList);
+            //    //m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_mvp_data);
 
-            m_color_shader->Bind(m_mvp_data);
-            m_line_buffer->Render(sizeof(ColorVertexCommon), 0, static_cast<U32>(m_line_indices.size()), eTopologyType::LineList);
+            //    m_color_shader->Bind(m_mvp_data);
+            //    m_line_buffer->Render(sizeof(ColorVertexCommon), 0, static_cast<U32>(m_line_indices.size()), eTopologyType::LineList);
+            //
         }
         if (m_face_vertices.empty() == false)
         {
-            m_face_buffer->BuildBuffer(m_renderer, m_face_vertices, m_face_indices);
+         /*   m_face_buffer->BuildBuffer(m_renderer, m_face_vertices, m_face_indices);
             m_face_buffer->Render(sizeof(ColorVertexCommon), 0);
             m_color_shader->Render(static_cast<U32>(m_face_indices.size()), m_mvp_data);
-        }
+    */    }
     }
 
     void PrimitiveRenderer::Shutdown()
     {
         Clear();
-        if (m_dot_buffer != nullptr)
+        if (m_dot_vertex_buffer != nullptr)
         {
-            m_dot_buffer->Shutdown();
-            delete m_dot_buffer;
-            m_dot_buffer = nullptr;
+            m_dot_vertex_buffer->Shutdown();
+            delete m_dot_vertex_buffer;
+            m_dot_vertex_buffer = nullptr;
         }
-        if (m_line_buffer != nullptr)
+        if (m_line_vertex_buffer != nullptr)
         {
-            m_line_buffer->Shutdown();
-            delete m_line_buffer;
-            m_line_buffer = nullptr;
+            m_line_vertex_buffer->Shutdown();
+            delete m_line_vertex_buffer;
+            m_line_vertex_buffer = nullptr;
         }
-        if (m_face_buffer != nullptr)
+        if (m_face_vertex_buffer != nullptr)
         {
-            m_face_buffer->Shutdown();
-            delete m_face_buffer;
-            m_face_buffer = nullptr;
+            m_face_vertex_buffer->Shutdown();
+            delete m_face_vertex_buffer;
+            m_face_vertex_buffer = nullptr;
+        }
+
+        if (m_dot_index_buffer != nullptr)
+        {
+            m_dot_index_buffer->Shutdown();
+            delete m_dot_index_buffer;
+            m_dot_index_buffer = nullptr;
+        }
+        if (m_line_index_buffer != nullptr)
+        {
+            m_line_index_buffer->Shutdown();
+            delete m_line_index_buffer;
+            m_line_index_buffer = nullptr;
+        }
+        if (m_face_index_buffer != nullptr)
+        {
+            m_face_index_buffer->Shutdown();
+            delete m_face_index_buffer;
+            m_face_index_buffer = nullptr;
         }
     }
 

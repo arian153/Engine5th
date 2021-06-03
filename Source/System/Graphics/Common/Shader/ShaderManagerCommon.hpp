@@ -1,4 +1,7 @@
 #pragma once
+//#include <unordered_map>
+
+
 #include "../../GraphicsAPI.hpp"
 #include "../../../Core/Utility/CoreDef.hpp"
 
@@ -64,6 +67,8 @@ namespace Engine5
         NormalMappingShaderCommon*            GetNormalMappingShader() const;
         SpecularMappingShaderCommon*          GetSpecularMappingShader() const;
 
+        //ShaderProgramCommon* GetShader(const std::string& name) const;
+
     private:
         //shader others
         ColorShaderCommon*           m_color_shader            = nullptr;
@@ -81,6 +86,9 @@ namespace Engine5
         //deferred
         DeferredBufferShaderCommon*           m_deferred_buffer_shader            = nullptr;
         DeferredDirectionalLightShaderCommon* m_deferred_directional_light_shader = nullptr;
+
+
+        //std::unordered_map<std::string, ShaderProgramCommon*> m_shader_table;
 
         //resource manager
         ResourceManager* m_resource_manager = nullptr;
