@@ -8,6 +8,7 @@
 #include "../Common/Buffer/MeshBufferCommon.hpp"
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
+#include "../Common/Shader/ShaderProgramCommon.hpp"
 
 namespace Engine5
 {
@@ -232,7 +233,7 @@ namespace Engine5
     {
         if (end.DistanceSquaredTo(start) > Math::EPSILON)
         {
-            Real scale = start.DistanceTo(end);
+            Real       scale = start.DistanceTo(end);
             Quaternion rotation(Vector3(0.0f, 1.0f, 0.0f), (end - start).Normalize());
             DrawPrimitive(Cone(end, rotation, scale * 0.1f, scale * 0.2f), eRenderingMode::Face, color);
             DrawSegment(start, end, color);
@@ -242,7 +243,7 @@ namespace Engine5
     void PrimitiveRenderer::DrawCurveLine(const Curve& curve, Color color)
     {
         size_t curve_size = curve.points.size() - 1;
-        size_t index = m_line_vertices.size();
+        size_t index      = m_line_vertices.size();
 
         m_line_vertices.reserve(index + 2 * curve_size);
         m_line_indices.reserve(m_line_indices.size() + 2 * curve_size);
@@ -258,8 +259,8 @@ namespace Engine5
     void PrimitiveRenderer::DrawDashedLineSegment(const Vector3& start, const Vector3& end, Real length, Color color)
     {
         Real    distance = start.DistanceTo(end);
-        Vector3 dir = (end - start).Unit();
-        int     count = static_cast<int>(distance / length);
+        Vector3 dir      = (end - start).Unit();
+        int     count    = static_cast<int>(distance / length);
 
         for (int i = 0; i < count; i += 2)
         {
@@ -269,34 +270,51 @@ namespace Engine5
         }
     }
 
-    void PrimitiveRenderer::Initialize(ColorShaderCommon* color_shader)
+    void PrimitiveRenderer::Initialize(ShaderProgramCommon* color_shader)
     {
-        m_color_shader = color_shader;
+        m_shader = color_shader;
 
-        m_dot_vertex_buffer = new VertexBufferCommon();
+        m_dot_vertex_buffer  = new VertexBufferCommon();
         m_line_vertex_buffer = new VertexBufferCommon();
         m_face_vertex_buffer = new VertexBufferCommon();
 
-        m_dot_index_buffer = new IndexBufferCommon();
+        m_dot_index_buffer  = new IndexBufferCommon();
         m_line_index_buffer = new IndexBufferCommon();
         m_face_index_buffer = new IndexBufferCommon();
+
+        m_stride = sizeof(ColorVertexCommon);
     }
 
     void PrimitiveRenderer::Render() const
     {
         if (m_dot_vertices.empty() == false)
         {
+            //build buffer
             m_dot_index_buffer->Init(m_renderer, m_dot_indices);
             m_dot_vertex_buffer->Init(m_renderer, m_dot_vertices);
+            m_dot_vertex_buffer->SetPrimitiveTopology(eTopologyType::PointList);
 
-
-
-        /*    m_dot_buffer->BuildBuffer(m_renderer, m_dot_vertices, m_dot_indices);
-            m_dot_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::PointList);
-            m_color_shader->Render(static_cast<U32>(m_dot_indices.size()), m_mvp_data);
-  */      }
+            //render
+            m_shader->Bind();
+            m_dot_vertex_buffer->Bind(m_stride, 0);
+            m_dot_index_buffer->Bind(0);
+            /*    m_dot_buffer->BuildBuffer(m_renderer, m_dot_vertices, m_dot_indices);
+                m_dot_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::PointList);
+                m_color_shader->Render(static_cast<U32>(m_dot_indices.size()), m_mvp_data);
+      */
+        }
         if (m_line_vertices.empty() == false)
         {
+            //build buffer
+            m_line_index_buffer->Init(m_renderer, m_dot_indices);
+            m_line_vertex_buffer->Init(m_renderer, m_dot_vertices);
+            m_line_vertex_buffer->SetPrimitiveTopology(eTopologyType::PointList);
+
+            //render
+            m_shader->Bind();
+            m_line_vertex_buffer->Bind(m_stride, 0);
+            m_line_index_buffer->Bind(0);
+
             //    m_line_buffer->BuildBuffer(m_renderer, m_line_vertices, m_line_indices);
             //    //m_line_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::LineList);
             //    //m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_mvp_data);
@@ -307,10 +325,21 @@ namespace Engine5
         }
         if (m_face_vertices.empty() == false)
         {
-         /*   m_face_buffer->BuildBuffer(m_renderer, m_face_vertices, m_face_indices);
-            m_face_buffer->Render(sizeof(ColorVertexCommon), 0);
-            m_color_shader->Render(static_cast<U32>(m_face_indices.size()), m_mvp_data);
-    */    }
+            //build buffer
+            m_face_index_buffer->Init(m_renderer, m_dot_indices);
+            m_face_vertex_buffer->Init(m_renderer, m_dot_vertices);
+            m_face_vertex_buffer->SetPrimitiveTopology(eTopologyType::PointList);
+
+            //render
+            m_shader->Bind();
+            m_face_vertex_buffer->Bind(m_stride, 0);
+            m_face_index_buffer->Bind(0);
+
+            /*   m_face_buffer->BuildBuffer(m_renderer, m_face_vertices, m_face_indices);
+               m_face_buffer->Render(sizeof(ColorVertexCommon), 0);
+               m_color_shader->Render(static_cast<U32>(m_face_indices.size()), m_mvp_data);
+       */
+        }
     }
 
     void PrimitiveRenderer::Shutdown()

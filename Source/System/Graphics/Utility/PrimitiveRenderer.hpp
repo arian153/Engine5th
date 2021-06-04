@@ -46,7 +46,7 @@ namespace Engine5
         void DrawCurveLine(const Curve& curve, Color color = Color());
         void DrawDashedLineSegment(const Vector3& start, const Vector3& end, Real length, Color color = Color());
 
-        void Initialize(ColorShaderCommon* color_shader);
+        void Initialize(ShaderProgramCommon* color_shader);
         void Render() const;
         void Shutdown();
         void Clear();
@@ -65,10 +65,11 @@ namespace Engine5
         size_t IndicesSize(eRenderingMode mode) const;
     private:
         MatrixData           m_mvp_data;
-        ColorShaderCommon*   m_color_shader = nullptr;
         RendererCommon*      m_renderer     = nullptr;
         Frustum              m_frustum;
         ShaderProgramCommon* m_shader = nullptr;
+
+        U32 m_stride = 0;
 
         std::vector<ColorVertexCommon> m_dot_vertices;
         std::vector<U32>               m_dot_indices;
