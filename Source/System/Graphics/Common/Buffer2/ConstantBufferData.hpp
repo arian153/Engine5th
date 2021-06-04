@@ -42,8 +42,16 @@ namespace Engine5
         Vector2 padding;
     };
 
+    struct MatrixBufferDataInstancing
+    {
+        Matrix44 view;
+        Matrix44 proj;
+    };
+
+
     struct MatrixBufferData
     {
+        Matrix44 world;
         Matrix44 view;
         Matrix44 proj;
     };

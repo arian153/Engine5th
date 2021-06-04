@@ -298,47 +298,30 @@ namespace Engine5
             m_shader->Bind();
             m_dot_vertex_buffer->Bind(m_stride, 0);
             m_dot_index_buffer->Bind(0);
-            /*    m_dot_buffer->BuildBuffer(m_renderer, m_dot_vertices, m_dot_indices);
-                m_dot_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::PointList);
-                m_color_shader->Render(static_cast<U32>(m_dot_indices.size()), m_mvp_data);
-      */
         }
         if (m_line_vertices.empty() == false)
         {
             //build buffer
-            m_line_index_buffer->Init(m_renderer, m_dot_indices);
-            m_line_vertex_buffer->Init(m_renderer, m_dot_vertices);
-            m_line_vertex_buffer->SetPrimitiveTopology(eTopologyType::PointList);
+            m_line_index_buffer->Init(m_renderer, m_line_indices);
+            m_line_vertex_buffer->Init(m_renderer, m_line_vertices);
+            m_line_vertex_buffer->SetPrimitiveTopology(eTopologyType::LineList);
 
             //render
             m_shader->Bind();
             m_line_vertex_buffer->Bind(m_stride, 0);
             m_line_index_buffer->Bind(0);
-
-            //    m_line_buffer->BuildBuffer(m_renderer, m_line_vertices, m_line_indices);
-            //    //m_line_buffer->Render(sizeof(ColorVertexCommon), 0, eTopologyType::LineList);
-            //    //m_color_shader->Render(static_cast<U32>(m_line_indices.size()), m_mvp_data);
-
-            //    m_color_shader->Bind(m_mvp_data);
-            //    m_line_buffer->Render(sizeof(ColorVertexCommon), 0, static_cast<U32>(m_line_indices.size()), eTopologyType::LineList);
-            //
         }
         if (m_face_vertices.empty() == false)
         {
             //build buffer
-            m_face_index_buffer->Init(m_renderer, m_dot_indices);
-            m_face_vertex_buffer->Init(m_renderer, m_dot_vertices);
-            m_face_vertex_buffer->SetPrimitiveTopology(eTopologyType::PointList);
+            m_face_index_buffer->Init(m_renderer, m_face_indices);
+            m_face_vertex_buffer->Init(m_renderer, m_face_vertices);
+            m_face_vertex_buffer->SetPrimitiveTopology(eTopologyType::TriangleList);
 
             //render
             m_shader->Bind();
             m_face_vertex_buffer->Bind(m_stride, 0);
             m_face_index_buffer->Bind(0);
-
-            /*   m_face_buffer->BuildBuffer(m_renderer, m_face_vertices, m_face_indices);
-               m_face_buffer->Render(sizeof(ColorVertexCommon), 0);
-               m_color_shader->Render(static_cast<U32>(m_face_indices.size()), m_mvp_data);
-       */
         }
     }
 

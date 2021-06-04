@@ -36,7 +36,7 @@ namespace Engine5
         m_matrix_manager->AddScene(this);
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
-        m_primitive_renderer->Initialize(m_shader_manager->GetColorShader());
+        m_primitive_renderer->Initialize(m_shader_manager->GetShader("Color"));
         //deferred buffer
         m_deferred_buffer = new DeferredBufferCommon();
         m_deferred_buffer->Initialize(
@@ -49,21 +49,11 @@ namespace Engine5
         m_matrix_buffer = new ConstantBufferCommon();
         m_matrix_buffer->Init(m_renderer, eBindingStage::VertexShader, sizeof(MatrixBufferData), 0);
 
-        m_color_vertex_layout = new VertexLayoutCommon();
-        m_color_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
-        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+        m_matrix_instancing_buffer = new ConstantBufferCommon();
+        m_matrix_instancing_buffer->Init(m_renderer, eBindingStage::VertexShader, sizeof(MatrixBufferDataInstancing), 0);
 
-        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
-
-        m_new_color_shader = new ShaderProgramCommon(m_shader_manager);
-        m_new_color_shader->SetShaderResource(m_resource_manager->GetShaderResourceFileName(L"Color.hlsl"));
-        m_new_color_shader->SetVertexLayout(m_color_vertex_layout);
-        m_new_color_shader->AddConstantBuffer(m_matrix_buffer);
-        m_new_color_shader->Init(m_renderer);
+        m_shader_manager->AddBuffer("Color", m_matrix_buffer);
+        m_shader_manager->AddBuffer("ColorInstancing", m_matrix_instancing_buffer);
 
         m_test_mesh = new Mesh2();
         m_test_mesh->Initialize();
@@ -79,6 +69,12 @@ namespace Engine5
         mvp_data.projection = m_projection_matrix;
         m_main_camera->Update();
         mvp_data.view = m_main_camera->GetViewMatrix();
+
+        MatrixBufferData mvp_buffer;
+        mvp_buffer.view = m_main_camera->GetViewMatrix();
+        mvp_buffer.proj = m_projection_matrix;
+        m_matrix_buffer->Update(mvp_buffer);
+
         m_frustum.ConstructFrustum(m_matrix_manager->GetFarPlane(), mvp_data.projection, mvp_data.view);
         m_primitive_renderer->UpdateFrustum(m_frustum);
         m_b_deferred_shading = false;
@@ -101,7 +97,7 @@ namespace Engine5
                     {
                     case eShaderType::DeferredDirectionalLight:
                         mesh->RenderBuffer();
-                        m_shader_manager->RenderDeferredBufferShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
+                        //m_shader_manager->RenderDeferredBufferShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
                         break;
                     default:
                         break;
@@ -123,6 +119,9 @@ namespace Engine5
     {
         if (m_main_camera == nullptr || m_cameras.empty())
             return;
+
+     
+
         m_primitive_renderer->Render();
         m_primitive_renderer->Clear();
         MatrixData mvp_data;
@@ -134,48 +133,6 @@ namespace Engine5
             {
                 mvp_data.view = camera->GetViewMatrix();
                 m_renderer->SetZBuffering(false);
-                for (DirectionalLight* directional_light : m_directional_lights)
-                {
-                    m_deferred_buffer->Render();
-                    m_shader_manager->RenderDeferredDirectionalLightShader(
-                                                                           m_deferred_buffer->GetIndexCount(),
-                                                                           mvp_data,
-                                                                           m_deferred_buffer,
-                                                                           camera,
-                                                                           directional_light
-                                                                          );
-                }
-                /*for (PointLight* point_light : m_point_lights)
-                {
-                    m_render_texture_buffer->Render();
-                    m_shader_manager->RenderDeferredLightShader(
-                                                                m_render_texture_buffer->GetIndexCount(),
-                                                                mvp_data,
-                                                                m_deferred_buffer,
-                                                                camera,
-                                                                point_light
-                                                               );
-                }
-                for (SpotLight* spot_light : m_spot_lights)
-                {
-                    m_render_texture_buffer->Render();
-                    m_shader_manager->RenderDeferredLightShader(
-                                                                m_render_texture_buffer->GetIndexCount(),
-                                                                mvp_data,
-                                                                m_deferred_buffer,
-                                                                camera,
-                                                                spot_light);
-                }
-                for (CapsuleLight* capsule_light : m_capsule_lights)
-                {
-                    m_render_texture_buffer->Render();
-                    m_shader_manager->RenderDeferredLightShader(
-                                                                m_render_texture_buffer->GetIndexCount(),
-                                                                mvp_data,
-                                                                m_deferred_buffer,
-                                                                camera,
-                                                                capsule_light);
-                }*/
                 m_renderer->SetZBuffering(true);
             }
         }
@@ -185,49 +142,51 @@ namespace Engine5
             camera->Update();
             mvp_data.view = camera->GetViewMatrix();
 
-            MatrixBufferData data;
-            data.proj = m_projection_matrix;
-            data.view = camera->GetViewMatrix();
+            MatrixBufferDataInstancing vp_data;
+            vp_data.proj = m_projection_matrix;
+            vp_data.view = camera->GetViewMatrix();
+
+           
 
             /* MatrixBufferData* mapped_data = (MatrixBufferData*)m_matrix_buffer->Map();
              mapped_data->model = Matrix44();
              mapped_data->view = camera->GetViewMatrix().Transpose();
              mapped_data->proj = m_projection_matrix.Transpose();
              m_matrix_buffer->UnMap();*/
-            m_matrix_buffer->Update(data);
+            m_matrix_instancing_buffer->Update(vp_data);
 
-            m_new_color_shader->Bind();
+            m_shader_manager->Bind("ColorInstancing");
             m_test_mesh->Render();
 
             for (auto& mesh : m_other_meshes)
             {
                 mvp_data.model = mesh->GetModelMatrix();
                 auto type      = mesh->GetShaderType();
-                if (type == eShaderType::Color)
-                {
-                    mesh->RenderBuffer();
-                    m_shader_manager->RenderColorShader(mesh->GetIndexCount(), mvp_data);
-                }
-                else if (type == eShaderType::Texture)
-                {
-                    mesh->RenderBuffer();
-                    m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
-                }
-                else if (type == eShaderType::MultiTexture)
-                {
-                    mesh->RenderBuffer();
-                    m_shader_manager->RenderMultiTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor(), 1.7f);
-                }
-                else if (type == eShaderType::AlphaMapping)
-                {
-                    mesh->RenderBuffer();
-                    m_shader_manager->RenderAlphaMappingShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor());
-                }
-                else if (type == eShaderType::LightMapping)
-                {
-                    mesh->RenderBuffer();
-                    m_shader_manager->RenderLightMappingShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor());
-                }
+                /*   if (type == eShaderType::Color)
+                   {
+                       mesh->RenderBuffer();
+                       m_shader_manager->RenderColorShader(mesh->GetIndexCount(), mvp_data);
+                   }
+                   else if (type == eShaderType::Texture)
+                   {
+                       mesh->RenderBuffer();
+                       m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
+                   }
+                   else if (type == eShaderType::MultiTexture)
+                   {
+                       mesh->RenderBuffer();
+                       m_shader_manager->RenderMultiTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor(), 1.7f);
+                   }
+                   else if (type == eShaderType::AlphaMapping)
+                   {
+                       mesh->RenderBuffer();
+                       m_shader_manager->RenderAlphaMappingShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor());
+                   }
+                   else if (type == eShaderType::LightMapping)
+                   {
+                       mesh->RenderBuffer();
+                       m_shader_manager->RenderLightMappingShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor());
+                   }*/
             }
             for (auto& mesh : m_forward_meshes)
             {
@@ -235,63 +194,63 @@ namespace Engine5
                 auto type      = mesh->GetShaderType();
                 for (DirectionalLight* directional_light : m_directional_lights)
                 {
-                    if (type == eShaderType::ForwardDirectionalLight)
-                    {
-                        mesh->RenderBuffer();
-                        m_shader_manager->RenderForwardDirectionalLightShader(
-                                                                              mesh->GetIndexCount(),
-                                                                              mvp_data,
-                                                                              mesh->GetTexture(),
-                                                                              camera,
-                                                                              mesh->GetColor(),
-                                                                              directional_light
-                                                                             );
-                    }
-                    else if (type == eShaderType::NormalMapping)
-                    {
-                        mesh->RenderBuffer();
-                        m_shader_manager->RenderNormalMappingShader(
-                                                                    mesh->GetIndexCount(),
-                                                                    mvp_data,
-                                                                    mesh->GetTextureArray(),
-                                                                    mesh->GetColor(),
-                                                                    directional_light
-                                                                   );
-                    }
-                    else if (type == eShaderType::SpecularMapping)
-                    {
-                        mesh->RenderBuffer();
-                        m_shader_manager->RenderSpecularMappingShader(
-                                                                      mesh->GetIndexCount(),
-                                                                      mvp_data,
-                                                                      mesh->GetTextureArray(),
-                                                                      camera,
-                                                                      mesh->GetColor(),
-                                                                      directional_light
-                                                                     );
-                    }
+                    /* if (type == eShaderType::ForwardDirectionalLight)
+                     {
+                         mesh->RenderBuffer();
+                         m_shader_manager->RenderForwardDirectionalLightShader(
+                                                                               mesh->GetIndexCount(),
+                                                                               mvp_data,
+                                                                               mesh->GetTexture(),
+                                                                               camera,
+                                                                               mesh->GetColor(),
+                                                                               directional_light
+                                                                              );
+                     }
+                     else if (type == eShaderType::NormalMapping)
+                     {
+                         mesh->RenderBuffer();
+                         m_shader_manager->RenderNormalMappingShader(
+                                                                     mesh->GetIndexCount(),
+                                                                     mvp_data,
+                                                                     mesh->GetTextureArray(),
+                                                                     mesh->GetColor(),
+                                                                     directional_light
+                                                                    );
+                     }
+                     else if (type == eShaderType::SpecularMapping)
+                     {
+                         mesh->RenderBuffer();
+                         m_shader_manager->RenderSpecularMappingShader(
+                                                                       mesh->GetIndexCount(),
+                                                                       mvp_data,
+                                                                       mesh->GetTextureArray(),
+                                                                       camera,
+                                                                       mesh->GetColor(),
+                                                                       directional_light
+                                                                      );
+                     }*/
                 }
             }
-            for (auto& text_sprite : m_text_sprites)
-            {
-                mvp_data.model = text_sprite->GetModelMatrix();
-                text_sprite->Render();
-                m_shader_manager->RenderTextureShader(
-                                                      text_sprite->GetIndexCount(),
-                                                      mvp_data,
-                                                      text_sprite->GetTexture(),
-                                                      text_sprite->GetColor());
-            }
-            for (auto& particle : m_particle_emitters)
-            {
-                mvp_data.model = particle->GetModelMatrix();
-                particle->SetBillboardPosition(camera->GetPosition());
-                m_shader_manager->RenderInstanceTextureShader(
-                                                              mvp_data,
-                                                              particle->GetTexture(),
-                                                              ColorDef::Pure::White);
-                particle->Render();
-            }
+            /*  for (auto& text_sprite : m_text_sprites)
+              {
+                  mvp_data.model = text_sprite->GetModelMatrix();
+                  text_sprite->Render();
+                  m_shader_manager->RenderTextureShader(
+                                                        text_sprite->GetIndexCount(),
+                                                        mvp_data,
+                                                        text_sprite->GetTexture(),
+                                                        text_sprite->GetColor());
+              }
+              for (auto& particle : m_particle_emitters)
+              {
+                  mvp_data.model = particle->GetModelMatrix();
+                  particle->SetBillboardPosition(camera->GetPosition());
+                  m_shader_manager->RenderInstanceTextureShader(
+                                                                mvp_data,
+                                                                particle->GetTexture(),
+                                                                ColorDef::Pure::White);
+                  particle->Render();
+              }*/
         }
     }
 
@@ -302,13 +261,9 @@ namespace Engine5
             delete m_matrix_buffer;
             m_matrix_buffer = nullptr;
 
-            m_color_vertex_layout->Clear();
-            delete m_color_vertex_layout;
-            m_color_vertex_layout = nullptr;
-
-            m_new_color_shader->Shutdown();
-            delete m_new_color_shader;
-            m_new_color_shader = nullptr;
+            m_matrix_instancing_buffer->Shutdown();
+            delete m_matrix_instancing_buffer;
+            m_matrix_instancing_buffer = nullptr;
 
             m_test_mesh->Shutdown();
             delete m_test_mesh;

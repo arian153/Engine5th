@@ -130,6 +130,23 @@ namespace Engine5
             return;
 
         MatrixBufferData* data_ptr = (MatrixBufferData*)mapped_resource.pData;
+        data_ptr->world = data.world.Transpose();
+        data_ptr->view = data.view.Transpose();
+        data_ptr->proj = data.proj.Transpose();
+
+        //mapped_resource.pData = data;
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
+    void ConstantBufferCommon::Update(const MatrixBufferDataInstancing& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        MatrixBufferDataInstancing* data_ptr = (MatrixBufferDataInstancing*)mapped_resource.pData;
         data_ptr->view             = data.view.Transpose();
         data_ptr->proj             = data.proj.Transpose();
 

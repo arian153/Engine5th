@@ -112,9 +112,8 @@ namespace Engine5
 
         bool m_b_deferred_shading = false;
 
-        Mesh2*                m_test_mesh           = nullptr;
-        ShaderProgramCommon*  m_new_color_shader    = nullptr;
-        ConstantBufferCommon* m_matrix_buffer       = nullptr;
-        VertexLayoutCommon*   m_color_vertex_layout = nullptr;
+        Mesh2*                m_test_mesh                = nullptr;
+        ConstantBufferCommon* m_matrix_buffer            = nullptr;
+        ConstantBufferCommon* m_matrix_instancing_buffer = nullptr;
     };
 }

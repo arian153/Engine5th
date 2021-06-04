@@ -66,7 +66,7 @@ namespace Engine5
                             m_matrix_manager->GetPerspectiveMatrix()
                            );
         auto type = mesh->GetShaderType();
-        if (type == eShaderType::Color)
+      /*  if (type == eShaderType::Color)
         {
             mesh->RenderBuffer();
             m_shader_manager->RenderColorShader(mesh->GetIndexCount(), mvp_data);
@@ -87,7 +87,7 @@ namespace Engine5
                                                                   mesh->GetColor(),
                                                                   (DirectionalLight*)light
                                                                  );
-        }
+        }*/
     }
 
     void RenderTextureGenerator::Render(Sprite* sprite, Camera* camera)
@@ -102,7 +102,7 @@ namespace Engine5
 
     void RenderTextureGenerator::Render(TextSprite* text_sprite, Camera* camera) const
     {
-        MatrixData mvp_data(
+     /*   MatrixData mvp_data(
                             text_sprite->GetModelMatrix(),
                             camera->GetViewMatrix(),
                             m_matrix_manager->GetPerspectiveMatrix()
@@ -112,7 +112,7 @@ namespace Engine5
                                               text_sprite->GetIndexCount(),
                                               mvp_data,
                                               text_sprite->GetTexture(),
-                                              text_sprite->GetColor());
+                                              text_sprite->GetColor());*/
     }
 
     void RenderTextureGenerator::BeginRenderToTexture(const Color& color) const

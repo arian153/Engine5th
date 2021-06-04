@@ -14,6 +14,7 @@ namespace Engine5
     struct GammaBufferData;
     struct LightBufferData;
     struct MatrixBufferData;
+    struct MatrixBufferDataInstancing;
     class Color;
     class RendererCommon;
 
@@ -30,6 +31,7 @@ namespace Engine5
         void Update(const GammaBufferData& data) const;
         void Update(const LightBufferData& data) const;
         void Update(const MatrixBufferData& data) const;
+        void Update(const MatrixBufferDataInstancing& data) const;
 
         void* Map() const;
         void  UnMap() const;

@@ -99,31 +99,31 @@ namespace Engine5
 
         transform.position = Vector3(3, 3, 3);
         transform.scale    = Vector3(1, 1, 1);
-        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 2.0f));
+        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 2.0f));
 
         m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0, 0, 0, 1)});
 
         transform.position = Vector3(-3, 3, 3);
         transform.scale    = Vector3(1, 1, 1);
-        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 3.0f));
+        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 3.0f));
 
         m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(1, 1, 0, 1)});
 
         transform.position = Vector3(3, -3, 3);
         transform.scale    = Vector3(1, 1, 1);
-        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 4.0f));
+        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 4.0f));
 
         m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.5f, 0.5f, 0.5f, 1)});
 
         transform.position = Vector3(3, 3, -3);
         transform.scale    = Vector3(1, 1, 1);
-        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 5.0f));
+        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 5.0f));
 
         m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.3f, 0.3f, 0.3f, 1)});
 
         transform.position = Vector3(-3, -3, 3);
         transform.scale    = Vector3(1, 1, 1);
-        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 6.0f));
+        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 6.0f));
 
         m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.7f, 0.7f, 0.7f, 1)});
 

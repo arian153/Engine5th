@@ -1,6 +1,8 @@
 #pragma once
 #include "../../Math/Math.hpp"
 #include <vector>
+
+#include "../Common/Buffer2/ConstantBufferData.hpp"
 #include "../DataType/Color.hpp"
 #include "../DataType/MatrixData.hpp"
 #include "../Common/Vertex/ColorVertexCommon.hpp"
