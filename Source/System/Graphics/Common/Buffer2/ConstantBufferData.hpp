@@ -61,4 +61,12 @@ namespace Engine5
         Matrix44 model;
         Color    color;
     };
+
+    struct TextureBufferData
+    {
+        int type;
+        int id0;
+        int id1;
+        int id2;
+    };
 }
