@@ -1,9 +1,9 @@
 // ReSharper disable CppExpressionWithoutSideEffects
 #include "TextSprite.hpp"
 
-#include "../../../../Manager/Component/EngineComponent/TextSpriteComponent.hpp"
-#include "../Buffer/TextTextureBufferCommon.hpp"
-#include "../../../Math/Structure/Transform.hpp"
+#include "../../../Manager/Component/EngineComponent/TextSpriteComponent.hpp"
+#include "../Common/Buffer/TextTextureBufferCommon.hpp"
+#include "../../Math/Structure/Transform.hpp"
 
 namespace Engine5
 {
@@ -17,7 +17,7 @@ namespace Engine5
 
     void TextSprite::Initialize(RendererCommon* renderer)
     {
-        if(m_texture == nullptr)
+        if (m_texture == nullptr)
         {
             m_texture = new TextureCommon();
         }

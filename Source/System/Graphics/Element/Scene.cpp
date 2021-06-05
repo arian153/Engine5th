@@ -16,7 +16,7 @@
 #include "../Common/Buffer2/ConstantBufferData.hpp"
 #include "../Common/Buffer2/VertexLayoutCommon.hpp"
 #include "../Common/Element/Mesh.hpp"
-#include "../Common/Element/TextSprite.hpp"
+#include "TextSprite.hpp"
 #include "../Common/Light/LightDef.hpp"
 #include "../Common/Shader/ShaderProgramCommon.hpp"
 #include "../DataType/MatrixData.hpp"
@@ -75,6 +75,11 @@ namespace Engine5
         mvp_buffer.proj = m_projection_matrix;
         m_matrix_buffer->Update(mvp_buffer);
 
+        MatrixBufferDataInstancing vp_data;
+        vp_data.view = m_main_camera->GetViewMatrix();
+        vp_data.proj = m_projection_matrix;
+        m_matrix_instancing_buffer->Update(vp_data);
+
         m_frustum.ConstructFrustum(m_matrix_manager->GetFarPlane(), mvp_data.projection, mvp_data.view);
         m_primitive_renderer->UpdateFrustum(m_frustum);
         m_b_deferred_shading = false;
@@ -120,8 +125,6 @@ namespace Engine5
         if (m_main_camera == nullptr || m_cameras.empty())
             return;
 
-     
-
         m_primitive_renderer->Render();
         m_primitive_renderer->Clear();
         MatrixData mvp_data;
@@ -137,26 +140,16 @@ namespace Engine5
             }
         }
         mvp_data.projection = m_projection_matrix;
+
+        m_shader_manager->Bind("ColorInstancing");
+        m_test_mesh->Render();
+
         for (auto& camera : m_cameras)
         {
             camera->Update();
             mvp_data.view = camera->GetViewMatrix();
 
-            MatrixBufferDataInstancing vp_data;
-            vp_data.proj = m_projection_matrix;
-            vp_data.view = camera->GetViewMatrix();
-
-           
-
-            /* MatrixBufferData* mapped_data = (MatrixBufferData*)m_matrix_buffer->Map();
-             mapped_data->model = Matrix44();
-             mapped_data->view = camera->GetViewMatrix().Transpose();
-             mapped_data->proj = m_projection_matrix.Transpose();
-             m_matrix_buffer->UnMap();*/
-            m_matrix_instancing_buffer->Update(vp_data);
-
-            m_shader_manager->Bind("ColorInstancing");
-            m_test_mesh->Render();
+          
 
             for (auto& mesh : m_other_meshes)
             {

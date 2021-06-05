@@ -1,5 +1,5 @@
 #include "TextSpriteComponent.hpp"
-#include "../../../System/Graphics/Common/Element/TextSprite.hpp"
+#include "../../../System/Graphics/Element/TextSprite.hpp"
 #include "TransformComponent.hpp"
 #include "../../Object/Object.hpp"
 #include "../../Space/Space.hpp"

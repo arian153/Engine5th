@@ -31,10 +31,6 @@ namespace Engine5
         //render elements
         void Render(Space* space);
         void Render(Scene* scene);
-        void Render(Mesh* mesh, Camera* camera, Light* light) const;
-        void Render(Sprite* sprite, Camera* camera);
-        void Render(ParticleEmitter* particle_emitter, Camera* camera);
-        void Render(TextSprite* text_sprite, Camera* camera) const;
 
         void BeginRenderToTexture(const Color& color) const;
         void EndRenderToTexture() const;

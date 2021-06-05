@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
-#include "../../../Math/Algebra/Matrix44.hpp"
-#include "../Texture/TextureCommon.hpp"
-#include "../../../Core/Utility/CoreDef.hpp"
+#include "../../Math/Algebra/Matrix44.hpp"
+#include "../Common/Texture/TextureCommon.hpp"
+#include "../../Core/Utility/CoreDef.hpp"
 
 namespace Engine5
 {
+    class RendererCommon;
     class Transform;
     class Color;
     class TextTextureBufferCommon;
@@ -35,9 +36,9 @@ namespace Engine5
         friend class TextSpriteComponent;
 
     private:
-        TextTextureBufferCommon*    m_text      = nullptr;
-        TextureCommon*       m_texture   = nullptr;
-        Transform*           m_transform = nullptr;
-        TextSpriteComponent* m_component = nullptr;
+        TextTextureBufferCommon* m_text      = nullptr;
+        TextureCommon*           m_texture   = nullptr;
+        Transform*               m_transform = nullptr;
+        TextSpriteComponent*     m_component = nullptr;
     };
 }
