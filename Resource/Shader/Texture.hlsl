@@ -1,3 +1,6 @@
+Texture2D shader_texture[5];
+SamplerState sample_type;
+
 #include "TextureMapping.hlsl"
 
 //global
@@ -10,10 +13,24 @@ cbuffer MatrixBuffer
 
 cbuffer TextureBuffer
 {
-    int type;
-    int id0;
-    int id1;
-    int id2;
+    int diff_type;
+    int diff_id0;
+    int diff_id1;
+    int diff_id2;
+    int spec_type;
+    int spec_id0;
+    int norm_type;
+    int norm_id0;
+};
+
+cbuffer MaterialBuffer
+{
+    float4 ambi_color;
+    float4 diff_color;
+    float4 spec_color;
+    float shineness;
+    float gamma;
+    float2 padding_m;
 };
 
 //defs
@@ -46,11 +63,60 @@ PixelInputType VertexShaderEntry(VertexInputType input)
 //pixel shader
 float4 PixelShaderEntry(PixelInputType input) : SV_TARGET
 {
-    //normal
-    if (type == 0)
+    float4 diffuse_texture = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    float4 specular_texture = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    float3 normal = float3(0.0f, 0.0f, 0.0f);
+
+    //sample diffuse texture
+    if (diff_type == 0)
     {
-        
+        // sample simple diffuse texture.
+        diffuse_texture = shader_texture[diff_id0].Sample(sample_type, input.tex);
     }
+    else if (diff_type == 1)
+    {
+        // alpha mapping
+        diffuse_texture = AlphaMapping(input.tex, diff_id0, diff_id1, diff_id2);
+    }
+    else if (diff_type == 2)
+    {
+        // light mapping
+        diffuse_texture = LightMapping(input.tex, diff_id0, diff_id1);
+    }
+    else if (diff_type == 3)
+    {
+        // multiple texture blending
+        diffuse_texture = BlendTexture(input.tex, diff_id0, diff_id1, gamma);
+    }
+    else
+    {
+        //use diffuse color
+        diffuse_texture = diff_color;
+    }
+
+    if (spec_type == 1)
+    {
+        //specular mapping
+        specular_texture = SpecularMapping(input.tex, spec_id0);
+    }
+    else
+    {
+        //use specular color
+        specular_texture = spec_color;
+    }
+
+    //if (norm_type == 1)
+    //{
+    //    //use normal map
+    //    normal = NormalMapping(input.tex, input.t, input.b, input.t, norm_id0);
+    //}
+    //else
+    //{
+    //    //use vertex normal
+    //    normal = input.n;
+    //}
+
+ 
 
     return input.color;
 }
