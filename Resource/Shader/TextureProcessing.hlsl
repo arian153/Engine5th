@@ -1,4 +1,8 @@
 
+
+
+
+
 float4 AlphaMapping(float2 tex, int diffuse1_id, int diffuse2_id int alpha_map_id)
 {
     float4 diffuse1 = shader_texture[diffuse1_id].Sample(sample_type, tex);
@@ -35,3 +39,4 @@ float4 BlendTexture(float2 tex, int diffuse1_id, int diffuse2_id, float gamma)
     float4 diffuse2 = shader_texture[diffuse2_id].Sample(sample_type, tex);
     return diffuse1 * diffuse2 * gamma;
 }
+

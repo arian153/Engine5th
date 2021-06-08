@@ -55,6 +55,8 @@ namespace Engine5
         m_shader_manager->AddBuffer("Color", m_matrix_buffer);
         m_shader_manager->AddBuffer("ColorInstancing", m_matrix_instancing_buffer);
 
+
+
         m_test_mesh = new Mesh2();
         m_test_mesh->Initialize();
         m_test_mesh->SetRenderer(m_renderer);

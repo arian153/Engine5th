@@ -50,6 +50,8 @@ namespace Engine5
         VertexLayoutCommon* m_color_vertex_layout            = nullptr;
         VertexLayoutCommon* m_color_instancing_vertex_layout = nullptr;
 
+        VertexLayoutCommon* m_texture_vertex_layout = nullptr;
+
         //others
         RendererCommon*  m_renderer         = nullptr;
         ResourceManager* m_resource_manager = nullptr;

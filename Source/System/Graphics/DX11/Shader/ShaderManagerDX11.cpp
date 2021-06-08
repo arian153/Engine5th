@@ -87,8 +87,16 @@ namespace Engine5
         m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
         m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
 
+
+        m_texture_vertex_layout = new VertexLayoutCommon();
+        m_texture_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+        m_texture_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+
+
         AddShader(L"Color.hlsl", m_color_vertex_layout);
         AddShader(L"ColorInstancing.hlsl", m_color_instancing_vertex_layout);
+
+        AddShader(L"Texture.hlsl", m_texture_vertex_layout);
 
         //temp
         //texture shader
@@ -102,6 +110,13 @@ namespace Engine5
 
     void ShaderManagerCommon::Shutdown()
     {
+        if (m_texture_vertex_layout != nullptr)
+        {
+            m_texture_vertex_layout->Clear();
+            delete m_texture_vertex_layout;
+            m_texture_vertex_layout = nullptr;
+        }
+
         if (m_color_vertex_layout != nullptr)
         {
             m_color_vertex_layout->Clear();
