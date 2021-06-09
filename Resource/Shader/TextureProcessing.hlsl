@@ -1,8 +1,3 @@
-
-
-
-
-
 float4 AlphaMapping(float2 tex, int diffuse1_id, int diffuse2_id, int alpha_map_id)
 {
     float4 diffuse1 = shader_texture[diffuse1_id].Sample(sample_type, tex);
@@ -40,3 +35,64 @@ float4 BlendTexture(float2 tex, int diffuse1_id, int diffuse2_id, float gamma)
     return diffuse1 * diffuse2 * gamma;
 }
 
+float4 ProcessDiffuse(float2 tex, int type, int diff0, int diff1, int diff2, float4 mat, float gamma)
+{
+    float4 diffuse_texture = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    if (type == 0)
+    {
+        // sample simple diffuse texture.
+        diffuse_texture = shader_texture[diff0].Sample(sample_type, tex);
+    }
+    else if (type == 1)
+    {
+        // alpha mapping
+        diffuse_texture = AlphaMapping(tex, diff0, diff1, diff2);
+    }
+    else if (type == 2)
+    {
+        // light mapping
+        diffuse_texture = LightMapping(tex, diff0, diff1);
+    }
+    else if (type == 3)
+    {
+        // multiple texture blending
+        diffuse_texture = BlendTexture(ex, diff0, diff1, gamma);
+    }
+    else
+    {
+        //use diffuse color
+        diffuse_texture = mat;
+    }
+
+    return diffuse_texture;
+}
+
+float4 ProcessSpecular(float2 tex, int type, int spec0, float4 mat )
+{
+    float4 specular_texture = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    if (type == 1)
+    {
+        //specular mapping
+        specular_texture = SpecularMapping(tex, spec0);
+    }
+    else
+    {
+        //use specular color
+        specular_texture = mat;
+    }
+
+    return diffuse_texture;
+}
+
+float3 ProcessNormal(float2 tex, int type, int norm0, float t, float b, float3 n)
+{
+    float3 normal = float3(0.0f, 0.0f, 0.0f);
+    if (norm_type == 1)
+    {
+        normal = NormalMapping(tex, t, b, n norm0);
+    }
+    else
+    {
+        normal = n;
+    }
+}
