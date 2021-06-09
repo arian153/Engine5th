@@ -40,7 +40,7 @@ namespace Engine5
         std::wstring vertex_shader_path   = m_resource->WFilePath();
 
         // Compile the vertex shader code.
-        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, nullptr, "VertexShaderEntry", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
+        HRESULT result = D3DCompileFromFile(vertex_shader_path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VertexShaderEntry", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertex_shader_buffer, &error_message);
         if (FAILED(result))
         {
             if (error_message)
@@ -65,7 +65,7 @@ namespace Engine5
         ID3D10Blob*  pixel_shader_buffer = nullptr;
         std::wstring pixel_shader_path   = m_resource->WFilePath();;
         // Compile the pixel shader code.
-        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, nullptr, "PixelShaderEntry", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
+        result = D3DCompileFromFile(pixel_shader_path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PixelShaderEntry", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixel_shader_buffer, &error_message);
         if (FAILED(result))
         {
             if (error_message)

@@ -64,29 +64,29 @@ PixelInputType VertexShaderEntry(VertexInputType input)
 float4 PixelShaderEntry(PixelInputType input) : SV_TARGET
 {
     float4 diffuse_texture = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    float4 specular_texture = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    float3 normal = float3(0.0f, 0.0f, 0.0f);
+    //float4 specular_texture = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    //float3 normal = float3(0.0f, 0.0f, 0.0f);
 
     //sample diffuse texture
     if (diff_type == 0)
     {
         // sample simple diffuse texture.
-        diffuse_texture = shader_texture[diff_id0].Sample(sample_type, input.tex);
+        diffuse_texture = shader_texture[0].Sample(sample_type, input.tex);
     }
     else if (diff_type == 1)
     {
         // alpha mapping
-        diffuse_texture = AlphaMapping(input.tex, diff_id0, diff_id1, diff_id2);
+        diffuse_texture = AlphaMapping(input.tex, 0, 1, 2);
     }
     else if (diff_type == 2)
     {
         // light mapping
-        diffuse_texture = LightMapping(input.tex, diff_id0, diff_id1);
+        diffuse_texture = LightMapping(input.tex, 0, 1);
     }
     else if (diff_type == 3)
     {
         // multiple texture blending
-        diffuse_texture = BlendTexture(input.tex, diff_id0, diff_id1, gamma);
+        diffuse_texture = BlendTexture(input.tex, 0, 1, gamma);
     }
     else
     {
@@ -94,16 +94,16 @@ float4 PixelShaderEntry(PixelInputType input) : SV_TARGET
         diffuse_texture = diff_color;
     }
 
-    if (spec_type == 1)
-    {
-        //specular mapping
-        specular_texture = SpecularMapping(input.tex, spec_id0);
-    }
-    else
-    {
-        //use specular color
-        specular_texture = spec_color;
-    }
+    //if (spec_type == 1)
+    //{
+    //    //specular mapping
+    //    specular_texture = SpecularMapping(input.tex, spec_id0);
+    //}
+    //else
+    //{
+    //    //use specular color
+    //    specular_texture = spec_color;
+    //}
 
     //if (norm_type == 1)
     //{
@@ -116,7 +116,5 @@ float4 PixelShaderEntry(PixelInputType input) : SV_TARGET
     //    normal = input.n;
     //}
 
- 
-
-    return input.color;
+    return diffuse_texture;
 }
