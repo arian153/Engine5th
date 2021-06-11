@@ -14,24 +14,11 @@ cbuffer MatrixBuffer
 cbuffer TextureBuffer
 {
     int diff_type;
-    int diff_id0;
-    int diff_id1;
-    int diff_id2;
     int spec_type;
-    int spec_id0;
     int norm_type;
-    int norm_id0;
+    float gamma;
 };
 
-cbuffer MaterialBuffer
-{
-    float4 ambi_color;
-    float4 diff_color;
-    float4 spec_color;
-    float shineness;
-    float gamma;
-    float2 padding_m;
-};
 
 //defs
 struct VertexInputType
@@ -63,6 +50,7 @@ PixelInputType VertexShaderEntry(VertexInputType input)
 //pixel shader
 float4 PixelShaderEntry(PixelInputType input) : SV_TARGET
 {
+    float4 diff_color = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 diffuse_texture = ProcessDiffuse(input.tex, diff_type, 0, 1, 2, diff_color, gamma);
     
     return diffuse_texture;

@@ -56,7 +56,7 @@ float4 ProcessDiffuse(float2 tex, int type, int diff0, int diff1, int diff2, flo
     else if (type == 3)
     {
         // multiple texture blending
-        diffuse_texture = BlendTexture(ex, diff0, diff1, gamma);
+        diffuse_texture = BlendTexture(tex, diff0, diff1, gamma);
     }
     else
     {
@@ -81,18 +81,19 @@ float4 ProcessSpecular(float2 tex, int type, int spec0, float4 mat )
         specular_texture = mat;
     }
 
-    return diffuse_texture;
+    return specular_texture;
 }
 
 float3 ProcessNormal(float2 tex, int type, int norm0, float t, float b, float3 n)
 {
     float3 normal = float3(0.0f, 0.0f, 0.0f);
-    if (norm_type == 1)
+    if (type == 1)
     {
-        normal = NormalMapping(tex, t, b, n norm0);
+        normal = NormalMapping(tex, t, b, n, norm0);
     }
     else
     {
         normal = n;
     }
+    return normal;
 }
