@@ -7,7 +7,6 @@
 #include "../../Common/Shader/ShaderProgramCommon.hpp"
 #include "../../../../Manager/Resource/ResourceManager.hpp"
 #include "../../../../Manager/Resource/ResourceType/ShaderResource.hpp"
-#include "../../Common/Shader/Forward/TextureShaderCommon.hpp"
 
 namespace Engine5
 {
@@ -80,32 +79,29 @@ namespace Engine5
         m_color_instancing_vertex_layout = new VertexLayoutCommon();
         m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
         m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::VERTEX_DATA, 0, 0);
-
         m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
         m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
         m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
         m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
         m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
 
-
         m_texture_vertex_layout = new VertexLayoutCommon();
         m_texture_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
         m_texture_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
 
+        m_texture_instancing_vertex_layout = new VertexLayoutCommon();
+        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
+        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
+        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
 
         AddShader(L"Color.hlsl", m_color_vertex_layout);
         AddShader(L"ColorInstancing.hlsl", m_color_instancing_vertex_layout);
-
         AddShader(L"Texture.hlsl", m_texture_vertex_layout);
-
-        //temp
-        //texture shader
-        m_texture_shader = new TextureShaderCommon(this);
-        m_texture_shader->SetShader(m_resource_manager->GetShaderResourceFileName(L"Texture.fx"));
-        m_texture_shader->SetHWnd(m_hwnd);
-        m_texture_shader->SetDevice(m_device);
-        m_texture_shader->SetDeviceContext(m_device_context);
-        m_texture_shader->Initialize();
+        AddShader(L"TextureInstancing.hlsl", m_texture_instancing_vertex_layout);
     }
 
     void ShaderManagerCommon::Shutdown()
@@ -115,6 +111,13 @@ namespace Engine5
             m_texture_vertex_layout->Clear();
             delete m_texture_vertex_layout;
             m_texture_vertex_layout = nullptr;
+        }
+
+        if (m_texture_instancing_vertex_layout != nullptr)
+        {
+            m_texture_instancing_vertex_layout->Clear();
+            delete m_texture_instancing_vertex_layout;
+            m_texture_instancing_vertex_layout = nullptr;
         }
 
         if (m_color_vertex_layout != nullptr)
@@ -138,14 +141,6 @@ namespace Engine5
             shader = nullptr;
         }
         m_shader_table.clear();
-
-        //temp
-        if (m_texture_shader != nullptr)
-        {
-            m_texture_shader->Shutdown();
-            delete m_texture_shader;
-            m_texture_shader = nullptr;
-        }
     }
 
     void ShaderManagerCommon::AddShader(const std::wstring& name, VertexLayoutCommon* layout)
@@ -192,10 +187,5 @@ namespace Engine5
         }
 
         return shader;
-    }
-
-    void ShaderManagerCommon::RenderTextureShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const
-    {
-        m_texture_shader->Render(indices_count, mvp_data, texture, color);
     }
 }

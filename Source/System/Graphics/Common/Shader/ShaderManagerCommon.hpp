@@ -39,24 +39,21 @@ namespace Engine5
 
         ShaderProgramCommon* GetShader(const std::string& name) const;
 
-
         //temp
-        void RenderTextureShader(U32 indices_count, const MatrixData& mvp_data, TextureCommon* texture, const Color& color) const;
     private:
         //shader tables
         std::unordered_map<std::string, ShaderProgramCommon*> m_shader_table;
 
         //vertex layouts
-        VertexLayoutCommon* m_color_vertex_layout            = nullptr;
-        VertexLayoutCommon* m_color_instancing_vertex_layout = nullptr;
-
-        VertexLayoutCommon* m_texture_vertex_layout = nullptr;
+        VertexLayoutCommon* m_color_vertex_layout              = nullptr;
+        VertexLayoutCommon* m_color_instancing_vertex_layout   = nullptr;
+        VertexLayoutCommon* m_texture_vertex_layout            = nullptr;
+        VertexLayoutCommon* m_texture_instancing_vertex_layout = nullptr;
+        VertexLayoutCommon* m_general_vertex_layout            = nullptr;
+        VertexLayoutCommon* m_general_instancing_vertex_layout = nullptr;
 
         //others
         RendererCommon*  m_renderer         = nullptr;
         ResourceManager* m_resource_manager = nullptr;
-
-        //temp
-        TextureShaderCommon* m_texture_shader = nullptr;
     };
 }

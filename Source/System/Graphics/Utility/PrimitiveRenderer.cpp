@@ -1,6 +1,5 @@
 #include "PrimitiveRenderer.hpp"
 #include "../Common/Renderer/RendererCommon.hpp"
-#include "../Common/Shader/Forward/ColorShaderCommon.hpp"
 #include "MatrixManager.hpp"
 #include "../../Math/Curve/Curve.hpp"
 #include "../DataType/MatrixData.hpp"

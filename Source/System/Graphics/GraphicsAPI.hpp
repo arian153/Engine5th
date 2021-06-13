@@ -30,22 +30,8 @@
 #define GeneralVertexAPI GeneralVertexDX11
 #define InstanceDataAPI InstanceDataDX11
 
-//forward shader
+//shader
 #define ShaderManagerAPI ShaderManagerDX11
-#define ColorShaderAPI ColorShaderDX11
-#define TextureShaderAPI TextureShaderDX11
-#define InstanceTextureShaderAPI InstanceTextureShaderDX11
-#define ForwardDirectionalLightShaderAPI ForwardDirectionalLightShaderDX11
-#define MultiTextureShaderAPI MultiTextureShaderDX11
-#define AlphaMappingShaderAPI AlphaMappingShaderDX11
-#define LightMappingShaderAPI LightMappingShaderDX11
-#define NormalMappingShaderAPI NormalMappingShaderDX11
-#define SpecularMappingShaderAPI SpecularMappingShaderDX11
-
-//deferred shader
-#define DeferredDirectionalLightShaderAPI DeferredDirectionalLightShaderDX11
-#define DeferredBufferShaderAPI DeferredBufferShaderDX11
-
 #define ShaderProgramAPI ShaderProgramDX11
 
 //includes
@@ -84,21 +70,6 @@
 #define IncludeGeneralVertexAPI "../../DX11/Vertex/GeneralVertexDX11.hpp"
 
 #define IncludeInstanceDataAPI "../../DX11/Vertex/InstanceDataDX11.hpp"
-
-//forward
-#define IncludeColorShaderAPI "../../../DX11/Shader/Forward/ColorShaderDX11.hpp"
-#define IncludeTextureShaderAPI "../../../DX11/Shader/Forward/TextureShaderDX11.hpp"
-#define IncludeInstanceTextureShaderAPI "../../../DX11/Shader/Forward/InstanceTextureShaderDX11.hpp"
-#define IncludeForwardDirectionalLightShaderAPI "../../../DX11/Shader/Forward/ForwardDirectionalLightShaderDX11.hpp"
-#define IncludeMultiTextureShaderAPI "../../../DX11/Shader/Forward/MultiTextureShaderDX11.hpp"
-#define IncludeAlphaMappingShaderAPI "../../../DX11/Shader/Forward/AlphaMappingShaderDX11.hpp"
-#define IncludeLightMappingShaderAPI "../../../DX11/Shader/Forward/LightMappingShaderDX11.hpp"
-#define IncludeNormalMappingShaderAPI "../../../DX11/Shader/Forward/NormalMappingShaderDX11.hpp"
-#define IncludeSpecularMappingShaderAPI "../../../DX11/Shader/Forward/SpecularMappingShaderDX11.hpp"
-
-//deferred
-#define IncludeDeferredBufferShaderAPI "../../../DX11/Shader/Deferred/DeferredBufferShaderDX11.hpp"
-#define IncludeDeferredDirectionalLightShaderAPI "../../../DX11/Shader/Deferred/DeferredDirectionalLightShaderDX11.hpp"
 
 #define IncludeShaderManagerAPI "../../DX11/Shader/ShaderManagerDX11.hpp"
 #define IncludeShaderProgramAPI "../../DX11/Shader/ShaderProgramDX11.hpp"
