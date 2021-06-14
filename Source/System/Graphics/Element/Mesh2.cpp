@@ -52,7 +52,7 @@ namespace Engine5
             delete m_mesh_data;
             m_mesh_data = nullptr;
         }
-        m_diffuse_maps.Clear();
+        m_textures.Clear();
     }
 
     void Mesh2::Render() const
@@ -151,17 +151,17 @@ namespace Engine5
 
     void Mesh2::AddTexture(TextureCommon* texture)
     {
-        m_diffuse_maps.PushBack(texture);
+        m_textures.PushBack(texture);
     }
 
     void Mesh2::ClearTexture()
     {
-        m_diffuse_maps.Clear();
+        m_textures.Clear();
     }
 
     void Mesh2::RemoveTexture(TextureCommon* texture)
     {
-        m_diffuse_maps.Erase(texture);
+        m_textures.Erase(texture);
     }
 
     void Mesh2::SetRenderer(RendererCommon* renderer)
@@ -174,5 +174,18 @@ namespace Engine5
         m_max_count = count;
         m_instances.resize(count);
         m_instance_buffer->Init(m_renderer, m_instances);
+    }
+
+    void Mesh2::SetMaterialData(const MaterialData& material_data)
+    {
+        m_diffuse_type  = material_data.diffuse_type;
+        m_specular_type = material_data.specular_type;
+        m_normal_type   = material_data.normal_type;
+    }
+
+    void Mesh2::SetSceneID(size_t model_id, size_t material_id)
+    {
+        m_model_id    = model_id;
+        m_material_id = material_id;
     }
 }

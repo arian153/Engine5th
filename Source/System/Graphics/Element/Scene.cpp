@@ -17,9 +17,13 @@
 #include "../Common/Buffer2/VertexLayoutCommon.hpp"
 #include "../Common/Element/Mesh.hpp"
 #include "TextSprite.hpp"
+#include "../../../Manager/Resource/ResourceType/MeshResource.hpp"
+#include "../../../Manager/Resource/ResourceType/TextureResource.hpp"
+#include "../../Core/Utility/CoreUtility.hpp"
 #include "../Common/Light/LightDef.hpp"
 #include "../Common/Shader/ShaderProgramCommon.hpp"
 #include "../DataType/MatrixData.hpp"
+#include "../Utility/MaterialManager.hpp"
 
 namespace Engine5
 {
@@ -54,8 +58,6 @@ namespace Engine5
 
         m_shader_manager->AddBuffer("Color", m_matrix_buffer);
         m_shader_manager->AddBuffer("ColorInstancing", m_matrix_instancing_buffer);
-
-
 
         m_test_mesh = new Mesh2();
         m_test_mesh->Initialize();
@@ -150,8 +152,6 @@ namespace Engine5
         {
             camera->Update();
             mvp_data.view = camera->GetViewMatrix();
-
-          
 
             for (auto& mesh : m_other_meshes)
             {
@@ -264,6 +264,21 @@ namespace Engine5
             delete m_test_mesh;
             m_test_mesh = nullptr;
         }
+
+        for (auto& [fst1, mesh_table] : m_meshes)
+        {
+            for (auto& [fst2, mesh] : mesh_table)
+            {
+                if (mesh != nullptr)
+                {
+                    mesh->Shutdown();
+                    delete mesh;
+                    mesh = nullptr;
+                }
+            }
+            mesh_table.clear();
+        }
+        m_meshes.clear();
 
         m_matrix_manager->RemoveScene(this);
         if (m_primitive_renderer != nullptr)
@@ -383,6 +398,11 @@ namespace Engine5
         m_text_renderer = text_renderer;
     }
 
+    void Scene::SetMaterialManager(MaterialManager* material_manager)
+    {
+        m_material_manager = material_manager;
+    }
+
     void Scene::SetProjectionType(eProjectionType projection_type)
     {
         m_projection_type = projection_type;
@@ -434,6 +454,149 @@ namespace Engine5
     PrimitiveRenderer* Scene::GetPrimitiveRenderer() const
     {
         return m_primitive_renderer;
+    }
+
+    Mesh2* Scene::GetMesh(size_t model_id, size_t material_id)
+    {
+        auto found_model = m_meshes.find(model_id);
+        if (found_model != m_meshes.end())
+        {
+            auto& material_table = found_model->second;
+            auto  found_material = material_table.find(material_id);
+
+            if (found_material != material_table.end())
+            {
+                return found_material->second;
+            }
+        }
+        return nullptr;
+    }
+
+    Mesh2* Scene::GetMesh(const std::string& model_path, const MaterialData& material)
+    {
+        Mesh2*        created;
+        MeshResource* model_resource = m_resource_manager->GetMeshResource(ToWString(model_path));
+        size_t        model_id       = reinterpret_cast<size_t>(model_resource);
+        size_t        material_id    = m_material_manager->GetID(material);
+
+        auto found_model = m_meshes.find(model_id);
+
+        if (found_model == m_meshes.end())
+        {
+            //add new
+            created = new Mesh2();
+            SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
+            m_meshes.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+        }
+        else
+        {
+            auto& material_table = found_model->second;
+            auto  found_material = material_table.find(material_id);
+
+            if (found_material == material_table.end())
+            {
+                //add new
+                created = new Mesh2();
+                SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
+                material_table.emplace(material_id, created);
+            }
+            else
+            {
+                created = found_material->second;
+            }
+        }
+
+        return created;
+    }
+
+    Mesh2* Scene::GetMesh(MeshData* model_data, const MaterialData& material)
+    {
+        Mesh2* created;
+        size_t model_id    = reinterpret_cast<size_t>(model_data);
+        size_t material_id = m_material_manager->GetID(material);
+        auto   found_model = m_meshes.find(model_id);
+
+        if (found_model == m_meshes.end())
+        {
+            //add new
+            created = new Mesh2();
+            SetUpMesh(created, model_data, material, model_id, material_id);
+            m_meshes.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+        }
+        else
+        {
+            auto& material_table = found_model->second;
+            auto  found_material = material_table.find(material_id);
+
+            if (found_material == material_table.end())
+            {
+                //add new
+                created = new Mesh2();
+                SetUpMesh(created, model_data, material, model_id, material_id);
+                material_table.emplace(material_id, created);
+            }
+            else
+            {
+                created = found_material->second;
+            }
+        }
+
+        return created;
+    }
+
+    void Scene::SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialData& material, size_t model_id, size_t material_id) const
+    {
+        if (mesh != nullptr)
+        {
+            mesh->SetModelData(model_data);
+            mesh->SetSceneID(model_id, material_id);
+            mesh->SetMaterialData(material);
+            //diffuse texture0
+            if (material.diffuse0 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.diffuse0))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+            //diffuse texture1
+            if (material.diffuse1 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.diffuse1))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+            //diffuse texture2
+            if (material.diffuse2 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.diffuse2))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+            //specular texture
+            if (material.specular0 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.specular0))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+            //normal texture
+            if (material.normal0 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.normal0))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+        }
     }
 
     Camera* Scene::AddCamera(Camera* camera)

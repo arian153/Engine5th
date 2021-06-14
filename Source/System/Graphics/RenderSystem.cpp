@@ -4,6 +4,7 @@
 #include "../Core/OS-API/OSCommon.hpp"
 #include "Utility/PrimitiveRenderer.hpp"
 #include "../../Manager/Resource/ResourceManager.hpp"
+#include "Utility/MaterialManager.hpp"
 #include "Utility/RenderTextureGenerator.hpp"
 #include "Utility/TextRenderer.hpp"
 
@@ -47,6 +48,9 @@ namespace Engine5
         {
             m_operating_system->SetWindowMode(eWindowMode::Fullscreen);
         }
+
+        m_material_manger = new MaterialManager();
+        m_material_manger->Initialize();
     }
 
     void RenderSystem::Shutdown()
@@ -58,6 +62,13 @@ namespace Engine5
             scene = nullptr;
         }
         m_scenes.clear();
+
+        if (m_material_manger != nullptr)
+        {
+            m_material_manger->Shutdown();
+            delete m_material_manger;
+            m_material_manger = nullptr;
+        }
         if (m_text_renderer != nullptr)
         {
             m_text_renderer->Shutdown();
@@ -168,6 +179,7 @@ namespace Engine5
         scene->SetMatrixManager(m_matrix_manager);
         scene->SetResourceManager(m_resource_manager);
         scene->SetTextRenderer(m_text_renderer);
+        scene->SetMaterialManager(m_material_manger);
         scene->UpdateProjection();
         return scene;
     }

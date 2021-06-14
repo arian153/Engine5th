@@ -7,6 +7,7 @@
 
 namespace Engine5
 {
+    class MaterialManager;
     class TextRenderer;
     class RenderTextureGenerator;
     class PrimitiveRenderer;
@@ -39,8 +40,8 @@ namespace Engine5
         Scene* CreateScene();
         void   RemoveScene(Scene* scene);
 
-        TextRenderer*   GetTextRenderer() const;
-        RendererCommon* GetRenderer() const;
+        TextRenderer*           GetTextRenderer() const;
+        RendererCommon*         GetRenderer() const;
         RenderTextureGenerator* GetRenderTextureGenerator() const;
 
     private:
@@ -51,6 +52,7 @@ namespace Engine5
         ResourceManager*        m_resource_manager         = nullptr;
         RenderTextureGenerator* m_render_texture_generator = nullptr;
         TextRenderer*           m_text_renderer            = nullptr;
+        MaterialManager*        m_material_manger          = nullptr;
 
         std::vector<Scene*> m_scenes;
         bool                m_b_vsync          = true;

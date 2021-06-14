@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Core/Utility/CoreDef.hpp"
 #include "../Common/Texture/TextureArrayCommon.hpp"
+#include "../DataType/MaterialData.hpp"
 
 namespace Engine5
 {
@@ -34,13 +35,18 @@ namespace Engine5
         void SetRenderer(RendererCommon* renderer);
         void ResizeInstanceBuffer(U32 count);
 
+        void SetMaterialData(const MaterialData& material_data);
+        void SetSceneID(size_t model_id, size_t material_id);
+
+    private:
+        friend class MeshComponent;
+
     private:
         ShaderManagerCommon* m_shader_manager = nullptr;
         RendererCommon*      m_renderer       = nullptr;
-        MeshData*            m_mesh_data      = nullptr;
-        TextureArrayCommon   m_diffuse_maps;
-        TextureArrayCommon   m_specular_maps;
-        TextureArrayCommon   m_normal_maps;
+
+        MeshData*          m_mesh_data = nullptr;
+        TextureArrayCommon m_textures;
 
         VertexBufferCommon*   m_vertex_buffer   = nullptr;
         IndexBufferCommon*    m_index_buffer    = nullptr;
@@ -48,6 +54,12 @@ namespace Engine5
         U32                   m_stride          = 0;
         U32                   m_max_count       = 0;
         U32                   m_instance_count  = 0;
+
+        size_t m_material_id   = (size_t)-1;
+        size_t m_model_id      = (size_t)-1;
+        int    m_diffuse_type  = -1;
+        int    m_specular_type = -1;
+        int    m_normal_type   = -1;
 
         std::vector<InstanceBufferData> m_instances;
     };

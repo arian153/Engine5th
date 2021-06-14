@@ -1,4 +1,6 @@
 #pragma once
+#include <unordered_map>
+
 #include "../../Math/Utility/MathDef.hpp"
 #include "Camera.hpp"
 #include "../DataType/ProjectionType.hpp"
@@ -7,6 +9,9 @@
 
 namespace Engine5
 {
+    class MeshData;
+    struct MaterialData;
+    class MaterialManager;
     class Mesh;
     class VertexLayoutCommon;
     class ConstantBufferCommon;
@@ -47,6 +52,7 @@ namespace Engine5
         void SetMainCamera(Camera* camera);
         void SetResourceManager(ResourceManager* resource_manager);
         void SetTextRenderer(TextRenderer* text_renderer);
+        void SetMaterialManager(MaterialManager* material_manager);
 
         void SetProjectionType(eProjectionType projection_type);
         void UpdateView();
@@ -54,6 +60,11 @@ namespace Engine5
         void OnResize() const;
 
         PrimitiveRenderer* GetPrimitiveRenderer() const;
+
+        Mesh2* GetMesh(size_t model_id, size_t material_id);
+        Mesh2* GetMesh(const std::string& model_path, const MaterialData& material);
+        Mesh2* GetMesh(MeshData* model_data, const MaterialData& material);
+        void SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialData& material, size_t model_id, size_t material_id) const;
 
         //add
         Camera* AddCamera(Camera* camera);
@@ -92,6 +103,7 @@ namespace Engine5
         PrimitiveRenderer*    m_primitive_renderer = nullptr;
         DeferredBufferCommon* m_deferred_buffer    = nullptr;
         TextRenderer*         m_text_renderer      = nullptr;
+        MaterialManager*      m_material_manager   = nullptr;
 
         std::vector<Camera*>           m_cameras;
         std::vector<Mesh*>             m_other_meshes;
@@ -103,6 +115,8 @@ namespace Engine5
         std::vector<CapsuleLight*>     m_capsule_lights;
         std::vector<TextSprite*>       m_text_sprites;
         std::vector<ParticleEmitter*>  m_particle_emitters;
+
+        std::unordered_map<size_t, std::unordered_map<size_t, Mesh2*>> m_meshes;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;
