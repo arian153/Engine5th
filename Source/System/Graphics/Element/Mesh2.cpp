@@ -176,7 +176,7 @@ namespace Engine5
         m_instance_buffer->Init(m_renderer, m_instances);
     }
 
-    void Mesh2::SetMaterialData(const MaterialData& material_data)
+    void Mesh2::SetMaterialData(const MaterialTexture& material_data)
     {
         m_diffuse_type  = material_data.diffuse_type;
         m_specular_type = material_data.specular_type;

@@ -1,13 +1,15 @@
 #pragma once
 #include <string>
 
+#include "Color.hpp"
+
 namespace Engine5
 {
-    struct MaterialData
+    struct MaterialTexture
     {
     public:
 
-        bool operator==(const MaterialData& rhs) const
+        bool operator==(const MaterialTexture& rhs) const
         {
             return (diffuse_type == rhs.diffuse_type) &&
                     (specular_type == rhs.specular_type) &&
@@ -28,5 +30,19 @@ namespace Engine5
         std::string diffuse2      = "";
         std::string specular0     = "";
         std::string normal0       = "";
+    };
+
+    struct MaterialColor
+    {
+        bool operator==(const MaterialColor& rhs) const
+        {
+            return (ambient == rhs.ambient) &&
+                    (diffuse == rhs.diffuse) &&
+                    (specular == rhs.specular);
+        }
+
+        Color ambient;
+        Color diffuse;
+        Color specular;
     };
 }

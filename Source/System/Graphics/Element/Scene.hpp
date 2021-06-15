@@ -5,12 +5,14 @@
 #include "Camera.hpp"
 #include "../DataType/ProjectionType.hpp"
 #include <vector>
+
+#include "../../../Manager/Component/EngineComponent/MeshComponent.hpp"
 #include "../DataType/Frustum.hpp"
 
 namespace Engine5
 {
     class MeshData;
-    struct MaterialData;
+    struct MaterialTexture;
     class MaterialManager;
     class Mesh;
     class VertexLayoutCommon;
@@ -34,6 +36,8 @@ namespace Engine5
     class PointLight;
     class SpotLight;
     class CapsuleLight;
+
+    using MeshTable = std::unordered_map<size_t, std::unordered_map<size_t, Mesh2*>>;
 
     class Scene
     {
@@ -62,9 +66,10 @@ namespace Engine5
         PrimitiveRenderer* GetPrimitiveRenderer() const;
 
         Mesh2* GetMesh(size_t model_id, size_t material_id);
-        Mesh2* GetMesh(const std::string& model_path, const MaterialData& material);
-        Mesh2* GetMesh(MeshData* model_data, const MaterialData& material);
-        void SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialData& material, size_t model_id, size_t material_id) const;
+        Mesh2* AddMesh(const std::string& model_path, const MaterialTexture& material);
+        Mesh2* AddMesh(MeshData* model_data, const MaterialTexture& material);
+        void AddMesh(MeshComponent* mesh_compo);
+        void RemoveMesh(MeshComponent* mesh_compo);
 
         //add
         Camera* AddCamera(Camera* camera);
@@ -95,6 +100,10 @@ namespace Engine5
         Ray   GetPickingRay(const Vector2& pos) const;
 
     private:
+        void SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialTexture& material, size_t model_id, size_t material_id) const;
+        void UpdateMesh(Real dt);
+
+    private:
         RendererCommon*       m_renderer           = nullptr;
         ShaderManagerCommon*  m_shader_manager     = nullptr;
         MatrixManager*        m_matrix_manager     = nullptr;
@@ -116,7 +125,9 @@ namespace Engine5
         std::vector<TextSprite*>       m_text_sprites;
         std::vector<ParticleEmitter*>  m_particle_emitters;
 
-        std::unordered_map<size_t, std::unordered_map<size_t, Mesh2*>> m_meshes;
+        std::vector<MeshComponent*> m_mesh_components;
+        std::vector<Mesh2*>         m_meshes;
+        MeshTable                   m_mesh_table;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;

@@ -35,7 +35,7 @@ namespace Engine5
         void SetRenderer(RendererCommon* renderer);
         void ResizeInstanceBuffer(U32 count);
 
-        void SetMaterialData(const MaterialData& material_data);
+        void SetMaterialData(const MaterialTexture& material_data);
         void SetSceneID(size_t model_id, size_t material_id);
 
     private:

@@ -10,11 +10,12 @@ namespace Engine5
         explicit Color(Real r = 1.0f, Real g = 1.0f, Real b = 1.0f, Real a = 1.0f);
         ~Color();
 
-        Real              ToReal(U8 color);
-        Real              ToReal(int color);
-        U8                ToByte(Real color);
-        int               ToInt(Real color);
-        
+        bool operator==(const Color& rhs) const;
+
+        Real ToReal(U8 color);
+        Real ToReal(int color);
+        U8   ToByte(Real color);
+        int  ToInt(Real color);
 
     public:
         Real r, g, b, a;

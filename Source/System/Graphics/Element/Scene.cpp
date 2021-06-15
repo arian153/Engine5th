@@ -265,20 +265,23 @@ namespace Engine5
             m_test_mesh = nullptr;
         }
 
-        for (auto& [fst1, mesh_table] : m_meshes)
+        //clear Meshes
         {
-            for (auto& [fst2, mesh] : mesh_table)
+            for (auto& [fst1, mesh_table] : m_mesh_table)
             {
-                if (mesh != nullptr)
-                {
-                    mesh->Shutdown();
-                    delete mesh;
-                    mesh = nullptr;
-                }
+                mesh_table.clear();
             }
-            mesh_table.clear();
+            m_mesh_table.clear();
+
+            for (auto& mesh : m_meshes)
+            {
+                mesh->Shutdown();
+                delete mesh;
+                mesh = nullptr;
+            }
+            m_meshes.clear();
+            m_mesh_components.clear();
         }
-        m_meshes.clear();
 
         m_matrix_manager->RemoveScene(this);
         if (m_primitive_renderer != nullptr)
@@ -458,8 +461,8 @@ namespace Engine5
 
     Mesh2* Scene::GetMesh(size_t model_id, size_t material_id)
     {
-        auto found_model = m_meshes.find(model_id);
-        if (found_model != m_meshes.end())
+        auto found_model = m_mesh_table.find(model_id);
+        if (found_model != m_mesh_table.end())
         {
             auto& material_table = found_model->second;
             auto  found_material = material_table.find(material_id);
@@ -472,21 +475,22 @@ namespace Engine5
         return nullptr;
     }
 
-    Mesh2* Scene::GetMesh(const std::string& model_path, const MaterialData& material)
+    Mesh2* Scene::AddMesh(const std::string& model_path, const MaterialTexture& material)
     {
         Mesh2*        created;
         MeshResource* model_resource = m_resource_manager->GetMeshResource(ToWString(model_path));
         size_t        model_id       = reinterpret_cast<size_t>(model_resource);
         size_t        material_id    = m_material_manager->GetID(material);
 
-        auto found_model = m_meshes.find(model_id);
+        auto found_model = m_mesh_table.find(model_id);
 
-        if (found_model == m_meshes.end())
+        if (found_model == m_mesh_table.end())
         {
             //add new
             created = new Mesh2();
             SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
-            m_meshes.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+            m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+            m_meshes.push_back(created);
         }
         else
         {
@@ -499,6 +503,7 @@ namespace Engine5
                 created = new Mesh2();
                 SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
                 material_table.emplace(material_id, created);
+                m_meshes.push_back(created);
             }
             else
             {
@@ -509,19 +514,20 @@ namespace Engine5
         return created;
     }
 
-    Mesh2* Scene::GetMesh(MeshData* model_data, const MaterialData& material)
+    Mesh2* Scene::AddMesh(MeshData* model_data, const MaterialTexture& material)
     {
         Mesh2* created;
         size_t model_id    = reinterpret_cast<size_t>(model_data);
         size_t material_id = m_material_manager->GetID(material);
-        auto   found_model = m_meshes.find(model_id);
+        auto   found_model = m_mesh_table.find(model_id);
 
-        if (found_model == m_meshes.end())
+        if (found_model == m_mesh_table.end())
         {
             //add new
             created = new Mesh2();
             SetUpMesh(created, model_data, material, model_id, material_id);
-            m_meshes.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+            m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+            m_meshes.push_back(created);
         }
         else
         {
@@ -534,6 +540,7 @@ namespace Engine5
                 created = new Mesh2();
                 SetUpMesh(created, model_data, material, model_id, material_id);
                 material_table.emplace(material_id, created);
+                m_meshes.push_back(created);
             }
             else
             {
@@ -544,59 +551,15 @@ namespace Engine5
         return created;
     }
 
-    void Scene::SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialData& material, size_t model_id, size_t material_id) const
+    void Scene::AddMesh(MeshComponent* mesh_compo)
     {
-        if (mesh != nullptr)
-        {
-            mesh->SetModelData(model_data);
-            mesh->SetSceneID(model_id, material_id);
-            mesh->SetMaterialData(material);
-            //diffuse texture0
-            if (material.diffuse0 != "")
-            {
-                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.diffuse0))->GetTexture());
-            }
-            else
-            {
-                mesh->AddTexture(nullptr);
-            }
-            //diffuse texture1
-            if (material.diffuse1 != "")
-            {
-                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.diffuse1))->GetTexture());
-            }
-            else
-            {
-                mesh->AddTexture(nullptr);
-            }
-            //diffuse texture2
-            if (material.diffuse2 != "")
-            {
-                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.diffuse2))->GetTexture());
-            }
-            else
-            {
-                mesh->AddTexture(nullptr);
-            }
-            //specular texture
-            if (material.specular0 != "")
-            {
-                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.specular0))->GetTexture());
-            }
-            else
-            {
-                mesh->AddTexture(nullptr);
-            }
-            //normal texture
-            if (material.normal0 != "")
-            {
-                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.normal0))->GetTexture());
-            }
-            else
-            {
-                mesh->AddTexture(nullptr);
-            }
-        }
+        m_mesh_components.push_back(mesh_compo);
+    }
+
+    void Scene::RemoveMesh(MeshComponent* mesh_compo)
+    {
+        auto found = std::find(m_mesh_components.begin(), m_mesh_components.end(), mesh_compo);
+        m_mesh_components.erase(found);
     }
 
     Camera* Scene::AddCamera(Camera* camera)
@@ -813,5 +776,69 @@ namespace Engine5
 
         Ray ray(origin, dir);
         return ray;
+    }
+
+    void Scene::SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialTexture& material, size_t model_id, size_t material_id) const
+    {
+        if (mesh != nullptr)
+        {
+            mesh->SetModelData(model_data);
+            mesh->SetSceneID(model_id, material_id);
+            mesh->SetMaterialData(material);
+            //diffuse texture0
+            if (material.diffuse0 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.diffuse0))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+            //diffuse texture1
+            if (material.diffuse1 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.diffuse1))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+            //diffuse texture2
+            if (material.diffuse2 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.diffuse2))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+            //specular texture
+            if (material.specular0 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.specular0))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+            //normal texture
+            if (material.normal0 != "")
+            {
+                mesh->AddTexture(m_resource_manager->GetTextureResource(ToWString(material.normal0))->GetTexture());
+            }
+            else
+            {
+                mesh->AddTexture(nullptr);
+            }
+        }
+    }
+
+    void Scene::UpdateMesh(Real dt)
+    {
+        for (auto& mesh_component : m_mesh_components)
+        {
+            //do mesh_compo
+            mesh_component->Update(dt);
+        }
     }
 }

@@ -1,8 +1,11 @@
 #pragma once
 #include "..//Component.hpp"
+#include "../../../System/Graphics/DataType/MaterialData.hpp"
 
 namespace Engine5
 {
+    class MeshResource;
+    class Mesh2;
     class Quaternion;
     class Vector3;
     class Transform;
@@ -28,14 +31,18 @@ namespace Engine5
 
     private:
         friend class MeshFactory;
-        friend class Mesh;
+        friend class Mesh2;
 
     private:
         explicit MeshComponent(Object* owner);
         void     Clone(MeshComponent* origin);
 
     private:
-        Mesh*      m_mesh      = nullptr;
+        Mesh2*     m_mesh      = nullptr;
         Transform* m_transform = nullptr;
+
+        std::string     m_model_resource_path = "";
+        MaterialTexture m_material_texture;
+        MaterialColor   m_material_color;
     };
 }

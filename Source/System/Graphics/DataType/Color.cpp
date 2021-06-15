@@ -1,4 +1,5 @@
 #include "Color.hpp"
+#include "../../Math/Utility/Utility.inl"
 
 namespace Engine5
 {
@@ -17,6 +18,14 @@ namespace Engine5
 
     Color::~Color()
     {
+    }
+
+    bool Color::operator==(const Color& rhs) const
+    {
+        return Math::IsEqual(r, rhs.r) &&
+                Math::IsEqual(g, rhs.g) &&
+                Math::IsEqual(b, rhs.b) &&
+                Math::IsEqual(a, rhs.a);
     }
 
     Real Color::ToReal(U8 color)

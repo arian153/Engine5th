@@ -22,10 +22,10 @@ namespace Engine5
 
     void Mesh::Shutdown()
     {
-        if (m_component != nullptr)
+     /*   if (m_component != nullptr)
         {
             m_component->m_mesh = nullptr;
-        }
+        }*/
         if (m_buffer != nullptr)
         {
             m_buffer->Shutdown();
