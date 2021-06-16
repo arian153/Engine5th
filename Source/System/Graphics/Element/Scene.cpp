@@ -62,7 +62,7 @@ namespace Engine5
         m_test_mesh = new Mesh2();
         m_test_mesh->Initialize();
         m_test_mesh->SetRenderer(m_renderer);
-        m_test_mesh->BuildBuffer();
+        m_test_mesh->BuildMeshBuffer();
     }
 
     void Scene::Update(Real dt)

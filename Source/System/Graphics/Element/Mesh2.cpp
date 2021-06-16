@@ -61,7 +61,7 @@ namespace Engine5
         m_index_buffer->Bind(0, m_instance_count);
     }
 
-    void Mesh2::BuildBuffer()
+    void Mesh2::BuildMeshBuffer()
     {
         if (m_index_buffer == nullptr)
         {
@@ -78,57 +78,69 @@ namespace Engine5
             m_instance_buffer = new InstanceBufferCommon();
         }
 
-        //temp code
-        std::vector<ColorVertexCommon> vertices(3);
+        if (m_mesh_data != nullptr)
+        {
+            m_index_buffer->Init(m_renderer, m_mesh_data->indices);
+            m_vertex_buffer->Init(m_renderer, m_mesh_data->vertices, false);
+            m_stride = m_mesh_data->stride;
 
-        vertices[0] = ColorVertexCommon(Vector3(-1.0f, -1.0f, 0.0f), Color(1.0f, 0.0f, 0.0f, 1.0f));
-        vertices[1] = ColorVertexCommon(Vector3(0.0f, 1.0f, 0.0f), Color(0.0f, 1.0f, 0.0f, 1.0f));
-        vertices[2] = ColorVertexCommon(Vector3(1.0f, -1.0f, 0.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
+            m_instance_buffer->Init(m_renderer, m_instances);
+            m_instance_count = (U32)m_instances.size();
+        }
+        else
+        {
+            //temp code
+            std::vector<ColorVertexCommon> vertices(3);
 
-        std::vector<U32> indices = {0, 1, 2};
-        m_index_buffer->Init(m_renderer, indices);
-        m_vertex_buffer->Init(m_renderer, vertices, false);
-        m_stride = sizeof(ColorVertexCommon);
+            vertices[0] = ColorVertexCommon(Vector3(-1.0f, -1.0f, 0.0f), Color(1.0f, 0.0f, 0.0f, 1.0f));
+            vertices[1] = ColorVertexCommon(Vector3(0.0f, 1.0f, 0.0f), Color(0.0f, 1.0f, 0.0f, 1.0f));
+            vertices[2] = ColorVertexCommon(Vector3(1.0f, -1.0f, 0.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
 
-        Transform transform;
-        transform.position = Vector3(0, 0, 0);
-        transform.scale    = Vector3(1, 1, 1);
-        transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6));
+            std::vector<U32> indices = {0, 1, 2};
+            m_index_buffer->Init(m_renderer, indices);
+            m_vertex_buffer->Init(m_renderer, vertices, false);
+            m_stride = sizeof(ColorVertexCommon);
 
-        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color()});
+            Transform transform;
+            transform.position = Vector3(0, 0, 0);
+            transform.scale    = Vector3(1, 1, 1);
+            transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6));
 
-        transform.position = Vector3(3, 3, 3);
-        transform.scale    = Vector3(1, 1, 1);
-        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 2.0f));
+            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color()});
 
-        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0, 0, 0, 1)});
+            transform.position = Vector3(3, 3, 3);
+            transform.scale    = Vector3(1, 1, 1);
+            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 2.0f));
 
-        transform.position = Vector3(-3, 3, 3);
-        transform.scale    = Vector3(1, 1, 1);
-        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 3.0f));
+            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0, 0, 0, 1)});
 
-        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(1, 1, 0, 1)});
+            transform.position = Vector3(-3, 3, 3);
+            transform.scale    = Vector3(1, 1, 1);
+            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 3.0f));
 
-        transform.position = Vector3(3, -3, 3);
-        transform.scale    = Vector3(1, 1, 1);
-        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 4.0f));
+            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(1, 1, 0, 1)});
 
-        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.5f, 0.5f, 0.5f, 1)});
+            transform.position = Vector3(3, -3, 3);
+            transform.scale    = Vector3(1, 1, 1);
+            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 4.0f));
 
-        transform.position = Vector3(3, 3, -3);
-        transform.scale    = Vector3(1, 1, 1);
-        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 5.0f));
+            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.5f, 0.5f, 0.5f, 1)});
 
-        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.3f, 0.3f, 0.3f, 1)});
+            transform.position = Vector3(3, 3, -3);
+            transform.scale    = Vector3(1, 1, 1);
+            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 5.0f));
 
-        transform.position = Vector3(-3, -3, 3);
-        transform.scale    = Vector3(1, 1, 1);
-        //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 6.0f));
+            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.3f, 0.3f, 0.3f, 1)});
 
-        m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.7f, 0.7f, 0.7f, 1)});
+            transform.position = Vector3(-3, -3, 3);
+            transform.scale    = Vector3(1, 1, 1);
+            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 6.0f));
 
-        m_instance_buffer->Init(m_renderer, m_instances);
-        m_instance_count = (U32)m_instances.size();
+            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.7f, 0.7f, 0.7f, 1)});
+
+            m_instance_buffer->Init(m_renderer, m_instances);
+            m_instance_count = (U32)m_instances.size();
+        }
     }
 
     void Mesh2::AddInstance(const InstanceBufferData& data)
@@ -146,7 +158,7 @@ namespace Engine5
     void Mesh2::SetModelData(MeshData* data)
     {
         m_mesh_data = data;
-        BuildBuffer();
+        BuildMeshBuffer();
     }
 
     void Mesh2::AddTexture(TextureCommon* texture)

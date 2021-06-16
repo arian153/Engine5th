@@ -24,7 +24,7 @@ namespace Engine5
         void Shutdown();
 
         void Render() const;
-        void BuildBuffer();
+        void BuildMeshBuffer();
 
         void AddInstance(const InstanceBufferData& data);
 

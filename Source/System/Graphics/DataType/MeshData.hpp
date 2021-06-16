@@ -19,7 +19,8 @@ namespace Engine5
 
     public:
         std::vector<NormalVertexCommon> vertices;
-        std::vector<U32>           indices;
-        bool                       b_resource = false;
+        std::vector<U32>                indices;
+        bool                            b_resource = false;
+        U32                             stride     = sizeof(NormalVertexCommon);
     };
 }
