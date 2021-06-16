@@ -33,13 +33,14 @@ namespace Engine5
         void Update(const std::vector<GeneralVertexCommon>& vertices) const;
 
         bool Init(RendererCommon* renderer, void* data, size_t vertex_size, size_t vertex_count, bool is_dynamic = false);
-        void Update(void* data, size_t vertex_size, size_t vertex_count) const;
-        void Bind(U32 stride, U32 offset) const;
-        void Bind(U32 stride, U32 offset, InstanceBufferCommon* instance_buffer) const;
+        void Update(void* data, size_t vertex_count) const;
+        void Bind( U32 offset) const;
+        void Bind( U32 offset, InstanceBufferCommon* instance_buffer) const;
         void Shutdown();
         void SetPrimitiveTopology(eTopologyType type);
 
     private:
+        U32  m_stride    = 0;
         bool m_b_dynamic = false;
     };
 }

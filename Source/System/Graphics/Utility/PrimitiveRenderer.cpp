@@ -295,7 +295,7 @@ namespace Engine5
 
             //render
             m_shader->Bind();
-            m_dot_vertex_buffer->Bind(m_stride, 0);
+            m_dot_vertex_buffer->Bind(0);
             m_dot_index_buffer->Bind(0);
         }
         if (m_line_vertices.empty() == false)
@@ -307,7 +307,7 @@ namespace Engine5
 
             //render
             m_shader->Bind();
-            m_line_vertex_buffer->Bind(m_stride, 0);
+            m_line_vertex_buffer->Bind(0);
             m_line_index_buffer->Bind(0);
         }
         if (m_face_vertices.empty() == false)
@@ -319,7 +319,7 @@ namespace Engine5
 
             //render
             m_shader->Bind();
-            m_face_vertex_buffer->Bind(m_stride, 0);
+            m_face_vertex_buffer->Bind(0);
             m_face_index_buffer->Bind(0);
         }
     }

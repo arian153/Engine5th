@@ -51,6 +51,7 @@ namespace Engine5
 
         m_device_context = renderer->GetDeviceContext();
         m_b_dynamic      = is_dynamic;
+        m_stride         = (U32)sizeof(ColorVertexCommon);
         return true;
     }
 
@@ -81,6 +82,7 @@ namespace Engine5
 
         m_device_context = renderer->GetDeviceContext();
         m_b_dynamic      = is_dynamic;
+        m_stride         = (U32)sizeof(TextureVertexCommon);
         return true;
     }
 
@@ -111,6 +113,7 @@ namespace Engine5
 
         m_device_context = renderer->GetDeviceContext();
         m_b_dynamic      = is_dynamic;
+        m_stride         = (U32)sizeof(NormalVertexCommon);
         return true;
     }
 
@@ -141,6 +144,7 @@ namespace Engine5
 
         m_device_context = renderer->GetDeviceContext();
         m_b_dynamic      = is_dynamic;
+        m_stride         = (U32)sizeof(GeneralVertexCommon);
         return true;
     }
 
@@ -255,10 +259,11 @@ namespace Engine5
 
         m_device_context = renderer->GetDeviceContext();
         m_b_dynamic      = is_dynamic;
+        m_stride         = static_cast<U32>(vertex_size);
         return true;
     }
 
-    void VertexBufferCommon::Update(void* data, size_t vertex_size, size_t vertex_count) const
+    void VertexBufferCommon::Update(void* data, size_t vertex_count) const
     {
         if (vertex_count > 0 && m_b_dynamic && data != nullptr)
         {
@@ -271,26 +276,26 @@ namespace Engine5
                 return;
             }
             // Copy the data into the vertex buffer.
-            memcpy(mapped_resource.pData, data, vertex_size * vertex_count);
+            memcpy(mapped_resource.pData, data, m_stride * vertex_count);
             // Unlock the vertex buffer.
             m_device_context->Unmap(m_vertex_buffer, 0);
         }
     }
 
-    void VertexBufferCommon::Bind(U32 stride, U32 offset) const
+    void VertexBufferCommon::Bind(U32 offset) const
     {
         // Set the vertex buffer to active in the input assembler so it can be rendered.
-        m_device_context->IASetVertexBuffers(0, 1, &m_vertex_buffer, &stride, &offset);
+        m_device_context->IASetVertexBuffers(0, 1, &m_vertex_buffer, &m_stride, &offset);
 
         // Set the type of primitive that should be rendered from this vertex buffer.
         m_device_context->IASetPrimitiveTopology(m_topology);
     }
 
-    void VertexBufferCommon::Bind(U32 stride, U32 offset, InstanceBufferCommon* instance_buffer) const
+    void VertexBufferCommon::Bind(U32 offset, InstanceBufferCommon* instance_buffer) const
     {
         // Set the buffer strides.
         U32 strides[2];
-        strides[0] = stride;
+        strides[0] = m_stride;
         strides[1] = instance_buffer->m_stride;
 
         // Set the buffer offsets.
