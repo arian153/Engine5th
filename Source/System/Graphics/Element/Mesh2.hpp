@@ -24,9 +24,13 @@ namespace Engine5
         void Shutdown();
 
         void Render() const;
-        void BuildMeshBuffer();
+        void CreateBuffer();
+
 
         void AddInstance(const InstanceBufferData& data);
+        void AddInstance(Transform* transform);
+        void AddInstance(Transform* transform, const Color& color);
+        void ClearCount(U32 clear_count = 0);
 
         void SetModelData(MeshData* data);
         void AddTexture(TextureCommon* texture);
@@ -51,7 +55,6 @@ namespace Engine5
         VertexBufferCommon*   m_vertex_buffer   = nullptr;
         IndexBufferCommon*    m_index_buffer    = nullptr;
         InstanceBufferCommon* m_instance_buffer = nullptr;
-        U32                   m_stride          = 0;
         U32                   m_max_count       = 0;
         U32                   m_instance_count  = 0;
 

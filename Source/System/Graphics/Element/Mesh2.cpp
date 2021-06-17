@@ -61,7 +61,7 @@ namespace Engine5
         m_index_buffer->Bind(0, m_instance_count);
     }
 
-    void Mesh2::BuildMeshBuffer()
+    void Mesh2::CreateBuffer()
     {
         if (m_index_buffer == nullptr)
         {
@@ -82,83 +82,57 @@ namespace Engine5
         {
             m_index_buffer->Init(m_renderer, m_mesh_data->indices);
             m_vertex_buffer->Init(m_renderer, m_mesh_data->vertices, false);
-            m_stride = m_mesh_data->stride;
-
-            m_instance_buffer->Init(m_renderer, m_instances);
-            m_instance_count = (U32)m_instances.size();
-        }
-        else
-        {
-            //temp code
-            std::vector<ColorVertexCommon> vertices(3);
-
-            vertices[0] = ColorVertexCommon(Vector3(-1.0f, -1.0f, 0.0f), Color(1.0f, 0.0f, 0.0f, 1.0f));
-            vertices[1] = ColorVertexCommon(Vector3(0.0f, 1.0f, 0.0f), Color(0.0f, 1.0f, 0.0f, 1.0f));
-            vertices[2] = ColorVertexCommon(Vector3(1.0f, -1.0f, 0.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
-
-            std::vector<U32> indices = {0, 1, 2};
-            m_index_buffer->Init(m_renderer, indices);
-            m_vertex_buffer->Init(m_renderer, vertices, false);
-            m_stride = sizeof(ColorVertexCommon);
-
-            Transform transform;
-            transform.position = Vector3(0, 0, 0);
-            transform.scale    = Vector3(1, 1, 1);
-            transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6));
-
-            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color()});
-
-            transform.position = Vector3(3, 3, 3);
-            transform.scale    = Vector3(1, 1, 1);
-            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 2.0f));
-
-            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0, 0, 0, 1)});
-
-            transform.position = Vector3(-3, 3, 3);
-            transform.scale    = Vector3(1, 1, 1);
-            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 3.0f));
-
-            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(1, 1, 0, 1)});
-
-            transform.position = Vector3(3, -3, 3);
-            transform.scale    = Vector3(1, 1, 1);
-            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 4.0f));
-
-            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.5f, 0.5f, 0.5f, 1)});
-
-            transform.position = Vector3(3, 3, -3);
-            transform.scale    = Vector3(1, 1, 1);
-            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 5.0f));
-
-            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.3f, 0.3f, 0.3f, 1)});
-
-            transform.position = Vector3(-3, -3, 3);
-            transform.scale    = Vector3(1, 1, 1);
-            //transform.orientation.Set(AxisRadian(Vector3(1, 1, 1).Unit(), Math::PI_DIV_6 * 6.0f));
-
-            m_instances.push_back({transform.LocalToWorldMatrix().Transpose(), Color(0.7f, 0.7f, 0.7f, 1)});
-
-            m_instance_buffer->Init(m_renderer, m_instances);
-            m_instance_count = (U32)m_instances.size();
         }
     }
 
     void Mesh2::AddInstance(const InstanceBufferData& data)
     {
-        if (m_instances.size() == m_max_count)
+        if (m_instance_count == m_max_count)
         {
             m_max_count = (m_max_count + 1) * 2;
-            //then resize instance buffer.
             ResizeInstanceBuffer(m_max_count);
         }
 
-        m_instances.push_back(data);
+        m_instances[m_instance_count].model = data.model;
+        m_instances[m_instance_count].color = data.color;
+        m_instance_count++;
+    }
+
+    void Mesh2::AddInstance(Transform* transform)
+    {
+        if (m_instance_count == m_max_count)
+        {
+            m_max_count = (m_max_count + 1) * 2;
+            ResizeInstanceBuffer(m_max_count);
+        }
+
+        m_instances[m_instance_count].model = transform->LocalToWorldMatrix();
+        m_instances[m_instance_count].color = Color();
+        m_instance_count++;
+    }
+
+    void Mesh2::AddInstance(Transform* transform, const Color& color)
+    {
+        if (m_instance_count == m_max_count)
+        {
+            m_max_count = (m_max_count + 1) * 2;
+            ResizeInstanceBuffer(m_max_count);
+        }
+
+        m_instances[m_instance_count].model = transform->LocalToWorldMatrix();
+        m_instances[m_instance_count].color = color;
+        m_instance_count++;
+    }
+
+    void Mesh2::ClearCount(U32 clear_idx)
+    {
+        m_instance_count = clear_idx;
     }
 
     void Mesh2::SetModelData(MeshData* data)
     {
         m_mesh_data = data;
-        BuildMeshBuffer();
+        CreateBuffer();
     }
 
     void Mesh2::AddTexture(TextureCommon* texture)

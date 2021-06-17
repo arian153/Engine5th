@@ -7,6 +7,7 @@
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../../System/Graphics/Common/Element/Mesh.hpp"
+#include "../../../System/Graphics/Element/Mesh2.hpp"
 #include "../../Resource/ResourceManager.hpp"
 #include "../../Resource/ResourceType/TextureResource.hpp"
 #include "../../Resource/ResourceType/MeshResource.hpp"
@@ -19,10 +20,7 @@ namespace Engine5
 
     void MeshComponent::Initialize()
     {
-        if (m_mesh == nullptr)
-        {
-            Subscribe();
-        }
+        Subscribe();
         if (m_transform == nullptr)
         {
             if (m_owner->HasComponent<TransformComponent>())
@@ -35,6 +33,11 @@ namespace Engine5
     void MeshComponent::Update(Real dt)
     {
         E5_UNUSED_PARAM(dt);
+
+        if (m_mesh != nullptr)
+        {
+            m_mesh->AddInstance(m_transform, m_material_color.diffuse);
+        }
     }
 
     void MeshComponent::Shutdown()
