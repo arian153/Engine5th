@@ -4,7 +4,7 @@
 #include "../../../Core/Utility/CoreDef.hpp"
 #include "../Vertex/ColorVertexCommon.hpp"
 #include "../Vertex/TextureVertexCommon.hpp"
-#include "../Vertex/NormalVertexCommon.hpp"
+#include "../Vertex/VertexCommon.hpp"
 #include "../../DataType/TopologyDef.hpp"
 #include <vector>
 
@@ -26,7 +26,7 @@ namespace Engine5
 
         bool BuildBuffer(RendererCommon* renderer, const std::vector<ColorVertexCommon>& vertices, const std::vector<U32>& indices);
         bool BuildBuffer(RendererCommon* renderer, const std::vector<TextureVertexCommon>& vertices, const std::vector<U32>& indices);
-        bool BuildBuffer(RendererCommon* renderer, const std::vector<NormalVertexCommon>& vertices, const std::vector<U32>& indices);
+        bool BuildBuffer(RendererCommon* renderer, const std::vector<VertexCommon>& vertices, const std::vector<U32>& indices);
     private:
     };
 }

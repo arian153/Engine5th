@@ -21,40 +21,40 @@ namespace Engine5
     MeshData* MeshGenerator::CreateBox(Real width, Real height, Real depth, U32 num_subdivisions) const
     {
         MeshData*     mesh_data = new MeshData();
-        NormalVertexCommon v[24];
+        VertexCommon v[24];
         Real          w2 = 0.5f * width;
         Real          h2 = 0.5f * height;
         Real          d2 = 0.5f * depth;
         // Fill in the front face vertex data.
-        v[0] = NormalVertexCommon(-w2, -h2, -d2, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f);
-        v[1] = NormalVertexCommon(-w2, +h2, -d2, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f);
-        v[2] = NormalVertexCommon(+w2, +h2, -d2, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f);
-        v[3] = NormalVertexCommon(+w2, -h2, -d2, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f);
+        v[0] = VertexCommon(-w2, -h2, -d2, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f);
+        v[1] = VertexCommon(-w2, +h2, -d2, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f);
+        v[2] = VertexCommon(+w2, +h2, -d2, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f);
+        v[3] = VertexCommon(+w2, -h2, -d2, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f);
         // Fill in the back face vertex data.
-        v[4] = NormalVertexCommon(-w2, -h2, +d2, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f);
-        v[5] = NormalVertexCommon(+w2, -h2, +d2, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f);
-        v[6] = NormalVertexCommon(+w2, +h2, +d2, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f);
-        v[7] = NormalVertexCommon(-w2, +h2, +d2, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f);
+        v[4] = VertexCommon(-w2, -h2, +d2, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f);
+        v[5] = VertexCommon(+w2, -h2, +d2, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f);
+        v[6] = VertexCommon(+w2, +h2, +d2, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f);
+        v[7] = VertexCommon(-w2, +h2, +d2, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f);
         // Fill in the top face vertex data.
-        v[8]  = NormalVertexCommon(-w2, +h2, -d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-        v[9]  = NormalVertexCommon(-w2, +h2, +d2, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-        v[10] = NormalVertexCommon(+w2, +h2, +d2, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-        v[11] = NormalVertexCommon(+w2, +h2, -d2, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        v[8]  = VertexCommon(-w2, +h2, -d2, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        v[9]  = VertexCommon(-w2, +h2, +d2, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        v[10] = VertexCommon(+w2, +h2, +d2, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        v[11] = VertexCommon(+w2, +h2, -d2, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
         // Fill in the bottom face vertex data.
-        v[12] = NormalVertexCommon(-w2, -h2, -d2, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f);
-        v[13] = NormalVertexCommon(+w2, -h2, -d2, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f);
-        v[14] = NormalVertexCommon(+w2, -h2, +d2, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f);
-        v[15] = NormalVertexCommon(-w2, -h2, +d2, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f);
+        v[12] = VertexCommon(-w2, -h2, -d2, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f);
+        v[13] = VertexCommon(+w2, -h2, -d2, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f);
+        v[14] = VertexCommon(+w2, -h2, +d2, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f);
+        v[15] = VertexCommon(-w2, -h2, +d2, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f);
         // Fill in the left face vertex data.
-        v[16] = NormalVertexCommon(-w2, -h2, +d2, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
-        v[17] = NormalVertexCommon(-w2, +h2, +d2, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
-        v[18] = NormalVertexCommon(-w2, +h2, -d2, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
-        v[19] = NormalVertexCommon(-w2, -h2, -d2, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
+        v[16] = VertexCommon(-w2, -h2, +d2, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
+        v[17] = VertexCommon(-w2, +h2, +d2, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
+        v[18] = VertexCommon(-w2, +h2, -d2, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
+        v[19] = VertexCommon(-w2, -h2, -d2, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
         // Fill in the right face vertex data.
-        v[20] = NormalVertexCommon(+w2, -h2, -d2, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-        v[21] = NormalVertexCommon(+w2, +h2, -d2, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-        v[22] = NormalVertexCommon(+w2, +h2, +d2, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-        v[23] = NormalVertexCommon(+w2, -h2, +d2, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        v[20] = VertexCommon(+w2, -h2, -d2, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        v[21] = VertexCommon(+w2, +h2, -d2, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        v[22] = VertexCommon(+w2, +h2, +d2, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        v[23] = VertexCommon(+w2, -h2, +d2, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
         mesh_data->vertices.assign(&v[0], &v[24]);
         // Create the indices.
         U32 i[36];
@@ -111,8 +111,8 @@ namespace Engine5
     MeshData* MeshGenerator::CreateSphere(Real radius, U32 slice_count, U32 stack_count) const
     {
         MeshData*     mesh_data = new MeshData();
-        NormalVertexCommon top_vertex(0.0f, +radius, 0.0f, 0.0f, 0.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-        NormalVertexCommon bottom_vertex(0.0f, -radius, 0.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        VertexCommon top_vertex(0.0f, +radius, 0.0f, 0.0f, 0.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        VertexCommon bottom_vertex(0.0f, -radius, 0.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
         mesh_data->vertices.push_back(top_vertex);
         Real phi_step   = Math::PI / stack_count;
         Real theta_step = Math::TWO_PI / slice_count;
@@ -325,25 +325,25 @@ namespace Engine5
         mesh_data->vertices.resize(4);
         mesh_data->indices.resize(6);
         // Position coordinates specified in NDC space.
-        mesh_data->vertices[0] = NormalVertexCommon(
+        mesh_data->vertices[0] = VertexCommon(
                                                x, y - h, depth,
                                                0.0f, 1.0f,
                                                0.0f, 0.0f, -1.0f,
                                                1.0f, 0.0f, 0.0f
                                               );
-        mesh_data->vertices[1] = NormalVertexCommon(
+        mesh_data->vertices[1] = VertexCommon(
                                                x, y, depth,
                                                0.0f, 0.0f,
                                                0.0f, 0.0f, -1.0f,
                                                1.0f, 0.0f, 0.0f
                                               );
-        mesh_data->vertices[2] = NormalVertexCommon(
+        mesh_data->vertices[2] = VertexCommon(
                                                x + w, y, depth,
                                                1.0f, 0.0f,
                                                0.0f, 0.0f, -1.0f,
                                                1.0f, 0.0f, 0.0f
                                               );
-        mesh_data->vertices[3] = NormalVertexCommon(
+        mesh_data->vertices[3] = VertexCommon(
                                                x + w, y - h, depth,
                                                1.0f, 1.0f,
                                                0.0f, 0.0f, -1.0f,
@@ -368,12 +368,12 @@ namespace Engine5
         U32 tri_angle_count = (U32)input_data.indices.size() / 3;
         for (U32 i = 0; i < tri_angle_count; ++i)
         {
-            NormalVertexCommon v0 = input_data.vertices[input_data.indices[i * 3 + 0]];
-            NormalVertexCommon v1 = input_data.vertices[input_data.indices[i * 3 + 1]];
-            NormalVertexCommon v2 = input_data.vertices[input_data.indices[i * 3 + 2]];
-            NormalVertexCommon m0 = MidPoint(v0, v1);
-            NormalVertexCommon m1 = MidPoint(v1, v2);
-            NormalVertexCommon m2 = MidPoint(v0, v2);
+            VertexCommon v0 = input_data.vertices[input_data.indices[i * 3 + 0]];
+            VertexCommon v1 = input_data.vertices[input_data.indices[i * 3 + 1]];
+            VertexCommon v2 = input_data.vertices[input_data.indices[i * 3 + 2]];
+            VertexCommon m0 = MidPoint(v0, v1);
+            VertexCommon m1 = MidPoint(v1, v2);
+            VertexCommon m2 = MidPoint(v0, v2);
             mesh_data.vertices.push_back(v0); // 0
             mesh_data.vertices.push_back(v1); // 1
             mesh_data.vertices.push_back(v2); // 2
@@ -395,7 +395,7 @@ namespace Engine5
         }
     }
 
-    NormalVertexCommon MeshGenerator::MidPoint(const NormalVertexCommon& v0, const NormalVertexCommon& v1) const
+    VertexCommon MeshGenerator::MidPoint(const VertexCommon& v0, const VertexCommon& v1) const
     {
         //vertex0
         Vector3 pos0 = v0.GetPosition();
@@ -413,7 +413,7 @@ namespace Engine5
         Vector3 nor = (nor0 + nor1).Half().Normalize();
         Vector3 tan = (tan0 + tan1).Half().Normalize();
         Vector3 bin = CrossProduct(tan, nor).Normalize();
-        return NormalVertexCommon(pos, uv, nor, tan, bin);
+        return VertexCommon(pos, uv, nor, tan, bin);
     }
 
     void MeshGenerator::BuildCylinderTopCap(Real top_radius, Real height, U32 slice_count, MeshData& mesh_data) const
@@ -430,10 +430,10 @@ namespace Engine5
             // proportional to base.
             Real u = x / height + 0.5f;
             Real v = z / height + 0.5f;
-            mesh_data.vertices.push_back(NormalVertexCommon(x, y, z, u, v, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f));
+            mesh_data.vertices.push_back(VertexCommon(x, y, z, u, v, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         }
         // Cap center vertex.
-        mesh_data.vertices.push_back(NormalVertexCommon(0.0f, y, 0.0f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f));
+        mesh_data.vertices.push_back(VertexCommon(0.0f, y, 0.0f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // Index of center vertex.
         U32 center_index = (U32)mesh_data.vertices.size() - 1;
         for (U32 i = 0; i < slice_count; ++i)
@@ -458,10 +458,10 @@ namespace Engine5
             // proportional to base.
             Real u = x / height + 0.5f;
             Real v = z / height + 0.5f;
-            mesh_data.vertices.push_back(NormalVertexCommon(x, y, z, u, v, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f));
+            mesh_data.vertices.push_back(VertexCommon(x, y, z, u, v, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         }
         // Cap center vertex.
-        mesh_data.vertices.push_back(NormalVertexCommon(0.0f, y, 0.0f, 0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f));
+        mesh_data.vertices.push_back(VertexCommon(0.0f, y, 0.0f, 0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // Cache the index of center vertex.
         U32 center_index = (U32)mesh_data.vertices.size() - 1;
         for (U32 i = 0; i < slice_count; ++i)

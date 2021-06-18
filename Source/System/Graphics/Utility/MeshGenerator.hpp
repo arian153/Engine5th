@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Core/Utility/CoreDef.hpp"
 #include "../../Math/Utility/MathDef.hpp"
-#include "../Common/Vertex/NormalVertexCommon.hpp"
+#include "../Common/Vertex/VertexCommon.hpp"
 
 namespace Engine5
 {
@@ -21,7 +21,7 @@ namespace Engine5
 
     private:
         void   Subdivide(MeshData& mesh_data) const;
-        NormalVertexCommon MidPoint(const NormalVertexCommon& v0, const NormalVertexCommon& v1) const;
+        VertexCommon MidPoint(const VertexCommon& v0, const VertexCommon& v1) const;
         void   BuildCylinderTopCap( Real top_radius, Real height, U32 slice_count, MeshData& mesh_data) const;
         void   BuildCylinderBottomCap(Real bottom_radius, Real height, U32 slice_count, MeshData& mesh_data) const;
         void   CalculateBinormal(MeshData& mesh_data) const;

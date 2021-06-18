@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Core/Utility/CoreDef.hpp"
+#include "../Common/Shader/ShaderType.hpp"
 #include "../Common/Texture/TextureArrayCommon.hpp"
 #include "../DataType/MaterialData.hpp"
 
@@ -26,12 +27,12 @@ namespace Engine5
         void Render() const;
         void CreateBuffer();
 
-
         void AddInstance(const InstanceBufferData& data);
         void AddInstance(Transform* transform);
         void AddInstance(Transform* transform, const MaterialColor& color);
         void ClearCount(U32 clear_idx = 0);
 
+        void SetShaderType(eShaderType type);
         void SetModelData(MeshData* data);
         void AddTexture(TextureCommon* texture);
         void ClearTexture();
@@ -41,6 +42,8 @@ namespace Engine5
 
         void SetMaterialData(const MaterialTexture& material_data);
         void SetSceneID(size_t model_id, size_t material_id);
+
+        eShaderType GetType() const;
 
     private:
         friend class MeshComponent;
@@ -63,6 +66,8 @@ namespace Engine5
         int    m_diffuse_type  = -1;
         int    m_specular_type = -1;
         int    m_normal_type   = -1;
+
+        eShaderType m_shader_type = eShaderType::LightI;
 
         std::vector<InstanceBufferData> m_instances;
     };

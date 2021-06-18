@@ -79,6 +79,11 @@ namespace Engine5
         {
             particle->Update(dt);
         }
+
+        for (auto& mesh_compo : m_mesh_components)
+        {
+            mesh_compo->Update(dt);
+        }
     }
 
     void Scene::Render() const
@@ -88,19 +93,12 @@ namespace Engine5
 
         m_primitive_renderer->Render();
         m_primitive_renderer->Clear();
-        MatrixData mvp_data;
-        if (m_b_deferred_shading)
+
+        for (auto& mesh : m_meshes)
         {
-            mvp_data.projection = m_orthogonal_matrix;
-            mvp_data.model.SetIdentity();
-            for (auto& camera : m_cameras)
-            {
-                mvp_data.view = camera->GetViewMatrix();
-                m_renderer->SetZBuffering(false);
-                m_renderer->SetZBuffering(true);
-            }
+            m_shader_manager->Bind("someting.....");
+            mesh->Render();
         }
-        mvp_data.projection = m_projection_matrix;
 
         //m_shader_manager->Bind("ColorInstancing");
         //m_test_mesh->Render();

@@ -22,10 +22,10 @@ namespace Engine5
 
     void Mesh::Shutdown()
     {
-     /*   if (m_component != nullptr)
-        {
-            m_component->m_mesh = nullptr;
-        }*/
+        /*   if (m_component != nullptr)
+           {
+               m_component->m_mesh = nullptr;
+           }*/
         if (m_buffer != nullptr)
         {
             m_buffer->Shutdown();
@@ -77,7 +77,7 @@ namespace Engine5
             else
             {
                 m_buffer->BuildBuffer(m_renderer, m_mesh_data->vertices, m_mesh_data->indices);
-                m_stride = sizeof(NormalVertexCommon);
+                m_stride = sizeof(VertexCommon);
             }
         }
     }
@@ -116,45 +116,6 @@ namespace Engine5
 
     void Mesh::SetShaderType(eShaderType type)
     {
-        if (m_type != type)
-        {
-            m_type = type;
-            switch (type)
-            {
-            case eShaderType::Invalid:
-                break;
-            case eShaderType::Color:
-                m_lighting = eLightingMethod::None;
-                break;
-            case eShaderType::Texture:
-                m_lighting = eLightingMethod::None;
-                break;
-            case eShaderType::ForwardDirectionalLight:
-                m_lighting = eLightingMethod::Forward;
-                break;
-            case eShaderType::DeferredDirectionalLight:
-                m_lighting = eLightingMethod::Deferred;
-                break;
-            case eShaderType::MultiTexture:
-                m_lighting = eLightingMethod::None;
-                break;
-            case eShaderType::AlphaMapping:
-                m_lighting = eLightingMethod::None;
-                break;
-            case eShaderType::LightMapping:
-                m_lighting = eLightingMethod::None;
-                break;
-            case eShaderType::NormalMapping:
-                m_lighting = eLightingMethod::Forward;
-                break;
-            case eShaderType::SpecularMapping:
-                m_lighting = eLightingMethod::Forward;
-                break;
-            default:
-                break;
-            }
-            BuildBuffer();
-        }
     }
 
     void Mesh::SetColor(const Color& color)

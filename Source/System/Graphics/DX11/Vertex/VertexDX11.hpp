@@ -3,16 +3,17 @@
 
 namespace Engine5
 {
-    class GeneralVertexDX11
+    class VertexDX11
     {
     public:
-        GeneralVertexDX11();
-        ~GeneralVertexDX11();
+        VertexDX11();
+        ~VertexDX11();
 
     public:
         DirectX::XMFLOAT3 position;
-        DirectX::XMFLOAT2 tex;
+        DirectX::XMFLOAT2 uv;
         DirectX::XMFLOAT3 normal;
         DirectX::XMFLOAT3 tangent;
+        DirectX::XMFLOAT3 binormal;
     };
 }

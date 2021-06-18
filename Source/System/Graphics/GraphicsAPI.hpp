@@ -25,9 +25,9 @@
 #define TextureArrayAPI TextureArrayDX11
 #define TextureAtlasAPI TextureAtlasDX11
 #define ColorVertexAPI ColorVertexDX11
-#define NormalVertexAPI NormalVertexDX11
+#define VertexAPI VertexDX11
 #define TextureVertexAPI TextureVertexDX11
-#define GeneralVertexAPI GeneralVertexDX11
+#define NormalVertexAPI NormalVertexDX11
 #define InstanceDataAPI InstanceDataDX11
 
 //shader
@@ -51,8 +51,6 @@
 #define IncludeVertexBufferAPI "../../DX11/Buffer2/VertexBufferDX11.hpp"
 #define IncludeVertexLayoutAPI "../../DX11/Buffer2/VertexLayoutDX11.hpp"
 
-
-
 #define IncludeMeshBufferAPI "../../DX11/Buffer/MeshBufferDX11.hpp"
 #define IncludeDeferredBufferAPI "../../DX11/Buffer/DeferredBufferDX11.hpp"
 #define IncludeRenderTextureBufferAPI "../../DX11/Buffer/RenderTextureBufferDX11.hpp"
@@ -65,9 +63,9 @@
 #define IncludeTextureArrayAPI "../../DX11/Texture/TextureArrayDX11.hpp"
 #define IncludeTextureAtlasAPI "../../DX11/Texture/TextureAtlasDX11.hpp"
 #define IncludeColorVertexAPI "../../DX11/Vertex/ColorVertexDX11.hpp"
-#define IncludeNormalVertexAPI "../../DX11/Vertex/NormalVertexDX11.hpp"
+#define IncludeVertexAPI "../../DX11/Vertex/VertexDX11.hpp"
 #define IncludeTextureVertexAPI "../../DX11/Vertex/TextureVertexDX11.hpp"
-#define IncludeGeneralVertexAPI "../../DX11/Vertex/GeneralVertexDX11.hpp"
+#define IncludeNormalVertexAPI "../../DX11/Vertex/NormalVertexDX11.hpp"
 
 #define IncludeInstanceDataAPI "../../DX11/Vertex/InstanceDataDX11.hpp"
 

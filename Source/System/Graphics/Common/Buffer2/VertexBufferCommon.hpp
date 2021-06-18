@@ -7,8 +7,8 @@
 
 #include "../../../Core/Utility/CoreDef.hpp"
 #include "../Vertex/ColorVertexCommon.hpp"
-#include "../Vertex/GeneralVertexCommon.hpp"
 #include "../Vertex/NormalVertexCommon.hpp"
+#include "../Vertex/VertexCommon.hpp"
 #include "../Vertex/TextureVertexCommon.hpp"
 
 namespace Engine5
@@ -24,13 +24,13 @@ namespace Engine5
 
         bool Init(RendererCommon* renderer, const std::vector<ColorVertexCommon>& vertices, bool is_dynamic = false);
         bool Init(RendererCommon* renderer, const std::vector<TextureVertexCommon>& vertices, bool is_dynamic = false);
+        bool Init(RendererCommon* renderer, const std::vector<VertexCommon>& vertices, bool is_dynamic = false);
         bool Init(RendererCommon* renderer, const std::vector<NormalVertexCommon>& vertices, bool is_dynamic = false);
-        bool Init(RendererCommon* renderer, const std::vector<GeneralVertexCommon>& vertices, bool is_dynamic = false);
 
         void Update(const std::vector<ColorVertexCommon>& vertices) const;
         void Update(const std::vector<TextureVertexCommon>& vertices) const;
+        void Update(const std::vector<VertexCommon>& vertices) const;
         void Update(const std::vector<NormalVertexCommon>& vertices) const;
-        void Update(const std::vector<GeneralVertexCommon>& vertices) const;
 
         bool Init(RendererCommon* renderer, void* data, size_t vertex_size, size_t vertex_count, bool is_dynamic = false);
         void Update(void* data, size_t vertex_count) const;

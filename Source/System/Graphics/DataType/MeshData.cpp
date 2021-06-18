@@ -32,12 +32,12 @@ namespace Engine5
         }
     }
 
-    void MeshData::Convert(std::vector<GeneralVertexCommon>& new_vertices)
+    void MeshData::Convert(std::vector<NormalVertexCommon>& new_vertices)
     {
         new_vertices.reserve(vertices.size());
         for (auto& vertex : vertices)
         {
-            new_vertices.emplace_back(vertex.GetPosition(), vertex.GetUV(), vertex.GetNormal(), vertex.GetTangent());
+            new_vertices.emplace_back(vertex.GetPosition(), vertex.GetNormal(), vertex.GetTangent(), vertex.GetBinormal());
         }
     }
 }

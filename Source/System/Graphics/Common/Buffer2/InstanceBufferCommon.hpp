@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "ConstantBufferData.hpp"
-#include "../Vertex/NormalVertexCommon.hpp"
+#include "../Vertex/VertexCommon.hpp"
 #include "../Vertex/ColorVertexCommon.hpp"
 #include "../Vertex/InstanceDataCommon.hpp"
 #include "../Vertex/TextureVertexCommon.hpp"

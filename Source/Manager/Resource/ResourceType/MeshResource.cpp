@@ -182,7 +182,7 @@ namespace Engine5
         m_mesh_data.indices.reserve(count);
         for (auto& face : faces)
         {
-            NormalVertexCommon vertex_a, vertex_b, vertex_c;
+            VertexCommon vertex_a, vertex_b, vertex_c;
             vertex_a.SetPosition(points[face.vertex_index_a - 1]);
             vertex_b.SetPosition(points[face.vertex_index_b - 1]);
             vertex_c.SetPosition(points[face.vertex_index_c - 1]);
@@ -248,7 +248,7 @@ namespace Engine5
         // Read in the vertex data.
         for (U32 i = 0; i < count; i++)
         {
-            NormalVertexCommon vertex;
+            VertexCommon vertex;
             file >> vertex.position.x >> vertex.position.y >> vertex.position.z;
             file >> vertex.uv.x >> vertex.uv.y;
             file >> vertex.normal.x >> vertex.normal.y >> vertex.normal.z;

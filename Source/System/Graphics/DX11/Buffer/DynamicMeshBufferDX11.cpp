@@ -144,7 +144,7 @@ namespace Engine5
         return true;
     }
 
-    bool DynamicMeshBufferCommon::BuildBuffer(RendererCommon* renderer, const std::vector<NormalVertexCommon>& vertices, const std::vector<U32>& indices)
+    bool DynamicMeshBufferCommon::BuildBuffer(RendererCommon* renderer, const std::vector<VertexCommon>& vertices, const std::vector<U32>& indices)
     {
         if (m_vertex_buffer != nullptr)
         {
@@ -159,7 +159,7 @@ namespace Engine5
         // Set up the description of the static vertex buffer.
         D3D11_BUFFER_DESC vertex_buffer_desc;
         vertex_buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
-        vertex_buffer_desc.ByteWidth           = sizeof(NormalVertexCommon) * static_cast<U32>(vertices.size());
+        vertex_buffer_desc.ByteWidth           = sizeof(VertexCommon) * static_cast<U32>(vertices.size());
         vertex_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
         vertex_buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;;
         vertex_buffer_desc.MiscFlags           = 0;
@@ -236,7 +236,7 @@ namespace Engine5
         }
     }
 
-    void DynamicMeshBufferCommon::UpdateVertexBuffer(const std::vector<NormalVertexCommon>& vertices) const
+    void DynamicMeshBufferCommon::UpdateVertexBuffer(const std::vector<VertexCommon>& vertices) const
     {
         if (vertices.empty() == false)
         {
@@ -249,9 +249,9 @@ namespace Engine5
                 return;
             }
             // Get a pointer to the data in the vertex buffer.
-            NormalVertexCommon* vertices_ptr = (NormalVertexCommon*)mapped_resource.pData;
+            VertexCommon* vertices_ptr = (VertexCommon*)mapped_resource.pData;
             // Copy the data into the vertex buffer.
-            memcpy(vertices_ptr, (void*)vertices.data(), sizeof(NormalVertexCommon) * static_cast<U32>(vertices.size()));
+            memcpy(vertices_ptr, (void*)vertices.data(), sizeof(VertexCommon) * static_cast<U32>(vertices.size()));
             // Unlock the vertex buffer.
             m_device_context->Unmap(m_vertex_buffer, 0);
         }

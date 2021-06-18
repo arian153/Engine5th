@@ -86,6 +86,37 @@ namespace Engine5
         return true;
     }
 
+    bool VertexBufferCommon::Init(RendererCommon* renderer, const std::vector<VertexCommon>& vertices, bool is_dynamic)
+    {
+        if (m_vertex_buffer != nullptr)
+        {
+            m_vertex_buffer->Release();
+            m_vertex_buffer = nullptr;
+        }
+        // Set up the description of the static vertex buffer.
+        D3D11_BUFFER_DESC vertex_buffer_desc;
+        vertex_buffer_desc.Usage               = is_dynamic ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
+        vertex_buffer_desc.ByteWidth           = sizeof(VertexCommon) * static_cast<U32>(vertices.size());
+        vertex_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
+        vertex_buffer_desc.CPUAccessFlags      = is_dynamic ? D3D11_CPU_ACCESS_WRITE : 0;
+        vertex_buffer_desc.MiscFlags           = 0;
+        vertex_buffer_desc.StructureByteStride = 0;
+        // Give the sub resource structure a pointer to the vertex data.
+        D3D11_SUBRESOURCE_DATA vertex_data;
+        vertex_data.pSysMem          = vertices.data();
+        vertex_data.SysMemPitch      = 0;
+        vertex_data.SysMemSlicePitch = 0;
+        // Now create the vertex buffer.
+        HRESULT result = renderer->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_vertex_buffer);
+        if (FAILED(result))
+            return false;
+
+        m_device_context = renderer->GetDeviceContext();
+        m_b_dynamic      = is_dynamic;
+        m_stride         = (U32)sizeof(VertexCommon);
+        return true;
+    }
+
     bool VertexBufferCommon::Init(RendererCommon* renderer, const std::vector<NormalVertexCommon>& vertices, bool is_dynamic)
     {
         if (m_vertex_buffer != nullptr)
@@ -114,37 +145,6 @@ namespace Engine5
         m_device_context = renderer->GetDeviceContext();
         m_b_dynamic      = is_dynamic;
         m_stride         = (U32)sizeof(NormalVertexCommon);
-        return true;
-    }
-
-    bool VertexBufferCommon::Init(RendererCommon* renderer, const std::vector<GeneralVertexCommon>& vertices, bool is_dynamic)
-    {
-        if (m_vertex_buffer != nullptr)
-        {
-            m_vertex_buffer->Release();
-            m_vertex_buffer = nullptr;
-        }
-        // Set up the description of the static vertex buffer.
-        D3D11_BUFFER_DESC vertex_buffer_desc;
-        vertex_buffer_desc.Usage               = is_dynamic ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
-        vertex_buffer_desc.ByteWidth           = sizeof(GeneralVertexCommon) * static_cast<U32>(vertices.size());
-        vertex_buffer_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-        vertex_buffer_desc.CPUAccessFlags      = is_dynamic ? D3D11_CPU_ACCESS_WRITE : 0;
-        vertex_buffer_desc.MiscFlags           = 0;
-        vertex_buffer_desc.StructureByteStride = 0;
-        // Give the sub resource structure a pointer to the vertex data.
-        D3D11_SUBRESOURCE_DATA vertex_data;
-        vertex_data.pSysMem          = vertices.data();
-        vertex_data.SysMemPitch      = 0;
-        vertex_data.SysMemSlicePitch = 0;
-        // Now create the vertex buffer.
-        HRESULT result = renderer->GetDevice()->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_vertex_buffer);
-        if (FAILED(result))
-            return false;
-
-        m_device_context = renderer->GetDeviceContext();
-        m_b_dynamic      = is_dynamic;
-        m_stride         = (U32)sizeof(GeneralVertexCommon);
         return true;
     }
 
@@ -190,6 +190,27 @@ namespace Engine5
         }
     }
 
+    void VertexBufferCommon::Update(const std::vector<VertexCommon>& vertices) const
+    {
+        if (!vertices.empty() && m_b_dynamic)
+        {
+            // Lock the vertex buffer so it can be written to.
+            D3D11_MAPPED_SUBRESOURCE mapped_resource;
+            // mapping
+            HRESULT result = m_device_context->Map(m_vertex_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+            if (FAILED(result))
+            {
+                return;
+            }
+            // Get a pointer to the data in the vertex buffer.
+            VertexCommon* vertices_ptr = (VertexCommon*)mapped_resource.pData;
+            // Copy the data into the vertex buffer.
+            memcpy(vertices_ptr, (void*)vertices.data(), sizeof(VertexCommon) * static_cast<U32>(vertices.size()));
+            // Unlock the vertex buffer.
+            m_device_context->Unmap(m_vertex_buffer, 0);
+        }
+    }
+
     void VertexBufferCommon::Update(const std::vector<NormalVertexCommon>& vertices) const
     {
         if (!vertices.empty() && m_b_dynamic)
@@ -206,27 +227,6 @@ namespace Engine5
             NormalVertexCommon* vertices_ptr = (NormalVertexCommon*)mapped_resource.pData;
             // Copy the data into the vertex buffer.
             memcpy(vertices_ptr, (void*)vertices.data(), sizeof(NormalVertexCommon) * static_cast<U32>(vertices.size()));
-            // Unlock the vertex buffer.
-            m_device_context->Unmap(m_vertex_buffer, 0);
-        }
-    }
-
-    void VertexBufferCommon::Update(const std::vector<GeneralVertexCommon>& vertices) const
-    {
-        if (!vertices.empty() && m_b_dynamic)
-        {
-            // Lock the vertex buffer so it can be written to.
-            D3D11_MAPPED_SUBRESOURCE mapped_resource;
-            // mapping
-            HRESULT result = m_device_context->Map(m_vertex_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
-            if (FAILED(result))
-            {
-                return;
-            }
-            // Get a pointer to the data in the vertex buffer.
-            GeneralVertexCommon* vertices_ptr = (GeneralVertexCommon*)mapped_resource.pData;
-            // Copy the data into the vertex buffer.
-            memcpy(vertices_ptr, (void*)vertices.data(), sizeof(GeneralVertexCommon) * static_cast<U32>(vertices.size()));
             // Unlock the vertex buffer.
             m_device_context->Unmap(m_vertex_buffer, 0);
         }

@@ -6,15 +6,11 @@ namespace Engine5
     {
         Invalid,
         Color,
+        ColorI,
         Texture,
-        ForwardDirectionalLight,
-        DeferredDirectionalLight,
-        MultiTexture,
-        AlphaMapping,
-        LightMapping,
-        NormalMapping,
-        SpecularMapping
+        TextureI,
+        Light,
+        LightI,
+        Max
     };
-
-   
 }
