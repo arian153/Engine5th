@@ -96,7 +96,7 @@ namespace Engine5
 
         for (auto& mesh : m_meshes)
         {
-            m_shader_manager->Bind("someting.....");
+            m_shader_manager->Bind(mesh->GetShaderType());
             mesh->Render();
         }
 

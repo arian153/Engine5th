@@ -85,24 +85,26 @@ namespace Engine5
         {
             m_index_buffer->Init(m_renderer, m_mesh_data->indices);
 
-            if (m_shader_type == eShaderType::Color || m_shader_type == eShaderType::ColorI)
-            {
-                std::vector<ColorVertexCommon> vertices;
-                m_mesh_data->Convert(vertices, Color());
-                m_vertex_buffer->Init(m_renderer, vertices, false);
-                vertices.clear();
-            }
-            else if (m_shader_type == eShaderType::Texture || m_shader_type == eShaderType::TextureI)
-            {
-                std::vector<TextureVertexCommon> vertices;
-                m_mesh_data->Convert(vertices);
-                m_vertex_buffer->Init(m_renderer, vertices, false);
-                vertices.clear();
-            }
-            else if (m_shader_type == eShaderType::Light || m_shader_type == eShaderType::LightI)
-            {
-                m_vertex_buffer->Init(m_renderer, m_mesh_data->vertices, false);
-            }
+            /*  if (m_vertex_type == eShaderType::Color || m_vertex_type == eShaderType::ColorI)
+              {
+                  std::vector<ColorVertexCommon> vertices;
+                  m_mesh_data->Convert(vertices, Color());
+                  m_vertex_buffer->Init(m_renderer, vertices, false);
+                  vertices.clear();
+              }
+              else if (m_vertex_type == eShaderType::Texture || m_vertex_type == eShaderType::TextureI)
+              {
+                  std::vector<TextureVertexCommon> vertices;
+                  m_mesh_data->Convert(vertices);
+                  m_vertex_buffer->Init(m_renderer, vertices, false);
+                  vertices.clear();
+              }
+              else if (m_vertex_type == eShaderType::Light || m_vertex_type == eShaderType::LightI)
+              {
+                  m_vertex_buffer->Init(m_renderer, m_mesh_data->vertices, false);
+              }*/
+
+            m_vertex_buffer->Init(m_renderer, m_mesh_data->vertices, false);
         }
     }
 
@@ -157,9 +159,9 @@ namespace Engine5
         m_instance_count = clear_idx;
     }
 
-    void Mesh2::SetShaderType(eShaderType type)
+    void Mesh2::SetShaderType(const std::string& shader_type)
     {
-        m_shader_type = type;
+        m_shader_type = shader_type;
     }
 
     void Mesh2::SetModelData(MeshData* data)
@@ -208,7 +210,7 @@ namespace Engine5
         m_material_id = material_id;
     }
 
-    eShaderType Mesh2::GetType() const
+    std::string Mesh2::GetShaderType() const
     {
         return m_shader_type;
     }
