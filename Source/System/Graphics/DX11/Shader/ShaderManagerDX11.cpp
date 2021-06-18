@@ -72,45 +72,94 @@ namespace Engine5
         m_resource_manager = resource_manager;
         m_renderer         = renderer;
 
-        m_color_vertex_layout = new VertexLayoutCommon();
-        m_color_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
-        m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+        //Color Vertex
+        {
+            m_color_vertex_layout = new VertexLayoutCommon();
+            m_color_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::VERTEX_DATA, 0, 0);
 
-        m_color_instancing_vertex_layout = new VertexLayoutCommon();
-        m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
-        m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::VERTEX_DATA, 0, 0);
-        m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_color_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_color_vertex_layout = new VertexLayoutCommon();
+            m_instancing_color_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_color_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
+        }
 
+        //Texture Vertex
+        {
+            m_texture_vertex_layout = new VertexLayoutCommon();
+            m_texture_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_texture_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
 
+            m_instancing_texture_vertex_layout = new VertexLayoutCommon();
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+        }
 
+        //Normal Vertex
+        {
+            m_normal_vertex_layout = new VertexLayoutCommon();
+            m_normal_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_normal_vertex_layout->PushDX11(eAttributeType::R32, 3, "NORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_normal_vertex_layout->PushDX11(eAttributeType::R32, 3, "TANGENT", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_normal_vertex_layout->PushDX11(eAttributeType::R32, 3, "BINORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
 
-        m_texture_vertex_layout = new VertexLayoutCommon();
-        m_texture_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
-        m_texture_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_normal_vertex_layout = new VertexLayoutCommon();
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 3, "NORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 3, "TANGENT", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 3, "BINORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
 
-        m_texture_instancing_vertex_layout = new VertexLayoutCommon();
-        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
-        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
-        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
-        m_texture_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_normal_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+        }
 
+        //Vertex - General
+        {
+            m_vertex_layout = new VertexLayoutCommon();
+            m_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_vertex_layout->PushDX11(eAttributeType::R32, 3, "NORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_vertex_layout->PushDX11(eAttributeType::R32, 3, "TANGENT", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_vertex_layout->PushDX11(eAttributeType::R32, 3, "BINORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
 
+            m_instancing_vertex_layout = new VertexLayoutCommon();
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 3, "NORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 3, "TANGENT", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 3, "BINORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+        }
 
         AddShader(L"Color.hlsl", m_color_vertex_layout);
-        AddShader(L"ColorInstancing.hlsl", m_color_instancing_vertex_layout);
+        AddShader(L"ColorInstancing.hlsl", m_instancing_color_vertex_layout);
         AddShader(L"Texture.hlsl", m_texture_vertex_layout);
-        AddShader(L"TextureInstancing.hlsl", m_texture_instancing_vertex_layout);
+        AddShader(L"TextureInstancing.hlsl", m_instancing_texture_vertex_layout);
     }
 
     void ShaderManagerCommon::Shutdown()
@@ -122,11 +171,11 @@ namespace Engine5
             m_texture_vertex_layout = nullptr;
         }
 
-        if (m_texture_instancing_vertex_layout != nullptr)
+        if (m_instancing_texture_vertex_layout != nullptr)
         {
-            m_texture_instancing_vertex_layout->Clear();
-            delete m_texture_instancing_vertex_layout;
-            m_texture_instancing_vertex_layout = nullptr;
+            m_instancing_texture_vertex_layout->Clear();
+            delete m_instancing_texture_vertex_layout;
+            m_instancing_texture_vertex_layout = nullptr;
         }
 
         if (m_color_vertex_layout != nullptr)
@@ -136,11 +185,39 @@ namespace Engine5
             m_color_vertex_layout = nullptr;
         }
 
-        if (m_color_instancing_vertex_layout != nullptr)
+        if (m_instancing_color_vertex_layout != nullptr)
         {
-            m_color_instancing_vertex_layout->Clear();
-            delete m_color_instancing_vertex_layout;
-            m_color_instancing_vertex_layout = nullptr;
+            m_instancing_color_vertex_layout->Clear();
+            delete m_instancing_color_vertex_layout;
+            m_instancing_color_vertex_layout = nullptr;
+        }
+
+        if (m_normal_vertex_layout != nullptr)
+        {
+            m_normal_vertex_layout->Clear();
+            delete m_normal_vertex_layout;
+            m_normal_vertex_layout = nullptr;
+        }
+
+        if (m_instancing_normal_vertex_layout != nullptr)
+        {
+            m_instancing_normal_vertex_layout->Clear();
+            delete m_instancing_normal_vertex_layout;
+            m_instancing_normal_vertex_layout = nullptr;
+        }
+
+        if (m_vertex_layout != nullptr)
+        {
+            m_vertex_layout->Clear();
+            delete m_vertex_layout;
+            m_vertex_layout = nullptr;
+        }
+
+        if (m_instancing_vertex_layout != nullptr)
+        {
+            m_instancing_vertex_layout->Clear();
+            delete m_instancing_vertex_layout;
+            m_instancing_vertex_layout = nullptr;
         }
 
         for (auto& [key, shader] : m_shader_table)

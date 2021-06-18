@@ -46,11 +46,13 @@ namespace Engine5
 
         //vertex layouts
         VertexLayoutCommon* m_color_vertex_layout              = nullptr;
-        VertexLayoutCommon* m_color_instancing_vertex_layout   = nullptr;
+        VertexLayoutCommon* m_instancing_color_vertex_layout   = nullptr;
         VertexLayoutCommon* m_texture_vertex_layout            = nullptr;
-        VertexLayoutCommon* m_texture_instancing_vertex_layout = nullptr;
-        VertexLayoutCommon* m_general_vertex_layout            = nullptr;
-        VertexLayoutCommon* m_general_instancing_vertex_layout = nullptr;
+        VertexLayoutCommon* m_instancing_texture_vertex_layout = nullptr;
+        VertexLayoutCommon* m_normal_vertex_layout             = nullptr;
+        VertexLayoutCommon* m_instancing_normal_vertex_layout  = nullptr;
+        VertexLayoutCommon* m_vertex_layout                    = nullptr;
+        VertexLayoutCommon* m_instancing_vertex_layout         = nullptr;
 
         //others
         RendererCommon*  m_renderer         = nullptr;
