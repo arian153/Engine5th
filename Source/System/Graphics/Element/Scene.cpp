@@ -41,12 +41,6 @@ namespace Engine5
         //primitive renderer
         m_primitive_renderer = new PrimitiveRenderer(m_renderer);
         m_primitive_renderer->Initialize(m_shader_manager->GetShader("Color"));
-        //deferred buffer
-        m_deferred_buffer = new DeferredBufferCommon();
-        m_deferred_buffer->Initialize(
-                                      m_renderer,
-                                      m_matrix_manager->GetScreenWidth(),
-                                      m_matrix_manager->GetScreenHeight());
         UpdateView();
         UpdateProjection();
 
@@ -58,11 +52,6 @@ namespace Engine5
 
         m_shader_manager->AddBuffer("Color", m_matrix_buffer);
         m_shader_manager->AddBuffer("ColorInstancing", m_matrix_instancing_buffer);
-
-        m_test_mesh = new Mesh2();
-        m_test_mesh->Initialize();
-        m_test_mesh->SetRenderer(m_renderer);
-        m_test_mesh->CreateBuffer();
     }
 
     void Scene::Update(Real dt)
@@ -86,38 +75,6 @@ namespace Engine5
 
         m_frustum.ConstructFrustum(m_matrix_manager->GetFarPlane(), mvp_data.projection, mvp_data.view);
         m_primitive_renderer->UpdateFrustum(m_frustum);
-        m_b_deferred_shading = false;
-        if (m_deferred_meshes.empty() == false)
-        {
-            m_b_deferred_shading = true;
-            // Set the render buffers to be the render target.
-            m_deferred_buffer->SetRenderTargets();
-            // Clear the render buffers.
-            m_deferred_buffer->ClearRenderTargets(Color(0.0f, 0.0f, 0.0f, 0.0f));
-            for (auto& camera : m_cameras)
-            {
-                camera->Update();
-                mvp_data.view = camera->GetViewMatrix();
-                for (auto& mesh : m_deferred_meshes)
-                {
-                    mvp_data.model = mesh->GetModelMatrix();
-                    auto type      = mesh->GetShaderType();
-                    switch (type)
-                    {
-                    case eShaderType::DeferredDirectionalLight:
-                        mesh->RenderBuffer();
-                        //m_shader_manager->RenderDeferredBufferShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
-                        break;
-                    default:
-                        break;
-                    }
-                }
-            }
-            // Reset the render target back to the original back buffer and not the render buffers anymore.
-            m_renderer->SetBackBufferRenderTarget();
-            // Reset the viewport back to the original.
-            m_renderer->ResetViewport();
-        }
         for (auto& particle : m_particle_emitters)
         {
             particle->Update(dt);
@@ -145,108 +102,28 @@ namespace Engine5
         }
         mvp_data.projection = m_projection_matrix;
 
-        m_shader_manager->Bind("ColorInstancing");
-        m_test_mesh->Render();
-
-        for (auto& camera : m_cameras)
-        {
-            camera->Update();
-            mvp_data.view = camera->GetViewMatrix();
-
-            for (auto& mesh : m_other_meshes)
-            {
-                mvp_data.model = mesh->GetModelMatrix();
-                auto type      = mesh->GetShaderType();
-                /*   if (type == eShaderType::Color)
-                   {
-                       mesh->RenderBuffer();
-                       m_shader_manager->RenderColorShader(mesh->GetIndexCount(), mvp_data);
-                   }
-                   else if (type == eShaderType::Texture)
-                   {
-                       mesh->RenderBuffer();
-                       m_shader_manager->RenderTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTexture(), mesh->GetColor());
-                   }
-                   else if (type == eShaderType::MultiTexture)
-                   {
-                       mesh->RenderBuffer();
-                       m_shader_manager->RenderMultiTextureShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor(), 1.7f);
-                   }
-                   else if (type == eShaderType::AlphaMapping)
-                   {
-                       mesh->RenderBuffer();
-                       m_shader_manager->RenderAlphaMappingShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor());
-                   }
-                   else if (type == eShaderType::LightMapping)
-                   {
-                       mesh->RenderBuffer();
-                       m_shader_manager->RenderLightMappingShader(mesh->GetIndexCount(), mvp_data, mesh->GetTextureArray(), mesh->GetColor());
-                   }*/
-            }
-            for (auto& mesh : m_forward_meshes)
-            {
-                mvp_data.model = mesh->GetModelMatrix();
-                auto type      = mesh->GetShaderType();
-                for (DirectionalLight* directional_light : m_directional_lights)
-                {
-                    /* if (type == eShaderType::ForwardDirectionalLight)
-                     {
-                         mesh->RenderBuffer();
-                         m_shader_manager->RenderForwardDirectionalLightShader(
-                                                                               mesh->GetIndexCount(),
-                                                                               mvp_data,
-                                                                               mesh->GetTexture(),
-                                                                               camera,
-                                                                               mesh->GetColor(),
-                                                                               directional_light
-                                                                              );
-                     }
-                     else if (type == eShaderType::NormalMapping)
-                     {
-                         mesh->RenderBuffer();
-                         m_shader_manager->RenderNormalMappingShader(
-                                                                     mesh->GetIndexCount(),
-                                                                     mvp_data,
-                                                                     mesh->GetTextureArray(),
-                                                                     mesh->GetColor(),
-                                                                     directional_light
-                                                                    );
-                     }
-                     else if (type == eShaderType::SpecularMapping)
-                     {
-                         mesh->RenderBuffer();
-                         m_shader_manager->RenderSpecularMappingShader(
-                                                                       mesh->GetIndexCount(),
-                                                                       mvp_data,
-                                                                       mesh->GetTextureArray(),
-                                                                       camera,
-                                                                       mesh->GetColor(),
-                                                                       directional_light
-                                                                      );
-                     }*/
-                }
-            }
-            /*  for (auto& text_sprite : m_text_sprites)
-              {
-                  mvp_data.model = text_sprite->GetModelMatrix();
-                  text_sprite->Render();
-                  m_shader_manager->RenderTextureShader(
-                                                        text_sprite->GetIndexCount(),
-                                                        mvp_data,
-                                                        text_sprite->GetTexture(),
-                                                        text_sprite->GetColor());
-              }
-              for (auto& particle : m_particle_emitters)
-              {
-                  mvp_data.model = particle->GetModelMatrix();
-                  particle->SetBillboardPosition(camera->GetPosition());
-                  m_shader_manager->RenderInstanceTextureShader(
-                                                                mvp_data,
-                                                                particle->GetTexture(),
-                                                                ColorDef::Pure::White);
-                  particle->Render();
-              }*/
-        }
+        //m_shader_manager->Bind("ColorInstancing");
+        //m_test_mesh->Render();
+        //for (auto& text_sprite : m_text_sprites)
+        //{
+        //    mvp_data.model = text_sprite->GetModelMatrix();
+        //    text_sprite->Render();
+        //    m_shader_manager->RenderTextureShader(
+        //                                          text_sprite->GetIndexCount(),
+        //                                          mvp_data,
+        //                                          text_sprite->GetTexture(),
+        //                                          text_sprite->GetColor());
+        //}
+        //for (auto& particle : m_particle_emitters)
+        //{
+        //    mvp_data.model = particle->GetModelMatrix();
+        //    particle->SetBillboardPosition(camera->GetPosition());
+        //    m_shader_manager->RenderInstanceTextureShader(
+        //                                                  mvp_data,
+        //                                                  particle->GetTexture(),
+        //                                                  ColorDef::Pure::White);
+        //    particle->Render();
+        //}
     }
 
     void Scene::Shutdown()
@@ -259,13 +136,50 @@ namespace Engine5
             m_matrix_instancing_buffer->Shutdown();
             delete m_matrix_instancing_buffer;
             m_matrix_instancing_buffer = nullptr;
-
-            m_test_mesh->Shutdown();
-            delete m_test_mesh;
-            m_test_mesh = nullptr;
         }
 
-        //clear Meshes
+        m_matrix_manager->RemoveScene(this);
+        if (m_primitive_renderer != nullptr)
+        {
+            m_primitive_renderer->Shutdown();
+            delete m_primitive_renderer;
+            m_primitive_renderer = nullptr;
+        }
+
+        //clear cameras
+        {
+            for (auto& camera : m_cameras)
+            {
+                camera->Shutdown();
+                delete camera;
+                camera = nullptr;
+            }
+            m_cameras.clear();
+        }
+
+        //clear text sprites
+        {
+            for (auto& text_sprite : m_text_sprites)
+            {
+                text_sprite->Shutdown();
+                delete text_sprite;
+                text_sprite = nullptr;
+            }
+            m_text_sprites.clear();
+        }
+
+        //clear particle emitters
+        {
+            for (auto& particle : m_particle_emitters)
+            {
+                particle->Shutdown();
+                delete particle;
+                particle = nullptr;
+            }
+            m_particle_emitters.clear();
+        }
+
+        //clear meshes
         {
             for (auto& [fst1, mesh_table] : m_mesh_table)
             {
@@ -282,90 +196,6 @@ namespace Engine5
             m_meshes.clear();
             m_mesh_components.clear();
         }
-
-        m_matrix_manager->RemoveScene(this);
-        if (m_primitive_renderer != nullptr)
-        {
-            m_primitive_renderer->Shutdown();
-            delete m_primitive_renderer;
-            m_primitive_renderer = nullptr;
-        }
-        if (m_deferred_buffer != nullptr)
-        {
-            m_deferred_buffer->Shutdown();
-            delete m_deferred_buffer;
-            m_deferred_buffer = nullptr;
-        }
-        for (auto& camera : m_cameras)
-        {
-            camera->Shutdown();
-            delete camera;
-            camera = nullptr;
-        }
-        m_cameras.clear();
-        for (auto& mesh : m_forward_meshes)
-        {
-            mesh->Shutdown();
-            delete mesh;
-            mesh = nullptr;
-        }
-        m_forward_meshes.clear();
-        for (auto& mesh : m_deferred_meshes)
-        {
-            mesh->Shutdown();
-            delete mesh;
-            mesh = nullptr;
-        }
-        m_deferred_meshes.clear();
-        for (auto& mesh : m_other_meshes)
-        {
-            mesh->Shutdown();
-            delete mesh;
-            mesh = nullptr;
-        }
-        m_other_meshes.clear();
-        for (auto& light : m_directional_lights)
-        {
-            light->Shutdown();
-            delete light;
-            light = nullptr;
-        }
-        m_directional_lights.clear();
-        for (auto& light : m_point_lights)
-        {
-            light->Shutdown();
-            delete light;
-            light = nullptr;
-        }
-        m_point_lights.clear();
-        for (auto& light : m_spot_lights)
-        {
-            light->Shutdown();
-            delete light;
-            light = nullptr;
-        }
-        m_spot_lights.clear();
-        for (auto& light : m_capsule_lights)
-        {
-            light->Shutdown();
-            delete light;
-            light = nullptr;
-        }
-        m_capsule_lights.clear();
-        for (auto& text_sprite : m_text_sprites)
-        {
-            text_sprite->Shutdown();
-            delete text_sprite;
-            text_sprite = nullptr;
-        }
-        m_text_sprites.clear();
-        for (auto& particle : m_particle_emitters)
-        {
-            particle->Shutdown();
-            delete particle;
-            particle = nullptr;
-        }
-        m_particle_emitters.clear();
     }
 
     void Scene::SetRenderer(RendererCommon* renderer)
@@ -446,12 +276,12 @@ namespace Engine5
 
     void Scene::OnResize() const
     {
-        if (m_deferred_buffer != nullptr)
-        {
-            m_deferred_buffer->OnResize(
-                                        m_matrix_manager->GetScreenWidth(),
-                                        m_matrix_manager->GetScreenHeight());
-        }
+        /* if (m_deferred_buffer != nullptr)
+         {
+             m_deferred_buffer->OnResize(
+                                         m_matrix_manager->GetScreenWidth(),
+                                         m_matrix_manager->GetScreenHeight());
+         }*/
     }
 
     PrimitiveRenderer* Scene::GetPrimitiveRenderer() const
@@ -572,45 +402,6 @@ namespace Engine5
         return camera;
     }
 
-    Mesh* Scene::AddMesh(Mesh* mesh)
-    {
-        auto lighting = mesh->GetLightingMethod();
-        if (lighting == eLightingMethod::Deferred)
-        {
-            m_deferred_meshes.push_back(mesh);
-        }
-        else if (lighting == eLightingMethod::Forward)
-        {
-            m_forward_meshes.push_back(mesh);
-        }
-        else
-        {
-            m_other_meshes.push_back(mesh);
-        }
-        mesh->SetRenderer(m_renderer);
-        return mesh;
-    }
-
-    void Scene::AddLight(DirectionalLight* light)
-    {
-        m_directional_lights.push_back(light);
-    }
-
-    void Scene::AddLight(PointLight* light)
-    {
-        m_point_lights.push_back(light);
-    }
-
-    void Scene::AddLight(SpotLight* light)
-    {
-        m_spot_lights.push_back(light);
-    }
-
-    void Scene::AddLight(CapsuleLight* light)
-    {
-        m_capsule_lights.push_back(light);
-    }
-
     void Scene::AddTextSprite(TextSprite* text_sprite)
     {
         m_text_sprites.push_back(text_sprite);
@@ -627,62 +418,6 @@ namespace Engine5
         m_cameras.erase(found);
     }
 
-    void Scene::RemoveMesh(Mesh* mesh)
-    {
-        if (mesh != nullptr)
-        {
-            auto lighting = mesh->GetLightingMethod();
-            if (lighting == eLightingMethod::Deferred)
-            {
-                if (m_deferred_meshes.empty() == false)
-                {
-                    auto found = std::find(m_deferred_meshes.begin(), m_deferred_meshes.end(), mesh);
-                    m_deferred_meshes.erase(found);
-                }
-            }
-            else if (lighting == eLightingMethod::Forward)
-            {
-                if (m_forward_meshes.empty() == false)
-                {
-                    auto found = std::find(m_forward_meshes.begin(), m_forward_meshes.end(), mesh);
-                    m_forward_meshes.erase(found);
-                }
-            }
-            else
-            {
-                if (m_other_meshes.empty() == false)
-                {
-                    auto found = std::find(m_other_meshes.begin(), m_other_meshes.end(), mesh);
-                    m_other_meshes.erase(found);
-                }
-            }
-        }
-    }
-
-    void Scene::RemoveLight(DirectionalLight* light)
-    {
-        auto found = std::find(m_directional_lights.begin(), m_directional_lights.end(), light);
-        m_directional_lights.erase(found);
-    }
-
-    void Scene::RemoveLight(PointLight* light)
-    {
-        auto found = std::find(m_point_lights.begin(), m_point_lights.end(), light);
-        m_point_lights.erase(found);
-    }
-
-    void Scene::RemoveLight(SpotLight* light)
-    {
-        auto found = std::find(m_spot_lights.begin(), m_spot_lights.end(), light);
-        m_spot_lights.erase(found);
-    }
-
-    void Scene::RemoveLight(CapsuleLight* light)
-    {
-        auto found = std::find(m_capsule_lights.begin(), m_capsule_lights.end(), light);
-        m_capsule_lights.erase(found);
-    }
-
     void Scene::RemoveTextSprite(TextSprite* text_sprite)
     {
         auto found = std::find(m_text_sprites.begin(), m_text_sprites.end(), text_sprite);
@@ -693,46 +428,6 @@ namespace Engine5
     {
         auto found = std::find(m_particle_emitters.begin(), m_particle_emitters.end(), particle_emitter);
         m_particle_emitters.erase(found);
-    }
-
-    void Scene::ChangeShaderType(Mesh* mesh)
-    {
-        //remove
-        auto found_forward = std::find(m_forward_meshes.begin(), m_forward_meshes.end(), mesh);
-        if (found_forward != m_forward_meshes.end())
-        {
-            m_forward_meshes.erase(found_forward);
-        }
-        else
-        {
-            auto found_deferred = std::find(m_deferred_meshes.begin(), m_deferred_meshes.end(), mesh);
-            if (found_deferred != m_deferred_meshes.end())
-            {
-                m_deferred_meshes.erase(found_deferred);
-            }
-            else
-            {
-                auto found_others = std::find(m_other_meshes.begin(), m_other_meshes.end(), mesh);
-                if (found_others != m_other_meshes.end())
-                {
-                    m_other_meshes.erase(found_others);
-                }
-            }
-        }
-        //add
-        auto lighting = mesh->GetLightingMethod();
-        if (lighting == eLightingMethod::Deferred)
-        {
-            m_deferred_meshes.push_back(mesh);
-        }
-        else if (lighting == eLightingMethod::Forward)
-        {
-            m_forward_meshes.push_back(mesh);
-        }
-        else
-        {
-            m_other_meshes.push_back(mesh);
-        }
     }
 
     void Scene::InitializeTextSprite(TextSprite* text_sprite) const

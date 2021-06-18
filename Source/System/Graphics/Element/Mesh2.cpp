@@ -57,8 +57,11 @@ namespace Engine5
 
     void Mesh2::Render() const
     {
-        m_vertex_buffer->Bind(0, m_instance_buffer);
-        m_index_buffer->Bind(0, m_instance_count);
+        if (m_instance_count > 0)
+        {
+            m_vertex_buffer->Bind(0, m_instance_buffer);
+            m_index_buffer->Bind(0, m_instance_count);
+        }
     }
 
     void Mesh2::CreateBuffer()
@@ -93,8 +96,11 @@ namespace Engine5
             ResizeInstanceBuffer(m_max_count);
         }
 
-        m_instances[m_instance_count].model = data.model;
-        m_instances[m_instance_count].color = data.color;
+        m_instances[m_instance_count].model    = data.model;
+        m_instances[m_instance_count].ambient  = data.ambient;
+        m_instances[m_instance_count].diffuse  = data.diffuse;
+        m_instances[m_instance_count].specular = data.specular;
+
         m_instance_count++;
     }
 
@@ -106,12 +112,14 @@ namespace Engine5
             ResizeInstanceBuffer(m_max_count);
         }
 
-        m_instances[m_instance_count].model = transform->LocalToWorldMatrix();
-        m_instances[m_instance_count].color = Color();
+        m_instances[m_instance_count].model    = transform->LocalToWorldMatrix();
+        m_instances[m_instance_count].ambient  = Color();
+        m_instances[m_instance_count].diffuse  = Color();
+        m_instances[m_instance_count].specular = Color();
         m_instance_count++;
     }
 
-    void Mesh2::AddInstance(Transform* transform, const Color& color)
+    void Mesh2::AddInstance(Transform* transform, const MaterialColor& color)
     {
         if (m_instance_count == m_max_count)
         {
@@ -119,8 +127,10 @@ namespace Engine5
             ResizeInstanceBuffer(m_max_count);
         }
 
-        m_instances[m_instance_count].model = transform->LocalToWorldMatrix();
-        m_instances[m_instance_count].color = color;
+        m_instances[m_instance_count].model    = transform->LocalToWorldMatrix();
+        m_instances[m_instance_count].ambient  = color.ambient;
+        m_instances[m_instance_count].diffuse  = color.diffuse;
+        m_instances[m_instance_count].specular = color.specular;
         m_instance_count++;
     }
 

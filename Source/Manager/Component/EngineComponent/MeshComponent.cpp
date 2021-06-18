@@ -36,7 +36,7 @@ namespace Engine5
 
         if (m_mesh != nullptr)
         {
-            m_mesh->AddInstance(m_transform, m_material_color.diffuse);
+            m_mesh->AddInstance(m_transform, m_material_color);
         }
     }
 

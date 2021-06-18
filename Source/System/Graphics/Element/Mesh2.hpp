@@ -29,8 +29,8 @@ namespace Engine5
 
         void AddInstance(const InstanceBufferData& data);
         void AddInstance(Transform* transform);
-        void AddInstance(Transform* transform, const Color& color);
-        void ClearCount(U32 clear_count = 0);
+        void AddInstance(Transform* transform, const MaterialColor& color);
+        void ClearCount(U32 clear_idx = 0);
 
         void SetModelData(MeshData* data);
         void AddTexture(TextureCommon* texture);

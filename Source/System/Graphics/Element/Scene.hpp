@@ -68,30 +68,19 @@ namespace Engine5
         Mesh2* GetMesh(size_t model_id, size_t material_id);
         Mesh2* AddMesh(const std::string& model_path, const MaterialTexture& material);
         Mesh2* AddMesh(MeshData* model_data, const MaterialTexture& material);
-        void AddMesh(MeshComponent* mesh_compo);
-        void RemoveMesh(MeshComponent* mesh_compo);
+        void   AddMesh(MeshComponent* mesh_compo);
+        void   RemoveMesh(MeshComponent* mesh_compo);
 
         //add
         Camera* AddCamera(Camera* camera);
-        Mesh*   AddMesh(Mesh* mesh);
-        void    AddLight(DirectionalLight* light);
-        void    AddLight(PointLight* light);
-        void    AddLight(SpotLight* light);
-        void    AddLight(CapsuleLight* light);
         void    AddTextSprite(TextSprite* text_sprite);
         void    AddParticleEmitter(ParticleEmitter* particle_emitter);
 
         //remove
         void RemoveCamera(Camera* camera);
-        void RemoveMesh(Mesh* mesh);
-        void RemoveLight(DirectionalLight* light);
-        void RemoveLight(PointLight* light);
-        void RemoveLight(SpotLight* light);
-        void RemoveLight(CapsuleLight* light);
         void RemoveTextSprite(TextSprite* text_sprite);
         void RemoveParticleEmitter(ParticleEmitter* particle_emitter);
 
-        void ChangeShaderType(Mesh* mesh);
         void InitializeTextSprite(TextSprite* text_sprite) const;
         void InitializeParticleEmitter(ParticleEmitter* particle_emitter) const;
 
@@ -104,30 +93,21 @@ namespace Engine5
         void UpdateMesh(Real dt);
 
     private:
-        RendererCommon*       m_renderer           = nullptr;
-        ShaderManagerCommon*  m_shader_manager     = nullptr;
-        MatrixManager*        m_matrix_manager     = nullptr;
-        ResourceManager*      m_resource_manager   = nullptr;
-        Camera*               m_main_camera        = nullptr;
-        PrimitiveRenderer*    m_primitive_renderer = nullptr;
-        DeferredBufferCommon* m_deferred_buffer    = nullptr;
-        TextRenderer*         m_text_renderer      = nullptr;
-        MaterialManager*      m_material_manager   = nullptr;
+        RendererCommon*      m_renderer           = nullptr;
+        ShaderManagerCommon* m_shader_manager     = nullptr;
+        MatrixManager*       m_matrix_manager     = nullptr;
+        ResourceManager*     m_resource_manager   = nullptr;
+        Camera*              m_main_camera        = nullptr;
+        PrimitiveRenderer*   m_primitive_renderer = nullptr;
+        TextRenderer*        m_text_renderer      = nullptr;
+        MaterialManager*     m_material_manager   = nullptr;
 
-        std::vector<Camera*>           m_cameras;
-        std::vector<Mesh*>             m_other_meshes;
-        std::vector<Mesh*>             m_forward_meshes;
-        std::vector<Mesh*>             m_deferred_meshes;
-        std::vector<DirectionalLight*> m_directional_lights;
-        std::vector<PointLight*>       m_point_lights;
-        std::vector<SpotLight*>        m_spot_lights;
-        std::vector<CapsuleLight*>     m_capsule_lights;
-        std::vector<TextSprite*>       m_text_sprites;
-        std::vector<ParticleEmitter*>  m_particle_emitters;
-
-        std::vector<MeshComponent*> m_mesh_components;
-        std::vector<Mesh2*>         m_meshes;
-        MeshTable                   m_mesh_table;
+        std::vector<Camera*>          m_cameras;
+        std::vector<TextSprite*>      m_text_sprites;
+        std::vector<ParticleEmitter*> m_particle_emitters;
+        std::vector<MeshComponent*>   m_mesh_components;
+        std::vector<Mesh2*>           m_meshes;
+        MeshTable                     m_mesh_table;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;
@@ -137,7 +117,6 @@ namespace Engine5
 
         bool m_b_deferred_shading = false;
 
-        Mesh2*                m_test_mesh                = nullptr;
         ConstantBufferCommon* m_matrix_buffer            = nullptr;
         ConstantBufferCommon* m_matrix_instancing_buffer = nullptr;
     };

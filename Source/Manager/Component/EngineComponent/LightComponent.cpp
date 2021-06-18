@@ -203,7 +203,7 @@ namespace Engine5
     {
         if (m_space != nullptr && m_light != nullptr)
         {
-            switch (m_light_type)
+           /* switch (m_light_type)
             {
             case eLightType::DirectionalLight:
                 m_space->GetScene()->AddLight(GetDirectionalLight());
@@ -220,7 +220,7 @@ namespace Engine5
             default:
                 m_space->GetScene()->AddLight(GetDirectionalLight());
                 break;
-            }
+            }*/
         }
     }
 
@@ -228,7 +228,7 @@ namespace Engine5
     {
         if (m_space != nullptr && m_light != nullptr)
         {
-            switch (m_light_type)
+           /* switch (m_light_type)
             {
             case eLightType::DirectionalLight:
                 m_space->GetScene()->RemoveLight(GetDirectionalLight());
@@ -245,7 +245,7 @@ namespace Engine5
             default:
                 m_space->GetScene()->RemoveLight(GetDirectionalLight());
                 break;
-            }
+            }*/
         }
     }
 

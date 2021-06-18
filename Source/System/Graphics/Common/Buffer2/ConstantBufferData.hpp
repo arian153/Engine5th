@@ -27,10 +27,10 @@ namespace Engine5
 
     struct LightBufferData
     {
-        Color ambient_color;
-        Color ambient_range;
-        Color diffuse_color;
-        Color specular_color;
+        Color   ambient_color;
+        Color   ambient_range;
+        Color   diffuse_color;
+        Color   specular_color;
         Real    specular_power;
         Vector3 direction;
         Vector3 position;
@@ -48,7 +48,6 @@ namespace Engine5
         Matrix44 proj;
     };
 
-
     struct MatrixBufferData
     {
         Matrix44 world;
@@ -59,7 +58,9 @@ namespace Engine5
     struct InstanceBufferData
     {
         Matrix44 model;
-        Color    color;
+        Color    ambient;
+        Color    diffuse;
+        Color    specular;
     };
 
     struct TextureBufferData

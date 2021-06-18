@@ -11,7 +11,9 @@ struct VertexInputType
     float4 position : POSITION;
     float4 color : COLOR;
     float4x4 world : WORLD;
-    float4 ins_color : COLOR1;
+    float4 ambient : COLOR1;
+    float4 diffuse : COLOR1;
+    float4 specular : COLOR1;
 };
 
 struct PixelInputType
@@ -29,7 +31,7 @@ PixelInputType VertexShaderEntry(VertexInputType input)
     output.position = mul(input.position, input.world);
     output.position = mul(output.position, view);
     output.position = mul(output.position, proj);
-    output.color = input.color * input.ins_color;
+    output.color = input.color * input.diffuse;
 
     return output;
 }
