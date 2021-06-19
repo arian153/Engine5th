@@ -1,4 +1,6 @@
 #include "Scene.hpp"
+
+#include "Light2.hpp"
 #include "../Common/Renderer/RendererCommon.hpp"
 #include "../Common/Shader/ShaderManagerCommon.hpp"
 #include "../Utility/MatrixManager.hpp"
@@ -175,6 +177,17 @@ namespace Engine5
                 particle = nullptr;
             }
             m_particle_emitters.clear();
+        }
+
+        //clear lights
+        {
+            for (auto& light : m_lights)
+            {
+                light->Shutdown();
+                delete light;
+                light = nullptr;
+            }
+            m_lights.clear();
         }
 
         //clear meshes
@@ -388,6 +401,17 @@ namespace Engine5
     {
         auto found = std::find(m_mesh_components.begin(), m_mesh_components.end(), mesh_compo);
         m_mesh_components.erase(found);
+    }
+
+    void Scene::AddLight(Light2* light)
+    {
+        m_lights.push_back(light);
+    }
+
+    void Scene::RemoveLight(Light2* light)
+    {
+        auto found = std::find(m_lights.begin(), m_lights.end(), light);
+        m_lights.erase(found);
     }
 
     Camera* Scene::AddCamera(Camera* camera)

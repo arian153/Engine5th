@@ -10,6 +10,14 @@ namespace Engine5
     {
     }
 
+    void Light2::Initialize()
+    {
+    }
+
+    void Light2::Shutdown()
+    {
+    }
+
     void Light2::SetAmbientColor(const Color& color)
     {
         m_ambient_color = color;

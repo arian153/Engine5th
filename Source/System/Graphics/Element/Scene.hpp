@@ -11,6 +11,7 @@
 
 namespace Engine5
 {
+    class Light2;
     class MeshData;
     struct MaterialTexture;
     class MaterialManager;
@@ -71,6 +72,9 @@ namespace Engine5
         void   AddMesh(MeshComponent* mesh_compo);
         void   RemoveMesh(MeshComponent* mesh_compo);
 
+        void AddLight(Light2* light);
+        void RemoveLight(Light2* light);
+
         //add
         Camera* AddCamera(Camera* camera);
         void    AddTextSprite(TextSprite* text_sprite);
@@ -108,6 +112,8 @@ namespace Engine5
         std::vector<MeshComponent*>   m_mesh_components;
         std::vector<Mesh2*>           m_meshes;
         MeshTable                     m_mesh_table;
+
+        std::vector<Light2*> m_lights;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;

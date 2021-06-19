@@ -12,6 +12,9 @@ namespace Engine5
         Light2();
         ~Light2();
 
+        void Initialize();
+        void Shutdown();
+
         void SetAmbientColor(const Color& color);
         void SetDiffuseColor(const Color& color);
         void SetSpecularColor(const Color& color);
