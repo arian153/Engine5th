@@ -15,7 +15,7 @@ namespace Engine5
     {
         if (m_component != nullptr)
         {
-            m_component->m_light = nullptr;
+            //m_component->m_light = nullptr;
         }
     }
 }

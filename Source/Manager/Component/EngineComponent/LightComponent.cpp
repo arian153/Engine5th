@@ -9,6 +9,7 @@
 #include "../../Space/Space.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
 #include "TransformComponent.hpp"
+#include "../../../System/Graphics/Element/Light2.hpp"
 #include "../../Object/Object.hpp"
 
 namespace Engine5
@@ -50,6 +51,7 @@ namespace Engine5
         if (m_light_type != type)
         {
             m_light_type = type;
+
             BuildLight();
         }
     }
@@ -61,66 +63,12 @@ namespace Engine5
             Unsubscribe();
             delete m_light;
         }
-        switch (m_light_type)
-        {
-        case eLightType::DirectionalLight:
-            m_light = new DirectionalLight();
-            break;
-        case eLightType::PointLight:
-            m_light = new PointLight();
-            break;
-        case eLightType::SpotLight:
-            m_light = new SpotLight();
-            break;
-        case eLightType::CapsuleLight:
-            m_light = new CapsuleLight();
-            break;
-        default:
-            m_light = new DirectionalLight();
-            break;
-        }
         m_light->Initialize();
-        m_light->m_component = this;
+        //m_light->m_component = this;
         Subscribe();
     }
 
-    DirectionalLight* LightComponent::GetDirectionalLight() const
-    {
-        if (m_light_type == eLightType::DirectionalLight)
-        {
-            return static_cast<DirectionalLight*>(m_light);
-        }
-        return nullptr;
-    }
-
-    PointLight* LightComponent::GetPointLight() const
-    {
-        if (m_light_type == eLightType::PointLight)
-        {
-            return static_cast<PointLight*>(m_light);
-        }
-        return nullptr;
-    }
-
-    SpotLight* LightComponent::GetSpotLight() const
-    {
-        if (m_light_type == eLightType::SpotLight)
-        {
-            return static_cast<SpotLight*>(m_light);
-        }
-        return nullptr;
-    }
-
-    CapsuleLight* LightComponent::GetCapsuleLight() const
-    {
-        if (m_light_type == eLightType::CapsuleLight)
-        {
-            return static_cast<CapsuleLight*>(m_light);
-        }
-        return nullptr;
-    }
-
-    Light* LightComponent::GetLight() const
+    Light2* LightComponent::GetLight() const
     {
         return m_light;
     }
@@ -203,24 +151,24 @@ namespace Engine5
     {
         if (m_space != nullptr && m_light != nullptr)
         {
-           /* switch (m_light_type)
-            {
-            case eLightType::DirectionalLight:
-                m_space->GetScene()->AddLight(GetDirectionalLight());
-                break;
-            case eLightType::PointLight:
-                m_space->GetScene()->AddLight(GetPointLight());
-                break;
-            case eLightType::SpotLight:
-                m_space->GetScene()->AddLight(GetSpotLight());
-                break;
-            case eLightType::CapsuleLight:
-                m_space->GetScene()->AddLight(GetCapsuleLight());
-                break;
-            default:
-                m_space->GetScene()->AddLight(GetDirectionalLight());
-                break;
-            }*/
+            /* switch (m_light_type)
+             {
+             case eLightType::DirectionalLight:
+                 m_space->GetScene()->AddLight(GetDirectionalLight());
+                 break;
+             case eLightType::PointLight:
+                 m_space->GetScene()->AddLight(GetPointLight());
+                 break;
+             case eLightType::SpotLight:
+                 m_space->GetScene()->AddLight(GetSpotLight());
+                 break;
+             case eLightType::CapsuleLight:
+                 m_space->GetScene()->AddLight(GetCapsuleLight());
+                 break;
+             default:
+                 m_space->GetScene()->AddLight(GetDirectionalLight());
+                 break;
+             }*/
         }
     }
 
@@ -228,24 +176,24 @@ namespace Engine5
     {
         if (m_space != nullptr && m_light != nullptr)
         {
-           /* switch (m_light_type)
-            {
-            case eLightType::DirectionalLight:
-                m_space->GetScene()->RemoveLight(GetDirectionalLight());
-                break;
-            case eLightType::PointLight:
-                m_space->GetScene()->RemoveLight(GetPointLight());
-                break;
-            case eLightType::SpotLight:
-                m_space->GetScene()->RemoveLight(GetSpotLight());
-                break;
-            case eLightType::CapsuleLight:
-                m_space->GetScene()->RemoveLight(GetCapsuleLight());
-                break;
-            default:
-                m_space->GetScene()->RemoveLight(GetDirectionalLight());
-                break;
-            }*/
+            /* switch (m_light_type)
+             {
+             case eLightType::DirectionalLight:
+                 m_space->GetScene()->RemoveLight(GetDirectionalLight());
+                 break;
+             case eLightType::PointLight:
+                 m_space->GetScene()->RemoveLight(GetPointLight());
+                 break;
+             case eLightType::SpotLight:
+                 m_space->GetScene()->RemoveLight(GetSpotLight());
+                 break;
+             case eLightType::CapsuleLight:
+                 m_space->GetScene()->RemoveLight(GetCapsuleLight());
+                 break;
+             default:
+                 m_space->GetScene()->RemoveLight(GetDirectionalLight());
+                 break;
+             }*/
         }
     }
 

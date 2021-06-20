@@ -1,18 +1,14 @@
 #pragma once
 #include "..//Component.hpp"
 #include "../../../System/Math/Utility/VectorDef.hpp"
-#include "../../../System/Graphics/Common/Light/Light.hpp"
 #include "../../../System/Graphics/Common/Light/LightDef.hpp"
 
 namespace Engine5
 {
+    class Light2;
     class Quaternion;
     class Vector3;
     class Transform;
-    class DirectionalLight;
-    class PointLight;
-    class SpotLight;
-    class CapsuleLight;
 
     class LightComponent final : public Component
     {
@@ -29,11 +25,7 @@ namespace Engine5
         void SetLightType(eLightType type);
         void BuildLight();
 
-        DirectionalLight* GetDirectionalLight() const;
-        PointLight* GetPointLight() const;
-        SpotLight* GetSpotLight() const;
-        CapsuleLight* GetCapsuleLight() const;
-        Light* GetLight() const;
+        Light2* GetLight() const;
 
     protected:
         bool Load(const Json::Value& data) override;
@@ -44,15 +36,15 @@ namespace Engine5
 
     private:
         friend class LightFactory;
-        friend class Light;
+        friend class Light2;
 
     private:
         explicit LightComponent(Object* owner);
         void     Clone(LightComponent* origin);
 
     private:
-        Light*     m_light     = nullptr;
-        Transform* m_transform = nullptr;
+        Light2*    m_light      = nullptr;
+        Transform* m_transform  = nullptr;
         eLightType m_light_type = eLightType::DirectionalLight;
     };
 }
