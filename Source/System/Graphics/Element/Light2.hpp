@@ -6,6 +6,8 @@
 
 namespace Engine5
 {
+    class LightComponent;
+
     class Light2
     {
     public:
@@ -13,7 +15,7 @@ namespace Engine5
         ~Light2();
 
         void Initialize();
-        void Shutdown();
+        void Shutdown() const;
 
         void SetAmbientColor(const Color& color);
         void SetDiffuseColor(const Color& color);
@@ -27,14 +29,15 @@ namespace Engine5
         void SetSpot(Real s);
 
         LightBufferData GetLightBuffer() const;
-        void GetLightBuffer(void* data) const;
+        void            GetLightBuffer(void* data) const;
     private:
-        eLightType m_type = eLightType::PointLight;
-        Color      m_ambient_color;
-        Color      m_ambient_range;
-        Color      m_diffuse_color;
-        Color      m_specular_color;
-        Real       m_specular_power = 1.0f;
+        LightComponent* m_component = nullptr;
+        eLightType      m_type      = eLightType::PointLight;
+        Color           m_ambient_color;
+        Color           m_ambient_range;
+        Color           m_diffuse_color;
+        Color           m_specular_color;
+        Real            m_specular_power = 1.0f;
 
         Vector3 m_direction;
         Vector3 m_position;

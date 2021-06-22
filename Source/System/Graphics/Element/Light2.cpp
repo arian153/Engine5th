@@ -1,5 +1,7 @@
 #include "Light2.hpp"
 
+#include "../../../Manager/Component/EngineComponent/LightComponent.hpp"
+
 namespace Engine5
 {
     Light2::Light2()
@@ -14,8 +16,12 @@ namespace Engine5
     {
     }
 
-    void Light2::Shutdown()
+    void Light2::Shutdown() const
     {
+        if (m_component != nullptr)
+        {
+            m_component->m_light = nullptr;
+        }
     }
 
     void Light2::SetAmbientColor(const Color& color)

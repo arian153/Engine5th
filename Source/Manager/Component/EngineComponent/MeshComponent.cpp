@@ -47,15 +47,14 @@ namespace Engine5
 
     bool MeshComponent::Load(const Json::Value& data)
     {
-        if (JsonResource::HasMember(data, "Material"))
+        if (JsonResource::HasMember(data, "Texture"))
         {
-            auto material    = data["Material"];
-            bool has_texture = false;
+            auto texture_data = data["Texture"];
 
-            if (JsonResource::HasMember(material, "Diffuse") && material["Diffuse"].isArray())
+            if (JsonResource::HasMember(texture_data, "Diffuse") && texture_data["Diffuse"].isArray())
             {
                 int idx = 0;
-                for (auto it = material["Diffuse"].begin(); it != material["Diffuse"].end(); ++it)
+                for (auto it = texture_data["Diffuse"].begin(); it != texture_data["Diffuse"].end(); ++it)
                 {
                     if ((*it).isString())
                     {
@@ -76,50 +75,35 @@ namespace Engine5
                 }
             }
 
-            if (JsonResource::HasMember(material, "Diffuse0"))
+            if (JsonResource::HasMember(texture_data, "Diffuse0"))
             {
-                if (material["Diffuse0"].isString())
+                if (texture_data["Diffuse0"].isString())
                 {
-                    m_material_texture.diffuse0 = material["Diffuse0"].asString();
-                    has_texture                 = true;
-                }
-                if (JsonResource::IsColor(material["Diffuse0"]))
-                {
-                    m_material_color.diffuse = JsonResource::AsColor(material["Diffuse0"]);
+                    m_material_texture.diffuse0 = texture_data["Diffuse0"].asString();
                 }
             }
 
-            if (JsonResource::HasMember(material, "Diffuse1"))
+            if (JsonResource::HasMember(texture_data, "Diffuse1"))
             {
-                if (material["Diffuse1"].isString())
+                if (texture_data["Diffuse1"].isString())
                 {
-                    m_material_texture.diffuse0 = material["Diffuse1"].asString();
-                    has_texture                 = true;
-                }
-                if (JsonResource::IsColor(material["Diffuse1"]))
-                {
-                    m_material_color.diffuse = JsonResource::AsColor(material["Diffuse1"]);
+                    m_material_texture.diffuse0 = texture_data["Diffuse1"].asString();
                 }
             }
 
-            if (JsonResource::HasMember(material, "Diffuse2"))
+            if (JsonResource::HasMember(texture_data, "Diffuse2"))
             {
-                if (material["Diffuse2"].isString())
+                if (texture_data["Diffuse2"].isString())
                 {
-                    m_material_texture.diffuse0 = material["Diffuse2"].asString();
-                    has_texture                 = true;
-                }
-                if (JsonResource::IsColor(material["Diffuse2"]))
-                {
-                    m_material_color.diffuse = JsonResource::AsColor(material["Diffuse2"]);
+                    m_material_texture.diffuse0 = texture_data["Diffuse2"].asString();
                 }
             }
 
-            if (JsonResource::HasMember(material, "DiffuseType"))
+            if (JsonResource::HasMember(texture_data, "DiffuseType"))
             {
                 if (data["DiffuseType"].isString())
                 {
-                    std::string type = material["DiffuseType"].asString();
+                    std::string type = texture_data["DiffuseType"].asString();
                     if (type == "Texture")
                     {
                         m_material_texture.diffuse_type = 0;
@@ -143,17 +127,12 @@ namespace Engine5
                 }
             }
 
-            if (JsonResource::HasMember(material, "Specular"))
+            if (JsonResource::HasMember(texture_data, "Specular"))
             {
-                if (material["Specular"].isString())
+                if (texture_data["Specular"].isString())
                 {
-                    m_material_texture.specular0     = material["Specular"].asString();
+                    m_material_texture.specular0     = texture_data["Specular"].asString();
                     m_material_texture.specular_type = 1;
-                }
-                if (JsonResource::IsColor(material["Specular"]))
-                {
-                    m_material_color.specular        = JsonResource::AsColor(material["Specular"]);
-                    m_material_texture.specular_type = 0;
                 }
             }
             else
@@ -161,11 +140,11 @@ namespace Engine5
                 m_material_texture.specular_type = 0;
             }
 
-            if (JsonResource::HasMember(material, "NormalMap"))
+            if (JsonResource::HasMember(texture_data, "NormalMap"))
             {
-                if (material["NormalMap"].isString())
+                if (texture_data["NormalMap"].isString())
                 {
-                    m_material_texture.normal0     = material["NormalMap"].asString();
+                    m_material_texture.normal0     = texture_data["NormalMap"].asString();
                     m_material_texture.normal_type = 1;
                 }
                 else
@@ -179,63 +158,48 @@ namespace Engine5
             }
         }
 
-        /* if (JsonResource::HasMember(data, "Shader Type") && data["Shader Type"].isString())
-         {
-             std::string shader = data["Shader Type"].asString();
-             if (shader == "Color")
-             {
-                 m_mesh->SetShaderType(eShaderType::Color);
-             }
-             else if (shader == "Texture")
-             {
-                 m_mesh->SetShaderType(eShaderType::Texture);
-             }
-             else if (shader == "Forward Directional Light")
-             {
-                 m_mesh->SetShaderType(eShaderType::ForwardDirectionalLight);
-             }
-             else if (shader == "Deferred Directional Light")
-             {
-                 m_mesh->SetShaderType(eShaderType::DeferredDirectionalLight);
-             }
-             else if (shader == "Multi Texture")
-             {
-                 m_mesh->SetShaderType(eShaderType::MultiTexture);
-             }
-             else if (shader == "Alpha Mapping")
-             {
-                 m_mesh->SetShaderType(eShaderType::AlphaMapping);
-             }
-             else if (shader == "Light Mapping")
-             {
-                 m_mesh->SetShaderType(eShaderType::LightMapping);
-             }
-             else if (shader == "Normal Mapping")
-             {
-                 m_mesh->SetShaderType(eShaderType::NormalMapping);
-             }
-             else if (shader == "Specular Mapping")
-             {
-                 m_mesh->SetShaderType(eShaderType::SpecularMapping);
-             }
-             if (m_space != nullptr && m_mesh != nullptr)
-             {
-                 m_space->GetScene()->ChangeShaderType(m_mesh);
-             }
-         }*/
-        //if (JsonResource::HasMember(data, "Mesh"))
-        //{
-        //    if (data["Mesh"].isString())
-        //    {
-        //        std::string mesh     = data["Mesh"].asString();
-        //        auto        resource = m_space->GetResourceManager()->GetMeshResource(ToWString(mesh));
-        //        m_mesh->SetMeshData(resource->GetMeshData());
-        //    }
-        //    else
-        //    {
-        //        //create mesh data from mesh generator
-        //    }
-        //}
+        if (JsonResource::HasMember(data, "Color"))
+        {
+            auto color_data = data["Color"];
+
+            if (JsonResource::IsColor(color_data["Ambient"]))
+            {
+                m_material_color.ambient = JsonResource::AsColor(color_data["Ambient"]);
+            }
+
+            if (JsonResource::IsColor(color_data["Diffuse"]))
+            {
+                m_material_color.diffuse = JsonResource::AsColor(color_data["Diffuse"]);
+            }
+
+            if (JsonResource::IsColor(color_data["Specular"]))
+            {
+                m_material_color.specular = JsonResource::AsColor(color_data["Specular"]);
+            }
+        }
+
+        if (JsonResource::HasMember(data, "Mesh"))
+        {
+            auto mesh_data = data["Mesh"];
+            std::string mesh_type;
+            if (JsonResource::HasMember(mesh_data, "Type"))
+            {
+                mesh_type = mesh_data["Type"].asString();
+            }
+
+
+
+            if (mesh_data["Path"].isString() && mesh_type == "File")
+            {
+                std::string mesh     = mesh_data["Path"].asString();
+                auto        resource = m_space->GetResourceManager()->GetMeshResource(ToWString(mesh));
+                //m_mesh->SetMeshData(resource->GetMeshData());
+            }
+            else
+            {
+                //create mesh data from mesh generator
+            }
+        }
         return true;
     }
 
