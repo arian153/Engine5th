@@ -30,6 +30,8 @@ namespace Engine5
 
         LightBufferData GetLightBuffer() const;
         void            GetLightBuffer(void* data) const;
+
+        void SetType(eLightType type);
     private:
         LightComponent* m_component = nullptr;
         eLightType      m_type      = eLightType::PointLight;

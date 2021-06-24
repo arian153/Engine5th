@@ -51,6 +51,7 @@ namespace Engine5
         if (m_light_type != type)
         {
             m_light_type = type;
+            m_light->SetType(type);
 
             BuildLight();
         }

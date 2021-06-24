@@ -107,4 +107,9 @@ namespace Engine5
         result->spot            = m_spot;
         result->type            = (int)m_type;
     }
+
+    void Light2::SetType(eLightType type)
+    {
+        m_type = type;
+    }
 }
