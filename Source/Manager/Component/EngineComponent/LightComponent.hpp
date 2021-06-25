@@ -23,7 +23,6 @@ namespace Engine5
         void Shutdown() override;
 
         void SetLightType(eLightType type);
-        void BuildLight();
 
         Light2* GetLight() const;
 
