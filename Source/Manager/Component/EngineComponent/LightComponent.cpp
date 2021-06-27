@@ -76,43 +76,48 @@ namespace Engine5
         }
         if (JsonResource::HasMember(data, "Ambient Color") && JsonResource::IsColor(data["Ambient Color"]))
         {
-            m_light->SetAmbientColor(JsonResource::AsColor(data["Ambient Color"]));
+            m_light->ambient_color = JsonResource::AsColor(data["Ambient Color"]);
+        }
+        if (JsonResource::HasMember(data, "Ambient Range") && JsonResource::IsColor(data["Ambient Range"]))
+        {
+            m_light->ambient_range = JsonResource::AsColor(data["Ambient Range"]);
         }
         if (JsonResource::HasMember(data, "Diffuse Color") && JsonResource::IsColor(data["Diffuse Color"]))
         {
-            m_light->SetDiffuseColor(JsonResource::AsColor(data["Diffuse Color"]));
+            m_light->diffuse_color = JsonResource::AsColor(data["Diffuse Color"]);
         }
         if (JsonResource::HasMember(data, "Specular Color") && JsonResource::IsColor(data["Specular Color"]))
         {
-            m_light->SetSpecularColor(JsonResource::AsColor(data["Specular Color"]));
+            m_light->specular_color = (JsonResource::AsColor(data["Specular Color"]));
         }
         if (JsonResource::HasMember(data, "Specular Power") && data["Specular Power"].isDouble())
         {
-            m_light->SetSpecularPower(data["Specular Power"].asFloat());
+            m_light->specular_power = (data["Specular Power"].asFloat());
         }
+
         if (JsonResource::HasMember(data, "Direction") && JsonResource::IsVector3(data["Direction"]))
         {
-            m_light->SetDirection(JsonResource::AsVector3(data["Direction"]));
+            m_light->direction = (JsonResource::AsVector3(data["Direction"]));
         }
         if (JsonResource::HasMember(data, "Position") && JsonResource::IsVector3(data["Position"]))
         {
-            m_light->SetPosition(JsonResource::AsVector3(data["Position"]));
+            m_light->position = (JsonResource::AsVector3(data["Position"]));
         }
         if (JsonResource::HasMember(data, "Attenuation") && JsonResource::IsVector3(data["Attenuation"]))
         {
-            m_light->SetAttenuation(JsonResource::AsVector3(data["Attenuation"]));
+            m_light->attenuation = (JsonResource::AsVector3(data["Attenuation"]));
         }
         if (JsonResource::HasMember(data, "Length") && data["Length"].isDouble())
         {
-            m_light->SetLength(data["Length"].asFloat());
+            m_light->length = (data["Length"].asFloat());
         }
         if (JsonResource::HasMember(data, "Range") && data["Range"].isDouble())
         {
-            m_light->SetRange(data["Range"].asFloat());
+            m_light->range = (data["Range"].asFloat());
         }
         if (JsonResource::HasMember(data, "Spot") && data["Spot"].isDouble())
         {
-            m_light->SetSpot(data["Spot"].asFloat());
+            m_light->spot = (data["Spot"].asFloat());
         }
         return true;
     }
