@@ -1,6 +1,8 @@
 #include "MeshResource.hpp"
 #include <fstream>
-#include "../../../System/Graphics/DataType/MeshFace.hpp"
+#include <sstream>
+
+#include "../../../System/Graphics/DataType/MeshInfo.hpp"
 #include "../../../System/Math/Algebra/Vector3.hpp"
 #include "../../../System/Math/Algebra/Vector2.hpp"
 #include "../../../System/Math/Primitive/ConvexHull2D/Triangle.hpp"
@@ -56,15 +58,15 @@ namespace Engine5
     {
         // Read in the vertices, texture coordinates, and normals into the data structures.
         // Important: Also convert to left hand coordinate system since Maya uses right hand coordinate system.
-        size_t                vertex_index = 0;
-        size_t                uv_index     = 0;
-        size_t                normal_index = 0;
-        size_t                face_index   = 0;
-        char                  input, input2;
-        std::vector<Vector3>  points;
-        std::vector<Vector3>  normals;
-        std::vector<Vector2>  uvs;
-        std::vector<MeshFace> faces;
+        size_t                         vertex_index = 0;
+        size_t                         uv_index     = 0;
+        size_t                         normal_index = 0;
+        size_t                         face_index   = 0;
+        char                           input, input2;
+        std::vector<Vector3>           points;
+        std::vector<Vector3>           normals;
+        std::vector<Vector2>           uvs;
+        std::vector<MeshFaceIndexInfo> faces;
         file.get(input);
         while (!file.eof())
         {
@@ -108,7 +110,7 @@ namespace Engine5
                 file.get(input);
                 if (input == ' ')
                 {
-                    MeshFace face;
+                    MeshFaceIndexInfo face;
                     // Read the face data in backwards to convert it to a left hand system from right hand system.
                     file >> face.vertex_index_c;
                     file.get(input2);
@@ -218,6 +220,155 @@ namespace Engine5
         }
     }
 
+    void MeshResource::LoadGeneralOBJ(std::ifstream& file)
+    {
+        std::string name = m_file_name_m;
+        //indices
+        size_t point_index  = 0;
+        size_t uv_index     = 0;
+        size_t normal_index = 0;
+        size_t face_index   = 0;
+        //container
+        std::vector<Vector3>            points;
+        std::vector<Vector3>            normals;
+        std::vector<Vector2>            uvs;
+        std::vector<MeshFaceIndexInfo>  faces;
+        std::vector<GeometryFaceIndex>  face_indices;
+        std::vector<GeometryPointIndex> point_indices;
+        //line, char
+        String line;
+        char   next_input;
+        while (std::getline(file, line))
+        {
+            String             text;
+            std::istringstream string_stream(line);
+            string_stream >> text;
+            // Read points.
+            if (text == "v")
+            {
+                Vector3 point;
+                string_stream >> point.x >> point.y >> point.z;
+                points.push_back(point);
+                point_indices.emplace_back(point_index);
+                point_index++;
+            }
+            // Read texture uv coordinates.
+            if (text == "vt")
+            {
+                Vector2 uv;
+                string_stream >> uv.x >> uv.y;
+                uv_index++;
+                uvs.push_back(uv);
+            }
+            // Read normals.
+            if (text == "vn")
+            {
+                Vector3 normal;
+                string_stream >> normal.x >> normal.y >> normal.z;
+                normal_index++;
+                normals.push_back(normal);
+            }
+            // Read faces.
+            if (text == "f")
+            {
+                size_t index_count = std::count(line.begin(), line.end(), ' ');
+                size_t slash_count = std::count(line.begin(), line.end(), '/');
+
+                std::vector<MeshVertexIndexInfo> model_indices;
+                size_t                           line_of_faces_size = index_count - 2;
+                model_indices.resize(index_count);
+                eOBJFaceType type = eOBJFaceType::Point;
+                if (slash_count == 0)
+                {
+                    type = eOBJFaceType::Point;
+                }
+                else if (slash_count == index_count)
+                {
+                    type = eOBJFaceType::PointTexture;
+                }
+                else if (slash_count == index_count * 2)
+                {
+                    if (line.find("//") != String::npos)
+                    {
+                        type = eOBJFaceType::PointNormal;
+                    }
+                    else
+                    {
+                        type = eOBJFaceType::PointTextureNormal;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+
+                for (size_t i = 0; i < index_count; ++i)
+                {
+                    if (type == eOBJFaceType::Point)
+                    {
+                        string_stream >> model_indices[i].point_index;
+                    }
+                    else if (type == eOBJFaceType::PointTexture)
+                    {
+                        string_stream >> model_indices[i].point_index;
+                        string_stream.get(next_input);
+                        string_stream >> model_indices[i].texture_index;
+                    }
+                    else if (type == eOBJFaceType::PointNormal)
+                    {
+                        string_stream >> model_indices[i].point_index;
+                        string_stream.get(next_input);
+                        string_stream.get(next_input);
+                        string_stream >> model_indices[i].normal_index;
+                    }
+                    else if (type == eOBJFaceType::PointTextureNormal)
+                    {
+                        string_stream >> model_indices[i].point_index;
+                        string_stream.get(next_input);
+                        string_stream >> model_indices[i].texture_index;
+                        string_stream.get(next_input);
+                        string_stream >> model_indices[i].normal_index;
+                    }
+                }
+                for (size_t i = 0; i < line_of_faces_size; ++i)
+                {
+                    faces.emplace_back(model_indices[0], model_indices[i + 1], model_indices[i + 2]);
+                }
+                face_index += line_of_faces_size;
+            }
+        }
+        //bool   b_uv      = !uvs.empty();
+        bool        b_normal  = !normals.empty();
+        size_t      index     = 0;
+        std::string test_name = m_file_name_m;
+        for (auto& face : faces)
+        {
+            VertexCommon vertex_a, vertex_b, vertex_c;
+            size_t       point_a = face.vertex_index_a - 1;
+            size_t       point_b = face.vertex_index_b - 1;
+            size_t       point_c = face.vertex_index_c - 1;
+            vertex_a.SetPosition(points[point_a]);
+            vertex_b.SetPosition(points[point_b]);
+            vertex_c.SetPosition(points[point_c]);
+            /* if (b_normal)
+             {
+                 if (face.normal_index_a > 0)
+                     vertex_a.n = normals[face.normal_index_a - 1];
+                 if (face.normal_index_b > 0)
+                     vertex_b.n = normals[face.normal_index_b - 1];
+                 if (face.normal_index_c > 0)
+                     vertex_c.n = normals[face.normal_index_c - 1];
+             }*/
+            //add adjacent faces
+            point_indices[point_a].faces.emplace_back(point_a, point_b, point_c);
+            point_indices[point_b].faces.emplace_back(point_a, point_b, point_c);
+            point_indices[point_c].faces.emplace_back(point_a, point_b, point_c);
+            //Add face normals both data
+            face_indices.emplace_back(point_a, point_b, point_c);
+            index += 3;
+        }
+    }
+
     void MeshResource::LoadCustomTXT(std::ifstream& file)
     {
         char input;
@@ -263,7 +414,7 @@ namespace Engine5
         {
             m_mesh_type = eMeshType::WaveFrontOBJ;
         }
-        else if(m_file_type_w == L".txtmdl")
+        else if (m_file_type_w == L".txtmdl")
         {
             m_mesh_type = eMeshType::CustomTXT;
         }

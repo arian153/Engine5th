@@ -5,7 +5,7 @@
 #include "DataType/Frustum.hpp"
 #include "DataType/MeshData.hpp"
 #include "DataType/MatrixData.hpp"
-#include "DataType/MeshFace.hpp"
+#include "DataType/MeshInfo.hpp"
 #include "DataType/Particle.hpp"
 #include "DataType/ProjectionType.hpp"
 #include "DataType/TopologyDef.hpp"

@@ -11,6 +11,14 @@ namespace Engine5
       , WaveFrontOBJ
     };
 
+    enum class eOBJFaceType
+    {
+        Point,
+        PointTexture,
+        PointNormal,
+        PointTextureNormal
+    };
+
     class MeshResource final : public Resource
     {
     public:
@@ -21,6 +29,7 @@ namespace Engine5
         void Shutdown() override;
 
         void LoadWaveFrontOBJ(std::ifstream& file);
+        void LoadGeneralOBJ(std::ifstream& file);
         void LoadCustomTXT(std::ifstream& file);
         void CheckMeshType();
 
