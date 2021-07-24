@@ -340,7 +340,7 @@ namespace Engine5
                 face_index += line_of_faces_size;
             }
         }
-        //bool   b_uv      = !uvs.empty();
+        bool        b_uv      = !uvs.empty();
         bool        b_normal  = !normals.empty();
         size_t      index     = 0;
         std::string test_name = m_file_name_m;
@@ -353,6 +353,15 @@ namespace Engine5
             vertex_a.SetPosition(points[point_a]);
             vertex_b.SetPosition(points[point_b]);
             vertex_c.SetPosition(points[point_c]);
+            if (b_uv)
+            {
+                if (face.uv_index_a > 0)
+                    vertex_a.SetUV(uvs[face.uv_index_a - 1]);
+                if (face.uv_index_b > 0)
+                    vertex_b.SetUV(uvs[face.uv_index_b - 1]);
+                if (face.uv_index_c > 0)
+                    vertex_c.SetUV(uvs[face.uv_index_c - 1]);
+            }
             if (b_normal)
             {
                 if (face.normal_index_a > 0)
