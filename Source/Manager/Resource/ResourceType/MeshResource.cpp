@@ -248,6 +248,7 @@ namespace Engine5
             {
                 Vector3 point;
                 string_stream >> point.x >> point.y >> point.z;
+                point.z = point.z * -1.0f;
                 points.push_back(point);
                 point_indices.emplace_back(point_index);
                 point_index++;
@@ -257,6 +258,7 @@ namespace Engine5
             {
                 Vector2 uv;
                 string_stream >> uv.x >> uv.y;
+                uv.y = 1.0f - uv.y;
                 uv_index++;
                 uvs.push_back(uv);
             }
@@ -265,6 +267,7 @@ namespace Engine5
             {
                 Vector3 normal;
                 string_stream >> normal.x >> normal.y >> normal.z;
+                normal.z = normal.z * -1.0f;
                 normal_index++;
                 normals.push_back(normal);
             }
@@ -332,7 +335,7 @@ namespace Engine5
                 }
                 for (size_t i = 0; i < line_of_faces_size; ++i)
                 {
-                    faces.emplace_back(model_indices[0], model_indices[i + 1], model_indices[i + 2]);
+                    faces.emplace_back(model_indices[i + 2], model_indices[i + 1], model_indices[0]);
                 }
                 face_index += line_of_faces_size;
             }
@@ -350,15 +353,15 @@ namespace Engine5
             vertex_a.SetPosition(points[point_a]);
             vertex_b.SetPosition(points[point_b]);
             vertex_c.SetPosition(points[point_c]);
-            /* if (b_normal)
-             {
-                 if (face.normal_index_a > 0)
-                     vertex_a.n = normals[face.normal_index_a - 1];
-                 if (face.normal_index_b > 0)
-                     vertex_b.n = normals[face.normal_index_b - 1];
-                 if (face.normal_index_c > 0)
-                     vertex_c.n = normals[face.normal_index_c - 1];
-             }*/
+            if (b_normal)
+            {
+                if (face.normal_index_a > 0)
+                    vertex_a.SetNormal(normals[face.normal_index_a - 1]);
+                if (face.normal_index_b > 0)
+                    vertex_b.SetNormal(normals[face.normal_index_b - 1]);
+                if (face.normal_index_c > 0)
+                    vertex_c.SetNormal(normals[face.normal_index_c - 1]);
+            }
             //add adjacent faces
             point_indices[point_a].faces.emplace_back(point_a, point_b, point_c);
             point_indices[point_b].faces.emplace_back(point_a, point_b, point_c);
@@ -367,6 +370,8 @@ namespace Engine5
             face_indices.emplace_back(point_a, point_b, point_c);
             index += 3;
         }
+
+        //process point based calculation
     }
 
     void MeshResource::LoadCustomTXT(std::ifstream& file)
