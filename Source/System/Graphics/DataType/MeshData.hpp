@@ -19,6 +19,8 @@ namespace Engine5
         void Convert(std::vector<TextureVertexCommon>& new_vertices);
         void Convert(std::vector<NormalVertexCommon>& new_vertices);
 
+        void Normalize(Vector3& min, Vector3& max);
+
     public:
         std::vector<VertexCommon> vertices;
         std::vector<U32>          indices;

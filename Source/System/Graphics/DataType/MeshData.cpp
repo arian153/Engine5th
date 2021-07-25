@@ -40,4 +40,33 @@ namespace Engine5
             new_vertices.emplace_back(vertex.GetPosition(), vertex.GetNormal(), vertex.GetTangent(), vertex.GetBinormal());
         }
     }
+
+    void MeshData::Normalize(Vector3& min, Vector3& max)
+    {
+        size_t size = vertices.size();
+        min         = vertices[0].GetPosition();
+        max         = vertices[0].GetPosition();
+        for (size_t i = 1; i < size; ++i)
+        {
+            Vector3 point = vertices[i].GetPosition();
+            min.x         = min.x > point.x ? point.x : min.x;
+            min.y         = min.y > point.y ? point.y : min.y;
+            min.z         = min.z > point.z ? point.z : min.z;
+            max.x         = max.x < point.x ? point.x : max.x;
+            max.y         = max.y < point.y ? point.y : max.y;
+            max.z         = max.z < point.z ? point.z : max.z;
+        }
+        Vector3 scale        = max - min;
+        Real    scale_factor = scale.x;
+        scale_factor         = scale_factor < scale.y ? scale.y : scale_factor;
+        scale_factor         = scale_factor < scale.z ? scale.z : scale_factor;
+        Real    vertex_scale = scale_factor == 0.0f ? 0.0f : 2.0f / scale_factor;
+        Vector3 center       = min + scale * 0.5f;
+        for (auto& vertex : vertices)
+        {
+            vertex.SetPosition(vertex_scale * (vertex.GetPosition() - center));
+        }
+        Real    normal_scale = scale_factor > vertex_scale ? vertex_scale : scale_factor * 0.1f;
+        Vector3 scale_center = vertex_scale * center;
+    }
 }
