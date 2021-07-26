@@ -43,10 +43,10 @@ namespace Engine5
 
     void MeshData::Normalize(Vector3& min, Vector3& max)
     {
-        size_t size = vertices.size();
-        min         = vertices[0].GetPosition();
-        max         = vertices[0].GetPosition();
-        for (size_t i = 1; i < size; ++i)
+        U32 size = (U32)vertices.size();
+        min      = vertices[0].GetPosition();
+        max      = vertices[0].GetPosition();
+        for (U32 i = 1; i < size; ++i)
         {
             Vector3 point = vertices[i].GetPosition();
             min.x         = min.x > point.x ? point.x : min.x;
@@ -68,5 +68,12 @@ namespace Engine5
         }
         Real    normal_scale = scale_factor > vertex_scale ? vertex_scale : scale_factor * 0.1f;
         Vector3 scale_center = vertex_scale * center;
+    }
+
+    Vector3 MeshData::GetFaceNormal(U32 a, U32 b, U32 c)
+    {
+        Vector3 edge_ab = vertices[b].GetPosition() - vertices[a].GetPosition();
+        Vector3 edge_ac = vertices[c].GetPosition() - vertices[a].GetPosition();
+        return CrossProduct(edge_ab, edge_ac).Normalize();
     }
 }

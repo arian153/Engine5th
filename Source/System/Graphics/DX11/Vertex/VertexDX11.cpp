@@ -55,6 +55,11 @@ namespace Engine5
         binormal   = ConverterDX11::ToXMFloat3(CrossProduct(Vector3(tx, ty, tz), Vector3(nx, ny, nz)).Normalize());
     }
 
+    VertexCommon::VertexCommon(const Vector3& p)
+    {
+        position = ConverterDX11::ToXMFloat3(p);
+    }
+
     VertexCommon::VertexCommon(const Vector3& p, const Vector2& _uv)
     {
         position = ConverterDX11::ToXMFloat3(p);

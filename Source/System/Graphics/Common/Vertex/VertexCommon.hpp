@@ -15,6 +15,8 @@ namespace Engine5
         VertexCommon(Real px, Real py, Real pz, Real u, Real v);
         VertexCommon(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz);
         VertexCommon(Real px, Real py, Real pz, Real u, Real v, Real nx, Real ny, Real nz, Real tx, Real ty, Real tz);
+
+        explicit VertexCommon(const Vector3& p);
         VertexCommon(const Vector3& p, const Vector2& _uv);
         VertexCommon(const Vector3& p, const Vector2& _uv, const Vector3& n);
         VertexCommon(const Vector3& p, const Vector2& _uv, const Vector3& n, const Vector3& t);

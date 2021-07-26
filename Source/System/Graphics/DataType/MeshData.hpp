@@ -20,6 +20,7 @@ namespace Engine5
         void Convert(std::vector<NormalVertexCommon>& new_vertices);
 
         void Normalize(Vector3& min, Vector3& max);
+        Vector3 GetFaceNormal(U32 a, U32 b, U32 c);
 
     public:
         std::vector<VertexCommon> vertices;

@@ -30,6 +30,7 @@ namespace Engine5
 
         void LoadWaveFrontOBJ(std::ifstream& file);
         void LoadGeneralOBJ(std::ifstream& file);
+        void LoadOBJOnlyPos(std::ifstream& file);
         void LoadCustomTXT(std::ifstream& file);
         void CheckMeshType();
 

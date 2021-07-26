@@ -383,6 +383,151 @@ namespace Engine5
         //process point based calculation
     }
 
+    void MeshResource::LoadOBJOnlyPos(std::ifstream& file)
+    {
+        std::string name = m_file_name_m;
+        //indices
+        U32 point_index = 0;
+        U32 face_index  = 0;
+        //container
+        std::vector<MeshFaceIndexInfo>  faces;
+        std::vector<GeometryFaceIndex>  face_indices;
+        std::vector<GeometryPointIndex> point_indices;
+        //line, char
+        String line;
+        char   next_input;
+        while (std::getline(file, line))
+        {
+            String             text;
+            std::istringstream string_stream(line);
+            string_stream >> text;
+            // Read points.
+            if (text == "v")
+            {
+                Vector3 point;
+                string_stream >> point.x >> point.y >> point.z;
+                point.z = point.z * -1.0f;
+                m_mesh_data.vertices.emplace_back(point);
+                point_indices.emplace_back(point_index);
+                point_index++;
+            }
+            // Read faces.
+            if (text == "f")
+            {
+                U32 index_count = (U32)std::count(line.begin(), line.end(), ' ');
+                U32 slash_count = (U32)std::count(line.begin(), line.end(), '/');
+
+                std::vector<MeshVertexIndexInfo> model_indices;
+                U32                           line_of_faces_size = index_count - 2;
+                model_indices.resize(index_count);
+                eOBJFaceType type = eOBJFaceType::Point;
+                if (slash_count == 0)
+                {
+                    type = eOBJFaceType::Point;
+                }
+                else if (slash_count == index_count)
+                {
+                    type = eOBJFaceType::PointTexture;
+                }
+                else if (slash_count == index_count * 2)
+                {
+                    if (line.find("//") != String::npos)
+                    {
+                        type = eOBJFaceType::PointNormal;
+                    }
+                    else
+                    {
+                        type = eOBJFaceType::PointTextureNormal;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+
+                for (U32 i = 0; i < index_count; ++i)
+                {
+                    if (type == eOBJFaceType::Point)
+                    {
+                        string_stream >> model_indices[i].point_index;
+                    }
+                    else if (type == eOBJFaceType::PointTexture)
+                    {
+                        string_stream >> model_indices[i].point_index;
+                        string_stream.get(next_input);
+                        string_stream >> model_indices[i].texture_index;
+                    }
+                    else if (type == eOBJFaceType::PointNormal)
+                    {
+                        string_stream >> model_indices[i].point_index;
+                        string_stream.get(next_input);
+                        string_stream.get(next_input);
+                        string_stream >> model_indices[i].normal_index;
+                    }
+                    else if (type == eOBJFaceType::PointTextureNormal)
+                    {
+                        string_stream >> model_indices[i].point_index;
+                        string_stream.get(next_input);
+                        string_stream >> model_indices[i].texture_index;
+                        string_stream.get(next_input);
+                        string_stream >> model_indices[i].normal_index;
+                    }
+                }
+                for (U32 i = 0; i < line_of_faces_size; ++i)
+                {
+                    faces.emplace_back(model_indices[i + 2], model_indices[i + 1], model_indices[0]);
+                }
+                face_index += line_of_faces_size;
+            }
+        }
+        U32      index     = 0;
+        std::string test_name = m_file_name_m;
+        for (auto& face : faces)
+        {
+            //set index start from 0.
+            U32 point_a = face.vertex_index_a - 1;
+            U32 point_b = face.vertex_index_b - 1;
+            U32 point_c = face.vertex_index_c - 1;
+            //add adjacent faces
+            point_indices[point_a].faces.emplace_back(point_a, point_b, point_c);
+            point_indices[point_b].faces.emplace_back(point_a, point_b, point_c);
+            point_indices[point_c].faces.emplace_back(point_a, point_b, point_c);
+            //Add face normals both data
+            face_indices.emplace_back(point_a, point_b, point_c);
+
+            m_mesh_data.indices.push_back(point_a);
+            m_mesh_data.indices.push_back(point_b);
+            m_mesh_data.indices.push_back(point_c);
+            index += 3;
+        }
+        Vector3 min, max;
+        m_mesh_data.Normalize(min, max);
+
+        //Calculate Vertex Normal
+        std::vector<Vector3> normals;
+        Vector3         accumulated_normal;
+        for (auto& point : point_indices)
+        {
+            normals.clear();
+            accumulated_normal.SetZero();
+            for (auto& face : point.faces)
+            {
+                Vector3 normal = m_mesh_data.GetFaceNormal(face.a, face.b, face.c);
+                auto      found = std::find(normals.begin(), normals.end(), normal);
+                if (found == normals.end())
+                {
+                    accumulated_normal += normal;
+                    normals.push_back(normal);
+                }
+            }
+            m_mesh_data.vertices[point.index].SetNormal(accumulated_normal.Normalize());
+            m_mesh_data.vertices[point.index].CalculateTangentAndBinormal();
+        }
+
+        //Calculate Planar UV Mapping
+        
+    }
+
     void MeshResource::LoadCustomTXT(std::ifstream& file)
     {
         char input;

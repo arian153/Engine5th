@@ -15,7 +15,6 @@
 #include "Element/Scene.hpp"
 
 #include "Common/Element/Mesh.hpp"
-#include "Common/Element/TextSprite.hpp"
 
 #include "Common/Renderer/RendererCommon.hpp"
 #include "Common/Texture/TextureArrayCommon.hpp"
