@@ -112,12 +112,12 @@ namespace Engine5
                 {
                     MeshFaceIndexInfo face;
                     // Read the face data in backwards to convert it to a left hand system from right hand system.
-                    file >> face.vertex_index_c;
+                    file >> face.point_index_c;
                     file.get(input2);
                     if (input2 == ' ')
                     {
-                        file >> face.vertex_index_b;
-                        file >> face.vertex_index_a;
+                        file >> face.point_index_b;
+                        file >> face.point_index_a;
                     }
                     else if (input2 == '/')
                     {
@@ -129,22 +129,22 @@ namespace Engine5
                             file.get(input2);
                             if (input2 == ' ')
                             {
-                                file >> face.vertex_index_b;
+                                file >> face.point_index_b;
                                 file.get(input2);
                                 file >> face.uv_index_b;
-                                file >> face.vertex_index_a;
+                                file >> face.point_index_a;
                                 file.get(input2);
                                 file >> face.uv_index_a;
                             }
                             else if (input2 == '/')
                             {
                                 file >> face.normal_index_c;
-                                file >> face.vertex_index_b;
+                                file >> face.point_index_b;
                                 file.get(input2);
                                 file >> face.uv_index_b;
                                 file.get(input2);
                                 file >> face.normal_index_b;
-                                file >> face.vertex_index_a;
+                                file >> face.point_index_a;
                                 file.get(input2);
                                 file >> face.uv_index_a;
                                 file.get(input2);
@@ -154,11 +154,11 @@ namespace Engine5
                         else
                         {
                             file >> face.normal_index_c;
-                            file >> face.vertex_index_b;
+                            file >> face.point_index_b;
                             file.get(input2);
                             file.get(input2);
                             file >> face.normal_index_b;
-                            file >> face.vertex_index_a;
+                            file >> face.point_index_a;
                             file.get(input2);
                             file.get(input2);
                             file >> face.normal_index_a;
@@ -185,9 +185,9 @@ namespace Engine5
         for (auto& face : faces)
         {
             VertexCommon vertex_a, vertex_b, vertex_c;
-            vertex_a.SetPosition(points[face.vertex_index_a - 1]);
-            vertex_b.SetPosition(points[face.vertex_index_b - 1]);
-            vertex_c.SetPosition(points[face.vertex_index_c - 1]);
+            vertex_a.SetPosition(points[face.point_index_a - 1]);
+            vertex_b.SetPosition(points[face.point_index_b - 1]);
+            vertex_c.SetPosition(points[face.point_index_c - 1]);
             if (b_uv)
             {
                 vertex_a.SetUV(uvs[face.uv_index_a - 1]);
@@ -224,7 +224,7 @@ namespace Engine5
     {
         std::string name = m_file_name_m;
         //indices
-        size_t point_index  = 0;
+        U32    point_index  = 0;
         size_t uv_index     = 0;
         size_t normal_index = 0;
         size_t face_index   = 0;
@@ -315,7 +315,7 @@ namespace Engine5
                     {
                         string_stream >> model_indices[i].point_index;
                         string_stream.get(next_input);
-                        string_stream >> model_indices[i].texture_index;
+                        string_stream >> model_indices[i].uv_index;
                     }
                     else if (type == eOBJFaceType::PointNormal)
                     {
@@ -328,7 +328,7 @@ namespace Engine5
                     {
                         string_stream >> model_indices[i].point_index;
                         string_stream.get(next_input);
-                        string_stream >> model_indices[i].texture_index;
+                        string_stream >> model_indices[i].uv_index;
                         string_stream.get(next_input);
                         string_stream >> model_indices[i].normal_index;
                     }
@@ -347,9 +347,9 @@ namespace Engine5
         for (auto& face : faces)
         {
             VertexCommon vertex_a, vertex_b, vertex_c;
-            size_t       point_a = face.vertex_index_a - 1;
-            size_t       point_b = face.vertex_index_b - 1;
-            size_t       point_c = face.vertex_index_c - 1;
+            U32          point_a = face.point_index_a - 1;
+            U32          point_b = face.point_index_b - 1;
+            U32          point_c = face.point_index_c - 1;
             vertex_a.SetPosition(points[point_a]);
             vertex_b.SetPosition(points[point_b]);
             vertex_c.SetPosition(points[point_c]);
@@ -418,7 +418,7 @@ namespace Engine5
                 U32 slash_count = (U32)std::count(line.begin(), line.end(), '/');
 
                 std::vector<MeshVertexIndexInfo> model_indices;
-                U32                           line_of_faces_size = index_count - 2;
+                U32                              line_of_faces_size = index_count - 2;
                 model_indices.resize(index_count);
                 eOBJFaceType type = eOBJFaceType::Point;
                 if (slash_count == 0)
@@ -455,7 +455,7 @@ namespace Engine5
                     {
                         string_stream >> model_indices[i].point_index;
                         string_stream.get(next_input);
-                        string_stream >> model_indices[i].texture_index;
+                        string_stream >> model_indices[i].uv_index;
                     }
                     else if (type == eOBJFaceType::PointNormal)
                     {
@@ -468,26 +468,26 @@ namespace Engine5
                     {
                         string_stream >> model_indices[i].point_index;
                         string_stream.get(next_input);
-                        string_stream >> model_indices[i].texture_index;
+                        string_stream >> model_indices[i].uv_index;
                         string_stream.get(next_input);
                         string_stream >> model_indices[i].normal_index;
                     }
                 }
-                for (U32 i = 0; i < line_of_faces_size; ++i)
+                for (size_t i = 0; i < line_of_faces_size; ++i)
                 {
                     faces.emplace_back(model_indices[i + 2], model_indices[i + 1], model_indices[0]);
                 }
                 face_index += line_of_faces_size;
             }
         }
-        U32      index     = 0;
+        U32         index     = 0;
         std::string test_name = m_file_name_m;
         for (auto& face : faces)
         {
             //set index start from 0.
-            U32 point_a = face.vertex_index_a - 1;
-            U32 point_b = face.vertex_index_b - 1;
-            U32 point_c = face.vertex_index_c - 1;
+            U32 point_a = face.point_index_a - 1;
+            U32 point_b = face.point_index_b - 1;
+            U32 point_c = face.point_index_c - 1;
             //add adjacent faces
             point_indices[point_a].faces.emplace_back(point_a, point_b, point_c);
             point_indices[point_b].faces.emplace_back(point_a, point_b, point_c);
@@ -505,7 +505,7 @@ namespace Engine5
 
         //Calculate Vertex Normal
         std::vector<Vector3> normals;
-        Vector3         accumulated_normal;
+        Vector3              accumulated_normal;
         for (auto& point : point_indices)
         {
             normals.clear();
@@ -513,7 +513,7 @@ namespace Engine5
             for (auto& face : point.faces)
             {
                 Vector3 normal = m_mesh_data.GetFaceNormal(face.a, face.b, face.c);
-                auto      found = std::find(normals.begin(), normals.end(), normal);
+                auto    found  = std::find(normals.begin(), normals.end(), normal);
                 if (found == normals.end())
                 {
                     accumulated_normal += normal;
@@ -525,7 +525,6 @@ namespace Engine5
         }
 
         //Calculate Planar UV Mapping
-        
     }
 
     void MeshResource::LoadCustomTXT(std::ifstream& file)

@@ -11,14 +11,27 @@ namespace Engine5
         ~MeshVertexIndexInfo() = default;
 
     public:
-        size_t point_index = 0, texture_index = 0, normal_index = 0;
+        U32 point_index = 0, uv_index = 0, normal_index = 0;
     };
 
     class MeshFaceIndexInfo
     {
     public:
         MeshFaceIndexInfo()
-            : vertex_index_a(0), vertex_index_b(0), vertex_index_c(0), uv_index_a(0), uv_index_b(0), uv_index_c(0), normal_index_a(0), normal_index_b(0), normal_index_c(0)
+            : point_index_a(0), point_index_b(0), point_index_c(0), uv_index_a(0), uv_index_b(0), uv_index_c(0), normal_index_a(0), normal_index_b(0), normal_index_c(0)
+        {
+        }
+
+        MeshFaceIndexInfo(const MeshVertexIndexInfo& a, const MeshVertexIndexInfo& b, const MeshVertexIndexInfo& c)
+            : point_index_a(a.point_index),
+              point_index_b(b.point_index),
+              point_index_c(c.point_index),
+              uv_index_a(a.uv_index),
+              uv_index_b(b.uv_index),
+              uv_index_c(c.uv_index),
+              normal_index_a(a.normal_index),
+              normal_index_b(b.normal_index),
+              normal_index_c(c.normal_index)
         {
         }
 
@@ -27,9 +40,9 @@ namespace Engine5
         }
 
     public:
-        size_t vertex_index_a, vertex_index_b, vertex_index_c;
-        size_t uv_index_a,     uv_index_b,     uv_index_c;
-        size_t normal_index_a, normal_index_b, normal_index_c;
+        U32 point_index_a,  point_index_b,  point_index_c;
+        U32 uv_index_a,     uv_index_b,     uv_index_c;
+        U32 normal_index_a, normal_index_b, normal_index_c;
     };
 
     class GeometryFaceIndex
@@ -38,13 +51,13 @@ namespace Engine5
         GeometryFaceIndex()  = default;
         ~GeometryFaceIndex() = default;
 
-        GeometryFaceIndex(size_t _a, size_t _b, size_t _c)
+        GeometryFaceIndex(U32 _a, U32 _b, U32 _c)
             : a(_a), b(_b), c(_c)
         {
         }
 
     public:
-        size_t a = 0, b = 0, c = 0;
+        U32 a = 0, b = 0, c = 0;
     };
 
     class GeometryPointIndex
@@ -53,13 +66,14 @@ namespace Engine5
         GeometryPointIndex()  = delete;
         ~GeometryPointIndex() = default;
 
-        explicit GeometryPointIndex(size_t i)
+        explicit GeometryPointIndex(U32 i)
             : index(i)
         {
         }
 
     public:
-        size_t                         index = 0;
+        U32 index = 0;
+
         std::vector<GeometryFaceIndex> faces;
     };
 
@@ -69,14 +83,14 @@ namespace Engine5
         FaceNormal()  = delete;
         ~FaceNormal() = default;
 
-        FaceNormal(size_t _a, size_t _b, size_t _c)
+        FaceNormal(U32 _a, U32 _b, U32 _c)
         {
             index.a = _a;
             index.b = _b;
             index.c = _c;
         }
 
-        FaceNormal(size_t _a, size_t _b, size_t _c, const Vector3& n, const Vector3& c)
+        FaceNormal(U32 _a, U32 _b, U32 _c, const Vector3& n, const Vector3& c)
             : normal(n), center(c)
         {
             index.a = _a;
@@ -85,7 +99,6 @@ namespace Engine5
         }
 
         explicit FaceNormal(const GeometryFaceIndex& i)
-            : normal(), center()
         {
             index.a = i.a;
             index.b = i.b;
