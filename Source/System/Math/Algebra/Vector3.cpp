@@ -198,6 +198,11 @@ namespace Engine5
         return Vector3(x * scale, y * scale, z * scale);
     }
 
+    Vector3 Vector3::Absolute() const
+    {
+        return Vector3(fabsf(x), fabsf(y), fabsf(z));
+    }
+
     Real Vector3::DotProduct(const Vector3& rhs) const
     {
         return (x * rhs.x + y * rhs.y + z * rhs.z);

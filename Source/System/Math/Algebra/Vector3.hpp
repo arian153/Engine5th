@@ -44,6 +44,7 @@ namespace Engine5
         Vector3 Inverse() const;
         Vector3 Negate() const;
         Vector3 Scale(Real scale) const;
+        Vector3 Absolute() const;
 
         Real     DotProduct(const Vector3& rhs) const;
         Vector3  CrossProduct(const Vector3& rhs) const;
