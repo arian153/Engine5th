@@ -40,7 +40,7 @@ namespace Engine5
             m_b_loaded = true;
             break;
         case eMeshType::WaveFrontOBJ:
-            LoadWaveFrontOBJ(file_stream);
+            LoadGeneralOBJ(file_stream);
             m_b_loaded = true;
             break;
         default:
@@ -229,12 +229,10 @@ namespace Engine5
         size_t normal_index = 0;
         size_t face_index   = 0;
         //container
-        std::vector<Vector3>            points;
-        std::vector<Vector3>            normals;
-        std::vector<Vector2>            uvs;
-        std::vector<MeshFaceIndexInfo>  faces;
-        std::vector<GeometryFaceIndex>  face_indices;
-        std::vector<GeometryPointIndex> point_indices;
+        std::vector<Vector3>           points;
+        std::vector<Vector3>           normals;
+        std::vector<Vector2>           uvs;
+        std::vector<MeshFaceIndexInfo> faces;
         //line, char
         String line;
         char   next_input;
@@ -250,7 +248,6 @@ namespace Engine5
                 string_stream >> point.x >> point.y >> point.z;
                 point.z = point.z * -1.0f;
                 points.push_back(point);
-                point_indices.emplace_back(point_index);
                 point_index++;
             }
             // Read texture uv coordinates.
@@ -340,19 +337,15 @@ namespace Engine5
                 face_index += line_of_faces_size;
             }
         }
-        bool        b_uv      = !uvs.empty();
-        bool        b_normal  = !normals.empty();
-        size_t      index     = 0;
-        std::string test_name = m_file_name_m;
+        bool b_uv     = !uvs.empty();
+        bool b_normal = !normals.empty();
+        U32  index    = 0;
         for (auto& face : faces)
         {
             VertexCommon vertex_a, vertex_b, vertex_c;
-            U32          point_a = face.point_index_a - 1;
-            U32          point_b = face.point_index_b - 1;
-            U32          point_c = face.point_index_c - 1;
-            vertex_a.SetPosition(points[point_a]);
-            vertex_b.SetPosition(points[point_b]);
-            vertex_c.SetPosition(points[point_c]);
+            vertex_a.SetPosition(points[face.point_index_a - 1]);
+            vertex_b.SetPosition(points[face.point_index_b - 1]);
+            vertex_c.SetPosition(points[face.point_index_c - 1]);
             if (b_uv)
             {
                 if (face.uv_index_a > 0)
@@ -371,12 +364,16 @@ namespace Engine5
                 if (face.normal_index_c > 0)
                     vertex_c.SetNormal(normals[face.normal_index_c - 1]);
             }
-            //add adjacent faces
-            point_indices[point_a].faces.emplace_back(point_a, point_b, point_c);
-            point_indices[point_b].faces.emplace_back(point_a, point_b, point_c);
-            point_indices[point_c].faces.emplace_back(point_a, point_b, point_c);
-            //Add face normals both data
-            face_indices.emplace_back(point_a, point_b, point_c);
+            //Add vertex info into mesh data
+            m_mesh_data.vertices.push_back(vertex_a);
+            m_mesh_data.vertices.push_back(vertex_b);
+            m_mesh_data.vertices.push_back(vertex_c);
+
+            //Add face info and index info into mesh data
+            m_mesh_data.faces.emplace_back(index, index + 1, index + 2);
+            m_mesh_data.indices.push_back(index);
+            m_mesh_data.indices.push_back(index + 1);
+            m_mesh_data.indices.push_back(index + 2);
             index += 3;
         }
 
@@ -391,7 +388,6 @@ namespace Engine5
         U32 face_index  = 0;
         //container
         std::vector<MeshFaceIndexInfo>  faces;
-        std::vector<GeometryFaceIndex>  face_indices;
         std::vector<GeometryPointIndex> point_indices;
         //line, char
         String line;
@@ -492,9 +488,8 @@ namespace Engine5
             point_indices[point_a].faces.emplace_back(point_a, point_b, point_c);
             point_indices[point_b].faces.emplace_back(point_a, point_b, point_c);
             point_indices[point_c].faces.emplace_back(point_a, point_b, point_c);
-            //Add face normals both data
-            face_indices.emplace_back(point_a, point_b, point_c);
-
+            //Add face info and index info into mesh data
+            m_mesh_data.faces.emplace_back(point_a, point_b, point_c);
             m_mesh_data.indices.push_back(point_a);
             m_mesh_data.indices.push_back(point_b);
             m_mesh_data.indices.push_back(point_c);
