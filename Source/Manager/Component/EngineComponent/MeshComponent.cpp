@@ -134,6 +134,10 @@ namespace Engine5
                     m_material_texture.specular0     = texture_data["Specular"].asString();
                     m_material_texture.specular_type = 1;
                 }
+                else
+                {
+                    m_material_texture.specular_type = 0;
+                }
             }
             else
             {
@@ -186,8 +190,6 @@ namespace Engine5
             {
                 mesh_type = mesh_data["Type"].asString();
             }
-
-
 
             if (mesh_data["Path"].isString() && mesh_type == "File")
             {

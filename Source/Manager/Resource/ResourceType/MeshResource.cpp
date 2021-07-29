@@ -40,7 +40,7 @@ namespace Engine5
             m_b_loaded = true;
             break;
         case eMeshType::WaveFrontOBJ:
-            LoadGeneralOBJ(file_stream);
+            LoadOBJOnlyPos(file_stream);
             m_b_loaded = true;
             break;
         default:
