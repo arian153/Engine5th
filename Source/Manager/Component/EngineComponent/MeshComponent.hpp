@@ -28,6 +28,7 @@ namespace Engine5
         void Edit(CommandRegistry* command_registry) override;
         void Subscribe() override;
         void Unsubscribe() override;
+        void AddMesh();
 
     private:
         friend class MeshFactory;
@@ -38,8 +39,10 @@ namespace Engine5
         void     Clone(MeshComponent* origin);
 
     private:
-        Mesh2*     m_mesh      = nullptr;
-        Transform* m_transform = nullptr;
+        Mesh2*        m_mesh           = nullptr;
+        Transform*    m_transform      = nullptr;
+        MeshResource* m_model_resource = nullptr;
+        size_t        m_model_id       = 0;
 
         std::string     m_model_resource_path = "";
         MaterialTexture m_material_texture;

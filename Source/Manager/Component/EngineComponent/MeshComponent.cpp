@@ -184,7 +184,7 @@ namespace Engine5
 
         if (JsonResource::HasMember(data, "Mesh"))
         {
-            auto mesh_data = data["Mesh"];
+            auto        mesh_data = data["Mesh"];
             std::string mesh_type;
             if (JsonResource::HasMember(mesh_data, "Type"))
             {
@@ -193,14 +193,21 @@ namespace Engine5
 
             if (mesh_data["Path"].isString() && mesh_type == "File")
             {
-                std::string mesh     = mesh_data["Path"].asString();
-                auto        resource = m_space->GetResourceManager()->GetMeshResource(ToWString(mesh));
-                //m_mesh->SetMeshData(resource->GetMeshData());
+                m_model_resource_path = mesh_data["Path"].asString();
+                m_model_resource      = m_space->GetResourceManager()->GetMeshResource(ToWString(m_model_resource_path));
+                m_model_id            = reinterpret_cast<size_t>(m_model_resource);
+            }
+            else if (mesh_type == "Generate")
+            {
+                //E5_TODO : Need to add generated mesh
+                //
             }
             else
             {
-                //create mesh data from mesh generator
+                //default mesh
             }
+            AddMesh();
+            //E5_TODO : Need to init properly Mesh2. 
         }
         return true;
     }
@@ -212,6 +219,11 @@ namespace Engine5
     void MeshComponent::Edit(CommandRegistry* command_registry)
     {
         ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
+        //E5_TODO : Need to add user interface for mesh component
+        //E5_TODO : Select Model Data from file
+        //E5_TODO : Select Generated Model Data
+        //E5_TODO : Select Texture Material
+        //E5_TODO : Select Color Material
     }
 
     void MeshComponent::Subscribe()
@@ -227,6 +239,23 @@ namespace Engine5
         if (m_space != nullptr && m_mesh != nullptr)
         {
             m_space->GetScene()->RemoveMesh(this);
+        }
+    }
+
+    void MeshComponent::AddMesh()
+    {
+        auto scene = m_space->GetScene();
+        if (m_model_resource != nullptr)
+        {
+            m_mesh = scene->AddMesh(m_model_resource, m_material_texture);
+        }
+        else if (m_model_resource_path != "")
+        {
+            m_mesh = scene->AddMesh(m_model_resource_path, m_material_texture);
+        }
+        else
+        {
+            //E5_TODO : Need to add Generated Mesh Creation
         }
     }
 

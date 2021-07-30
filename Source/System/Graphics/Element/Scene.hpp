@@ -68,6 +68,7 @@ namespace Engine5
 
         Mesh2* GetMesh(size_t model_id, size_t material_id);
         Mesh2* AddMesh(const std::string& model_path, const MaterialTexture& material);
+        Mesh2* AddMesh(MeshResource* model_resource, const MaterialTexture& material);
         Mesh2* AddMesh(MeshData* model_data, const MaterialTexture& material);
         void   AddMesh(MeshComponent* mesh_compo);
         void   RemoveMesh(MeshComponent* mesh_compo);

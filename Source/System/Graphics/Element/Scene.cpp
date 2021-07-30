@@ -348,6 +348,46 @@ namespace Engine5
             }
             else
             {
+                //found duplicated
+                created = found_material->second;
+            }
+        }
+
+        return created;
+    }
+
+    Mesh2* Scene::AddMesh(MeshResource* model_resource, const MaterialTexture& material)
+    {
+        Mesh2* created;
+        size_t model_id    = reinterpret_cast<size_t>(model_resource);
+        size_t material_id = m_material_manager->GetID(material);
+
+        auto found_model = m_mesh_table.find(model_id);
+
+        if (found_model == m_mesh_table.end())
+        {
+            //add new
+            created = new Mesh2();
+            SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
+            m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+            m_meshes.push_back(created);
+        }
+        else
+        {
+            auto& material_table = found_model->second;
+            auto  found_material = material_table.find(material_id);
+
+            if (found_material == material_table.end())
+            {
+                //add new
+                created = new Mesh2();
+                SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
+                material_table.emplace(material_id, created);
+                m_meshes.push_back(created);
+            }
+            else
+            {
+                //found duplicated
                 created = found_material->second;
             }
         }
@@ -385,6 +425,7 @@ namespace Engine5
             }
             else
             {
+                //found duplicated
                 created = found_material->second;
             }
         }
@@ -501,7 +542,7 @@ namespace Engine5
         {
             mesh->SetModelData(model_data);
             mesh->SetSceneID(model_id, material_id);
-            mesh->SetMaterialData(material);
+            mesh->SetMaterialTexture(material);
             //diffuse texture0
             if (material.diffuse0 != "")
             {
