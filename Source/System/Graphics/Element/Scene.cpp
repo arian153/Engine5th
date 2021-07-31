@@ -368,6 +368,7 @@ namespace Engine5
         {
             //add new
             created = new Mesh2();
+            created->SetRenderer(m_renderer);
             SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
             m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
             m_meshes.push_back(created);
@@ -381,6 +382,7 @@ namespace Engine5
             {
                 //add new
                 created = new Mesh2();
+                created->SetRenderer(m_renderer);
                 SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
                 material_table.emplace(material_id, created);
                 m_meshes.push_back(created);
@@ -440,8 +442,11 @@ namespace Engine5
 
     void Scene::RemoveMesh(MeshComponent* mesh_compo)
     {
-        auto found = std::find(m_mesh_components.begin(), m_mesh_components.end(), mesh_compo);
-        m_mesh_components.erase(found);
+        if (!m_mesh_components.empty())
+        {
+            auto found = std::find(m_mesh_components.begin(), m_mesh_components.end(), mesh_compo);
+            m_mesh_components.erase(found);
+        }
     }
 
     void Scene::AddLight(Light2* light)
@@ -550,7 +555,7 @@ namespace Engine5
             }
             else
             {
-                mesh->AddTexture(nullptr);
+                mesh->AddTexture(m_resource_manager->GetTextureResource(L"DefaultTexture")->GetTexture());
             }
             //diffuse texture1
             if (material.diffuse1 != "")
@@ -559,7 +564,7 @@ namespace Engine5
             }
             else
             {
-                mesh->AddTexture(nullptr);
+                mesh->AddTexture(m_resource_manager->GetTextureResource(L"DefaultTexture")->GetTexture());
             }
             //diffuse texture2
             if (material.diffuse2 != "")
@@ -568,7 +573,7 @@ namespace Engine5
             }
             else
             {
-                mesh->AddTexture(nullptr);
+                mesh->AddTexture(m_resource_manager->GetTextureResource(L"DefaultTexture")->GetTexture());
             }
             //specular texture
             if (material.specular0 != "")
@@ -577,7 +582,7 @@ namespace Engine5
             }
             else
             {
-                mesh->AddTexture(nullptr);
+                mesh->AddTexture(m_resource_manager->GetTextureResource(L"DefaultTexture")->GetTexture());
             }
             //normal texture
             if (material.normal0 != "")
@@ -586,7 +591,7 @@ namespace Engine5
             }
             else
             {
-                mesh->AddTexture(nullptr);
+                mesh->AddTexture(m_resource_manager->GetTextureResource(L"DefaultTexture")->GetTexture());
             }
         }
     }

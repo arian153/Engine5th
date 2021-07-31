@@ -436,6 +436,9 @@ namespace Engine5
         {
             AddResource(file);
         }
+
+        TextureResource* default_texture = new TextureResource(L"DefaultTexture");
+        m_texture_resource_map.emplace(L"DefaultTexture", default_texture);
     }
 
     std::wstring ResourceManager::GetRootPath() const

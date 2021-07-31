@@ -18,6 +18,7 @@ namespace Engine5
         bool Initialize(RendererCommon* renderer, const std::wstring& file_path, const std::wstring& file_type);
         bool Initialize(TextTextureBufferCommon* text_buffer);
         bool Initialize(RenderTextureBufferCommon* render_texture_buffer);
+        bool InitializeDefault(RendererCommon* renderer);
         bool Shutdown();
 
     private:

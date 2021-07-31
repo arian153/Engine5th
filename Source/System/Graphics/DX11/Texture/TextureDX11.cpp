@@ -62,7 +62,7 @@ namespace Engine5
         }
         else
         {
-            return false;
+            return InitializeDefault(renderer);
         }
         if (FAILED(result))
         {
@@ -73,15 +73,55 @@ namespace Engine5
 
     bool TextureCommon::Initialize(TextTextureBufferCommon* text_buffer)
     {
-        m_texture  = text_buffer->GetTextResource();
+        m_texture   = text_buffer->GetTextResource();
         m_b_created = true;
         return true;
     }
 
     bool TextureCommon::Initialize(RenderTextureBufferCommon* render_texture_buffer)
     {
-        m_texture  = render_texture_buffer->GetTextureResource();
+        m_texture   = render_texture_buffer->GetTextureResource();
         m_b_created = true;
+        return true;
+    }
+
+    bool TextureCommon::InitializeDefault(RendererCommon* renderer)
+    {
+        static const uint32_t s_pixel = 0xffffffff;
+
+        D3D11_SUBRESOURCE_DATA initData = {&s_pixel, sizeof(uint32_t), 0};
+
+        D3D11_TEXTURE2D_DESC desc = {};
+        desc.Width                = desc.Height = desc.MipLevels = desc.ArraySize = 1;
+        desc.Format               = DXGI_FORMAT_R8G8B8A8_UNORM;
+        desc.SampleDesc.Count     = 1;
+        desc.Usage                = D3D11_USAGE_IMMUTABLE;
+        desc.BindFlags            = D3D11_BIND_SHADER_RESOURCE;
+
+        ID3D11Texture2D* tex;
+        auto             device  = renderer->GetDevice();
+        HRESULT          hresult = device->CreateTexture2D(&desc, &initData, &tex);
+
+        if (SUCCEEDED(hresult))
+        {
+            D3D11_SHADER_RESOURCE_VIEW_DESC shader_resource_view_desc = {};
+            shader_resource_view_desc.Format                          = DXGI_FORMAT_R8G8B8A8_UNORM;
+            shader_resource_view_desc.ViewDimension                   = D3D11_SRV_DIMENSION_TEXTURE2D;
+            shader_resource_view_desc.Texture2D.MipLevels             = 1;
+
+            hresult = device->CreateShaderResourceView(tex, &shader_resource_view_desc, &m_texture);
+        }
+
+        if (FAILED(hresult))
+        {
+            return false;
+        }
+
+        if (tex != nullptr)
+        {
+            tex->Release();
+            tex = nullptr;
+        }
         return true;
     }
 
