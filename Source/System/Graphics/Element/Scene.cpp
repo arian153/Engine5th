@@ -316,7 +316,7 @@ namespace Engine5
         return nullptr;
     }
 
-    Mesh2* Scene::AddMesh(const std::string& model_path, const MaterialTexture& material)
+    Mesh2* Scene::AddMesh(const std::string& model_path, const MaterialIdentifier& material)
     {
         Mesh2*        created;
         MeshResource* model_resource = m_resource_manager->GetMeshResource(ToWString(model_path));
@@ -356,7 +356,7 @@ namespace Engine5
         return created;
     }
 
-    Mesh2* Scene::AddMesh(MeshResource* model_resource, const MaterialTexture& material)
+    Mesh2* Scene::AddMesh(MeshResource* model_resource, const MaterialIdentifier& material)
     {
         Mesh2* created;
         size_t model_id    = reinterpret_cast<size_t>(model_resource);
@@ -397,7 +397,7 @@ namespace Engine5
         return created;
     }
 
-    Mesh2* Scene::AddMesh(MeshData* model_data, const MaterialTexture& material)
+    Mesh2* Scene::AddMesh(MeshData* model_data, const MaterialIdentifier& material)
     {
         Mesh2* created;
         size_t model_id    = reinterpret_cast<size_t>(model_data);
@@ -541,13 +541,13 @@ namespace Engine5
         return ray;
     }
 
-    void Scene::SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialTexture& material, size_t model_id, size_t material_id) const
+    void Scene::SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialIdentifier& material, size_t model_id, size_t material_id) const
     {
         if (mesh != nullptr)
         {
             mesh->SetModelData(model_data);
             mesh->SetSceneID(model_id, material_id);
-            mesh->SetMaterialTexture(material);
+            mesh->SetMaterialIdentifier(material);
             //diffuse texture0
             if (material.diffuse0 != "")
             {

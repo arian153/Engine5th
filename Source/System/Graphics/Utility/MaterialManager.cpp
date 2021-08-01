@@ -19,7 +19,7 @@ namespace Engine5
         m_data.clear();
     }
 
-    size_t MaterialManager::GetID(const MaterialTexture& material)
+    size_t MaterialManager::GetID(const MaterialIdentifier& material)
     {
         size_t id      = m_data.size();
         bool   b_found = false;
@@ -40,7 +40,7 @@ namespace Engine5
         return id;
     }
 
-    MaterialTexture MaterialManager::GetMaterial(size_t id)
+    MaterialIdentifier MaterialManager::GetMaterial(size_t id)
     {
         return m_data[id];
     }

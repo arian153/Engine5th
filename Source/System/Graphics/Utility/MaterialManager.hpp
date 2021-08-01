@@ -15,10 +15,10 @@ namespace Engine5
         void Initialize();
         void Shutdown();
 
-        size_t       GetID(const MaterialTexture& material);
-        MaterialTexture GetMaterial(size_t id);
+        size_t       GetID(const MaterialIdentifier& material);
+        MaterialIdentifier GetMaterial(size_t id);
 
     private:
-        std::vector<MaterialTexture> m_data;
+        std::vector<MaterialIdentifier> m_data;
     };
 }

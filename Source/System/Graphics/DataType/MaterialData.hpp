@@ -5,11 +5,11 @@
 
 namespace Engine5
 {
-    struct MaterialTexture
+    struct MaterialIdentifier
     {
     public:
 
-        bool operator==(const MaterialTexture& rhs) const
+        bool operator==(const MaterialIdentifier& rhs) const
         {
             return (diffuse_type == rhs.diffuse_type) &&
                     (specular_type == rhs.specular_type) &&
@@ -18,7 +18,8 @@ namespace Engine5
                     (diffuse1 == rhs.diffuse1) &&
                     (diffuse2 == rhs.diffuse2) &&
                     (specular0 == rhs.specular0) &&
-                    (normal0 == rhs.normal0);
+                    (normal0 == rhs.normal0) &&
+                    (shader_type == rhs.shader_type);
         }
 
     public:
@@ -30,6 +31,7 @@ namespace Engine5
         std::string diffuse2      = "";
         std::string specular0     = "";
         std::string normal0       = "";
+        std::string shader_type   = "";
     };
 
     struct MaterialColor

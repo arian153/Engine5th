@@ -60,15 +60,15 @@ namespace Engine5
                     {
                         if (idx == 0)
                         {
-                            m_material_texture.diffuse0 = (*it).asString();
+                            m_material_identifier.diffuse0 = (*it).asString();
                         }
                         if (idx == 1)
                         {
-                            m_material_texture.diffuse1 = (*it).asString();
+                            m_material_identifier.diffuse1 = (*it).asString();
                         }
                         if (idx == 2)
                         {
-                            m_material_texture.diffuse2 = (*it).asString();
+                            m_material_identifier.diffuse2 = (*it).asString();
                         }
                     }
                     idx++;
@@ -79,7 +79,7 @@ namespace Engine5
             {
                 if (texture_data["Diffuse0"].isString())
                 {
-                    m_material_texture.diffuse0 = texture_data["Diffuse0"].asString();
+                    m_material_identifier.diffuse0 = texture_data["Diffuse0"].asString();
                 }
             }
 
@@ -87,7 +87,7 @@ namespace Engine5
             {
                 if (texture_data["Diffuse1"].isString())
                 {
-                    m_material_texture.diffuse0 = texture_data["Diffuse1"].asString();
+                    m_material_identifier.diffuse0 = texture_data["Diffuse1"].asString();
                 }
             }
 
@@ -95,7 +95,7 @@ namespace Engine5
             {
                 if (texture_data["Diffuse2"].isString())
                 {
-                    m_material_texture.diffuse0 = texture_data["Diffuse2"].asString();
+                    m_material_identifier.diffuse0 = texture_data["Diffuse2"].asString();
                 }
             }
 
@@ -106,23 +106,23 @@ namespace Engine5
                     std::string type = texture_data["DiffuseType"].asString();
                     if (type == "Texture")
                     {
-                        m_material_texture.diffuse_type = 0;
+                        m_material_identifier.diffuse_type = 0;
                     }
                     else if (type == "AlphaMapping")
                     {
-                        m_material_texture.diffuse_type = 1;
+                        m_material_identifier.diffuse_type = 1;
                     }
                     else if (type == "LightMapping")
                     {
-                        m_material_texture.diffuse_type = 2;
+                        m_material_identifier.diffuse_type = 2;
                     }
                     else if (type == "Multi-Texture")
                     {
-                        m_material_texture.diffuse_type = 3;
+                        m_material_identifier.diffuse_type = 3;
                     }
                     else
                     {
-                        m_material_texture.diffuse_type = -1;
+                        m_material_identifier.diffuse_type = -1;
                     }
                 }
             }
@@ -131,34 +131,34 @@ namespace Engine5
             {
                 if (texture_data["Specular"].isString())
                 {
-                    m_material_texture.specular0     = texture_data["Specular"].asString();
-                    m_material_texture.specular_type = 1;
+                    m_material_identifier.specular0     = texture_data["Specular"].asString();
+                    m_material_identifier.specular_type = 1;
                 }
                 else
                 {
-                    m_material_texture.specular_type = 0;
+                    m_material_identifier.specular_type = 0;
                 }
             }
             else
             {
-                m_material_texture.specular_type = 0;
+                m_material_identifier.specular_type = 0;
             }
 
             if (JsonResource::HasMember(texture_data, "NormalMap"))
             {
                 if (texture_data["NormalMap"].isString())
                 {
-                    m_material_texture.normal0     = texture_data["NormalMap"].asString();
-                    m_material_texture.normal_type = 1;
+                    m_material_identifier.normal0     = texture_data["NormalMap"].asString();
+                    m_material_identifier.normal_type = 1;
                 }
                 else
                 {
-                    m_material_texture.normal_type = 0;
+                    m_material_identifier.normal_type = 0;
                 }
             }
             else
             {
-                m_material_texture.normal_type = 0;
+                m_material_identifier.normal_type = 0;
             }
         }
 
@@ -180,6 +180,16 @@ namespace Engine5
             {
                 m_material_color.specular = JsonResource::AsColor(color_data["Specular"]);
             }
+        }
+
+        if (JsonResource::HasMember(data, "Shader Type"))
+        {
+            m_material_identifier.shader_type = data["Shader Type"].asString();
+        }
+        else
+        {
+            //E5_TODO : need to update default shader name.
+            m_material_identifier.shader_type = "Default";
         }
 
         if (JsonResource::HasMember(data, "Mesh"))
@@ -247,11 +257,11 @@ namespace Engine5
         auto scene = m_space->GetScene();
         if (m_model_resource != nullptr)
         {
-            m_mesh = scene->AddMesh(m_model_resource, m_material_texture);
+            m_mesh = scene->AddMesh(m_model_resource, m_material_identifier);
         }
         else if (m_model_resource_path != "")
         {
-            m_mesh = scene->AddMesh(m_model_resource_path, m_material_texture);
+            m_mesh = scene->AddMesh(m_model_resource_path, m_material_identifier);
         }
         else
         {

@@ -45,7 +45,8 @@ namespace Engine5
         size_t        m_model_id       = 0;
 
         std::string     m_model_resource_path = "";
-        MaterialTexture m_material_texture;
+        std::string     m_shader_type = "";
+        MaterialIdentifier m_material_identifier;
         MaterialColor   m_material_color;
     };
 }

@@ -32,7 +32,6 @@ namespace Engine5
         void AddInstance(Transform* transform, const MaterialColor& color);
         void ClearCount(U32 clear_idx = 0);
 
-        void SetShaderType(const std::string& shader_type);
         void SetModelData(MeshData* data);
         void AddTexture(TextureCommon* texture);
         void ClearTexture();
@@ -40,7 +39,7 @@ namespace Engine5
         void SetRenderer(RendererCommon* renderer);
         void ResizeInstanceBuffer(U32 count);
 
-        void SetMaterialTexture(const MaterialTexture& material_data);
+        void SetMaterialIdentifier(const MaterialIdentifier& material_data);
         void SetSceneID(size_t model_id, size_t material_id);
 
         std::string GetShaderType() const;
@@ -67,10 +66,7 @@ namespace Engine5
         int    m_specular_type = -1;
         int    m_normal_type   = -1;
 
-
-        std::string m_shader_type = "";
-
-
+        std::string                     m_shader_type = "";
         std::vector<InstanceBufferData> m_instances;
     };
 }

@@ -13,7 +13,7 @@ namespace Engine5
 {
     class Light2;
     class MeshData;
-    struct MaterialTexture;
+    struct MaterialIdentifier;
     class MaterialManager;
     class Mesh;
     class VertexLayoutCommon;
@@ -67,9 +67,9 @@ namespace Engine5
         PrimitiveRenderer* GetPrimitiveRenderer() const;
 
         Mesh2* GetMesh(size_t model_id, size_t material_id);
-        Mesh2* AddMesh(const std::string& model_path, const MaterialTexture& material);
-        Mesh2* AddMesh(MeshResource* model_resource, const MaterialTexture& material);
-        Mesh2* AddMesh(MeshData* model_data, const MaterialTexture& material);
+        Mesh2* AddMesh(const std::string& model_path, const MaterialIdentifier& material);
+        Mesh2* AddMesh(MeshResource* model_resource, const MaterialIdentifier& material);
+        Mesh2* AddMesh(MeshData* model_data, const MaterialIdentifier& material);
         void   AddMesh(MeshComponent* mesh_compo);
         void   RemoveMesh(MeshComponent* mesh_compo);
 
@@ -94,7 +94,7 @@ namespace Engine5
         Ray   GetPickingRay(const Vector2& pos) const;
 
     private:
-        void SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialTexture& material, size_t model_id, size_t material_id) const;
+        void SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialIdentifier& material, size_t model_id, size_t material_id) const;
         void UpdateMesh(Real dt);
 
     private:

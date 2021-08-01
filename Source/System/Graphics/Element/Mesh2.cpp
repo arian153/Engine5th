@@ -160,11 +160,6 @@ namespace Engine5
         m_instance_count = clear_idx;
     }
 
-    void Mesh2::SetShaderType(const std::string& shader_type)
-    {
-        m_shader_type = shader_type;
-    }
-
     void Mesh2::SetModelData(MeshData* data)
     {
         m_mesh_data = data;
@@ -198,11 +193,12 @@ namespace Engine5
         m_instance_buffer->Init(m_renderer, m_instances);
     }
 
-    void Mesh2::SetMaterialTexture(const MaterialTexture& material_data)
+    void Mesh2::SetMaterialIdentifier(const MaterialIdentifier& material_data)
     {
         m_diffuse_type  = material_data.diffuse_type;
         m_specular_type = material_data.specular_type;
         m_normal_type   = material_data.normal_type;
+        m_shader_type   = material_data.shader_type;
     }
 
     void Mesh2::SetSceneID(size_t model_id, size_t material_id)
