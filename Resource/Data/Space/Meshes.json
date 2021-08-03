@@ -43,9 +43,9 @@
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, -40, 0 ],
-                        "Scale": [ 1, 1, 1 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 0, 0],
+                        "Scale": [3, 3, 3]
                     }
                 },
                 {
@@ -66,12 +66,13 @@
                             "Diffuse1": "",
                             "Diffuse2": "",
                             "Specular": 0,
-                            "NormalMap": 0 
+                            "NormalMap": 0
 
-                        }
+                        },
+                        "Shader Type": "TextureInstancing"
+
                     }
                 }
-                
             ],
             "Name": "Mesh"
         }

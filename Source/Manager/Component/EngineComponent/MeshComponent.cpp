@@ -238,7 +238,7 @@ namespace Engine5
 
     void MeshComponent::Subscribe()
     {
-        if (m_space != nullptr && m_mesh != nullptr)
+        if (m_space != nullptr)
         {
             m_space->GetScene()->AddMesh(this);
         }
@@ -246,7 +246,7 @@ namespace Engine5
 
     void MeshComponent::Unsubscribe()
     {
-        if (m_space != nullptr && m_mesh != nullptr)
+        if (m_space != nullptr)
         {
             m_space->GetScene()->RemoveMesh(this);
         }

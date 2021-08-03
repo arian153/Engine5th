@@ -54,6 +54,7 @@ namespace Engine5
 
         m_shader_manager->AddBuffer("Color", m_matrix_buffer);
         m_shader_manager->AddBuffer("ColorInstancing", m_matrix_instancing_buffer);
+        m_shader_manager->AddBuffer("TextureInstancing", m_matrix_instancing_buffer);
     }
 
     void Scene::Update(Real dt)
@@ -80,6 +81,11 @@ namespace Engine5
         for (auto& particle : m_particle_emitters)
         {
             particle->Update(dt);
+        }
+
+        for (auto& mesh : m_meshes)
+        {
+            mesh->ClearCount();
         }
 
         for (auto& mesh_compo : m_mesh_components)
