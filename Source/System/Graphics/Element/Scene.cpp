@@ -99,13 +99,24 @@ namespace Engine5
         if (m_main_camera == nullptr || m_cameras.empty())
             return;
 
-        m_primitive_renderer->Render();
+        m_primitive_renderer->PreRenderDot();
+        m_matrix_buffer->Bind();
+        m_primitive_renderer->PostRenderDot();
+
+        m_primitive_renderer->PreRenderLine();
+        m_matrix_buffer->Bind();
+        m_primitive_renderer->PostRenderLine();
+
+        m_primitive_renderer->PreRenderFace();
+        m_matrix_buffer->Bind();
+        m_primitive_renderer->PostRenderFace();
+
         m_primitive_renderer->Clear();
 
         for (auto& mesh : m_meshes)
         {
             m_shader_manager->Bind(mesh->GetShaderType());
-            mesh->Render();
+            mesh->Bind();
         }
 
         //m_shader_manager->Bind("ColorInstancing");

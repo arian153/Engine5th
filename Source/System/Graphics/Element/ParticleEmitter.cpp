@@ -54,7 +54,9 @@ namespace Engine5
     void ParticleEmitter::Render() const
     {
         m_vertex_buffer->Bind(0, m_instance_buffer);
-        m_index_buffer->Bind(0, (U32)m_active_amount);
+        m_index_buffer->Bind(0);
+
+        m_index_buffer->Draw((U32)m_active_amount);
     }
 
     void ParticleEmitter::Shutdown()

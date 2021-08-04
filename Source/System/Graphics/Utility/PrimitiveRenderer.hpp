@@ -50,6 +50,15 @@ namespace Engine5
 
         void Initialize(ShaderProgramCommon* color_shader);
         void Render() const;
+
+        void PreRenderDot() const;
+        void PreRenderLine() const;
+        void PreRenderFace() const;
+
+        void PostRenderDot() const;
+        void PostRenderLine() const;
+        void PostRenderFace() const;
+
         void Shutdown();
         void Clear();
 

@@ -55,12 +55,20 @@ namespace Engine5
         m_textures.Clear();
     }
 
-    void Mesh2::Render() const
+    void Mesh2::Bind() const
     {
         if (m_instance_count > 0)
         {
             m_vertex_buffer->Bind(0, m_instance_buffer);
-            m_index_buffer->Bind(0, m_instance_count);
+            m_index_buffer->Bind(0);
+        }
+    }
+
+    void Mesh2::Draw() const
+    {
+        if (m_instance_count > 0)
+        {
+            m_index_buffer->Draw(m_instance_count);
         }
     }
 

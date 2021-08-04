@@ -55,14 +55,16 @@ namespace Engine5
     {
         // Set the index buffer to active in the input assembler so it can be rendered.
         m_device_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, offset);
+    }
+
+    void IndexBufferCommon::Draw() const
+    {
         // Render the triangle.
         m_device_context->DrawIndexed(m_indices_count, 0, 0);
     }
 
-    void IndexBufferCommon::Bind(U32 offset, U32 instance_count) const
+    void IndexBufferCommon::Draw(U32 instance_count) const
     {
-        // Set the index buffer to active in the input assembler so it can be rendered.
-        m_device_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, offset);
         // Render the triangle
         m_device_context->DrawIndexedInstanced(m_indices_count, instance_count, 0, 0, 0);
     }

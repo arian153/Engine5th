@@ -24,7 +24,8 @@ namespace Engine5
         void Initialize();
         void Shutdown();
 
-        void Render() const;
+        void Bind() const;
+        void Draw() const;
         void CreateBuffer();
 
         void AddInstance(const InstanceBufferData& data);

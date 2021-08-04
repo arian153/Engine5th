@@ -286,18 +286,25 @@ namespace Engine5
 
     void PrimitiveRenderer::Render() const
     {
+    }
+
+    void PrimitiveRenderer::PreRenderDot() const
+    {
         if (m_dot_vertices.empty() == false)
         {
             //build buffer
             m_dot_index_buffer->Init(m_renderer, m_dot_indices);
             m_dot_vertex_buffer->Init(m_renderer, m_dot_vertices);
             m_dot_vertex_buffer->SetPrimitiveTopology(eTopologyType::PointList);
-
-            //render
-            m_shader->Bind();
+            //Bind Buffer
             m_dot_vertex_buffer->Bind(0);
             m_dot_index_buffer->Bind(0);
+            m_shader->Bind();
         }
+    }
+
+    void PrimitiveRenderer::PreRenderLine() const
+    {
         if (m_line_vertices.empty() == false)
         {
             //build buffer
@@ -305,22 +312,49 @@ namespace Engine5
             m_line_vertex_buffer->Init(m_renderer, m_line_vertices);
             m_line_vertex_buffer->SetPrimitiveTopology(eTopologyType::LineList);
 
-            //render
-            m_shader->Bind();
+            //Bind Buffer
             m_line_vertex_buffer->Bind(0);
             m_line_index_buffer->Bind(0);
+            m_shader->Bind();
         }
+    }
+
+    void PrimitiveRenderer::PreRenderFace() const
+    {
         if (m_face_vertices.empty() == false)
         {
             //build buffer
             m_face_index_buffer->Init(m_renderer, m_face_indices);
             m_face_vertex_buffer->Init(m_renderer, m_face_vertices);
             m_face_vertex_buffer->SetPrimitiveTopology(eTopologyType::TriangleList);
-
-            //render
-            m_shader->Bind();
+            //Bind Buffer
             m_face_vertex_buffer->Bind(0);
             m_face_index_buffer->Bind(0);
+            m_shader->Bind();
+        }
+    }
+
+    void PrimitiveRenderer::PostRenderDot() const
+    {
+        if (m_dot_vertices.empty() == false)
+        {
+            m_dot_index_buffer->Draw();
+        }
+    }
+
+    void PrimitiveRenderer::PostRenderLine() const
+    {
+        if (m_line_vertices.empty() == false)
+        {
+            m_line_index_buffer->Draw();
+        }
+    }
+
+    void PrimitiveRenderer::PostRenderFace() const
+    {
+        if (m_face_vertices.empty() == false)
+        {
+            m_face_index_buffer->Draw();
         }
     }
 
