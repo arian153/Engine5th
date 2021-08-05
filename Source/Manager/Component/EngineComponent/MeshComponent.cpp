@@ -106,23 +106,23 @@ namespace Engine5
                     std::string type = texture_data["DiffuseType"].asString();
                     if (type == "Texture")
                     {
-                        m_material_identifier.diffuse_type = 0;
+                        m_material_identifier.diffuse_type = 1;
                     }
                     else if (type == "AlphaMapping")
                     {
-                        m_material_identifier.diffuse_type = 1;
+                        m_material_identifier.diffuse_type = 2;
                     }
                     else if (type == "LightMapping")
                     {
-                        m_material_identifier.diffuse_type = 2;
+                        m_material_identifier.diffuse_type = 3;
                     }
                     else if (type == "Multi-Texture")
                     {
-                        m_material_identifier.diffuse_type = 3;
+                        m_material_identifier.diffuse_type = 4;
                     }
                     else
                     {
-                        m_material_identifier.diffuse_type = -1;
+                        m_material_identifier.diffuse_type = 0;
                     }
                 }
             }

@@ -59,6 +59,7 @@ namespace Engine5
     {
         if (m_instance_count > 0)
         {
+            m_instance_buffer->Update(m_instances);
             m_vertex_buffer->Bind(0, m_instance_buffer);
             m_index_buffer->Bind(0);
         }
@@ -156,7 +157,7 @@ namespace Engine5
             ResizeInstanceBuffer(m_max_count);
         }
 
-        m_instances[m_instance_count].model    = transform->LocalToWorldMatrix();
+        m_instances[m_instance_count].model    = transform->LocalToWorldMatrix().Transpose();
         m_instances[m_instance_count].ambient  = color.ambient;
         m_instances[m_instance_count].diffuse  = color.diffuse;
         m_instances[m_instance_count].specular = color.specular;

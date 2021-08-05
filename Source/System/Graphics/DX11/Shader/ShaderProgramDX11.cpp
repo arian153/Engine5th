@@ -219,13 +219,8 @@ namespace Engine5
         }
     }
 
-    void ShaderProgramCommon::Bind()
+    void ShaderProgramCommon::Bind() const
     {
-        for (auto& buffer : m_constant_buffers)
-        {
-            buffer->Bind();
-        }
-
         // Set the vertex input layout.
         m_device_context->IASetInputLayout(m_layout);
         // Set the vertex shader and pixel shader.
@@ -243,10 +238,5 @@ namespace Engine5
     void ShaderProgramCommon::SetShaderResource(ShaderResource* resource)
     {
         m_resource = resource;
-    }
-
-    void ShaderProgramCommon::AddConstantBuffer(ConstantBufferCommon* buffer)
-    {
-        m_constant_buffers.push_back(buffer);
     }
 }

@@ -33,10 +33,7 @@ namespace Engine5
         void Shutdown();
 
         void AddShader(const std::wstring& name, VertexLayoutCommon* layout);
-
         void Bind(const std::string& name);
-        void AddBuffer(const std::string& name, ConstantBufferCommon* constant_buffer);
-
         ShaderProgramCommon* GetShader(const std::string& name) const;
 
         //temp

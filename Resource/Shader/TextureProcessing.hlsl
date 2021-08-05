@@ -37,23 +37,23 @@ float4 BlendTexture(float2 tex, int diffuse1_id, int diffuse2_id, float gamma)
 
 float4 ProcessDiffuse(float2 tex, int type, int diff0, int diff1, int diff2, float4 mat, float gamma)
 {
-    float4 diffuse_texture = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    if (type == 0)
+    float4 diffuse_texture = mat;
+    if (type == 1)
     {
         // sample simple diffuse texture.
         diffuse_texture = shader_texture[diff0].Sample(sample_type, tex);
     }
-    else if (type == 1)
+    else if (type == 2)
     {
         // alpha mapping
         diffuse_texture = AlphaMapping(tex, diff0, diff1, diff2);
     }
-    else if (type == 2)
+    else if (type == 3)
     {
         // light mapping
         diffuse_texture = LightMapping(tex, diff0, diff1);
     }
-    else if (type == 3)
+    else if (type == 4)
     {
         // multiple texture blending
         diffuse_texture = BlendTexture(tex, diff0, diff1, gamma);

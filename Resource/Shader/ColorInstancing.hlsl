@@ -12,8 +12,8 @@ struct VertexInputType
     float4 color : COLOR;
     float4x4 world : WORLD;
     float4 ambient : COLOR1;
-    float4 diffuse : COLOR1;
-    float4 specular : COLOR1;
+    float4 diffuse : COLOR2;
+    float4 specular : COLOR3;
 };
 
 struct PixelInputType

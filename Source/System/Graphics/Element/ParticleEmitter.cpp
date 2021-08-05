@@ -56,6 +56,8 @@ namespace Engine5
         m_vertex_buffer->Bind(0, m_instance_buffer);
         m_index_buffer->Bind(0);
 
+        //E5_TODO : need to apply proper buffer binding.
+
         m_index_buffer->Draw((U32)m_active_amount);
     }
 

@@ -22,11 +22,10 @@ namespace Engine5
 
         bool Init(RendererCommon* renderer);
         void Shutdown();
-        void Bind();
+        void Bind() const;
 
         void SetVertexLayout(VertexLayoutCommon* layout);
         void SetShaderResource(ShaderResource* resource);
-        void AddConstantBuffer(ConstantBufferCommon* buffer);
 
     private:
         ShaderManagerCommon* m_shader_manager = nullptr;

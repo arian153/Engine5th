@@ -6,7 +6,7 @@
         "V-Sync": true,
         "Window Caption": "Engine 5th - Testbed",
         "Window Mode": "Windowed",
-        "Initial Level": "Collider"
+        "Initial Level": "Meshes"
     },
     "Type": "Setting"
 }

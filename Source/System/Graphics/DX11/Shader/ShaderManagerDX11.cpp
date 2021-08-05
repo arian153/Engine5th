@@ -255,15 +255,6 @@ namespace Engine5
         }
     }
 
-    void ShaderManagerCommon::AddBuffer(const std::string& name, ConstantBufferCommon* constant_buffer)
-    {
-        auto found = m_shader_table.find(name);
-        if (found != m_shader_table.end())
-        {
-            found->second->AddConstantBuffer(constant_buffer);
-        }
-    }
-
     ShaderProgramCommon* ShaderManagerCommon::GetShader(const std::string& name) const
     {
         ShaderProgramCommon* shader = nullptr;
