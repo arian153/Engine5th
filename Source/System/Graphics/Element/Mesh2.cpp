@@ -46,6 +46,13 @@ namespace Engine5
             m_instance_buffer = nullptr;
         }
 
+        if (m_texture_buffer != nullptr)
+        {
+            m_texture_buffer->Shutdown();
+            delete m_texture_buffer;
+            m_texture_buffer = nullptr;
+        }
+
         if (m_mesh_data != nullptr && m_mesh_data->b_resource == false)
         {
             m_mesh_data->indices.clear();
@@ -64,6 +71,7 @@ namespace Engine5
             m_vertex_buffer->Bind(0, m_instance_buffer);
             m_index_buffer->Bind(0);
             m_texture_buffer->Bind();
+            //E5_TODO : need to bind textures
         }
     }
 
@@ -95,6 +103,7 @@ namespace Engine5
         if (m_texture_buffer == nullptr)
         {
             m_texture_buffer = new ConstantBufferCommon();
+            m_texture_buffer->Init(m_renderer, eBindingStage::PixelShader, sizeof(TextureBufferData), 0);
         }
 
         if (m_mesh_data != nullptr)
@@ -217,8 +226,17 @@ namespace Engine5
         m_shader_type   = material_data.shader_type;
 
         //get actual resource data from resource manager.
+        if (m_texture_buffer != nullptr)
+        {
+            TextureBufferData data;
+            data.diff_type = m_diffuse_type;
+            data.spec_type = m_specular_type;
+            data.norm_type = m_normal_type;
+            //E5_TODO : need to update user gamma setting
+            data.gamma     = 2.2f;
 
-
+            m_texture_buffer->Update(data);
+        }
     }
 
     void Mesh2::SetSceneID(size_t model_id, size_t material_id)

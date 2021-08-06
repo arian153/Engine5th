@@ -116,7 +116,7 @@ namespace Engine5
         data_ptr->diffuse_color   = data.diffuse_color;
         data_ptr->specular_color  = data.specular_color;
         //data_ptr->light_direction = data.light_direction;
-        data_ptr->specular_power  = data.specular_power;
+        data_ptr->specular_power = data.specular_power;
 
         m_device_context->Unmap(m_constant_buffer, 0);
     }
@@ -130,9 +130,9 @@ namespace Engine5
             return;
 
         MatrixBufferData* data_ptr = (MatrixBufferData*)mapped_resource.pData;
-        data_ptr->world = data.world.Transpose();
-        data_ptr->view = data.view.Transpose();
-        data_ptr->proj = data.proj.Transpose();
+        data_ptr->world            = data.world.Transpose();
+        data_ptr->view             = data.view.Transpose();
+        data_ptr->proj             = data.proj.Transpose();
 
         //mapped_resource.pData = data;
         m_device_context->Unmap(m_constant_buffer, 0);
@@ -147,10 +147,27 @@ namespace Engine5
             return;
 
         MatrixBufferDataInstancing* data_ptr = (MatrixBufferDataInstancing*)mapped_resource.pData;
-        data_ptr->view             = data.view.Transpose();
-        data_ptr->proj             = data.proj.Transpose();
+        data_ptr->view                       = data.view.Transpose();
+        data_ptr->proj                       = data.proj.Transpose();
 
         //mapped_resource.pData = data;
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
+    void ConstantBufferCommon::Update(const TextureBufferData& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        TextureBufferData* data_ptr = (TextureBufferData*)mapped_resource.pData;
+        data_ptr->diff_type         = data.diff_type;
+        data_ptr->spec_type         = data.spec_type;
+        data_ptr->norm_type         = data.norm_type;
+        data_ptr->gamma             = data.gamma;
+
         m_device_context->Unmap(m_constant_buffer, 0);
     }
 

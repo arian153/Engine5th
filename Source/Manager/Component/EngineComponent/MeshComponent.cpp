@@ -101,7 +101,7 @@ namespace Engine5
 
             if (JsonResource::HasMember(texture_data, "DiffuseType"))
             {
-                if (data["DiffuseType"].isString())
+                if (texture_data["DiffuseType"].isString())
                 {
                     std::string type = texture_data["DiffuseType"].asString();
                     if (type == "Texture")

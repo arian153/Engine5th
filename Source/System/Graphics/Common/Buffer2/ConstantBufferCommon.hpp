@@ -8,6 +8,7 @@
 
 namespace Engine5
 {
+    struct TextureBufferData;
     enum class eBindingStage;
     struct ColorBufferData;
     struct CameraBufferData;
@@ -32,6 +33,7 @@ namespace Engine5
         void Update(const LightBufferData& data) const;
         void Update(const MatrixBufferData& data) const;
         void Update(const MatrixBufferDataInstancing& data) const;
+        void Update(const TextureBufferData& data) const;
 
         void* Map() const;
         void  UnMap() const;

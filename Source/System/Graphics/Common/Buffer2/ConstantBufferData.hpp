@@ -65,9 +65,9 @@ namespace Engine5
 
     struct TextureBufferData
     {
-        int type;
-        int id0;
-        int id1;
-        int id2;
+        int diff_type;
+        int spec_type;
+        int norm_type;
+        float gamma;
     };
 }
