@@ -1,11 +1,21 @@
-#include "LightHelper.hlsl"
-
 Texture2D shader_texture[5];
+SamplerState sample_type;
+
+#include "LightProcessing.hlsl"
+#include "TextureProcessing.hlsl"
 
 cbuffer MatrixBuffer
 {
     matrix view;
     matrix proj;
+};
+
+cbuffer TextureBuffer
+{
+    int diff_type;
+    int spec_type;
+    int norm_type;
+    float gamma;
 };
 
 cbuffer CameraBuffer
@@ -107,7 +117,6 @@ float4 PixelShaderEntry(VSOut input)
         }
 
     }
-
 
     float4 final_color = ambient + diffuse + specular;
     // take alpha from diffuse materal

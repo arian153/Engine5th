@@ -2,6 +2,7 @@
 
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../../Math/Structure/Transform.hpp"
+#include "../Common/Buffer2/ConstantBufferCommon.hpp"
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
 #include "../Common/Buffer2/InstanceBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
@@ -62,6 +63,7 @@ namespace Engine5
             m_instance_buffer->Update(m_instances);
             m_vertex_buffer->Bind(0, m_instance_buffer);
             m_index_buffer->Bind(0);
+            m_texture_buffer->Bind();
         }
     }
 
@@ -88,6 +90,11 @@ namespace Engine5
         if (m_instance_buffer == nullptr)
         {
             m_instance_buffer = new InstanceBufferCommon();
+        }
+
+        if (m_texture_buffer == nullptr)
+        {
+            m_texture_buffer = new ConstantBufferCommon();
         }
 
         if (m_mesh_data != nullptr)
@@ -208,6 +215,10 @@ namespace Engine5
         m_specular_type = material_data.specular_type;
         m_normal_type   = material_data.normal_type;
         m_shader_type   = material_data.shader_type;
+
+        //get actual resource data from resource manager.
+
+
     }
 
     void Mesh2::SetSceneID(size_t model_id, size_t material_id)

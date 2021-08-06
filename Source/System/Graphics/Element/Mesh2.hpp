@@ -6,6 +6,7 @@
 
 namespace Engine5
 {
+    class ConstantBufferCommon;
     struct InstanceBufferData;
     class InstanceBufferCommon;
     class IndexBufferCommon;
@@ -58,6 +59,7 @@ namespace Engine5
         VertexBufferCommon*   m_vertex_buffer   = nullptr;
         IndexBufferCommon*    m_index_buffer    = nullptr;
         InstanceBufferCommon* m_instance_buffer = nullptr;
+        ConstantBufferCommon* m_texture_buffer  = nullptr;
         U32                   m_max_count       = 0;
         U32                   m_instance_count  = 0;
 

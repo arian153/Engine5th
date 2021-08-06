@@ -10,6 +10,7 @@
 
 namespace Engine5
 {
+    class ConstantBufferCommon;
     class VertexBufferCommon;
     class IndexBufferCommon;
     class ShaderProgramCommon;
@@ -49,16 +50,7 @@ namespace Engine5
         void DrawDashedLineSegment(const Vector3& start, const Vector3& end, Real length, Color color = Color());
 
         void Initialize(ShaderProgramCommon* color_shader);
-        void Render() const;
-
-        void PreRenderDot() const;
-        void PreRenderLine() const;
-        void PreRenderFace() const;
-
-        void PostRenderDot() const;
-        void PostRenderLine() const;
-        void PostRenderFace() const;
-
+        void Render(ConstantBufferCommon* matrix_buffer) const;
         void Shutdown();
         void Clear();
 
@@ -76,7 +68,7 @@ namespace Engine5
         size_t IndicesSize(eRenderingMode mode) const;
     private:
         MatrixData           m_mvp_data;
-        RendererCommon*      m_renderer     = nullptr;
+        RendererCommon*      m_renderer = nullptr;
         Frustum              m_frustum;
         ShaderProgramCommon* m_shader = nullptr;
 

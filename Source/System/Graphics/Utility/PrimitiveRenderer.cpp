@@ -5,6 +5,7 @@
 #include "../DataType/MatrixData.hpp"
 #include "../DataType/TopologyDef.hpp"
 #include "../Common/Buffer/MeshBufferCommon.hpp"
+#include "../Common/Buffer2/ConstantBufferCommon.hpp"
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
 #include "../Common/Shader/ShaderProgramCommon.hpp"
@@ -284,11 +285,7 @@ namespace Engine5
         m_stride = sizeof(ColorVertexCommon);
     }
 
-    void PrimitiveRenderer::Render() const
-    {
-    }
-
-    void PrimitiveRenderer::PreRenderDot() const
+    void PrimitiveRenderer::Render(ConstantBufferCommon* matrix_buffer) const
     {
         if (m_dot_vertices.empty() == false)
         {
@@ -300,11 +297,10 @@ namespace Engine5
             m_dot_vertex_buffer->Bind(0);
             m_dot_index_buffer->Bind(0);
             m_shader->Bind();
+            matrix_buffer->Bind();
+            m_dot_index_buffer->Draw();
         }
-    }
 
-    void PrimitiveRenderer::PreRenderLine() const
-    {
         if (m_line_vertices.empty() == false)
         {
             //build buffer
@@ -316,11 +312,10 @@ namespace Engine5
             m_line_vertex_buffer->Bind(0);
             m_line_index_buffer->Bind(0);
             m_shader->Bind();
+            matrix_buffer->Bind();
+            m_line_index_buffer->Draw();
         }
-    }
 
-    void PrimitiveRenderer::PreRenderFace() const
-    {
         if (m_face_vertices.empty() == false)
         {
             //build buffer
@@ -331,29 +326,7 @@ namespace Engine5
             m_face_vertex_buffer->Bind(0);
             m_face_index_buffer->Bind(0);
             m_shader->Bind();
-        }
-    }
-
-    void PrimitiveRenderer::PostRenderDot() const
-    {
-        if (m_dot_vertices.empty() == false)
-        {
-            m_dot_index_buffer->Draw();
-        }
-    }
-
-    void PrimitiveRenderer::PostRenderLine() const
-    {
-        if (m_line_vertices.empty() == false)
-        {
-            m_line_index_buffer->Draw();
-        }
-    }
-
-    void PrimitiveRenderer::PostRenderFace() const
-    {
-        if (m_face_vertices.empty() == false)
-        {
+            matrix_buffer->Bind();
             m_face_index_buffer->Draw();
         }
     }
