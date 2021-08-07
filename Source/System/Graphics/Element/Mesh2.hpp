@@ -6,6 +6,7 @@
 
 namespace Engine5
 {
+    class ResourceManager;
     class ConstantBufferCommon;
     struct InstanceBufferData;
     class InstanceBufferCommon;
@@ -25,7 +26,7 @@ namespace Engine5
         void Initialize();
         void Shutdown();
 
-        void Bind() const;
+        void Bind();
         void Draw() const;
         void CreateBuffer();
 

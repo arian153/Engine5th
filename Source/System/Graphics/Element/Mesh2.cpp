@@ -6,6 +6,7 @@
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
 #include "../Common/Buffer2/InstanceBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
+#include "../Common/Renderer/RendererCommon.hpp"
 #include "../DataType/Color.hpp"
 #include "../DataType/MeshData.hpp"
 
@@ -63,15 +64,17 @@ namespace Engine5
         m_textures.Clear();
     }
 
-    void Mesh2::Bind() const
+    void Mesh2::Bind()
     {
         if (m_instance_count > 0)
         {
             m_instance_buffer->Update(m_instances);
             m_vertex_buffer->Bind(0, m_instance_buffer);
             m_index_buffer->Bind(0);
+
+            U32 count = (U32)m_textures.Size();
+            m_renderer->GetDeviceContext()->PSSetShaderResources(0, count, m_textures.Data());
             m_texture_buffer->Bind();
-            //E5_TODO : need to bind textures
         }
     }
 
@@ -225,6 +228,8 @@ namespace Engine5
         m_normal_type   = material_data.normal_type;
         m_shader_type   = material_data.shader_type;
 
+        m_textures.Clear();
+
         //get actual resource data from resource manager.
         if (m_texture_buffer != nullptr)
         {
@@ -233,7 +238,7 @@ namespace Engine5
             data.spec_type = m_specular_type;
             data.norm_type = m_normal_type;
             //E5_TODO : need to update user gamma setting
-            data.gamma     = 2.2f;
+            data.gamma = 2.2f;
 
             m_texture_buffer->Update(data);
         }
