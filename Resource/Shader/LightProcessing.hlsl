@@ -7,8 +7,10 @@ struct DynamicLight
 
     float3 direction;
     float  range;
+
     float3 position;
     float  length;
+
     float3 attenuation;
     float  spot;
 

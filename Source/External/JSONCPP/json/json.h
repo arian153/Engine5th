@@ -110,6 +110,7 @@ license you like.
 
 #pragma warning(disable: 4996)
 #pragma warning(disable: 4702)
+#pragma warning(disable: 26439)
 
 
 // //////////////////////////////////////////////////////////////////////

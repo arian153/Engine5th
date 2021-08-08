@@ -116,7 +116,7 @@ namespace Engine5
         data_ptr->diffuse_color   = data.diffuse_color;
         data_ptr->specular_color  = data.specular_color;
         //data_ptr->light_direction = data.light_direction;
-        data_ptr->specular_power = data.specular_power;
+        data_ptr->intensity = data.intensity;
 
         m_device_context->Unmap(m_constant_buffer, 0);
     }
@@ -168,6 +168,35 @@ namespace Engine5
         data_ptr->norm_type         = data.norm_type;
         data_ptr->gamma             = data.gamma;
 
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
+    void ConstantBufferCommon::Update(const MultipleLightsBufferData& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        MultipleLightsBufferData* data_ptr = (MultipleLightsBufferData*)mapped_resource.pData;
+        int                       count    = data.light_count;
+        data_ptr->light_count              = data.light_count;
+        for (int i = 0; i < count; ++i)
+        {
+            data_ptr->data[i].ambient_color  = data.data[i].ambient_color;
+            data_ptr->data[i].diffuse_color  = data.data[i].diffuse_color;
+            data_ptr->data[i].specular_color = data.data[i].specular_color;
+            data_ptr->data[i].ambient_range  = data.data[i].ambient_range;
+            data_ptr->data[i].direction      = data.data[i].direction;
+            data_ptr->data[i].range          = data.data[i].range;
+            data_ptr->data[i].position       = data.data[i].position;
+            data_ptr->data[i].length         = data.data[i].length;
+            data_ptr->data[i].attenuation    = data.data[i].attenuation;
+            data_ptr->data[i].spot           = data.data[i].spot;
+            data_ptr->data[i].type           = data.data[i].type;
+            data_ptr->data[i].intensity      = data.data[i].intensity;
+        }
         m_device_context->Unmap(m_constant_buffer, 0);
     }
 

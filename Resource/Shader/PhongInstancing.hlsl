@@ -37,7 +37,9 @@ struct VSIn
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
     float4x4 world : WORLD;
-    float4 ins_color : COLOR;
+    float4 ambient : COLOR0;
+    float4 diffuse : COLOR1;
+    float4 specular : COLOR2;
 };
 
 struct VSOut

@@ -126,5 +126,7 @@ namespace Engine5
 
         ConstantBufferCommon* m_matrix_buffer            = nullptr;
         ConstantBufferCommon* m_matrix_instancing_buffer = nullptr;
+        ConstantBufferCommon* m_camera_buffer            = nullptr;
+        ConstantBufferCommon* m_light_buffer             = nullptr;
     };
 }

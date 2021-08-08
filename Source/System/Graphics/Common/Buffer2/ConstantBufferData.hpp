@@ -27,19 +27,30 @@ namespace Engine5
 
     struct LightBufferData
     {
-        Color   ambient_color;
-        Color   ambient_range;
-        Color   diffuse_color;
-        Color   specular_color;
-        Real    specular_power;
+        Color ambient_color;
+        Color diffuse_color;
+        Color specular_color;
+        Color ambient_range;
+
         Vector3 direction;
-        Vector3 position;
         Real    range;
-        Vector3 attenuation;
+
+        Vector3 position;
         Real    length;
+
+        Vector3 attenuation;
         Real    spot;
+
         int     type;
+        Real    intensity;
         Vector2 padding;
+    };
+
+    struct MultipleLightsBufferData
+    {
+        LightBufferData data[16];
+        int             light_count;
+        Vector3         padding;
     };
 
     struct MatrixBufferDataInstancing
@@ -65,9 +76,9 @@ namespace Engine5
 
     struct TextureBufferData
     {
-        int diff_type;
-        int spec_type;
-        int norm_type;
+        int   diff_type;
+        int   spec_type;
+        int   norm_type;
         float gamma;
     };
 }

@@ -30,7 +30,7 @@ namespace Engine5
         result.ambient_color  = ambient_color;
         result.diffuse_color  = diffuse_color;
         result.specular_color = specular_color;
-        result.specular_power = specular_power;
+        result.intensity = specular_power;
         result.direction      = direction;
         result.position       = position;
         result.range          = range;
@@ -47,7 +47,7 @@ namespace Engine5
         result->ambient_color   = ambient_color;
         result->diffuse_color   = diffuse_color;
         result->specular_color  = specular_color;
-        result->specular_power  = specular_power;
+        result->intensity  = specular_power;
         result->direction       = direction;
         result->position        = position;
         result->range           = range;

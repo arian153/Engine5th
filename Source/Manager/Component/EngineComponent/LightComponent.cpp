@@ -57,7 +57,12 @@ namespace Engine5
         if (JsonResource::HasMember(data, "Type") && data["Type"].isString())
         {
             std::string light_type = data["Type"].asString();
-            if (light_type == "DirectionalLight")
+
+            if (light_type == "AmbientLight")
+            {
+                SetLightType(eLightType::AmbientLight);
+            }
+            else if (light_type == "DirectionalLight")
             {
                 SetLightType(eLightType::DirectionalLight);
             }

@@ -5,25 +5,16 @@
 #include "../Common/Shader/ShaderManagerCommon.hpp"
 #include "../Utility/MatrixManager.hpp"
 #include "../Utility/PrimitiveRenderer.hpp"
-#include "../Common/Light/DirectionalLight.hpp"
-#include "../Common/Buffer/DeferredBufferCommon.hpp"
-#include "../Common/Light/PointLight.hpp"
-#include "../Common/Light/SpotLight.hpp"
-#include "../Common/Light/CapsuleLight.hpp"
 #include "ParticleEmitter.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
 #include "Mesh2.hpp"
 #include "../Utility/TextRenderer.hpp"
 #include "../Common/Buffer2/ConstantBufferCommon.hpp"
 #include "../Common/Buffer2/ConstantBufferData.hpp"
-#include "../Common/Buffer2/VertexLayoutCommon.hpp"
-#include "../Common/Element/Mesh.hpp"
 #include "TextSprite.hpp"
 #include "../../../Manager/Resource/ResourceType/MeshResource.hpp"
 #include "../../../Manager/Resource/ResourceType/TextureResource.hpp"
 #include "../../Core/Utility/CoreUtility.hpp"
-#include "../Common/Light/LightDef.hpp"
-#include "../Common/Shader/ShaderProgramCommon.hpp"
 #include "../DataType/MatrixData.hpp"
 #include "../Utility/MaterialManager.hpp"
 
@@ -51,6 +42,12 @@ namespace Engine5
 
         m_matrix_instancing_buffer = new ConstantBufferCommon();
         m_matrix_instancing_buffer->Init(m_renderer, eBindingStage::VertexShader, sizeof(MatrixBufferDataInstancing), 0);
+
+        m_camera_buffer = new ConstantBufferCommon();
+        m_camera_buffer->Init(m_renderer, eBindingStage::PixelShader, sizeof(CameraBufferData), 1);
+
+        m_light_buffer = new ConstantBufferCommon();
+        m_light_buffer->Init(m_renderer, eBindingStage::PixelShader, sizeof(MultipleLightsBufferData), 2);
     }
 
     void Scene::Update(Real dt)
@@ -98,11 +95,31 @@ namespace Engine5
         m_primitive_renderer->Render(m_matrix_buffer);
         m_primitive_renderer->Clear();
 
+        {
+            int count = (int)m_lights.size();
+            count     = count < 16 ? count : 16;
+            MultipleLightsBufferData light_buffer_data;
+            light_buffer_data.light_count = count;
+            for (int i = 0; i < count; ++i)
+            {
+                light_buffer_data.data[i] = m_lights[i]->GetLightBuffer();
+            }
+            m_light_buffer->Update(light_buffer_data);
+        }
+
         for (auto& mesh : m_meshes)
         {
             mesh->Bind();
             m_matrix_instancing_buffer->Bind();
-            m_shader_manager->Bind(mesh->GetShaderType());
+
+            std::string type = mesh->GetShaderType();
+
+            if (type == "PhongInstancing")
+            {
+                m_light_buffer->Bind();
+            }
+
+            m_shader_manager->Bind(type);
             mesh->Draw();
         }
 
@@ -140,6 +157,14 @@ namespace Engine5
             m_matrix_instancing_buffer->Shutdown();
             delete m_matrix_instancing_buffer;
             m_matrix_instancing_buffer = nullptr;
+
+            m_camera_buffer->Shutdown();
+            delete m_camera_buffer;
+            m_camera_buffer = nullptr;
+
+            m_light_buffer->Shutdown();
+            delete m_light_buffer;
+            m_light_buffer = nullptr;
         }
 
         m_matrix_manager->RemoveScene(this);
