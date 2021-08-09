@@ -32,7 +32,7 @@ cbuffer LightBuffer
 struct VSIn
 {
     float4 position : POSITION;
-    float2 uv : TEXCOORD0;
+    float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
@@ -45,7 +45,7 @@ struct VSIn
 struct VSOut
 {
     float4 position : SV_POSITION;
-    float2 uv : TEXCOORD0;
+    float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
@@ -66,7 +66,7 @@ VSOut VertexShaderEntry(VSIn input)
     output.position = mul(input.position, input.world);
     output.position = mul(output.position, view);
     output.position = mul(output.position, proj);
-    output.uv = input.uv;
+    output.tex = input.tex;
 
     float3x3 world = (float3x3)input.world;
 
@@ -88,67 +88,76 @@ VSOut VertexShaderEntry(VSIn input)
 
 float4 PixelShaderEntry(VSOut input)
 {
-    float3 normal_world = normalize(input.normal);
+    //process material
+    Material material;
+    material.ambient = input.ambient;
+    material.diffuse = ProcessDiffuse(input.tex, diff_type, 0, 1, 2, input.diffuse, gamma);
+    material.specular = ProcessSpecular(input.tex, spec_type, 3, input.specular);
+    material.reflect = float4(0.0f, 0.0f, 0.0f, 0.0f);;
+
+    //process normal
     float3 tangent_world = normalize(input.tangent);
     float3 binormal_world = normalize(input.binormal);
+    float3 normal_world = normalize(input.normal);
+    float3 normal_vec = ProcessNormal(input.tex, norm_type, 4, tangent_world, binormal_world, normal_world);
+
+    //process eye vector
     float3 to_eye_world = normalize(cam_pos - input.world_pos);
 
-    //process texture
-
-    float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    float4 specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
-
+    //process lighting
+    float4 ambient_light = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    float4 diffuse_light = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    float4 specular_light = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 A, D, S;
 
     for (int i = 0; i < light_count; ++i)
     {
         if (dynamic_light[i].type == 0)
         {
-            CalculateAmbient(material, dynamic_light[i], normal_world, A);
-            ambient += A;
+            CalculateAmbient(material, dynamic_light[i], normal_vec, A);
+            ambient_light += A;
         }
         else if (dynamic_light[i].type == 1)
         {
-            CalculateDirectional(material, dynamic_light[i], normal_world, to_eye, A, D, S);
-            ambient += A;
-            diffuse += D;
-            specular += S;
+            CalculateDirectional(material, dynamic_light[i], normal_vec, to_eye, A, D, S);
+            ambient_light += A;
+            diffuse_light += D;
+            specular_light += S;
 
         }
         else if (dynamic_light[i].type == 2)
         {
-            CalculatePoint(material, dynamic_light[i], input.pos_world, normal_world, to_eye, A, D, S);
+            CalculatePoint(material, dynamic_light[i], input.pos_world, normal_vec, to_eye, A, D, S);
 
-            ambient += A;
-            diffuse += D;
-            specular += S;
+            ambient_light += A;
+            diffuse_light += D;
+            specular_light += S;
 
         }
         else if (dynamic_light[i].type == 3)
         {
-            CalculateSpot(material, dynamic_light[i], input.pos_world, normal_world, to_eye, A, D, S);
+            CalculateSpot(material, dynamic_light[i], input.pos_world, normal_vec, to_eye, A, D, S);
 
-            ambient += A;
-            diffuse += D;
-            specular += S;
+            ambient_light += A;
+            diffuse_light += D;
+            specular_light += S;
         }
         else if (dynamic_light[i].type == 4)
         {
-            CalculateCapsule(material, dynamic_light[i], input.pos_world, normal_world, to_eye, A, D, S);
+            CalculateCapsule(material, dynamic_light[i], input.pos_world, normal_vec, to_eye, A, D, S);
 
-            ambient += A;
-            diffuse += D;
-            specular += S;
+            ambient_light += A;
+            diffuse_light += D;
+            specular_light += S;
         }
 
     }
 
-    float4 final_color = ambient + diffuse + specular;
+    float4 final_color = ambient_light + diffuse_light + specular_light;
     // take alpha from diffuse materal
     final_color.a = material.diffuse.a; 
 
-    //do other process.
+    //do post process.
 
     return final_color;
 }

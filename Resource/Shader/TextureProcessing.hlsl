@@ -67,7 +67,7 @@ float4 ProcessDiffuse(float2 tex, int type, int diff0, int diff1, int diff2, flo
     return diffuse_texture;
 }
 
-float4 ProcessSpecular(float2 tex, int type, int spec0, float4 mat )
+float4 ProcessSpecular(float2 tex, int type, int spec0, float4 mat)
 {
     float4 specular_texture = float4(0.0f, 0.0f, 0.0f, 0.0f);
     if (type == 1)
@@ -84,7 +84,7 @@ float4 ProcessSpecular(float2 tex, int type, int spec0, float4 mat )
     return specular_texture;
 }
 
-float3 ProcessNormal(float2 tex, int type, int norm0, float t, float b, float3 n)
+float3 ProcessNormal(float2 tex, int type, int norm0, float3 t, float3 b, float3 n)
 {
     float3 normal = float3(0.0f, 0.0f, 0.0f);
     if (type == 1)
