@@ -24,7 +24,8 @@ namespace Engine5
 
         void Initialize();
         void Update(Real dt);
-        void Render() const;
+        void Bind() const;
+        void Draw() const;
         void Shutdown();
 
         void AddParticle(const Particle& particle);

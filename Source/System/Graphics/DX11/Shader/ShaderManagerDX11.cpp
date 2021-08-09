@@ -160,6 +160,8 @@ namespace Engine5
         AddShader(L"ColorInstancing.hlsl", m_instancing_color_vertex_layout);
         AddShader(L"Texture.hlsl", m_texture_vertex_layout);
         AddShader(L"TextureInstancing.hlsl", m_instancing_texture_vertex_layout);
+
+        AddShader(L"PhongInstancing.hlsl", m_instancing_vertex_layout);
         //E5_TODO : need to add light shader.
     }
 

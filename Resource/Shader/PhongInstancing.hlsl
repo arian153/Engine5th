@@ -49,12 +49,10 @@ struct VSOut
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
-
-    float3 world_pos : TEXCOORD1; //world vertex pos
-    float4 ambient : COLOR0; //ambient color
-    float4 diffuse : COLOR1; //diffuse color
-    float4 specular : COLOR2; //specular color
-    
+    float3 pos_world : TEXCOORD1;
+    float4 ambient : COLOR0;
+    float4 diffuse : COLOR1;
+    float4 specular : COLOR2;
 };
 
 
@@ -79,14 +77,16 @@ VSOut VertexShaderEntry(VSIn input)
     output.binormal = mul(input.binormal, world);
     output.binormal = normalize(output.binormal);
 
-    output.world_pos = mul(input.position, input.world);
+    output.pos_world = (float3)mul(input.position, input.world);
+
     output.ambient = input.ambient;
     output.diffuse = input.diffuse;
     output.specular = input.specular;
+    
     return output;
 }
 
-float4 PixelShaderEntry(VSOut input)
+float4 PixelShaderEntry(VSOut input) : SV_TARGET
 {
     //process material
     Material material;
@@ -102,7 +102,7 @@ float4 PixelShaderEntry(VSOut input)
     float3 normal_vec = ProcessNormal(input.tex, norm_type, 4, tangent_world, binormal_world, normal_world);
 
     //process eye vector
-    float3 to_eye_world = normalize(cam_pos - input.world_pos);
+    float3 to_eye_world = normalize(cam_pos - input.pos_world);
 
     //process lighting
     float4 ambient_light = float4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -119,7 +119,7 @@ float4 PixelShaderEntry(VSOut input)
         }
         else if (dynamic_light[i].type == 1)
         {
-            CalculateDirectional(material, dynamic_light[i], normal_vec, to_eye, A, D, S);
+            CalculateDirectional(material, dynamic_light[i], normal_vec, to_eye_world, A, D, S);
             ambient_light += A;
             diffuse_light += D;
             specular_light += S;
@@ -127,7 +127,7 @@ float4 PixelShaderEntry(VSOut input)
         }
         else if (dynamic_light[i].type == 2)
         {
-            CalculatePoint(material, dynamic_light[i], input.pos_world, normal_vec, to_eye, A, D, S);
+            CalculatePoint(material, dynamic_light[i], input.pos_world, normal_vec, to_eye_world, A, D, S);
 
             ambient_light += A;
             diffuse_light += D;
@@ -136,7 +136,7 @@ float4 PixelShaderEntry(VSOut input)
         }
         else if (dynamic_light[i].type == 3)
         {
-            CalculateSpot(material, dynamic_light[i], input.pos_world, normal_vec, to_eye, A, D, S);
+            CalculateSpot(material, dynamic_light[i], input.pos_world, normal_vec, to_eye_world, A, D, S);
 
             ambient_light += A;
             diffuse_light += D;
@@ -144,7 +144,7 @@ float4 PixelShaderEntry(VSOut input)
         }
         else if (dynamic_light[i].type == 4)
         {
-            CalculateCapsule(material, dynamic_light[i], input.pos_world, normal_vec, to_eye, A, D, S);
+            CalculateCapsule(material, dynamic_light[i], input.pos_world, normal_vec, to_eye_world, A, D, S);
 
             ambient_light += A;
             diffuse_light += D;

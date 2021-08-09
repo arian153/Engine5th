@@ -59,6 +59,11 @@ namespace Engine5
         m_main_camera->Update();
         mvp_data.view = m_main_camera->GetViewMatrix();
 
+
+        CameraBufferData camera_data;
+        camera_data.camera_position = m_main_camera->GetPosition();
+        m_camera_buffer->Update(camera_data);
+
         MatrixBufferData mvp_buffer;
         mvp_buffer.view = m_main_camera->GetViewMatrix();
         mvp_buffer.proj = m_projection_matrix;
@@ -116,6 +121,7 @@ namespace Engine5
 
             if (type == "PhongInstancing")
             {
+                m_camera_buffer->Bind();
                 m_light_buffer->Bind();
             }
 
@@ -137,13 +143,17 @@ namespace Engine5
         //}
         //for (auto& particle : m_particle_emitters)
         //{
-        //    mvp_data.model = particle->GetModelMatrix();
-        //    particle->SetBillboardPosition(camera->GetPosition());
+        //    //mvp_data.model = particle->GetModelMatrix();
+        //    particle->SetBillboardPosition(m_main_camera->GetPosition());
+
+
         //    m_shader_manager->RenderInstanceTextureShader(
         //                                                  mvp_data,
         //                                                  particle->GetTexture(),
         //                                                  ColorDef::Pure::White);
-        //    particle->Render();
+
+        //    m_shader_manager->Bind(type);
+        //    particle->Draw();
         //}
     }
 
