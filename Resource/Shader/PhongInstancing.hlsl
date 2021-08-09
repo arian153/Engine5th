@@ -49,7 +49,12 @@ struct VSOut
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
-    float3 view_direction : TEXCOORD1;
+
+    float3 world_pos : TEXCOORD1; //world vertex pos
+    float4 ambient : COLOR0; //ambient color
+    float4 diffuse : COLOR1; //diffuse color
+    float4 specular : COLOR2; //specular color
+    
 };
 
 
@@ -61,15 +66,34 @@ VSOut VertexShaderEntry(VSIn input)
     output.position = mul(input.position, input.world);
     output.position = mul(output.position, view);
     output.position = mul(output.position, proj);
-    output.color = input.color * input.ins_color;
+    output.uv = input.uv;
 
+    float3x3 world = (float3x3)input.world;
+
+    output.normal = mul(input.normal, world);
+    output.normal = normalize(output.normal);
+
+    output.tangent = mul(input.tangent, world);
+    output.tangent = normalize(output.tangent);
+
+    output.binormal = mul(input.binormal, world);
+    output.binormal = normalize(output.binormal);
+
+    output.world_pos = mul(input.position, input.world);
+    output.ambient = input.ambient;
+    output.diffuse = input.diffuse;
+    output.specular = input.specular;
     return output;
 }
 
 float4 PixelShaderEntry(VSOut input)
 {
     float3 normal_world = normalize(input.normal);
-    float3 to_eye_world = normalize(cam_pos - input.pos_world);
+    float3 tangent_world = normalize(input.tangent);
+    float3 binormal_world = normalize(input.binormal);
+    float3 to_eye_world = normalize(cam_pos - input.world_pos);
+
+    //process texture
 
     float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
