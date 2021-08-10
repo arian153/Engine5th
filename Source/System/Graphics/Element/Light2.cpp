@@ -26,39 +26,12 @@ namespace Engine5
 
     LightBufferData Light2::GetLightBuffer() const
     {
-        LightBufferData result;
-        result.ambient_color  = ambient_color;
-        result.diffuse_color  = diffuse_color;
-        result.specular_color = specular_color;
-        result.intensity = specular_power;
-        result.direction      = direction;
-        result.position       = position;
-        result.range          = range;
-        result.attenuation    = attenuation;
-        result.length         = length;
-        result.spot           = spot;
-        result.type           = (int)m_type;
-        return result;
-    }
-
-    void Light2::GetLightBuffer(void* data) const
-    {
-        LightBufferData* result = (LightBufferData*)data;
-        result->ambient_color   = ambient_color;
-        result->diffuse_color   = diffuse_color;
-        result->specular_color  = specular_color;
-        result->intensity  = specular_power;
-        result->direction       = direction;
-        result->position        = position;
-        result->range           = range;
-        result->attenuation     = attenuation;
-        result->length          = length;
-        result->spot            = spot;
-        result->type            = (int)m_type;
+        return light_data;
     }
 
     void Light2::SetType(eLightType type)
     {
-        m_type = type;
+        m_type          = type;
+        light_data.type = (int)type;
     }
 }

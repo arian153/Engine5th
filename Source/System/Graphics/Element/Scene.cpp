@@ -59,7 +59,6 @@ namespace Engine5
         m_main_camera->Update();
         mvp_data.view = m_main_camera->GetViewMatrix();
 
-
         CameraBufferData camera_data;
         camera_data.camera_position = m_main_camera->GetPosition();
         m_camera_buffer->Update(camera_data);
@@ -145,7 +144,6 @@ namespace Engine5
         //{
         //    //mvp_data.model = particle->GetModelMatrix();
         //    particle->SetBillboardPosition(m_main_camera->GetPosition());
-
 
         //    m_shader_manager->RenderInstanceTextureShader(
         //                                                  mvp_data,
@@ -495,8 +493,11 @@ namespace Engine5
 
     void Scene::RemoveLight(Light2* light)
     {
-        auto found = std::find(m_lights.begin(), m_lights.end(), light);
-        m_lights.erase(found);
+        if (!m_lights.empty())
+        {
+            auto found = std::find(m_lights.begin(), m_lights.end(), light);
+            m_lights.erase(found);
+        }
     }
 
     Camera* Scene::AddCamera(Camera* camera)

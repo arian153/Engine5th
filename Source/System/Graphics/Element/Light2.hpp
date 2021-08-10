@@ -18,12 +18,13 @@ namespace Engine5
         void Shutdown() const;
 
         LightBufferData GetLightBuffer() const;
-        void            GetLightBuffer(void* data) const;
-
         void SetType(eLightType type);
 
     public:
-        Color ambient_color;
+        LightBufferData light_data;
+
+
+       /* Color ambient_color;
         Color ambient_range;
         Color diffuse_color;
         Color specular_color;
@@ -34,8 +35,10 @@ namespace Engine5
         Real    range = 1.0f;
         Real    spot  = 0.0f;
         Vector3 attenuation;
-        Real    length = 0.0f;
+        Real    length = 0.0f;*/
 
+    private:
+        friend class LightComponent;
     private:
         LightComponent* m_component = nullptr;
         eLightType      m_type      = eLightType::PointLight;

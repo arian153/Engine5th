@@ -44,7 +44,7 @@
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 0, 0 ],
+                        "Position": [ -5, 0, 0 ],
                         "Scale": [ 3, 3, 3 ]
                     }
                 },
@@ -57,7 +57,7 @@
                         },
                         "Color": {
                             "Ambient": [ 0.1, 0.1, 0.1, 1 ],
-                            "Diffuse": [ 0.85, 0.8, 0.1, 1 ],
+                            "Diffuse": [ 0.285, 0.8, 0.1, 1 ],
                             "Specular": [ 0.2, 0.6, 0.3, 1 ]
                         },
                         "Texture": {
@@ -69,7 +69,7 @@
                             "NormalMap": 0
 
                         },
-                        "Shader Type": "TextureInstancing"
+                        "Shader Type": "PhongInstancing"
 
                     }
                 }
@@ -108,7 +108,7 @@
                             "NormalMap": 0
 
                         },
-                        "Shader Type": "TextureInstancing"
+                        "Shader Type": "PhongInstancing"
 
                     }
                 }
@@ -134,7 +134,7 @@
                             "Path": "../../Resource/Mesh/CS300/starwars1.obj"
                         },
                         "Color": {
-                            "Ambient": [ 0.1, 0.1, 0.1, 1 ],
+                            "Ambient": [ 0.5, 0.5, 0.5, 1 ],
                             "Diffuse": [ 0.285, 0.8, 0.71, 1 ],
                             "Specular": [ 0.2, 0.6, 0.3, 1 ]
                         },
@@ -147,7 +147,7 @@
                             "NormalMap": 0
 
                         },
-                        "Shader Type": "TextureInstancing"
+                        "Shader Type": "PhongInstancing"
 
                     }
                 }
@@ -186,12 +186,34 @@
                             "NormalMap": 0
 
                         },
-                        "Shader Type": "TextureInstancing"
+                        "Shader Type": "PhongInstancing"
 
                     }
                 }
             ],
             "Name": "Mesh"
+        },
+
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 10, 0, 0 ],
+                        "Scale": [ 3, 3, 3 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::LightComponent",
+                    "Value": {
+                        "Type": "AmbientLight",
+                        "Ambient Color": [0.95, 0.45, 0.45, 1.0],
+                        "Ambient Range": [0.35, 0.35, 0.95, 1.0]
+                    }
+                }
+            ],
+            "Name": "Light"
         }
     ],
     "Settings": {
