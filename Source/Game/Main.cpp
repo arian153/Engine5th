@@ -2,6 +2,7 @@
 #include "../System/Core/Core.hpp"
 #include "../Manager/Component/ComponentRegistry.hpp"
 #include "GameLogic/Factory/ControllerFactory.h"
+#include "GameLogic/Factory/RotatingFactory.h"
 #include "../Manager/Level/LevelManager.hpp"
 
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR cmd_line, int show_cmd)
@@ -12,6 +13,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR cmd_line, 
     //app->GetLevelManager()->SetInitialLevel("Collider");
     //Add game components
     app->GetComponentRegistry()->AddFactory(new Game::ControllerFactory);
+    app->GetComponentRegistry()->AddFactory(new Game::RotatingFactory);
 
     app->Update();
     app->Shutdown();

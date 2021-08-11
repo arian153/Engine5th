@@ -16,6 +16,14 @@ namespace Engine5
     {
     }
 
+    void Light2::Update(Real dt) const
+    {
+        if (m_component != nullptr)
+        {
+            m_component->Update(dt);
+        }
+    }
+
     void Light2::Shutdown() const
     {
         if (m_component != nullptr)

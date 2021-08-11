@@ -36,6 +36,11 @@ namespace Engine5
     void LightComponent::Update(Real dt)
     {
         E5_UNUSED_PARAM(dt);
+
+        if (m_transform != nullptr)
+        {
+            m_light->light_data.position = m_transform->position;
+        }
     }
 
     void LightComponent::Shutdown()
@@ -62,29 +67,40 @@ namespace Engine5
 
     bool LightComponent::Load(const Json::Value& data)
     {
-        if (JsonResource::HasMember(data, "Type") && data["Type"].isString())
+        if (JsonResource::HasMember(data, "Type"))
         {
-            std::string light_type = data["Type"].asString();
+            if (data["Type"].isString())
+            {
+                std::string light_type = data["Type"].asString();
 
-            if (light_type == "AmbientLight")
-            {
-                SetLightType(eLightType::AmbientLight);
+                if (light_type == "AmbientLight")
+                {
+                    SetLightType(eLightType::AmbientLight);
+                }
+                else if (light_type == "DirectionalLight")
+                {
+                    SetLightType(eLightType::DirectionalLight);
+                }
+                else if (light_type == "PointLight")
+                {
+                    SetLightType(eLightType::PointLight);
+                }
+                else if (light_type == "SpotLight")
+                {
+                    SetLightType(eLightType::SpotLight);
+                }
+                else if (light_type == "CapsuleLight")
+                {
+                    SetLightType(eLightType::CapsuleLight);
+                }
             }
-            else if (light_type == "DirectionalLight")
+
+            if (data["Type"].isInt())
             {
-                SetLightType(eLightType::DirectionalLight);
-            }
-            else if (light_type == "PointLight")
-            {
-                SetLightType(eLightType::PointLight);
-            }
-            else if (light_type == "SpotLight")
-            {
-                SetLightType(eLightType::SpotLight);
-            }
-            else if (light_type == "CapsuleLight")
-            {
-                SetLightType(eLightType::CapsuleLight);
+                int light_type = data["Type"].asInt();
+                light_type %= 5;
+
+                SetLightType((eLightType)light_type);
             }
         }
         if (JsonResource::HasMember(data, "Ambient Color") && JsonResource::IsColor(data["Ambient Color"]))

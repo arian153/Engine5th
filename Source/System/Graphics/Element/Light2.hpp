@@ -15,6 +15,7 @@ namespace Engine5
         ~Light2();
 
         void Initialize();
+        void Update(Real dt) const;
         void Shutdown() const;
 
         LightBufferData GetLightBuffer() const;
@@ -22,20 +23,6 @@ namespace Engine5
 
     public:
         LightBufferData light_data;
-
-
-       /* Color ambient_color;
-        Color ambient_range;
-        Color diffuse_color;
-        Color specular_color;
-        Real  specular_power = 1.0f;
-
-        Vector3 direction;
-        Vector3 position;
-        Real    range = 1.0f;
-        Real    spot  = 0.0f;
-        Vector3 attenuation;
-        Real    length = 0.0f;*/
 
     private:
         friend class LightComponent;

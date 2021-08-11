@@ -14,7 +14,6 @@ namespace Game
     }
 
     Engine5::Component* ControllerFactory::Create(Engine5::Object* owner, Engine5::Space* space)
-
     {
         auto create    = new ControllerComponent(owner);
         create->m_type = type;

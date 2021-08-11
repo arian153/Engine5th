@@ -89,6 +89,11 @@ namespace Engine5
         {
             mesh_compo->Update(dt);
         }
+
+        for (auto& light : m_lights)
+        {
+            light->Update(dt);
+        }
     }
 
     void Scene::Render() const
