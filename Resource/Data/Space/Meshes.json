@@ -43,9 +43,9 @@
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ -5, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [-5, 0, 0],
+                        "Scale": [3, 3, 3]
                     }
                 },
                 {
@@ -56,9 +56,9 @@
                             "Path": "../../Resource/Mesh/CS300/starwars1.obj"
                         },
                         "Color": {
-                            "Ambient": [ 0.1, 0.1, 0.1, 1 ],
-                            "Diffuse": [ 0.285, 0.8, 0.1, 1 ],
-                            "Specular": [ 0.2, 0.6, 0.3, 1 ]
+                            "Ambient": [0.1, 0.1, 0.1, 1],
+                            "Diffuse": [0.285, 0.8, 0.1, 1],
+                            "Specular": [0.2, 0.6, 0.3, 1]
                         },
                         "Texture": {
                             "DiffuseType": "None",
@@ -76,15 +76,14 @@
             ],
             "Name": "Mesh"
         },
-
         {
             "Components": [
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 0, 0],
+                        "Scale": [3, 3, 3]
                     }
                 },
                 {
@@ -95,9 +94,9 @@
                             "Path": "../../Resource/Mesh/CS300/starwars1.obj"
                         },
                         "Color": {
-                            "Ambient": [ 0.1, 0.1, 0.1, 1 ],
-                            "Diffuse": [ 0.85, 0.8, 0.1, 1 ],
-                            "Specular": [ 0.2, 0.6, 0.3, 1 ]
+                            "Ambient": [0.1, 0.1, 0.1, 1],
+                            "Diffuse": [0.85, 0.8, 0.1, 1],
+                            "Specular": [0.2, 0.6, 0.3, 1]
                         },
                         "Texture": {
                             "DiffuseType": "None",
@@ -115,15 +114,14 @@
             ],
             "Name": "Mesh"
         },
-
         {
             "Components": [
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 5, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 5, 0],
+                        "Scale": [3, 3, 3]
                     }
                 },
                 {
@@ -134,9 +132,9 @@
                             "Path": "../../Resource/Mesh/CS300/starwars1.obj"
                         },
                         "Color": {
-                            "Ambient": [ 0.5, 0.5, 0.5, 1 ],
-                            "Diffuse": [ 0.285, 0.8, 0.71, 1 ],
-                            "Specular": [ 0.2, 0.6, 0.3, 1 ]
+                            "Ambient": [0.5, 0.5, 0.5, 1],
+                            "Diffuse": [0.285, 0.8, 0.71, 1],
+                            "Specular": [0.2, 0.6, 0.3, 1]
                         },
                         "Texture": {
                             "DiffuseType": "None",
@@ -154,15 +152,14 @@
             ],
             "Name": "Mesh"
         },
-
         {
             "Components": [
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 5, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [5, 0, 0],
+                        "Scale": [3, 3, 3]
                     }
                 },
                 {
@@ -173,9 +170,9 @@
                             "Path": "../../Resource/Mesh/CS300/starwars1.obj"
                         },
                         "Color": {
-                            "Ambient": [ 0.1, 0.1, 0.1, 1 ],
-                            "Diffuse": [ 0.85, 0.28, 0.1, 1 ],
-                            "Specular": [ 0.2, 0.6, 0.3, 1 ]
+                            "Ambient": [0.1, 0.1, 0.1, 1],
+                            "Diffuse": [0.85, 0.28, 0.1, 1],
+                            "Specular": [0.2, 0.6, 0.3, 1]
                         },
                         "Texture": {
                             "DiffuseType": "None",
@@ -193,15 +190,14 @@
             ],
             "Name": "Mesh"
         },
-
         {
             "Components": [
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 10, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [10, 0, 0],
+                        "Scale": [3, 3, 3]
                     }
                 },
                 {
@@ -213,7 +209,126 @@
                     }
                 }
             ],
-            "Name": "Light"
+            "Name": "AmbientLight"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [10, 0, 0],
+                        "Scale": [3, 3, 3]
+                    }
+                },
+                {
+                    "Type": "class Engine5::LightComponent",
+                    "Value": {
+                        "Type": "DirectionalLight",
+                        "Ambient Color": [0.15, 0.15, 0.15, 1.0],
+                        "Diffuse Color": [0.55, 0.55, 0.15, 1.0],
+                        "Specular Color": [0.9, 0.9, 0.9, 1.0],
+                        "Intensity": 1.0,
+                        "Direction": [1.0, 0.0, 0.0],
+                        "Position": [0.0, 0.0, 0.0],
+                        "Attenuation": [1.0, 1.0, 1.0],
+                        "Length": 1.0,
+                        "Range": 5.0,
+                        "Spot": 1.0
+                    }
+                }
+            ],
+            "Name": "DirectionalLight"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [10, 0, 0],
+                        "Scale": [3, 3, 3]
+                    }
+                },
+                {
+                    "Type": "class Engine5::LightComponent",
+                    "Value": {
+                        "Type": "PointLight",
+                        "Ambient Color": [ 0.15, 0.15, 0.15, 1.0 ],
+                        "Diffuse Color": [ 0.55, 0.55, 0.15, 1.0 ],
+                        "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+                        "Intensity": 1.0,
+                        "Direction": [ 1.0, 0.0, 0.0 ],
+                        "Position": [ 0.0, 0.0, 0.0 ],
+                        "Attenuation": [ 1.0, 1.0, 1.0 ],
+                        "Length": 1.0,
+                        "Range": 5.0,
+                        "Spot": 1.0
+
+                    }
+                }
+            ],
+            "Name": "PointLight"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [10, 0, 0],
+                        "Scale": [3, 3, 3]
+                    }
+                },
+                {
+                    "Type": "class Engine5::LightComponent",
+                    "Value": {
+                        "Type": "SpotLight",
+                        "Ambient Color": [ 0.15, 0.15, 0.15, 1.0 ],
+                        "Diffuse Color": [ 0.55, 0.55, 0.15, 1.0 ],
+                        "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+                        "Intensity": 1.0,
+                        "Direction": [ 1.0, 0.0, 0.0 ],
+                        "Position": [ 0.0, 0.0, 0.0 ],
+                        "Attenuation": [ 1.0, 1.0, 1.0 ],
+                        "Length": 1.0,
+                        "Range": 5.0,
+                        "Spot": 1.0
+
+                    }
+                }
+            ],
+            "Name": "SpotLight"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [10, 0, 0],
+                        "Scale": [3, 3, 3]
+                    }
+                },
+                {
+                    "Type": "class Engine5::LightComponent",
+                    "Value": {
+                        "Type": "CapsuleLight",
+                        "Ambient Color": [ 0.15, 0.15, 0.15, 1.0 ],
+                        "Diffuse Color": [ 0.55, 0.55, 0.15, 1.0 ],
+                        "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+                        "Intensity": 1.0,
+                        "Direction": [ 1.0, 0.0, 0.0 ],
+                        "Position": [ 0.0, 0.0, 0.0 ],
+                        "Attenuation": [ 1.0, 1.0, 1.0 ],
+                        "Length": 1.0,
+                        "Range": 5.0,
+                        "Spot": 1.0
+
+                    }
+                }
+            ],
+            "Name": "CapsuleLight"
         }
     ],
     "Settings": {
