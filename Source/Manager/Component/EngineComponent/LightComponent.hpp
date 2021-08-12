@@ -23,6 +23,7 @@ namespace Engine5
         void Shutdown() override;
 
         void SetLightType(eLightType type);
+        void SetLightDirection(const Vector3& dir) const;
 
         Light2* GetLight() const;
 

@@ -39,7 +39,7 @@ namespace Engine5
 
         if (m_transform != nullptr)
         {
-            m_light->light_data.position = m_transform->position;
+            m_light->light_data.position  = m_transform->position;
         }
     }
 
@@ -58,6 +58,11 @@ namespace Engine5
     {
         m_light_type = type;
         m_light->SetType(type);
+    }
+
+    void LightComponent::SetLightDirection(const Vector3& dir) const
+    {
+        m_light->light_data.direction = dir;
     }
 
     Light2* LightComponent::GetLight() const
@@ -157,7 +162,90 @@ namespace Engine5
 
     void LightComponent::Edit(CommandRegistry* command_registry)
     {
-        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
+        if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
+        {
+            ImGui::Text("Light Type");
+            const char* light_type[] = {"Ambient Light", "Directional Light", "Point Light", "Spot Light", "Capsule Light"};
+
+            if (ImGui::Combo("##Light Type", (int*)&m_light_type, light_type, 5))
+            {
+                m_light->SetType(m_light_type);
+            }
+
+            ImGui::Text("Ambient Color");
+            ImGui::ColorEdit4("##Ambient Color", &m_light->light_data.ambient_color.r);
+
+            if (m_light_type == eLightType::AmbientLight)
+            {
+                ImGui::Text("Ambient Range");
+                ImGui::ColorEdit4("##Ambient Range", &m_light->light_data.ambient_range.r);
+            }
+            else
+            {
+                ImGui::Text("Diffuse Color");
+                if (ImGui::ColorEdit4("##Diffuse Color", &m_light->light_data.diffuse_color.r))
+                {
+                }
+
+                ImGui::Text("Specular Color");
+                ImGui::ColorEdit4("##Specular Color", &m_light->light_data.specular_color.r);
+
+                ImGui::Text("Intensity");
+                ImGui::DragFloat("##Intensity", &m_light->light_data.intensity);
+
+                if (m_light_type == eLightType::DirectionalLight)
+                {
+                    ImGui::Text("Direction");
+                    ImGui::InputFloat3("##Direction", &m_light->light_data.direction.x);
+                }
+                else if (m_light_type == eLightType::PointLight)
+                {
+                    Vector3 pos = m_light->light_data.position;
+                    ImGui::Text("Position");
+                    ImGui::Text("[%.3f, %.3f, %.3f]", pos[0], pos[1], pos[2]);
+                    ImGui::Text("Range");
+                    ImGui::InputFloat("##Range", &m_light->light_data.range);
+                    ImGui::Text("Attenuation");
+                    ImGui::InputFloat3("##Attenuation", &m_light->light_data.attenuation.x);
+                }
+                else if (m_light_type == eLightType::SpotLight)
+                {
+                    Vector3 pos = m_light->light_data.position;
+                    ImGui::Text("Position");
+                    ImGui::Text("[%.3f, %.3f, %.3f]", pos[0], pos[1], pos[2]);
+
+                    ImGui::Text("Direction");
+                    ImGui::InputFloat3("##Direction", &m_light->light_data.direction.x);
+
+                    ImGui::Text("Spot");
+                    ImGui::InputFloat("##Spot", &m_light->light_data.spot);
+
+                    ImGui::Text("Range");
+                    ImGui::InputFloat("##Range", &m_light->light_data.range);
+
+                    ImGui::Text("Attenuation");
+                    ImGui::InputFloat3("##Attenuation", &m_light->light_data.attenuation.x);
+                }
+                else if (m_light_type == eLightType::CapsuleLight)
+                {
+                    Vector3 pos = m_light->light_data.position;
+                    ImGui::Text("Position");
+                    ImGui::Text("[%.3f, %.3f, %.3f]", pos[0], pos[1], pos[2]);
+
+                    ImGui::Text("Direction");
+                    ImGui::InputFloat3("##Direction", &m_light->light_data.direction.x);
+
+                    ImGui::Text("Length");
+                    ImGui::InputFloat("##Length", &m_light->light_data.length);
+
+                    ImGui::Text("Range");
+                    ImGui::InputFloat("##Range", &m_light->light_data.range);
+
+                    ImGui::Text("Attenuation");
+                    ImGui::InputFloat3("##Attenuation", &m_light->light_data.attenuation.x);
+                }
+            }
+        }
     }
 
     void LightComponent::Subscribe()

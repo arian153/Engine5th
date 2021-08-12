@@ -19,16 +19,16 @@
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 0, -60 ],
-                        "Scale": [ 1, 1, 1 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 0, -60],
+                        "Scale": [1, 1, 1]
                     }
                 },
                 {
                     "Type": "class Engine5::CameraComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 0, -60 ],
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 0, -60],
                         "Zoom": 1.0
                     }
                 },
@@ -43,9 +43,9 @@
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ -5, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 0, 0],
+                        "Scale": [1, 1, 1]
                     }
                 },
                 {
@@ -53,12 +53,12 @@
                     "Value": {
                         "Mesh": {
                             "Type": "File",
-                            "Path": "../../Resource/Mesh/CS300/starwars1.obj"
+                            "Path": "../../Resource/Mesh/CS300/bunny_high_poly.obj"
                         },
                         "Color": {
-                            "Ambient": [ 1, 1, 1, 1 ],
-                            "Diffuse": [ 0.285, 0.8, 0.1, 1 ],
-                            "Specular": [ 0.2, 0.6, 0.3, 32 ]
+                            "Ambient": [1, 1, 1, 1],
+                            "Diffuse": [1, 1, 1, 1],
+                            "Specular": [1, 1, 1, 32]
                         },
                         "Texture": {
                             "DiffuseType": "None",
@@ -81,123 +81,9 @@
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::MeshComponent",
-                    "Value": {
-                        "Mesh": {
-                            "Type": "File",
-                            "Path": "../../Resource/Mesh/CS300/starwars1.obj"
-                        },
-                        "Color": {
-                            "Ambient": [ 1, 1, 1, 1 ],
-                            "Diffuse": [ 0.85, 0.8, 0.1, 1 ],
-                            "Specular": [ 0.2, 0.6, 0.3, 32 ]
-                        },
-                        "Texture": {
-                            "DiffuseType": "None",
-                            "Diffuse0": "",
-                            "Diffuse1": "",
-                            "Diffuse2": "",
-                            "Specular": 0,
-                            "NormalMap": 0
-
-                        },
-                        "Shader Type": "PhongInstancing"
-
-                    }
-                }
-            ],
-            "Name": "Mesh"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 0, 5, 0 ],
-                        "Scale": [ 3, 3, 3 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::MeshComponent",
-                    "Value": {
-                        "Mesh": {
-                            "Type": "File",
-                            "Path": "../../Resource/Mesh/CS300/starwars1.obj"
-                        },
-                        "Color": {
-                            "Ambient": [ 1, 1, 1, 1 ],
-                            "Diffuse": [ 0.285, 0.8, 0.71, 1 ],
-                            "Specular": [ 0.2, 0.6, 0.3, 32 ]
-                        },
-                        "Texture": {
-                            "DiffuseType": "None",
-                            "Diffuse0": "",
-                            "Diffuse1": "",
-                            "Diffuse2": "",
-                            "Specular": 0,
-                            "NormalMap": 0
-
-                        },
-                        "Shader Type": "PhongInstancing"
-
-                    }
-                }
-            ],
-            "Name": "Mesh"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 5, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
-                    }
-                },
-                {
-                    "Type": "class Engine5::MeshComponent",
-                    "Value": {
-                        "Mesh": {
-                            "Type": "File",
-                            "Path": "../../Resource/Mesh/CS300/starwars1.obj"
-                        },
-                        "Color": {
-                            "Ambient": [ 1, 1, 1, 1 ],
-                            "Diffuse": [ 0.85, 0.28, 0.1, 1 ],
-                            "Specular": [ 0.2, 0.6, 0.3, 32 ]
-                        },
-                        "Texture": {
-                            "DiffuseType": "None",
-                            "Diffuse0": "",
-                            "Diffuse1": "",
-                            "Diffuse2": "",
-                            "Specular": 0,
-                            "NormalMap": 0
-
-                        },
-                        "Shader Type": "PhongInstancing"
-
-                    }
-                }
-            ],
-            "Name": "Mesh"
-        },
-        {
-            "Components": [
-                {
-                    "Type": "class Engine5::TransformComponent",
-                    "Value": {
-                        "Orientation": [ 0.707, 0.707, 0, 0 ],
-                        "Position": [ 0, -1, 0 ],
-                        "Scale": [ 20, 20, 20 ]
+                        "Orientation": [0.707, 0.707, 0, 0],
+                        "Position": [0, -1, 0],
+                        "Scale": [20, 20, 20]
                     }
                 },
                 {
@@ -208,9 +94,9 @@
                             "Path": "../../Resource/Mesh/CS300/triangle.obj"
                         },
                         "Color": {
-                            "Ambient": [ 1, 1, 1, 1 ],
-                            "Diffuse": [ 1, 1, 1, 1 ],
-                            "Specular": [ 1, 1, 1, 32 ]
+                            "Ambient": [1, 1, 1, 1],
+                            "Diffuse": [1, 1, 1, 1],
+                            "Specular": [1, 1, 1, 32]
                         },
                         "Texture": {
                             "DiffuseType": "None",
@@ -233,23 +119,23 @@
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 10, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [10, 0, 0],
+                        "Scale": [3, 3, 3]
                     }
                 },
                 {
                     "Type": "class Engine5::LightComponent",
                     "Value": {
                         "Type": 0,
-                        "Ambient Color": [ 0.15, 0.15, 0.15, 1.0 ],
-                        "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
-                        "Diffuse Color": [ 0.55, 0.55, 0.55, 1.0 ],
-                        "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+                        "Ambient Color": [0.15, 0.15, 0.15, 1.0],
+                        "Ambient Range": [0.35, 0.35, 0.95, 1.0],
+                        "Diffuse Color": [0.55, 0.55, 0.55, 1.0],
+                        "Specular Color": [0.9, 0.9, 0.9, 1.0],
                         "Intensity": 1.0,
-                        "Direction": [ 1.0, 0.0, 0.0 ],
-                        "Position": [ 0.0, 0.0, 0.0 ],
-                        "Attenuation": [ 1.0, 1.0, 1.0 ],
+                        "Direction": [1.0, 0.0, 0.0],
+                        "Position": [0.0, 0.0, 0.0],
+                        "Attenuation": [1.0, 1.0, 1.0],
                         "Length": 1.0,
                         "Range": 5.0,
                         "Spot": 1.0
@@ -261,29 +147,28 @@
             ],
             "Name": "Ambient Light"
         },
-
         {
             "Components": [
                 {
                     "Type": "class Engine5::TransformComponent",
                     "Value": {
-                        "Orientation": [ 1, 0, 0, 0 ],
-                        "Position": [ 10, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [10, 0, 0],
+                        "Scale": [3, 3, 3]
                     }
                 },
                 {
                     "Type": "class Engine5::LightComponent",
                     "Value": {
                         "Type": 2,
-                        "Ambient Color": [ 0, 0, 0, 1.0 ],
-                        "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
-                        "Diffuse Color": [ 0.55, 0.55, 0.55, 1.0 ],
-                        "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+                        "Ambient Color": [0, 0, 0, 1.0],
+                        "Ambient Range": [0.35, 0.35, 0.95, 1.0],
+                        "Diffuse Color": [0.55, 0.55, 0.55, 1.0],
+                        "Specular Color": [0.9, 0.9, 0.9, 1.0],
                         "Intensity": 1.0,
-                        "Direction": [ 1.0, 0.0, 0.0 ],
-                        "Position": [ 0.0, 0.0, 0.0 ],
-                        "Attenuation": [ 1.0, 1.0, 1.0 ],
+                        "Direction": [1.0, 0.0, 0.0],
+                        "Position": [0.0, 0.0, 0.0],
+                        "Attenuation": [1.0, 1.0, 1.0],
                         "Length": 1.0,
                         "Range": 5.0,
                         "Spot": 1.0

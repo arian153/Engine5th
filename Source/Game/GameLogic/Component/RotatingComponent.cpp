@@ -1,5 +1,6 @@
 #include "RotatingComponent.h"
 
+#include "../../../Manager/Component/EngineComponent/LightComponent.hpp"
 #include "../../../Manager/Object/Object.hpp"
 #include "../../../Manager/Component/EngineComponent/TransformComponent.hpp"
 #include "../../../Manager/Space/Space.hpp"
@@ -33,6 +34,12 @@ namespace Game
             Vector3 position  = s_orbit_radius * (cosf(m_elapsed_angle) * s_basis.j + sinf(m_elapsed_angle) * s_basis.k);
             auto    transform = m_owner->GetComponent<Engine5::TransformComponent>();
             transform->SetPosition(s_orbit_center + position);
+
+            if (m_owner->HasComponent<Engine5::LightComponent>())
+            {
+                auto light = m_owner->GetComponent<Engine5::LightComponent>();
+                light->SetLightDirection((-position).Unit());
+            }
         }
     }
 

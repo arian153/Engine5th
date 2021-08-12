@@ -336,7 +336,12 @@ namespace Engine5
                                                   &TransformComponent::SetOrientation>(this, prev, next));
             }
             ImGui::Text("Radian");
-            ImGui::SliderAngle("##TransformEdit3", &radian);
+            if(ImGui::SliderAngle("##TransformEdit3", &radian))
+            {
+                AxisRadian prev = m_axis_holder;
+                prev.radian = radian;
+                m_transform.orientation.Set(prev);
+            }
             if (ImGui::IsItemEdited())
             {
                 m_edit_radian.axis   = m_axis_holder.axis;
@@ -351,7 +356,12 @@ namespace Engine5
                                                   &TransformComponent::SetOrientation>(this, m_axis_holder, m_edit_radian));
             }
             ImGui::Text("Quaternion");
-            ImGui::SliderFloat4("##TransformEdit4", quaternion, -1.0f, 1.0f);
+            if(ImGui::SliderFloat4("##TransformEdit4", quaternion, -1.0f, 1.0f))
+            {
+                Quaternion edited(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
+                edited.SetNormalize();
+                m_transform.orientation.Set(edited);
+            }
             if (ImGui::IsItemEdited())
             {
                 m_edit_quaternion = Quaternion(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
