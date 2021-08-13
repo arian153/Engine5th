@@ -228,7 +228,50 @@ namespace Engine5
 
     void MeshComponent::Edit(CommandRegistry* command_registry)
     {
-        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
+        if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
+        {
+            Matrix44 model = m_transform->LocalToWorldMatrix().Transpose();
+
+            static bool is_1f = true;
+
+            if (ImGui::Button(is_1f ? "3digit" : "1digit"))
+            {
+                is_1f = !is_1f;
+            }
+
+            if (is_1f)
+            {
+                ImGui::Text("World");
+                ImGui::Text("|%.1f, %.1f, %.1f, %.1f|", model[0], model[1], model[2], model[3]);
+                ImGui::Text("|%.1f, %.1f, %.1f, %.1f|", model[4], model[5], model[6], model[7]);
+                ImGui::Text("|%.1f, %.1f, %.1f, %.1f|", model[8], model[9], model[10], model[11]);
+                ImGui::Text("|%.1f, %.1f, %.1f, %.1f|", model[12], model[13], model[14], model[15]);
+
+                model.SetInverse();
+                model.SetTranspose();
+                ImGui::Text("World Inverse Transpose");
+                ImGui::Text("|%.1f, %.1f, %.1f, %.1f|", model[0], model[1], model[2], model[3]);
+                ImGui::Text("|%.1f, %.1f, %.1f, %.1f|", model[4], model[5], model[6], model[7]);
+                ImGui::Text("|%.1f, %.1f, %.1f, %.1f|", model[8], model[9], model[10], model[11]);
+                ImGui::Text("|%.1f, %.1f, %.1f, %.1f|", model[12], model[13], model[14], model[15]);
+            }
+            else
+            {
+                ImGui::Text("World");
+                ImGui::Text("|%.3f, %.3f, %.3f, %.3f|", model[0], model[1], model[2], model[3]);
+                ImGui::Text("|%.3f, %.3f, %.3f, %.3f|", model[4], model[5], model[6], model[7]);
+                ImGui::Text("|%.3f, %.3f, %.3f, %.3f|", model[8], model[9], model[10], model[11]);
+                ImGui::Text("|%.3f, %.3f, %.3f, %.3f|", model[12], model[13], model[14], model[15]);
+
+                model.SetInverse();
+                model.SetTranspose();
+                ImGui::Text("World Inverse Transpose");
+                ImGui::Text("|%.3f, %.3f, %.3f, %.3f|", model[0], model[1], model[2], model[3]);
+                ImGui::Text("|%.3f, %.3f, %.3f, %.3f|", model[4], model[5], model[6], model[7]);
+                ImGui::Text("|%.3f, %.3f, %.3f, %.3f|", model[8], model[9], model[10], model[11]);
+                ImGui::Text("|%.3f, %.3f, %.3f, %.3f|", model[12], model[13], model[14], model[15]);
+            }
+        }
         //E5_TODO : Need to add user interface for mesh component
         //E5_TODO : Select Model Data from file
         //E5_TODO : Select Generated Model Data

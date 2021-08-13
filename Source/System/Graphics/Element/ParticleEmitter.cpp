@@ -46,7 +46,10 @@ namespace Engine5
             m_particles[i].life -= m_base_particle.life * m_life_decay_rate * dt;
             m_particles[i].scale -= m_base_particle.scale * m_scale_decay_rate * dt;
             auto world = ParticleToWorldMatrix(m_particles[i], orientation);
-            m_instances.push_back({world, m_particles[i].color, m_particles[i].color, m_particles[i].color});
+            InstanceBufferData data;
+            data.model = world;
+            data.diffuse = m_particles[i].color;
+            m_instances.push_back(data);
         }
         m_instance_buffer->Update(m_instances);
     }
