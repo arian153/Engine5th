@@ -185,6 +185,7 @@ namespace Engine5
         m_instances[m_instance_count].ambient  = color.ambient;
         m_instances[m_instance_count].diffuse  = color.diffuse;
         m_instances[m_instance_count].specular = color.specular;
+        m_instances[m_instance_count].reflect = color.reflect;
         m_instance_count++;
     }
 

@@ -161,6 +161,8 @@ namespace Engine5
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
+
         }
 
         AddShader(L"Color.hlsl", m_color_vertex_layout);

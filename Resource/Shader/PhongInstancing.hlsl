@@ -41,6 +41,7 @@ struct VSIn
     float4 ambient : COLOR0;
     float4 diffuse : COLOR1;
     float4 specular : COLOR2;
+    float4 reflect : COLOR3;
 };
 
 struct VSOut
@@ -54,6 +55,7 @@ struct VSOut
     float4 ambient : COLOR0;
     float4 diffuse : COLOR1;
     float4 specular : COLOR2;
+    float4 reflect : COLOR3;
 };
 
 
@@ -83,6 +85,7 @@ VSOut VertexShaderEntry(VSIn input)
     output.ambient = input.ambient;
     output.diffuse = input.diffuse;
     output.specular = input.specular;
+    output.reflect = input.reflect;
     
     return output;
 }
@@ -94,7 +97,7 @@ float4 PixelShaderEntry(VSOut input) : SV_TARGET
     material.ambient = input.ambient;
     material.diffuse = ProcessDiffuse(input.tex, diff_type, 0, 1, 2, input.diffuse, gamma);
     material.specular = ProcessSpecular(input.tex, spec_type, 3, input.specular);
-    material.reflect = float4(0.0f, 0.0f, 0.0f, 0.0f);;
+    material.reflect = input.reflect;
 
     //process normal
     float3 tangent_world = normalize(input.tangent);

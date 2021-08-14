@@ -46,5 +46,6 @@ namespace Engine5
         Color ambient;
         Color diffuse;
         Color specular;
+        Color reflect;
     };
 }
