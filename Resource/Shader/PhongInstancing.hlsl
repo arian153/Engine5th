@@ -69,15 +69,15 @@ VSOut VertexShaderEntry(VSIn input)
     output.position = mul(output.position, proj);
     output.tex = input.tex;
 
-    float3x3 world = (float3x3)input.world_it;
+    float3x3 inv_trans_world = (float3x3)input.world_it;
 
-    output.normal = mul(input.normal, world);
+    output.normal = mul(input.normal, inv_trans_world);
     output.normal = normalize(output.normal);
 
-    output.tangent = mul(input.tangent, world);
+    output.tangent = mul(input.tangent, inv_trans_world);
     output.tangent = normalize(output.tangent);
 
-    output.binormal = mul(input.binormal, world);
+    output.binormal = mul(input.binormal, inv_trans_world);
     output.binormal = normalize(output.binormal);
 
     output.pos_world = (float3)mul(input.position, input.world);
@@ -103,7 +103,7 @@ float4 PixelShaderEntry(VSOut input) : SV_TARGET
     float3 tangent_world = normalize(input.tangent);
     float3 binormal_world = normalize(input.binormal);
     float3 normal_world = normalize(input.normal);
-    float3 normal_vec = ProcessNormal(input.tex, norm_type, 4, tangent_world, binormal_world, normal_world);
+    float3 normal_vec = normal_world;//ProcessNormal(input.tex, norm_type, 4, tangent_world, binormal_world, normal_world);
 
     //process eye vector
     float3 to_eye_world = normalize(cam_pos - input.pos_world);

@@ -361,8 +361,8 @@ void CalculatePoint(Material   mat, DynamicLight   light,
     [flatten]
     if (diffuse_factor > 0.0f)
     {
-        float3 v           = reflect(-light_vec, normal);
-        float  spec_factor = pow(max(dot(v, to_eye), 0.0f), mat.specular.w);
+        float3 h = normalize(light_vec + to_eye);
+        float  spec_factor = pow(max(dot(h, normal), 0.0f), mat.specular.w) * light.intensity;
 
         diffuse  = diffuse_factor * mat.diffuse * light.diffuse_color;
         specular = spec_factor * mat.specular * light.specular_color;
@@ -409,8 +409,8 @@ void CalculateSpot(Material   mat, DynamicLight   light,
     [flatten]
     if (diffuse_factor > 0.0f)
     {
-        float3 v           = reflect(-light_vec, normal);
-        float  spec_factor = pow(max(dot(v, to_eye), 0.0f), mat.specular.w) * light.intensity;
+        float3 h = normalize(light_vec + to_eye);
+        float  spec_factor = pow(max(dot(h, normal), 0.0f), mat.specular.w) * light.intensity;
 
         diffuse  = diffuse_factor * mat.diffuse * light.diffuse_color;
         specular = spec_factor * mat.specular * light.specular_color;
@@ -464,11 +464,11 @@ void CalculateCapsule(Material   mat, DynamicLight   light,
     [flatten]
     if (diffuse_factor > 0.0f)
     {
-        float3 v               = reflect(-light_vec, normal);
-        float  specular_factor = pow(max(dot(v, to_eye), 0.0f), mat.specular.w) * light.intensity;
+        float3 h = normalize(light_vec + to_eye);
+        float  spec_factor = pow(max(dot(h, normal), 0.0f), mat.specular.w) * light.intensity;
 
         diffuse  = diffuse_factor * mat.diffuse * light.diffuse_color;
-        specular = specular_factor * mat.specular * light.specular_color;
+        specular = spec_factor * mat.specular * light.specular_color;
     }
 
     // Attenuate

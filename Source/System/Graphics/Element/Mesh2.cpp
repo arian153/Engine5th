@@ -178,14 +178,12 @@ namespace Engine5
 
         Matrix44 model = transform->LocalToWorldMatrix().Transpose();
 
-        m_instances[m_instance_count].model    = model;
-        model.SetInverse();
-        model.SetTranspose();
+        m_instances[m_instance_count].model = model;
         m_instances[m_instance_count].world_it = model;
         m_instances[m_instance_count].ambient  = color.ambient;
         m_instances[m_instance_count].diffuse  = color.diffuse;
         m_instances[m_instance_count].specular = color.specular;
-        m_instances[m_instance_count].reflect = color.reflect;
+        m_instances[m_instance_count].reflect  = color.reflect;
         m_instance_count++;
     }
 

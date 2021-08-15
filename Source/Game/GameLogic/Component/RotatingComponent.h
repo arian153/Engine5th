@@ -39,8 +39,8 @@ namespace Game
         inline static Engine5::Vector3 s_normal  = Engine5::Vector3(0, 1, 0);
         inline static Engine5::Basis   s_basis;
 
-        inline static float            s_ball_speed   = 3.0f;
-        inline static float            s_orbit_radius = 10.0f;
+        inline static float            s_ball_speed   = 1.0f;
+        inline static float            s_orbit_radius = 3.0f;
         inline static Engine5::Vector3 s_orbit_center = Engine5::Vector3();
     };
 }
