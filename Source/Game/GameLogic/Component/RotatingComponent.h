@@ -25,6 +25,8 @@ namespace Game
         void Subscribe() override;
         void Unsubscribe() override;
 
+        void UpdateElapsedAngle() const;
+
     private:
         friend class RotatingFactory;
 
@@ -42,5 +44,6 @@ namespace Game
         inline static float            s_ball_speed   = 1.0f;
         inline static float            s_orbit_radius = 3.0f;
         inline static Engine5::Vector3 s_orbit_center = Engine5::Vector3();
+        inline static int              s_count        = 0;
     };
 }

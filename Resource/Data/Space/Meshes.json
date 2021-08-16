@@ -331,6 +331,138 @@
                 }
             ],
             "Name": "Light"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 10, 0, 0 ],
+                        "Scale": [ 3, 3, 3 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::LightComponent",
+                    "Value": {
+                        "Type": 3,
+                        "Ambient Color": [ 0, 0, 0, 1.0 ],
+                        "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
+                        "Diffuse Color": [ 0.255, 0.255, 0.55, 1.0 ],
+                        "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+                        "Intensity": 1.0,
+                        "Direction": [ 1.0, 0.0, 0.0 ],
+                        "Position": [ 0.0, 0.0, 0.0 ],
+                        "Attenuation": [ 1.0, 0.045, 0.0075 ],
+                        "Length": 1.0,
+                        "Range": 15.0,
+                        "Spot": 15.0
+                    }
+                },
+                {
+                    "Type": "class Game::RotatingComponent"
+                }
+            ],
+            "Name": "Light"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 10, 0, 0 ],
+                        "Scale": [ 3, 3, 3 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::LightComponent",
+                    "Value": {
+                        "Type": 1,
+                        "Ambient Color": [ 0, 0, 0, 1.0 ],
+                        "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
+                        "Diffuse Color": [ 0.55, 0.55, 0.255, 1.0 ],
+                        "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+                        "Intensity": 1.0,
+                        "Direction": [ 1.0, 0.0, 0.0 ],
+                        "Position": [ 0.0, 0.0, 0.0 ],
+                        "Attenuation": [ 1.0, 0.045, 0.0075 ],
+                        "Length": 1.0,
+                        "Range": 15.0,
+                        "Spot": 15.0
+                    }
+                },
+                {
+                    "Type": "class Game::RotatingComponent"
+                }
+            ],
+            "Name": "Light"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 10, 0, 0 ],
+                        "Scale": [ 3, 3, 3 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::LightComponent",
+                    "Value": {
+                        "Type": 2,
+                        "Ambient Color": [ 0, 0, 0, 1.0 ],
+                        "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
+                        "Diffuse Color": [ 0.255, 0.55, 0.55, 1.0 ],
+                        "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+                        "Intensity": 1.0,
+                        "Direction": [ 1.0, 0.0, 0.0 ],
+                        "Position": [ 0.0, 0.0, 0.0 ],
+                        "Attenuation": [ 1.0, 0.045, 0.0075 ],
+                        "Length": 1.0,
+                        "Range": 15.0,
+                        "Spot": 15.0
+                    }
+                },
+                {
+                    "Type": "class Game::RotatingComponent"
+                }
+            ],
+            "Name": "Light"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class Engine5::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 10, 0, 0 ],
+                        "Scale": [ 3, 3, 3 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::LightComponent",
+                    "Value": {
+                        "Type": 3,
+                        "Ambient Color": [ 0, 0, 0, 1.0 ],
+                        "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
+                        "Diffuse Color": [ 0.55, 0.255, 0.55, 1.0 ],
+                        "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+                        "Intensity": 1.0,
+                        "Direction": [ 1.0, 0.0, 0.0 ],
+                        "Position": [ 0.0, 0.0, 0.0 ],
+                        "Attenuation": [ 1.0, 0.045, 0.0075 ],
+                        "Length": 1.0,
+                        "Range": 15.0,
+                        "Spot": 15.0
+                    }
+                },
+                {
+                    "Type": "class Game::RotatingComponent"
+                }
+            ],
+            "Name": "Light"
         }
     ],
     "Settings": {

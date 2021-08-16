@@ -32,6 +32,7 @@ namespace Engine5
         void SetPickingRay(const Ray& ray);
         void SetMouseOrtho(const Vector2& pos);
 
+        void GetLogicComponents(const std::string& type, std::vector<LogicComponent*> container);
     private:
         friend class LogicSystem;
     private:

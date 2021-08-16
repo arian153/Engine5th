@@ -1,8 +1,10 @@
 #include "RotatingComponent.h"
 
+#include "../../../External/JSONCPP/json/json.h"
 #include "../../../Manager/Component/EngineComponent/LightComponent.hpp"
 #include "../../../Manager/Object/Object.hpp"
 #include "../../../Manager/Component/EngineComponent/TransformComponent.hpp"
+#include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../Manager/Space/Space.hpp"
 #include "../../../System/Logic/LogicSubsystem.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
@@ -24,6 +26,8 @@ namespace Game
         Subscribe();
 
         s_basis.CalculateBasisQuaternion(s_normal);
+        s_count++;
+        UpdateElapsedAngle();
     }
 
     void RotatingComponent::Update(Engine5::Real dt)
@@ -45,7 +49,9 @@ namespace Game
 
     void RotatingComponent::Shutdown()
     {
+        s_count--;
         Unsubscribe();
+        UpdateElapsedAngle();
     }
 
     void RotatingComponent::Render()
@@ -101,6 +107,21 @@ namespace Game
         if (m_space != nullptr)
         {
             m_space->GetLogicSubsystem()->RemoveLogic(this);
+        }
+    }
+
+    void RotatingComponent::UpdateElapsedAngle() const
+    {
+        std::vector<LogicComponent*> container;
+        m_space->GetLogicSubsystem()->GetLogicComponents(m_type, container);
+        s_count = (int)container.size();
+
+        float angle = Math::TWO_PI / (float)s_count;
+
+        for (int i = 0; i < s_count; ++i)
+        {
+            RotatingComponent* compo = ((RotatingComponent*)container[i]);
+            compo->m_elapsed_angle   = (float)i * angle;
         }
     }
 
