@@ -78,7 +78,7 @@ namespace Engine5
         m_mouse_ortho = pos;
     }
 
-    void LogicSubsystem::GetLogicComponents(const std::string& type, std::vector<LogicComponent*> container)
+    void LogicSubsystem::GetLogicComponents(const std::string& type, std::vector<LogicComponent*>& container)
     {
         for (auto& logic : m_logic_components)
         {

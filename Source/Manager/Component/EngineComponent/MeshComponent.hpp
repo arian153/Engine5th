@@ -21,6 +21,7 @@ namespace Engine5
         void Initialize() override;
         void Update(Real dt) override;
         void Shutdown() override;
+        void SetDiffuseColor(const Color& color);
 
     protected:
         bool Load(const Json::Value& data) override;

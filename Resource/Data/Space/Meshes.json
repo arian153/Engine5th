@@ -273,7 +273,32 @@
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
                         "Position": [ 10, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Scale": [ 0.1, 0.1, 0.1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::MeshComponent",
+                    "Value": {
+                        "Mesh": {
+                            "Type": "File",
+                            "Path": "../../Resource/Mesh/CS300/cube2.obj"
+                        },
+                        "Color": {
+                            "Ambient": [ 1, 1, 1, 1 ],
+                            "Diffuse": [ 1, 1, 1, 1 ],
+                            "Specular": [ 1, 1, 1, 64 ]
+                        },
+                        "Texture": {
+                            "DiffuseType": "None",
+                            "Diffuse0": "",
+                            "Diffuse1": "",
+                            "Diffuse2": "",
+                            "Specular": 0,
+                            "NormalMap": 0
+
+                        },
+                        "Shader Type": "TextureInstancing"
+
                     }
                 },
                 {
@@ -306,7 +331,32 @@
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
                         "Position": [ 10, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Scale": [ 0.1, 0.1, 0.1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::MeshComponent",
+                    "Value": {
+                        "Mesh": {
+                            "Type": "File",
+                            "Path": "../../Resource/Mesh/CS300/cube2.obj"
+                        },
+                        "Color": {
+                            "Ambient": [ 1, 1, 1, 1 ],
+                            "Diffuse": [ 1, 1, 1, 1 ],
+                            "Specular": [ 1, 1, 1, 64 ]
+                        },
+                        "Texture": {
+                            "DiffuseType": "None",
+                            "Diffuse0": "",
+                            "Diffuse1": "",
+                            "Diffuse2": "",
+                            "Specular": 0,
+                            "NormalMap": 0
+
+                        },
+                        "Shader Type": "TextureInstancing"
+
                     }
                 },
                 {
@@ -339,7 +389,32 @@
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
                         "Position": [ 10, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Scale": [ 0.1, 0.1, 0.1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::MeshComponent",
+                    "Value": {
+                        "Mesh": {
+                            "Type": "File",
+                            "Path": "../../Resource/Mesh/CS300/cube2.obj"
+                        },
+                        "Color": {
+                            "Ambient": [ 1, 1, 1, 1 ],
+                            "Diffuse": [ 1, 1, 1, 1 ],
+                            "Specular": [ 1, 1, 1, 64 ]
+                        },
+                        "Texture": {
+                            "DiffuseType": "None",
+                            "Diffuse0": "",
+                            "Diffuse1": "",
+                            "Diffuse2": "",
+                            "Specular": 0,
+                            "NormalMap": 0
+
+                        },
+                        "Shader Type": "TextureInstancing"
+
                     }
                 },
                 {
@@ -372,7 +447,32 @@
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
                         "Position": [ 10, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Scale": [ 0.1, 0.1, 0.1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::MeshComponent",
+                    "Value": {
+                        "Mesh": {
+                            "Type": "File",
+                            "Path": "../../Resource/Mesh/CS300/cube2.obj"
+                        },
+                        "Color": {
+                            "Ambient": [ 1, 1, 1, 1 ],
+                            "Diffuse": [ 1, 1, 1, 1 ],
+                            "Specular": [ 1, 1, 1, 64 ]
+                        },
+                        "Texture": {
+                            "DiffuseType": "None",
+                            "Diffuse0": "",
+                            "Diffuse1": "",
+                            "Diffuse2": "",
+                            "Specular": 0,
+                            "NormalMap": 0
+
+                        },
+                        "Shader Type": "TextureInstancing"
+
                     }
                 },
                 {
@@ -405,7 +505,32 @@
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
                         "Position": [ 10, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Scale": [ 0.1, 0.1, 0.1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::MeshComponent",
+                    "Value": {
+                        "Mesh": {
+                            "Type": "File",
+                            "Path": "../../Resource/Mesh/CS300/cube2.obj"
+                        },
+                        "Color": {
+                            "Ambient": [ 1, 1, 1, 1 ],
+                            "Diffuse": [ 1, 1, 1, 1 ],
+                            "Specular": [ 1, 1, 1, 64 ]
+                        },
+                        "Texture": {
+                            "DiffuseType": "None",
+                            "Diffuse0": "",
+                            "Diffuse1": "",
+                            "Diffuse2": "",
+                            "Specular": 0,
+                            "NormalMap": 0
+
+                        },
+                        "Shader Type": "TextureInstancing"
+
                     }
                 },
                 {
@@ -438,7 +563,32 @@
                     "Value": {
                         "Orientation": [ 1, 0, 0, 0 ],
                         "Position": [ 10, 0, 0 ],
-                        "Scale": [ 3, 3, 3 ]
+                        "Scale": [ 0.1, 0.1, 0.1 ]
+                    }
+                },
+                {
+                    "Type": "class Engine5::MeshComponent",
+                    "Value": {
+                        "Mesh": {
+                            "Type": "File",
+                            "Path": "../../Resource/Mesh/CS300/cube2.obj"
+                        },
+                        "Color": {
+                            "Ambient": [ 1, 1, 1, 1 ],
+                            "Diffuse": [ 1, 1, 1, 1 ],
+                            "Specular": [ 1, 1, 1, 64 ]
+                        },
+                        "Texture": {
+                            "DiffuseType": "None",
+                            "Diffuse0": "",
+                            "Diffuse1": "",
+                            "Diffuse2": "",
+                            "Specular": 0,
+                            "NormalMap": 0
+
+                        },
+                        "Shader Type": "TextureInstancing"
+
                     }
                 },
                 {

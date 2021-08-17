@@ -106,6 +106,7 @@ namespace Engine5
             m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
             m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
             m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
+            m_instancing_texture_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
         }
 
         //Normal Vertex
@@ -152,17 +153,10 @@ namespace Engine5
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
 
-            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 4, eInputSlotType::INSTANCE_DATA, 1, 1);
-            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 5, eInputSlotType::INSTANCE_DATA, 1, 1);
-            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 6, eInputSlotType::INSTANCE_DATA, 1, 1);
-            m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "WORLD", 7, eInputSlotType::INSTANCE_DATA, 1, 1);
-
-
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 0, eInputSlotType::INSTANCE_DATA, 1, 1);
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 1, eInputSlotType::INSTANCE_DATA, 1, 1);
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 2, eInputSlotType::INSTANCE_DATA, 1, 1);
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
-
         }
 
         AddShader(L"Color.hlsl", m_color_vertex_layout);

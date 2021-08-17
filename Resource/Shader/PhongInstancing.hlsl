@@ -36,8 +36,7 @@ struct VSIn
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
-    float4x4 world : WORLD0;
-    float4x4 world_it : WORLD4;
+    float4x4 world : WORLD;
     float4 ambient : COLOR0;
     float4 diffuse : COLOR1;
     float4 specular : COLOR2;
@@ -69,7 +68,7 @@ VSOut VertexShaderEntry(VSIn input)
     output.position = mul(output.position, proj);
     output.tex = input.tex;
 
-    float3x3 inv_trans_world = (float3x3)input.world_it;
+    float3x3 inv_trans_world = (float3x3)input.world;
 
     output.normal = mul(input.normal, inv_trans_world);
     output.normal = normalize(output.normal);

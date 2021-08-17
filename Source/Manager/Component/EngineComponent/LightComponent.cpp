@@ -41,6 +41,12 @@ namespace Engine5
         {
             m_light->light_data.position  = m_transform->position;
         }
+
+        if (m_owner->HasComponent<MeshComponent>())
+        {
+            auto mesh = m_owner->GetComponent<MeshComponent>();
+            mesh->SetDiffuseColor(m_light->light_data.diffuse_color);
+        }
     }
 
     void LightComponent::Shutdown()

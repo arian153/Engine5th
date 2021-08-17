@@ -45,6 +45,11 @@ namespace Engine5
         Unsubscribe();
     }
 
+    void MeshComponent::SetDiffuseColor(const Color& color)
+    {
+        m_material_color.diffuse = color;
+    }
+
     bool MeshComponent::Load(const Json::Value& data)
     {
         if (JsonResource::HasMember(data, "Texture"))

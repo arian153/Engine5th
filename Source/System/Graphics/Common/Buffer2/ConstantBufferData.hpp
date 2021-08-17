@@ -69,7 +69,6 @@ namespace Engine5
     struct InstanceBufferData
     {
         Matrix44 model;
-        Matrix44 world_it;
         Color    ambient;
         Color    diffuse;
         Color    specular;

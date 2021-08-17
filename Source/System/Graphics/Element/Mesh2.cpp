@@ -148,6 +148,7 @@ namespace Engine5
         m_instances[m_instance_count].ambient  = data.ambient;
         m_instances[m_instance_count].diffuse  = data.diffuse;
         m_instances[m_instance_count].specular = data.specular;
+        m_instances[m_instance_count].reflect = data.reflect;
 
         m_instance_count++;
     }
@@ -164,6 +165,7 @@ namespace Engine5
         m_instances[m_instance_count].ambient  = Color();
         m_instances[m_instance_count].diffuse  = Color();
         m_instances[m_instance_count].specular = Color();
+        m_instances[m_instance_count].reflect = Color();
         m_instance_count++;
     }
 
@@ -176,10 +178,7 @@ namespace Engine5
             ResizeInstanceBuffer(m_max_count);
         }
 
-        Matrix44 model = transform->LocalToWorldMatrix().Transpose();
-
-        m_instances[m_instance_count].model = model;
-        m_instances[m_instance_count].world_it = model;
+        m_instances[m_instance_count].model = transform->LocalToWorldMatrix().Transpose();
         m_instances[m_instance_count].ambient  = color.ambient;
         m_instances[m_instance_count].diffuse  = color.diffuse;
         m_instances[m_instance_count].specular = color.specular;
