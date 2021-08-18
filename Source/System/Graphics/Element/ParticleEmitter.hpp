@@ -4,9 +4,11 @@
 #include <vector>
 #include "../../Core/Utility/CoreDef.hpp"
 #include "../Common/Buffer2/ConstantBufferData.hpp"
+#include "../Common/Texture/TextureArrayCommon.hpp"
 
 namespace Engine5
 {
+    class ConstantBufferCommon;
     class IndexBufferCommon;
     class VertexBufferCommon;
     class RendererCommon;
@@ -24,7 +26,7 @@ namespace Engine5
 
         void Initialize();
         void Update(Real dt);
-        void Bind() const;
+        void Bind();
         void Draw() const;
         void Shutdown();
 
@@ -34,7 +36,7 @@ namespace Engine5
         //setter
         void SetRenderer(RendererCommon* renderer);
         void SetBuffer();
-        void SetTexture(TextureCommon* texture);
+        void SetTexture(TextureCommon* texture, TextureCommon* default_texture);
         void SetTransform(Transform* transform);
         void SetBillboardPosition(const Vector3& position);
         void SetParticleAmount(const size_t& amount);
@@ -68,12 +70,13 @@ namespace Engine5
         friend class ParticleEmitterComponent;
 
     private:
-        //Particle*                       m_particles = nullptr;
-        RendererCommon*                 m_renderer        = nullptr;
-        TextureCommon*                  m_texture         = nullptr;
+        RendererCommon*                 m_renderer = nullptr;
+        TextureCommon*                  m_texture  = nullptr;
+        TextureArrayCommon              m_textures;
         VertexBufferCommon*             m_vertex_buffer   = nullptr;
         IndexBufferCommon*              m_index_buffer    = nullptr;
         InstanceBufferCommon*           m_instance_buffer = nullptr;
+        ConstantBufferCommon*           m_texture_buffer  = nullptr;
         Transform*                      m_transform       = nullptr;
         ParticleEmitterComponent*       m_component       = nullptr;
         std::vector<Particle>           m_particles;

@@ -51,8 +51,9 @@ namespace Engine5
         friend class MeshComponent;
 
     private:
-        ShaderManagerCommon* m_shader_manager = nullptr;
-        RendererCommon*      m_renderer       = nullptr;
+        ShaderManagerCommon* m_shader_manager   = nullptr;
+        RendererCommon*      m_renderer         = nullptr;
+     
 
         MeshData*          m_mesh_data = nullptr;
         TextureArrayCommon m_textures;

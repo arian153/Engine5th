@@ -57,9 +57,10 @@ namespace Engine5
     {
         if (JsonResource::HasMember(data, "Texture") && data["Texture"].isString())
         {
-            std::string texture  = data["Texture"].asString();
-            auto        resource = m_space->GetResourceManager()->GetTextureResource(ToWString(texture));
-            m_emitter->SetTexture(resource->GetTexture());
+            std::string texture          = data["Texture"].asString();
+            auto        resource         = m_space->GetResourceManager()->GetTextureResource(ToWString(texture));
+            auto        default_resource = m_space->GetResourceManager()->GetTextureResource(L"DefaultTexture");
+            m_emitter->SetTexture(resource->GetTexture(), default_resource->GetTexture());
         }
         if (JsonResource::HasMember(data, "Particle Amount") && data["Particle Amount"].isInt())
         {
@@ -248,7 +249,7 @@ namespace Engine5
             ImGui::Separator();
             Particle base = m_emitter->m_base_particle;
             ImGui::Text("Base Position");
-            float base_position[ 3 ] = {base.position.x, base.position.y, base.position.z};
+            float base_position[3] = {base.position.x, base.position.y, base.position.z};
             ImGui::InputFloat3("##ParticleEdit8", base_position, 3);
             if (ImGui::IsItemEdited())
             {
@@ -260,7 +261,7 @@ namespace Engine5
             }
             ImGui::Separator();
             ImGui::Text("Base Velocity");
-            float base_velocity[ 3 ] = {base.velocity.x, base.velocity.y, base.velocity.z};
+            float base_velocity[3] = {base.velocity.x, base.velocity.y, base.velocity.z};
             ImGui::InputFloat3("##ParticleEdit9", base_velocity, 3);
             if (ImGui::IsItemEdited())
             {
@@ -272,7 +273,7 @@ namespace Engine5
             }
             ImGui::Separator();
             ImGui::Text("Base Color");
-            float base_color[ 4 ] = {base.color.r, base.color.g, base.color.b, base.color.a};
+            float base_color[4] = {base.color.r, base.color.g, base.color.b, base.color.a};
             ImGui::ColorEdit4("##ParticleEdit10", base_color);
             if (ImGui::IsItemEdited())
             {
@@ -316,7 +317,7 @@ namespace Engine5
             }
             ImGui::Separator();
             ImGui::Text("Position Variance");
-            float position_variance[ 3 ] = {
+            float position_variance[3] = {
                 m_emitter->m_position_variance.x, m_emitter->m_position_variance.y, m_emitter->m_position_variance.z
             };
             ImGui::InputFloat3("##ParticleEdit13", position_variance, 3);
@@ -330,7 +331,7 @@ namespace Engine5
             }
             ImGui::Separator();
             ImGui::Text("Velocity Variance");
-            float velocity_variance[ 3 ] = {
+            float velocity_variance[3] = {
                 m_emitter->m_velocity_variance.x, m_emitter->m_velocity_variance.y, m_emitter->m_velocity_variance.z
             };
             ImGui::InputFloat3("##ParticleEdit14", velocity_variance, 3);
@@ -340,17 +341,16 @@ namespace Engine5
                                               new EditFunction<
                                                   Vector3,
                                                   ParticleEmitter,
-                                                  &ParticleEmitter::SetVelocityVariance>
-                                              (
-                                               m_emitter,
-                                               m_emitter->m_velocity_variance,
-                                               Vector3(velocity_variance)
-                                              )
+                                                  &ParticleEmitter::SetVelocityVariance>(
+                                                                                         m_emitter,
+                                                                                         m_emitter->m_velocity_variance,
+                                                                                         Vector3(velocity_variance)
+                                                                                        )
                                              );
             }
             ImGui::Separator();
             ImGui::Text("Color Variance");
-            float color_variance[ 4 ] = {
+            float color_variance[4] = {
                 m_emitter->m_color_variance.r, m_emitter->m_color_variance.g, m_emitter->m_color_variance.b, m_emitter->m_color_variance.a
             };
             ImGui::ColorEdit4("##ParticleEdit15", color_variance);
@@ -364,12 +364,11 @@ namespace Engine5
                                               new EditFunction<
                                                   Color,
                                                   ParticleEmitter,
-                                                  &ParticleEmitter::SetColorVariance>
-                                              (
-                                               m_emitter,
-                                               m_emitter->m_color_variance,
-                                               m_edit_color_variance
-                                              )
+                                                  &ParticleEmitter::SetColorVariance>(
+                                                                                      m_emitter,
+                                                                                      m_emitter->m_color_variance,
+                                                                                      m_edit_color_variance
+                                                                                     )
                                              );
             }
             ImGui::Separator();
@@ -383,12 +382,11 @@ namespace Engine5
                                               new EditFunction<
                                                   Real,
                                                   ParticleEmitter,
-                                                  &ParticleEmitter::SetLifeVariance>
-                                              (
-                                               m_emitter,
-                                               m_emitter->m_life_variance,
-                                               life_variance
-                                              )
+                                                  &ParticleEmitter::SetLifeVariance>(
+                                                                                     m_emitter,
+                                                                                     m_emitter->m_life_variance,
+                                                                                     life_variance
+                                                                                    )
                                              );
             }
             ImGui::Separator();
@@ -402,12 +400,11 @@ namespace Engine5
                                               new EditFunction<
                                                   Real,
                                                   ParticleEmitter,
-                                                  &ParticleEmitter::SetScaleVariance>
-                                              (
-                                               m_emitter,
-                                               m_emitter->m_scale_variance,
-                                               scale_variance
-                                              )
+                                                  &ParticleEmitter::SetScaleVariance>(
+                                                                                      m_emitter,
+                                                                                      m_emitter->m_scale_variance,
+                                                                                      scale_variance
+                                                                                     )
                                              );
             }
             ImGui::Separator();

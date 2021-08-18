@@ -133,6 +133,15 @@ namespace Engine5
             mesh->Draw();
         }
 
+        for (auto& particle : m_particle_emitters)
+        {
+            particle->SetBillboardPosition(m_main_camera->GetPosition());
+            particle->Bind();
+            m_matrix_instancing_buffer->Bind();
+            m_shader_manager->Bind("TextureInstancing");
+            particle->Draw();
+        }
+
         //m_shader_manager->Bind("ColorInstancing");
         //m_test_mesh->Render();
         //for (auto& text_sprite : m_text_sprites)
@@ -144,19 +153,6 @@ namespace Engine5
         //                                          mvp_data,
         //                                          text_sprite->GetTexture(),
         //                                          text_sprite->GetColor());
-        //}
-        //for (auto& particle : m_particle_emitters)
-        //{
-        //    //mvp_data.model = particle->GetModelMatrix();
-        //    particle->SetBillboardPosition(m_main_camera->GetPosition());
-
-        //    m_shader_manager->RenderInstanceTextureShader(
-        //                                                  mvp_data,
-        //                                                  particle->GetTexture(),
-        //                                                  ColorDef::Pure::White);
-
-        //    m_shader_manager->Bind(type);
-        //    particle->Draw();
         //}
     }
 

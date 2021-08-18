@@ -58,6 +58,10 @@ float4 ProcessDiffuse(float2 tex, int type, int diff0, int diff1, int diff2, flo
         // multiple texture blending
         diffuse_texture = BlendTexture(tex, diff0, diff1, gamma);
     }
+    else if (type == 5)
+    {
+        diffuse_texture = shader_texture[diff0].Sample(sample_type, tex) * mat;
+    }
     else
     {
         //use diffuse color

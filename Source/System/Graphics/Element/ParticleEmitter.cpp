@@ -8,9 +8,11 @@
 #include "../../Math/Utility/MatrixUtility.hpp"
 #include <algorithm>
 
+#include "../Common/Buffer2/ConstantBufferCommon.hpp"
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
 #include "../Common/Buffer2/InstanceBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
+#include "../Common/Renderer/RendererCommon.hpp"
 
 namespace Engine5
 {
@@ -40,28 +42,37 @@ namespace Engine5
         m_instances.clear();
         m_instances.reserve(m_active_amount);
         Matrix44 orientation = m_transform != nullptr ? Math::Matrix44::Rotation(m_transform->orientation.Inverse()) : Matrix44();
+
+        Matrix44 world;
+        if (m_transform != nullptr)
+        {
+            world = m_transform->LocalToWorldMatrix();
+        }
+
         for (size_t i = 0; i < m_active_amount; ++i)
         {
             m_particles[i].position += m_particles[i].velocity * dt;
             m_particles[i].life -= m_base_particle.life * m_life_decay_rate * dt;
             m_particles[i].scale -= m_base_particle.scale * m_scale_decay_rate * dt;
-            auto world = ParticleToWorldMatrix(m_particles[i], orientation);
+
+            auto               local = ParticleToWorldMatrix(m_particles[i], orientation);
             InstanceBufferData data;
-            data.model = world;
+            data.model   = (world * local);
+            data.ambient = m_particles[i].color;
             data.diffuse = m_particles[i].color;
             m_instances.push_back(data);
         }
         m_instance_buffer->Update(m_instances);
     }
 
-    void ParticleEmitter::Bind() const
+    void ParticleEmitter::Bind()
     {
         m_vertex_buffer->Bind(0, m_instance_buffer);
         m_index_buffer->Bind(0);
 
-        /*U32 count = (U32)m_textures.Size();
+        U32 count = (U32)m_textures.Size();
         m_renderer->GetDeviceContext()->PSSetShaderResources(0, count, m_textures.Data());
-        m_texture_buffer->Bind();*/
+        m_texture_buffer->Bind();
     }
 
     void ParticleEmitter::Draw() const
@@ -96,8 +107,16 @@ namespace Engine5
             m_index_buffer = nullptr;
         }
 
+        if (m_texture_buffer != nullptr)
+        {
+            m_texture_buffer->Shutdown();
+            delete m_texture_buffer;
+            m_texture_buffer = nullptr;
+        }
+
         m_instances.clear();
         m_particles.clear();
+        m_textures.Clear();
     }
 
     void ParticleEmitter::AddParticle(const Particle& particle)
@@ -158,11 +177,39 @@ namespace Engine5
         {
             m_instance_buffer = new InstanceBufferCommon();
         }
+        if (m_texture_buffer == nullptr)
+        {
+            m_texture_buffer = new ConstantBufferCommon();
+            m_texture_buffer->Init(m_renderer, eBindingStage::PixelShader, sizeof(TextureBufferData), 0);
+            TextureBufferData data;
+            data.diff_type = 5;
+            data.spec_type = 0;
+            data.norm_type = 0;
+            //E5_TODO : need to update user gamma setting
+            data.gamma = 2.2f;
+
+            m_texture_buffer->Update(data);
+        }
     }
 
-    void ParticleEmitter::SetTexture(TextureCommon* texture)
+    void ParticleEmitter::SetTexture(TextureCommon* texture, TextureCommon* default_texture)
     {
         m_texture = texture;
+        m_textures.Clear();
+
+        if (texture != nullptr)
+        {
+            m_textures.PushBack(texture); //diffuse 0
+        }
+        else
+        {
+            m_textures.PushBack(default_texture); //diffuse 0
+        }
+
+        m_textures.PushBack(default_texture); //diffuse 1
+        m_textures.PushBack(default_texture); //diffuse 2
+        m_textures.PushBack(default_texture); //specular 0
+        m_textures.PushBack(default_texture); //normal map 0
     }
 
     void ParticleEmitter::SetTransform(Transform* transform)
