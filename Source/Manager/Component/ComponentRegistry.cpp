@@ -11,7 +11,7 @@
 #include "EngineFactory/TextSpriteFactory.hpp"
 #include "EngineFactory/ParticleEmitterFactory.hpp"
 #include "EngineFactory/PointConstraintFactory.hpp"
-#include "EngineFactory/SkyBoxFactory.hpp"
+#include "EngineFactory/EnvironmentMapFactory.hpp"
 
 namespace Engine5
 {
@@ -34,7 +34,7 @@ namespace Engine5
         AddFactory(new TextSpriteFactory());
         AddFactory(new ParticleEmitterFactory());
         AddFactory(new PointConstraintFactory());
-        AddFactory(new SkyBoxFactory());
+        AddFactory(new EnvironmentMapFactory());
         return true;
     }
 
