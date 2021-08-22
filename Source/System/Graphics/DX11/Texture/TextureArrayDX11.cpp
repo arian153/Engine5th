@@ -17,6 +17,11 @@ namespace Engine5
         return m_textures.data();
     }
 
+    ID3D11ShaderResourceView* const* TextureArrayDX11::Data() const
+    {
+        return m_textures.data();
+    }
+
     TextureArrayCommon::TextureArrayCommon()
     {
     }

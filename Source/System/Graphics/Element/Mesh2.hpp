@@ -26,7 +26,7 @@ namespace Engine5
         void Initialize();
         void Shutdown();
 
-        void Bind();
+        void Bind() const;
         void Draw() const;
         void CreateBuffer();
 

@@ -12,10 +12,11 @@ namespace Engine5
         TextureArrayDX11();
         ~TextureArrayDX11();
 
-        ID3D11ShaderResourceView** Data();
+        ID3D11ShaderResourceView**       Data();
+        ID3D11ShaderResourceView* const* Data() const;
 
     protected:
         std::vector<ID3D11ShaderResourceView*> m_textures;
-        TextureCommon* m_front = nullptr;
+        TextureCommon*                         m_front = nullptr;
     };
 }

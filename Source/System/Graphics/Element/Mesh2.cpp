@@ -64,7 +64,7 @@ namespace Engine5
         m_textures.Clear();
     }
 
-    void Mesh2::Bind()
+    void Mesh2::Bind() const
     {
         if (m_instance_count > 0)
         {
