@@ -32,8 +32,8 @@ namespace Engine5
         void Initialize(RendererCommon* renderer, ResourceManager* resource_manager);
         void Shutdown();
 
-        void AddShader(const std::wstring& name, VertexLayoutCommon* layout);
-        void Bind(const std::string& name);
+        void                 AddShader(const std::wstring& name, VertexLayoutCommon* layout);
+        void                 Bind(const std::string& name);
         ShaderProgramCommon* GetShader(const std::string& name) const;
 
         //temp
@@ -50,6 +50,7 @@ namespace Engine5
         VertexLayoutCommon* m_instancing_normal_vertex_layout  = nullptr;
         VertexLayoutCommon* m_vertex_layout                    = nullptr;
         VertexLayoutCommon* m_instancing_vertex_layout         = nullptr;
+        VertexLayoutCommon* m_point_vertex_layout              = nullptr;
 
         //others
         RendererCommon*  m_renderer         = nullptr;

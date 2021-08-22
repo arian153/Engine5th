@@ -72,6 +72,13 @@ namespace Engine5
         m_resource_manager = resource_manager;
         m_renderer         = renderer;
 
+        //Point Vertex
+        {
+            m_point_vertex_layout = new VertexLayoutCommon();
+            m_point_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+
+        }
+
         //Color Vertex
         {
             m_color_vertex_layout = new VertexLayoutCommon();
@@ -170,6 +177,13 @@ namespace Engine5
 
     void ShaderManagerCommon::Shutdown()
     {
+        if (m_point_vertex_layout != nullptr)
+        {
+            m_point_vertex_layout->Clear();
+            delete m_point_vertex_layout;
+            m_point_vertex_layout = nullptr;
+        }
+
         if (m_texture_vertex_layout != nullptr)
         {
             m_texture_vertex_layout->Clear();
