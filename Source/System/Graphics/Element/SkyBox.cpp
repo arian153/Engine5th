@@ -4,6 +4,8 @@
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
 #include "../Common/Renderer/RendererCommon.hpp"
 #include "../Common/Texture/TextureCommon.hpp"
+#include "../DataType/MeshData.hpp"
+#include "../Utility/MeshGenerator.hpp"
 
 namespace Engine5
 {
@@ -31,6 +33,8 @@ namespace Engine5
         {
             m_vertex_buffer = new VertexBufferCommon();
         }
+
+
 
         m_index_buffer->Init(m_renderer, m_indices);
         m_vertex_buffer->Init(m_renderer, m_vertices, false);
@@ -71,5 +75,22 @@ namespace Engine5
     void SkyBox::Draw() const
     {
         m_index_buffer->Draw();
+    }
+
+    void SkyBox::GenerateSkySphere()
+    {
+        MeshGenerator mesh_gen;
+        MeshData      data;
+        mesh_gen.CreateSphere(m_radius, 30, 30, data);
+
+        size_t size = data.vertices.size();
+        m_vertices.resize(size);
+
+        for (size_t i = 0; i < size; ++i)
+        {
+            m_vertices[i] = data.vertices[i].GetPosition();
+        }
+
+        m_indices.assign(data.indices.begin(), data.indices.end());
     }
 }

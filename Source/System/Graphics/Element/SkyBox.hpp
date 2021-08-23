@@ -22,9 +22,11 @@ namespace Engine5
         void Update(Real dt);
         void Shutdown();
 
-
         void Bind() const;
         void Draw() const;
+
+        void GenerateSkySphere();
+
     private:
         RendererCommon*     m_renderer      = nullptr;
         VertexBufferCommon* m_vertex_buffer = nullptr;
@@ -33,5 +35,7 @@ namespace Engine5
 
         std::vector<U32>     m_indices;
         std::vector<Vector3> m_vertices;
+
+        float m_radius = 5000.0f;
     };
 }
