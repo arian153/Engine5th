@@ -1,4 +1,6 @@
 #include "TextureArrayDX11.hpp"
+
+#include "../../../Core/Utility/CoreDef.hpp"
 #include "../../Common/Texture/TextureArrayCommon.hpp"
 #include "../../Common/Texture/TextureCommon.hpp"
 
@@ -34,6 +36,11 @@ namespace Engine5
     {
         m_front = texture;
         m_textures.insert(m_textures.begin(), texture->GetTexture());
+
+        if (texture->m_device_context != nullptr)
+        {
+            m_device_context = texture->m_device_context;
+        }
     }
 
     void TextureArrayCommon::PushBack(TextureCommon* texture)
@@ -43,6 +50,10 @@ namespace Engine5
             m_front = texture;
         }
         m_textures.push_back(texture->GetTexture());
+        if (texture->m_device_context != nullptr)
+        {
+            m_device_context = texture->m_device_context;
+        }
     }
 
     void TextureArrayCommon::Erase(TextureCommon* texture)
@@ -69,5 +80,11 @@ namespace Engine5
     size_t TextureArrayCommon::Size() const
     {
         return m_textures.size();
+    }
+
+    void TextureArrayCommon::Bind() const
+    {
+        U32 count = (U32)m_textures.size();
+        m_device_context->PSSetShaderResources(0, count, m_textures.data());
     }
 }

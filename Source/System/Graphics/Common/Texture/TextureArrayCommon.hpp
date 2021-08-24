@@ -19,6 +19,7 @@ namespace Engine5
 
         TextureCommon* Front() const;
         size_t         Size() const;
+        void           Bind() const;
 
     private:
     };

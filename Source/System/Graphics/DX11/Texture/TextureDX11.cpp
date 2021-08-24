@@ -68,6 +68,7 @@ namespace Engine5
         {
             return false;
         }
+        m_device_context = renderer->GetDeviceContext();
         return true;
     }
 
@@ -80,8 +81,9 @@ namespace Engine5
 
     bool TextureCommon::Initialize(RenderTextureBufferCommon* render_texture_buffer)
     {
-        m_texture   = render_texture_buffer->GetTextureResource();
-        m_b_created = true;
+        m_texture        = render_texture_buffer->GetTextureResource();
+        m_device_context = render_texture_buffer->GetDeviceContext();
+        m_b_created      = true;
         return true;
     }
 
@@ -122,6 +124,8 @@ namespace Engine5
             tex->Release();
             tex = nullptr;
         }
+
+        m_device_context = renderer->GetDeviceContext();
         return true;
     }
 
@@ -141,5 +145,10 @@ namespace Engine5
             }
         }
         return true;
+    }
+
+    void TextureCommon::Bind() const
+    {
+        m_device_context->PSSetShaderResources(0, 1, &m_texture);
     }
 }

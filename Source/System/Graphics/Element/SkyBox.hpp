@@ -2,11 +2,14 @@
 #include <vector>
 
 #include "../../Core/Utility/CoreDef.hpp"
+#include "../../Math/Algebra/Matrix44.hpp"
 #include "../../Math/Algebra/Vector3.hpp"
+#include "../../Math/Structure/Transform.hpp"
 #include "../../Math/Utility/MathDef.hpp"
 
 namespace Engine5
 {
+    class Camera;
     class TextureCommon;
     class RendererCommon;
     class VertexBufferCommon;
@@ -26,16 +29,21 @@ namespace Engine5
         void Draw() const;
 
         void GenerateSkySphere();
+        void SetCamera(Camera* camera);
+
+        Matrix44 GetModelMatrix() const;
 
     private:
         RendererCommon*     m_renderer      = nullptr;
         VertexBufferCommon* m_vertex_buffer = nullptr;
         IndexBufferCommon*  m_index_buffer  = nullptr;
         TextureCommon*      m_texture       = nullptr;
+        Camera*             m_camera        = nullptr;
+
+        Transform m_transform;
+        float     m_radius = 5000.0f;
 
         std::vector<U32>     m_indices;
         std::vector<Vector3> m_vertices;
-
-        float m_radius = 5000.0f;
     };
 }

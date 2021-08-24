@@ -1,5 +1,8 @@
 #include "SkyBox.hpp"
 
+
+#include "Camera.hpp"
+#include "../../Core/Utility/CoreUtility.hpp"
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
 #include "../Common/Renderer/RendererCommon.hpp"
@@ -34,14 +37,14 @@ namespace Engine5
             m_vertex_buffer = new VertexBufferCommon();
         }
 
-
-
         m_index_buffer->Init(m_renderer, m_indices);
         m_vertex_buffer->Init(m_renderer, m_vertices, false);
     }
 
     void SkyBox::Update(Real dt)
     {
+        E5_UNUSED_PARAM(dt);
+        m_transform.position = m_camera->GetPosition();
     }
 
     void SkyBox::Shutdown()
@@ -68,8 +71,7 @@ namespace Engine5
     {
         m_vertex_buffer->Bind(0);
         m_index_buffer->Bind(0);
-        auto texture = m_texture->GetTexture();
-        m_renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &texture);
+        m_texture->Bind();
     }
 
     void SkyBox::Draw() const
@@ -92,5 +94,15 @@ namespace Engine5
         }
 
         m_indices.assign(data.indices.begin(), data.indices.end());
+    }
+
+    void SkyBox::SetCamera(Camera* camera)
+    {
+        m_camera = camera;
+    }
+
+    Matrix44 SkyBox::GetModelMatrix() const
+    {
+        return m_transform.LocalToWorldMatrix();
     }
 }

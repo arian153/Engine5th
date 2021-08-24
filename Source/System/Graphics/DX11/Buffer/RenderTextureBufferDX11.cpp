@@ -219,6 +219,11 @@ namespace Engine5
         return m_shader_resource_view;
     }
 
+    ID3D11DeviceContext* RenderTextureBufferDX11::GetDeviceContext() const
+    {
+        return m_device_context;
+    }
+
     RenderTextureBufferCommon::RenderTextureBufferCommon()
     {
     }

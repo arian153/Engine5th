@@ -8,6 +8,7 @@
 #include "ParticleEmitter.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
 #include "Mesh2.hpp"
+#include "SkyBox.hpp"
 #include "../Utility/TextRenderer.hpp"
 #include "../Common/Buffer2/ConstantBufferCommon.hpp"
 #include "../Common/Buffer2/ConstantBufferData.hpp"
@@ -94,6 +95,12 @@ namespace Engine5
         {
             light->Update(dt);
         }
+
+        for(auto& sky_box : m_sky_boxes)
+        {
+            sky_box->SetCamera(m_main_camera);
+            sky_box->Update(dt);
+        }
     }
 
     void Scene::Render() const
@@ -141,6 +148,8 @@ namespace Engine5
             m_shader_manager->Bind("TextureInstancing");
             particle->Draw();
         }
+
+        
 
         //m_shader_manager->Bind("ColorInstancing");
         //m_test_mesh->Render();

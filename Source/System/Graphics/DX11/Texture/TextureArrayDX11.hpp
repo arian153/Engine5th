@@ -17,6 +17,7 @@ namespace Engine5
 
     protected:
         std::vector<ID3D11ShaderResourceView*> m_textures;
-        TextureCommon*                         m_front = nullptr;
+        ID3D11DeviceContext*                   m_device_context = nullptr;
+        TextureCommon*                         m_front          = nullptr;
     };
 }

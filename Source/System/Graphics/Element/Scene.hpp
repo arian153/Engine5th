@@ -5,12 +5,12 @@
 #include "Camera.hpp"
 #include "../DataType/ProjectionType.hpp"
 #include <vector>
-
 #include "../../../Manager/Component/EngineComponent/MeshComponent.hpp"
 #include "../DataType/Frustum.hpp"
 
 namespace Engine5
 {
+    class SkyBox;
     class Light2;
     class MeshData;
     struct MaterialIdentifier;
@@ -115,6 +115,7 @@ namespace Engine5
         MeshTable                     m_mesh_table;
 
         std::vector<Light2*> m_lights;
+        std::vector<SkyBox*> m_sky_boxes;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;

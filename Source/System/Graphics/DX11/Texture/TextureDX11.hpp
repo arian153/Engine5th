@@ -13,5 +13,6 @@ namespace Engine5
     protected:
         ID3D11ShaderResourceView* m_texture          = nullptr;
         ID3D11Resource*           m_texture_resource = nullptr;
+        ID3D11DeviceContext*      m_device_context   = nullptr;
     };
 }

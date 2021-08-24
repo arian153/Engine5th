@@ -20,8 +20,10 @@ namespace Engine5
         bool Initialize(RenderTextureBufferCommon* render_texture_buffer);
         bool InitializeDefault(RendererCommon* renderer);
         bool Shutdown();
+        void Bind() const;
 
     private:
+        friend class TextureArrayCommon;
         bool m_b_created = false;
     };
 }

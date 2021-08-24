@@ -20,6 +20,7 @@ namespace Engine5
         void ClearRenderTarget(const Color& color) const;
 
         ID3D11ShaderResourceView* GetTextureResource() const;
+        ID3D11DeviceContext* GetDeviceContext() const;
 
     protected:
         ID3D11Texture2D*          m_render_target_texture = nullptr;

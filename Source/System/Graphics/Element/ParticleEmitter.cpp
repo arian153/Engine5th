@@ -65,13 +65,11 @@ namespace Engine5
         m_instance_buffer->Update(m_instances);
     }
 
-    void ParticleEmitter::Bind()
+    void ParticleEmitter::Bind() const
     {
         m_vertex_buffer->Bind(0, m_instance_buffer);
         m_index_buffer->Bind(0);
-
-        U32 count = (U32)m_textures.Size();
-        m_renderer->GetDeviceContext()->PSSetShaderResources(0, count, m_textures.Data());
+        m_textures.Bind();
         m_texture_buffer->Bind();
     }
 
