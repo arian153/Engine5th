@@ -10,6 +10,7 @@
 
 namespace Engine5
 {
+    class SkyDome;
     class SkyBox;
     class Light2;
     class MeshData;
@@ -75,6 +76,10 @@ namespace Engine5
 
         void AddLight(Light2* light);
         void RemoveLight(Light2* light);
+        void AddSkyBox(SkyBox* sky_box);
+        void RemoveSkyBox(SkyBox* sky_box);
+        void AddSkyDome(SkyDome* sky_dome);
+        void RemoveSkyDome(SkyDome* sky_dome);
 
         //add
         Camera* AddCamera(Camera* camera);

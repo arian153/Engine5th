@@ -96,7 +96,7 @@ namespace Engine5
             light->Update(dt);
         }
 
-        for(auto& sky_box : m_sky_boxes)
+        for (auto& sky_box : m_sky_boxes)
         {
             sky_box->SetCamera(m_main_camera);
             sky_box->Update(dt);
@@ -149,7 +149,18 @@ namespace Engine5
             particle->Draw();
         }
 
-        
+        for (auto& sky_box : m_sky_boxes)
+        {
+            MatrixBufferData mvp_buffer;
+            mvp_buffer.world = sky_box->GetModelMatrix();
+            mvp_buffer.view  = m_main_camera->GetViewMatrix();
+            mvp_buffer.proj  = m_projection_matrix;
+            m_matrix_buffer->Update(mvp_buffer);
+
+            sky_box->Bind();
+            m_matrix_buffer->Bind();
+            sky_box->Draw();
+        }
 
         //m_shader_manager->Bind("ColorInstancing");
         //m_test_mesh->Render();
@@ -508,6 +519,34 @@ namespace Engine5
             auto found = std::find(m_lights.begin(), m_lights.end(), light);
             m_lights.erase(found);
         }
+    }
+
+    void Scene::AddSkyBox(SkyBox* sky_box)
+    {
+        m_sky_boxes.push_back(sky_box);
+    }
+
+    void Scene::RemoveSkyBox(SkyBox* sky_box)
+    {
+        if (!m_sky_boxes.empty())
+        {
+            auto found = std::find(m_sky_boxes.begin(), m_sky_boxes.end(), sky_box);
+            m_sky_boxes.erase(found);
+        }
+    }
+
+    void Scene::AddSkyDome(SkyDome* sky_dome)
+    {
+        //m_sky_domes.push_back(sky_dome);
+    }
+
+    void Scene::RemoveSkyDome(SkyDome* sky_dome)
+    {
+        //if (!m_sky_domes.empty())
+        //{
+        //    auto found = std::find(m_sky_domes.begin(), m_sky_domes.end(), sky_dome);
+        //    m_sky_domes.erase(found);
+        //}
     }
 
     Camera* Scene::AddCamera(Camera* camera)
