@@ -3,6 +3,10 @@
 
 namespace Engine5
 {
+    class RendererCommon;
+    class VertexBufferCommon;
+    class IndexBufferCommon;
+    class Camera;
     class TextureCommon;
     class MeshData;
 
@@ -17,7 +21,14 @@ namespace Engine5
         void Shutdown();
 
     private:
-        MeshData*      m_mesh_data = nullptr;
-        TextureCommon* m_texture   = nullptr;
+        friend class EnvironmentMapComponent;
+
+    private:
+        EnvironmentMapComponent* m_component     = nullptr;
+        RendererCommon*          m_renderer      = nullptr;
+        VertexBufferCommon*      m_vertex_buffer = nullptr;
+        IndexBufferCommon*       m_index_buffer  = nullptr;
+        TextureCommon*           m_texture       = nullptr;
+        Camera*                  m_camera        = nullptr;
     };
 }

@@ -5,6 +5,8 @@
 
 namespace Engine5
 {
+    class TextureCommon;
+
     class EnvironmentMapComponent final : public Component
     {
     public:
@@ -33,8 +35,13 @@ namespace Engine5
         explicit EnvironmentMapComponent(Object* owner);
         void     Clone(EnvironmentMapComponent* origin);
 
+        void SwitchSkyType();
+
     private:
         SkyBox*  m_sky_box  = nullptr;
         SkyDome* m_sky_dome = nullptr;
+
+        int            m_sky_type    = -1;
+        TextureCommon* m_sky_texture = nullptr;
     };
 }

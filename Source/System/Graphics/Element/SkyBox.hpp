@@ -9,6 +9,7 @@
 
 namespace Engine5
 {
+    class EnvironmentMapComponent;
     class Camera;
     class TextureCommon;
     class RendererCommon;
@@ -34,11 +35,15 @@ namespace Engine5
         Matrix44 GetModelMatrix() const;
 
     private:
-        RendererCommon*     m_renderer      = nullptr;
-        VertexBufferCommon* m_vertex_buffer = nullptr;
-        IndexBufferCommon*  m_index_buffer  = nullptr;
-        TextureCommon*      m_texture       = nullptr;
-        Camera*             m_camera        = nullptr;
+        friend class EnvironmentMapComponent;
+
+    private:
+        EnvironmentMapComponent* m_component     = nullptr;
+        RendererCommon*          m_renderer      = nullptr;
+        VertexBufferCommon*      m_vertex_buffer = nullptr;
+        IndexBufferCommon*       m_index_buffer  = nullptr;
+        TextureCommon*           m_texture       = nullptr;
+        Camera*                  m_camera        = nullptr;
 
         Transform m_transform;
         float     m_radius = 5000.0f;
