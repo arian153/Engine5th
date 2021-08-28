@@ -30,7 +30,11 @@ namespace Engine5
         void Draw() const;
 
         void GenerateSkySphere();
+        void GenerateSkyBox();
         void SetCamera(Camera* camera);
+        void SetRenderer(RendererCommon* renderer);
+        void SetTexture(TextureCommon* texture);
+        void CreateBuffer();
 
         Matrix44 GetModelMatrix() const;
 
@@ -38,15 +42,16 @@ namespace Engine5
         friend class SkyComponent;
 
     private:
-        SkyComponent* m_component     = nullptr;
-        RendererCommon*          m_renderer      = nullptr;
-        VertexBufferCommon*      m_vertex_buffer = nullptr;
-        IndexBufferCommon*       m_index_buffer  = nullptr;
-        TextureCommon*           m_texture       = nullptr;
-        Camera*                  m_camera        = nullptr;
+        SkyComponent*       m_component     = nullptr;
+        RendererCommon*     m_renderer      = nullptr;
+        VertexBufferCommon* m_vertex_buffer = nullptr;
+        IndexBufferCommon*  m_index_buffer  = nullptr;
+        TextureCommon*      m_texture       = nullptr;
+        Camera*             m_camera        = nullptr;
 
         Transform m_transform;
         float     m_radius = 5000.0f;
+        int       m_type   = 0;
 
         std::vector<U32>     m_indices;
         std::vector<Vector3> m_vertices;

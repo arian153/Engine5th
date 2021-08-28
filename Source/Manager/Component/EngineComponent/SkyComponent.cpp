@@ -23,17 +23,18 @@ namespace Engine5
             if (m_sky_type == 0 && m_cube_map_sky == nullptr)
             {
                 m_cube_map_sky = new CubeMapSky();
-                m_cube_map_sky->Initialize();
-                m_cube_map_sky->m_component = this;
                 Subscribe();
+                m_cube_map_sky->Initialize();
+                m_cube_map_sky->SetTexture(m_sky_texture);
+                m_cube_map_sky->m_component = this;
             }
 
             if (m_sky_type == 1 && m_texture_sky == nullptr)
             {
                 m_texture_sky = new TextureSky();
+                Subscribe();
                 m_texture_sky->Initialize();
                 m_texture_sky->m_component = this;
-                Subscribe();
             }
         }
     }
@@ -115,7 +116,7 @@ namespace Engine5
         {
             if (m_cube_map_sky != nullptr)
             {
-                m_space->GetScene()->AddSkyBox(m_cube_map_sky);
+                m_space->GetScene()->AddCubeMapSky(m_cube_map_sky);
             }
 
             if (m_texture_sky != nullptr)
@@ -131,7 +132,7 @@ namespace Engine5
         {
             if (m_cube_map_sky != nullptr)
             {
-                m_space->GetScene()->RemoveSkyBox(m_cube_map_sky);
+                m_space->GetScene()->RemoveCubeMapSky(m_cube_map_sky);
             }
 
             if (m_texture_sky != nullptr)
@@ -159,8 +160,8 @@ namespace Engine5
             Unsubscribe();
             m_cube_map_sky->Shutdown();
             delete m_cube_map_sky;
-            m_cube_map_sky  = nullptr;
-            m_texture_sky = new TextureSky();
+            m_cube_map_sky = nullptr;
+            m_texture_sky  = new TextureSky();
             m_texture_sky->Initialize();
             //E5_TODO : need to reselect texture.
             Subscribe();
@@ -170,8 +171,8 @@ namespace Engine5
             Unsubscribe();
             m_texture_sky->Shutdown();
             delete m_texture_sky;
-            m_texture_sky = nullptr;
-            m_cube_map_sky  = new CubeMapSky();
+            m_texture_sky  = nullptr;
+            m_cube_map_sky = new CubeMapSky();
             m_cube_map_sky->Initialize();
             //E5_TODO : need to reselect texture.
             Subscribe();

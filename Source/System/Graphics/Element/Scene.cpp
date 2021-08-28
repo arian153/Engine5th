@@ -387,6 +387,7 @@ namespace Engine5
         {
             //add new
             created = new Mesh2();
+            created->SetRenderer(m_renderer);
             SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
             m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
             m_meshes.push_back(created);
@@ -400,6 +401,7 @@ namespace Engine5
             {
                 //add new
                 created = new Mesh2();
+                created->SetRenderer(m_renderer);
                 SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
                 material_table.emplace(material_id, created);
                 m_meshes.push_back(created);
@@ -466,6 +468,7 @@ namespace Engine5
         {
             //add new
             created = new Mesh2();
+            created->SetRenderer(m_renderer);
             SetUpMesh(created, model_data, material, model_id, material_id);
             m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
             m_meshes.push_back(created);
@@ -479,6 +482,7 @@ namespace Engine5
             {
                 //add new
                 created = new Mesh2();
+                created->SetRenderer(m_renderer);
                 SetUpMesh(created, model_data, material, model_id, material_id);
                 material_table.emplace(material_id, created);
                 m_meshes.push_back(created);
@@ -521,12 +525,13 @@ namespace Engine5
         }
     }
 
-    void Scene::AddSkyBox(CubeMapSky* sky)
+    void Scene::AddCubeMapSky(CubeMapSky* sky)
     {
+        sky->SetRenderer(m_renderer);
         m_cube_map_skies.push_back(sky);
     }
 
-    void Scene::RemoveSkyBox(CubeMapSky* sky)
+    void Scene::RemoveCubeMapSky(CubeMapSky* sky)
     {
         if (!m_cube_map_skies.empty())
         {

@@ -76,8 +76,8 @@ namespace Engine5
 
         void AddLight(Light2* light);
         void RemoveLight(Light2* light);
-        void AddSkyBox(CubeMapSky* sky);
-        void RemoveSkyBox(CubeMapSky* sky);
+        void AddCubeMapSky(CubeMapSky* sky);
+        void RemoveCubeMapSky(CubeMapSky* sky);
         void AddSkyDome(TextureSky* sky);
         void RemoveSkyDome(TextureSky* sky);
 
