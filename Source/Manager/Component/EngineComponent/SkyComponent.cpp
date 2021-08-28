@@ -1,10 +1,10 @@
-#include "EnvironmentMapComponent.hpp"
+#include "SkyComponent.hpp"
 
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
-#include "../../../System/Graphics/Element/SkyBox.hpp"
-#include "../../../System/Graphics/Element/SkyDome.hpp"
+#include "../../../System/Graphics/Element/CubeMapSky.hpp"
+#include "../../../System/Graphics/Element/TextureSky.hpp"
 #include "../../Resource/ResourceManager.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../Resource/ResourceType/TextureResource.hpp"
@@ -12,55 +12,55 @@
 
 namespace Engine5
 {
-    EnvironmentMapComponent::~EnvironmentMapComponent()
+    SkyComponent::~SkyComponent()
     {
     }
 
-    void EnvironmentMapComponent::Initialize()
+    void SkyComponent::Initialize()
     {
         if (m_sky_type != -1)
         {
-            if (m_sky_type == 0 && m_sky_box == nullptr)
+            if (m_sky_type == 0 && m_cube_map_sky == nullptr)
             {
-                m_sky_box = new SkyBox();
-                m_sky_box->Initialize();
-                m_sky_box->m_component = this;
+                m_cube_map_sky = new CubeMapSky();
+                m_cube_map_sky->Initialize();
+                m_cube_map_sky->m_component = this;
                 Subscribe();
             }
 
-            if (m_sky_type == 1 && m_sky_dome == nullptr)
+            if (m_sky_type == 1 && m_texture_sky == nullptr)
             {
-                m_sky_dome = new SkyDome();
-                m_sky_dome->Initialize();
-                m_sky_dome->m_component = this;
+                m_texture_sky = new TextureSky();
+                m_texture_sky->Initialize();
+                m_texture_sky->m_component = this;
                 Subscribe();
             }
         }
     }
 
-    void EnvironmentMapComponent::Update(Real dt)
+    void SkyComponent::Update(Real dt)
     {
     }
 
-    void EnvironmentMapComponent::Shutdown()
+    void SkyComponent::Shutdown()
     {
         Unsubscribe();
-        if (m_sky_box != nullptr)
+        if (m_cube_map_sky != nullptr)
         {
-            m_sky_box->Shutdown();
-            delete m_sky_box;
-            m_sky_box = nullptr;
+            m_cube_map_sky->Shutdown();
+            delete m_cube_map_sky;
+            m_cube_map_sky = nullptr;
         }
 
-        if (m_sky_dome != nullptr)
+        if (m_texture_sky != nullptr)
         {
-            m_sky_dome->Shutdown();
-            delete m_sky_dome;
-            m_sky_dome = nullptr;
+            m_texture_sky->Shutdown();
+            delete m_texture_sky;
+            m_texture_sky = nullptr;
         }
     }
 
-    bool EnvironmentMapComponent::Load(const Json::Value& data)
+    bool SkyComponent::Load(const Json::Value& data)
     {
         if (JsonResource::HasMember(data, "Type"))
         {
@@ -101,78 +101,78 @@ namespace Engine5
         return true;
     }
 
-    void EnvironmentMapComponent::Save(Json::Value& data) const
+    void SkyComponent::Save(Json::Value& data) const
     {
     }
 
-    void EnvironmentMapComponent::Edit(CommandRegistry* command_registry)
+    void SkyComponent::Edit(CommandRegistry* command_registry)
     {
     }
 
-    void EnvironmentMapComponent::Subscribe()
+    void SkyComponent::Subscribe()
     {
         if (m_space != nullptr)
         {
-            if (m_sky_box != nullptr)
+            if (m_cube_map_sky != nullptr)
             {
-                m_space->GetScene()->AddSkyBox(m_sky_box);
+                m_space->GetScene()->AddSkyBox(m_cube_map_sky);
             }
 
-            if (m_sky_dome != nullptr)
+            if (m_texture_sky != nullptr)
             {
-                m_space->GetScene()->AddSkyDome(m_sky_dome);
+                m_space->GetScene()->AddSkyDome(m_texture_sky);
             }
         }
     }
 
-    void EnvironmentMapComponent::Unsubscribe()
+    void SkyComponent::Unsubscribe()
     {
         if (m_space != nullptr)
         {
-            if (m_sky_box != nullptr)
+            if (m_cube_map_sky != nullptr)
             {
-                m_space->GetScene()->RemoveSkyBox(m_sky_box);
+                m_space->GetScene()->RemoveSkyBox(m_cube_map_sky);
             }
 
-            if (m_sky_dome != nullptr)
+            if (m_texture_sky != nullptr)
             {
-                m_space->GetScene()->RemoveSkyDome(m_sky_dome);
+                m_space->GetScene()->RemoveSkyDome(m_texture_sky);
             }
         }
     }
 
-    EnvironmentMapComponent::EnvironmentMapComponent(Object* owner)
+    SkyComponent::SkyComponent(Object* owner)
         : Component(owner)
     {
     }
 
-    void EnvironmentMapComponent::Clone(EnvironmentMapComponent* origin)
+    void SkyComponent::Clone(SkyComponent* origin)
     {
     }
 
-    void EnvironmentMapComponent::SwitchSkyType()
+    void SkyComponent::SwitchSkyType()
     {
         m_sky_type = (m_sky_type + 1) % 2;
 
-        if (m_sky_box != nullptr)
+        if (m_cube_map_sky != nullptr)
         {
             Unsubscribe();
-            m_sky_box->Shutdown();
-            delete m_sky_box;
-            m_sky_box  = nullptr;
-            m_sky_dome = new SkyDome();
-            m_sky_dome->Initialize();
+            m_cube_map_sky->Shutdown();
+            delete m_cube_map_sky;
+            m_cube_map_sky  = nullptr;
+            m_texture_sky = new TextureSky();
+            m_texture_sky->Initialize();
             //E5_TODO : need to reselect texture.
             Subscribe();
         }
-        else if (m_sky_dome != nullptr)
+        else if (m_texture_sky != nullptr)
         {
             Unsubscribe();
-            m_sky_dome->Shutdown();
-            delete m_sky_dome;
-            m_sky_dome = nullptr;
-            m_sky_box  = new SkyBox();
-            m_sky_box->Initialize();
+            m_texture_sky->Shutdown();
+            delete m_texture_sky;
+            m_texture_sky = nullptr;
+            m_cube_map_sky  = new CubeMapSky();
+            m_cube_map_sky->Initialize();
             //E5_TODO : need to reselect texture.
             Subscribe();
         }

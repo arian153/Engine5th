@@ -9,18 +9,18 @@
 
 namespace Engine5
 {
-    class EnvironmentMapComponent;
+    class SkyComponent;
     class Camera;
     class TextureCommon;
     class RendererCommon;
     class VertexBufferCommon;
     class IndexBufferCommon;
 
-    class SkyBox
+    class CubeMapSky
     {
     public:
-        SkyBox();
-        ~SkyBox();
+        CubeMapSky();
+        ~CubeMapSky();
 
         void Initialize();
         void Update(Real dt);
@@ -35,10 +35,10 @@ namespace Engine5
         Matrix44 GetModelMatrix() const;
 
     private:
-        friend class EnvironmentMapComponent;
+        friend class SkyComponent;
 
     private:
-        EnvironmentMapComponent* m_component     = nullptr;
+        SkyComponent* m_component     = nullptr;
         RendererCommon*          m_renderer      = nullptr;
         VertexBufferCommon*      m_vertex_buffer = nullptr;
         IndexBufferCommon*       m_index_buffer  = nullptr;

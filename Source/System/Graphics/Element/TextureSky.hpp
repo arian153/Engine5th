@@ -10,21 +10,21 @@ namespace Engine5
     class TextureCommon;
     class MeshData;
 
-    class SkyDome
+    class TextureSky
     {
     public:
-        SkyDome();
-        ~SkyDome();
+        TextureSky();
+        ~TextureSky();
 
         void Initialize();
         void Update(Real dt);
         void Shutdown();
 
     private:
-        friend class EnvironmentMapComponent;
+        friend class SkyComponent;
 
     private:
-        EnvironmentMapComponent* m_component     = nullptr;
+        SkyComponent* m_component     = nullptr;
         RendererCommon*          m_renderer      = nullptr;
         VertexBufferCommon*      m_vertex_buffer = nullptr;
         IndexBufferCommon*       m_index_buffer  = nullptr;

@@ -8,7 +8,7 @@
 #include "ParticleEmitter.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
 #include "Mesh2.hpp"
-#include "SkyBox.hpp"
+#include "CubeMapSky.hpp"
 #include "../Utility/TextRenderer.hpp"
 #include "../Common/Buffer2/ConstantBufferCommon.hpp"
 #include "../Common/Buffer2/ConstantBufferData.hpp"
@@ -96,7 +96,7 @@ namespace Engine5
             light->Update(dt);
         }
 
-        for (auto& sky_box : m_sky_boxes)
+        for (auto& sky_box : m_cube_map_skies)
         {
             sky_box->SetCamera(m_main_camera);
             sky_box->Update(dt);
@@ -149,7 +149,7 @@ namespace Engine5
             particle->Draw();
         }
 
-        for (auto& sky_box : m_sky_boxes)
+        for (auto& sky_box : m_cube_map_skies)
         {
             MatrixBufferData mvp_buffer;
             mvp_buffer.world = sky_box->GetModelMatrix();
@@ -521,26 +521,26 @@ namespace Engine5
         }
     }
 
-    void Scene::AddSkyBox(SkyBox* sky_box)
+    void Scene::AddSkyBox(CubeMapSky* sky)
     {
-        m_sky_boxes.push_back(sky_box);
+        m_cube_map_skies.push_back(sky);
     }
 
-    void Scene::RemoveSkyBox(SkyBox* sky_box)
+    void Scene::RemoveSkyBox(CubeMapSky* sky)
     {
-        if (!m_sky_boxes.empty())
+        if (!m_cube_map_skies.empty())
         {
-            auto found = std::find(m_sky_boxes.begin(), m_sky_boxes.end(), sky_box);
-            m_sky_boxes.erase(found);
+            auto found = std::find(m_cube_map_skies.begin(), m_cube_map_skies.end(), sky);
+            m_cube_map_skies.erase(found);
         }
     }
 
-    void Scene::AddSkyDome(SkyDome* sky_dome)
+    void Scene::AddSkyDome(TextureSky* sky)
     {
         //m_sky_domes.push_back(sky_dome);
     }
 
-    void Scene::RemoveSkyDome(SkyDome* sky_dome)
+    void Scene::RemoveSkyDome(TextureSky* sky)
     {
         //if (!m_sky_domes.empty())
         //{

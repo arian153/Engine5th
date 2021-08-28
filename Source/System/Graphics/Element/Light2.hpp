@@ -19,7 +19,7 @@ namespace Engine5
         void Shutdown() const;
 
         LightBufferData GetLightBuffer() const;
-        void SetType(eLightType type);
+        void            SetType(eLightType type);
 
     public:
         LightBufferData light_data;

@@ -1,4 +1,4 @@
-#include "SkyBox.hpp"
+#include "CubeMapSky.hpp"
 
 
 #include "Camera.hpp"
@@ -12,15 +12,15 @@
 
 namespace Engine5
 {
-    SkyBox::SkyBox()
+    CubeMapSky::CubeMapSky()
     {
     }
 
-    SkyBox::~SkyBox()
+    CubeMapSky::~CubeMapSky()
     {
     }
 
-    void SkyBox::Initialize()
+    void CubeMapSky::Initialize()
     {
         //Add Cube Vertices
 
@@ -41,13 +41,13 @@ namespace Engine5
         m_vertex_buffer->Init(m_renderer, m_vertices, false);
     }
 
-    void SkyBox::Update(Real dt)
+    void CubeMapSky::Update(Real dt)
     {
         E5_UNUSED_PARAM(dt);
         m_transform.position = m_camera->GetPosition();
     }
 
-    void SkyBox::Shutdown()
+    void CubeMapSky::Shutdown()
     {
         if (m_index_buffer != nullptr)
         {
@@ -67,19 +67,19 @@ namespace Engine5
         m_vertices.clear();
     }
 
-    void SkyBox::Bind() const
+    void CubeMapSky::Bind() const
     {
         m_vertex_buffer->Bind(0);
         m_index_buffer->Bind(0);
         m_texture->Bind();
     }
 
-    void SkyBox::Draw() const
+    void CubeMapSky::Draw() const
     {
         m_index_buffer->Draw();
     }
 
-    void SkyBox::GenerateSkySphere()
+    void CubeMapSky::GenerateSkySphere()
     {
         MeshGenerator mesh_gen;
         MeshData      data;
@@ -96,12 +96,12 @@ namespace Engine5
         m_indices.assign(data.indices.begin(), data.indices.end());
     }
 
-    void SkyBox::SetCamera(Camera* camera)
+    void CubeMapSky::SetCamera(Camera* camera)
     {
         m_camera = camera;
     }
 
-    Matrix44 SkyBox::GetModelMatrix() const
+    Matrix44 CubeMapSky::GetModelMatrix() const
     {
         return m_transform.LocalToWorldMatrix();
     }

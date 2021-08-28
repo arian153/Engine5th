@@ -7,13 +7,13 @@ namespace Engine5
 {
     class TextureCommon;
 
-    class EnvironmentMapComponent final : public Component
+    class SkyComponent final : public Component
     {
     public:
-        ~EnvironmentMapComponent();
-        EnvironmentMapComponent()                                              = delete;
-        EnvironmentMapComponent(const EnvironmentMapComponent& rhs)            = delete;
-        EnvironmentMapComponent& operator=(const EnvironmentMapComponent& rhs) = delete;
+        ~SkyComponent();
+        SkyComponent()                                   = delete;
+        SkyComponent(const SkyComponent& rhs)            = delete;
+        SkyComponent& operator=(const SkyComponent& rhs) = delete;
 
         void Initialize() override;
         void Update(Real dt) override;
@@ -27,19 +27,19 @@ namespace Engine5
         void Unsubscribe() override;
 
     private:
-        friend class EnvironmentMapFactory;
-        friend class SkyBox;
-        friend class SkyDome;
+        friend class SkyFactory;
+        friend class CubeMapSky;
+        friend class TextureSky;
 
     private:
-        explicit EnvironmentMapComponent(Object* owner);
-        void     Clone(EnvironmentMapComponent* origin);
+        explicit SkyComponent(Object* owner);
+        void     Clone(SkyComponent* origin);
 
         void SwitchSkyType();
 
     private:
-        SkyBox*  m_sky_box  = nullptr;
-        SkyDome* m_sky_dome = nullptr;
+        CubeMapSky* m_cube_map_sky = nullptr;
+        TextureSky* m_texture_sky  = nullptr;
 
         int            m_sky_type    = -1;
         TextureCommon* m_sky_texture = nullptr;

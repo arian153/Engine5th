@@ -6,11 +6,11 @@ namespace Engine5
     class Component;
     class Object;
 
-    class EnvironmentMapFactory final : public ComponentFactory
+    class SkyFactory final : public ComponentFactory
     {
     public:
-        EnvironmentMapFactory();
-        ~EnvironmentMapFactory();
+        SkyFactory();
+        ~SkyFactory();
 
         Component* Create(Object* owner, Space* space) override;
         Component* Clone(Component* origin, Object* dest, Space* space) override;

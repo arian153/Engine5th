@@ -10,8 +10,8 @@
 
 namespace Engine5
 {
-    class SkyDome;
-    class SkyBox;
+    class TextureSky;
+    class CubeMapSky;
     class Light2;
     class MeshData;
     struct MaterialIdentifier;
@@ -76,10 +76,10 @@ namespace Engine5
 
         void AddLight(Light2* light);
         void RemoveLight(Light2* light);
-        void AddSkyBox(SkyBox* sky_box);
-        void RemoveSkyBox(SkyBox* sky_box);
-        void AddSkyDome(SkyDome* sky_dome);
-        void RemoveSkyDome(SkyDome* sky_dome);
+        void AddSkyBox(CubeMapSky* sky);
+        void RemoveSkyBox(CubeMapSky* sky);
+        void AddSkyDome(TextureSky* sky);
+        void RemoveSkyDome(TextureSky* sky);
 
         //add
         Camera* AddCamera(Camera* camera);
@@ -119,8 +119,8 @@ namespace Engine5
         std::vector<Mesh2*>           m_meshes;
         MeshTable                     m_mesh_table;
 
-        std::vector<Light2*> m_lights;
-        std::vector<SkyBox*> m_sky_boxes;
+        std::vector<Light2*>     m_lights;
+        std::vector<CubeMapSky*> m_cube_map_skies;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;
