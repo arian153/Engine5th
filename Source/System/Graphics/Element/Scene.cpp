@@ -156,9 +156,10 @@ namespace Engine5
             mvp_buffer.view  = m_main_camera->GetViewMatrix();
             mvp_buffer.proj  = m_projection_matrix;
             m_matrix_buffer->Update(mvp_buffer);
-
+       
             sky_box->Bind();
             m_matrix_buffer->Bind();
+            m_shader_manager->Bind("SkyBox");
             sky_box->Draw();
         }
 

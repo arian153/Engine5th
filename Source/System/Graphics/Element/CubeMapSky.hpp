@@ -50,8 +50,8 @@ namespace Engine5
         Camera*             m_camera        = nullptr;
 
         Transform m_transform;
-        float     m_radius = 5000.0f;
-        int       m_type   = 0;
+        float     m_radius = 50.0f;
+        int       m_type   = 1;
 
         std::vector<U32>     m_indices;
         std::vector<Vector3> m_vertices;
