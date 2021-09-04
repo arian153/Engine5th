@@ -8,11 +8,11 @@ namespace Engine5
 {
     class LightComponent;
 
-    class Light2
+    class Light
     {
     public:
-        Light2();
-        ~Light2();
+        Light();
+        ~Light();
 
         void Initialize();
         void Update(Real dt) const;

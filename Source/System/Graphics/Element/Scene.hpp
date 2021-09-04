@@ -12,15 +12,14 @@ namespace Engine5
 {
     class TextureSky;
     class CubeMapSky;
-    class Light2;
+    class Light;
     class MeshData;
     struct MaterialIdentifier;
     class MaterialManager;
-    class Mesh;
     class VertexLayoutCommon;
     class ConstantBufferCommon;
     class ShaderProgramCommon;
-    class Mesh2;
+    class Mesh;
     class TextRenderer;
     class ResourceManager;
     class ParticleEmitter;
@@ -39,7 +38,7 @@ namespace Engine5
     class SpotLight;
     class CapsuleLight;
 
-    using MeshTable = std::unordered_map<size_t, std::unordered_map<size_t, Mesh2*>>;
+    using MeshTable = std::unordered_map<size_t, std::unordered_map<size_t, Mesh*>>;
 
     class Scene
     {
@@ -67,15 +66,15 @@ namespace Engine5
 
         PrimitiveRenderer* GetPrimitiveRenderer() const;
 
-        Mesh2* GetMesh(size_t model_id, size_t material_id);
-        Mesh2* AddMesh(const std::string& model_path, const MaterialIdentifier& material);
-        Mesh2* AddMesh(MeshResource* model_resource, const MaterialIdentifier& material);
-        Mesh2* AddMesh(MeshData* model_data, const MaterialIdentifier& material);
-        void   AddMesh(MeshComponent* mesh_compo);
-        void   RemoveMesh(MeshComponent* mesh_compo);
+        Mesh* GetMesh(size_t model_id, size_t material_id);
+        Mesh* AddMesh(const std::string& model_path, const MaterialIdentifier& material);
+        Mesh* AddMesh(MeshResource* model_resource, const MaterialIdentifier& material);
+        Mesh* AddMesh(MeshData* model_data, const MaterialIdentifier& material);
+        void  AddMesh(MeshComponent* mesh_compo);
+        void  RemoveMesh(MeshComponent* mesh_compo);
 
-        void AddLight(Light2* light);
-        void RemoveLight(Light2* light);
+        void AddLight(Light* light);
+        void RemoveLight(Light* light);
         void AddCubeMapSky(CubeMapSky* sky);
         void RemoveCubeMapSky(CubeMapSky* sky);
         void AddSkyDome(TextureSky* sky);
@@ -99,7 +98,7 @@ namespace Engine5
         Ray   GetPickingRay(const Vector2& pos) const;
 
     private:
-        void SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialIdentifier& material, size_t model_id, size_t material_id) const;
+        void SetUpMesh(Mesh* mesh, MeshData* model_data, const MaterialIdentifier& material, size_t model_id, size_t material_id) const;
         void UpdateMesh(Real dt);
 
     private:
@@ -116,10 +115,10 @@ namespace Engine5
         std::vector<TextSprite*>      m_text_sprites;
         std::vector<ParticleEmitter*> m_particle_emitters;
         std::vector<MeshComponent*>   m_mesh_components;
-        std::vector<Mesh2*>           m_meshes;
+        std::vector<Mesh*>            m_meshes;
         MeshTable                     m_mesh_table;
 
-        std::vector<Light2*>     m_lights;
+        std::vector<Light*>      m_lights;
         std::vector<CubeMapSky*> m_cube_map_skies;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;

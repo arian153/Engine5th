@@ -1,22 +1,22 @@
-#include "Light2.hpp"
+#include "Light.hpp"
 
 #include "../../../Manager/Component/EngineComponent/LightComponent.hpp"
 
 namespace Engine5
 {
-    Light2::Light2()
+    Light::Light()
     {
     }
 
-    Light2::~Light2()
+    Light::~Light()
     {
     }
 
-    void Light2::Initialize()
+    void Light::Initialize()
     {
     }
 
-    void Light2::Update(Real dt) const
+    void Light::Update(Real dt) const
     {
         if (m_component != nullptr)
         {
@@ -24,7 +24,7 @@ namespace Engine5
         }
     }
 
-    void Light2::Shutdown() const
+    void Light::Shutdown() const
     {
         if (m_component != nullptr)
         {
@@ -32,12 +32,12 @@ namespace Engine5
         }
     }
 
-    LightBufferData Light2::GetLightBuffer() const
+    LightBufferData Light::GetLightBuffer() const
     {
         return light_data;
     }
 
-    void Light2::SetType(eLightType type)
+    void Light::SetType(eLightType type)
     {
         m_type          = type;
         light_data.type = (int)type;

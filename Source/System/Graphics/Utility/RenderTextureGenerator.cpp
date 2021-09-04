@@ -6,7 +6,6 @@
 #include "../Element/Scene.hpp"
 #include "../Common/Shader/ShaderManagerCommon.hpp"
 #include "../../../Manager/Space/Space.hpp"
-#include "../Common/Element/Mesh.hpp"
 
 namespace Engine5
 {

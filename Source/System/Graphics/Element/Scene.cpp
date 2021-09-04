@@ -1,13 +1,13 @@
 #include "Scene.hpp"
 
-#include "Light2.hpp"
+#include "Light.hpp"
 #include "../Common/Renderer/RendererCommon.hpp"
 #include "../Common/Shader/ShaderManagerCommon.hpp"
 #include "../Utility/MatrixManager.hpp"
 #include "../Utility/PrimitiveRenderer.hpp"
 #include "ParticleEmitter.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
-#include "Mesh2.hpp"
+#include "Mesh.hpp"
 #include "CubeMapSky.hpp"
 #include "../Utility/TextRenderer.hpp"
 #include "../Common/Buffer2/ConstantBufferCommon.hpp"
@@ -156,7 +156,7 @@ namespace Engine5
             mvp_buffer.view  = m_main_camera->GetViewMatrix();
             mvp_buffer.proj  = m_projection_matrix;
             m_matrix_buffer->Update(mvp_buffer);
-       
+
             sky_box->Bind();
             m_matrix_buffer->Bind();
             m_shader_manager->Bind("SkyBox");
@@ -359,7 +359,7 @@ namespace Engine5
         return m_primitive_renderer;
     }
 
-    Mesh2* Scene::GetMesh(size_t model_id, size_t material_id)
+    Mesh* Scene::GetMesh(size_t model_id, size_t material_id)
     {
         auto found_model = m_mesh_table.find(model_id);
         if (found_model != m_mesh_table.end())
@@ -375,9 +375,9 @@ namespace Engine5
         return nullptr;
     }
 
-    Mesh2* Scene::AddMesh(const std::string& model_path, const MaterialIdentifier& material)
+    Mesh* Scene::AddMesh(const std::string& model_path, const MaterialIdentifier& material)
     {
-        Mesh2*        created;
+        Mesh*         created;
         MeshResource* model_resource = m_resource_manager->GetMeshResource(ToWString(model_path));
         size_t        model_id       = reinterpret_cast<size_t>(model_resource);
         size_t        material_id    = m_material_manager->GetID(material);
@@ -387,10 +387,10 @@ namespace Engine5
         if (found_model == m_mesh_table.end())
         {
             //add new
-            created = new Mesh2();
+            created = new Mesh();
             created->SetRenderer(m_renderer);
             SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
-            m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+            m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh*>({{material_id, created}}));
             m_meshes.push_back(created);
         }
         else
@@ -401,7 +401,7 @@ namespace Engine5
             if (found_material == material_table.end())
             {
                 //add new
-                created = new Mesh2();
+                created = new Mesh();
                 created->SetRenderer(m_renderer);
                 SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
                 material_table.emplace(material_id, created);
@@ -417,9 +417,9 @@ namespace Engine5
         return created;
     }
 
-    Mesh2* Scene::AddMesh(MeshResource* model_resource, const MaterialIdentifier& material)
+    Mesh* Scene::AddMesh(MeshResource* model_resource, const MaterialIdentifier& material)
     {
-        Mesh2* created;
+        Mesh*  created;
         size_t model_id    = reinterpret_cast<size_t>(model_resource);
         size_t material_id = m_material_manager->GetID(material);
 
@@ -428,10 +428,10 @@ namespace Engine5
         if (found_model == m_mesh_table.end())
         {
             //add new
-            created = new Mesh2();
+            created = new Mesh();
             created->SetRenderer(m_renderer);
             SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
-            m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+            m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh*>({{material_id, created}}));
             m_meshes.push_back(created);
         }
         else
@@ -442,7 +442,7 @@ namespace Engine5
             if (found_material == material_table.end())
             {
                 //add new
-                created = new Mesh2();
+                created = new Mesh();
                 created->SetRenderer(m_renderer);
                 SetUpMesh(created, model_resource->GetMeshData(), material, model_id, material_id);
                 material_table.emplace(material_id, created);
@@ -458,9 +458,9 @@ namespace Engine5
         return created;
     }
 
-    Mesh2* Scene::AddMesh(MeshData* model_data, const MaterialIdentifier& material)
+    Mesh* Scene::AddMesh(MeshData* model_data, const MaterialIdentifier& material)
     {
-        Mesh2* created;
+        Mesh*  created;
         size_t model_id    = reinterpret_cast<size_t>(model_data);
         size_t material_id = m_material_manager->GetID(material);
         auto   found_model = m_mesh_table.find(model_id);
@@ -468,10 +468,10 @@ namespace Engine5
         if (found_model == m_mesh_table.end())
         {
             //add new
-            created = new Mesh2();
+            created = new Mesh();
             created->SetRenderer(m_renderer);
             SetUpMesh(created, model_data, material, model_id, material_id);
-            m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh2*>({{material_id, created}}));
+            m_mesh_table.emplace(model_id, std::unordered_map<size_t, Mesh*>({{material_id, created}}));
             m_meshes.push_back(created);
         }
         else
@@ -482,7 +482,7 @@ namespace Engine5
             if (found_material == material_table.end())
             {
                 //add new
-                created = new Mesh2();
+                created = new Mesh();
                 created->SetRenderer(m_renderer);
                 SetUpMesh(created, model_data, material, model_id, material_id);
                 material_table.emplace(material_id, created);
@@ -512,12 +512,12 @@ namespace Engine5
         }
     }
 
-    void Scene::AddLight(Light2* light)
+    void Scene::AddLight(Light* light)
     {
         m_lights.push_back(light);
     }
 
-    void Scene::RemoveLight(Light2* light)
+    void Scene::RemoveLight(Light* light)
     {
         if (!m_lights.empty())
         {
@@ -636,7 +636,7 @@ namespace Engine5
         return ray;
     }
 
-    void Scene::SetUpMesh(Mesh2* mesh, MeshData* model_data, const MaterialIdentifier& material, size_t model_id, size_t material_id) const
+    void Scene::SetUpMesh(Mesh* mesh, MeshData* model_data, const MaterialIdentifier& material, size_t model_id, size_t material_id) const
     {
         if (mesh != nullptr)
         {

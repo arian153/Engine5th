@@ -17,11 +17,11 @@ namespace Engine5
     class RendererCommon;
     class ShaderManagerCommon;
 
-    class Mesh2
+    class Mesh
     {
     public:
-        Mesh2();
-        ~Mesh2();
+        Mesh();
+        ~Mesh();
 
         void Initialize();
         void Shutdown();

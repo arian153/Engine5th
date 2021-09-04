@@ -5,7 +5,7 @@
 namespace Engine5
 {
     class MeshResource;
-    class Mesh2;
+    class Mesh;
     class Quaternion;
     class Vector3;
     class Transform;
@@ -33,21 +33,21 @@ namespace Engine5
 
     private:
         friend class MeshFactory;
-        friend class Mesh2;
+        friend class Mesh;
 
     private:
         explicit MeshComponent(Object* owner);
         void     Clone(MeshComponent* origin);
 
     private:
-        Mesh2*        m_mesh           = nullptr;
+        Mesh*         m_mesh           = nullptr;
         Transform*    m_transform      = nullptr;
         MeshResource* m_model_resource = nullptr;
         size_t        m_model_id       = 0;
 
-        std::string     m_model_resource_path = "";
-        std::string     m_shader_type = "";
+        std::string        m_model_resource_path = "";
+        std::string        m_shader_type         = "";
         MaterialIdentifier m_material_identifier;
-        MaterialColor   m_material_color;
+        MaterialColor      m_material_color;
     };
 }

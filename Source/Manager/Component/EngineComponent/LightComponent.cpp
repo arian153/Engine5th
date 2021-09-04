@@ -5,7 +5,7 @@
 #include "../../Space/Space.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
 #include "TransformComponent.hpp"
-#include "../../../System/Graphics/Element/Light2.hpp"
+#include "../../../System/Graphics/Element/Light.hpp"
 #include "../../Object/Object.hpp"
 
 namespace Engine5
@@ -18,7 +18,7 @@ namespace Engine5
     {
         if (m_light == nullptr)
         {
-            m_light = new Light2();
+            m_light = new Light();
             m_light->Initialize();
             m_light->m_component = this;
             Subscribe();
@@ -71,7 +71,7 @@ namespace Engine5
         m_light->light_data.direction = dir;
     }
 
-    Light2* LightComponent::GetLight() const
+    Light* LightComponent::GetLight() const
     {
         return m_light;
     }

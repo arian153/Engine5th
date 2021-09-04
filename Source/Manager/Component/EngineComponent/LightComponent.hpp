@@ -5,7 +5,7 @@
 
 namespace Engine5
 {
-    class Light2;
+    class Light;
     class Quaternion;
     class Vector3;
     class Transform;
@@ -25,7 +25,7 @@ namespace Engine5
         void SetLightType(eLightType type);
         void SetLightDirection(const Vector3& dir) const;
 
-        Light2* GetLight() const;
+        Light* GetLight() const;
 
     protected:
         bool Load(const Json::Value& data) override;
@@ -36,14 +36,14 @@ namespace Engine5
 
     private:
         friend class LightFactory;
-        friend class Light2;
+        friend class Light;
 
     private:
         explicit LightComponent(Object* owner);
         void     Clone(LightComponent* origin);
 
     private:
-        Light2*    m_light      = nullptr;
+        Light*    m_light      = nullptr;
         Transform* m_transform  = nullptr;
         eLightType m_light_type = eLightType::DirectionalLight;
     };

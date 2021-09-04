@@ -1,4 +1,4 @@
-#include "Mesh2.hpp"
+#include "Mesh.hpp"
 
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../../Math/Structure/Transform.hpp"
@@ -12,19 +12,19 @@
 
 namespace Engine5
 {
-    Mesh2::Mesh2()
+    Mesh::Mesh()
     {
     }
 
-    Mesh2::~Mesh2()
+    Mesh::~Mesh()
     {
     }
 
-    void Mesh2::Initialize()
+    void Mesh::Initialize()
     {
     }
 
-    void Mesh2::Shutdown()
+    void Mesh::Shutdown()
     {
         if (m_index_buffer != nullptr)
         {
@@ -64,7 +64,7 @@ namespace Engine5
         m_textures.Clear();
     }
 
-    void Mesh2::Bind() const
+    void Mesh::Bind() const
     {
         if (m_instance_count > 0)
         {
@@ -76,7 +76,7 @@ namespace Engine5
         }
     }
 
-    void Mesh2::Draw() const
+    void Mesh::Draw() const
     {
         if (m_instance_count > 0)
         {
@@ -84,7 +84,7 @@ namespace Engine5
         }
     }
 
-    void Mesh2::CreateBuffer()
+    void Mesh::CreateBuffer()
     {
         if (m_index_buffer == nullptr)
         {
@@ -134,7 +134,7 @@ namespace Engine5
         }
     }
 
-    void Mesh2::AddInstance(const InstanceBufferData& data)
+    void Mesh::AddInstance(const InstanceBufferData& data)
     {
         if (m_instance_count == m_max_count)
         {
@@ -151,7 +151,7 @@ namespace Engine5
         m_instance_count++;
     }
 
-    void Mesh2::AddInstance(Transform* transform)
+    void Mesh::AddInstance(Transform* transform)
     {
         if (m_instance_count == m_max_count)
         {
@@ -167,7 +167,7 @@ namespace Engine5
         m_instance_count++;
     }
 
-    void Mesh2::AddInstance(Transform* transform, const MaterialColor& color)
+    void Mesh::AddInstance(Transform* transform, const MaterialColor& color)
     {
         if (m_instance_count == m_max_count)
         {
@@ -184,45 +184,45 @@ namespace Engine5
         m_instance_count++;
     }
 
-    void Mesh2::ClearCount(U32 clear_idx)
+    void Mesh::ClearCount(U32 clear_idx)
     {
         m_instance_count = clear_idx;
     }
 
-    void Mesh2::SetModelData(MeshData* data)
+    void Mesh::SetModelData(MeshData* data)
     {
         m_mesh_data = data;
         CreateBuffer();
     }
 
-    void Mesh2::AddTexture(TextureCommon* texture)
+    void Mesh::AddTexture(TextureCommon* texture)
     {
         m_textures.PushBack(texture);
     }
 
-    void Mesh2::ClearTexture()
+    void Mesh::ClearTexture()
     {
         m_textures.Clear();
     }
 
-    void Mesh2::RemoveTexture(TextureCommon* texture)
+    void Mesh::RemoveTexture(TextureCommon* texture)
     {
         m_textures.Erase(texture);
     }
 
-    void Mesh2::SetRenderer(RendererCommon* renderer)
+    void Mesh::SetRenderer(RendererCommon* renderer)
     {
         m_renderer = renderer;
     }
 
-    void Mesh2::ResizeInstanceBuffer(U32 count)
+    void Mesh::ResizeInstanceBuffer(U32 count)
     {
         m_max_count = count;
         m_instances.resize(count);
         m_instance_buffer->Init(m_renderer, m_instances);
     }
 
-    void Mesh2::SetMaterialIdentifier(const MaterialIdentifier& material_data)
+    void Mesh::SetMaterialIdentifier(const MaterialIdentifier& material_data)
     {
         m_diffuse_type  = material_data.diffuse_type;
         m_specular_type = material_data.specular_type;
@@ -245,13 +245,13 @@ namespace Engine5
         }
     }
 
-    void Mesh2::SetSceneID(size_t model_id, size_t material_id)
+    void Mesh::SetSceneID(size_t model_id, size_t material_id)
     {
         m_model_id    = model_id;
         m_material_id = material_id;
     }
 
-    std::string Mesh2::GetShaderType() const
+    std::string Mesh::GetShaderType() const
     {
         return m_shader_type;
     }

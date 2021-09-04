@@ -6,10 +6,8 @@
 #include "../../../System/Graphics/Element/Scene.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
-#include "../../../System/Graphics/Common/Element/Mesh.hpp"
-#include "../../../System/Graphics/Element/Mesh2.hpp"
+#include "../../../System/Graphics/Element/Mesh.hpp"
 #include "../../Resource/ResourceManager.hpp"
-#include "../../Resource/ResourceType/TextureResource.hpp"
 #include "../../Resource/ResourceType/MeshResource.hpp"
 
 namespace Engine5
