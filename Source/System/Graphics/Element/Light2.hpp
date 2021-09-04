@@ -1,8 +1,8 @@
 #pragma once
+#include "LightDef.hpp"
 #include "../../Math/Algebra/Vector3.hpp"
 #include "../Common/Buffer2/ConstantBufferData.hpp"
 #include "../DataType/Color.hpp"
-#include "../Common/Light/LightDef.hpp"
 
 namespace Engine5
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include "..//Component.hpp"
+#include "../../../System/Graphics/Element/LightDef.hpp"
 #include "../../../System/Math/Utility/VectorDef.hpp"
-#include "../../../System/Graphics/Common/Light/LightDef.hpp"
 
 namespace Engine5
 {
